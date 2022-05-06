@@ -106,7 +106,7 @@ type
   GraphicsPipeSelection* {.importcpp: "GraphicsPipeSelection*", header: "graphicsPipeSelection.h", inheritable} = object
 
 proc get_global_ptr*(_: typedesc[GraphicsPipeSelection]): GraphicsPipeSelection {.cdecl, importcpp: "GraphicsPipeSelection::get_global_ptr()"}
-proc printPipeTypes*(this: GraphicsPipeSelection) {.cdecl, importcpp: "#->print_pipe_types()"}
+proc print_pipe_types*(this: GraphicsPipeSelection) {.cdecl, importcpp: "#->print_pipe_types()"}
 proc make_default_pipe*(this: GraphicsPipeSelection) : GraphicsPipe {.cdecl, importcpp: "#->make_default_pipe(@)"}
 
 type

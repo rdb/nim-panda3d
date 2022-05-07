@@ -82,7 +82,7 @@ proc name*(this: PandaNode): std_string {.importcpp: "#->get_name()".}
 proc `name=`*(this: PandaNode, name: cstring) {.importcpp: "#->set_name(@)".}
 
 type
-  NodePath* {.importcpp: "NodePath", header: "nodePath.h".} = object
+  NodePath* {.importcpp: "NodePath", header: "nodePath.h", inheritable, pure.} = object
 
 proc constructNodePath*(): NodePath {.constructor, importcpp: "NodePath(@)".}
 proc constructNodePath*(name: cstring): NodePath {.constructor, importcpp: "NodePath(@)".}
@@ -106,6 +106,14 @@ proc set_scale*(this: NodePath, scale: float) {.importcpp: "set_scale".}
 proc set_scale*(this: NodePath, sx: float, sy: float, sz: float) {.importcpp: "set_scale".}
 
 type
+  Lens* {.importcpp: "PT(Lens)", header: "lens.h", inheritable, pure, bycopy.} = object of PandaNode
+
+proc class_type*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_class_type()".}
+proc dcast*(_: typedesc[Lens], obj: TypedObject): Lens {.importcpp: "DCAST(Lens, @)".}
+proc aspect_ratio*(this: Lens): float {.importcpp: "#->get_aspect_ratio()".}
+proc `aspect_ratio=`*(this: Lens, aspectRatio: float) {.importcpp: "#->set_aspect_ratio(@)".}
+
+type
   Camera* {.importcpp: "PT(Camera)", header: "camera.h", inheritable, pure, bycopy.} = object of PandaNode
 
 proc class_type*(_: typedesc[Camera]): TypeHandle {.importcpp: "Camera::get_class_type()".}
@@ -113,6 +121,7 @@ proc dcast*(_: typedesc[Camera], obj: TypedObject): Camera {.importcpp: "DCAST(C
 proc newCamera*(name: cstring): Camera {.constructor, importcpp: "new Camera(@)".}
 proc active*(this: Camera): bool {.importcpp: "#->is_active()".}
 proc `active=`*(this: Camera, active: bool) {.importcpp: "#->set_active(@)".}
+proc get_lens*(this: Camera): Lens {.importcpp: "#->get_lens()".}
 
 type
   Light* {.importcpp: "PT(Light)", header: "lightNode.h", inheritable, pure, bycopy.} = object
@@ -138,10 +147,10 @@ proc newAmbientLight*(name: cstring): AmbientLight {.constructor, importcpp: "ne
 type
   Loader* {.importcpp: "PT(Loader)", header: "loader.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
 
-proc class_type*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()".}
+proc class_type*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()", header: "loader.h".}
 proc dcast*(_: typedesc[Loader], obj: TypedObject): Loader {.importcpp: "DCAST(Loader, @)".}
 proc newLoader*(name: cstring = "loader"): Loader {.constructor, importcpp: "new Loader(@)".}
-proc get_global_ptr*(_: typedesc[Loader]): Loader {.importcpp: "Loader::get_global_ptr()".}
+proc get_global_ptr*(_: typedesc[Loader]): Loader {.importcpp: "Loader::get_global_ptr()", header: "loader.h".}
 proc load_sync*(this: Loader, filename: cstring): PandaNode {.importcpp: "#->load_sync(@)".}
 
 type
@@ -162,6 +171,10 @@ proc make_mono_display_region*(this: GraphicsOutput): DisplayRegion {.importcpp:
 proc make_mono_display_region*(this: GraphicsOutput, l: float, r: float, b: float, t: float): DisplayRegion {.importcpp: "#->make_mono_display_region(@)".}
 proc make_stereo_display_region*(this: GraphicsOutput): DisplayRegion {.importcpp: "#->make_stereo_display_region(@)".}
 proc make_stereo_display_region*(this: GraphicsOutput, l: float, r: float, b: float, t: float): DisplayRegion {.importcpp: "#->make_stereo_display_region(@)".}
+proc get_sbs_left_x_size*(this: GraphicsOutput): float {.importcpp: "#->get_sbs_left_x_size()".}
+proc get_sbs_left_y_size*(this: GraphicsOutput): float {.importcpp: "#->get_sbs_left_y_size()".}
+proc get_sbs_right_x_size*(this: GraphicsOutput): float {.importcpp: "#->get_sbs_right_x_size()".}
+proc get_sbs_right_y_size*(this: GraphicsOutput): float {.importcpp: "#->get_sbs_right_y_size()".}
 
 type
   GraphicsBuffer* {.importcpp: "PT(GraphicsBuffer)", header: "graphicsBuffer.h", inheritable, pure, bycopy.} = object of GraphicsOutput
@@ -184,24 +197,46 @@ proc dcast*(_: typedesc[GraphicsPipe], obj: TypedObject): GraphicsPipe {.importc
 type
   GraphicsPipeSelection* {.importcpp: "GraphicsPipeSelection*", header: "graphicsPipeSelection.h", inheritable, pure, bycopy.} = object
 
-proc get_global_ptr*(_: typedesc[GraphicsPipeSelection]): GraphicsPipeSelection {.importcpp: "GraphicsPipeSelection::get_global_ptr()".}
+proc get_global_ptr*(_: typedesc[GraphicsPipeSelection]): GraphicsPipeSelection {.importcpp: "GraphicsPipeSelection::get_global_ptr()", header: "graphicsPipeSelection.h".}
 proc print_pipe_types*(this: GraphicsPipeSelection) {.importcpp: "#->print_pipe_types()".}
 proc make_default_pipe*(this: GraphicsPipeSelection) : GraphicsPipe {.importcpp: "#->make_default_pipe(@)".}
 
 type
   FrameBufferProperties* {.importcpp: "FrameBufferProperties", header: "frameBufferProperties.h".} = object
 
-proc get_default*(_: typedesc[FrameBufferProperties]): FrameBufferProperties {.importcpp: "FrameBufferProperties::get_default()".}
+proc get_default*(_: typedesc[FrameBufferProperties]): FrameBufferProperties {.importcpp: "FrameBufferProperties::get_default()", header: "frameBufferProperties.h".}
 
 type
   WindowProperties* {.importcpp: "WindowProperties", header: "windowProperties.h".} = object
 
-proc get_default*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_default()".}
+proc get_default*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_default()", header: "windowProperties.h".}
 
 type
   GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", header: "graphicsEngine.h", inheritable, pure, bycopy.} = object of ReferenceCount
 
-proc get_global_ptr*(_: typedesc[GraphicsEngine]): GraphicsEngine {.importcpp: "GraphicsEngine::get_global_ptr()".}
+proc get_global_ptr*(_: typedesc[GraphicsEngine]): GraphicsEngine {.importcpp: "GraphicsEngine::get_global_ptr()", header: "graphicsEngine.h".}
 proc open_windows*(this: GraphicsEngine) {.importcpp: "#->open_windows()".}
 proc render_frame*(this: GraphicsEngine) {.importcpp: "#->render_frame()".}
 proc make_output*(this: GraphicsEngine, pipe: GraphicsPipe, name: cstring, sort: int, fb_prop: FrameBufferProperties, win_prop: WindowProperties, flags: int) : GraphicsOutput {.importcpp: "#->make_output(@)".}
+
+type
+  Event* {.importcpp: "CPT_Event", header: "event.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+proc nameInternal(this: Event): cstring {.importcpp: "#->get_name().c_str()".}
+proc name*(this: Event): string = $(this.nameInternal)
+
+type
+  EventHandler* {.importcpp: "EventHandler*", header: "eventHandler.h", inheritable, pure, bycopy.} = object of TypedObject
+
+proc get_global_event_handler*(_: typedesc[EventHandler]): EventHandler {.importcpp: "EventHandler::get_global_event_handler()", header: "eventHandler.h".}
+
+type
+  EventQueue* {.importcpp: "EventQueue*", header: "eventQueue.h", inheritable, pure, bycopy.} = object
+
+proc newEventQueue*(): EventQueue {.constructor, importcpp: "new EventQueue(@)".}
+proc queue_event*(this: EventQueue, event: Event) {.importcpp: "#->queue_event(@)".}
+proc clear*(this: EventQueue) {.importcpp: "#->clear(@)".}
+proc is_queue_empty*(this: EventQueue): bool {.importcpp: "#->is_queue_empty(@)".}
+proc is_queue_full*(this: EventQueue): bool {.importcpp: "#->is_queue_full(@)".}
+proc dequeue_event*(this: EventQueue): Event {.importcpp: "#->dequeue_event(@)".}
+proc get_global_event_queue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "EventQueue::get_global_event_queue()", header: "eventQueue.h".}

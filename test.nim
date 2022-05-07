@@ -14,6 +14,7 @@ env.setPos(-8, 42, 0)
 
 var pandaActor = Actor()
 pandaActor.loadModel("models/panda-model")
+pandaActor.loadAnims({"walk": "models/panda-walk4"})
 pandaActor.setScale(0.005, 0.005, 0.005)
 pandaActor.reparentTo(render)
 pandaActor.loop("walk")

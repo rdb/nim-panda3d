@@ -59,7 +59,6 @@ proc add*(this: TaskManager, function: (proc(task: Task): DoneStatus), name: str
   `result` = new NimTask(`procp`, `envp`);
   `this`->mgr->add(`result`.p());
   """.}
-  discard function(result);
 
 proc stop*(this: TaskManager) =
   this.running = false

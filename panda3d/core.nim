@@ -242,3 +242,50 @@ proc is_queue_empty*(this: EventQueue): bool {.importcpp: "#->is_queue_empty(@)"
 proc is_queue_full*(this: EventQueue): bool {.importcpp: "#->is_queue_full(@)".}
 proc dequeue_event*(this: EventQueue): Event {.importcpp: "#->dequeue_event(@)".}
 proc get_global_event_queue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "EventQueue::get_global_event_queue()", header: "eventQueue.h".}
+
+type
+  AnimControl* {.importcpp: "PT(AnimControl)", header: "animControl.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+converter toAnimControl*(_: type(nil)): AnimControl {.importcpp: "PT(AnimControl)(nullptr)".}
+converter toBool*(this: AnimControl): bool {.importcpp: "!#.is_null()".}
+proc class_type*(_: typedesc[AnimControl]): TypeHandle {.importcpp: "AnimControl::get_class_type()".}
+proc dcast*(_: typedesc[AnimControl], obj: TypedObject): AnimControl {.importcpp: "DCAST(AnimControl, @)".}
+proc is_pending*(this: AnimControl): bool {.importcpp: "#->is_pending()".}
+proc has_anim*(this: AnimControl): bool {.importcpp: "#->has_anim()".}
+proc play*(this: AnimControl) {.importcpp: "#->play()".}
+proc play*(this: AnimControl, fro: float, to: float) {.importcpp: "#->play(@)".}
+proc loop*(this: AnimControl, restart: bool) {.importcpp: "#->loop(@)".}
+proc loop*(this: AnimControl, restart: bool, fro: float, to: float) {.importcpp: "#->loop(@)".}
+proc pingpong*(this: AnimControl, restart: bool) {.importcpp: "#->pingpong(@)".}
+proc pingpong*(this: AnimControl, restart: bool, fro: float, to: float) {.importcpp: "#->pingpong(@)".}
+proc stop*(this: AnimControl) {.importcpp: "#->stop()".}
+proc pose*(this: AnimControl, frame: float) {.importcpp: "#->pose(@)".}
+
+type
+  PartGroup* {.importcpp: "PT(PartGroup)", header: "partGroup.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+proc class_type*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGroup::get_class_type()".}
+proc dcast*(_: typedesc[PartGroup], obj: TypedObject): PartGroup {.importcpp: "DCAST(PartGroup, @)".}
+
+type
+  PartSubset* {.importcpp: "PartSubset", header: "partSubset.h".} = object
+
+type
+  PartBundle* {.importcpp: "PT(PartBundle)", header: "partBundle.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+proc class_type*(_: typedesc[PartBundle]): TypeHandle {.importcpp: "PartBundle::get_class_type()".}
+proc dcast*(_: typedesc[PartBundle], obj: TypedObject): PartBundle {.importcpp: "DCAST(PartBundle, @)".}
+proc load_bind_anim*(this: PartBundle, loader: Loader, filename: cstring, hierarchy_match_flags: int, subset: PartSubset, allow_async: bool): AnimControl {.importcpp: "#->load_bind_anim(@)".}
+
+type
+  PartBundleNode* {.importcpp: "PT(PartBundleNode)", header: "partBundleNode.h", inheritable, pure, bycopy.} = object of PandaNode
+
+proc class_type*(_: typedesc[PartBundleNode]): TypeHandle {.importcpp: "PartBundleNode::get_class_type()".}
+proc dcast*(_: typedesc[PartBundleNode], obj: TypedObject): PartBundleNode {.importcpp: "DCAST(PartBundleNode, @)".}
+proc get_bundle*(this: PartBundleNode, i: int): PartBundle {.importcpp: "#->get_bundle(@)".}
+
+type
+  Character* {.importcpp: "PT(Character)", header: "character.h", inheritable, pure, bycopy.} = object of PartBundleNode
+
+proc class_type*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()".}
+proc dcast*(_: typedesc[Character], obj: TypedObject): Character {.importcpp: "DCAST(Character, @)".}

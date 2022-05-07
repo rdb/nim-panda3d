@@ -39,8 +39,18 @@ proc getAspectRatio*(this: ShowBase): float =
 proc adjustWindowAspectRatio*(this: ShowBase, aspectRatio: float) =
   this.camLens.aspectRatio = aspectRatio
 
+proc finalizeExit(this: ShowBase) =
+  quit(0)
+
+proc userExit(this: ShowBase) =
+  this.finalizeExit()
+
 proc windowEvent*(this: ShowBase) =
   this.adjustWindowAspectRatio(this.getAspectRatio())
+
+  var properties = dcast(GraphicsWindow, this.win).getProperties()
+  if not properties.open:
+    this.userExit()
 
 proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.getDefault()) =
   this.makeAllPipes()

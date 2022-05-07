@@ -161,6 +161,17 @@ proc dcast*(_: typedesc[DisplayRegion], obj: TypedObject): DisplayRegion {.impor
 proc set_camera*(this: DisplayRegion, camera: NodePath) {.importcpp: "#->set_camera(@)".}
 
 type
+  FrameBufferProperties* {.importcpp: "FrameBufferProperties", header: "frameBufferProperties.h".} = object
+
+proc get_default*(_: typedesc[FrameBufferProperties]): FrameBufferProperties {.importcpp: "FrameBufferProperties::get_default()", header: "frameBufferProperties.h".}
+
+type
+  WindowProperties* {.importcpp: "WindowProperties", header: "windowProperties.h".} = object
+
+proc get_default*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_default()", header: "windowProperties.h".}
+proc open*(this: WindowProperties): bool {.importcpp: "get_open".}
+
+type
   GraphicsOutput* {.importcpp: "PT(GraphicsOutput)", header: "graphicsOutput.h", inheritable, pure, bycopy.} = object of TypedWritableReferenceCount
 
 proc class_type*(_: typedesc[GraphicsOutput]): TypeHandle {.importcpp: "GraphicsOutput::get_class_type()".}
@@ -187,6 +198,7 @@ type
 
 proc class_type*(_: typedesc[GraphicsWindow]): TypeHandle {.importcpp: "GraphicsWindow::get_class_type()".}
 proc dcast*(_: typedesc[GraphicsWindow], obj: TypedObject): GraphicsWindow {.importcpp: "DCAST(GraphicsWindow, @)".}
+proc get_properties*(this: GraphicsWindow): WindowProperties {.importcpp: "#->get_properties()".}
 
 type
   GraphicsPipe* {.importcpp: "PT(GraphicsPipe)", header: "graphicsPipe.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
@@ -200,16 +212,6 @@ type
 proc get_global_ptr*(_: typedesc[GraphicsPipeSelection]): GraphicsPipeSelection {.importcpp: "GraphicsPipeSelection::get_global_ptr()", header: "graphicsPipeSelection.h".}
 proc print_pipe_types*(this: GraphicsPipeSelection) {.importcpp: "#->print_pipe_types()".}
 proc make_default_pipe*(this: GraphicsPipeSelection) : GraphicsPipe {.importcpp: "#->make_default_pipe(@)".}
-
-type
-  FrameBufferProperties* {.importcpp: "FrameBufferProperties", header: "frameBufferProperties.h".} = object
-
-proc get_default*(_: typedesc[FrameBufferProperties]): FrameBufferProperties {.importcpp: "FrameBufferProperties::get_default()", header: "frameBufferProperties.h".}
-
-type
-  WindowProperties* {.importcpp: "WindowProperties", header: "windowProperties.h".} = object
-
-proc get_default*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_default()", header: "windowProperties.h".}
 
 type
   GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", header: "graphicsEngine.h", inheritable, pure, bycopy.} = object of ReferenceCount

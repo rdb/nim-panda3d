@@ -1,16 +1,65 @@
 import ../panda3d/core
 
-proc newGenericAsyncTask(name: cstring, function, user_data: pointer): AsyncTask {.cdecl, importcpp: "new GenericAsyncTask(@)", header: "genericAsyncTask.h"}
+{.emit: """/*TYPESECTION*/
+#include "asyncTask.h"
+
+class NimTask final : public AsyncTask {
+public:
+  typedef int TaskProc(PT(AsyncTask) task, void *env);
+
+  NimTask(TaskProc *proc, void *env) : _proc(proc), _env(env) {}
+
+  ALLOC_DELETED_CHAIN(NimTask);
+
+  virtual DoneStatus do_task() {
+    return (DoneStatus)_proc(this, _env);
+  }
+
+private:
+  TaskProc *_proc;
+  void *_env;
+};
+""".}
+
+type
+  Task* = AsyncTask
+
+type
+  DoneStatus {.pure.} = enum
+    done = 0
+    cont = 1
+    again = 2
+    pickup = 3
+    exit = 4
+
+template done*(_: typedesc[Task]): DoneStatus =
+  DoneStatus.done
+
+template cont*(_: typedesc[Task]): DoneStatus =
+  DoneStatus.cont
+
+template again*(_: typedesc[Task]): DoneStatus =
+  DoneStatus.again
+
+template pickup*(_: typedesc[Task]): DoneStatus =
+  DoneStatus.pickup
+
+template exit*(_: typedesc[Task]): DoneStatus =
+  DoneStatus.exit
 
 type
   TaskManager* = ref object of RootObj
     mgr: AsyncTaskManager
     running: bool
 
-proc add*(this: TaskManager, function: (proc(): int), name: string, sort: int = 0) : AsyncTask {.discardable.} =
-  var task = newGenericAsyncTask(name, rawProc(function), rawEnv(function))
-  AsyncTaskManager.getGlobalPtr().add(task)
-  return task
+proc add*(this: TaskManager, function: (proc(task: Task): DoneStatus), name: string, sort: int = 0) : AsyncTask {.discardable.} =
+  var procp = rawProc(function);
+  var envp = rawEnv(function);
+  {.emit: """
+  `result` = new NimTask(`procp`, `envp`);
+  `this`->mgr->add(`result`.p());
+  """.}
+  discard function(result);
 
 proc stop*(this: TaskManager) =
   this.running = false
@@ -20,5 +69,5 @@ proc run*(this: TaskManager) =
   while this.running:
     this.mgr.poll()
 
-var taskMgr* = TaskManager()
+var taskMgr* = new(TaskManager)
 taskMgr.mgr = AsyncTaskManager.getGlobalPtr()

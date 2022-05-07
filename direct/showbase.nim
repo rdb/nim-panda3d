@@ -35,9 +35,9 @@ proc makeAllPipes*(this: ShowBase) =
   if this.pipe == nil:
     this.makeDefaultPipe()
 
-proc igLoop(this: ShowBase): int =
-  GraphicsEngine.getGlobalPtr().renderFrame()
-  return 1
+proc igLoop(this: ShowBase): auto =
+  this.graphicsEngine.renderFrame()
+  return Task.cont
 
 proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.getDefault()) =
   this.makeAllPipes()
@@ -46,6 +46,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   var fbprops = FrameBufferProperties.getDefault()
   this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, 0x0008)
 
+  this.taskMgr = taskMgr
   this.loader = loader
   this.render = render
   this.camera = this.render.attachNewNode("camera")
@@ -55,7 +56,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   var dr = this.win.makeDisplayRegion()
   dr.setCamera(this.cam)
 
-  this.taskMgr.add(proc (): int = this.igLoop(), "igLoop", 50)
+  taskMgr.add(proc (task: Task): auto = this.igLoop(), "igLoop", 50)
 
   this.graphicsEngine.openWindows()
 

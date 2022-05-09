@@ -56,7 +56,7 @@ proc add*(this: TaskManager, function: (proc(task: Task): DoneStatus), name: str
   var procp = rawProc(function);
   var envp = rawEnv(function);
   {.emit: """
-  `result` = new NimTask(`procp`, `envp`);
+  `result` = new NimTask((NimTask::TaskProc *)`procp`, `envp`);
   `this`->mgr->add(`result`.p());
   """.}
 

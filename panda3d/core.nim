@@ -1,4 +1,22 @@
-{.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
+when defined(pandaDir):
+  const pandaDir {.strdefine.}: string = ""
+  when len(pandaDir) < 1:
+    {.error: "pandaDir must not be an empty string when defined".}
+
+when defined(vcc):
+  {.passC: "/DNOMINMAX".}
+
+  when defined(pandaDir):
+    {.passC: "/I\"" & pandaDir & "/include\"".}
+    {.passL: "\"" & pandaDir & "/lib/libpandaexpress.lib\"".}
+    {.passL: "\"" & pandaDir & "/lib/libpanda.lib\"".}
+    {.passL: "\"" & pandaDir & "/lib/libp3dtoolconfig.lib\"".}
+    {.passL: "\"" & pandaDir & "/lib/libp3dtool.lib\"".}
+  else:
+    {.passL: "libpandaexpress.lib libpanda.lib libp3dtoolconfig.lib libp3dtool.lib".}
+
+else:
+  {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
 type
   std_string {.importcpp: "std::string", header: "string".} = object
@@ -224,7 +242,7 @@ proc make_output*(this: GraphicsEngine, pipe: GraphicsPipe, name: cstring, sort:
 type
   Event* {.importcpp: "CPT_Event", header: "event.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
 
-proc nameInternal(this: Event): cstring {.importcpp: "#->get_name().c_str()".}
+proc nameInternal(this: Event): cstring {.importcpp: "(char *)(#->get_name().c_str())".}
 proc name*(this: Event): string = $(this.nameInternal)
 
 type

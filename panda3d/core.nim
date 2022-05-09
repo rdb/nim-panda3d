@@ -289,3 +289,34 @@ type
 
 proc class_type*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()".}
 proc dcast*(_: typedesc[Character], obj: TypedObject): Character {.importcpp: "DCAST(Character, @)".}
+
+type
+  AudioSound* {.importcpp: "PT(AudioSound)", header: "audioSound.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+proc class_type*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()".}
+proc dcast*(_: typedesc[AudioSound], obj: TypedObject): AudioSound {.importcpp: "DCAST(AudioSound, @)".}
+proc play*(this: AudioSound) {.importcpp: "#->play()".}
+proc stop*(this: AudioSound) {.importcpp: "#->stop()".}
+proc get_loop*(this: AudioSound): bool {.importcpp: "#->get_loop()".}
+proc set_loop*(this: AudioSound, loop: bool = true) {.importcpp: "#->set_loop(@)".}
+proc get_loop_count*(this: AudioSound): int {.importcpp: "#->get_loop_count()".}
+proc set_loop_count*(this: AudioSound, loop_count: int = 1) {.importcpp: "#->set_loop_count(@)".}
+proc get_time*(this: AudioSound): float {.importcpp: "#->get_time()".}
+proc set_time*(this: AudioSound, time: float = 0.0) {.importcpp: "#->set_time(@)".}
+proc get_volume*(this: AudioSound): float {.importcpp: "#->get_volume()".}
+proc set_volume*(this: AudioSound, volume: float = 1.0) {.importcpp: "#->set_volume(@)".}
+proc get_balance*(this: AudioSound): float {.importcpp: "#->get_balance()".}
+proc set_balance*(this: AudioSound, balance: float = 0.0) {.importcpp: "#->set_balance(@)".}
+proc get_play_rate*(this: AudioSound): float {.importcpp: "#->get_play_rate()".}
+proc set_play_rate*(this: AudioSound, play_rate: float = 1.0) {.importcpp: "#->set_play_rate(@)".}
+proc get_active*(this: AudioSound): bool {.importcpp: "#->get_active()".}
+proc set_active*(this: AudioSound, active: bool = true) {.importcpp: "#->set_active(@)".}
+
+type
+  AudioManager* {.importcpp: "PT(AudioManager)", header: "audioManager.h", inheritable, pure, bycopy.} = object of TypedReferenceCount
+
+proc create_AudioManager*(_: typedesc[AudioManager]): AudioManager {.importcpp: "AudioManager::create_AudioManager()".}
+proc shutdown*(this: AudioManager) {.importcpp: "#->shutdown()".}
+proc get_sound*(this: AudioManager, file_name: cstring, positional: bool = false): AudioSound {.importcpp: "#->get_sound(@)".}
+proc get_concurrent_sound_limit*(this: AudioManager): int {.importcpp: "#->get_concurrent_sound_limit()".}
+proc set_concurrent_sound_limit*(this: AudioManager, limit: int = 0) {.importcpp: "#->set_concurrent_sound_limit(@)".}

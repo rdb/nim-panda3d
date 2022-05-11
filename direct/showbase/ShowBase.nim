@@ -5,7 +5,7 @@ import ./EventManagerGlobal
 import ./EventManager
 from ./Loader import loader
 
-var render* = constructNodePath("render")
+var render* = initNodePath("render")
 
 type
   ShowBase* = ref object of DirectObject
@@ -14,7 +14,7 @@ type
     camLens*: Lens
     camNode*: Camera
     graphicsEngine*: GraphicsEngine
-    loader*: type(loader)
+    loader*: type(Loader.loader)
     pipe*: GraphicsPipe
     render*: NodePath
     taskMgr*: TaskManager
@@ -59,11 +59,11 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   eventMgr.restart()
   this.accept("window-event", proc () = this.windowEvent())
 
-  var fbprops = FrameBufferProperties.getDefault()
+  var fbprops: FrameBufferProperties = FrameBufferProperties.getDefault()
   this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, 0x0008)
 
   this.taskMgr = taskMgr
-  this.loader = loader
+  this.loader = Loader.loader
   this.render = render
   this.camera = this.render.attachNewNode("camera")
   this.camNode = newCamera("cam")

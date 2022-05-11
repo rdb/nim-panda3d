@@ -5,12 +5,12 @@ type
     sfxManager*: AudioManager
     musicManager*: AudioManager
 
-proc loadModel*(this: Loader, modelPath: string): NodePath =
+proc loadModel*(this: Loader, modelPath: string, loaderOptions: LoaderOptions = LoaderOptions()): NodePath =
   var loader = core.Loader.getGlobalPtr()
-  return constructNodePath(loader.loadSync(modelPath))
+  return initNodePath(loader.loadSync(modelPath, loaderOptions))
 
 proc loadSound*(this: Loader, manager: AudioManager, soundPath: string, positional: bool = false): AudioSound =
-  return manager.getSound(soundPath, positional)
+  return manager.getSound(soundPath, positional, 0)
 
 proc loadSfx*(this: Loader, soundPath: string, positional: bool = false): AudioSound =
   if this.sfxManager == nil:

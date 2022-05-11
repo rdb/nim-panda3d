@@ -7,12 +7,9 @@ type
   EventManager* = ref object of RootObj
     eventQueue*: EventQueue
 
-proc processEvent*(this: EventManager, event: Event) =
-  messenger.send(event.name)
-
 proc doEvents*(this: EventManager) =
   while not this.eventQueue.isQueueEmpty():
-    this.processEvent(this.eventQueue.dequeueEvent())
+    messenger.send(this.eventQueue.dequeueEvent().name)
 
 proc eventLoopTask(this: EventManager, task: Task): auto =
   this.doEvents()

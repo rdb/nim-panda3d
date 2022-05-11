@@ -12,13 +12,13 @@ type
     partDict: Table[string, Table[string, AnimDef]]
 
 proc loadModel*(this: var Actor, modelPath: string, partName: string = "modelRoot") =
-  var model = constructNodePath(Loader.getGlobalPtr().loadSync(modelPath))
+  var model = initNodePath(Loader.getGlobalPtr().loadSync(modelPath))
   {.emit: """
   (NodePath &)`this` = `model`;
   """.}
 
   var bundleNP: NodePath
-  if model.node().isOfType(Character.classType):
+  if model.node().isOfType(Character.getClassType()):
     bundleNP = model
   else:
     bundleNP = model.find("**/+Character")

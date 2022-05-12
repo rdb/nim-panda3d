@@ -181,7 +181,7 @@ type pofstream* = OFileStream
 
 type pfstream* = FileStream
 
-type TextEncoder* {.importcpp: "TextEncoder", pure, inheritable, header: "textEncoder.h".} = object
+type TextEncoder* {.importcpp: "TextEncoder*", bycopy, pure, inheritable, header: "textEncoder.h".} = object
   ## This class can be used to convert text between multiple representations,
   ## e.g.  UTF-8 to UTF-16.  You may use it as a static class object, passing
   ## the encoding each time, or you may create an instance and use that object,
@@ -189,6 +189,10 @@ type TextEncoder* {.importcpp: "TextEncoder", pure, inheritable, header: "textEn
   ##
   ## This class is also a base class of TextNode, which inherits this
   ## functionality.
+
+converter toTextEncoder*(_: type(nil)): TextEncoder {.importcpp: "(nullptr)".}
+converter toBool*(this: TextEncoder): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TextEncoder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type Filename* {.importcpp: "Filename", pure, inheritable, header: "filename.h".} = object
   ## The name of a file, such as a texture file or an Egg file.  Stores the full
@@ -414,21 +418,33 @@ type StreamWrapper* {.importcpp: "StreamWrapper", pure, inheritable, header: "st
   ## This class provides a locking wrapper around a combination ostream/istream
   ## pointer.
 
-type SSReader* {.importcpp: "SSReader", pure, inheritable, header: "socketStream.h".} = object
+type SSReader* {.importcpp: "SSReader*", bycopy, pure, inheritable, header: "socketStream.h".} = object
   ## An internal class for reading from a socket stream.  This serves as a base
   ## class for both ISocketStream and SocketStream; its purpose is to minimize
   ## redundant code between them.  Do not use it directly.
 
-type SSWriter* {.importcpp: "SSWriter", pure, inheritable, header: "socketStream.h".} = object
+converter toSSReader*(_: type(nil)): SSReader {.importcpp: "(nullptr)".}
+converter toBool*(this: SSReader): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SSReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type SSWriter* {.importcpp: "SSWriter*", bycopy, pure, inheritable, header: "socketStream.h".} = object
   ## An internal class for writing to a socket stream.  This serves as a base
   ## class for both OSocketStream and SocketStream; its purpose is to minimize
   ## redundant code between them.  Do not use it directly.
 
-type ISocketStream* {.importcpp: "ISocketStream", pure, inheritable, header: "socketStream.h".} = object of istream
+converter toSSWriter*(_: type(nil)): SSWriter {.importcpp: "(nullptr)".}
+converter toBool*(this: SSWriter): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SSWriter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type ISocketStream* {.importcpp: "ISocketStream*", bycopy, pure, inheritable, header: "socketStream.h".} = object of istream
   ## This is a base class for istreams implemented in Panda that read from a
   ## (possibly non-blocking) socket.  It adds is_closed(), which can be called
   ## after an eof condition to check whether the socket has been closed, or
   ## whether more data may be available later.
+
+converter toISocketStream*(_: type(nil)): ISocketStream {.importcpp: "(nullptr)".}
+converter toBool*(this: ISocketStream): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: ISocketStream, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "socketStream.h".} = object of ostream
   ## A base class for ostreams that write to a (possibly non-blocking) socket.
@@ -595,8 +611,12 @@ converter toBool*(this: VirtualFileMountHTTP): bool {.importcpp: "(# != nullptr)
 func `==`*(x: VirtualFileMountHTTP, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountHTTP], obj: TypedObject): VirtualFileMountHTTP {.importcpp: "DCAST(VirtualFileMountHTTP, @)".}
 
-type Patcher* {.importcpp: "Patcher", pure, inheritable, header: "patcher.h".} = object
+type Patcher* {.importcpp: "Patcher*", bycopy, pure, inheritable, header: "patcher.h".} = object
   ## Applies a patch synchronously
+
+converter toPatcher*(_: type(nil)): Patcher {.importcpp: "(nullptr)".}
+converter toBool*(this: Patcher): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: Patcher, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type StringStream* {.importcpp: "StringStream", pure, inheritable, header: "stringStream.h".} = object of iostream
   ## A bi-directional stream object that reads and writes data to an internal
@@ -670,9 +690,13 @@ type Datagram* {.importcpp: "Datagram", pure, inheritable, header: "datagram.h".
   ## A Datagram is itself headerless; it is simply a collection of data
   ## elements.
 
-type DatagramGenerator* {.importcpp: "DatagramGenerator", pure, inheritable, header: "datagramGenerator.h".} = object
+type DatagramGenerator* {.importcpp: "DatagramGenerator*", bycopy, pure, inheritable, header: "datagramGenerator.h".} = object
   ## This class defines the abstract interace to any source of datagrams,
   ## whether it be from a file or from the net.
+
+converter toDatagramGenerator*(_: type(nil)): DatagramGenerator {.importcpp: "(nullptr)".}
+converter toBool*(this: DatagramGenerator): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: DatagramGenerator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DatagramIterator* {.importcpp: "DatagramIterator", pure, inheritable, header: "datagramIterator.h".} = object
   ## A class to retrieve the individual data elements previously stored in a
@@ -682,9 +706,13 @@ type DatagramIterator* {.importcpp: "DatagramIterator", pure, inheritable, heade
   ## Note that it is the responsibility of the caller to ensure that the datagram
   ## object is not destructed while this DatagramIterator is in use.
 
-type DatagramSink* {.importcpp: "DatagramSink", pure, inheritable, header: "datagramSink.h".} = object
+type DatagramSink* {.importcpp: "DatagramSink*", bycopy, pure, inheritable, header: "datagramSink.h".} = object
   ## This class defines the abstract interface to sending datagrams to any
   ## target, whether it be into a file or across the net
+
+converter toDatagramSink*(_: type(nil)): DatagramSink {.importcpp: "(nullptr)".}
+converter toBool*(this: DatagramSink): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: DatagramSink, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type FileReference* {.importcpp: "PT(FileReference)", bycopy, pure, inheritable, header: "fileReference.h".} = object of TypedReferenceCount
   ## Keeps a reference-counted pointer to a file on disk.  As long as the
@@ -936,7 +964,7 @@ type WindowsRegistry* {.importcpp: "WindowsRegistry", pure, inheritable, header:
   ## encoding and stores them in Unicode (and conversely reconverts them on
   ## retrieval).
 
-type RecorderBase* {.importcpp: "RecorderBase", pure, inheritable, header: "recorderBase.h".} = object
+type RecorderBase* {.importcpp: "RecorderBase*", bycopy, pure, inheritable, header: "recorderBase.h".} = object
   ## This is the base class to a number of objects that record particular kinds
   ## of user input (like a MouseRecorder) to use in conjunction with a
   ## RecorderController to record the user's inputs for a session.
@@ -955,6 +983,10 @@ type RecorderBase* {.importcpp: "RecorderBase", pure, inheritable, header: "reco
   ## Most types of recorders should derive from Recorder, as it derives from
   ## ReferenceCount, except for MouseRecorder, which would otherwise doubly
   ## inherit from ReferenceCount.
+
+converter toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
+converter toBool*(this: RecorderBase): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: RecorderBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TypedWritable* {.importcpp: "TypedWritable", pure, inheritable, header: "typedWritable.h".} = object of TypedObject
   ## Base class for objects that can be written to and read from Bam files.
@@ -1033,10 +1065,14 @@ converter toBool*(this: SocketStreamRecorder): bool {.importcpp: "(# != nullptr)
 func `==`*(x: SocketStreamRecorder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SocketStreamRecorder], obj: TypedObject): SocketStreamRecorder {.importcpp: "DCAST(SocketStreamRecorder, @)".}
 
-type Light* {.importcpp: "Light", pure, inheritable, header: "light.h".} = object
+type Light* {.importcpp: "Light*", bycopy, pure, inheritable, header: "light.h".} = object
   ## The abstract interface to all kinds of lights.  The actual light objects
   ## also inherit from PandaNode, and can therefore be added to the scene graph
   ## at some arbitrary point to define the coordinate system of effect.
+
+converter toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
+converter toBool*(this: Light): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: Light, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of Light
   ## A derivative of Light and of PandaNode.  All kinds of Light except
@@ -3445,12 +3481,16 @@ func dcast*(_: typedesc[GraphicsPipe], obj: TypedObject): GraphicsPipe {.importc
 type DisplayInformation* {.importcpp: "DisplayInformation", pure, inheritable, header: "displayInformation.h".} = object
   ## This class contains various display information.
 
-type DrawableRegion* {.importcpp: "DrawableRegion", pure, inheritable, header: "drawableRegion.h".} = object
+type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, header: "drawableRegion.h".} = object
   ## This is a base class for GraphicsWindow (actually, GraphicsOutput) and
   ## DisplayRegion, both of which are conceptually rectangular regions into
   ## which drawing commands may be issued.  Sometimes you want to deal with a
   ## single display region, and sometimes you want to deal with the whole window
   ## at once, particularly for issuing clear commands and capturing screenshots.
+
+converter toDrawableRegion*(_: type(nil)): DrawableRegion {.importcpp: "(nullptr)".}
+converter toBool*(this: DrawableRegion): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: DrawableRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type WindowHandle* {.importcpp: "PT(WindowHandle)", bycopy, pure, inheritable, header: "windowHandle.h".} = object of TypedReferenceCount
   ## This object represents a window on the desktop, not necessarily a Panda
@@ -4001,7 +4041,7 @@ type AdaptiveLru* {.importcpp: "AdaptiveLru", pure, inheritable, header: "adapti
   ## The interface is designed to be identical to that for SimpleLru, so that it
   ## may be used as a drop-in replacement.
 
-type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage", pure, inheritable, header: "adaptiveLru.h".} = object
+type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage*", bycopy, pure, inheritable, header: "adaptiveLru.h".} = object
   ## One atomic piece that may be managed by a AdaptiveLru chain.  To use this
   ## class, inherit from it and override evict_lru().
   ##
@@ -4011,6 +4051,10 @@ type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage", pure, inheritable, header:
   ## different linked lists simultaneously.  The AdaptiveLru class depends on
   ## this; it maintains its pages in two different lists, one grouped by
   ## priority, and one in order by next partial update needs.
+
+converter toAdaptiveLruPage*(_: type(nil)): AdaptiveLruPage {.importcpp: "(nullptr)".}
+converter toBool*(this: AdaptiveLruPage): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: AdaptiveLruPage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type GeomEnums* {.importcpp: "GeomEnums", pure, inheritable, header: "geomEnums.h".} = object
   ## This class exists just to provide scoping for the various enumerated types
@@ -4097,22 +4141,34 @@ func dcast*(_: typedesc[GeomVertexFormat], obj: TypedObject): GeomVertexFormat {
 type SimpleLru* {.importcpp: "SimpleLru", pure, inheritable, header: "simpleLru.h".} = object of Namable
   ## An implementation of a very simple LRU algorithm.  Also see AdaptiveLru.
 
-type SimpleLruPage* {.importcpp: "SimpleLruPage", pure, inheritable, header: "simpleLru.h".} = object
+type SimpleLruPage* {.importcpp: "SimpleLruPage*", bycopy, pure, inheritable, header: "simpleLru.h".} = object
   ## One atomic piece that may be managed by a SimpleLru chain.  To use this
   ## class, inherit from it and override evict_lru().
 
-type SimpleAllocator* {.importcpp: "SimpleAllocator", pure, inheritable, header: "simpleAllocator.h".} = object
+converter toSimpleLruPage*(_: type(nil)): SimpleLruPage {.importcpp: "(nullptr)".}
+converter toBool*(this: SimpleLruPage): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SimpleLruPage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type SimpleAllocator* {.importcpp: "SimpleAllocator*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
   ## An implementation of a very simple block allocator.  This class can
   ## allocate ranges of nonnegative integers within a specified upper limit; it
   ## uses a simple first-fit algorithm to find the next available space.
 
+converter toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullptr)".}
+converter toBool*(this: SimpleAllocator): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SimpleAllocator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
 type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock", pure, inheritable, header: "simpleAllocator.h".} = object
   ## A single block as returned from SimpleAllocator::alloc().
 
-type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile", pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
+type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile*", bycopy, pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
   ## A temporary file to hold the vertex data that has been evicted from memory
   ## and written to disk.  All vertex data arrays are written into one large
   ## flat file.
+
+converter toVertexDataSaveFile*(_: type(nil)): VertexDataSaveFile {.importcpp: "(nullptr)".}
+converter toBool*(this: VertexDataSaveFile): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: VertexDataSaveFile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type VertexDataPage* {.importcpp: "VertexDataPage", pure, inheritable, header: "vertexDataPage.h".} = object of SimpleAllocator
   ## A block of bytes that holds one or more VertexDataBlocks.  The entire page
@@ -4276,7 +4332,7 @@ type SavedContext* {.importcpp: "SavedContext", pure, inheritable, header: "save
   ## TextureContext and GeomContext.  It exists mainly to provide some
   ## structural organization.
 
-type BufferContext* {.importcpp: "BufferContext", pure, inheritable, header: "bufferContext.h".} = object of SavedContext
+type BufferContext* {.importcpp: "BufferContext*", bycopy, pure, inheritable, header: "bufferContext.h".} = object of SavedContext
   ## This is a base class for those kinds of SavedContexts that occupy an
   ## easily-measured (and substantial) number of bytes in the video card's frame
   ## buffer memory or AGP memory.  At the present, this includes most of the
@@ -4285,6 +4341,10 @@ type BufferContext* {.importcpp: "BufferContext", pure, inheritable, header: "bu
   ##
   ## This class provides methods for tracking the video memory utilization, as
   ## well as residency of each object, via PStats.
+
+converter toBufferContext*(_: type(nil)): BufferContext {.importcpp: "(nullptr)".}
+converter toBool*(this: BufferContext): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: BufferContext, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type GeomPrimitive* {.importcpp: "PT(GeomPrimitive)", bycopy, pure, inheritable, header: "geomPrimitive.h".} = object of CopyOnWriteObject
   ## This is an abstract base class for a family of classes that represent the
@@ -5367,11 +5427,15 @@ converter toBool*(this: HermiteCurve): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: HermiteCurve, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HermiteCurve], obj: TypedObject): HermiteCurve {.importcpp: "DCAST(HermiteCurve, @)".}
 
-type NurbsCurveInterface* {.importcpp: "NurbsCurveInterface", pure, inheritable, header: "nurbsCurveInterface.h".} = object
+type NurbsCurveInterface* {.importcpp: "NurbsCurveInterface*", bycopy, pure, inheritable, header: "nurbsCurveInterface.h".} = object
   ## This abstract class defines the interface only for a Nurbs-style curve,
   ## with knots and coordinates in homogeneous space.
   ##
   ## The NurbsCurve class inherits both from this and from ParametricCurve.
+
+converter toNurbsCurveInterface*(_: type(nil)): NurbsCurveInterface {.importcpp: "(nullptr)".}
+converter toBool*(this: NurbsCurveInterface): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: NurbsCurveInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NurbsCurve* {.importcpp: "PT(NurbsCurve)", bycopy, pure, inheritable, header: "nurbsCurve.h".} = object of PiecewiseCurve
   ## A Nonuniform Rational B-Spline.
@@ -5734,11 +5798,15 @@ converter toBool*(this: MouseWatcherRegion): bool {.importcpp: "(# != nullptr)".
 func `==`*(x: MouseWatcherRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseWatcherRegion], obj: TypedObject): MouseWatcherRegion {.importcpp: "DCAST(MouseWatcherRegion, @)".}
 
-type MouseWatcherBase* {.importcpp: "MouseWatcherBase", pure, inheritable, header: "mouseWatcherBase.h".} = object
+type MouseWatcherBase* {.importcpp: "MouseWatcherBase*", bycopy, pure, inheritable, header: "mouseWatcherBase.h".} = object
   ## This represents a collection of MouseWatcherRegions that may be managed as
   ## a group.  This is the base class for both MouseWatcherGroup and
   ## MouseWatcher, and exists so that we don't have to make MouseWatcher inherit
   ## from ReferenceCount more than once.
+
+converter toMouseWatcherBase*(_: type(nil)): MouseWatcherBase {.importcpp: "(nullptr)".}
+converter toBool*(this: MouseWatcherBase): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: MouseWatcherBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type MouseWatcherGroup* {.importcpp: "PT(MouseWatcherGroup)", bycopy, pure, inheritable, header: "mouseWatcherGroup.h".} = object of MouseWatcherBase
   ## This represents a collection of MouseWatcherRegions that may be managed as
@@ -6267,7 +6335,7 @@ converter toBool*(this: Connection): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Connection, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Connection], obj: TypedObject): Connection {.importcpp: "DCAST(Connection, @)".}
 
-type ConnectionReader* {.importcpp: "ConnectionReader", pure, inheritable, header: "connectionReader.h".} = object
+type ConnectionReader* {.importcpp: "ConnectionReader*", bycopy, pure, inheritable, header: "connectionReader.h".} = object
   ## This is an abstract base class for a family of classes that listen for
   ## activity on a socket and respond to it, for instance by reading a datagram
   ## and serving it (or queueing it up for later service).
@@ -6283,6 +6351,10 @@ type ConnectionReader* {.importcpp: "ConnectionReader", pure, inheritable, heade
   ## ConnectionListener derives from this class, extending it to accept
   ## connections on a rendezvous socket rather than read datagrams.
 
+converter toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nullptr)".}
+converter toBool*(this: ConnectionReader): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: ConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
 type ConnectionListener* {.importcpp: "ConnectionListener", pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
   ## This is a special kind of ConnectionReader that waits for activity on a
   ## rendezvous port and accepts a TCP connection (instead of attempting to read
@@ -6296,7 +6368,7 @@ type NetDatagram* {.importcpp: "NetDatagram", pure, inheritable, header: "netDat
   ## from a network.  It's different only in that it knows which Connection
   ## and/or NetAddress it is to be sent to or was received from.
 
-type ConnectionManager* {.importcpp: "ConnectionManager", pure, inheritable, header: "connectionManager.h".} = object
+type ConnectionManager* {.importcpp: "ConnectionManager*", bycopy, pure, inheritable, header: "connectionManager.h".} = object
   ## The primary interface to the low-level networking layer in this package.  A
   ## ConnectionManager is used to establish and destroy TCP and UDP connections.
   ## Communication on these connections, once established, is handled via
@@ -6307,6 +6379,10 @@ type ConnectionManager* {.importcpp: "ConnectionManager", pure, inheritable, hea
   ## QueuedConnectionManager to get reports about these events (or derive your
   ## own class to handle these events properly).
 
+converter toConnectionManager*(_: type(nil)): ConnectionManager {.importcpp: "(nullptr)".}
+converter toBool*(this: ConnectionManager): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: ConnectionManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
 type ConnectionWriter* {.importcpp: "ConnectionWriter", pure, inheritable, header: "connectionWriter.h".} = object
   ## This class handles threaded delivery of datagrams to various TCP or UDP
   ## sockets.
@@ -6315,20 +6391,28 @@ type ConnectionWriter* {.importcpp: "ConnectionWriter", pure, inheritable, heade
   ## write its datagrams to sockets.  The number of threads is specified at
   ## construction time and cannot be changed.
 
-type DatagramGeneratorNet* {.importcpp: "DatagramGeneratorNet", pure, inheritable, header: "datagramGeneratorNet.h".} = object of DatagramGenerator
+type DatagramGeneratorNet* {.importcpp: "DatagramGeneratorNet*", bycopy, pure, inheritable, header: "datagramGeneratorNet.h".} = object of DatagramGenerator
   ## This class provides datagrams one-at-a-time as read directly from the net,
   ## via a TCP connection.  If a datagram is not available, get_datagram() will
   ## block until one is.
+
+converter toDatagramGeneratorNet*(_: type(nil)): DatagramGeneratorNet {.importcpp: "(nullptr)".}
+converter toBool*(this: DatagramGeneratorNet): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: DatagramGeneratorNet, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DatagramSinkNet* {.importcpp: "DatagramSinkNet", pure, inheritable, header: "datagramSinkNet.h".} = object of DatagramSink
   ## This class accepts datagrams one-at-a-time and sends them over the net, via
   ## a TCP connection.
 
-type QueuedConnectionListener* {.importcpp: "QueuedConnectionListener", pure, inheritable, header: "queuedConnectionListener.h".} = object of ConnectionListener
+type QueuedConnectionListener* {.importcpp: "QueuedConnectionListener*", bycopy, pure, inheritable, header: "queuedConnectionListener.h".} = object of ConnectionListener
   ## This flavor of ConnectionListener will queue up all of the TCP connections
   ## it established for later detection by the client code.
 
-type QueuedConnectionManager* {.importcpp: "QueuedConnectionManager", pure, inheritable, header: "queuedConnectionManager.h".} = object of ConnectionManager
+converter toQueuedConnectionListener*(_: type(nil)): QueuedConnectionListener {.importcpp: "(nullptr)".}
+converter toBool*(this: QueuedConnectionListener): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: QueuedConnectionListener, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type QueuedConnectionManager* {.importcpp: "QueuedConnectionManager*", bycopy, pure, inheritable, header: "queuedConnectionManager.h".} = object of ConnectionManager
   ## This flavor of ConnectionManager will queue up all of the reset-connection
   ## messages from the ConnectionReaders and ConnectionWriters and report them
   ## to the client on demand.
@@ -6338,13 +6422,21 @@ type QueuedConnectionManager* {.importcpp: "QueuedConnectionManager", pure, inhe
   ## responsibility of the client to call close_connection() on that connection
   ## to free up its resources.
 
-type QueuedConnectionReader* {.importcpp: "QueuedConnectionReader", pure, inheritable, header: "queuedConnectionReader.h".} = object of ConnectionReader
+converter toQueuedConnectionManager*(_: type(nil)): QueuedConnectionManager {.importcpp: "(nullptr)".}
+converter toBool*(this: QueuedConnectionManager): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: QueuedConnectionManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type QueuedConnectionReader* {.importcpp: "QueuedConnectionReader*", bycopy, pure, inheritable, header: "queuedConnectionReader.h".} = object of ConnectionReader
   ## This flavor of ConnectionReader will read from its sockets and queue up all
   ## of the datagrams read for later receipt by the client code.  This class is
   ## useful for client code that doesn't want to deal with threading and is
   ## willing to poll for datagrams at its convenience.
 
-type RecentConnectionReader* {.importcpp: "RecentConnectionReader", pure, inheritable, header: "recentConnectionReader.h".} = object of ConnectionReader
+converter toQueuedConnectionReader*(_: type(nil)): QueuedConnectionReader {.importcpp: "(nullptr)".}
+converter toBool*(this: QueuedConnectionReader): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: QueuedConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type RecentConnectionReader* {.importcpp: "RecentConnectionReader*", bycopy, pure, inheritable, header: "recentConnectionReader.h".} = object of ConnectionReader
   ## This flavor of ConnectionReader will read from its sockets and retain only
   ## the single most recent datagram for inspection by client code.  It's useful
   ## particularly for reading telemetry-type data from UDP sockets where you
@@ -6353,9 +6445,17 @@ type RecentConnectionReader* {.importcpp: "RecentConnectionReader", pure, inheri
   ##
   ## This class will always create one thread for itself.
 
-type Socket_Address* {.importcpp: "Socket_Address", pure, inheritable, header: "socket_Address.h".} = object
+converter toRecentConnectionReader*(_: type(nil)): RecentConnectionReader {.importcpp: "(nullptr)".}
+converter toBool*(this: RecentConnectionReader): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: RecentConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type Socket_Address* {.importcpp: "Socket_Address*", bycopy, pure, inheritable, header: "socket_Address.h".} = object
   ## A simple place to store and manipulate tcp and port address for
   ## communication layer
+
+converter toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr)".}
+converter toBool*(this: Socket_Address): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: Socket_Address, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_IP.h".} = object of TypedObject
   ## Base functionality for a INET domain Socket This call should be the
@@ -6392,7 +6492,7 @@ type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_U
   ## duplicates code from Socket_UDP_Outgoing, to avoid the problems of multiple
   ## inheritance.
 
-type TiXmlBase* {.importcpp: "TiXmlBase", pure, inheritable, header: "tinyxml.h".} = object
+type TiXmlBase* {.importcpp: "TiXmlBase*", bycopy, pure, inheritable, header: "tinyxml.h".} = object
   ## TiXmlBase is a base class for every class in TinyXml.
   ## It does little except to establish that TinyXml classes
   ## can be printed and provide some utility functions.
@@ -6415,14 +6515,22 @@ type TiXmlBase* {.importcpp: "TiXmlBase", pure, inheritable, header: "tinyxml.h"
   ## A Decleration contains: Attributes (not on tree)
   ## @endverbatim
 
-type TiXmlNode* {.importcpp: "TiXmlNode", pure, inheritable, header: "tinyxml.h".} = object of TiXmlBase
+converter toTiXmlBase*(_: type(nil)): TiXmlBase {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlBase): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlNode* {.importcpp: "TiXmlNode*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlBase
   ## The parent class for everything in the Document Object Model.
   ## (Except for attributes).
   ## Nodes have siblings, a parent, and children. A node can be
   ## in a document, or stand on its own. The type of a TiXmlNode
   ## can be queried, and it can be cast to its more defined type.
 
-type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+converter toTiXmlNode*(_: type(nil)): TiXmlNode {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlNode): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## In correct XML the declaration is the first entry in the file.
   ## @verbatim
   ## <?xml version="1.0" standalone="yes"?>
@@ -6436,21 +6544,33 @@ type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration", pure, inheritable, heade
   ## handled as special cases, not generic attributes, simply
   ## because there can only be at most 3 and they are always the same.
 
-type TiXmlDocument* {.importcpp: "TiXmlDocument", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+converter toTiXmlDeclaration*(_: type(nil)): TiXmlDeclaration {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlDeclaration): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlDeclaration, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlDocument* {.importcpp: "TiXmlDocument*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## Always the top level node. A document binds together all the
   ## XML pieces. It can be saved, loaded, and printed to the screen.
   ## The 'value' of a document node is the xml file name.
 
-type TiXmlElement* {.importcpp: "TiXmlElement", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+converter toTiXmlDocument*(_: type(nil)): TiXmlDocument {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlDocument): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlDocument, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlElement* {.importcpp: "TiXmlElement*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## The element is a container class. It has a value, the element name,
   ## and can contain other elements, text, comments, and unknowns.
   ## Elements also contain an arbitrary number of attributes.
+
+converter toTiXmlElement*(_: type(nil)): TiXmlElement {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlElement): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlElement, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TiXmlCursor* {.importcpp: "TiXmlCursor", pure, inheritable, header: "tinyxml.h".} = object
   ## Internal structure for tracking location of items
   ## in the XML file.
 
-type TiXmlVisitor* {.importcpp: "TiXmlVisitor", pure, inheritable, header: "tinyxml.h".} = object
+type TiXmlVisitor* {.importcpp: "TiXmlVisitor*", bycopy, pure, inheritable, header: "tinyxml.h".} = object
   ## Implements the interface to the "Visitor pattern" (see the Accept() method.)
   ## If you call the Accept() method, it requires being passed a TiXmlVisitor
   ## class to handle callbacks. For nodes that contain other nodes (Document, Element)
@@ -6468,6 +6588,10 @@ type TiXmlVisitor* {.importcpp: "TiXmlVisitor", pure, inheritable, header: "tiny
   ## You should never change the document from a callback.
   ##
   ## @sa TiXmlNode::Accept()
+
+converter toTiXmlVisitor*(_: type(nil)): TiXmlVisitor {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlVisitor): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlVisitor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 const TIXML_SUCCESS*: int = 0
 const TIXML_NO_ATTRIBUTE*: int = 1
@@ -6500,22 +6624,34 @@ type TiXmlAttributeSet* {.importcpp: "TiXmlAttributeSet", pure, inheritable, hea
   ## - I like circular lists
   ## - it demonstrates some independence from the (typical) doubly linked list.
 
-type TiXmlComment* {.importcpp: "TiXmlComment", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+type TiXmlComment* {.importcpp: "TiXmlComment*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## An XML comment.
 
-type TiXmlText* {.importcpp: "TiXmlText", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+converter toTiXmlComment*(_: type(nil)): TiXmlComment {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlComment): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlComment, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlText* {.importcpp: "TiXmlText*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## XML text. A text node can have 2 ways to output the next. "normal" output
   ## and CDATA. It will default to the mode it was parsed from the XML file and
   ## you generally want to leave it alone, but you can change the output mode with
   ## SetCDATA() and query it with CDATA().
 
-type TiXmlUnknown* {.importcpp: "TiXmlUnknown", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
+converter toTiXmlText*(_: type(nil)): TiXmlText {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlText): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlText, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type TiXmlUnknown* {.importcpp: "TiXmlUnknown*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## Any tag that tinyXml doesn't recognize is saved as an
   ## unknown. It is a tag of text, but should not be modified.
   ## It will be written back to the XML, unchanged, when the file
   ## is saved.
   ##
   ## DTD tags get thrown into TiXmlUnknowns.
+
+converter toTiXmlUnknown*(_: type(nil)): TiXmlUnknown {.importcpp: "(nullptr)".}
+converter toBool*(this: TiXmlUnknown): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TiXmlUnknown, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TiXmlHandle* {.importcpp: "TiXmlHandle", pure, inheritable, header: "tinyxml.h".} = object
   ## A TiXmlHandle is a class that wraps a node pointer with null checks; this is
@@ -7177,15 +7313,15 @@ func totalSize*(_: typedesc[MemoryUsage]): clonglong {.importcpp: "MemoryUsage::
 ## Returns the total size of allocated memory consumed by the process, as
 ## nearly as can be determined.
 
-func filename*(this: DatagramSink): Filename {.importcpp: "#.get_filename()".} ## \
+func filename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()".} ## \
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-func file*(this: DatagramSink): FileReference {.importcpp: "#.get_file()".} ## \
+func file*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
-func filePos*(this: DatagramSink): clonglong {.importcpp: "#.get_file_pos()".} ## \
+func filePos*(this: DatagramSink): clonglong {.importcpp: "#->get_file_pos()".} ## \
 ## Returns the current file position within the data stream, if any, or 0 if
 ## the file position is not meaningful or cannot be determined.
 ##
@@ -7406,19 +7542,19 @@ func stashed*(this: PandaNode, n: int): PandaNode {.importcpp: "#->get_stashed(#
 ## see get_stashed(), if your intention is to iterate through the complete
 ## list of stashed children; get_stashed() is preferable in this case.
 
-func color*(this: Light): LColor {.importcpp: "#.get_color()".} ## \
+func color*(this: Light): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the basic color of the light.
 
-proc `color=`*(this: Light, color: LColor) {.importcpp: "#.set_color(#)".} ## \
+proc `color=`*(this: Light, color: LColor) {.importcpp: "#->set_color(#)".} ## \
 ## Sets the basic color of the light.
 
-func colorTemperature*(this: Light): float32 {.importcpp: "#.get_color_temperature()".} ## \
+func colorTemperature*(this: Light): float32 {.importcpp: "#->get_color_temperature()".} ## \
 ## Returns the basic color temperature of the light, assuming
 ## has_color_temperature() returns true.
 ##
 ## @since 1.10.0
 
-proc `colorTemperature=`*(this: Light, temperature: float32) {.importcpp: "#.set_color_temperature(#)".} ## \
+proc `colorTemperature=`*(this: Light, temperature: float32) {.importcpp: "#->set_color_temperature(#)".} ## \
 ## Sets the color temperature of the light in kelvins.  This will recalculate
 ## the light's color.
 ##
@@ -7427,10 +7563,10 @@ proc `colorTemperature=`*(this: Light, temperature: float32) {.importcpp: "#.set
 ##
 ## @since 1.10.0
 
-func priority*(this: Light): int {.importcpp: "#.get_priority()".} ## \
+func priority*(this: Light): int {.importcpp: "#->get_priority()".} ## \
 ## Returns the priority associated with this light.  See set_priority().
 
-proc `priority=`*(this: Light, priority: int) {.importcpp: "#.set_priority(#)".} ## \
+proc `priority=`*(this: Light, priority: int) {.importcpp: "#->set_priority(#)".} ## \
 ## Changes the relative importance of this light relative to the other lights
 ## that are applied simultaneously.
 ##
@@ -9733,43 +9869,43 @@ func displayInformation*(this: GraphicsPipe): DisplayInformation {.importcpp: "#
 
 func interfaceName*(this: GraphicsPipe): string {.importcpp: "nimStringFromStdString(#->get_interface_name())", header: stringConversionCode.}
 
-func clearColor*(this: DrawableRegion): LColor {.importcpp: "#.get_clear_color()".} ## \
+func clearColor*(this: DrawableRegion): LColor {.importcpp: "#->get_clear_color()".} ## \
 ## Returns the current clear color value.  This is the value that will be used
 ## to clear the color buffer every frame, but only if get_clear_color_active()
 ## returns true.  If get_clear_color_active() returns false, this is
 ## meaningless.
 
-proc `clearColor=`*(this: DrawableRegion, color: LColor) {.importcpp: "#.set_clear_color(#)".} ## \
+proc `clearColor=`*(this: DrawableRegion, color: LColor) {.importcpp: "#->set_clear_color(#)".} ## \
 ## Sets the clear color to the indicated value.  This is the value that will
 ## be used to clear the color buffer every frame, but only if
 ## get_clear_color_active() returns true.  If get_clear_color_active() returns
 ## false, this is meaningless.
 
-func clearDepth*(this: DrawableRegion): float32 {.importcpp: "#.get_clear_depth()".} ## \
+func clearDepth*(this: DrawableRegion): float32 {.importcpp: "#->get_clear_depth()".} ## \
 ## Returns the current clear depth value.  This is the value that will be used
 ## to clear the depth buffer every frame, but only if get_clear_depth_active()
 ## returns true.  If get_clear_depth_active() returns false, this is
 ## meaningless.
 
-proc `clearDepth=`*(this: DrawableRegion, depth: float32) {.importcpp: "#.set_clear_depth(#)".} ## \
+proc `clearDepth=`*(this: DrawableRegion, depth: float32) {.importcpp: "#->set_clear_depth(#)".} ## \
 ## Sets the clear depth to the indicated value.  This is the value that will
 ## be used to clear the depth buffer every frame, but only if
 ## get_clear_depth_active() returns true.  If get_clear_depth_active() returns
 ## false, this is meaningless.
 
-func clearStencil*(this: DrawableRegion): int {.importcpp: "#.get_clear_stencil()".} ## \
+func clearStencil*(this: DrawableRegion): int {.importcpp: "#->get_clear_stencil()".} ## \
 ## Returns the current clear stencil value.  This is the value that will be
 ## used to clear the stencil buffer every frame, but only if
 ## get_clear_stencil_active() returns true.  If get_clear_stencil_active()
 ## returns false, this is meaningless.
 
-proc `clearStencil=`*(this: DrawableRegion, stencil: int) {.importcpp: "#.set_clear_stencil(#)".}
+proc `clearStencil=`*(this: DrawableRegion, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
 
-func pixelZoom*(this: DrawableRegion): float32 {.importcpp: "#.get_pixel_zoom()".} ## \
+func pixelZoom*(this: DrawableRegion): float32 {.importcpp: "#->get_pixel_zoom()".} ## \
 ## Returns the value set by set_pixel_zoom(), regardless of whether it is
 ## being respected or not.  Also see get_pixel_factor().
 
-proc `pixelZoom=`*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#.set_pixel_zoom(#)".} ## \
+proc `pixelZoom=`*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#->set_pixel_zoom(#)".} ## \
 ## Sets the amount by which the pixels of the region are scaled internally
 ## when filling the image interally.  Setting this number larger makes the
 ## pixels blockier, but may make the rendering faster, particularly for
@@ -9787,7 +9923,7 @@ proc `pixelZoom=`*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#.se
 ## useful--currently, this is the tinydisplay software renderer.  Other kinds
 ## of renderers allow you to set this property, but ignore it.
 
-func pixelFactor*(this: DrawableRegion): float32 {.importcpp: "#.get_pixel_factor()".} ## \
+func pixelFactor*(this: DrawableRegion): float32 {.importcpp: "#->get_pixel_factor()".} ## \
 ## Returns the amount by which the height and width of the region will be
 ## scaled internally, based on the zoom factor set by set_pixel_zoom().  This
 ## will return 1.0 if the pixel_zoom was not set or if it is not being
@@ -11184,21 +11320,21 @@ func modified*(this: GeomVertexData): UpdateSeq {.importcpp: "#->get_modified()"
 ## Returns a sequence number which is guaranteed to change at least every time
 ## the vertex data is modified.
 
-func dataSizeBytes*(this: BufferContext): clonglong {.importcpp: "#.get_data_size_bytes()".} ## \
+func dataSizeBytes*(this: BufferContext): clonglong {.importcpp: "#->get_data_size_bytes()".} ## \
 ## Returns the number of bytes previously reported for the data object.  This
 ## is used to track changes in the data object's allocated size; if it changes
 ## from this, we need to create a new buffer.  This is also used to track
 ## memory utilization in PStats.
 
-func modified*(this: BufferContext): UpdateSeq {.importcpp: "#.get_modified()".} ## \
+func modified*(this: BufferContext): UpdateSeq {.importcpp: "#->get_modified()".} ## \
 ## Returns the UpdateSeq that was recorded the last time mark_loaded() was
 ## called.
 
-func active*(this: BufferContext): bool {.importcpp: "#.get_active()".} ## \
+func active*(this: BufferContext): bool {.importcpp: "#->get_active()".} ## \
 ## Returns the active flag associated with this object.  An object is
 ## considered "active" if it was rendered in the current frame.
 
-func resident*(this: BufferContext): bool {.importcpp: "#.get_resident()".} ## \
+func resident*(this: BufferContext): bool {.importcpp: "#->get_resident()".} ## \
 ## Returns the resident flag associated with this object.  An object is
 ## considered "resident" if it appears to be resident in texture memory.
 
@@ -12849,7 +12985,7 @@ proc `suppressFlags=`*(this: MouseWatcherRegion, suppress_flags: int) {.importcp
 ## the mouse position will not be sent along the data graph when the mouse is
 ## over this particular region.
 
-func sorted*(this: MouseWatcherBase): bool {.importcpp: "#.is_sorted()".} ## \
+func sorted*(this: MouseWatcherBase): bool {.importcpp: "#->is_sorted()".} ## \
 ## Returns true if the group has already been sorted, false otherwise.
 
 func seq*(this: UpdateSeq): int {.importcpp: "#.get_seq()".} ## \
@@ -13614,47 +13750,47 @@ proc open*(this: FileStream, filename: string) {.importcpp: "#.open(nimStringToS
 
 proc close*(this: FileStream) {.importcpp: "#.close()".}
 
-proc initTextEncoder*(): TextEncoder {.importcpp: "TextEncoder()".}
+proc newTextEncoder*(): TextEncoder {.importcpp: "new TextEncoder()".}
 
-proc initTextEncoder*(copy: TextEncoder): TextEncoder {.importcpp: "TextEncoder(#)".}
+proc newTextEncoder*(copy: TextEncoder): TextEncoder {.importcpp: "new TextEncoder(#)".}
 
-proc clearText*(this: TextEncoder) {.importcpp: "#.clear_text()".} ## \
+proc clearText*(this: TextEncoder) {.importcpp: "#->clear_text()".} ## \
 ## Removes the text from the TextEncoder.
 
-proc hasText*(this: TextEncoder): bool {.importcpp: "#.has_text()".}
+proc hasText*(this: TextEncoder): bool {.importcpp: "#->has_text()".}
 
-proc makeUpper*(this: TextEncoder) {.importcpp: "#.make_upper()".} ## \
+proc makeUpper*(this: TextEncoder) {.importcpp: "#->make_upper()".} ## \
 ## Adjusts the text stored within the encoder to all uppercase letters
 ## (preserving accent marks correctly).
 
-proc makeLower*(this: TextEncoder) {.importcpp: "#.make_lower()".} ## \
+proc makeLower*(this: TextEncoder) {.importcpp: "#->make_lower()".} ## \
 ## Adjusts the text stored within the encoder to all lowercase letters
 ## (preserving accent marks correctly).
 
-proc appendUnicodeChar*(this: TextEncoder, character: int) {.importcpp: "#.append_unicode_char(#)".} ## \
+proc appendUnicodeChar*(this: TextEncoder, character: int) {.importcpp: "#->append_unicode_char(#)".} ## \
 ## Appends a single character to the end of the stored text.  This may be a
 ## wide character, up to 16 bits in Unicode.
 
-proc getNumChars*(this: TextEncoder): clonglong {.importcpp: "#.get_num_chars()".} ## \
+proc getNumChars*(this: TextEncoder): clonglong {.importcpp: "#->get_num_chars()".} ## \
 ## Returns the number of characters in the stored text.  This is a count of
 ## wide characters, after the string has been decoded according to
 ## set_encoding().
 
-proc getUnicodeChar*(this: TextEncoder, index: clonglong): int {.importcpp: "#.get_unicode_char(#)".} ## \
+proc getUnicodeChar*(this: TextEncoder, index: clonglong): int {.importcpp: "#->get_unicode_char(#)".} ## \
 ## Returns the Unicode value of the nth character in the stored text.  This
 ## may be a wide character (greater than 255), after the string has been
 ## decoded according to set_encoding().
 
-proc setUnicodeChar*(this: TextEncoder, index: clonglong, character: int) {.importcpp: "#.set_unicode_char(#, #)".} ## \
+proc setUnicodeChar*(this: TextEncoder, index: clonglong, character: int) {.importcpp: "#->set_unicode_char(#, #)".} ## \
 ## Sets the Unicode value of the nth character in the stored text.  This may
 ## be a wide character (greater than 255), after the string has been decoded
 ## according to set_encoding().
 
-proc getEncodedChar*(this: TextEncoder, index: clonglong): string {.importcpp: "nimStringFromStdString(#.get_encoded_char(#))", header: stringConversionCode.} ## \
+proc getEncodedChar*(this: TextEncoder, index: clonglong): string {.importcpp: "nimStringFromStdString(#->get_encoded_char(#))", header: stringConversionCode.} ## \
 ## Returns the nth char of the stored text, as a one-, two-, or three-byte
 ## encoded string.
 
-proc getTextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#.get_text_as_ascii())", header: stringConversionCode.} ## \
+proc getTextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#->get_text_as_ascii())", header: stringConversionCode.} ## \
 ## Returns the text associated with the node, converted as nearly as possible
 ## to a fully-ASCII representation.  This means replacing accented letters
 ## with their unaccented ASCII equivalents.
@@ -13707,19 +13843,19 @@ proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimS
 ## Converts the string to lowercase, assuming the string is encoded in the
 ## default encoding.
 
-proc setWtext*(this: TextEncoder, wtext: string) {.importcpp: "#.set_wtext(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc setWtext*(this: TextEncoder, wtext: string) {.importcpp: "#->set_wtext(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Changes the text that is stored in the encoder.  Subsequent calls to
 ## get_wtext() will return this same string, while get_text() will return the
 ## encoded version of the string.
 
-proc getWtext*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#.get_wtext())", header: stringConversionCode.} ## \
+proc getWtext*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#->get_wtext())", header: stringConversionCode.} ## \
 ## Returns the text associated with the TextEncoder, as a wide-character
 ## string.
 
-proc appendWtext*(this: TextEncoder, text: string) {.importcpp: "#.append_wtext(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc appendWtext*(this: TextEncoder, text: string) {.importcpp: "#->append_wtext(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Appends the indicates string to the end of the stored wide-character text.
 
-proc getWtextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#.get_wtext_as_ascii())", header: stringConversionCode.} ## \
+proc getWtextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#->get_wtext_as_ascii())", header: stringConversionCode.} ## \
 ## Returns the text associated with the node, converted as nearly as possible
 ## to a fully-ASCII representation.  This means replacing accented letters
 ## with their unaccented ASCII equivalents.
@@ -13732,7 +13868,7 @@ proc getWtextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdS
 ## will be converted to ASCII, and the nonconvertible characters will remain
 ## in their original form.
 
-proc isWtext*(this: TextEncoder): bool {.importcpp: "#.is_wtext()".} ## \
+proc isWtext*(this: TextEncoder): bool {.importcpp: "#->is_wtext()".} ## \
 ## Returns true if any of the characters in the string returned by get_wtext()
 ## are out of the range of an ASCII character (and, therefore, get_wtext()
 ## should be called in preference to get_text()).
@@ -16057,35 +16193,35 @@ proc initStreamWrapper*(stream: iostream): StreamWrapper {.importcpp: "StreamWra
 proc getIostream*(this: StreamWrapper): iostream {.importcpp: "#.get_iostream()".} ## \
 ## Returns the iostream this object is wrapping.
 
-proc receiveDatagram*(this: SSReader, dg: Datagram): bool {.importcpp: "#.receive_datagram(#)".} ## \
+proc receiveDatagram*(this: SSReader, dg: Datagram): bool {.importcpp: "#->receive_datagram(#)".} ## \
 ## Receives a datagram over the socket by expecting a little-endian 16-bit
 ## byte count as a prefix.  If the socket stream is non-blocking, may return
 ## false if the data is not available; otherwise, returns false only if the
 ## socket closes.
 
-proc isClosed*(this: SSReader): bool {.importcpp: "#.is_closed()".}
+proc isClosed*(this: SSReader): bool {.importcpp: "#->is_closed()".}
 
-proc close*(this: SSReader) {.importcpp: "#.close()".}
+proc close*(this: SSReader) {.importcpp: "#->close()".}
 
-proc setTcpHeaderSize*(this: SSReader, tcp_header_size: int) {.importcpp: "#.set_tcp_header_size(#)".} ## \
+proc setTcpHeaderSize*(this: SSReader, tcp_header_size: int) {.importcpp: "#->set_tcp_header_size(#)".} ## \
 ## Sets the header size for datagrams.  At the present, legal values for this
 ## are 0, 2, or 4; this specifies the number of bytes to use encode the
 ## datagram length at the start of each TCP datagram.  Sender and receiver
 ## must independently agree on this.
 
-proc getTcpHeaderSize*(this: SSReader): int {.importcpp: "#.get_tcp_header_size()".} ## \
+proc getTcpHeaderSize*(this: SSReader): int {.importcpp: "#->get_tcp_header_size()".} ## \
 ## Returns the header size for datagrams.  See set_tcp_header_size().
 
-proc sendDatagram*(this: SSWriter, dg: Datagram): bool {.importcpp: "#.send_datagram(#)".} ## \
+proc sendDatagram*(this: SSWriter, dg: Datagram): bool {.importcpp: "#->send_datagram(#)".} ## \
 ## Transmits the indicated datagram over the socket by prepending it with a
 ## little-endian 16-bit byte count.  Does not return until the data is sent or
 ## the connection is closed, even if the socket stream is non-blocking.
 
-proc isClosed*(this: SSWriter): bool {.importcpp: "#.is_closed()".}
+proc isClosed*(this: SSWriter): bool {.importcpp: "#->is_closed()".}
 
-proc close*(this: SSWriter) {.importcpp: "#.close()".}
+proc close*(this: SSWriter) {.importcpp: "#->close()".}
 
-proc setCollectTcp*(this: SSWriter, collect_tcp: bool) {.importcpp: "#.set_collect_tcp(#)".} ## \
+proc setCollectTcp*(this: SSWriter, collect_tcp: bool) {.importcpp: "#->set_collect_tcp(#)".} ## \
 ## Enables or disables "collect-tcp" mode.  In this mode, individual TCP
 ## packets are not sent immediately, but rather they are collected together
 ## and accumulated to be sent periodically as one larger TCP packet.  This
@@ -16099,43 +16235,43 @@ proc setCollectTcp*(this: SSWriter, collect_tcp: bool) {.importcpp: "#.set_colle
 ## If you enable this mode, you may also need to periodically call
 ## consider_flush() to flush the queue if no packets have been sent recently.
 
-proc getCollectTcp*(this: SSWriter): bool {.importcpp: "#.get_collect_tcp()".} ## \
+proc getCollectTcp*(this: SSWriter): bool {.importcpp: "#->get_collect_tcp()".} ## \
 ## Returns the current setting of "collect-tcp" mode.  See set_collect_tcp().
 
-proc setCollectTcpInterval*(this: SSWriter, interval: float64) {.importcpp: "#.set_collect_tcp_interval(#)".} ## \
+proc setCollectTcpInterval*(this: SSWriter, interval: float64) {.importcpp: "#->set_collect_tcp_interval(#)".} ## \
 ## Specifies the interval in time, in seconds, for which to hold TCP packets
 ## before sending all of the recently received packets at once.  This only has
 ## meaning if "collect-tcp" mode is enabled; see set_collect_tcp().
 
-proc getCollectTcpInterval*(this: SSWriter): float64 {.importcpp: "#.get_collect_tcp_interval()".} ## \
+proc getCollectTcpInterval*(this: SSWriter): float64 {.importcpp: "#->get_collect_tcp_interval()".} ## \
 ## Returns the interval in time, in seconds, for which to hold TCP packets
 ## before sending all of the recently received packets at once.  This only has
 ## meaning if "collect-tcp" mode is enabled; see set_collect_tcp().
 
-proc setTcpHeaderSize*(this: SSWriter, tcp_header_size: int) {.importcpp: "#.set_tcp_header_size(#)".} ## \
+proc setTcpHeaderSize*(this: SSWriter, tcp_header_size: int) {.importcpp: "#->set_tcp_header_size(#)".} ## \
 ## Sets the header size for datagrams.  At the present, legal values for this
 ## are 0, 2, or 4; this specifies the number of bytes to use encode the
 ## datagram length at the start of each TCP datagram.  Sender and receiver
 ## must independently agree on this.
 
-proc getTcpHeaderSize*(this: SSWriter): int {.importcpp: "#.get_tcp_header_size()".} ## \
+proc getTcpHeaderSize*(this: SSWriter): int {.importcpp: "#->get_tcp_header_size()".} ## \
 ## Returns the header size for datagrams.  See set_tcp_header_size().
 
-proc considerFlush*(this: SSWriter): bool {.importcpp: "#.consider_flush()".} ## \
+proc considerFlush*(this: SSWriter): bool {.importcpp: "#->consider_flush()".} ## \
 ## Sends the most recently queued data if enough time has elapsed.  This only
 ## has meaning if set_collect_tcp() has been set to true.
 
-proc flush*(this: SSWriter): bool {.importcpp: "#.flush()".} ## \
+proc flush*(this: SSWriter): bool {.importcpp: "#->flush()".} ## \
 ## Sends the most recently queued data now.  This only has meaning if
 ## set_collect_tcp() has been set to true.
 
-converter upcastToIstream*(this: ISocketStream): istream {.importcpp: "#.upcast_to_istream()".}
+converter upcastToIstream*(this: ISocketStream): istream {.importcpp: "((istream *)(#))".}
 
-converter upcastToSSReader*(this: ISocketStream): SSReader {.importcpp: "#.upcast_to_SSReader()".}
+converter upcastToSSReader*(this: ISocketStream): SSReader {.importcpp: "((SSReader *)(#))".}
 
-proc isClosed*(this: ISocketStream): bool {.importcpp: "#.is_closed()".}
+proc isClosed*(this: ISocketStream): bool {.importcpp: "#->is_closed()".}
 
-proc close*(this: ISocketStream) {.importcpp: "#.close()".}
+proc close*(this: ISocketStream) {.importcpp: "#->close()".}
 
 converter upcastToOstream*(this: OSocketStream): ostream {.importcpp: "#.upcast_to_ostream()".}
 
@@ -17775,17 +17911,17 @@ proc reloadVfsMountUrl*(_: typedesc[VirtualFileMountHTTP]) {.importcpp: "Virtual
 
 proc getClassType*(_: typedesc[VirtualFileMountHTTP]): TypeHandle {.importcpp: "VirtualFileMountHTTP::get_class_type()", header: "virtualFileMountHTTP.h".}
 
-proc initPatcher*(): Patcher {.importcpp: "Patcher()".}
+proc newPatcher*(): Patcher {.importcpp: "new Patcher()".}
 
-proc initPatcher*(param0: Patcher): Patcher {.importcpp: "Patcher(#)".}
+proc newPatcher*(param0: Patcher): Patcher {.importcpp: "new Patcher(#)".}
 
-proc initPatcher*(buffer: Buffer): Patcher {.importcpp: "Patcher(#)".}
+proc newPatcher*(buffer: Buffer): Patcher {.importcpp: "new Patcher(#)".}
 
-proc initiate*(this: Patcher, patch: Filename, infile: Filename): int {.importcpp: "#.initiate(#, #)".}
+proc initiate*(this: Patcher, patch: Filename, infile: Filename): int {.importcpp: "#->initiate(#, #)".}
 
-proc run*(this: Patcher): int {.importcpp: "#.run()".}
+proc run*(this: Patcher): int {.importcpp: "#->run()".}
 
-proc getProgress*(this: Patcher): float32 {.importcpp: "#.get_progress()".}
+proc getProgress*(this: Patcher): float32 {.importcpp: "#->get_progress()".}
 
 proc initStringStream*(): StringStream {.importcpp: "StringStream()".}
 
@@ -18112,9 +18248,9 @@ proc write*(this: Datagram, `out`: ostream) {.importcpp: "#.write(#)".} ## \
 
 proc getClassType*(_: typedesc[Datagram]): TypeHandle {.importcpp: "Datagram::get_class_type()", header: "datagram.h".}
 
-proc getDatagram*(this: DatagramGenerator, data: Datagram): bool {.importcpp: "#.get_datagram(#)".}
+proc getDatagram*(this: DatagramGenerator, data: Datagram): bool {.importcpp: "#->get_datagram(#)".}
 
-proc saveDatagram*(this: DatagramGenerator, info: SubfileInfo): bool {.importcpp: "#.save_datagram(#)".} ## \
+proc saveDatagram*(this: DatagramGenerator, info: SubfileInfo): bool {.importcpp: "#->save_datagram(#)".} ## \
 ## Skips over the next datagram without extracting it, but saves the relevant
 ## file information in the SubfileInfo object so that its data may be read
 ## later.  For non-file-based datagram generators, this may mean creating a
@@ -18123,27 +18259,27 @@ proc saveDatagram*(this: DatagramGenerator, info: SubfileInfo): bool {.importcpp
 ## Returns true on success, false on failure or if this method is
 ## unimplemented.
 
-proc isEof*(this: DatagramGenerator): bool {.importcpp: "#.is_eof()".}
+proc isEof*(this: DatagramGenerator): bool {.importcpp: "#->is_eof()".}
 
-proc isError*(this: DatagramGenerator): bool {.importcpp: "#.is_error()".}
+proc isError*(this: DatagramGenerator): bool {.importcpp: "#->is_error()".}
 
-proc getFilename*(this: DatagramGenerator): Filename {.importcpp: "#.get_filename()".} ## \
+proc getFilename*(this: DatagramGenerator): Filename {.importcpp: "#->get_filename()".} ## \
 ## Returns the filename that provides the source for these datagrams, if any,
 ## or empty string if the datagrams do not originate from a file on disk.
 
-proc getTimestamp*(this: DatagramGenerator): int {.importcpp: "#.get_timestamp()".} ## \
+proc getTimestamp*(this: DatagramGenerator): int {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the on-disk timestamp of the file that was read, at the time it was
 ## opened, if that is available, or 0 if it is not.
 
-proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "#.get_file()".} ## \
+proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "#->get_file()".} ## \
 ## Returns the FileReference that provides the source for these datagrams, if
 ## any, or NULL if the datagrams do not originate from a file on disk.
 
-proc getVfile*(this: DatagramGenerator): VirtualFile {.importcpp: "#.get_vfile()".} ## \
+proc getVfile*(this: DatagramGenerator): VirtualFile {.importcpp: "#->get_vfile()".} ## \
 ## Returns the VirtualFile that provides the source for these datagrams, if
 ## any, or NULL if the datagrams do not originate from a VirtualFile.
 
-proc getFilePos*(this: DatagramGenerator): clonglong {.importcpp: "#.get_file_pos()".} ## \
+proc getFilePos*(this: DatagramGenerator): clonglong {.importcpp: "#->get_file_pos()".} ## \
 ## Returns the current file position within the data stream, if any, or 0 if
 ## the file position is not meaningful or cannot be determined.
 ##
@@ -18260,9 +18396,9 @@ proc write*(this: DatagramIterator, `out`: ostream) {.importcpp: "#.write(#)".} 
 
 proc getClassType*(_: typedesc[DatagramIterator]): TypeHandle {.importcpp: "DatagramIterator::get_class_type()", header: "datagramIterator.h".}
 
-proc putDatagram*(this: DatagramSink, data: Datagram): bool {.importcpp: "#.put_datagram(#)".}
+proc putDatagram*(this: DatagramSink, data: Datagram): bool {.importcpp: "#->put_datagram(#)".}
 
-proc copyDatagram*(this: DatagramSink, result: SubfileInfo, filename: Filename): bool {.importcpp: "#.copy_datagram(#, #)".} ## \
+proc copyDatagram*(this: DatagramSink, result: SubfileInfo, filename: Filename): bool {.importcpp: "#->copy_datagram(#, #)".} ## \
 ## Copies the file data from the entire indicated file (via the vfs) as the
 ## next datagram.  This is intended to support potentially very large
 ## datagrams.
@@ -18271,7 +18407,7 @@ proc copyDatagram*(this: DatagramSink, result: SubfileInfo, filename: Filename):
 ## unimplemented.  On true, fills "result" with the information that
 ## references the copied file, if possible.
 
-proc copyDatagram*(this: DatagramSink, result: SubfileInfo, source: SubfileInfo): bool {.importcpp: "#.copy_datagram(#, #)".} ## \
+proc copyDatagram*(this: DatagramSink, result: SubfileInfo, source: SubfileInfo): bool {.importcpp: "#->copy_datagram(#, #)".} ## \
 ## Copies the file data from the range of the indicated file (outside of the
 ## vfs) as the next datagram.  This is intended to support potentially very
 ## large datagrams.
@@ -18280,19 +18416,19 @@ proc copyDatagram*(this: DatagramSink, result: SubfileInfo, source: SubfileInfo)
 ## unimplemented.  On true, fills "result" with the information that
 ## references the copied file, if possible.
 
-proc isError*(this: DatagramSink): bool {.importcpp: "#.is_error()".}
+proc isError*(this: DatagramSink): bool {.importcpp: "#->is_error()".}
 
-proc flush*(this: DatagramSink) {.importcpp: "#.flush()".}
+proc flush*(this: DatagramSink) {.importcpp: "#->flush()".}
 
-proc getFilename*(this: DatagramSink): Filename {.importcpp: "#.get_filename()".} ## \
+proc getFilename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()".} ## \
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-proc getFile*(this: DatagramSink): FileReference {.importcpp: "#.get_file()".} ## \
+proc getFile*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
-proc getFilePos*(this: DatagramSink): clonglong {.importcpp: "#.get_file_pos()".} ## \
+proc getFilePos*(this: DatagramSink): clonglong {.importcpp: "#->get_file_pos()".} ## \
 ## Returns the current file position within the data stream, if any, or 0 if
 ## the file position is not meaningful or cannot be determined.
 ##
@@ -19956,12 +20092,12 @@ proc initWindowsRegistry*(): WindowsRegistry {.importcpp: "WindowsRegistry()".}
 
 proc initWindowsRegistry*(param0: WindowsRegistry): WindowsRegistry {.importcpp: "WindowsRegistry(#)".}
 
-proc isRecording*(this: RecorderBase): bool {.importcpp: "#.is_recording()".} ## \
+proc isRecording*(this: RecorderBase): bool {.importcpp: "#->is_recording()".} ## \
 ## Returns true if this recorder is presently recording data for saving to a
 ## session file, false otherwise.  If this is true, record_data() will be
 ## called from time to time.
 
-proc isPlaying*(this: RecorderBase): bool {.importcpp: "#.is_playing()".} ## \
+proc isPlaying*(this: RecorderBase): bool {.importcpp: "#->is_playing()".} ## \
 ## Returns true if this recorder is presently playing back data from session
 ## file, false otherwise.  If this is true, play_data() will be called from
 ## time to time.
@@ -28064,31 +28200,31 @@ proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteA
 
 proc getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "DepthWriteAttrib::get_class_type()", header: "depthWriteAttrib.h".}
 
-proc asNode*(this: Light): PandaNode {.importcpp: "#.as_node()".}
+proc asNode*(this: Light): PandaNode {.importcpp: "#->as_node()".}
 
-proc isAmbientLight*(this: Light): bool {.importcpp: "#.is_ambient_light()".} ## \
+proc isAmbientLight*(this: Light): bool {.importcpp: "#->is_ambient_light()".} ## \
 ## Returns true if this is an AmbientLight, false if it is some other kind of
 ## light.
 
-proc getColor*(this: Light): LColor {.importcpp: "#.get_color()".} ## \
+proc getColor*(this: Light): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the basic color of the light.
 
-proc setColor*(this: Light, color: LColor) {.importcpp: "#.set_color(#)".} ## \
+proc setColor*(this: Light, color: LColor) {.importcpp: "#->set_color(#)".} ## \
 ## Sets the basic color of the light.
 
-proc hasColorTemperature*(this: Light): bool {.importcpp: "#.has_color_temperature()".} ## \
+proc hasColorTemperature*(this: Light): bool {.importcpp: "#->has_color_temperature()".} ## \
 ## Returns true if the color was specified as a temperature in kelvins, and
 ## get_color_temperature is defined.
 ##
 ## @since 1.10.0
 
-proc getColorTemperature*(this: Light): float32 {.importcpp: "#.get_color_temperature()".} ## \
+proc getColorTemperature*(this: Light): float32 {.importcpp: "#->get_color_temperature()".} ## \
 ## Returns the basic color temperature of the light, assuming
 ## has_color_temperature() returns true.
 ##
 ## @since 1.10.0
 
-proc setColorTemperature*(this: Light, temperature: float32) {.importcpp: "#.set_color_temperature(#)".} ## \
+proc setColorTemperature*(this: Light, temperature: float32) {.importcpp: "#->set_color_temperature(#)".} ## \
 ## Sets the color temperature of the light in kelvins.  This will recalculate
 ## the light's color.
 ##
@@ -28097,21 +28233,21 @@ proc setColorTemperature*(this: Light, temperature: float32) {.importcpp: "#.set
 ##
 ## @since 1.10.0
 
-proc getExponent*(this: Light): float32 {.importcpp: "#.get_exponent()".} ## \
+proc getExponent*(this: Light): float32 {.importcpp: "#->get_exponent()".} ## \
 ## For spotlights, returns the exponent that controls the amount of light
 ## falloff from the center of the spotlight.  For other kinds of lights,
 ## returns 0.
 
-proc getSpecularColor*(this: Light): LColor {.importcpp: "#.get_specular_color()".} ## \
+proc getSpecularColor*(this: Light): LColor {.importcpp: "#->get_specular_color()".} ## \
 ## Returns the color of specular highlights generated by the light.  This
 ## value is meaningless for ambient lights.
 
-proc getAttenuation*(this: Light): LVecBase3 {.importcpp: "#.get_attenuation()".} ## \
+proc getAttenuation*(this: Light): LVecBase3 {.importcpp: "#->get_attenuation()".} ## \
 ## Returns the terms of the attenuation equation for the light.  These are, in
 ## order, the constant, linear, and quadratic terms based on the distance from
 ## the point to the vertex.
 
-proc setPriority*(this: Light, priority: int) {.importcpp: "#.set_priority(#)".} ## \
+proc setPriority*(this: Light, priority: int) {.importcpp: "#->set_priority(#)".} ## \
 ## Changes the relative importance of this light relative to the other lights
 ## that are applied simultaneously.
 ##
@@ -28121,10 +28257,10 @@ proc setPriority*(this: Light, priority: int) {.importcpp: "#.set_priority(#)".}
 ##
 ## This is similar to TextureStage::set_priority().
 
-proc getPriority*(this: Light): int {.importcpp: "#.get_priority()".} ## \
+proc getPriority*(this: Light): int {.importcpp: "#->get_priority()".} ## \
 ## Returns the priority associated with this light.  See set_priority().
 
-proc getClassPriority*(this: Light): int {.importcpp: "#.get_class_priority()".}
+proc getClassPriority*(this: Light): int {.importcpp: "#->get_class_priority()".}
 
 proc getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
@@ -34394,89 +34530,89 @@ proc getInterfaceName*(this: GraphicsPipe): string {.importcpp: "nimStringFromSt
 
 proc getClassType*(_: typedesc[GraphicsPipe]): TypeHandle {.importcpp: "GraphicsPipe::get_class_type()", header: "graphicsPipe.h".}
 
-proc setClearColorActive*(this: DrawableRegion, clear_color_active: bool) {.importcpp: "#.set_clear_color_active(#)".} ## \
+proc setClearColorActive*(this: DrawableRegion, clear_color_active: bool) {.importcpp: "#->set_clear_color_active(#)".} ## \
 ## Toggles the flag that indicates whether the color buffer should be cleared
 ## every frame.  If this is true, the color buffer will be cleared to the
 ## color indicated by set_clear_color(); otherwise, it will be left alone.
 
-proc getClearColorActive*(this: DrawableRegion): bool {.importcpp: "#.get_clear_color_active()".} ## \
+proc getClearColorActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_color_active()".} ## \
 ## Returns the current setting of the flag that indicates whether the color
 ## buffer should be cleared every frame.  See set_clear_color_active().
 
-proc setClearDepthActive*(this: DrawableRegion, clear_depth_active: bool) {.importcpp: "#.set_clear_depth_active(#)".} ## \
+proc setClearDepthActive*(this: DrawableRegion, clear_depth_active: bool) {.importcpp: "#->set_clear_depth_active(#)".} ## \
 ## Toggles the flag that indicates whether the depth buffer should be cleared
 ## every frame.  If this is true, the depth buffer will be cleared to the
 ## depth value indicated by set_clear_depth(); otherwise, it will be left
 ## alone.
 
-proc getClearDepthActive*(this: DrawableRegion): bool {.importcpp: "#.get_clear_depth_active()".} ## \
+proc getClearDepthActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_depth_active()".} ## \
 ## Returns the current setting of the flag that indicates whether the depth
 ## buffer should be cleared every frame.  See set_clear_depth_active().
 
-proc setClearStencilActive*(this: DrawableRegion, clear_stencil_active: bool) {.importcpp: "#.set_clear_stencil_active(#)".} ## \
+proc setClearStencilActive*(this: DrawableRegion, clear_stencil_active: bool) {.importcpp: "#->set_clear_stencil_active(#)".} ## \
 ## Toggles the flag that indicates whether the stencil buffer should be
 ## cleared every frame.  If this is true, the stencil buffer will be cleared
 ## to the value indicated by set_clear_stencil(); otherwise, it will be left
 ## alone.
 
-proc getClearStencilActive*(this: DrawableRegion): bool {.importcpp: "#.get_clear_stencil_active()".} ## \
+proc getClearStencilActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_stencil_active()".} ## \
 ## Returns the current setting of the flag that indicates whether the color
 ## buffer should be cleared every frame.  See set_clear_stencil_active().
 
-proc setClearColor*(this: DrawableRegion, color: LColor) {.importcpp: "#.set_clear_color(#)".} ## \
+proc setClearColor*(this: DrawableRegion, color: LColor) {.importcpp: "#->set_clear_color(#)".} ## \
 ## Sets the clear color to the indicated value.  This is the value that will
 ## be used to clear the color buffer every frame, but only if
 ## get_clear_color_active() returns true.  If get_clear_color_active() returns
 ## false, this is meaningless.
 
-proc getClearColor*(this: DrawableRegion): LColor {.importcpp: "#.get_clear_color()".} ## \
+proc getClearColor*(this: DrawableRegion): LColor {.importcpp: "#->get_clear_color()".} ## \
 ## Returns the current clear color value.  This is the value that will be used
 ## to clear the color buffer every frame, but only if get_clear_color_active()
 ## returns true.  If get_clear_color_active() returns false, this is
 ## meaningless.
 
-proc setClearDepth*(this: DrawableRegion, depth: float32) {.importcpp: "#.set_clear_depth(#)".} ## \
+proc setClearDepth*(this: DrawableRegion, depth: float32) {.importcpp: "#->set_clear_depth(#)".} ## \
 ## Sets the clear depth to the indicated value.  This is the value that will
 ## be used to clear the depth buffer every frame, but only if
 ## get_clear_depth_active() returns true.  If get_clear_depth_active() returns
 ## false, this is meaningless.
 
-proc getClearDepth*(this: DrawableRegion): float32 {.importcpp: "#.get_clear_depth()".} ## \
+proc getClearDepth*(this: DrawableRegion): float32 {.importcpp: "#->get_clear_depth()".} ## \
 ## Returns the current clear depth value.  This is the value that will be used
 ## to clear the depth buffer every frame, but only if get_clear_depth_active()
 ## returns true.  If get_clear_depth_active() returns false, this is
 ## meaningless.
 
-proc setClearStencil*(this: DrawableRegion, stencil: int) {.importcpp: "#.set_clear_stencil(#)".}
+proc setClearStencil*(this: DrawableRegion, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
 
-proc getClearStencil*(this: DrawableRegion): int {.importcpp: "#.get_clear_stencil()".} ## \
+proc getClearStencil*(this: DrawableRegion): int {.importcpp: "#->get_clear_stencil()".} ## \
 ## Returns the current clear stencil value.  This is the value that will be
 ## used to clear the stencil buffer every frame, but only if
 ## get_clear_stencil_active() returns true.  If get_clear_stencil_active()
 ## returns false, this is meaningless.
 
-proc setClearActive*(this: DrawableRegion, n: int, clear_aux_active: bool) {.importcpp: "#.set_clear_active(#, #)".} ## \
+proc setClearActive*(this: DrawableRegion, n: int, clear_aux_active: bool) {.importcpp: "#->set_clear_active(#, #)".} ## \
 ## Sets the clear-active flag for any bitplane.
 
-proc getClearActive*(this: DrawableRegion, n: int): bool {.importcpp: "#.get_clear_active(#)".} ## \
+proc getClearActive*(this: DrawableRegion, n: int): bool {.importcpp: "#->get_clear_active(#)".} ## \
 ## Gets the clear-active flag for any bitplane.
 
-proc setClearValue*(this: DrawableRegion, n: int, clear_value: LColor) {.importcpp: "#.set_clear_value(#, #)".} ## \
+proc setClearValue*(this: DrawableRegion, n: int, clear_value: LColor) {.importcpp: "#->set_clear_value(#, #)".} ## \
 ## Sets the clear value for any bitplane.
 
-proc getClearValue*(this: DrawableRegion, n: int): LColor {.importcpp: "#.get_clear_value(#)".} ## \
+proc getClearValue*(this: DrawableRegion, n: int): LColor {.importcpp: "#->get_clear_value(#)".} ## \
 ## Returns the clear value for any bitplane.
 
-proc disableClears*(this: DrawableRegion) {.importcpp: "#.disable_clears()".} ## \
+proc disableClears*(this: DrawableRegion) {.importcpp: "#->disable_clears()".} ## \
 ## Disables both the color and depth clear.  See set_clear_color_active and
 ## set_clear_depth_active.
 
-proc isAnyClearActive*(this: DrawableRegion): bool {.importcpp: "#.is_any_clear_active()".} ## \
+proc isAnyClearActive*(this: DrawableRegion): bool {.importcpp: "#->is_any_clear_active()".} ## \
 ## Returns true if any of the clear types (so far there are just color or
 ## depth) have been set active, or false if none of them are active and there
 ## is no need to clear.
 
-proc setPixelZoom*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#.set_pixel_zoom(#)".} ## \
+proc setPixelZoom*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#->set_pixel_zoom(#)".} ## \
 ## Sets the amount by which the pixels of the region are scaled internally
 ## when filling the image interally.  Setting this number larger makes the
 ## pixels blockier, but may make the rendering faster, particularly for
@@ -34494,18 +34630,18 @@ proc setPixelZoom*(this: DrawableRegion, pixel_zoom: float32) {.importcpp: "#.se
 ## useful--currently, this is the tinydisplay software renderer.  Other kinds
 ## of renderers allow you to set this property, but ignore it.
 
-proc getPixelZoom*(this: DrawableRegion): float32 {.importcpp: "#.get_pixel_zoom()".} ## \
+proc getPixelZoom*(this: DrawableRegion): float32 {.importcpp: "#->get_pixel_zoom()".} ## \
 ## Returns the value set by set_pixel_zoom(), regardless of whether it is
 ## being respected or not.  Also see get_pixel_factor().
 
-proc getPixelFactor*(this: DrawableRegion): float32 {.importcpp: "#.get_pixel_factor()".} ## \
+proc getPixelFactor*(this: DrawableRegion): float32 {.importcpp: "#->get_pixel_factor()".} ## \
 ## Returns the amount by which the height and width of the region will be
 ## scaled internally, based on the zoom factor set by set_pixel_zoom().  This
 ## will return 1.0 if the pixel_zoom was not set or if it is not being
 ## respected (for instance, because the underlying renderer doesn't support it
 ## --see supports_pixel_zoom).
 
-proc supportsPixelZoom*(this: DrawableRegion): bool {.importcpp: "#.supports_pixel_zoom()".} ## \
+proc supportsPixelZoom*(this: DrawableRegion): bool {.importcpp: "#->supports_pixel_zoom()".} ## \
 ## Returns true if a call to set_pixel_zoom() will be respected, false if it
 ## will be ignored.  If this returns false, then get_pixel_factor() will
 ## always return 1.0, regardless of what value you specify for
@@ -38633,35 +38769,35 @@ proc setMaxUpdatesPerFrame*(this: AdaptiveLru, max_updates_per_frame: int) {.imp
 proc getMaxUpdatesPerFrame*(this: AdaptiveLru): int {.importcpp: "#.get_max_updates_per_frame()".} ## \
 ## Returns the maximum number of pages the AdaptiveLru will update each frame.
 
-proc initAdaptiveLruPage*(copy: AdaptiveLruPage): AdaptiveLruPage {.importcpp: "AdaptiveLruPage(#)".}
+proc newAdaptiveLruPage*(copy: AdaptiveLruPage): AdaptiveLruPage {.importcpp: "new AdaptiveLruPage(#)".}
 
-proc initAdaptiveLruPage*(lru_size: clonglong): AdaptiveLruPage {.importcpp: "AdaptiveLruPage(#)".}
+proc newAdaptiveLruPage*(lru_size: clonglong): AdaptiveLruPage {.importcpp: "new AdaptiveLruPage(#)".}
 
-proc getLru*(this: AdaptiveLruPage): AdaptiveLru {.importcpp: "#.get_lru()".} ## \
+proc getLru*(this: AdaptiveLruPage): AdaptiveLru {.importcpp: "#->get_lru()".} ## \
 ## Returns the LRU that manages this page, or NULL if it is not currently
 ## managed by any LRU.
 
-proc enqueueLru*(this: AdaptiveLruPage, lru: AdaptiveLru) {.importcpp: "#.enqueue_lru(#)".} ## \
+proc enqueueLru*(this: AdaptiveLruPage, lru: AdaptiveLru) {.importcpp: "#->enqueue_lru(#)".} ## \
 ## Adds the page to the LRU for the first time, or marks it recently-accessed
 ## if it has already been added.
 ##
 ## If lru is NULL, it means to remove this page from its LRU.
 
-proc dequeueLru*(this: AdaptiveLruPage) {.importcpp: "#.dequeue_lru()".} ## \
+proc dequeueLru*(this: AdaptiveLruPage) {.importcpp: "#->dequeue_lru()".} ## \
 ## Removes the page from its AdaptiveLru.
 
-proc markUsedLru*(this: AdaptiveLruPage, lru: AdaptiveLru) {.importcpp: "#.mark_used_lru(#)".} ## \
+proc markUsedLru*(this: AdaptiveLruPage, lru: AdaptiveLru) {.importcpp: "#->mark_used_lru(#)".} ## \
 ## To be called when the page is used; this will move it to the tail of the
 ## specified AdaptiveLru queue.
 
-proc getLruSize*(this: AdaptiveLruPage): clonglong {.importcpp: "#.get_lru_size()".} ## \
+proc getLruSize*(this: AdaptiveLruPage): clonglong {.importcpp: "#->get_lru_size()".} ## \
 ## Returns the size of this page as reported to the LRU, presumably in bytes.
 
-proc setLruSize*(this: AdaptiveLruPage, lru_size: clonglong) {.importcpp: "#.set_lru_size(#)".} ## \
+proc setLruSize*(this: AdaptiveLruPage, lru_size: clonglong) {.importcpp: "#->set_lru_size(#)".} ## \
 ## Specifies the size of this page, presumably in bytes, although any unit is
 ## possible.
 
-proc evictLru*(this: AdaptiveLruPage) {.importcpp: "#.evict_lru()".} ## \
+proc evictLru*(this: AdaptiveLruPage) {.importcpp: "#->evict_lru()".} ## \
 ## Evicts the page from the LRU.  Called internally when the LRU determines
 ## that it is full.  May also be called externally when necessary to
 ## explicitly evict the page.
@@ -38671,15 +38807,15 @@ proc evictLru*(this: AdaptiveLruPage) {.importcpp: "#.evict_lru()".} ## \
 ## epoch), or requeue itself on the tail of the queue (in which case the
 ## eviction will be requested again much later).
 
-proc output*(this: AdaptiveLruPage, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: AdaptiveLruPage, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: AdaptiveLruPage, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+proc write*(this: AdaptiveLruPage, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getNumFrames*(this: AdaptiveLruPage): int {.importcpp: "#.get_num_frames()".} ## \
+proc getNumFrames*(this: AdaptiveLruPage): int {.importcpp: "#->get_num_frames()".} ## \
 ## Returns the number of frames since the page was first added to its LRU.
 ## Returns 0 if it does not have an LRU.
 
-proc getNumInactiveFrames*(this: AdaptiveLruPage): int {.importcpp: "#.get_num_inactive_frames()".} ## \
+proc getNumInactiveFrames*(this: AdaptiveLruPage): int {.importcpp: "#->get_num_inactive_frames()".} ## \
 ## Returns the number of frames since the page was last accessed on its LRU.
 ## Returns 0 if it does not have an LRU.
 
@@ -39461,35 +39597,35 @@ proc output*(this: SimpleLru, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc write*(this: SimpleLru, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
 
-proc initSimpleLruPage*(copy: SimpleLruPage): SimpleLruPage {.importcpp: "SimpleLruPage(#)".}
+proc newSimpleLruPage*(copy: SimpleLruPage): SimpleLruPage {.importcpp: "new SimpleLruPage(#)".}
 
-proc initSimpleLruPage*(lru_size: clonglong): SimpleLruPage {.importcpp: "SimpleLruPage(#)".}
+proc newSimpleLruPage*(lru_size: clonglong): SimpleLruPage {.importcpp: "new SimpleLruPage(#)".}
 
-proc getLru*(this: SimpleLruPage): SimpleLru {.importcpp: "#.get_lru()".} ## \
+proc getLru*(this: SimpleLruPage): SimpleLru {.importcpp: "#->get_lru()".} ## \
 ## Returns the LRU that manages this page, or NULL if it is not currently
 ## managed by any LRU.
 
-proc enqueueLru*(this: SimpleLruPage, lru: SimpleLru) {.importcpp: "#.enqueue_lru(#)".} ## \
+proc enqueueLru*(this: SimpleLruPage, lru: SimpleLru) {.importcpp: "#->enqueue_lru(#)".} ## \
 ## Adds the page to the LRU for the first time, or marks it recently-accessed
 ## if it has already been added.
 ##
 ## If lru is NULL, it means to remove this page from its LRU.
 
-proc dequeueLru*(this: SimpleLruPage) {.importcpp: "#.dequeue_lru()".} ## \
+proc dequeueLru*(this: SimpleLruPage) {.importcpp: "#->dequeue_lru()".} ## \
 ## Removes the page from its SimpleLru.
 
-proc markUsedLru*(this: SimpleLruPage, lru: SimpleLru) {.importcpp: "#.mark_used_lru(#)".} ## \
+proc markUsedLru*(this: SimpleLruPage, lru: SimpleLru) {.importcpp: "#->mark_used_lru(#)".} ## \
 ## To be called when the page is used; this will move it to the tail of the
 ## specified SimpleLru queue.
 
-proc getLruSize*(this: SimpleLruPage): clonglong {.importcpp: "#.get_lru_size()".} ## \
+proc getLruSize*(this: SimpleLruPage): clonglong {.importcpp: "#->get_lru_size()".} ## \
 ## Returns the size of this page as reported to the LRU, presumably in bytes.
 
-proc setLruSize*(this: SimpleLruPage, lru_size: clonglong) {.importcpp: "#.set_lru_size(#)".} ## \
+proc setLruSize*(this: SimpleLruPage, lru_size: clonglong) {.importcpp: "#->set_lru_size(#)".} ## \
 ## Specifies the size of this page, presumably in bytes, although any unit is
 ## possible.
 
-proc evictLru*(this: SimpleLruPage) {.importcpp: "#.evict_lru()".} ## \
+proc evictLru*(this: SimpleLruPage) {.importcpp: "#->evict_lru()".} ## \
 ## Evicts the page from the LRU.  Called internally when the LRU determines
 ## that it is full.  May also be called externally when necessary to
 ## explicitly evict the page.
@@ -39499,54 +39635,54 @@ proc evictLru*(this: SimpleLruPage) {.importcpp: "#.evict_lru()".} ## \
 ## epoch), or requeue itself on the tail of the queue (in which case the
 ## eviction will be requested again much later).
 
-proc output*(this: SimpleLruPage, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: SimpleLruPage, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: SimpleLruPage, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+proc write*(this: SimpleLruPage, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc initSimpleAllocator*(max_size: clonglong, lock: Mutex): SimpleAllocator {.importcpp: "SimpleAllocator(#, #)".}
+proc newSimpleAllocator*(max_size: clonglong, lock: Mutex): SimpleAllocator {.importcpp: "new SimpleAllocator(#, #)".}
 
-proc alloc*(this: SimpleAllocator, size: clonglong, alignment: clonglong): SimpleAllocatorBlock {.importcpp: "#.alloc(#, #)".} ## \
+proc alloc*(this: SimpleAllocator, size: clonglong, alignment: clonglong): SimpleAllocatorBlock {.importcpp: "#->alloc(#, #)".} ## \
 ## Allocates a new block.  Returns NULL if a block of the requested size
 ## cannot be allocated.
 ##
 ## To free the allocated block, call block->free(), or simply delete the block
 ## pointer.
 
-proc alloc*(this: SimpleAllocator, size: clonglong): SimpleAllocatorBlock {.importcpp: "#.alloc(#)".} ## \
+proc alloc*(this: SimpleAllocator, size: clonglong): SimpleAllocatorBlock {.importcpp: "#->alloc(#)".} ## \
 ## Allocates a new block.  Returns NULL if a block of the requested size
 ## cannot be allocated.
 ##
 ## To free the allocated block, call block->free(), or simply delete the block
 ## pointer.
 
-proc isEmpty*(this: SimpleAllocator): bool {.importcpp: "#.is_empty()".} ## \
+proc isEmpty*(this: SimpleAllocator): bool {.importcpp: "#->is_empty()".} ## \
 ## Returns true if there are no blocks allocated on this page, or false if
 ## there is at least one.
 
-proc getTotalSize*(this: SimpleAllocator): clonglong {.importcpp: "#.get_total_size()".} ## \
+proc getTotalSize*(this: SimpleAllocator): clonglong {.importcpp: "#->get_total_size()".} ## \
 ## Returns the total size of allocated objects.
 
-proc getMaxSize*(this: SimpleAllocator): clonglong {.importcpp: "#.get_max_size()".} ## \
+proc getMaxSize*(this: SimpleAllocator): clonglong {.importcpp: "#->get_max_size()".} ## \
 ## Returns the available space for allocated objects.
 
-proc setMaxSize*(this: SimpleAllocator, max_size: clonglong) {.importcpp: "#.set_max_size(#)".} ## \
+proc setMaxSize*(this: SimpleAllocator, max_size: clonglong) {.importcpp: "#->set_max_size(#)".} ## \
 ## Changes the available space for allocated objects.  This will not affect
 ## any already-allocated objects, but will have an effect on future calls to
 ## alloc().
 
-proc getContiguous*(this: SimpleAllocator): clonglong {.importcpp: "#.get_contiguous()".} ## \
+proc getContiguous*(this: SimpleAllocator): clonglong {.importcpp: "#->get_contiguous()".} ## \
 ## Returns an upper-bound estimate of the size of the largest contiguous block
 ## that may be allocated.  It is guaranteed that an attempt to allocate a
 ## block larger than this will fail, though it is not guaranteed that an
 ## attempt to allocate a block this size or smaller will succeed.
 
-proc getFirstBlock*(this: SimpleAllocator): SimpleAllocatorBlock {.importcpp: "#.get_first_block()".} ## \
+proc getFirstBlock*(this: SimpleAllocator): SimpleAllocatorBlock {.importcpp: "#->get_first_block()".} ## \
 ## Returns a pointer to the first allocated block, or NULL if there are no
 ## allocated blocks.
 
-proc output*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#.write(#)".}
+proc write*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->write(#)".}
 
 proc free*(this: SimpleAllocatorBlock) {.importcpp: "#.free()".} ## \
 ## Releases the allocated space.
@@ -39580,15 +39716,15 @@ proc getNextBlock*(this: SimpleAllocatorBlock): SimpleAllocatorBlock {.importcpp
 
 proc output*(this: SimpleAllocatorBlock, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc isValid*(this: VertexDataSaveFile): bool {.importcpp: "#.is_valid()".} ## \
+proc isValid*(this: VertexDataSaveFile): bool {.importcpp: "#->is_valid()".} ## \
 ## Returns true if the save file was successfully created and is ready for
 ## use, false if there was an error.
 
-proc getTotalFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#.get_total_file_size()".} ## \
+proc getTotalFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#->get_total_file_size()".} ## \
 ## Returns the amount of space consumed by the save file, including unused
 ## portions.
 
-proc getUsedFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#.get_used_file_size()".} ## \
+proc getUsedFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#->get_used_file_size()".} ## \
 ## Returns the amount of space within the save file that is currently in use.
 
 converter upcastToSimpleAllocator*(this: VertexDataPage): SimpleAllocator {.importcpp: "#.upcast_to_SimpleAllocator()".}
@@ -40643,23 +40779,23 @@ proc getClassType*(_: typedesc[AnimateVerticesRequest]): TypeHandle {.importcpp:
 
 proc getClassType*(_: typedesc[SavedContext]): TypeHandle {.importcpp: "SavedContext::get_class_type()", header: "savedContext.h".}
 
-converter upcastToSavedContext*(this: BufferContext): SavedContext {.importcpp: "#.upcast_to_SavedContext()".}
+converter upcastToSavedContext*(this: BufferContext): SavedContext {.importcpp: "((SavedContext *)(#))".}
 
-proc getDataSizeBytes*(this: BufferContext): clonglong {.importcpp: "#.get_data_size_bytes()".} ## \
+proc getDataSizeBytes*(this: BufferContext): clonglong {.importcpp: "#->get_data_size_bytes()".} ## \
 ## Returns the number of bytes previously reported for the data object.  This
 ## is used to track changes in the data object's allocated size; if it changes
 ## from this, we need to create a new buffer.  This is also used to track
 ## memory utilization in PStats.
 
-proc getModified*(this: BufferContext): UpdateSeq {.importcpp: "#.get_modified()".} ## \
+proc getModified*(this: BufferContext): UpdateSeq {.importcpp: "#->get_modified()".} ## \
 ## Returns the UpdateSeq that was recorded the last time mark_loaded() was
 ## called.
 
-proc getActive*(this: BufferContext): bool {.importcpp: "#.get_active()".} ## \
+proc getActive*(this: BufferContext): bool {.importcpp: "#->get_active()".} ## \
 ## Returns the active flag associated with this object.  An object is
 ## considered "active" if it was rendered in the current frame.
 
-proc getResident*(this: BufferContext): bool {.importcpp: "#.get_resident()".} ## \
+proc getResident*(this: BufferContext): bool {.importcpp: "#->get_resident()".} ## \
 ## Returns the resident flag associated with this object.  An object is
 ## considered "resident" if it appears to be resident in texture memory.
 
@@ -52838,51 +52974,51 @@ proc writeCv*(this: HermiteCurve, `out`: ostream, n: int) {.importcpp: "#->write
 
 proc getClassType*(_: typedesc[HermiteCurve]): TypeHandle {.importcpp: "HermiteCurve::get_class_type()", header: "hermiteCurve.h".}
 
-proc setOrder*(this: NurbsCurveInterface, order: int) {.importcpp: "#.set_order(#)".}
+proc setOrder*(this: NurbsCurveInterface, order: int) {.importcpp: "#->set_order(#)".}
 
-proc getOrder*(this: NurbsCurveInterface): int {.importcpp: "#.get_order()".}
+proc getOrder*(this: NurbsCurveInterface): int {.importcpp: "#->get_order()".}
 
-proc getNumCvs*(this: NurbsCurveInterface): int {.importcpp: "#.get_num_cvs()".}
+proc getNumCvs*(this: NurbsCurveInterface): int {.importcpp: "#->get_num_cvs()".}
 
-proc getNumKnots*(this: NurbsCurveInterface): int {.importcpp: "#.get_num_knots()".}
+proc getNumKnots*(this: NurbsCurveInterface): int {.importcpp: "#->get_num_knots()".}
 
-proc insertCv*(this: NurbsCurveInterface, t: float32): bool {.importcpp: "#.insert_cv(#)".}
+proc insertCv*(this: NurbsCurveInterface, t: float32): bool {.importcpp: "#->insert_cv(#)".}
 
-proc appendCv*(this: NurbsCurveInterface, v: LVecBase3): int {.importcpp: "#.append_cv(#)".}
+proc appendCv*(this: NurbsCurveInterface, v: LVecBase3): int {.importcpp: "#->append_cv(#)".}
 
-proc appendCv*(this: NurbsCurveInterface, v: LVecBase4): int {.importcpp: "#.append_cv(#)".}
+proc appendCv*(this: NurbsCurveInterface, v: LVecBase4): int {.importcpp: "#->append_cv(#)".}
 
-proc appendCv*(this: NurbsCurveInterface, x: float32, y: float32, z: float32): int {.importcpp: "#.append_cv(#, #, #)".}
+proc appendCv*(this: NurbsCurveInterface, x: float32, y: float32, z: float32): int {.importcpp: "#->append_cv(#, #, #)".}
 
-proc removeCv*(this: NurbsCurveInterface, n: int): bool {.importcpp: "#.remove_cv(#)".}
+proc removeCv*(this: NurbsCurveInterface, n: int): bool {.importcpp: "#->remove_cv(#)".}
 
-proc removeAllCvs*(this: NurbsCurveInterface) {.importcpp: "#.remove_all_cvs()".}
+proc removeAllCvs*(this: NurbsCurveInterface) {.importcpp: "#->remove_all_cvs()".}
 
-proc setCvPoint*(this: NurbsCurveInterface, n: int, v: LVecBase3): bool {.importcpp: "#.set_cv_point(#, #)".} ## \
+proc setCvPoint*(this: NurbsCurveInterface, n: int, v: LVecBase3): bool {.importcpp: "#->set_cv_point(#, #)".} ## \
 ## Repositions the indicated CV.  Returns true if successful, false otherwise.
 
-proc setCvPoint*(this: NurbsCurveInterface, n: int, x: float32, y: float32, z: float32): bool {.importcpp: "#.set_cv_point(#, #, #, #)".} ## \
+proc setCvPoint*(this: NurbsCurveInterface, n: int, x: float32, y: float32, z: float32): bool {.importcpp: "#->set_cv_point(#, #, #, #)".} ## \
 ## Repositions the indicated CV.  Returns true if successful, false otherwise.
 
-proc getCvPoint*(this: NurbsCurveInterface, n: int): LVecBase3 {.importcpp: "#.get_cv_point(#)".} ## \
+proc getCvPoint*(this: NurbsCurveInterface, n: int): LVecBase3 {.importcpp: "#->get_cv_point(#)".} ## \
 ## Returns the position of the indicated CV.
 
-proc setCvWeight*(this: NurbsCurveInterface, n: int, w: float32): bool {.importcpp: "#.set_cv_weight(#, #)".} ## \
+proc setCvWeight*(this: NurbsCurveInterface, n: int, w: float32): bool {.importcpp: "#->set_cv_weight(#, #)".} ## \
 ## Sets the weight of the indicated CV without affecting its position in 3-d
 ## space.
 
-proc getCvWeight*(this: NurbsCurveInterface, n: int): float32 {.importcpp: "#.get_cv_weight(#)".} ## \
+proc getCvWeight*(this: NurbsCurveInterface, n: int): float32 {.importcpp: "#->get_cv_weight(#)".} ## \
 ## Returns the weight of the indicated CV.
 
-proc setCv*(this: NurbsCurveInterface, n: int, v: LVecBase4): bool {.importcpp: "#.set_cv(#, #)".}
+proc setCv*(this: NurbsCurveInterface, n: int, v: LVecBase4): bool {.importcpp: "#->set_cv(#, #)".}
 
-proc getCv*(this: NurbsCurveInterface, n: int): LVecBase4 {.importcpp: "#.get_cv(#)".}
+proc getCv*(this: NurbsCurveInterface, n: int): LVecBase4 {.importcpp: "#->get_cv(#)".}
 
-proc setKnot*(this: NurbsCurveInterface, n: int, t: float32): bool {.importcpp: "#.set_knot(#, #)".}
+proc setKnot*(this: NurbsCurveInterface, n: int, t: float32): bool {.importcpp: "#->set_knot(#, #)".}
 
-proc getKnot*(this: NurbsCurveInterface, n: int): float32 {.importcpp: "#.get_knot(#)".}
+proc getKnot*(this: NurbsCurveInterface, n: int): float32 {.importcpp: "#->get_knot(#)".}
 
-proc writeCv*(this: NurbsCurveInterface, `out`: ostream, n: int) {.importcpp: "#.write_cv(#, #)".}
+proc writeCv*(this: NurbsCurveInterface, `out`: ostream, n: int) {.importcpp: "#->write_cv(#, #)".}
 
 proc getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcpp: "NurbsCurveInterface::get_class_type()", header: "nurbsCurveInterface.h".}
 
@@ -57614,59 +57750,59 @@ proc write*(this: MouseWatcherRegion, `out`: ostream) {.importcpp: "#->write(#)"
 
 proc getClassType*(_: typedesc[MouseWatcherRegion]): TypeHandle {.importcpp: "MouseWatcherRegion::get_class_type()", header: "mouseWatcherRegion.h".}
 
-proc addRegion*(this: MouseWatcherBase, region: MouseWatcherRegion) {.importcpp: "#.add_region(#)".} ## \
+proc addRegion*(this: MouseWatcherBase, region: MouseWatcherRegion) {.importcpp: "#->add_region(#)".} ## \
 ## Adds the indicated region to the set of regions in the group.  It is no
 ## longer an error to call this for the same region more than once.
 
-proc hasRegion*(this: MouseWatcherBase, region: MouseWatcherRegion): bool {.importcpp: "#.has_region(#)".} ## \
+proc hasRegion*(this: MouseWatcherBase, region: MouseWatcherRegion): bool {.importcpp: "#->has_region(#)".} ## \
 ## Returns true if the indicated region has already been added to the
 ## MouseWatcherBase, false otherwise.
 
-proc removeRegion*(this: MouseWatcherBase, region: MouseWatcherRegion): bool {.importcpp: "#.remove_region(#)".} ## \
+proc removeRegion*(this: MouseWatcherBase, region: MouseWatcherRegion): bool {.importcpp: "#->remove_region(#)".} ## \
 ## Removes the indicated region from the group.  Returns true if it was
 ## successfully removed, or false if it wasn't there in the first place.
 
-proc findRegion*(this: MouseWatcherBase, name: string): MouseWatcherRegion {.importcpp: "#.find_region(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc findRegion*(this: MouseWatcherBase, name: string): MouseWatcherRegion {.importcpp: "#->find_region(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Returns a pointer to the first region found with the indicated name.  If
 ## multiple regions share the same name, the one that is returned is
 ## indeterminate.
 
-proc clearRegions*(this: MouseWatcherBase) {.importcpp: "#.clear_regions()".} ## \
+proc clearRegions*(this: MouseWatcherBase) {.importcpp: "#->clear_regions()".} ## \
 ## Removes all the regions from the group.
 
-proc sortRegions*(this: MouseWatcherBase) {.importcpp: "#.sort_regions()".} ## \
+proc sortRegions*(this: MouseWatcherBase) {.importcpp: "#->sort_regions()".} ## \
 ## Sorts all the regions in this group into pointer order.
 
-proc isSorted*(this: MouseWatcherBase): bool {.importcpp: "#.is_sorted()".} ## \
+proc isSorted*(this: MouseWatcherBase): bool {.importcpp: "#->is_sorted()".} ## \
 ## Returns true if the group has already been sorted, false otherwise.
 
-proc getNumRegions*(this: MouseWatcherBase): clonglong {.importcpp: "#.get_num_regions()".} ## \
+proc getNumRegions*(this: MouseWatcherBase): clonglong {.importcpp: "#->get_num_regions()".} ## \
 ## Returns the number of regions in the group.
 
-proc getRegion*(this: MouseWatcherBase, n: clonglong): MouseWatcherRegion {.importcpp: "#.get_region(#)".} ## \
+proc getRegion*(this: MouseWatcherBase, n: clonglong): MouseWatcherRegion {.importcpp: "#->get_region(#)".} ## \
 ## Returns the nth region of the group; returns NULL if there is no nth
 ## region.  Note that this is not thread-safe; another thread might have
 ## removed the nth region before you called this method.
 
-proc output*(this: MouseWatcherBase, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: MouseWatcherBase, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: MouseWatcherBase, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+proc write*(this: MouseWatcherBase, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc write*(this: MouseWatcherBase, `out`: ostream) {.importcpp: "#.write(#)".}
+proc write*(this: MouseWatcherBase, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc showRegions*(this: MouseWatcherBase, render2d: NodePath, bin_name: string, draw_order: int) {.importcpp: "#.show_regions(#, nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc showRegions*(this: MouseWatcherBase, render2d: NodePath, bin_name: string, draw_order: int) {.importcpp: "#->show_regions(#, nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Enables the visualization of all of the regions handled by this
 ## MouseWatcherBase.  The supplied NodePath should be the root of the 2-d
 ## scene graph for the window.
 
-proc setColor*(this: MouseWatcherBase, color: LColor) {.importcpp: "#.set_color(#)".} ## \
+proc setColor*(this: MouseWatcherBase, color: LColor) {.importcpp: "#->set_color(#)".} ## \
 ## Specifies the color used to draw the region rectangles for the regions
 ## visualized by show_regions().
 
-proc hideRegions*(this: MouseWatcherBase) {.importcpp: "#.hide_regions()".} ## \
+proc hideRegions*(this: MouseWatcherBase) {.importcpp: "#->hide_regions()".} ## \
 ## Stops the visualization created by a previous call to show_regions().
 
-proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#.update_regions()".} ## \
+proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#->update_regions()".} ## \
 ## Refreshes the visualization created by show_regions().
 
 proc getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
@@ -61831,7 +61967,7 @@ proc setNoDelay*(this: Connection, flag: bool) {.importcpp: "#->set_no_delay(#)"
 proc setMaxSegment*(this: Connection, size: int) {.importcpp: "#->set_max_segment(#)".} ## \
 ## Sets the maximum segment size.
 
-proc addConnection*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#.add_connection(#)".} ## \
+proc addConnection*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#->add_connection(#)".} ## \
 ## Adds a new socket to the list of sockets the ConnectionReader will monitor.
 ## A datagram that comes in on any of the monitored sockets will be reported.
 ## In the case of a ConnectionListener, this adds a new rendezvous socket; any
@@ -61843,7 +61979,7 @@ proc addConnection*(this: ConnectionReader, connection: Connection): bool {.impo
 ##
 ## add_connection() is thread-safe, and may be called at will by any thread.
 
-proc removeConnection*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#.remove_connection(#)".} ## \
+proc removeConnection*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#->remove_connection(#)".} ## \
 ## Removes a socket from the list of sockets being monitored.  Returns true if
 ## the socket was correctly removed, false if it was not on the list in the
 ## first place.
@@ -61851,14 +61987,14 @@ proc removeConnection*(this: ConnectionReader, connection: Connection): bool {.i
 ## remove_connection() is thread-safe, and may be called at will by any
 ## thread.
 
-proc isConnectionOk*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#.is_connection_ok(#)".} ## \
+proc isConnectionOk*(this: ConnectionReader, connection: Connection): bool {.importcpp: "#->is_connection_ok(#)".} ## \
 ## Returns true if the indicated connection has been added to the
 ## ConnectionReader and is being monitored properly, false if it is not known,
 ## or if there was some error condition detected on the connection.  (If there
 ## was an error condition, normally the ConnectionManager would have been
 ## informed and closed the connection.)
 
-proc poll*(this: ConnectionReader) {.importcpp: "#.poll()".} ## \
+proc poll*(this: ConnectionReader) {.importcpp: "#->poll()".} ## \
 ## Explicitly polls the available sockets to see if any of them have any
 ## noise.  This function does nothing unless this is a polling-type
 ## ConnectionReader, i.e.  it was created with zero threads (and is_polling()
@@ -61866,17 +62002,17 @@ proc poll*(this: ConnectionReader) {.importcpp: "#.poll()".} ## \
 ##
 ## It is not necessary to call this explicitly for a QueuedConnectionReader.
 
-proc getManager*(this: ConnectionReader): ConnectionManager {.importcpp: "#.get_manager()".} ## \
+proc getManager*(this: ConnectionReader): ConnectionManager {.importcpp: "#->get_manager()".} ## \
 ## Returns a pointer to the ConnectionManager object that serves this
 ## ConnectionReader.
 
-proc isPolling*(this: ConnectionReader): bool {.importcpp: "#.is_polling()".} ## \
+proc isPolling*(this: ConnectionReader): bool {.importcpp: "#->is_polling()".} ## \
 ## Returns true if the reader is a polling reader, i.e.  it has no threads.
 
-proc getNumThreads*(this: ConnectionReader): int {.importcpp: "#.get_num_threads()".} ## \
+proc getNumThreads*(this: ConnectionReader): int {.importcpp: "#->get_num_threads()".} ## \
 ## Returns the number of threads the ConnectionReader has been created with.
 
-proc setRawMode*(this: ConnectionReader, mode: bool) {.importcpp: "#.set_raw_mode(#)".} ## \
+proc setRawMode*(this: ConnectionReader, mode: bool) {.importcpp: "#->set_raw_mode(#)".} ## \
 ## Sets the ConnectionReader into raw mode (or turns off raw mode).  In raw
 ## mode, datagram headers are not expected; instead, all the data available on
 ## the pipe is treated as a single datagram.
@@ -61884,19 +62020,19 @@ proc setRawMode*(this: ConnectionReader, mode: bool) {.importcpp: "#.set_raw_mod
 ## This is similar to set_tcp_header_size(0), except that it also turns off
 ## headers for UDP packets.
 
-proc getRawMode*(this: ConnectionReader): bool {.importcpp: "#.get_raw_mode()".} ## \
+proc getRawMode*(this: ConnectionReader): bool {.importcpp: "#->get_raw_mode()".} ## \
 ## Returns the current setting of the raw mode flag.  See set_raw_mode().
 
-proc setTcpHeaderSize*(this: ConnectionReader, tcp_header_size: int) {.importcpp: "#.set_tcp_header_size(#)".} ## \
+proc setTcpHeaderSize*(this: ConnectionReader, tcp_header_size: int) {.importcpp: "#->set_tcp_header_size(#)".} ## \
 ## Sets the header size of TCP packets.  At the present, legal values for this
 ## are 0, 2, or 4; this specifies the number of bytes to use encode the
 ## datagram length at the start of each TCP datagram.  Sender and receiver
 ## must independently agree on this.
 
-proc getTcpHeaderSize*(this: ConnectionReader): int {.importcpp: "#.get_tcp_header_size()".} ## \
+proc getTcpHeaderSize*(this: ConnectionReader): int {.importcpp: "#->get_tcp_header_size()".} ## \
 ## Returns the current setting of TCP header size.  See set_tcp_header_size().
 
-proc shutdown*(this: ConnectionReader) {.importcpp: "#.shutdown()".} ## \
+proc shutdown*(this: ConnectionReader) {.importcpp: "#->shutdown()".} ## \
 ## Terminates all threads cleanly.  Normally this is only called by the
 ## destructor, but it may be called explicitly before destruction.
 
@@ -61923,9 +62059,9 @@ proc getAddress*(this: NetDatagram): NetAddress {.importcpp: "#.get_address()".}
 
 proc getClassType*(_: typedesc[NetDatagram]): TypeHandle {.importcpp: "NetDatagram::get_class_type()", header: "netDatagram.h".}
 
-proc initConnectionManager*(): ConnectionManager {.importcpp: "ConnectionManager()".}
+proc newConnectionManager*(): ConnectionManager {.importcpp: "new ConnectionManager()".}
 
-proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int, for_broadcast: bool): Connection {.importcpp: "#.open_UDP_connection(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int, for_broadcast: bool): Connection {.importcpp: "#->open_UDP_connection(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## Opens a socket for sending and/or receiving UDP packets.  If the port
 ## number is greater than zero, the UDP connection will be opened for
 ## listening on the indicated port; otherwise, it will be useful only for
@@ -61942,7 +62078,7 @@ proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int, fo
 ## Use a ConnectionReader and ConnectionWriter to handle the actual
 ## communication.
 
-proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int): Connection {.importcpp: "#.open_UDP_connection(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int): Connection {.importcpp: "#->open_UDP_connection(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Opens a socket for sending and/or receiving UDP packets.  If the port
 ## number is greater than zero, the UDP connection will be opened for
 ## listening on the indicated port; otherwise, it will be useful only for
@@ -61959,7 +62095,7 @@ proc openUDPConnection*(this: ConnectionManager, hostname: string, port: int): C
 ## Use a ConnectionReader and ConnectionWriter to handle the actual
 ## communication.
 
-proc openUDPConnection*(this: ConnectionManager, port: int): Connection {.importcpp: "#.open_UDP_connection(#)".} ## \
+proc openUDPConnection*(this: ConnectionManager, port: int): Connection {.importcpp: "#->open_UDP_connection(#)".} ## \
 ## Opens a socket for sending and/or receiving UDP packets.  If the port
 ## number is greater than zero, the UDP connection will be opened for
 ## listening on the indicated port; otherwise, it will be useful only for
@@ -61968,7 +62104,7 @@ proc openUDPConnection*(this: ConnectionManager, port: int): Connection {.import
 ## Use a ConnectionReader and ConnectionWriter to handle the actual
 ## communication.
 
-proc openUDPConnection*(this: ConnectionManager): Connection {.importcpp: "#.open_UDP_connection()".} ## \
+proc openUDPConnection*(this: ConnectionManager): Connection {.importcpp: "#->open_UDP_connection()".} ## \
 ## Opens a socket for sending and/or receiving UDP packets.  If the port
 ## number is greater than zero, the UDP connection will be opened for
 ## listening on the indicated port; otherwise, it will be useful only for
@@ -61977,7 +62113,7 @@ proc openUDPConnection*(this: ConnectionManager): Connection {.importcpp: "#.ope
 ## Use a ConnectionReader and ConnectionWriter to handle the actual
 ## communication.
 
-proc openTCPServerRendezvous*(this: ConnectionManager, address: NetAddress, backlog: int): Connection {.importcpp: "#.open_TCP_server_rendezvous(#, #)".} ## \
+proc openTCPServerRendezvous*(this: ConnectionManager, address: NetAddress, backlog: int): Connection {.importcpp: "#->open_TCP_server_rendezvous(#, #)".} ## \
 ## Creates a socket to be used as a rendezvous socket for a server to listen
 ## for TCP connections.  The socket returned by this call should only be added
 ## to a ConnectionListener (not to a generic ConnectionReader).
@@ -61987,7 +62123,7 @@ proc openTCPServerRendezvous*(this: ConnectionManager, address: NetAddress, back
 ##
 ## backlog is the maximum length of the queue of pending connections.
 
-proc openTCPServerRendezvous*(this: ConnectionManager, hostname: string, port: int, backlog: int): Connection {.importcpp: "#.open_TCP_server_rendezvous(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc openTCPServerRendezvous*(this: ConnectionManager, hostname: string, port: int, backlog: int): Connection {.importcpp: "#->open_TCP_server_rendezvous(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## Creates a socket to be used as a rendezvous socket for a server to listen
 ## for TCP connections.  The socket returned by this call should only be added
 ## to a ConnectionListener (not to a generic ConnectionReader).
@@ -61999,7 +62135,7 @@ proc openTCPServerRendezvous*(this: ConnectionManager, hostname: string, port: i
 ##
 ## backlog is the maximum length of the queue of pending connections.
 
-proc openTCPServerRendezvous*(this: ConnectionManager, port: int, backlog: int): Connection {.importcpp: "#.open_TCP_server_rendezvous(#, #)".} ## \
+proc openTCPServerRendezvous*(this: ConnectionManager, port: int, backlog: int): Connection {.importcpp: "#->open_TCP_server_rendezvous(#, #)".} ## \
 ## Creates a socket to be used as a rendezvous socket for a server to listen
 ## for TCP connections.  The socket returned by this call should only be added
 ## to a ConnectionListener (not to a generic ConnectionReader).
@@ -62009,16 +62145,16 @@ proc openTCPServerRendezvous*(this: ConnectionManager, port: int, backlog: int):
 ##
 ## backlog is the maximum length of the queue of pending connections.
 
-proc openTCPClientConnection*(this: ConnectionManager, address: NetAddress, timeout_ms: int): Connection {.importcpp: "#.open_TCP_client_connection(#, #)".} ## \
+proc openTCPClientConnection*(this: ConnectionManager, address: NetAddress, timeout_ms: int): Connection {.importcpp: "#->open_TCP_client_connection(#, #)".} ## \
 ## Attempts to establish a TCP client connection to a server at the indicated
 ## address.  If the connection is not established within timeout_ms
 ## milliseconds, a null connection is returned.
 
-proc openTCPClientConnection*(this: ConnectionManager, hostname: string, port: int, timeout_ms: int): Connection {.importcpp: "#.open_TCP_client_connection(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc openTCPClientConnection*(this: ConnectionManager, hostname: string, port: int, timeout_ms: int): Connection {.importcpp: "#->open_TCP_client_connection(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## This is a shorthand version of the function to directly establish
 ## communications to a named host and port.
 
-proc closeConnection*(this: ConnectionManager, connection: Connection): bool {.importcpp: "#.close_connection(#)".} ## \
+proc closeConnection*(this: ConnectionManager, connection: Connection): bool {.importcpp: "#->close_connection(#)".} ## \
 ## Terminates a UDP or TCP socket previously opened.  This also removes it
 ## from any associated ConnectionReader or ConnectionListeners.
 ##
@@ -62032,7 +62168,7 @@ proc closeConnection*(this: ConnectionManager, connection: Connection): bool {.i
 ## anything about whether the connection has \*actually\* been closed yet based
 ## on the return value.
 
-proc waitForReaders*(this: ConnectionManager, timeout: float64): bool {.importcpp: "#.wait_for_readers(#)".} ## \
+proc waitForReaders*(this: ConnectionManager, timeout: float64): bool {.importcpp: "#->wait_for_readers(#)".} ## \
 ## Blocks the process for timeout number of seconds, or until any data is
 ## available on any of the non-threaded ConnectionReaders or
 ## ConnectionListeners, whichever comes first.  The return value is true if
@@ -62050,13 +62186,13 @@ proc getHostName*(_: typedesc[ConnectionManager]): string {.importcpp: "nimStrin
 ## Returns the name of this particular machine on the network, if available,
 ## or the empty string if the hostname cannot be determined.
 
-proc scanInterfaces*(this: ConnectionManager) {.importcpp: "#.scan_interfaces()".} ## \
+proc scanInterfaces*(this: ConnectionManager) {.importcpp: "#->scan_interfaces()".} ## \
 ## Repopulates the list reported by get_num_interface()/get_interface().  It
 ## is not necessary to call this explicitly, unless you want to re-determine
 ## the connected interfaces (for instance, if you suspect the hardware has
 ## recently changed).
 
-proc getNumInterfaces*(this: ConnectionManager): clonglong {.importcpp: "#.get_num_interfaces()".} ## \
+proc getNumInterfaces*(this: ConnectionManager): clonglong {.importcpp: "#->get_num_interfaces()".} ## \
 ## This returns the number of usable network interfaces detected on this
 ## machine.  See scan_interfaces() to repopulate this list.
 
@@ -62178,24 +62314,24 @@ proc shutdown*(this: ConnectionWriter) {.importcpp: "#.shutdown()".} ## \
 ## Stops all the threads and cleans them up.  This is called automatically by
 ## the destructor, but it may be called explicitly before destruction.
 
-converter upcastToDatagramGenerator*(this: DatagramGeneratorNet): DatagramGenerator {.importcpp: "#.upcast_to_DatagramGenerator()".}
+converter upcastToDatagramGenerator*(this: DatagramGeneratorNet): DatagramGenerator {.importcpp: "((DatagramGenerator *)(#))".}
 
-converter upcastToConnectionReader*(this: DatagramGeneratorNet): ConnectionReader {.importcpp: "#.upcast_to_ConnectionReader()".}
+converter upcastToConnectionReader*(this: DatagramGeneratorNet): ConnectionReader {.importcpp: "((ConnectionReader *)(#))".}
 
-proc initDatagramGeneratorNet*(manager: ConnectionManager, num_threads: int): DatagramGeneratorNet {.importcpp: "DatagramGeneratorNet(#, #)".} ## \
+proc newDatagramGeneratorNet*(manager: ConnectionManager, num_threads: int): DatagramGeneratorNet {.importcpp: "new DatagramGeneratorNet(#, #)".} ## \
 ## Creates a new DatagramGeneratorNet with the indicated number of threads to
 ## handle requests.  Normally num_threads should be either 0 or 1 to guarantee
 ## that datagrams are generated in the same order in which they were received.
 
-proc getDatagram*(this: DatagramGeneratorNet, data: Datagram): bool {.importcpp: "#.get_datagram(#)".} ## \
+proc getDatagram*(this: DatagramGeneratorNet, data: Datagram): bool {.importcpp: "#->get_datagram(#)".} ## \
 ## Reads the next datagram from the stream.  Blocks until a datagram is
 ## available.  Returns true on success, false on stream closed or error.
 
-proc isEof*(this: DatagramGeneratorNet): bool {.importcpp: "#.is_eof()".} ## \
+proc isEof*(this: DatagramGeneratorNet): bool {.importcpp: "#->is_eof()".} ## \
 ## Returns true if the stream has been closed normally.  This test may only be
 ## made after a call to get_datagram() has failed.
 
-proc isError*(this: DatagramGeneratorNet): bool {.importcpp: "#.is_error()".} ## \
+proc isError*(this: DatagramGeneratorNet): bool {.importcpp: "#->is_error()".} ## \
 ## Returns true if the stream has an error condition.
 
 converter upcastToDatagramSink*(this: DatagramSinkNet): DatagramSink {.importcpp: "#.upcast_to_DatagramSink()".}
@@ -62226,19 +62362,19 @@ proc flush*(this: DatagramSinkNet) {.importcpp: "#.flush()".} ## \
 ## Ensures that all datagrams previously written will be visible on the
 ## stream.
 
-converter upcastToConnectionListener*(this: QueuedConnectionListener): ConnectionListener {.importcpp: "#.upcast_to_ConnectionListener()".}
+converter upcastToConnectionListener*(this: QueuedConnectionListener): ConnectionListener {.importcpp: "((ConnectionListener *)(#))".}
 
-proc initQueuedConnectionListener*(manager: ConnectionManager, num_threads: int): QueuedConnectionListener {.importcpp: "QueuedConnectionListener(#, #)".}
+proc newQueuedConnectionListener*(manager: ConnectionManager, num_threads: int): QueuedConnectionListener {.importcpp: "new QueuedConnectionListener(#, #)".}
 
-proc newConnectionAvailable*(this: QueuedConnectionListener): bool {.importcpp: "#.new_connection_available()".} ## \
+proc newConnectionAvailable*(this: QueuedConnectionListener): bool {.importcpp: "#->new_connection_available()".} ## \
 ## Returns true if a new connection was recently established; the connection
 ## information may then be retrieved via get_new_connection().
 
-converter upcastToConnectionManager*(this: QueuedConnectionManager): ConnectionManager {.importcpp: "#.upcast_to_ConnectionManager()".}
+converter upcastToConnectionManager*(this: QueuedConnectionManager): ConnectionManager {.importcpp: "((ConnectionManager *)(#))".}
 
-proc initQueuedConnectionManager*(): QueuedConnectionManager {.importcpp: "QueuedConnectionManager()".}
+proc newQueuedConnectionManager*(): QueuedConnectionManager {.importcpp: "new QueuedConnectionManager()".}
 
-proc resetConnectionAvailable*(this: QueuedConnectionManager): bool {.importcpp: "#.reset_connection_available()".} ## \
+proc resetConnectionAvailable*(this: QueuedConnectionManager): bool {.importcpp: "#->reset_connection_available()".} ## \
 ## Returns true if one of the readers/writers/listeners reported a connection
 ## reset recently.  If so, the particular connection that has been reset can
 ## be extracted via get_reset_connection().
@@ -62250,21 +62386,21 @@ proc resetConnectionAvailable*(this: QueuedConnectionManager): bool {.importcpp:
 ## reset by this call.  (There is no harm in calling close_connection() more
 ## than once on a given socket.)
 
-converter upcastToConnectionReader*(this: QueuedConnectionReader): ConnectionReader {.importcpp: "#.upcast_to_ConnectionReader()".}
+converter upcastToConnectionReader*(this: QueuedConnectionReader): ConnectionReader {.importcpp: "((ConnectionReader *)(#))".}
 
-proc initQueuedConnectionReader*(manager: ConnectionManager, num_threads: int): QueuedConnectionReader {.importcpp: "QueuedConnectionReader(#, #)".}
+proc newQueuedConnectionReader*(manager: ConnectionManager, num_threads: int): QueuedConnectionReader {.importcpp: "new QueuedConnectionReader(#, #)".}
 
-proc dataAvailable*(this: QueuedConnectionReader): bool {.importcpp: "#.data_available()".} ## \
+proc dataAvailable*(this: QueuedConnectionReader): bool {.importcpp: "#->data_available()".} ## \
 ## Returns true if a datagram is available on the queue; call get_data() to
 ## extract the datagram.
 
-proc getData*(this: QueuedConnectionReader, result: Datagram): bool {.importcpp: "#.get_data(#)".} ## \
+proc getData*(this: QueuedConnectionReader, result: Datagram): bool {.importcpp: "#->get_data(#)".} ## \
 ## This flavor of QueuedConnectionReader::get_data(), works like the other,
 ## except that it only fills a Datagram object, not a NetDatagram object.
 ## This means that the Datagram cannot be queried for its source Connection
 ## and/or NetAddress, but it is useful in all other respects.
 
-proc getData*(this: QueuedConnectionReader, result: NetDatagram): bool {.importcpp: "#.get_data(#)".} ## \
+proc getData*(this: QueuedConnectionReader, result: NetDatagram): bool {.importcpp: "#->get_data(#)".} ## \
 ## If a previous call to data_available() returned true, this function will
 ## return the datagram that has become available.
 ##
@@ -62272,19 +62408,19 @@ proc getData*(this: QueuedConnectionReader, result: NetDatagram): bool {.importc
 ## if there was, in fact, no datagram available.  (This may happen if there
 ## are multiple threads accessing the QueuedConnectionReader).
 
-proc initRecentConnectionReader*(manager: ConnectionManager): RecentConnectionReader {.importcpp: "RecentConnectionReader(#)".}
+proc newRecentConnectionReader*(manager: ConnectionManager): RecentConnectionReader {.importcpp: "new RecentConnectionReader(#)".}
 
-proc dataAvailable*(this: RecentConnectionReader): bool {.importcpp: "#.data_available()".} ## \
+proc dataAvailable*(this: RecentConnectionReader): bool {.importcpp: "#->data_available()".} ## \
 ## Returns true if a datagram is available on the queue; call get_data() to
 ## extract the datagram.
 
-proc getData*(this: RecentConnectionReader, result: Datagram): bool {.importcpp: "#.get_data(#)".} ## \
+proc getData*(this: RecentConnectionReader, result: Datagram): bool {.importcpp: "#->get_data(#)".} ## \
 ## This flavor of RecentConnectionReader::get_data(), works like the other,
 ## except that it only fills a Datagram object, not a NetDatagram object.
 ## This means that the Datagram cannot be queried for its source Connection
 ## and/or NetAddress, but it is useful in all other respects.
 
-proc getData*(this: RecentConnectionReader, result: NetDatagram): bool {.importcpp: "#.get_data(#)".} ## \
+proc getData*(this: RecentConnectionReader, result: NetDatagram): bool {.importcpp: "#->get_data(#)".} ## \
 ## If a previous call to data_available() returned true, this function will
 ## return the datagram that has become available.
 ##
@@ -62292,68 +62428,68 @@ proc getData*(this: RecentConnectionReader, result: NetDatagram): bool {.importc
 ## if there was, in fact, no datagram available.  (This may happen if there
 ## are multiple threads accessing the RecentConnectionReader).
 
-proc initSocketAddress*(inaddr: Socket_Address): Socket_Address {.importcpp: "Socket_Address(#)".}
+proc newSocketAddress*(inaddr: Socket_Address): Socket_Address {.importcpp: "new Socket_Address(#)".}
 
-proc initSocketAddress*(port: int): Socket_Address {.importcpp: "Socket_Address(#)".} ## \
+proc newSocketAddress*(port: int): Socket_Address {.importcpp: "new Socket_Address(#)".} ## \
 ## Constructor that lets us set a port value
 
-proc initSocketAddress*(): Socket_Address {.importcpp: "Socket_Address()".} ## \
+proc newSocketAddress*(): Socket_Address {.importcpp: "new Socket_Address()".} ## \
 ## Constructor that lets us set a port value
 
-proc setAnyIP*(this: Socket_Address, port: int): bool {.importcpp: "#.set_any_IP(#)".} ## \
+proc setAnyIP*(this: Socket_Address, port: int): bool {.importcpp: "#->set_any_IP(#)".} ## \
 ## Set to any address and a specified port
 
-proc setAnyIPv6*(this: Socket_Address, port: int): bool {.importcpp: "#.set_any_IPv6(#)".} ## \
+proc setAnyIPv6*(this: Socket_Address, port: int): bool {.importcpp: "#->set_any_IPv6(#)".} ## \
 ## Set to any IPv6 address and a specified port.
 
-proc setPort*(this: Socket_Address, port: int): bool {.importcpp: "#.set_port(#)".} ## \
+proc setPort*(this: Socket_Address, port: int): bool {.importcpp: "#->set_port(#)".} ## \
 ## Set to a specified port
 
-proc setBroadcast*(this: Socket_Address, port: int): bool {.importcpp: "#.set_broadcast(#)".} ## \
+proc setBroadcast*(this: Socket_Address, port: int): bool {.importcpp: "#->set_broadcast(#)".} ## \
 ## Set to the broadcast address and a specified port
 
-proc setHost*(this: Socket_Address, hostname: string): bool {.importcpp: "#.set_host(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc setHost*(this: Socket_Address, hostname: string): bool {.importcpp: "#->set_host(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Initializes the address from a string specifying both the address and port,
 ## separated by a colon.  An IPv6 address must be enclosed in brackets.
 
-proc setHost*(this: Socket_Address, hostname: string, port: int): bool {.importcpp: "#.set_host(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc setHost*(this: Socket_Address, hostname: string, port: int): bool {.importcpp: "#->set_host(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## This function will take a port and string-based TCP address and initialize
 ## the address with this information.  Returns true on success; on failure, it
 ## returns false and the address may be undefined.
 
-proc setHost*(this: Socket_Address, ip4addr: int, port: int): bool {.importcpp: "#.set_host(#, #)".}
+proc setHost*(this: Socket_Address, ip4addr: int, port: int): bool {.importcpp: "#->set_host(#, #)".}
 
-proc clear*(this: Socket_Address) {.importcpp: "#.clear()".} ## \
+proc clear*(this: Socket_Address) {.importcpp: "#->clear()".} ## \
 ## Set the internal values to a suitable known value
 
-proc getFamily*(this: Socket_Address): int {.importcpp: "#.get_family()".} ## \
+proc getFamily*(this: Socket_Address): int {.importcpp: "#->get_family()".} ## \
 ## Returns AF_INET if this is an IPv4 address, or AF_INET6 if this is an IPv6
 ## address.
 
-proc getPort*(this: Socket_Address): int {.importcpp: "#.get_port()".} ## \
+proc getPort*(this: Socket_Address): int {.importcpp: "#->get_port()".} ## \
 ## Get the port portion as an integer
 
-proc getIp*(this: Socket_Address): string {.importcpp: "nimStringFromStdString(#.get_ip())", header: stringConversionCode.} ## \
+proc getIp*(this: Socket_Address): string {.importcpp: "nimStringFromStdString(#->get_ip())", header: stringConversionCode.} ## \
 ## Return the IP address portion in dot notation string.
 
-proc getIpPort*(this: Socket_Address): string {.importcpp: "nimStringFromStdString(#.get_ip_port())", header: stringConversionCode.} ## \
+proc getIpPort*(this: Socket_Address): string {.importcpp: "nimStringFromStdString(#->get_ip_port())", header: stringConversionCode.} ## \
 ## Return the ip address/port in dot notation string.  If this is an IPv6
 ## address, it will be enclosed in square brackets.
 
-proc GetIPAddressRaw*(this: Socket_Address): int {.importcpp: "#.GetIPAddressRaw()".} ## \
+proc GetIPAddressRaw*(this: Socket_Address): int {.importcpp: "#->GetIPAddressRaw()".} ## \
 ## Returns a raw 32-bit unsigned integer representing the IPv4 address.
 ## @deprecated  Does not work with IPv6 addresses.
 
-proc `==`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#->operator ==(#)".}
 
-proc `!=`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#->operator !=(#)".}
 
-proc `<`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: Socket_Address, `in`: Socket_Address): bool {.importcpp: "#->operator <(#)".}
 
-proc isAny*(this: Socket_Address): bool {.importcpp: "#.is_any()".} ## \
+proc isAny*(this: Socket_Address): bool {.importcpp: "#->is_any()".} ## \
 ## True if the address is zero.
 
-proc isMcastRange*(this: Socket_Address): bool {.importcpp: "#.is_mcast_range()".} ## \
+proc isMcastRange*(this: Socket_Address): bool {.importcpp: "#->is_mcast_range()".} ## \
 ## True if the address is in the multicast range.
 
 proc initSocketIP*(): Socket_IP {.importcpp: "Socket_IP()".} ## \
@@ -62599,7 +62735,7 @@ proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp:
 proc IsWhiteSpaceCondensed*(_: typedesc[TiXmlBase]): bool {.importcpp: "TiXmlBase::IsWhiteSpaceCondensed()", header: "tinyxml.h".} ## \
 ## Return the current white space setting.
 
-proc Row*(this: TiXmlBase): int {.importcpp: "#.Row()".} ## \
+proc Row*(this: TiXmlBase): int {.importcpp: "#->Row()".} ## \
 ## Return the position, in the original source file, of this node or attribute.
 ## The row and column are 1-based. (That is the first row and first column is
 ## 1,1). If the returns values are 0 or less, then the parser does not have
@@ -62618,13 +62754,13 @@ proc Row*(this: TiXmlBase): int {.importcpp: "#.Row()".} ## \
 ##
 ## @sa TiXmlDocument::SetTabSize()
 
-proc Column*(this: TiXmlBase): int {.importcpp: "#.Column()".} ## \
+proc Column*(this: TiXmlBase): int {.importcpp: "#->Column()".} ## \
 ## See Row()
 
-proc GetUserData*(this: TiXmlBase) {.importcpp: "#.GetUserData()".} ## \
+proc GetUserData*(this: TiXmlBase) {.importcpp: "#->GetUserData()".} ## \
 ## Get a pointer to arbitrary user data.
 
-proc Value*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#.Value())", header: stringConversionCode.} ## \
+proc Value*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#->Value())", header: stringConversionCode.} ## \
 ## The meaning of 'value' changes for the specific type of
 ## TiXmlNode.
 ## @verbatim
@@ -62637,87 +62773,87 @@ proc Value*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#.Valu
 ##
 ## The subclasses will wrap this function.
 
-proc ValueStr*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#.ValueStr())", header: stringConversionCode.} ## \
+proc ValueStr*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#->ValueStr())", header: stringConversionCode.} ## \
 ## Return Value() as a std::string. If you only use STL,
 ## this is more efficient than calling Value().
 ## Only available in STL mode.
 
-proc ValueTStr*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#.ValueTStr())", header: stringConversionCode.}
+proc ValueTStr*(this: TiXmlNode): string {.importcpp: "nimStringFromStdString(#->ValueTStr())", header: stringConversionCode.}
 
-proc Clear*(this: TiXmlNode) {.importcpp: "#.Clear()".} ## \
+proc Clear*(this: TiXmlNode) {.importcpp: "#->Clear()".} ## \
 ## Delete all the children of this node. Does not affect 'this'.
 
-proc Parent*(this: TiXmlNode): TiXmlNode {.importcpp: "#.Parent()".} ## \
+proc Parent*(this: TiXmlNode): TiXmlNode {.importcpp: "#->Parent()".} ## \
 ## One step up the DOM.
 
-proc FirstChild*(this: TiXmlNode): TiXmlNode {.importcpp: "#.FirstChild()".} ## \
+proc FirstChild*(this: TiXmlNode): TiXmlNode {.importcpp: "#->FirstChild()".} ## \
 ## The first child of this node. Will be null if there are no children.
 
-proc LastChild*(this: TiXmlNode): TiXmlNode {.importcpp: "#.LastChild()".} ## \
+proc LastChild*(this: TiXmlNode): TiXmlNode {.importcpp: "#->LastChild()".} ## \
 ## The last child of this node. Will be null if there are no children.
 
-proc IterateChildren*(this: TiXmlNode, previous: TiXmlNode): TiXmlNode {.importcpp: "#.IterateChildren(#)".}
+proc IterateChildren*(this: TiXmlNode, previous: TiXmlNode): TiXmlNode {.importcpp: "#->IterateChildren(#)".}
 
-proc InsertEndChild*(this: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#.InsertEndChild(#)".} ## \
+proc InsertEndChild*(this: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#->InsertEndChild(#)".} ## \
 ## Add a new node related to this. Adds a child past the LastChild.
 ## Returns a pointer to the new object or NULL if an error occured.
 
-proc InsertBeforeChild*(this: TiXmlNode, beforeThis: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#.InsertBeforeChild(#, #)".} ## \
+proc InsertBeforeChild*(this: TiXmlNode, beforeThis: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#->InsertBeforeChild(#, #)".} ## \
 ## Add a new node related to this. Adds a child before the specified child.
 ## Returns a pointer to the new object or NULL if an error occured.
 
-proc InsertAfterChild*(this: TiXmlNode, afterThis: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#.InsertAfterChild(#, #)".} ## \
+proc InsertAfterChild*(this: TiXmlNode, afterThis: TiXmlNode, addThis: TiXmlNode): TiXmlNode {.importcpp: "#->InsertAfterChild(#, #)".} ## \
 ## Add a new node related to this. Adds a child after the specified child.
 ## Returns a pointer to the new object or NULL if an error occured.
 
-proc ReplaceChild*(this: TiXmlNode, replaceThis: TiXmlNode, withThis: TiXmlNode): TiXmlNode {.importcpp: "#.ReplaceChild(#, #)".} ## \
+proc ReplaceChild*(this: TiXmlNode, replaceThis: TiXmlNode, withThis: TiXmlNode): TiXmlNode {.importcpp: "#->ReplaceChild(#, #)".} ## \
 ## Replace a child of this node.
 ## Returns a pointer to the new object or NULL if an error occured.
 
-proc RemoveChild*(this: TiXmlNode, removeThis: TiXmlNode): bool {.importcpp: "#.RemoveChild(#)".} ## \
+proc RemoveChild*(this: TiXmlNode, removeThis: TiXmlNode): bool {.importcpp: "#->RemoveChild(#)".} ## \
 ## Delete a child of this node.
 
-proc PreviousSibling*(this: TiXmlNode): TiXmlNode {.importcpp: "#.PreviousSibling()".}
+proc PreviousSibling*(this: TiXmlNode): TiXmlNode {.importcpp: "#->PreviousSibling()".}
 
-proc NextSibling*(this: TiXmlNode): TiXmlNode {.importcpp: "#.NextSibling()".}
+proc NextSibling*(this: TiXmlNode): TiXmlNode {.importcpp: "#->NextSibling()".}
 
-proc NextSiblingElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#.NextSiblingElement()".}
+proc NextSiblingElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#->NextSiblingElement()".}
 
-proc FirstChildElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#.FirstChildElement()".}
+proc FirstChildElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#->FirstChildElement()".}
 
-proc Type*(this: TiXmlNode): int {.importcpp: "#.Type()".} ## \
+proc Type*(this: TiXmlNode): int {.importcpp: "#->Type()".} ## \
 ## Query the type (as an enumerated value, above) of this node.
 ## The possible types are: DOCUMENT, ELEMENT, COMMENT,
 ## UNKNOWN, TEXT, and DECLARATION.
 
-proc GetDocument*(this: TiXmlNode): TiXmlDocument {.importcpp: "#.GetDocument()".}
+proc GetDocument*(this: TiXmlNode): TiXmlDocument {.importcpp: "#->GetDocument()".}
 
-proc NoChildren*(this: TiXmlNode): bool {.importcpp: "#.NoChildren()".} ## \
+proc NoChildren*(this: TiXmlNode): bool {.importcpp: "#->NoChildren()".} ## \
 ## Returns true if this node has no children.
 
-proc ToDocument*(this: TiXmlNode): TiXmlDocument {.importcpp: "#.ToDocument()".} ## \
+proc ToDocument*(this: TiXmlNode): TiXmlDocument {.importcpp: "#->ToDocument()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc ToElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#.ToElement()".} ## \
+proc ToElement*(this: TiXmlNode): TiXmlElement {.importcpp: "#->ToElement()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc ToComment*(this: TiXmlNode): TiXmlComment {.importcpp: "#.ToComment()".} ## \
+proc ToComment*(this: TiXmlNode): TiXmlComment {.importcpp: "#->ToComment()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc ToUnknown*(this: TiXmlNode): TiXmlUnknown {.importcpp: "#.ToUnknown()".} ## \
+proc ToUnknown*(this: TiXmlNode): TiXmlUnknown {.importcpp: "#->ToUnknown()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc ToText*(this: TiXmlNode): TiXmlText {.importcpp: "#.ToText()".} ## \
+proc ToText*(this: TiXmlNode): TiXmlText {.importcpp: "#->ToText()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc ToDeclaration*(this: TiXmlNode): TiXmlDeclaration {.importcpp: "#.ToDeclaration()".} ## \
+proc ToDeclaration*(this: TiXmlNode): TiXmlDeclaration {.importcpp: "#->ToDeclaration()".} ## \
 ## Cast to a more defined type. Will return null if not of the requested type.
 
-proc Clone*(this: TiXmlNode): TiXmlNode {.importcpp: "#.Clone()".} ## \
+proc Clone*(this: TiXmlNode): TiXmlNode {.importcpp: "#->Clone()".} ## \
 ## Create an exact duplicate of this node and return it. The memory must be deleted
 ## by the caller.
 
-proc Accept*(this: TiXmlNode, visitor: TiXmlVisitor): bool {.importcpp: "#.Accept(#)".} ## \
+proc Accept*(this: TiXmlNode, visitor: TiXmlVisitor): bool {.importcpp: "#->Accept(#)".} ## \
 ## Accept a hierchical visit the nodes in the TinyXML DOM. Every node in the
 ## XML tree will be conditionally visited and the host will be called back
 ## via the TiXmlVisitor interface.
@@ -62740,66 +62876,66 @@ proc Accept*(this: TiXmlNode, visitor: TiXmlVisitor): bool {.importcpp: "#.Accep
 ## const char\* xmlcstr = printer.CStr();
 ## @endverbatim
 
-proc initTiXmlDeclaration*(): TiXmlDeclaration {.importcpp: "TiXmlDeclaration()".} ## \
+proc newTiXmlDeclaration*(): TiXmlDeclaration {.importcpp: "new TiXmlDeclaration()".} ## \
 ## Construct an empty declaration.
 
-proc initTiXmlDeclaration*(copy: TiXmlDeclaration): TiXmlDeclaration {.importcpp: "TiXmlDeclaration(#)".}
+proc newTiXmlDeclaration*(copy: TiXmlDeclaration): TiXmlDeclaration {.importcpp: "new TiXmlDeclaration(#)".}
 
-proc Version*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#.Version())", header: stringConversionCode.} ## \
+proc Version*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#->Version())", header: stringConversionCode.} ## \
 ## Version. Will return an empty string if none was found.
 
-proc Encoding*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#.Encoding())", header: stringConversionCode.} ## \
+proc Encoding*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#->Encoding())", header: stringConversionCode.} ## \
 ## Encoding. Will return an empty string if none was found.
 
-proc Standalone*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#.Standalone())", header: stringConversionCode.} ## \
+proc Standalone*(this: TiXmlDeclaration): string {.importcpp: "nimStringFromStdString(#->Standalone())", header: stringConversionCode.} ## \
 ## Is this a standalone document?
 
-proc initTiXmlDocument*(): TiXmlDocument {.importcpp: "TiXmlDocument()".} ## \
+proc newTiXmlDocument*(): TiXmlDocument {.importcpp: "new TiXmlDocument()".} ## \
 ## Create an empty document, that has no name.
 
-proc initTiXmlDocument*(copy: TiXmlDocument): TiXmlDocument {.importcpp: "TiXmlDocument(#)".}
+proc newTiXmlDocument*(copy: TiXmlDocument): TiXmlDocument {.importcpp: "new TiXmlDocument(#)".}
 
-proc initTiXmlDocument*(documentName: string): TiXmlDocument {.importcpp: "TiXmlDocument(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc newTiXmlDocument*(documentName: string): TiXmlDocument {.importcpp: "new TiXmlDocument(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Create a document with a name. The name of the document is also the filename of the xml.
 
-proc LoadFile*(this: TiXmlDocument, encoding: TiXmlEncoding): bool {.importcpp: "#.LoadFile(#)".} ## \
+proc LoadFile*(this: TiXmlDocument, encoding: TiXmlEncoding): bool {.importcpp: "#->LoadFile(#)".} ## \
 ## Load a file using the current document value.
 ## Returns true if successful. Will delete any existing
 ## document data before loading.
 
-proc LoadFile*(this: TiXmlDocument): bool {.importcpp: "#.LoadFile()".} ## \
+proc LoadFile*(this: TiXmlDocument): bool {.importcpp: "#->LoadFile()".} ## \
 ## Load a file using the current document value.
 ## Returns true if successful. Will delete any existing
 ## document data before loading.
 
-proc LoadFile*(this: TiXmlDocument, filename: string, encoding: TiXmlEncoding): bool {.importcpp: "#.LoadFile(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc LoadFile*(this: TiXmlDocument, filename: string, encoding: TiXmlEncoding): bool {.importcpp: "#->LoadFile(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Load a file using the given filename. Returns true if successful.
 
-proc LoadFile*(this: TiXmlDocument, filename: string): bool {.importcpp: "#.LoadFile(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc LoadFile*(this: TiXmlDocument, filename: string): bool {.importcpp: "#->LoadFile(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Load a file using the given filename. Returns true if successful.
 
-proc SaveFile*(this: TiXmlDocument): bool {.importcpp: "#.SaveFile()".} ## \
+proc SaveFile*(this: TiXmlDocument): bool {.importcpp: "#->SaveFile()".} ## \
 ## Save a file using the current document value. Returns true if successful.
 
-proc SaveFile*(this: TiXmlDocument, filename: string): bool {.importcpp: "#.SaveFile(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc SaveFile*(this: TiXmlDocument, filename: string): bool {.importcpp: "#->SaveFile(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Save a file using the given filename. Returns true if successful.
 
-proc RootElement*(this: TiXmlDocument): TiXmlElement {.importcpp: "#.RootElement()".}
+proc RootElement*(this: TiXmlDocument): TiXmlElement {.importcpp: "#->RootElement()".}
 
-proc Error*(this: TiXmlDocument): bool {.importcpp: "#.Error()".} ## \
+proc Error*(this: TiXmlDocument): bool {.importcpp: "#->Error()".} ## \
 ## If an error occurs, Error will be set to true. Also,
 ## - The ErrorId() will contain the integer identifier of the error (not generally useful)
 ## - The ErrorDesc() method will return the name of the error. (very useful)
 ## - The ErrorRow() and ErrorCol() will return the location of the error (if known)
 
-proc ErrorDesc*(this: TiXmlDocument): string {.importcpp: "nimStringFromStdString(#.ErrorDesc())", header: stringConversionCode.} ## \
+proc ErrorDesc*(this: TiXmlDocument): string {.importcpp: "nimStringFromStdString(#->ErrorDesc())", header: stringConversionCode.} ## \
 ## Contains a textual (english) description of the error if one occurs.
 
-proc ErrorId*(this: TiXmlDocument): int {.importcpp: "#.ErrorId()".} ## \
+proc ErrorId*(this: TiXmlDocument): int {.importcpp: "#->ErrorId()".} ## \
 ## Generally, you probably want the error string ( ErrorDesc() ). But if you
 ## prefer the ErrorId, this function will fetch it.
 
-proc ErrorRow*(this: TiXmlDocument): int {.importcpp: "#.ErrorRow()".} ## \
+proc ErrorRow*(this: TiXmlDocument): int {.importcpp: "#->ErrorRow()".} ## \
 ## Returns the location (if known) of the error. The first column is column 1,
 ## and the first row is row 1. A value of 0 means the row and column wasn't applicable
 ## (memory errors, for example, have no row/column) or the parser lost the error. (An
@@ -62807,45 +62943,45 @@ proc ErrorRow*(this: TiXmlDocument): int {.importcpp: "#.ErrorRow()".} ## \
 ##
 ## @sa SetTabSize, Row, Column
 
-proc ErrorCol*(this: TiXmlDocument): int {.importcpp: "#.ErrorCol()".} ## \
+proc ErrorCol*(this: TiXmlDocument): int {.importcpp: "#->ErrorCol()".} ## \
 ## The column where the error occured. See ErrorRow()
 
-proc TabSize*(this: TiXmlDocument): int {.importcpp: "#.TabSize()".}
+proc TabSize*(this: TiXmlDocument): int {.importcpp: "#->TabSize()".}
 
-proc ClearError*(this: TiXmlDocument) {.importcpp: "#.ClearError()".} ## \
+proc ClearError*(this: TiXmlDocument) {.importcpp: "#->ClearError()".} ## \
 ## If you have handled the error, it can be reset with this call. The error
 ## state is automatically cleared if you Parse a new XML block.
 
-proc Print*(this: TiXmlDocument) {.importcpp: "#.Print()".} ## \
+proc Print*(this: TiXmlDocument) {.importcpp: "#->Print()".} ## \
 ## Write the document to standard out using formatted printing ("pretty print").
 
-proc initTiXmlElement*(param0: TiXmlElement): TiXmlElement {.importcpp: "TiXmlElement(#)".}
+proc newTiXmlElement*(param0: TiXmlElement): TiXmlElement {.importcpp: "new TiXmlElement(#)".}
 
-proc initTiXmlElement*(in_value: string): TiXmlElement {.importcpp: "TiXmlElement(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc newTiXmlElement*(in_value: string): TiXmlElement {.importcpp: "new TiXmlElement(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Construct an element.
 
-proc Attribute*(this: TiXmlElement, name: string): string {.importcpp: "nimStringFromStdString(#.Attribute(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc Attribute*(this: TiXmlElement, name: string): string {.importcpp: "nimStringFromStdString(#->Attribute(nimStringToStdString(#)))", header: stringConversionCode.} ## \
 ## Given an attribute name, Attribute() returns the value
 ## for the attribute of that name, or null if none exists.
 
-proc SetAttribute*(this: TiXmlElement, name: string, value: int) {.importcpp: "#.SetAttribute(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc SetAttribute*(this: TiXmlElement, name: string, value: int) {.importcpp: "#->SetAttribute(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Sets an attribute of name to a given value. The attribute
 ## will be created if it does not exist, or changed if it does.
 
-proc SetDoubleAttribute*(this: TiXmlElement, name: string, value: float64) {.importcpp: "#.SetDoubleAttribute(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc SetDoubleAttribute*(this: TiXmlElement, name: string, value: float64) {.importcpp: "#->SetDoubleAttribute(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Sets an attribute of name to a given value. The attribute
 ## will be created if it does not exist, or changed if it does.
 
-proc RemoveAttribute*(this: TiXmlElement, name: string) {.importcpp: "#.RemoveAttribute(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc RemoveAttribute*(this: TiXmlElement, name: string) {.importcpp: "#->RemoveAttribute(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Deletes an attribute with the given name.
 
-proc FirstAttribute*(this: TiXmlElement): TiXmlAttribute {.importcpp: "#.FirstAttribute()".} ## \
+proc FirstAttribute*(this: TiXmlElement): TiXmlAttribute {.importcpp: "#->FirstAttribute()".} ## \
 ## Access the first attribute in this element.
 
-proc LastAttribute*(this: TiXmlElement): TiXmlAttribute {.importcpp: "#.LastAttribute()".} ## \
+proc LastAttribute*(this: TiXmlElement): TiXmlAttribute {.importcpp: "#->LastAttribute()".} ## \
 ## Access the last attribute in this element.
 
-proc GetText*(this: TiXmlElement): string {.importcpp: "nimStringFromStdString(#.GetText())", header: stringConversionCode.} ## \
+proc GetText*(this: TiXmlElement): string {.importcpp: "nimStringFromStdString(#->GetText())", header: stringConversionCode.} ## \
 ## Convenience function for easy access to the text inside an element. Although easy
 ## and concise, GetText() is limited compared to getting the TiXmlText child
 ## and accessing it directly.
@@ -62896,33 +63032,33 @@ proc getTIXMLPATCHVERSION*(): int {.importcpp: "get_TIXML_PATCH_VERSION()".}
 
 proc initTiXmlCursor*(param0: TiXmlCursor): TiXmlCursor {.importcpp: "TiXmlCursor(#)".}
 
-proc VisitEnter*(this: TiXmlVisitor, param0: TiXmlDocument): bool {.importcpp: "#.VisitEnter(#)".} ## \
+proc VisitEnter*(this: TiXmlVisitor, param0: TiXmlDocument): bool {.importcpp: "#->VisitEnter(#)".} ## \
 ## doc
 
-proc VisitEnter*(this: TiXmlVisitor, param0: TiXmlElement, param1: TiXmlAttribute): bool {.importcpp: "#.VisitEnter(#, #)".} ## \
+proc VisitEnter*(this: TiXmlVisitor, param0: TiXmlElement, param1: TiXmlAttribute): bool {.importcpp: "#->VisitEnter(#, #)".} ## \
 ## firstAttribute
 
-proc VisitExit*(this: TiXmlVisitor, param0: TiXmlDocument): bool {.importcpp: "#.VisitExit(#)".} ## \
+proc VisitExit*(this: TiXmlVisitor, param0: TiXmlDocument): bool {.importcpp: "#->VisitExit(#)".} ## \
 ## doc
 
-proc VisitExit*(this: TiXmlVisitor, param0: TiXmlElement): bool {.importcpp: "#.VisitExit(#)".} ## \
+proc VisitExit*(this: TiXmlVisitor, param0: TiXmlElement): bool {.importcpp: "#->VisitExit(#)".} ## \
 ## element
 
-proc Visit*(this: TiXmlVisitor, param0: TiXmlComment): bool {.importcpp: "#.Visit(#)".} ## \
+proc Visit*(this: TiXmlVisitor, param0: TiXmlComment): bool {.importcpp: "#->Visit(#)".} ## \
 ## comment
 
-proc Visit*(this: TiXmlVisitor, param0: TiXmlDeclaration): bool {.importcpp: "#.Visit(#)".} ## \
+proc Visit*(this: TiXmlVisitor, param0: TiXmlDeclaration): bool {.importcpp: "#->Visit(#)".} ## \
 ## declaration
 
-proc Visit*(this: TiXmlVisitor, param0: TiXmlText): bool {.importcpp: "#.Visit(#)".} ## \
+proc Visit*(this: TiXmlVisitor, param0: TiXmlText): bool {.importcpp: "#->Visit(#)".} ## \
 ## text
 
-proc Visit*(this: TiXmlVisitor, param0: TiXmlUnknown): bool {.importcpp: "#.Visit(#)".} ## \
+proc Visit*(this: TiXmlVisitor, param0: TiXmlUnknown): bool {.importcpp: "#->Visit(#)".} ## \
 ## unknown
 
-proc initTiXmlVisitor*(): TiXmlVisitor {.importcpp: "TiXmlVisitor()".}
+proc newTiXmlVisitor*(): TiXmlVisitor {.importcpp: "new TiXmlVisitor()".}
 
-proc initTiXmlVisitor*(param0: TiXmlVisitor): TiXmlVisitor {.importcpp: "TiXmlVisitor(#)".}
+proc newTiXmlVisitor*(param0: TiXmlVisitor): TiXmlVisitor {.importcpp: "new TiXmlVisitor(#)".}
 
 proc getTIXMLDEFAULTENCODING*(): TiXmlEncoding {.importcpp: "get_TIXML_DEFAULT_ENCODING()".}
 
@@ -62971,24 +63107,24 @@ proc First*(this: TiXmlAttributeSet): TiXmlAttribute {.importcpp: "#.First()".}
 
 proc Last*(this: TiXmlAttributeSet): TiXmlAttribute {.importcpp: "#.Last()".}
 
-proc initTiXmlComment*(): TiXmlComment {.importcpp: "TiXmlComment()".} ## \
+proc newTiXmlComment*(): TiXmlComment {.importcpp: "new TiXmlComment()".} ## \
 ## Constructs an empty comment.
 
-proc initTiXmlComment*(param0: TiXmlComment): TiXmlComment {.importcpp: "TiXmlComment(#)".}
+proc newTiXmlComment*(param0: TiXmlComment): TiXmlComment {.importcpp: "new TiXmlComment(#)".}
 
-proc initTiXmlText*(copy: TiXmlText): TiXmlText {.importcpp: "TiXmlText(#)".}
+proc newTiXmlText*(copy: TiXmlText): TiXmlText {.importcpp: "new TiXmlText(#)".}
 
-proc initTiXmlText*(initValue: string): TiXmlText {.importcpp: "TiXmlText(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc newTiXmlText*(initValue: string): TiXmlText {.importcpp: "new TiXmlText(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Constructor for text element. By default, it is treated as
 ## normal, encoded text. If you want it be output as a CDATA text
 ## element, set the parameter _cdata to 'true'
 
-proc CDATA*(this: TiXmlText): bool {.importcpp: "#.CDATA()".} ## \
+proc CDATA*(this: TiXmlText): bool {.importcpp: "#->CDATA()".} ## \
 ## Queries whether this represents text using a CDATA section.
 
-proc initTiXmlUnknown*(): TiXmlUnknown {.importcpp: "TiXmlUnknown()".}
+proc newTiXmlUnknown*(): TiXmlUnknown {.importcpp: "new TiXmlUnknown()".}
 
-proc initTiXmlUnknown*(copy: TiXmlUnknown): TiXmlUnknown {.importcpp: "TiXmlUnknown(#)".}
+proc newTiXmlUnknown*(copy: TiXmlUnknown): TiXmlUnknown {.importcpp: "new TiXmlUnknown(#)".}
 
 proc initTiXmlHandle*(`ref`: TiXmlHandle): TiXmlHandle {.importcpp: "TiXmlHandle(#)".} ## \
 ## Copy constructor

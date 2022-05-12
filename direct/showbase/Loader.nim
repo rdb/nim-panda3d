@@ -1,12 +1,15 @@
 import ../../panda3d/core
 
 type
+  PandaLoader = Loader
+
+type
   Loader* = ref object of RootObj
     sfxManager*: AudioManager
     musicManager*: AudioManager
 
 proc loadModel*(this: Loader, modelPath: string, loaderOptions: LoaderOptions = LoaderOptions()): NodePath =
-  var loader = core.Loader.getGlobalPtr()
+  var loader = PandaLoader.getGlobalPtr()
   return initNodePath(loader.loadSync(modelPath, loaderOptions))
 
 proc loadSound*(this: Loader, manager: AudioManager, soundPath: string, positional: bool = false): AudioSound =

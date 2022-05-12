@@ -139,36 +139,36 @@ converter toBool*(this: TypedObject): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TypedObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TypedObject], obj: TypedObject): TypedObject {.importcpp: "(@)".}
 
-type ios_base* {.importcpp: "ios_base", pure, inheritable, header: "ios_base.h".} = object
+type ios_base* {.importcpp: "ios_base", pure, inheritable, header: "<ios>".} = object
   ## We need to expose one method in each class to force it to publish.
   ## But we'd like to expose some of these methods anyway, so no
   ## problem.
 
-type istream* {.importcpp: "istream", pure, inheritable, header: "istream.h".} = object
+type istream* {.importcpp: "istream", pure, inheritable, header: "<istream>".} = object
 
-type ostream* {.importcpp: "ostream", pure, inheritable, header: "ostream.h".} = object
+type ostream* {.importcpp: "ostream", pure, inheritable, header: "<ostream>".} = object
 
-type iostream* {.importcpp: "iostream", pure, inheritable, header: "iostream.h".} = object of istream
+type iostream* {.importcpp: "iostream", pure, inheritable, header: "<iostream>".} = object of istream
 
-type fstream* {.importcpp: "fstream", pure, inheritable, header: "fstream.h".} = object of iostream
+type fstream* {.importcpp: "fstream", pure, inheritable, header: "<fstream>".} = object of iostream
 
-type ifstream* {.importcpp: "ifstream", pure, inheritable, header: "ifstream.h".} = object of istream
+type ifstream* {.importcpp: "ifstream", pure, inheritable, header: "<fstream>".} = object of istream
 
-type ofstream* {.importcpp: "ofstream", pure, inheritable, header: "ofstream.h".} = object of ostream
+type ofstream* {.importcpp: "ofstream", pure, inheritable, header: "<fstream>".} = object of ostream
 
-type IFileStream* {.importcpp: "IFileStream", pure, inheritable, header: "iFileStream.h".} = object of istream
+type IFileStream* {.importcpp: "IFileStream", pure, inheritable, header: "pandaFileStream.h".} = object of istream
   ## Implements a C++ stream object suitable for reading from files on disk.
   ## This is similar to ifstream, but it provides low-level support for Panda's
   ## simple-threading implementation (using this interface will block only the
   ## current thread, rather than the entire process, on I/O waits).
 
-type OFileStream* {.importcpp: "OFileStream", pure, inheritable, header: "oFileStream.h".} = object of ostream
+type OFileStream* {.importcpp: "OFileStream", pure, inheritable, header: "pandaFileStream.h".} = object of ostream
   ## Implements a C++ stream object suitable for writing to files on disk.  This
   ## is similar to ofstream, but it provides low-level support for Panda's
   ## simple-threading implementation (using this interface will block only the
   ## current thread, rather than the entire process, on I/O waits).
 
-type FileStream* {.importcpp: "FileStream", pure, inheritable, header: "fileStream.h".} = object of iostream
+type FileStream* {.importcpp: "FileStream", pure, inheritable, header: "pandaFileStream.h".} = object of iostream
   ## Implements a C++ stream object suitable for reading from and/or writing to
   ## files on disk.  This is similar to fstream, but it provides low-level
   ## support for Panda's simple-threading implementation (using this interface
@@ -272,7 +272,7 @@ type NotifySeverity* = enum
   NS_error = 5
   NS_fatal = 6
 
-type Notify* {.importcpp: "Notify", pure, inheritable, header: "notify.h".} = object
+type Notify* {.importcpp: "Notify", pure, inheritable, header: "pnotify.h".} = object
   ## An object that handles general error reporting to the user.  It contains a
   ## pointer to an ostream, initially cerr, which can be reset at will to point
   ## to different output devices, according to the needs of the application.
@@ -368,7 +368,7 @@ type NotifyCategory* {.importcpp: "NotifyCategory", pure, inheritable, header: "
   ## a package level; further nested categories can be created within a package
   ## if a finer grain of control is required.
 
-type IDecryptStream* {.importcpp: "IDecryptStream", pure, inheritable, header: "iDecryptStream.h".} = object of istream
+type IDecryptStream* {.importcpp: "IDecryptStream", pure, inheritable, header: "encryptStream.h".} = object of istream
   ## An input stream object that uses OpenSSL to decrypt the input from another
   ## source stream on-the-fly.
   ##
@@ -378,7 +378,7 @@ type IDecryptStream* {.importcpp: "IDecryptStream", pure, inheritable, header: "
   ##
   ## Seeking is not supported.
 
-type OEncryptStream* {.importcpp: "OEncryptStream", pure, inheritable, header: "oEncryptStream.h".} = object of ostream
+type OEncryptStream* {.importcpp: "OEncryptStream", pure, inheritable, header: "encryptStream.h".} = object of ostream
   ## An input stream object that uses OpenSSL to encrypt data to another
   ## destination stream on-the-fly.
   ##
@@ -397,16 +397,16 @@ type StreamWriter* {.importcpp: "StreamWriter", pure, inheritable, header: "stre
   ## primarily intended as a convenience to eliminate the overhead of writing
   ## bytes to a Datagram and then writing the Datagram to a stream.
 
-type StreamWrapperBase* {.importcpp: "StreamWrapperBase", pure, inheritable, header: "streamWrapperBase.h".} = object
+type StreamWrapperBase* {.importcpp: "StreamWrapperBase", pure, inheritable, header: "streamWrapper.h".} = object
   ## The base class for both IStreamWrapper and OStreamWrapper, this provides
   ## the common locking interface.
 
-type IStreamWrapper* {.importcpp: "IStreamWrapper", pure, inheritable, header: "iStreamWrapper.h".} = object of StreamWrapperBase
+type IStreamWrapper* {.importcpp: "IStreamWrapper", pure, inheritable, header: "streamWrapper.h".} = object of StreamWrapperBase
   ## This class provides a locking wrapper around an arbitrary istream pointer.
   ## A thread may use this class to perform an atomic seek/read/gcount
   ## operation.
 
-type OStreamWrapper* {.importcpp: "OStreamWrapper", pure, inheritable, header: "oStreamWrapper.h".} = object of StreamWrapperBase
+type OStreamWrapper* {.importcpp: "OStreamWrapper", pure, inheritable, header: "streamWrapper.h".} = object of StreamWrapperBase
   ## This class provides a locking wrapper around an arbitrary ostream pointer.
   ## A thread may use this class to perform an atomic seek/write operation.
 
@@ -414,23 +414,23 @@ type StreamWrapper* {.importcpp: "StreamWrapper", pure, inheritable, header: "st
   ## This class provides a locking wrapper around a combination ostream/istream
   ## pointer.
 
-type SSReader* {.importcpp: "SSReader", pure, inheritable, header: "sSReader.h".} = object
+type SSReader* {.importcpp: "SSReader", pure, inheritable, header: "socketStream.h".} = object
   ## An internal class for reading from a socket stream.  This serves as a base
   ## class for both ISocketStream and SocketStream; its purpose is to minimize
   ## redundant code between them.  Do not use it directly.
 
-type SSWriter* {.importcpp: "SSWriter", pure, inheritable, header: "sSWriter.h".} = object
+type SSWriter* {.importcpp: "SSWriter", pure, inheritable, header: "socketStream.h".} = object
   ## An internal class for writing to a socket stream.  This serves as a base
   ## class for both OSocketStream and SocketStream; its purpose is to minimize
   ## redundant code between them.  Do not use it directly.
 
-type ISocketStream* {.importcpp: "ISocketStream", pure, inheritable, header: "iSocketStream.h".} = object of istream
+type ISocketStream* {.importcpp: "ISocketStream", pure, inheritable, header: "socketStream.h".} = object of istream
   ## This is a base class for istreams implemented in Panda that read from a
   ## (possibly non-blocking) socket.  It adds is_closed(), which can be called
   ## after an eof condition to check whether the socket has been closed, or
   ## whether more data may be available later.
 
-type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "oSocketStream.h".} = object of ostream
+type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "socketStream.h".} = object of ostream
   ## A base class for ostreams that write to a (possibly non-blocking) socket.
   ## It adds is_closed(), which can be called after any write operation fails to
   ## check whether the socket has been closed, or whether more data may be sent
@@ -440,23 +440,23 @@ type SocketStream* {.importcpp: "SocketStream", pure, inheritable, header: "sock
   ## A base class for iostreams that read and write to a (possibly non-blocking)
   ## socket.
 
-type URLSpec* {.importcpp: "URLSpec", pure, inheritable, header: "uRLSpec.h".} = object
+type URLSpec* {.importcpp: "URLSpec", pure, inheritable, header: "urlSpec.h".} = object
   ## A container for a URL, e.g.  "http://server:port/path".
   ##
   ## The URLSpec object is similar to a Filename in that it contains logic to
   ## identify the various parts of a URL and return (or modify) them separately.
 
-type HTTPEnum* {.importcpp: "HTTPEnum", pure, inheritable, header: "hTTPEnum.h".} = object
+type HTTPEnum* {.importcpp: "HTTPEnum", pure, inheritable, header: "httpEnum.h".} = object
   ## This class is just used as a namespace wrapper for some of the enumerated
   ## types used by various classes within the HTTPClient family.
 
-type HTTPDate* {.importcpp: "HTTPDate", pure, inheritable, header: "hTTPDate.h".} = object
+type HTTPDate* {.importcpp: "HTTPDate", pure, inheritable, header: "httpDate.h".} = object
   ## A container for an HTTP-legal time/date indication.  This can accept a
   ## string from an HTTP header and will decode it into a C time_t value;
   ## conversely, it can accept a time_t value and encode it for output as a
   ## string.
 
-type HTTPCookie* {.importcpp: "HTTPCookie", pure, inheritable, header: "hTTPCookie.h".} = object
+type HTTPCookie* {.importcpp: "HTTPCookie", pure, inheritable, header: "httpCookie.h".} = object
   ## A cookie sent from an HTTP server to be stored on the client and returned
   ## when the path and/or domain matches.
 
@@ -469,7 +469,7 @@ converter toReferenceCount*(_: type(nil)): ReferenceCount {.importcpp: "(nullptr
 converter toBool*(this: ReferenceCount): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type HTTPClient* {.importcpp: "PT(HTTPClient)", bycopy, pure, inheritable, header: "hTTPClient.h".} = object of ReferenceCount
+type HTTPClient* {.importcpp: "PT(HTTPClient)", bycopy, pure, inheritable, header: "httpClient.h".} = object of ReferenceCount
   ## Handles contacting an HTTP server and retrieving a document.  Each
   ## HTTPClient object represents a separate context, and stores its own list of
   ## cookies, passwords, and certificates; however, a given HTTPClient is
@@ -486,7 +486,7 @@ converter toBool*(this: HTTPClient): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: HTTPClient, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HTTPClient], obj: TypedObject): HTTPClient {.importcpp: "DCAST(HTTPClient, @)".}
 
-type HTTPEntityTag* {.importcpp: "HTTPEntityTag", pure, inheritable, header: "hTTPEntityTag.h".} = object
+type HTTPEntityTag* {.importcpp: "HTTPEntityTag", pure, inheritable, header: "httpEntityTag.h".} = object
   ## A container for an "entity tag" from an HTTP server.  This is used to
   ## identify a particular version of a document or resource, particularly
   ## useful for verifying caches.
@@ -513,7 +513,7 @@ converter toBool*(this: TypedReferenceCount): bool {.importcpp: "(# != nullptr)"
 func `==`*(x: TypedReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TypedReferenceCount], obj: TypedObject): TypedReferenceCount {.importcpp: "DCAST(TypedReferenceCount, @)".}
 
-type HTTPChannel* {.importcpp: "PT(HTTPChannel)", bycopy, pure, inheritable, header: "hTTPChannel.h".} = object of TypedReferenceCount
+type HTTPChannel* {.importcpp: "PT(HTTPChannel)", bycopy, pure, inheritable, header: "httpChannel.h".} = object of TypedReferenceCount
   ## A single channel of communication from an HTTPClient.  This is similar to
   ## the concept of a 'connection', except that HTTP is technically
   ## connectionless; in fact, a channel may represent one unbroken connection or
@@ -756,7 +756,7 @@ type MemoryUsagePointers* {.importcpp: "MemoryUsagePointers", pure, inheritable,
   ## This class is just a user interface to talk about pointers stored in a
   ## MemoryUsage object.  It doesn't even exist when compiled with NDEBUG.
 
-type ISubStream* {.importcpp: "ISubStream", pure, inheritable, header: "iSubStream.h".} = object of istream
+type ISubStream* {.importcpp: "ISubStream", pure, inheritable, header: "subStream.h".} = object of istream
   ## An istream object that presents a subwindow into another istream.  The
   ## first character read from this stream will be the "start" character from
   ## the source istream; just before the file pointer reaches the "end"
@@ -765,7 +765,7 @@ type ISubStream* {.importcpp: "ISubStream", pure, inheritable, header: "iSubStre
   ## The source stream must be one that we can randomly seek within.  The
   ## resulting ISubStream will also support arbitrary seeks.
 
-type OSubStream* {.importcpp: "OSubStream", pure, inheritable, header: "oSubStream.h".} = object of ostream
+type OSubStream* {.importcpp: "OSubStream", pure, inheritable, header: "subStream.h".} = object of ostream
   ## An ostream object that presents a subwindow into another ostream.  The
   ## first character written to this stream will be the "start" character in the
   ## dest istream; no characters may be written to character "end" or later
@@ -857,7 +857,7 @@ converter toBool*(this: TemporaryFile): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TemporaryFile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TemporaryFile], obj: TypedObject): TemporaryFile {.importcpp: "DCAST(TemporaryFile, @)".}
 
-type IDecompressStream* {.importcpp: "IDecompressStream", pure, inheritable, header: "iDecompressStream.h".} = object of istream
+type IDecompressStream* {.importcpp: "IDecompressStream", pure, inheritable, header: "zStream.h".} = object of istream
   ## An input stream object that uses zlib to decompress (inflate) the input
   ## from another source stream on-the-fly.
   ##
@@ -867,7 +867,7 @@ type IDecompressStream* {.importcpp: "IDecompressStream", pure, inheritable, hea
   ##
   ## Seeking is not supported.
 
-type OCompressStream* {.importcpp: "OCompressStream", pure, inheritable, header: "oCompressStream.h".} = object of ostream
+type OCompressStream* {.importcpp: "OCompressStream", pure, inheritable, header: "zStream.h".} = object of ostream
   ## An input stream object that uses zlib to compress (deflate) data to another
   ## destination stream on-the-fly.
   ##
@@ -1118,7 +1118,7 @@ converter toBool*(this: DirectionalLight): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DirectionalLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DirectionalLight], obj: TypedObject): DirectionalLight {.importcpp: "DCAST(DirectionalLight, @)".}
 
-type LODNode* {.importcpp: "PT(LODNode)", bycopy, pure, inheritable, header: "lODNode.h".} = object of PandaNode
+type LODNode* {.importcpp: "PT(LODNode)", bycopy, pure, inheritable, header: "lodNode.h".} = object of PandaNode
   ## A Level-of-Detail node.  This selects only one of its children for
   ## rendering, according to the distance from the camera and the table
   ## indicated in the associated LOD object.
@@ -3623,7 +3623,7 @@ converter toBool*(this: CallbackGraphicsWindow): bool {.importcpp: "(# != nullpt
 func `==`*(x: CallbackGraphicsWindow, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CallbackGraphicsWindow], obj: TypedObject): CallbackGraphicsWindow {.importcpp: "DCAST(CallbackGraphicsWindow, @)".}
 
-type DisplayMode* {.importcpp: "DisplayMode", pure, inheritable, header: "displayMode.h".} = object
+type DisplayMode* {.importcpp: "DisplayMode", pure, inheritable, header: "displayInformation.h".} = object
 
 type DisplayRegionCullCallbackData* {.importcpp: "DisplayRegionCullCallbackData", pure, inheritable, header: "displayRegionCullCallbackData.h".} = object of CallbackData
   ## This specialization on CallbackData is passed when the callback is
@@ -3738,7 +3738,7 @@ type MutexDirect* {.importcpp: "MutexDirect", pure, inheritable, header: "mutexD
   ## underlying implementation layer.  It doesn't perform any debugging
   ## operations.
 
-type Mutex* {.importcpp: "Mutex", pure, inheritable, header: "mutex.h".} = object of MutexDirect
+type Mutex* {.importcpp: "Mutex", pure, inheritable, header: "pmutex.h".} = object of MutexDirect
 
 type ConditionVarDirect* {.importcpp: "ConditionVarDirect", pure, inheritable, header: "conditionVarDirect.h".} = object
   ## A condition variable, usually used to communicate information about
@@ -3801,7 +3801,7 @@ converter toBool*(this: MainThread): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: MainThread, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MainThread], obj: TypedObject): MainThread {.importcpp: "DCAST(MainThread, @)".}
 
-type Semaphore* {.importcpp: "Semaphore", pure, inheritable, header: "semaphore.h".} = object
+type Semaphore* {.importcpp: "Semaphore", pure, inheritable, header: "psemaphore.h".} = object
   ## A classic semaphore synchronization primitive.
   ##
   ## A semaphore manages an internal counter which is decremented by each
@@ -3923,7 +3923,7 @@ type ButtonEvent* {.importcpp: "ButtonEvent", pure, inheritable, header: "button
   ## This API should not be considered stable and may change in a future version
   ## of Panda3D.
 
-type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValueBase.h".} = object of TypedWritableReferenceCount
+type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValue.h".} = object of TypedWritableReferenceCount
   ## A non-template base class of ParamValue (below), which serves mainly to
   ## define the placeholder for the virtual output function.
 
@@ -4001,7 +4001,7 @@ type AdaptiveLru* {.importcpp: "AdaptiveLru", pure, inheritable, header: "adapti
   ## The interface is designed to be identical to that for SimpleLru, so that it
   ## may be used as a drop-in replacement.
 
-type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage", pure, inheritable, header: "adaptiveLruPage.h".} = object
+type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage", pure, inheritable, header: "adaptiveLru.h".} = object
   ## One atomic piece that may be managed by a AdaptiveLru chain.  To use this
   ## class, inherit from it and override evict_lru().
   ##
@@ -4097,7 +4097,7 @@ func dcast*(_: typedesc[GeomVertexFormat], obj: TypedObject): GeomVertexFormat {
 type SimpleLru* {.importcpp: "SimpleLru", pure, inheritable, header: "simpleLru.h".} = object of Namable
   ## An implementation of a very simple LRU algorithm.  Also see AdaptiveLru.
 
-type SimpleLruPage* {.importcpp: "SimpleLruPage", pure, inheritable, header: "simpleLruPage.h".} = object
+type SimpleLruPage* {.importcpp: "SimpleLruPage", pure, inheritable, header: "simpleLru.h".} = object
   ## One atomic piece that may be managed by a SimpleLru chain.  To use this
   ## class, inherit from it and override evict_lru().
 
@@ -4106,7 +4106,7 @@ type SimpleAllocator* {.importcpp: "SimpleAllocator", pure, inheritable, header:
   ## allocate ranges of nonnegative integers within a specified upper limit; it
   ## uses a simple first-fit algorithm to find the next available space.
 
-type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock", pure, inheritable, header: "simpleAllocatorBlock.h".} = object
+type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock", pure, inheritable, header: "simpleAllocator.h".} = object
   ## A single block as returned from SimpleAllocator::alloc().
 
 type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile", pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
@@ -4152,7 +4152,7 @@ converter toBool*(this: GeomVertexArrayData): bool {.importcpp: "(# != nullptr)"
 func `==`*(x: GeomVertexArrayData, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayData], obj: TypedObject): GeomVertexArrayData {.importcpp: "DCAST(GeomVertexArrayData, @)".}
 
-type GeomVertexArrayDataHandle* {.importcpp: "PT(GeomVertexArrayDataHandle)", bycopy, pure, inheritable, header: "geomVertexArrayDataHandle.h".} = object of ReferenceCount
+type GeomVertexArrayDataHandle* {.importcpp: "PT(GeomVertexArrayDataHandle)", bycopy, pure, inheritable, header: "geomVertexArrayData.h".} = object of ReferenceCount
   ## This data object is returned by GeomVertexArrayData::get_handle() or
   ## modify_handle(). As long as it exists, the data is locked; when the last of
   ## these destructs, the data is unlocked.
@@ -4628,7 +4628,7 @@ converter toBool*(this: OrthographicLens): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: OrthographicLens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OrthographicLens], obj: TypedObject): OrthographicLens {.importcpp: "DCAST(OrthographicLens, @)".}
 
-type ParamTextureSampler* {.importcpp: "PT(ParamTextureSampler)", bycopy, pure, inheritable, header: "paramTextureSampler.h".} = object of ParamValueBase
+type ParamTextureSampler* {.importcpp: "PT(ParamTextureSampler)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
   ## A class object for storing a pointer to a Texture along with a sampler
   ## state that indicates how to to sample the given texture.
 
@@ -4637,7 +4637,7 @@ converter toBool*(this: ParamTextureSampler): bool {.importcpp: "(# != nullptr)"
 func `==`*(x: ParamTextureSampler, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParamTextureSampler], obj: TypedObject): ParamTextureSampler {.importcpp: "DCAST(ParamTextureSampler, @)".}
 
-type ParamTextureImage* {.importcpp: "PT(ParamTextureImage)", bycopy, pure, inheritable, header: "paramTextureImage.h".} = object of ParamValueBase
+type ParamTextureImage* {.importcpp: "PT(ParamTextureImage)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
   ## A class object for storing a pointer to a Texture along with a set of
   ## properties that indicates which image to bind to a shader input.
   ##
@@ -4838,7 +4838,7 @@ type LPoint3i* {.importcpp: "LPoint3i", pure, inheritable, header: "lpoint3.h".}
 type LVecBase4f* {.importcpp: "LVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is the base class for all three-component vectors and points.
 
-type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable, header: "unalignedLVecBase4f.h".} = object
+type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4850,7 +4850,7 @@ type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable,
 type LVecBase4d* {.importcpp: "LVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is the base class for all three-component vectors and points.
 
-type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable, header: "unalignedLVecBase4d.h".} = object
+type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4862,7 +4862,7 @@ type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable,
 type LVecBase4i* {.importcpp: "LVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is the base class for all three-component vectors and points.
 
-type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable, header: "unalignedLVecBase4i.h".} = object
+type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4889,15 +4889,15 @@ type LPoint4d* {.importcpp: "LPoint4d", pure, inheritable, header: "lpoint4.h".}
 type LPoint4i* {.importcpp: "LPoint4i", pure, inheritable, header: "lpoint4.h".} = object of LVecBase4i
   ## This is a four-component point in space.
 
-type LMatrix3f* {.importcpp: "LMatrix3f", pure, inheritable, header: "lmatrix3.h".} = object
+type LMatrix3f* {.importcpp: "LMatrix3f", pure, inheritable, header: "lmatrix.h".} = object
   ## This is a 3-by-3 transform matrix.  It typically will represent either a
   ## rotation-and-scale (no translation) matrix in 3-d, or a full affine matrix
   ## (rotation, scale, translation) in 2-d, e.g.  for a texture matrix.
 
-type LMatrix4f* {.importcpp: "LMatrix4f", pure, inheritable, header: "lmatrix4.h".} = object
+type LMatrix4f* {.importcpp: "LMatrix4f", pure, inheritable, header: "lmatrix.h".} = object
   ## This is a 4-by-4 transform matrix.
 
-type UnalignedLMatrix4f* {.importcpp: "UnalignedLMatrix4f", pure, inheritable, header: "unalignedLMatrix4f.h".} = object
+type UnalignedLMatrix4f* {.importcpp: "UnalignedLMatrix4f", pure, inheritable, header: "lmatrix.h".} = object
   ## This is an "unaligned" LMatrix4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LMatrix4 class.
@@ -4905,15 +4905,15 @@ type UnalignedLMatrix4f* {.importcpp: "UnalignedLMatrix4f", pure, inheritable, h
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LMatrix4 to get actual use from it.
 
-type LMatrix3d* {.importcpp: "LMatrix3d", pure, inheritable, header: "lmatrix3.h".} = object
+type LMatrix3d* {.importcpp: "LMatrix3d", pure, inheritable, header: "lmatrix.h".} = object
   ## This is a 3-by-3 transform matrix.  It typically will represent either a
   ## rotation-and-scale (no translation) matrix in 3-d, or a full affine matrix
   ## (rotation, scale, translation) in 2-d, e.g.  for a texture matrix.
 
-type LMatrix4d* {.importcpp: "LMatrix4d", pure, inheritable, header: "lmatrix4.h".} = object
+type LMatrix4d* {.importcpp: "LMatrix4d", pure, inheritable, header: "lmatrix.h".} = object
   ## This is a 4-by-4 transform matrix.
 
-type UnalignedLMatrix4d* {.importcpp: "UnalignedLMatrix4d", pure, inheritable, header: "unalignedLMatrix4d.h".} = object
+type UnalignedLMatrix4d* {.importcpp: "UnalignedLMatrix4d", pure, inheritable, header: "lmatrix.h".} = object
   ## This is an "unaligned" LMatrix4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LMatrix4 class.
@@ -5123,13 +5123,13 @@ converter toBool*(this: FiniteBoundingVolume): bool {.importcpp: "(# != nullptr)
 func `==`*(x: FiniteBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FiniteBoundingVolume], obj: TypedObject): FiniteBoundingVolume {.importcpp: "DCAST(FiniteBoundingVolume, @)".}
 
-type LParabolaf* {.importcpp: "LParabolaf", pure, inheritable, header: "lparabola.h".} = object
+type LParabolaf* {.importcpp: "LParabolaf", pure, inheritable, header: "parabola.h".} = object
   ## An abstract mathematical description of a parabola, particularly useful for
   ## describing arcs of projectiles.
   ##
   ## The parabolic equation, given parametrically here, is P = At^2 + Bt + C.
 
-type LParabolad* {.importcpp: "LParabolad", pure, inheritable, header: "lparabola.h".} = object
+type LParabolad* {.importcpp: "LParabolad", pure, inheritable, header: "parabola.h".} = object
   ## An abstract mathematical description of a parabola, particularly useful for
   ## describing arcs of projectiles.
   ##
@@ -5137,11 +5137,11 @@ type LParabolad* {.importcpp: "LParabolad", pure, inheritable, header: "lparabol
 
 type LParabola* = LParabolaf
 
-type LPlanef* {.importcpp: "LPlanef", pure, inheritable, header: "lplane.h".} = object of LVecBase4f
+type LPlanef* {.importcpp: "LPlanef", pure, inheritable, header: "plane.h".} = object of LVecBase4f
   ## An abstract mathematical description of a plane.  A plane is defined by the
   ## equation Ax + By + Cz + D = 0.
 
-type LPlaned* {.importcpp: "LPlaned", pure, inheritable, header: "lplane.h".} = object of LVecBase4d
+type LPlaned* {.importcpp: "LPlaned", pure, inheritable, header: "plane.h".} = object of LVecBase4d
   ## An abstract mathematical description of a plane.  A plane is defined by the
   ## equation Ax + By + Cz + D = 0.
 
@@ -5165,9 +5165,9 @@ converter toBool*(this: BoundingBox): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: BoundingBox, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingBox], obj: TypedObject): BoundingBox {.importcpp: "DCAST(BoundingBox, @)".}
 
-type LFrustumf* {.importcpp: "LFrustumf", pure, inheritable, header: "lfrustum.h".} = object
+type LFrustumf* {.importcpp: "LFrustumf", pure, inheritable, header: "frustum.h".} = object
 
-type LFrustumd* {.importcpp: "LFrustumd", pure, inheritable, header: "lfrustum.h".} = object
+type LFrustumd* {.importcpp: "LFrustumd", pure, inheritable, header: "frustum.h".} = object
 
 type LFrustum* = LFrustumf
 
@@ -5474,7 +5474,7 @@ converter toBool*(this: SheetNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: SheetNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SheetNode], obj: TypedObject): SheetNode {.importcpp: "DCAST(SheetNode, @)".}
 
-type pixel* {.importcpp: "pixel", pure, inheritable, header: "pixel.h".} = object
+type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".} = object
 
 type xel* = pixel
 
@@ -5903,7 +5903,7 @@ type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.
   ## See also BamFile, which defines a higher-level interface to read and write
   ## Bam files on disk.
 
-type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMaskNative.h".} = object
+type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMask.h".} = object
 
 type BitArray* {.importcpp: "BitArray", pure, inheritable, header: "bitArray.h".} = object
   ## A dynamic array with an unlimited number of bits.
@@ -5953,7 +5953,7 @@ converter toBool*(this: PythonCallbackObject): bool {.importcpp: "(# != nullptr)
 func `==`*(x: PythonCallbackObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PythonCallbackObject], obj: TypedObject): PythonCallbackObject {.importcpp: "DCAST(PythonCallbackObject, @)".}
 
-type TimeVal* {.importcpp: "TimeVal", pure, inheritable, header: "timeVal.h".} = object
+type TimeVal* {.importcpp: "TimeVal", pure, inheritable, header: "clockObject.h".} = object
 
 type ClockObject* {.importcpp: "PT(ClockObject)", bycopy, pure, inheritable, header: "clockObject.h".} = object of ReferenceCount
   ## A ClockObject keeps track of elapsed real time and discrete time.  In
@@ -6047,7 +6047,7 @@ type SparseArray* {.importcpp: "SparseArray", pure, inheritable, header: "sparse
   ##
   ## Also, unlike BitArray, the SparseArray can store negative integers.
 
-type ParamTypedRefCount* {.importcpp: "PT(ParamTypedRefCount)", bycopy, pure, inheritable, header: "paramTypedRefCount.h".} = object of ParamValueBase
+type ParamTypedRefCount* {.importcpp: "PT(ParamTypedRefCount)", bycopy, pure, inheritable, header: "paramValue.h".} = object of ParamValueBase
   ## A class object for storing specifically objects of type
   ## TypedReferenceCount, which is different than TypedWritableReferenceCount.
 
@@ -6115,9 +6115,9 @@ converter toBool*(this: AudioLoadRequest): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AudioLoadRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioLoadRequest], obj: TypedObject): AudioLoadRequest {.importcpp: "DCAST(AudioLoadRequest, @)".}
 
-type PGFrameStyle* {.importcpp: "PGFrameStyle", pure, inheritable, header: "pGFrameStyle.h".} = object
+type PGFrameStyle* {.importcpp: "PGFrameStyle", pure, inheritable, header: "pgFrameStyle.h".} = object
 
-type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pGItem.h".} = object of PandaNode
+type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pgItem.h".} = object of PandaNode
   ## This is the base class for all the various kinds of gui widget objects.
   ##
   ## It is a Node which corresponds to a rectangular region on the screen, and
@@ -6132,7 +6132,7 @@ converter toBool*(this: PGItem): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGItem, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGItem], obj: TypedObject): PGItem {.importcpp: "DCAST(PGItem, @)".}
 
-type PGButton* {.importcpp: "PT(PGButton)", bycopy, pure, inheritable, header: "pGButton.h".} = object of PGItem
+type PGButton* {.importcpp: "PT(PGButton)", bycopy, pure, inheritable, header: "pgButton.h".} = object of PGItem
   ## This is a particular kind of PGItem that is specialized to behave like a
   ## normal button object.  It keeps track of its own state, and handles mouse
   ## events sensibly.
@@ -6142,7 +6142,7 @@ converter toBool*(this: PGButton): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGButton, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGButton], obj: TypedObject): PGButton {.importcpp: "DCAST(PGButton, @)".}
 
-type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pGTop.h".} = object of PandaNode
+type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pgTop.h".} = object of PandaNode
   ## The "top" node of the new Panda GUI system.  This node must be parented to
   ## the 2-d scene graph, and all PG objects should be parented to this node or
   ## somewhere below it.  PG objects not parented within this hierarchy will not
@@ -6157,7 +6157,7 @@ converter toBool*(this: PGTop): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGTop, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGTop], obj: TypedObject): PGTop {.importcpp: "DCAST(PGTop, @)".}
 
-type PGEntry* {.importcpp: "PT(PGEntry)", bycopy, pure, inheritable, header: "pGEntry.h".} = object of PGItem
+type PGEntry* {.importcpp: "PT(PGEntry)", bycopy, pure, inheritable, header: "pgEntry.h".} = object of PGItem
   ## This is a particular kind of PGItem that handles simple one-line or short
   ## multi-line text entries, of the sort where the user can type any string.
   ##
@@ -6172,7 +6172,7 @@ converter toBool*(this: PGEntry): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGEntry, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGEntry], obj: TypedObject): PGEntry {.importcpp: "DCAST(PGEntry, @)".}
 
-type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy, pure, inheritable, header: "pGMouseWatcherParameter.h".} = object of TypedWritableReferenceCount
+type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy, pure, inheritable, header: "pgMouseWatcherParameter.h".} = object of TypedWritableReferenceCount
   ## This specialization on MouseWatcherParameter allows us to tag on additional
   ## elements to events for the gui system, and also inherits from
   ## TypedWritableReferenceCount so we can attach this thing to an event.
@@ -6182,7 +6182,7 @@ converter toBool*(this: PGMouseWatcherParameter): bool {.importcpp: "(# != nullp
 func `==`*(x: PGMouseWatcherParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherParameter], obj: TypedObject): PGMouseWatcherParameter {.importcpp: "DCAST(PGMouseWatcherParameter, @)".}
 
-type PGMouseWatcherBackground* {.importcpp: "PT(PGMouseWatcherBackground)", bycopy, pure, inheritable, header: "pGMouseWatcherBackground.h".} = object of MouseWatcherRegion
+type PGMouseWatcherBackground* {.importcpp: "PT(PGMouseWatcherBackground)", bycopy, pure, inheritable, header: "pgMouseWatcherBackground.h".} = object of MouseWatcherRegion
   ## This is a special kind of MouseWatcherRegion that doesn't have a rectangle
   ## and is never active, but just quietly listens for keypresses and sends them
   ## to all the PGItems with background focus.
@@ -6192,7 +6192,7 @@ converter toBool*(this: PGMouseWatcherBackground): bool {.importcpp: "(# != null
 func `==`*(x: PGMouseWatcherBackground, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherBackground], obj: TypedObject): PGMouseWatcherBackground {.importcpp: "DCAST(PGMouseWatcherBackground, @)".}
 
-type PGVirtualFrame* {.importcpp: "PT(PGVirtualFrame)", bycopy, pure, inheritable, header: "pGVirtualFrame.h".} = object of PGItem
+type PGVirtualFrame* {.importcpp: "PT(PGVirtualFrame)", bycopy, pure, inheritable, header: "pgVirtualFrame.h".} = object of PGItem
   ## This represents a frame that is rendered as a window onto another (possibly
   ## much larger) canvas.  You can only see the portion of the canvas that is
   ## below the window at any given time.
@@ -6216,7 +6216,7 @@ converter toBool*(this: PGVirtualFrame): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGVirtualFrame, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGVirtualFrame], obj: TypedObject): PGVirtualFrame {.importcpp: "DCAST(PGVirtualFrame, @)".}
 
-type PGSliderBar* {.importcpp: "PT(PGSliderBar)", bycopy, pure, inheritable, header: "pGSliderBar.h".} = object of PGItem
+type PGSliderBar* {.importcpp: "PT(PGSliderBar)", bycopy, pure, inheritable, header: "pgSliderBar.h".} = object of PGItem
   ## This is a particular kind of PGItem that draws a little bar with a slider
   ## that moves from left to right indicating a value between the ranges.
   ##
@@ -6228,7 +6228,7 @@ converter toBool*(this: PGSliderBar): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGSliderBar, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGSliderBar], obj: TypedObject): PGSliderBar {.importcpp: "DCAST(PGSliderBar, @)".}
 
-type PGScrollFrame* {.importcpp: "PT(PGScrollFrame)", bycopy, pure, inheritable, header: "pGScrollFrame.h".} = object of PGVirtualFrame
+type PGScrollFrame* {.importcpp: "PT(PGScrollFrame)", bycopy, pure, inheritable, header: "pgScrollFrame.h".} = object of PGVirtualFrame
   ## This is a special kind of frame that pretends to be much larger than it
   ## actually is.  You can scroll through the frame, as if you're looking
   ## through a window at the larger frame beneath.  All children of this frame
@@ -6245,7 +6245,7 @@ converter toBool*(this: PGScrollFrame): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGScrollFrame, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGScrollFrame], obj: TypedObject): PGScrollFrame {.importcpp: "DCAST(PGScrollFrame, @)".}
 
-type PGWaitBar* {.importcpp: "PT(PGWaitBar)", bycopy, pure, inheritable, header: "pGWaitBar.h".} = object of PGItem
+type PGWaitBar* {.importcpp: "PT(PGWaitBar)", bycopy, pure, inheritable, header: "pgWaitBar.h".} = object of PGItem
   ## This is a particular kind of PGItem that draws a little bar that fills from
   ## left to right to indicate a slow process gradually completing, like a
   ## traditional "wait, loading" bar.
@@ -6392,7 +6392,7 @@ type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_U
   ## duplicates code from Socket_UDP_Outgoing, to avoid the problems of multiple
   ## inheritance.
 
-type TiXmlBase* {.importcpp: "TiXmlBase", pure, inheritable, header: "tiXmlBase.h".} = object
+type TiXmlBase* {.importcpp: "TiXmlBase", pure, inheritable, header: "tinyxml.h".} = object
   ## TiXmlBase is a base class for every class in TinyXml.
   ## It does little except to establish that TinyXml classes
   ## can be printed and provide some utility functions.
@@ -6415,14 +6415,14 @@ type TiXmlBase* {.importcpp: "TiXmlBase", pure, inheritable, header: "tiXmlBase.
   ## A Decleration contains: Attributes (not on tree)
   ## @endverbatim
 
-type TiXmlNode* {.importcpp: "TiXmlNode", pure, inheritable, header: "tiXmlNode.h".} = object of TiXmlBase
+type TiXmlNode* {.importcpp: "TiXmlNode", pure, inheritable, header: "tinyxml.h".} = object of TiXmlBase
   ## The parent class for everything in the Document Object Model.
   ## (Except for attributes).
   ## Nodes have siblings, a parent, and children. A node can be
   ## in a document, or stand on its own. The type of a TiXmlNode
   ## can be queried, and it can be cast to its more defined type.
 
-type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration", pure, inheritable, header: "tiXmlDeclaration.h".} = object of TiXmlNode
+type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## In correct XML the declaration is the first entry in the file.
   ## @verbatim
   ## <?xml version="1.0" standalone="yes"?>
@@ -6436,21 +6436,21 @@ type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration", pure, inheritable, heade
   ## handled as special cases, not generic attributes, simply
   ## because there can only be at most 3 and they are always the same.
 
-type TiXmlDocument* {.importcpp: "TiXmlDocument", pure, inheritable, header: "tiXmlDocument.h".} = object of TiXmlNode
+type TiXmlDocument* {.importcpp: "TiXmlDocument", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## Always the top level node. A document binds together all the
   ## XML pieces. It can be saved, loaded, and printed to the screen.
   ## The 'value' of a document node is the xml file name.
 
-type TiXmlElement* {.importcpp: "TiXmlElement", pure, inheritable, header: "tiXmlElement.h".} = object of TiXmlNode
+type TiXmlElement* {.importcpp: "TiXmlElement", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## The element is a container class. It has a value, the element name,
   ## and can contain other elements, text, comments, and unknowns.
   ## Elements also contain an arbitrary number of attributes.
 
-type TiXmlCursor* {.importcpp: "TiXmlCursor", pure, inheritable, header: "tiXmlCursor.h".} = object
+type TiXmlCursor* {.importcpp: "TiXmlCursor", pure, inheritable, header: "tinyxml.h".} = object
   ## Internal structure for tracking location of items
   ## in the XML file.
 
-type TiXmlVisitor* {.importcpp: "TiXmlVisitor", pure, inheritable, header: "tiXmlVisitor.h".} = object
+type TiXmlVisitor* {.importcpp: "TiXmlVisitor", pure, inheritable, header: "tinyxml.h".} = object
   ## Implements the interface to the "Visitor pattern" (see the Accept() method.)
   ## If you call the Accept() method, it requires being passed a TiXmlVisitor
   ## class to handle callbacks. For nodes that contain other nodes (Document, Element)
@@ -6479,7 +6479,7 @@ type TiXmlEncoding* = enum
   TIXML_ENCODING_UTF8 = 1
   TIXML_ENCODING_LEGACY = 2
 
-type TiXmlAttribute* {.importcpp: "TiXmlAttribute", pure, inheritable, header: "tiXmlAttribute.h".} = object of TiXmlBase
+type TiXmlAttribute* {.importcpp: "TiXmlAttribute", pure, inheritable, header: "tinyxml.h".} = object of TiXmlBase
   ## An attribute is a name-value pair. Elements have an arbitrary
   ## number of attributes, each with a unique name.
   ##
@@ -6487,7 +6487,7 @@ type TiXmlAttribute* {.importcpp: "TiXmlAttribute", pure, inheritable, header: "
   ## part of the tinyXML document object model. There are other
   ## suggested ways to look at this problem.
 
-type TiXmlAttributeSet* {.importcpp: "TiXmlAttributeSet", pure, inheritable, header: "tiXmlAttributeSet.h".} = object
+type TiXmlAttributeSet* {.importcpp: "TiXmlAttributeSet", pure, inheritable, header: "tinyxml.h".} = object
   ## A class used to manage a group of attributes.
   ## It is only used internally, both by the ELEMENT and the DECLARATION.
   ##
@@ -6500,16 +6500,16 @@ type TiXmlAttributeSet* {.importcpp: "TiXmlAttributeSet", pure, inheritable, hea
   ## - I like circular lists
   ## - it demonstrates some independence from the (typical) doubly linked list.
 
-type TiXmlComment* {.importcpp: "TiXmlComment", pure, inheritable, header: "tiXmlComment.h".} = object of TiXmlNode
+type TiXmlComment* {.importcpp: "TiXmlComment", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## An XML comment.
 
-type TiXmlText* {.importcpp: "TiXmlText", pure, inheritable, header: "tiXmlText.h".} = object of TiXmlNode
+type TiXmlText* {.importcpp: "TiXmlText", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## XML text. A text node can have 2 ways to output the next. "normal" output
   ## and CDATA. It will default to the mode it was parsed from the XML file and
   ## you generally want to leave it alone, but you can change the output mode with
   ## SetCDATA() and query it with CDATA().
 
-type TiXmlUnknown* {.importcpp: "TiXmlUnknown", pure, inheritable, header: "tiXmlUnknown.h".} = object of TiXmlNode
+type TiXmlUnknown* {.importcpp: "TiXmlUnknown", pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## Any tag that tinyXml doesn't recognize is saved as an
   ## unknown. It is a tag of text, but should not be modified.
   ## It will be written back to the XML, unchanged, when the file
@@ -6517,7 +6517,7 @@ type TiXmlUnknown* {.importcpp: "TiXmlUnknown", pure, inheritable, header: "tiXm
   ##
   ## DTD tags get thrown into TiXmlUnknowns.
 
-type TiXmlHandle* {.importcpp: "TiXmlHandle", pure, inheritable, header: "tiXmlHandle.h".} = object
+type TiXmlHandle* {.importcpp: "TiXmlHandle", pure, inheritable, header: "tinyxml.h".} = object
   ## A TiXmlHandle is a class that wraps a node pointer with null checks; this is
   ## an incredibly useful thing. Note that TiXmlHandle is not part of the TinyXml
   ## DOM structure. It is a separate utility class.
@@ -6597,7 +6597,7 @@ type TiXmlHandle* {.importcpp: "TiXmlHandle", pure, inheritable, header: "tiXmlH
   ## }
   ## @endverbatim
 
-type TiXmlPrinter* {.importcpp: "TiXmlPrinter", pure, inheritable, header: "tiXmlPrinter.h".} = object of TiXmlVisitor
+type TiXmlPrinter* {.importcpp: "TiXmlPrinter", pure, inheritable, header: "tinyxml.h".} = object of TiXmlVisitor
   ## Print to memory functionality. The TiXmlPrinter is useful when you need to:
   ##
   ## -# Print to memory (especially in non-STL mode)
@@ -6647,7 +6647,7 @@ func name*(this: TypeHandle): string {.importcpp: "nimStringFromStdString(#.get_
 ## owns this TypeHandle.  It is only used in case the TypeHandle is
 ## inadvertantly undefined.
 
-func versionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: stringConversionCode.} ## \
+func versionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the current version of Panda, expressed as a string, e.g.  "1.0.0".
 ## The string will end in the letter "c" if this build does not represent an
 ## official version.
@@ -6679,24 +6679,24 @@ func officialVersion*(_: typedesc[PandaSystem]): bool {.importcpp: "PandaSystem:
 func memoryAlignment*(_: typedesc[PandaSystem]): int {.importcpp: "PandaSystem::get_memory_alignment()", header: "pandaSystem.h".} ## \
 ## Returns the memory alignment that Panda's allocators are using.
 
-func distributor*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_distributor())", header: stringConversionCode.} ## \
+func distributor*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_distributor())", header: "pandaSystem.h".} ## \
 ## Returns the string defined by the distributor of this version of Panda, or
 ## "homebuilt" if this version was built directly from the sources by the end-
 ## user.  This is a completely arbitrary string.
 
-func compiler*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_compiler())", header: stringConversionCode.} ## \
+func compiler*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_compiler())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the compiler that was used to generate this
 ## version of Panda, if it is available, or "unknown" if it is not.
 
-func buildDate*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_build_date())", header: stringConversionCode.} ## \
+func buildDate*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_build_date())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the date and time at which this version of
 ## Panda (or at least dtool) was compiled, if available.
 
-func gitCommit*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_git_commit())", header: stringConversionCode.} ## \
+func gitCommit*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_git_commit())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the git commit hash that this source tree is
 ## based on, or the empty string if it has not been specified at build time.
 
-func platform*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_platform())", header: stringConversionCode.} ## \
+func platform*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_platform())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the runtime platform that we are currently
 ## running on.  This will be something like "win32" or "osx_i386" or
 ## "linux_amd64".
@@ -7193,7 +7193,7 @@ func filePos*(this: DatagramSink): clonglong {.importcpp: "#.get_file_pos()".} #
 ## pointing to the first byte following the datagram returned after a call to
 ## put_datagram().
 
-func magicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStdString(Multifile::get_magic_number())", header: stringConversionCode.} ## \
+func magicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStdString(Multifile::get_magic_number())", header: "multifile.h".} ## \
 ## Returns a string with the first n bytes written to a Multifile, to identify
 ## it as a Multifile.
 
@@ -13273,12 +13273,12 @@ func value*(this: ParamTypedRefCount): TypedReferenceCount {.importcpp: "#->get_
 
 func dlsPathname*(_: typedesc[AudioManager]): Filename {.importcpp: "AudioManager::get_dls_pathname()", header: "audioManager.h".}
 
-func clickPrefix*(_: typedesc[PGButton]): string {.importcpp: "nimStringFromStdString(PGButton::get_click_prefix())", header: stringConversionCode.} ## \
+func clickPrefix*(_: typedesc[PGButton]): string {.importcpp: "nimStringFromStdString(PGButton::get_click_prefix())", header: "pgButton.h".} ## \
 ## Returns the prefix that is used to define the click event for all
 ## PGButtons.  The click event is the concatenation of this string followed by
 ## get_id().
 
-func hostName*(_: typedesc[ConnectionManager]): string {.importcpp: "nimStringFromStdString(ConnectionManager::get_host_name())", header: stringConversionCode.} ## \
+func hostName*(_: typedesc[ConnectionManager]): string {.importcpp: "nimStringFromStdString(ConnectionManager::get_host_name())", header: "connectionManager.h".} ## \
 ## Returns the name of this particular machine on the network, if available,
 ## or the empty string if the hostname cannot be determined.
 
@@ -13699,11 +13699,11 @@ proc unicodeTolower*(_: typedesc[TextEncoder], character: int): int {.importcpp:
 ## Returns the uppercase equivalent of the given Unicode character.  This is
 ## akin to ctype's tolower(), extended to Unicode.
 
-proc upper*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::upper(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc upper*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::upper(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
 ## Converts the string to uppercase, assuming the string is encoded in the
 ## default encoding.
 
-proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::lower(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::lower(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
 ## Converts the string to lowercase, assuming the string is encoded in the
 ## default encoding.
 
@@ -13749,21 +13749,21 @@ proc textFilename*(_: typedesc[Filename], filename: Filename): Filename {.import
 ## or binary file.  This is in lieu of calling set_text() or set_binary() or
 ## set_type().
 
-proc textFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::text_filename(nimStringToStdString(#))", header: stringConversionCode.}
+proc textFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::text_filename(nimStringToStdString(#))", header: "filename.h".}
 
 proc binaryFilename*(_: typedesc[Filename], filename: Filename): Filename {.importcpp: "Filename::binary_filename(#)", header: "filename.h".}
 
-proc binaryFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::binary_filename(nimStringToStdString(#))", header: stringConversionCode.}
+proc binaryFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::binary_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc dsoFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::dso_filename(nimStringToStdString(#))", header: stringConversionCode.}
+proc dsoFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::dso_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc executableFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::executable_filename(nimStringToStdString(#))", header: stringConversionCode.}
+proc executableFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::executable_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc patternFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::pattern_filename(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc patternFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::pattern_filename(nimStringToStdString(#))", header: "filename.h".} ## \
 ## Constructs a filename that represents a sequence of numbered files.  See
 ## set_pattern().
 
-proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific(nimStringToStdString(#))", header: "filename.h".} ## \
 ## This named constructor returns a Panda-style filename (that is, using
 ## forward slashes, and no drive letter) based on the supplied filename string
 ## that describes a filename in the local system conventions (for instance, on
@@ -13777,16 +13777,16 @@ proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.imp
 ## local conventions and partially Panda conventions; e.g.  some backslashes
 ## and some forward slashes.
 
-proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific_w(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific_w(nimStringToStdString(#))", header: "filename.h".} ## \
 ## The wide-string variant of from_os_specific(). Returns a new Filename,
 ## converted from an os-specific wide-character string.
 
-proc expandFrom*(_: typedesc[Filename], user_string: string): Filename {.importcpp: "Filename::expand_from(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc expandFrom*(_: typedesc[Filename], user_string: string): Filename {.importcpp: "Filename::expand_from(nimStringToStdString(#))", header: "filename.h".} ## \
 ## Returns the same thing as from_os_specific(), but embedded environment
 ## variable references (e.g.  "$DMODELS/foo.txt") are expanded out.  It also
 ## automatically elevates the file to its true case if needed.
 
-proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
 ## Generates a temporary filename within the indicated directory, using the
 ## indicated prefix.  If the directory is empty, a system-defined directory is
 ## chosen instead.
@@ -13795,7 +13795,7 @@ proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: 
 ## it does not specifically create the file, it is possible that another
 ## process could simultaneously create a file by the same name.
 
-proc temporary*(_: typedesc[Filename], dirname: string, prefix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc temporary*(_: typedesc[Filename], dirname: string, prefix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
 ## Generates a temporary filename within the indicated directory, using the
 ## indicated prefix.  If the directory is empty, a system-defined directory is
 ## chosen instead.
@@ -14352,12 +14352,12 @@ proc output*(this: Filename, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
 
-proc getVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: stringConversionCode.} ## \
+proc getVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the current version of Panda, expressed as a string, e.g.  "1.0.0".
 ## The string will end in the letter "c" if this build does not represent an
 ## official version.
 
-proc getPackageVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_package_version_string())", header: stringConversionCode.} ## \
+proc getPackageVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_package_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the version of the Panda3D distributable package that provides this
 ## build of Panda.
 ##
@@ -14375,7 +14375,7 @@ proc getPackageVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "ni
 ## set to a nonempty string only when building a Panda3D package for
 ## distribution.
 
-proc getPackageHostUrl*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_package_host_url())", header: stringConversionCode.} ## \
+proc getPackageHostUrl*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_package_host_url())", header: "pandaSystem.h".} ## \
 ## Returns the URL of the download server that provides the Panda3D
 ## distributable package currently running.  This can be used, along with the
 ## get_package_version_string(), to uniquely identify the running version of
@@ -14387,7 +14387,7 @@ proc getPackageHostUrl*(_: typedesc[PandaSystem]): string {.importcpp: "nimStrin
 ## set to a nonempty string only when building a Panda3D package for
 ## distribution.
 
-proc getP3dCoreapiVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_p3d_coreapi_version_string())", header: stringConversionCode.} ## \
+proc getP3dCoreapiVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_p3d_coreapi_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the current version of Panda's Core API, expressed as a string of
 ## dot-delimited integers.  There are usually four integers in this version,
 ## but this is not guaranteed.
@@ -14425,24 +14425,24 @@ proc isOfficialVersion*(_: typedesc[PandaSystem]): bool {.importcpp: "PandaSyste
 proc getMemoryAlignment*(_: typedesc[PandaSystem]): int {.importcpp: "PandaSystem::get_memory_alignment()", header: "pandaSystem.h".} ## \
 ## Returns the memory alignment that Panda's allocators are using.
 
-proc getDistributor*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_distributor())", header: stringConversionCode.} ## \
+proc getDistributor*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_distributor())", header: "pandaSystem.h".} ## \
 ## Returns the string defined by the distributor of this version of Panda, or
 ## "homebuilt" if this version was built directly from the sources by the end-
 ## user.  This is a completely arbitrary string.
 
-proc getCompiler*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_compiler())", header: stringConversionCode.} ## \
+proc getCompiler*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_compiler())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the compiler that was used to generate this
 ## version of Panda, if it is available, or "unknown" if it is not.
 
-proc getBuildDate*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_build_date())", header: stringConversionCode.} ## \
+proc getBuildDate*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_build_date())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the date and time at which this version of
 ## Panda (or at least dtool) was compiled, if available.
 
-proc getGitCommit*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_git_commit())", header: stringConversionCode.} ## \
+proc getGitCommit*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_git_commit())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the git commit hash that this source tree is
 ## based on, or the empty string if it has not been specified at build time.
 
-proc getPlatform*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_platform())", header: stringConversionCode.} ## \
+proc getPlatform*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_platform())", header: "pandaSystem.h".} ## \
 ## Returns a string representing the runtime platform that we are currently
 ## running on.  This will be something like "win32" or "osx_i386" or
 ## "linux_amd64".
@@ -14544,13 +14544,13 @@ proc findFile*(this: DSearchPath, filename: Filename): Filename {.importcpp: "#.
 ## order.  Returns the full matching pathname of the first match if found, or
 ## the empty string if not found.
 
-proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string, separator: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string, separator: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#), nimStringToStdString(#))", header: "dSearchPath.h".} ## \
 ## A quick-and-easy way to search a searchpath for a file when you don't feel
 ## like building or keeping around a DSearchPath object.  This simply
 ## constructs a temporary DSearchPath based on the indicated path string, and
 ## searches that.
 
-proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#))", header: "dSearchPath.h".} ## \
 ## A quick-and-easy way to search a searchpath for a file when you don't feel
 ## like building or keeping around a DSearchPath object.  This simply
 ## constructs a temporary DSearchPath based on the indicated path string, and
@@ -15105,11 +15105,11 @@ proc getCategory*(this: Notify, basename: string, parent_fullname: string): Noti
 ## don't have a pointer to its parent handy, but you know the name of its
 ## parent.  If the parent Category does not already exist, it will be created.
 
-proc null*(_: typedesc[Notify]): ostream {.importcpp: "Notify::null()", header: "notify.h".} ## \
+proc null*(_: typedesc[Notify]): ostream {.importcpp: "Notify::null()", header: "pnotify.h".} ## \
 ## A convenient way to get an ostream that doesn't do anything.  Returned by
 ## Category::out() when a particular Category and/or Severity is disabled.
 
-proc writeString*(_: typedesc[Notify], str: string) {.importcpp: "Notify::write_string(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc writeString*(_: typedesc[Notify], str: string) {.importcpp: "Notify::write_string(nimStringToStdString(#))", header: "pnotify.h".} ## \
 ## A convenient way for scripting languages, which may know nothing about
 ## ostreams, to write to Notify.  This writes a single string, followed by an
 ## implicit newline, to the Notify output stream.
@@ -16258,7 +16258,7 @@ proc isDefaultPort*(this: URLSpec): bool {.importcpp: "#.is_default_port()".} ##
 ## number for the scheme (or if there is no port number), or false if it is a
 ## nonstandard port.
 
-proc getDefaultPortForScheme*(_: typedesc[URLSpec], scheme: string): int {.importcpp: "URLSpec::get_default_port_for_scheme(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getDefaultPortForScheme*(_: typedesc[URLSpec], scheme: string): int {.importcpp: "URLSpec::get_default_port_for_scheme(nimStringToStdString(#))", header: "urlSpec.h".} ## \
 ## Returns the default port number for the indicated scheme, or 0 if there is
 ## no known default.
 
@@ -16344,31 +16344,31 @@ proc input*(this: URLSpec, `in`: istream): bool {.importcpp: "#.input(#)".}
 
 proc output*(this: URLSpec, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc quote*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#), nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc quote*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Returns the source string with all "unsafe" characters quoted, making a
 ## string suitable for placing in a URL.  Letters, digits, and the underscore,
 ## comma, period, and hyphen characters, as well as any included in the safe
 ## string, are left alone; all others are converted to hex representation.
 
-proc quote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc quote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Returns the source string with all "unsafe" characters quoted, making a
 ## string suitable for placing in a URL.  Letters, digits, and the underscore,
 ## comma, period, and hyphen characters, as well as any included in the safe
 ## string, are left alone; all others are converted to hex representation.
 
-proc quotePlus*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#), nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc quotePlus*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Behaves like quote() with the additional behavior of replacing spaces with
 ## plus signs.
 
-proc quotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc quotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Behaves like quote() with the additional behavior of replacing spaces with
 ## plus signs.
 
-proc unquote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc unquote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Reverses the operation of quote(): converts escaped characters of the form
 ## "%xx" to their ascii equivalent.
 
-proc unquotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote_plus(nimStringToStdString(#)))", header: stringConversionCode.} ## \
+proc unquotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Reverses the operation of quote_plus(): converts escaped characters of the
 ## form "%xx" to their ascii equivalent, and also converts plus signs to
 ## spaces.
@@ -16387,7 +16387,7 @@ proc initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToS
 
 proc initHTTPDate*(time: int): HTTPDate {.importcpp: "HTTPDate(#)".}
 
-proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "hTTPDate.h".} ## \
+proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "httpDate.h".} ## \
 ## Returns an HTTPDate that represents the current time and date.
 
 proc isValid*(this: HTTPDate): bool {.importcpp: "#.is_valid()".} ## \
@@ -16512,7 +16512,7 @@ proc newHTTPClient*(): HTTPClient {.importcpp: "new HTTPClient()".}
 
 proc newHTTPClient*(copy: HTTPClient): HTTPClient {.importcpp: "new HTTPClient(#)".}
 
-proc initRandomSeed*(_: typedesc[HTTPClient]) {.importcpp: "HTTPClient::init_random_seed()", header: "hTTPClient.h".} ## \
+proc initRandomSeed*(_: typedesc[HTTPClient]) {.importcpp: "HTTPClient::init_random_seed()", header: "httpClient.h".} ## \
 ## This may be called once, presumably at the beginning of an application, to
 ## initialize OpenSSL's random seed.  On Windows, it is particularly important
 ## to call this at startup if you are going to be performing any https
@@ -16761,17 +16761,17 @@ proc getHeader*(this: HTTPClient, url: URLSpec): HTTPChannel {.importcpp: "#->ge
 ## might also return the size of the document (if the server gives us this
 ## information).
 
-proc base64Encode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_encode(nimStringToStdString(#)))", header: "hTTPClient.h".} ## \
+proc base64Encode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_encode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
 ## Implements HTTPAuthorization::base64_encode().  This is provided here just
 ## as a convenient place to publish it for access by the scripting language;
 ## C++ code should probably use HTTPAuthorization directly.
 
-proc base64Decode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_decode(nimStringToStdString(#)))", header: "hTTPClient.h".} ## \
+proc base64Decode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_decode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
 ## Implements HTTPAuthorization::base64_decode().  This is provided here just
 ## as a convenient place to publish it for access by the scripting language;
 ## C++ code should probably use HTTPAuthorization directly.
 
-proc getGlobalPtr*(_: typedesc[HTTPClient]): HTTPClient {.importcpp: "HTTPClient::get_global_ptr()", header: "hTTPClient.h".} ## \
+proc getGlobalPtr*(_: typedesc[HTTPClient]): HTTPClient {.importcpp: "HTTPClient::get_global_ptr()", header: "httpClient.h".} ## \
 ## Returns the default global HTTPClient.
 
 proc initHTTPEntityTag*(): HTTPEntityTag {.importcpp: "HTTPEntityTag()".}
@@ -17518,7 +17518,7 @@ proc isDownloadComplete*(this: HTTPChannel): bool {.importcpp: "#->is_download_c
 ## is_valid() to prove that the file you expected has been successfully
 ## retrieved.
 
-proc getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "hTTPChannel.h".}
+proc getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "httpChannel.h".}
 
 proc newHTTPChannel*(param0: HTTPChannel): HTTPChannel {.importcpp: "new HTTPChannel(#)".}
 
@@ -19125,7 +19125,7 @@ proc ls*(this: Multifile, `out`: ostream) {.importcpp: "#->ls(#)".} ## \
 proc ls*(this: Multifile) {.importcpp: "#->ls()".} ## \
 ## Shows a list of all subfiles within the Multifile.
 
-proc getMagicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStdString(Multifile::get_magic_number())", header: stringConversionCode.} ## \
+proc getMagicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStdString(Multifile::get_magic_number())", header: "multifile.h".} ## \
 ## Returns a string with the first n bytes written to a Multifile, to identify
 ## it as a Multifile.
 
@@ -20336,7 +20336,7 @@ proc getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: "Dire
 
 proc newLODNode*(name: string): LODNode {.importcpp: "new LODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc makeDefaultLod*(_: typedesc[LODNode], name: string): LODNode {.importcpp: "LODNode::make_default_lod(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc makeDefaultLod*(_: typedesc[LODNode], name: string): LODNode {.importcpp: "LODNode::make_default_lod(nimStringToStdString(#))", header: "lodNode.h".} ## \
 ## Creates a new LODNode of the type specified by the default-lod-type config
 ## variable.
 
@@ -20445,7 +20445,7 @@ proc verifyChildBounds*(this: LODNode): bool {.importcpp: "#->verify_child_bound
 ## otherwise.  It is almost always a mistake for the geometry of an LOD level
 ## to be larger than its switch_in radius.
 
-proc getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lODNode.h".}
+proc getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lodNode.h".}
 
 proc newFadeLODNode*(name: string): FadeLODNode {.importcpp: "new FadeLODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -27468,7 +27468,7 @@ proc writeVerbose*(this: GeomNode, `out`: ostream, indent_level: int) {.importcp
 
 proc getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
-proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "CullBinAttrib::make(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "CullBinAttrib::make(nimStringToStdString(#), #)", header: "cullBinAttrib.h".} ## \
 ## Constructs a new CullBinAttrib assigning geometry into the named bin.  If
 ## the bin name is the empty string, the default bin is used.
 ##
@@ -36457,7 +36457,7 @@ proc getPixelSize*(this: DisplayRegion): LVecBase2i {.importcpp: "#->get_pixel_s
 
 proc output*(this: DisplayRegion, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc makeScreenshotFilename*(_: typedesc[DisplayRegion], prefix: string): Filename {.importcpp: "DisplayRegion::make_screenshot_filename(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc makeScreenshotFilename*(_: typedesc[DisplayRegion], prefix: string): Filename {.importcpp: "DisplayRegion::make_screenshot_filename(nimStringToStdString(#))", header: "displayRegion.h".} ## \
 ## Synthesizes a suitable default filename for passing to save_screenshot().
 ##
 ## The default filename is generated from the supplied prefix and from the
@@ -37198,7 +37198,7 @@ converter upcastToTypedReferenceCount*(this: Thread): TypedReferenceCount {.impo
 
 converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(#.p()))".}
 
-proc bindThread*(_: typedesc[Thread], name: string, sync_name: string): Thread {.importcpp: "Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc bindThread*(_: typedesc[Thread], name: string, sync_name: string): Thread {.importcpp: "Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: "thread.h".} ## \
 ## Returns a new Panda Thread object associated with the current thread (which
 ## has been created externally). This can be used to bind a unique Panda
 ## Thread object with an external thread, such as a new Python thread.
@@ -38720,7 +38720,7 @@ proc setHardware*(this: GeomVertexAnimationSpec, num_transforms: int, indexed_tr
 
 proc output*(this: GeomVertexAnimationSpec, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc make*(_: typedesc[InternalName], name: string, index: int): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc make*(_: typedesc[InternalName], name: string, index: int): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#), #)", header: "internalName.h".} ## \
 ## Make using a string and an integer.  Concatenates the two.
 
 proc append*(this: InternalName, basename: string): InternalName {.importcpp: "#->append(nimStringToStdString(#))", header: stringConversionCode.} ## \
@@ -38789,7 +38789,7 @@ proc getTangent*(_: typedesc[InternalName]): InternalName {.importcpp: "Internal
 ## usually perpendicular to the normal and in the direction of the U texture
 ## coordinate change.  It is used for deriving bump maps.
 
-proc getTangentName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_tangent_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getTangentName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_tangent_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "tangent.name", where name is the supplied string.
 ## This is the column header for the tangent associated with the named texture
 ## coordinate set.
@@ -38801,7 +38801,7 @@ proc getBinormal*(_: typedesc[InternalName]): InternalName {.importcpp: "Interna
 ## direction of the V texture coordinate change.  It is used for deriving bump
 ## maps.
 
-proc getBinormalName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_binormal_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getBinormalName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_binormal_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "binormal.name", where name is the supplied
 ## string.  This is the column header for the binormal associated with the
 ## named texture coordinate set.
@@ -38811,7 +38811,7 @@ proc getTexcoord*(_: typedesc[InternalName]): InternalName {.importcpp: "Interna
 ## for the default texture coordinate set for each vertex.  It is also used
 ## for identifying the default texture coordinate set in a TextureStage.
 
-proc getTexcoordName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_texcoord_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getTexcoordName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_texcoord_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "texcoord.name", where name is the supplied
 ## string.  This is the column header for the named texture coordinate set for
 ## each vertex.  It is also used for identifying the named texture coordinate
@@ -38860,7 +38860,7 @@ proc getTransformIndex*(_: typedesc[InternalName]): InternalName {.importcpp: "I
 ## lookup in the TransformTable.  The transform_index column may be omitted,
 ## in which case the nth transform is the nth entry in the table.
 
-proc getMorph*(_: typedesc[InternalName], column: InternalName, slider: string): InternalName {.importcpp: "InternalName::get_morph(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getMorph*(_: typedesc[InternalName], column: InternalName, slider: string): InternalName {.importcpp: "InternalName::get_morph(#, nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns an InternalName derived from the given base column name and the
 ## given slider name, which is the column header for the offset vector that
 ## should be applied to the base column name when the named morph slider is
@@ -39892,7 +39892,7 @@ proc copySubdataFrom*(this: GeomVertexArrayDataHandle, to_start: clonglong, to_s
 proc markUsed*(this: GeomVertexArrayDataHandle) {.importcpp: "#->mark_used()".} ## \
 ## Marks the array data recently-used.
 
-proc getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayDataHandle.h".}
+proc getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayData.h".}
 
 proc setMaxSize*(this: GeomCacheManager, max_size: int) {.importcpp: "#.set_max_size(#)".} ## \
 ## Specifies the maximum number of entries in the cache for storing pre-
@@ -44149,7 +44149,7 @@ proc getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_
 proc load*(_: typedesc[Shader], file: Filename): Shader {.importcpp: "Shader::load(#)", header: "shader.h".} ## \
 ## Loads the shader with the given filename.
 
-proc make*(_: typedesc[Shader], body: string): Shader {.importcpp: "Shader::make(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc make*(_: typedesc[Shader], body: string): Shader {.importcpp: "Shader::make(nimStringToStdString(#))", header: "shader.h".} ## \
 ## Loads the shader, using the string as shader body.
 
 proc getFilename*(this: Shader): Filename {.importcpp: "#->get_filename()".} ## \
@@ -45516,7 +45516,7 @@ proc getTexture*(this: ParamTextureSampler): Texture {.importcpp: "#->get_textur
 proc getSampler*(this: ParamTextureSampler): SamplerState {.importcpp: "#->get_sampler()".} ## \
 ## Retrieves the sampler state stored in the parameter.
 
-proc getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTextureSampler.h".}
+proc getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTexture.h".}
 
 proc newParamTextureImage*(tex: Texture, read: bool, write: bool, z: int, n: int): ParamTextureImage {.importcpp: "new ParamTextureImage(#, #, #, #, #)".} ## \
 ## Creates a new ParamTextureImage storing the given texture and image binding
@@ -45549,7 +45549,7 @@ proc getBindLayer*(this: ParamTextureImage): int {.importcpp: "#->get_bind_layer
 ## Returns the image layer that should be bound.  This is undefined if
 ## get_bind_layered() returns false.
 
-proc getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTextureImage.h".}
+proc getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTexture.h".}
 
 proc newPerspectiveLens*(): PerspectiveLens {.importcpp: "new PerspectiveLens()".}
 
@@ -46041,12 +46041,12 @@ proc listContents*(_: typedesc[TexturePool]) {.importcpp: "TexturePool::list_con
 proc listContents*(_: typedesc[TexturePool], `out`: ostream) {.importcpp: "TexturePool::list_contents(#)", header: "texturePool.h".} ## \
 ## Lists the contents of the texture pool to the indicated output stream.
 
-proc findTexture*(_: typedesc[TexturePool], name: string): Texture {.importcpp: "TexturePool::find_texture(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc findTexture*(_: typedesc[TexturePool], name: string): Texture {.importcpp: "TexturePool::find_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Returns the first texture found in the pool that matches the indicated name
 ## (which may contain wildcards).  Returns the texture if it is found, or NULL
 ## if it is not.
 
-proc findAllTextures*(_: typedesc[TexturePool], name: string): TextureCollection {.importcpp: "TexturePool::find_all_textures(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc findAllTextures*(_: typedesc[TexturePool], name: string): TextureCollection {.importcpp: "TexturePool::find_all_textures(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Returns the set of all textures found in the pool that match the indicated
 ## name (which may contain wildcards).
 
@@ -46069,7 +46069,7 @@ proc getFakeTextureImage*(_: typedesc[TexturePool]): Filename {.importcpp: "Text
 ## Returns the filename that was specified with a previous call to
 ## set_fake_texture_image().
 
-proc makeTexture*(_: typedesc[TexturePool], extension: string): Texture {.importcpp: "TexturePool::make_texture(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc makeTexture*(_: typedesc[TexturePool], extension: string): Texture {.importcpp: "TexturePool::make_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Creates a new Texture object of the appropriate type for the indicated
 ## filename extension, according to the types that have been registered via
 ## register_texture_type().
@@ -48362,19 +48362,19 @@ proc set*(this: UnalignedLVecBase4f, x: float32, y: float32, z: float32, w: floa
 
 proc `[]`*(this: UnalignedLVecBase4f, i: int, assign_val: float32) {.importcpp: "#.operator [](#, #)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::size()", header: "unalignedLVecBase4f.h".}
+proc size*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4f) {.importcpp: "#.get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
-proc getNumComponents*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::get_num_components()", header: "unalignedLVecBase4f.h".}
+proc getNumComponents*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::get_num_components()", header: "lvecBase4.h".}
 
 proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator ==(#)".}
 
 proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "unalignedLVecBase4f.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVecBase4d*(): LVecBase4d {.importcpp: "LVecBase4d()".}
 
@@ -48588,19 +48588,19 @@ proc set*(this: UnalignedLVecBase4d, x: float64, y: float64, z: float64, w: floa
 
 proc `[]`*(this: UnalignedLVecBase4d, i: int, assign_val: float64) {.importcpp: "#.operator [](#, #)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::size()", header: "unalignedLVecBase4d.h".}
+proc size*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4d) {.importcpp: "#.get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
-proc getNumComponents*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::get_num_components()", header: "unalignedLVecBase4d.h".}
+proc getNumComponents*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::get_num_components()", header: "lvecBase4.h".}
 
 proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator ==(#)".}
 
 proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "unalignedLVecBase4d.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVecBase4i*(): LVecBase4i {.importcpp: "LVecBase4i()".}
 
@@ -48788,19 +48788,19 @@ proc set*(this: UnalignedLVecBase4i, x: int, y: int, z: int, w: int) {.importcpp
 
 proc `[]`*(this: UnalignedLVecBase4i, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::size()", header: "unalignedLVecBase4i.h".}
+proc size*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4i) {.importcpp: "#.get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
-proc getNumComponents*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::get_num_components()", header: "unalignedLVecBase4i.h".}
+proc getNumComponents*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::get_num_components()", header: "lvecBase4.h".}
 
 proc `==`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "#.operator ==(#)".}
 
 proc `!=`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "unalignedLVecBase4i.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVector4f*(): LVector4f {.importcpp: "LVector4f()".}
 
@@ -49149,7 +49149,7 @@ proc fill*(this: LMatrix3f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
 
 proc set*(this: LMatrix3f, e00: float32, e01: float32, e02: float32, e10: float32, e11: float32, e12: float32, e20: float32, e21: float32, e22: float32) {.importcpp: "#.set(#, #, #, #, #, #, #, #, #)".}
 
-proc size*(_: typedesc[LMatrix3f]): int {.importcpp: "LMatrix3f::size()", header: "lmatrix3.h".} ## \
+proc size*(_: typedesc[LMatrix3f]): int {.importcpp: "LMatrix3f::size()", header: "lmatrix.h".} ## \
 ## Returns 3: the number of rows of a LMatrix3.
 
 proc setRow*(this: LMatrix3f, row: int, v: LVecBase2f) {.importcpp: "#.set_row(#, #)".} ## \
@@ -49328,7 +49328,7 @@ proc invertTransposeFrom*(this: LMatrix3f, other: LMatrix4f): bool {.importcpp: 
 ## Simultaneously computes the inverse of the indicated matrix, and then the
 ## transpose of that inverse.
 
-proc identMat*(_: typedesc[LMatrix3f]): LMatrix3f {.importcpp: "LMatrix3f::ident_mat()", header: "lmatrix3.h".} ## \
+proc identMat*(_: typedesc[LMatrix3f]): LMatrix3f {.importcpp: "LMatrix3f::ident_mat()", header: "lmatrix.h".} ## \
 ## Returns an identity matrix.
 ##
 ## This function definition must appear first, since some inline functions
@@ -49357,35 +49357,35 @@ proc setScaleMat*(this: LMatrix3f, scale: LVecBase3f) {.importcpp: "#.set_scale_
 ## Fills mat with a matrix that applies the indicated scale in each of the
 ## three axes.
 
-proc translateMat*(_: typedesc[LMatrix3f], trans: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#)", header: "lmatrix3.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3f], trans: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix3f], tx: float32, ty: float32): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#, #)", header: "lmatrix3.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3f], tx: float32, ty: float32): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
@@ -49399,12 +49399,12 @@ proc setRotateMatNormaxis*(this: LMatrix3f, angle: float32, axis: LVecBase3f) {.
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #, #)", header: "lmatrix3.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #)", header: "lmatrix3.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
@@ -49417,19 +49417,19 @@ proc setShearMat*(this: LMatrix3f, shear: LVecBase3f) {.importcpp: "#.set_shear_
 ## Fills mat with a matrix that applies the indicated shear in each of the
 ## three planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
@@ -49439,19 +49439,19 @@ proc setScaleShearMat*(this: LMatrix3f, scale: LVecBase3f, shear: LVecBase3f, cs
 proc setScaleShearMat*(this: LMatrix3f, scale: LVecBase3f, shear: LVecBase3f) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc convertMat*(_: typedesc[LMatrix3f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::convert_mat(#, #)", header: "lmatrix3.h".} ## \
+proc convertMat*(_: typedesc[LMatrix3f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -49488,7 +49488,7 @@ proc writeDatagram*(this: LMatrix3f, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix3f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix3.h".}
+proc getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix.h".}
 
 proc transpose*(a: LMatrix3d): LMatrix3d {.importcpp: "transpose(#)".}
 
@@ -49539,7 +49539,7 @@ proc setUpper3*(this: LMatrix4f, upper3: LMatrix3f) {.importcpp: "#.set_upper_3(
 proc getUpper3*(this: LMatrix4f): LMatrix3f {.importcpp: "#.get_upper_3()".} ## \
 ## Retrieves the upper 3x3 submatrix.
 
-proc size*(_: typedesc[LMatrix4f]): int {.importcpp: "LMatrix4f::size()", header: "lmatrix4.h".} ## \
+proc size*(_: typedesc[LMatrix4f]): int {.importcpp: "LMatrix4f::size()", header: "lmatrix.h".} ## \
 ## Returns 4: the number of rows of a LMatrix4.
 
 proc setRow*(this: LMatrix4f, row: int, v: LVecBase3f) {.importcpp: "#.set_row(#, #)".} ## \
@@ -49719,16 +49719,16 @@ proc invertInPlace*(this: LMatrix4f): bool {.importcpp: "#.invert_in_place()".} 
 proc accumulate*(this: LMatrix4f, other: LMatrix4f, weight: float32) {.importcpp: "#.accumulate(#, #)".} ## \
 ## Computes `(\*this) += other \* weight`.
 
-proc identMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::ident_mat()", header: "lmatrix4.h".} ## \
+proc identMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::ident_mat()", header: "lmatrix.h".} ## \
 ## Returns an identity matrix.
 ##
 ## This function definition must appear first, since some inline functions
 ## below take advantage of it.
 
-proc onesMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::ones_mat()", header: "lmatrix4.h".} ## \
+proc onesMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::ones_mat()", header: "lmatrix.h".} ## \
 ## Returns an matrix filled with ones.
 
-proc zerosMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::zeros_mat()", header: "lmatrix4.h".} ## \
+proc zerosMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::zeros_mat()", header: "lmatrix.h".} ## \
 ## Returns an matrix filled with zeros.
 
 proc setTranslateMat*(this: LMatrix4f, trans: LVecBase3f) {.importcpp: "#.set_translate_mat(#)".} ## \
@@ -49770,78 +49770,78 @@ proc setScaleShearMat*(this: LMatrix4f, scale: LVecBase3f, shear: LVecBase3f, cs
 proc setScaleShearMat*(this: LMatrix4f, scale: LVecBase3f, shear: LVecBase3f) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc translateMat*(_: typedesc[LMatrix4f], trans: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#)", header: "lmatrix4.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4f], trans: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix4f], tx: float32, ty: float32, tz: float32): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4f], tx: float32, ty: float32, tz: float32): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #)", header: "lmatrix4.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #, #)", header: "lmatrix4.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #)", header: "lmatrix4.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc scaleMat*(_: typedesc[LMatrix4f], scale: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], scale: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix4f], scale: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], scale: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated uniform scale.
 
-proc scaleMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc yToZUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::y_to_z_up_mat()", header: "lmatrix4.h".} ## \
+proc yToZUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::y_to_z_up_mat()", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc zToYUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::z_to_y_up_mat()", header: "lmatrix4.h".} ## \
+proc zToYUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::z_to_y_up_mat()", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc convertMat*(_: typedesc[LMatrix4f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::convert_mat(#, #)", header: "lmatrix4.h".} ## \
+proc convertMat*(_: typedesc[LMatrix4f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -49879,7 +49879,7 @@ proc writeDatagram*(this: LMatrix4f, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix4f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix4.h".}
+proc getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4f*(): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f()".}
 
@@ -49902,7 +49902,7 @@ proc `==`*(this: UnalignedLMatrix4f, other: UnalignedLMatrix4f): bool {.importcp
 
 proc `!=`*(this: UnalignedLMatrix4f, other: UnalignedLMatrix4f): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "unalignedLMatrix4f.h".}
+proc getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix3d*(): LMatrix3d {.importcpp: "LMatrix3d()".}
 
@@ -49919,7 +49919,7 @@ proc fill*(this: LMatrix3d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
 
 proc set*(this: LMatrix3d, e00: float64, e01: float64, e02: float64, e10: float64, e11: float64, e12: float64, e20: float64, e21: float64, e22: float64) {.importcpp: "#.set(#, #, #, #, #, #, #, #, #)".}
 
-proc size*(_: typedesc[LMatrix3d]): int {.importcpp: "LMatrix3d::size()", header: "lmatrix3.h".} ## \
+proc size*(_: typedesc[LMatrix3d]): int {.importcpp: "LMatrix3d::size()", header: "lmatrix.h".} ## \
 ## Returns 3: the number of rows of a LMatrix3.
 
 proc setRow*(this: LMatrix3d, row: int, v: LVecBase2d) {.importcpp: "#.set_row(#, #)".} ## \
@@ -50098,7 +50098,7 @@ proc invertTransposeFrom*(this: LMatrix3d, other: LMatrix4d): bool {.importcpp: 
 ## Simultaneously computes the inverse of the indicated matrix, and then the
 ## transpose of that inverse.
 
-proc identMat*(_: typedesc[LMatrix3d]): LMatrix3d {.importcpp: "LMatrix3d::ident_mat()", header: "lmatrix3.h".} ## \
+proc identMat*(_: typedesc[LMatrix3d]): LMatrix3d {.importcpp: "LMatrix3d::ident_mat()", header: "lmatrix.h".} ## \
 ## Returns an identity matrix.
 ##
 ## This function definition must appear first, since some inline functions
@@ -50127,35 +50127,35 @@ proc setScaleMat*(this: LMatrix3d, scale: LVecBase3d) {.importcpp: "#.set_scale_
 ## Fills mat with a matrix that applies the indicated scale in each of the
 ## three axes.
 
-proc translateMat*(_: typedesc[LMatrix3d], trans: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#)", header: "lmatrix3.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3d], trans: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix3d], tx: float64, ty: float64): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#, #)", header: "lmatrix3.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3d], tx: float64, ty: float64): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #)", header: "lmatrix3.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
@@ -50169,12 +50169,12 @@ proc setRotateMatNormaxis*(this: LMatrix3d, angle: float64, axis: LVecBase3d) {.
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #, #)", header: "lmatrix3.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #)", header: "lmatrix3.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
@@ -50187,19 +50187,19 @@ proc setShearMat*(this: LMatrix3d, shear: LVecBase3d) {.importcpp: "#.set_shear_
 ## Fills mat with a matrix that applies the indicated shear in each of the
 ## three planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
@@ -50209,19 +50209,19 @@ proc setScaleShearMat*(this: LMatrix3d, scale: LVecBase3d, shear: LVecBase3d, cs
 proc setScaleShearMat*(this: LMatrix3d, scale: LVecBase3d, shear: LVecBase3d) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix3.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc convertMat*(_: typedesc[LMatrix3d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::convert_mat(#, #)", header: "lmatrix3.h".} ## \
+proc convertMat*(_: typedesc[LMatrix3d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -50258,7 +50258,7 @@ proc writeDatagram*(this: LMatrix3d, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix3d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix3.h".}
+proc getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix4d*(): LMatrix4d {.importcpp: "LMatrix4d()".}
 
@@ -50289,7 +50289,7 @@ proc setUpper3*(this: LMatrix4d, upper3: LMatrix3d) {.importcpp: "#.set_upper_3(
 proc getUpper3*(this: LMatrix4d): LMatrix3d {.importcpp: "#.get_upper_3()".} ## \
 ## Retrieves the upper 3x3 submatrix.
 
-proc size*(_: typedesc[LMatrix4d]): int {.importcpp: "LMatrix4d::size()", header: "lmatrix4.h".} ## \
+proc size*(_: typedesc[LMatrix4d]): int {.importcpp: "LMatrix4d::size()", header: "lmatrix.h".} ## \
 ## Returns 4: the number of rows of a LMatrix4.
 
 proc setRow*(this: LMatrix4d, row: int, v: LVecBase3d) {.importcpp: "#.set_row(#, #)".} ## \
@@ -50469,16 +50469,16 @@ proc invertInPlace*(this: LMatrix4d): bool {.importcpp: "#.invert_in_place()".} 
 proc accumulate*(this: LMatrix4d, other: LMatrix4d, weight: float64) {.importcpp: "#.accumulate(#, #)".} ## \
 ## Computes `(\*this) += other \* weight`.
 
-proc identMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::ident_mat()", header: "lmatrix4.h".} ## \
+proc identMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::ident_mat()", header: "lmatrix.h".} ## \
 ## Returns an identity matrix.
 ##
 ## This function definition must appear first, since some inline functions
 ## below take advantage of it.
 
-proc onesMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::ones_mat()", header: "lmatrix4.h".} ## \
+proc onesMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::ones_mat()", header: "lmatrix.h".} ## \
 ## Returns an matrix filled with ones.
 
-proc zerosMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::zeros_mat()", header: "lmatrix4.h".} ## \
+proc zerosMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::zeros_mat()", header: "lmatrix.h".} ## \
 ## Returns an matrix filled with zeros.
 
 proc setTranslateMat*(this: LMatrix4d, trans: LVecBase3d) {.importcpp: "#.set_translate_mat(#)".} ## \
@@ -50520,78 +50520,78 @@ proc setScaleShearMat*(this: LMatrix4d, scale: LVecBase3d, shear: LVecBase3d, cs
 proc setScaleShearMat*(this: LMatrix4d, scale: LVecBase3d, shear: LVecBase3d) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc translateMat*(_: typedesc[LMatrix4d], trans: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#)", header: "lmatrix4.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4d], trans: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix4d], tx: float64, ty: float64, tz: float64): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4d], tx: float64, ty: float64, tz: float64): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #)", header: "lmatrix4.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #, #)", header: "lmatrix4.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #)", header: "lmatrix4.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc scaleMat*(_: typedesc[LMatrix4d], scale: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], scale: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix4d], scale: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], scale: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated uniform scale.
 
-proc scaleMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix4.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc yToZUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::y_to_z_up_mat()", header: "lmatrix4.h".} ## \
+proc yToZUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::y_to_z_up_mat()", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc zToYUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::z_to_y_up_mat()", header: "lmatrix4.h".} ## \
+proc zToYUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::z_to_y_up_mat()", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc convertMat*(_: typedesc[LMatrix4d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::convert_mat(#, #)", header: "lmatrix4.h".} ## \
+proc convertMat*(_: typedesc[LMatrix4d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -50629,7 +50629,7 @@ proc writeDatagram*(this: LMatrix4d, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix4d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix4.h".}
+proc getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4d*(): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d()".}
 
@@ -50652,7 +50652,7 @@ proc `==`*(this: UnalignedLMatrix4d, other: UnalignedLMatrix4d): bool {.importcp
 
 proc `!=`*(this: UnalignedLMatrix4d, other: UnalignedLMatrix4d): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "unalignedLMatrix4d.h".}
+proc getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc `*`*(m: LMatrix3d, q: LQuaterniond): LMatrix3d {.importcpp: "operator *(#, #)".}
 
@@ -53518,7 +53518,7 @@ proc `!=`*(this: pixel, other: pixel): bool {.importcpp: "#.operator !=(#)".}
 
 proc `<`*(this: pixel, other: pixel): bool {.importcpp: "#.operator <(#)".}
 
-proc size*(_: typedesc[pixel]): int {.importcpp: "pixel::size()", header: "pixel.h".}
+proc size*(_: typedesc[pixel]): int {.importcpp: "pixel::size()", header: "pnmimage_base.h".}
 
 proc output*(this: pixel, `out`: ostream) {.importcpp: "#.output(#)".}
 
@@ -55860,26 +55860,26 @@ proc write*(this: DynamicTextFont, `out`: ostream, indent_level: int) {.importcp
 
 proc getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
 
-proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::has_font(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::has_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Returns true if the font has ever been loaded, false otherwise.
 
-proc verifyFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::verify_font(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc verifyFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::verify_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Loads the given filename up into a font, if it has not already been loaded,
 ## and returns true to indicate success, or false to indicate failure.  If
 ## this returns true, it is guaranteed that a subsequent call to load_font()
 ## with the same font name will return a valid Font pointer.
 
-proc loadFont*(_: typedesc[FontPool], filename: string): TextFont {.importcpp: "FontPool::load_font(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc loadFont*(_: typedesc[FontPool], filename: string): TextFont {.importcpp: "FontPool::load_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Loads the given filename up into a font, if it has not already been loaded,
 ## and returns the new font.  If a font with the same filename was previously
 ## loaded, returns that one instead.  If the font file cannot be found,
 ## returns NULL.
 
-proc addFont*(_: typedesc[FontPool], filename: string, font: TextFont) {.importcpp: "FontPool::add_font(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc addFont*(_: typedesc[FontPool], filename: string, font: TextFont) {.importcpp: "FontPool::add_font(nimStringToStdString(#), #)", header: "fontPool.h".} ## \
 ## Adds the indicated already-loaded font to the pool.  The font will always
 ## replace any previously-loaded font in the pool that had the same filename.
 
-proc releaseFont*(_: typedesc[FontPool], filename: string) {.importcpp: "FontPool::release_font(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc releaseFont*(_: typedesc[FontPool], filename: string) {.importcpp: "FontPool::release_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Removes the indicated font from the pool, indicating it will never be
 ## loaded again; the font may then be freed.  If this function is never
 ## called, a reference count will be maintained on every font every loaded,
@@ -60153,14 +60153,14 @@ proc getValueType*(this: ParamValueBase): TypeHandle {.importcpp: "#->get_value_
 
 proc output*(this: ParamValueBase, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValueBase.h".}
+proc getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValue.h".}
 
 proc newParamTypedRefCount*(value: TypedReferenceCount): ParamTypedRefCount {.importcpp: "new ParamTypedRefCount(#)".}
 
 proc getValue*(this: ParamTypedRefCount): TypedReferenceCount {.importcpp: "#->get_value()".} ## \
 ## Retrieves the value stored in the parameter.
 
-proc getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramTypedRefCount.h".}
+proc getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramValue.h".}
 
 proc getClassType*(_: typedesc[WritableConfigurable]): TypeHandle {.importcpp: "WritableConfigurable::get_class_type()", header: "writableConfigurable.h".}
 
@@ -60842,53 +60842,53 @@ proc setId*(this: PGItem, id: string) {.importcpp: "#->set_id(nimStringToStdStri
 ## itself an ID when it is created, but this function allows the user to
 ## decide to redefine the ID to be something possibly more meaningful.
 
-proc getEnterPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_enter_prefix())", header: stringConversionCode.} ## \
+proc getEnterPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_enter_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the enter event for all PGItems.
 ## The enter event is the concatenation of this string followed by get_id().
 
-proc getExitPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_exit_prefix())", header: stringConversionCode.} ## \
+proc getExitPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_exit_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the exit event for all PGItems.
 ## The exit event is the concatenation of this string followed by get_id().
 
-proc getWithinPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_within_prefix())", header: stringConversionCode.} ## \
+proc getWithinPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_within_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the within event for all PGItems.
 ## The within event is the concatenation of this string followed by get_id().
 
-proc getWithoutPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_without_prefix())", header: stringConversionCode.} ## \
+proc getWithoutPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_without_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the without event for all
 ## PGItems.  The without event is the concatenation of this string followed by
 ## get_id().
 
-proc getFocusInPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_focus_in_prefix())", header: stringConversionCode.} ## \
+proc getFocusInPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_focus_in_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the focus_in event for all
 ## PGItems.  The focus_in event is the concatenation of this string followed
 ## by get_id().
 ##
 ## Unlike most item events, this event is thrown with no parameters.
 
-proc getFocusOutPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_focus_out_prefix())", header: stringConversionCode.} ## \
+proc getFocusOutPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_focus_out_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the focus_out event for all
 ## PGItems.  The focus_out event is the concatenation of this string followed
 ## by get_id().
 ##
 ## Unlike most item events, this event is thrown with no parameters.
 
-proc getPressPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_press_prefix())", header: stringConversionCode.} ## \
+proc getPressPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_press_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the press event for all PGItems.
 ## The press event is the concatenation of this string followed by a button
 ## name, followed by a hyphen and get_id().
 
-proc getRepeatPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_repeat_prefix())", header: stringConversionCode.} ## \
+proc getRepeatPrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_repeat_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the repeat event for all PGItems.
 ## The repeat event is the concatenation of this string followed by a button
 ## name, followed by a hyphen and get_id().
 
-proc getReleasePrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_release_prefix())", header: stringConversionCode.} ## \
+proc getReleasePrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_release_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the release event for all
 ## PGItems.  The release event is the concatenation of this string followed by
 ## a button name, followed by a hyphen and get_id().
 
-proc getKeystrokePrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_keystroke_prefix())", header: stringConversionCode.} ## \
+proc getKeystrokePrefix*(_: typedesc[PGItem]): string {.importcpp: "nimStringFromStdString(PGItem::get_keystroke_prefix())", header: "pgItem.h".} ## \
 ## Returns the prefix that is used to define the keystroke event for all
 ## PGItems.  The keystroke event is the concatenation of this string followed
 ## by a hyphen and get_id().
@@ -60957,22 +60957,22 @@ proc hasSound*(this: PGItem, event: string): bool {.importcpp: "#->has_sound(nim
 ## Returns true if there is a sound associated with the indicated event, or
 ## false otherwise.
 
-proc getTextNode*(_: typedesc[PGItem]): TextNode {.importcpp: "PGItem::get_text_node()", header: "pGItem.h".} ## \
+proc getTextNode*(_: typedesc[PGItem]): TextNode {.importcpp: "PGItem::get_text_node()", header: "pgItem.h".} ## \
 ## Returns the TextNode object that will be used by all PGItems to generate
 ## default labels given a string.  This can be loaded with the default font,
 ## etc.
 
-proc setTextNode*(_: typedesc[PGItem], node: TextNode) {.importcpp: "PGItem::set_text_node(#)", header: "pGItem.h".} ## \
+proc setTextNode*(_: typedesc[PGItem], node: TextNode) {.importcpp: "PGItem::set_text_node(#)", header: "pgItem.h".} ## \
 ## Changes the TextNode object that will be used by all PGItems to generate
 ## default labels given a string.  This can be loaded with the default font,
 ## etc.
 
-proc getFocusItem*(_: typedesc[PGItem]): PGItem {.importcpp: "PGItem::get_focus_item()", header: "pGItem.h".} ## \
+proc getFocusItem*(_: typedesc[PGItem]): PGItem {.importcpp: "PGItem::get_focus_item()", header: "pgItem.h".} ## \
 ## Returns the one PGItem in the world that currently has keyboard focus, if
 ## any, or NULL if no item has keyboard focus.  Use PGItem::set_focus() to
 ## activate or deactivate keyboard focus on a particular item.
 
-proc getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pGItem.h".}
+proc getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pgItem.h".}
 
 proc newPGButton*(name: string): PGButton {.importcpp: "new PGButton(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61019,7 +61019,7 @@ proc isButtonDown*(this: PGButton): bool {.importcpp: "#->is_button_down()".} ##
 ## Returns true if the user is currently holding the mouse button down on the
 ## button, false otherwise.
 
-proc getClickPrefix*(_: typedesc[PGButton]): string {.importcpp: "nimStringFromStdString(PGButton::get_click_prefix())", header: stringConversionCode.} ## \
+proc getClickPrefix*(_: typedesc[PGButton]): string {.importcpp: "nimStringFromStdString(PGButton::get_click_prefix())", header: "pgButton.h".} ## \
 ## Returns the prefix that is used to define the click event for all
 ## PGButtons.  The click event is the concatenation of this string followed by
 ## get_id().
@@ -61028,7 +61028,7 @@ proc getClickEvent*(this: PGButton, button: ButtonHandle): string {.importcpp: "
 ## Returns the event name that will be thrown when the button is clicked
 ## normally.
 
-proc getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pGButton.h".}
+proc getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pgButton.h".}
 
 proc newPGTop*(name: string): PGTop {.importcpp: "new PGTop(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61062,7 +61062,7 @@ proc getStartSort*(this: PGTop): int {.importcpp: "#->get_start_sort()".} ## \
 ## Returns the sort index that is assigned during the traversal to the first
 ## PGItem that is discovered during traversal.  See set_start_sort().
 
-proc getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pGTop.h".}
+proc getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pgTop.h".}
 
 proc newPGEntry*(name: string): PGEntry {.importcpp: "new PGEntry(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61251,31 +61251,31 @@ proc getTextDef*(this: PGEntry, state: int): TextNode {.importcpp: "#->get_text_
 ## Returns the TextNode that will be used to render the text within the entry
 ## when the entry is in the indicated state.  See set_text_def().
 
-proc getAcceptPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_accept_prefix())", header: stringConversionCode.} ## \
+proc getAcceptPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_accept_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the accept event for all
 ## PGEntries.  The accept event is the concatenation of this string followed
 ## by get_id().
 
-proc getAcceptFailedPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_accept_failed_prefix())", header: stringConversionCode.} ## \
+proc getAcceptFailedPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_accept_failed_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the accept failed event for all
 ## PGEntries.  This event is the concatenation of this string followed by
 ## get_id().
 
-proc getOverflowPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_overflow_prefix())", header: stringConversionCode.} ## \
+proc getOverflowPrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_overflow_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the overflow event for all
 ## PGEntries.  The overflow event is the concatenation of this string followed
 ## by get_id().
 
-proc getTypePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_type_prefix())", header: stringConversionCode.} ## \
+proc getTypePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_type_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the type event for all PGEntries.
 ## The type event is the concatenation of this string followed by get_id().
 
-proc getErasePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_erase_prefix())", header: stringConversionCode.} ## \
+proc getErasePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_erase_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the erase event for all
 ## PGEntries.  The erase event is the concatenation of this string followed by
 ## get_id().
 
-proc getCursormovePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_cursormove_prefix())", header: stringConversionCode.} ## \
+proc getCursormovePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_cursormove_prefix())", header: "pgEntry.h".} ## \
 ## Returns the prefix that is used to define the cursor event for all
 ## PGEntries.  The cursor event is the concatenation of this string followed
 ## by get_id().
@@ -61326,7 +61326,7 @@ proc isWtext*(this: PGEntry): bool {.importcpp: "#->is_wtext()".} ## \
 ## are out of the range of an ASCII character (and, therefore, get_wtext()
 ## should be called in preference to get_text()).
 
-proc getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pGEntry.h".}
+proc getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pgEntry.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: PGMouseWatcherParameter): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -61334,7 +61334,7 @@ converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWa
 
 proc output*(this: PGMouseWatcherParameter, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pGMouseWatcherParameter.h".}
+proc getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pgMouseWatcherParameter.h".}
 
 proc newPGMouseWatcherParameter*(param0: PGMouseWatcherParameter): PGMouseWatcherParameter {.importcpp: "new PGMouseWatcherParameter(#)".}
 
@@ -61342,7 +61342,7 @@ proc newPGMouseWatcherBackground*(): PGMouseWatcherBackground {.importcpp: "new 
 
 proc newPGMouseWatcherBackground*(param0: PGMouseWatcherBackground): PGMouseWatcherBackground {.importcpp: "new PGMouseWatcherBackground(#)".}
 
-proc getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pGMouseWatcherBackground.h".}
+proc getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pgMouseWatcherBackground.h".}
 
 proc newPGVirtualFrame*(name: string): PGVirtualFrame {.importcpp: "new PGVirtualFrame(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61389,7 +61389,7 @@ proc getCanvasNode*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas
 proc getCanvasParent*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas_parent()".} ## \
 ## Returns the parent node of the canvas_node.
 
-proc getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pGVirtualFrame.h".}
+proc getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pgVirtualFrame.h".}
 
 converter upcastToPGItem*(this: PGSliderBar): PGItem {.importcpp: "(PT(PGItem)(#))".}
 
@@ -61538,7 +61538,7 @@ proc getRightButton*(this: PGSliderBar): PGButton {.importcpp: "#->get_right_but
 ## Returns the PGButton that serves as the right scroll button for this
 ## slider, if any, or NULL if it is not set.
 
-proc getAdjustPrefix*(_: typedesc[PGSliderBar]): string {.importcpp: "nimStringFromStdString(PGSliderBar::get_adjust_prefix())", header: stringConversionCode.} ## \
+proc getAdjustPrefix*(_: typedesc[PGSliderBar]): string {.importcpp: "nimStringFromStdString(PGSliderBar::get_adjust_prefix())", header: "pgSliderBar.h".} ## \
 ## Returns the prefix that is used to define the adjust event for all
 ## PGSliderBars.  The adjust event is the concatenation of this string
 ## followed by get_id().
@@ -61561,7 +61561,7 @@ proc recompute*(this: PGSliderBar) {.importcpp: "#->recompute()".} ## \
 ## Recomputes the position and size of the thumb.  Normally this should not
 ## need to be called directly.
 
-proc getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pGSliderBar.h".}
+proc getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pgSliderBar.h".}
 
 converter upcastToPGVirtualFrame*(this: PGScrollFrame): PGVirtualFrame {.importcpp: "(PT(PGVirtualFrame)(#))".}
 
@@ -61650,7 +61650,7 @@ proc recompute*(this: PGScrollFrame) {.importcpp: "#->recompute()".} ## \
 ## Forces the PGScrollFrame to recompute itself right now.  Normally this
 ## should not be required.
 
-proc getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pGScrollFrame.h".}
+proc getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pgScrollFrame.h".}
 
 proc newPGWaitBar*(name: string): PGWaitBar {.importcpp: "new PGWaitBar(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61684,7 +61684,7 @@ proc getBarStyle*(this: PGWaitBar): PGFrameStyle {.importcpp: "#->get_bar_style(
 ## Returns the kind of frame that is drawn on top of the WaitBar to represent
 ## the amount completed.
 
-proc getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pGWaitBar.h".}
+proc getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pgWaitBar.h".}
 
 proc initNetAddress*(): NetAddress {.importcpp: "NetAddress()".} ## \
 ## Constructs an unspecified address.
@@ -62046,7 +62046,7 @@ proc waitForReaders*(this: ConnectionManager, timeout: float64): bool {.importcp
 ## threaded.  If any threaded ConnectionReaders are part of the
 ## ConnectionManager, the timeout value is implicitly treated as 0.
 
-proc getHostName*(_: typedesc[ConnectionManager]): string {.importcpp: "nimStringFromStdString(ConnectionManager::get_host_name())", header: stringConversionCode.} ## \
+proc getHostName*(_: typedesc[ConnectionManager]): string {.importcpp: "nimStringFromStdString(ConnectionManager::get_host_name())", header: "connectionManager.h".} ## \
 ## Returns the name of this particular machine on the network, if available,
 ## or the empty string if the hostname cannot be determined.
 
@@ -62589,14 +62589,14 @@ proc SetToBroadCast*(this: Socket_UDP): bool {.importcpp: "#.SetToBroadCast()".}
 
 proc getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_UDP.h".}
 
-proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "TiXmlBase::SetCondenseWhiteSpace(#)", header: "tiXmlBase.h".} ## \
+proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "TiXmlBase::SetCondenseWhiteSpace(#)", header: "tinyxml.h".} ## \
 ## The world does not agree on whether white space should be kept or
 ## not. In order to make everyone happy, these global, static functions
 ## are provided to set whether or not TinyXml will condense all white space
 ## into a single space or not. The default is to condense. Note changing this
 ## value is not thread safe.
 
-proc IsWhiteSpaceCondensed*(_: typedesc[TiXmlBase]): bool {.importcpp: "TiXmlBase::IsWhiteSpaceCondensed()", header: "tiXmlBase.h".} ## \
+proc IsWhiteSpaceCondensed*(_: typedesc[TiXmlBase]): bool {.importcpp: "TiXmlBase::IsWhiteSpaceCondensed()", header: "tinyxml.h".} ## \
 ## Return the current white space setting.
 
 proc Row*(this: TiXmlBase): int {.importcpp: "#.Row()".} ## \

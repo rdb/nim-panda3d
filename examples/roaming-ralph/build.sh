@@ -1,0 +1,1 @@
+nim --clibdir:/usr/lib/x86_64-linux-gnu/panda3d --cincludes:/usr/include/eigen3 --cincludes:/usr/include/panda3d --out:ralph -r cpp main.nim

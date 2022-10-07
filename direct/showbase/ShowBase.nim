@@ -45,10 +45,10 @@ proc finalizeExit(this: ShowBase) =
 proc userExit(this: ShowBase) =
   this.finalizeExit()
 
-proc windowEvent*(this: ShowBase) =
+proc windowEvent*(this: ShowBase, win: GraphicsWindow) =
   this.adjustWindowAspectRatio(this.getAspectRatio())
 
-  var properties = dcast(GraphicsWindow, this.win).getProperties()
+  var properties = win.getProperties()
   if not properties.open:
     this.userExit()
 
@@ -57,7 +57,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   this.graphicsEngine = GraphicsEngine.getGlobalPtr()
 
   eventMgr.restart()
-  this.accept("window-event", proc () = this.windowEvent())
+  this.accept("window-event", proc (win: GraphicsWindow) = this.windowEvent(win))
 
   var fbprops: FrameBufferProperties = FrameBufferProperties.getDefault()
   this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, 0x0008)

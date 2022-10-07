@@ -9,7 +9,14 @@ type
 
 proc doEvents*(this: EventManager) =
   while not this.eventQueue.isQueueEmpty():
-    messenger.send(this.eventQueue.dequeueEvent().name)
+    var event = this.eventQueue.dequeueEvent()
+    var numParams = event.getNumParameters()
+    var parameters = newSeq[EventParameter](numParams)
+
+    for i in 0..numParams-1:
+      parameters[i] = event.getParameter(i)
+
+    messenger.send(event.name, parameters)
 
 proc eventLoopTask(this: EventManager, task: Task): auto =
   this.doEvents()

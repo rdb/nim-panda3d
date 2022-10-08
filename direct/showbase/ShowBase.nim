@@ -18,7 +18,6 @@ type
     clock*: ClockObject
     dataRoot*: NodePath
     dataRootNode*: PandaNode
-    dgTrav*: DataGraphTraverser
     drive*: NodePath
     frameRateMeter*: FrameRateMeter
     graphicsEngine*: GraphicsEngine
@@ -43,7 +42,8 @@ proc makeAllPipes*(this: ShowBase) =
     this.makeDefaultPipe()
 
 proc dataLoop(this: ShowBase): auto =
-  this.dgTrav.traverse(this.dataRootNode)
+  var dgTrav = initDataGraphTraverser()
+  dgTrav.traverse(this.dataRootNode)
   return Task.cont
 
 proc igLoop(this: ShowBase): auto =
@@ -70,8 +70,6 @@ proc windowEvent*(this: ShowBase, win: GraphicsWindow) =
     this.userExit()
 
 proc setupDataGraph*(this: ShowBase) =
-  this.dgTrav = initDataGraphTraverser()
-
   this.dataRoot = initNodePath("dataRoot")
   this.dataRootNode = this.dataRoot.node()
 

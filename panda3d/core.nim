@@ -5863,7 +5863,7 @@ converter toBool*(this: Trackball): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Trackball, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Trackball], obj: TypedObject): Trackball {.importcpp: "DCAST(Trackball, @)".}
 
-type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2SG.h".} = object of DataNode
+type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2sg.h".} = object of DataNode
   ## input: Transform (matrix)
   ##
   ## output: none, but applies the matrix as the transform transition for a

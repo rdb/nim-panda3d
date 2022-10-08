@@ -33231,7 +33231,7 @@ proc getFromNode*(this: CollisionEntry): CollisionNode {.importcpp: "#->get_from
 ## collision.  This will be a node that has been added to a CollisionTraverser
 ## via add_collider().
 
-proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "#->get_into_node()".} ## \
+proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "(PT(PandaNode)(#->get_into_node()))".} ## \
 ## Returns the node that contains the CollisionSolid that was collided into.
 ## This returns a PandaNode pointer instead of something more specific,
 ## because it might be either a CollisionNode or a GeomNode.

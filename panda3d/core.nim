@@ -38620,7 +38620,8 @@ proc isQueueEmpty*(this: EventQueue): bool {.importcpp: "#->is_queue_empty()".}
 proc isQueueFull*(this: EventQueue): bool {.importcpp: "#->is_queue_full()".} ## \
 ## @deprecated Always returns false; the queue can never be full.
 
-proc dequeueEvent*(this: EventQueue): Event {.importcpp: "(Event *)(#->dequeue_event()).p()".}
+proc dequeueEvent*(this: EventQueue): Event {.noinit.} =
+  {.emit: [this, "->dequeue_event().swap(result);"]}
 
 proc getGlobalEventQueue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "EventQueue::get_global_event_queue()", header: "eventQueue.h".} ## \
 ## Returns a pointer to the one global EventQueue object.  If the global

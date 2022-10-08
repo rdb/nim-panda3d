@@ -13692,7 +13692,7 @@ proc isOfType*(this: TypedObject, handle: TypeHandle): bool {.importcpp: "#->is_
 proc isExactType*(this: TypedObject, handle: TypeHandle): bool {.importcpp: "#->is_exact_type(#)".} ## \
 ## Returns true if the current object is the indicated type exactly.
 
-proc getClassType*(_: typedesc[TypedObject]): TypeHandle {.importcpp: "TypedObject::get_class_type()", header: "typedObject.h".}
+converter getClassType*(_: typedesc[TypedObject]): TypeHandle {.importcpp: "TypedObject::get_class_type()", header: "typedObject.h".}
 
 proc get*(this: istream): int {.importcpp: "#.get()".}
 
@@ -14486,7 +14486,7 @@ proc getHash*(this: Filename): int {.importcpp: "#.get_hash()".} ## \
 
 proc output*(this: Filename, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
+converter getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
 
 proc getVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the current version of Panda, expressed as a string, e.g.  "1.0.0".
@@ -14629,7 +14629,7 @@ proc write*(this: PandaSystem, `out`: ostream) {.importcpp: "#.write(#)".}
 proc getGlobalPtr*(_: typedesc[PandaSystem]): PandaSystem {.importcpp: "PandaSystem::get_global_ptr()", header: "pandaSystem.h".} ## \
 ## Returns the global PandaSystem object.
 
-proc getClassType*(_: typedesc[PandaSystem]): TypeHandle {.importcpp: "PandaSystem::get_class_type()", header: "pandaSystem.h".}
+converter getClassType*(_: typedesc[PandaSystem]): TypeHandle {.importcpp: "PandaSystem::get_class_type()", header: "pandaSystem.h".}
 
 proc initDSearchPath*(): DSearchPath {.importcpp: "DSearchPath()".}
 
@@ -17654,7 +17654,7 @@ proc isDownloadComplete*(this: HTTPChannel): bool {.importcpp: "#->is_download_c
 ## is_valid() to prove that the file you expected has been successfully
 ## retrieved.
 
-proc getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "httpChannel.h".}
+converter getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "httpChannel.h".}
 
 proc newHTTPChannel*(param0: HTTPChannel): HTTPChannel {.importcpp: "new HTTPChannel(#)".}
 
@@ -17888,7 +17888,7 @@ proc addSystemDebug*(this: MultiplexStream) {.importcpp: "#.add_system_debug()".
 proc flush*(this: MultiplexStream) {.importcpp: "#.flush()".} ## \
 ## Forces out all output that hasn't yet been written.
 
-proc getClassType*(_: typedesc[VirtualFileHTTP]): TypeHandle {.importcpp: "VirtualFileHTTP::get_class_type()", header: "virtualFileHTTP.h".}
+converter getClassType*(_: typedesc[VirtualFileHTTP]): TypeHandle {.importcpp: "VirtualFileHTTP::get_class_type()", header: "virtualFileHTTP.h".}
 
 proc newVirtualFileMountHTTP*(root: URLSpec, http: HTTPClient): VirtualFileMountHTTP {.importcpp: "new VirtualFileMountHTTP(#, #)".}
 
@@ -17909,7 +17909,7 @@ proc reloadVfsMountUrl*(_: typedesc[VirtualFileMountHTTP]) {.importcpp: "Virtual
 ## called automatically at startup, and need not be called again, unless you
 ## have fiddled with some config settings.
 
-proc getClassType*(_: typedesc[VirtualFileMountHTTP]): TypeHandle {.importcpp: "VirtualFileMountHTTP::get_class_type()", header: "virtualFileMountHTTP.h".}
+converter getClassType*(_: typedesc[VirtualFileMountHTTP]): TypeHandle {.importcpp: "VirtualFileMountHTTP::get_class_type()", header: "virtualFileMountHTTP.h".}
 
 proc newPatcher*(): Patcher {.importcpp: "new Patcher()".}
 
@@ -18069,7 +18069,7 @@ proc testRefCountNonzero*(this: ReferenceCount): bool {.importcpp: "#->test_ref_
 ## Does some easy checks to make sure that the reference count isn't zero, or
 ## completely bogus.  Returns true if ok, false otherwise.
 
-proc getClassType*(_: typedesc[ReferenceCount]): TypeHandle {.importcpp: "ReferenceCount::get_class_type()", header: "referenceCount.h".}
+converter getClassType*(_: typedesc[ReferenceCount]): TypeHandle {.importcpp: "ReferenceCount::get_class_type()", header: "referenceCount.h".}
 
 proc getLength*(this: Buffer): int {.importcpp: "#->get_length()".}
 
@@ -18114,7 +18114,7 @@ proc nodeUnrefOnly*(this: NodeReferenceCount) {.importcpp: "#->node_unref_only()
 ## count.  Intended to be called by derived classes only, presumably to
 ## reimplement node_unref().
 
-proc getClassType*(_: typedesc[NodeReferenceCount]): TypeHandle {.importcpp: "NodeReferenceCount::get_class_type()", header: "nodeReferenceCount.h".}
+converter getClassType*(_: typedesc[NodeReferenceCount]): TypeHandle {.importcpp: "NodeReferenceCount::get_class_type()", header: "nodeReferenceCount.h".}
 
 proc initDatagram*(): Datagram {.importcpp: "Datagram()".}
 
@@ -18246,7 +18246,7 @@ proc write*(this: Datagram, `out`: ostream, indent: int) {.importcpp: "#.write(#
 proc write*(this: Datagram, `out`: ostream) {.importcpp: "#.write(#)".} ## \
 ## Write a string representation of this instance to <out>.
 
-proc getClassType*(_: typedesc[Datagram]): TypeHandle {.importcpp: "Datagram::get_class_type()", header: "datagram.h".}
+converter getClassType*(_: typedesc[Datagram]): TypeHandle {.importcpp: "Datagram::get_class_type()", header: "datagram.h".}
 
 proc getDatagram*(this: DatagramGenerator, data: Datagram): bool {.importcpp: "#->get_datagram(#)".}
 
@@ -18394,7 +18394,7 @@ proc write*(this: DatagramIterator, `out`: ostream, indent: int) {.importcpp: "#
 proc write*(this: DatagramIterator, `out`: ostream) {.importcpp: "#.write(#)".} ## \
 ## Write a string representation of this instance to <out>.
 
-proc getClassType*(_: typedesc[DatagramIterator]): TypeHandle {.importcpp: "DatagramIterator::get_class_type()", header: "datagramIterator.h".}
+converter getClassType*(_: typedesc[DatagramIterator]): TypeHandle {.importcpp: "DatagramIterator::get_class_type()", header: "datagramIterator.h".}
 
 proc putDatagram*(this: DatagramSink, data: Datagram): bool {.importcpp: "#->put_datagram(#)".}
 
@@ -18440,7 +18440,7 @@ converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importc
 
 converter upcastToReferenceCount*(this: TypedReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
-proc getClassType*(_: typedesc[TypedReferenceCount]): TypeHandle {.importcpp: "TypedReferenceCount::get_class_type()", header: "typedReferenceCount.h".}
+converter getClassType*(_: typedesc[TypedReferenceCount]): TypeHandle {.importcpp: "TypedReferenceCount::get_class_type()", header: "typedReferenceCount.h".}
 
 proc newFileReference*(param0: FileReference): FileReference {.importcpp: "new FileReference(#)".}
 
@@ -18449,7 +18449,7 @@ proc newFileReference*(filename: Filename): FileReference {.importcpp: "new File
 proc getFilename*(this: FileReference): Filename {.importcpp: "#->get_filename()".} ## \
 ## Returns the filename of the reference.
 
-proc getClassType*(_: typedesc[FileReference]): TypeHandle {.importcpp: "FileReference::get_class_type()", header: "fileReference.h".}
+converter getClassType*(_: typedesc[FileReference]): TypeHandle {.importcpp: "FileReference::get_class_type()", header: "fileReference.h".}
 
 proc encryptString*(source: string, password: string, algorithm: string, key_length: int, iteration_count: int): string {.importcpp: "nimStringFromStdString(encrypt_string(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), #, #))", header: stringConversionCode.}
 
@@ -19303,7 +19303,7 @@ proc output*(this: Namable, `out`: ostream) {.importcpp: "#.output(#)".} ## \
 ## Outputs the Namable.  This function simply writes the name to the output
 ## stream; most Namable derivatives will probably redefine this.
 
-proc getClassType*(_: typedesc[Namable]): TypeHandle {.importcpp: "Namable::get_class_type()", header: "namable.h".}
+converter getClassType*(_: typedesc[Namable]): TypeHandle {.importcpp: "Namable::get_class_type()", header: "namable.h".}
 
 proc clearCertificates*(this: OpenSSLWrapper) {.importcpp: "#.clear_certificates()".} ## \
 ## Removes all the certificates from the global store, including the compiled-
@@ -19536,9 +19536,9 @@ proc getSystemInfo*(this: VirtualFile, info: SubfileInfo): bool {.importcpp: "#-
 ## not (or it is not known where the file resides), in which case the info is
 ## meaningless.
 
-proc getClassType*(_: typedesc[VirtualFile]): TypeHandle {.importcpp: "VirtualFile::get_class_type()", header: "virtualFile.h".}
+converter getClassType*(_: typedesc[VirtualFile]): TypeHandle {.importcpp: "VirtualFile::get_class_type()", header: "virtualFile.h".}
 
-proc getClassType*(_: typedesc[VirtualFileComposite]): TypeHandle {.importcpp: "VirtualFileComposite::get_class_type()", header: "virtualFileComposite.h".}
+converter getClassType*(_: typedesc[VirtualFileComposite]): TypeHandle {.importcpp: "VirtualFileComposite::get_class_type()", header: "virtualFileComposite.h".}
 
 proc getFileSystem*(this: VirtualFileMount): VirtualFileSystem {.importcpp: "#->get_file_system()".} ## \
 ## Returns the file system this mount object is attached to.
@@ -19555,18 +19555,18 @@ proc output*(this: VirtualFileMount, `out`: ostream) {.importcpp: "#->output(#)"
 
 proc write*(this: VirtualFileMount, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[VirtualFileMount]): TypeHandle {.importcpp: "VirtualFileMount::get_class_type()", header: "virtualFileMount.h".}
+converter getClassType*(_: typedesc[VirtualFileMount]): TypeHandle {.importcpp: "VirtualFileMount::get_class_type()", header: "virtualFileMount.h".}
 
 proc newVirtualFileMountMultifile*(multifile: Multifile): VirtualFileMountMultifile {.importcpp: "new VirtualFileMountMultifile(#)".}
 
 proc getMultifile*(this: VirtualFileMountMultifile): Multifile {.importcpp: "#->get_multifile()".} ## \
 ## Returns the Multifile pointer that this mount object is based on.
 
-proc getClassType*(_: typedesc[VirtualFileMountMultifile]): TypeHandle {.importcpp: "VirtualFileMountMultifile::get_class_type()", header: "virtualFileMountMultifile.h".}
+converter getClassType*(_: typedesc[VirtualFileMountMultifile]): TypeHandle {.importcpp: "VirtualFileMountMultifile::get_class_type()", header: "virtualFileMountMultifile.h".}
 
 proc newVirtualFileMountRamdisk*(): VirtualFileMountRamdisk {.importcpp: "new VirtualFileMountRamdisk()".}
 
-proc getClassType*(_: typedesc[VirtualFileMountRamdisk]): TypeHandle {.importcpp: "VirtualFileMountRamdisk::get_class_type()", header: "virtualFileMountRamdisk.h".}
+converter getClassType*(_: typedesc[VirtualFileMountRamdisk]): TypeHandle {.importcpp: "VirtualFileMountRamdisk::get_class_type()", header: "virtualFileMountRamdisk.h".}
 
 proc newVirtualFileMountSystem*(physical_filename: Filename): VirtualFileMountSystem {.importcpp: "new VirtualFileMountSystem(#)".}
 
@@ -19574,7 +19574,7 @@ proc getPhysicalFilename*(this: VirtualFileMountSystem): Filename {.importcpp: "
 ## Returns the name of the source file on the OS filesystem of the directory
 ## or file that is mounted.
 
-proc getClassType*(_: typedesc[VirtualFileMountSystem]): TypeHandle {.importcpp: "VirtualFileMountSystem::get_class_type()", header: "virtualFileMountSystem.h".}
+converter getClassType*(_: typedesc[VirtualFileMountSystem]): TypeHandle {.importcpp: "VirtualFileMountSystem::get_class_type()", header: "virtualFileMountSystem.h".}
 
 proc getMount*(this: VirtualFileSimple): VirtualFileMount {.importcpp: "#->get_mount()".} ## \
 ## Returns the VirtualFileMount this file is associated with.
@@ -19584,13 +19584,13 @@ proc isImplicitPzFile*(this: VirtualFileSimple): bool {.importcpp: "#->is_implic
 ## decompressed on load, or false if it is not a .pz file or if it should not
 ## be decompressed.
 
-proc getClassType*(_: typedesc[VirtualFileSimple]): TypeHandle {.importcpp: "VirtualFileSimple::get_class_type()", header: "virtualFileSimple.h".}
+converter getClassType*(_: typedesc[VirtualFileSimple]): TypeHandle {.importcpp: "VirtualFileSimple::get_class_type()", header: "virtualFileSimple.h".}
 
 proc newTemporaryFile*(filename: Filename): TemporaryFile {.importcpp: "new TemporaryFile(#)".}
 
 proc newTemporaryFile*(param0: TemporaryFile): TemporaryFile {.importcpp: "new TemporaryFile(#)".}
 
-proc getClassType*(_: typedesc[TemporaryFile]): TypeHandle {.importcpp: "TemporaryFile::get_class_type()", header: "temporaryFile.h".}
+converter getClassType*(_: typedesc[TemporaryFile]): TypeHandle {.importcpp: "TemporaryFile::get_class_type()", header: "temporaryFile.h".}
 
 proc initIDecompressStream*(): IDecompressStream {.importcpp: "IDecompressStream()".}
 
@@ -20102,7 +20102,7 @@ proc isPlaying*(this: RecorderBase): bool {.importcpp: "#->is_playing()".} ## \
 ## file, false otherwise.  If this is true, play_data() will be called from
 ## time to time.
 
-proc getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "RecorderBase::get_class_type()", header: "recorderBase.h".}
+converter getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "RecorderBase::get_class_type()", header: "recorderBase.h".}
 
 converter upcastToDataNode*(this: MouseRecorder): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
@@ -20110,7 +20110,7 @@ converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: 
 
 proc newMouseRecorder*(name: string): MouseRecorder {.importcpp: "new MouseRecorder(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[MouseRecorder]): TypeHandle {.importcpp: "MouseRecorder::get_class_type()", header: "mouseRecorder.h".}
+converter getClassType*(_: typedesc[MouseRecorder]): TypeHandle {.importcpp: "MouseRecorder::get_class_type()", header: "mouseRecorder.h".}
 
 proc newRecorderController*(): RecorderController {.importcpp: "new RecorderController()".}
 
@@ -20231,7 +20231,7 @@ proc playFrame*(this: RecorderController) {.importcpp: "#->play_frame()".} ## \
 ## Gets the next frame of data from all of the active recorders and adds it to
 ## the output file.
 
-proc getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
+converter getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
 
 converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(#.p()))".}
 
@@ -20274,7 +20274,7 @@ proc considerFlush*(this: SocketStreamRecorder): bool {.importcpp: "#->consider_
 proc flush*(this: SocketStreamRecorder): bool {.importcpp: "#->flush()".} ## \
 ## See SocketStream::flush()
 
-proc getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
+converter getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
 
 converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(#.p()))".}
 
@@ -20288,11 +20288,11 @@ proc write*(this: LightNode, `out`: ostream, indent_level: int) {.importcpp: "#-
 
 proc write*(this: LightNode, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[LightNode]): TypeHandle {.importcpp: "LightNode::get_class_type()", header: "lightNode.h".}
+converter getClassType*(_: typedesc[LightNode]): TypeHandle {.importcpp: "LightNode::get_class_type()", header: "lightNode.h".}
 
 proc newAmbientLight*(name: string): AmbientLight {.importcpp: "new AmbientLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[AmbientLight]): TypeHandle {.importcpp: "AmbientLight::get_class_type()", header: "ambientLight.h".}
+converter getClassType*(_: typedesc[AmbientLight]): TypeHandle {.importcpp: "AmbientLight::get_class_type()", header: "ambientLight.h".}
 
 proc newCallbackNode*(name: string): CallbackNode {.importcpp: "new CallbackNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20349,7 +20349,7 @@ proc clearDrawCallback*(this: CallbackNode) {.importcpp: "#->clear_draw_callback
 proc getDrawCallback*(this: CallbackNode): CallbackObject {.importcpp: "#->get_draw_callback()".} ## \
 ## Returns the CallbackObject set by set_draw_callback().
 
-proc getClassType*(_: typedesc[CallbackNode]): TypeHandle {.importcpp: "CallbackNode::get_class_type()", header: "callbackNode.h".}
+converter getClassType*(_: typedesc[CallbackNode]): TypeHandle {.importcpp: "CallbackNode::get_class_type()", header: "callbackNode.h".}
 
 proc newComputeNode*(name: string): ComputeNode {.importcpp: "new ComputeNode(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Creates a ComputeNode with the given name.  Use add_dispatch and  also
@@ -20386,7 +20386,7 @@ proc removeDispatch*(this: ComputeNode, i: clonglong) {.importcpp: "#->remove_di
 proc clearDispatches*(this: ComputeNode) {.importcpp: "#->clear_dispatches()".} ## \
 ## Removes all dispatch commands.
 
-proc getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
+converter getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
 
 converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(#.p()))".}
 
@@ -20439,7 +20439,7 @@ proc write*(this: LightLensNode, `out`: ostream, indent_level: int) {.importcpp:
 
 proc write*(this: LightLensNode, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[LightLensNode]): TypeHandle {.importcpp: "LightLensNode::get_class_type()", header: "lightLensNode.h".}
+converter getClassType*(_: typedesc[LightLensNode]): TypeHandle {.importcpp: "LightLensNode::get_class_type()", header: "lightLensNode.h".}
 
 proc newDirectionalLight*(name: string): DirectionalLight {.importcpp: "new DirectionalLight(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20468,7 +20468,7 @@ proc getDirection*(this: DirectionalLight): LVector3 {.importcpp: "#->get_direct
 proc setDirection*(this: DirectionalLight, direction: LVector3) {.importcpp: "#->set_direction(#)".} ## \
 ## Sets the direction in which the light is aimed.
 
-proc getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: "DirectionalLight::get_class_type()", header: "directionalLight.h".}
+converter getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: "DirectionalLight::get_class_type()", header: "directionalLight.h".}
 
 proc newLODNode*(name: string): LODNode {.importcpp: "new LODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20581,7 +20581,7 @@ proc verifyChildBounds*(this: LODNode): bool {.importcpp: "#->verify_child_bound
 ## otherwise.  It is almost always a mistake for the geometry of an LOD level
 ## to be larger than its switch_in radius.
 
-proc getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lodNode.h".}
+converter getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lodNode.h".}
 
 proc newFadeLODNode*(name: string): FadeLODNode {.importcpp: "new FadeLODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20613,7 +20613,7 @@ proc getFadeStateOverride*(this: FadeLODNode): int {.importcpp: "#->get_fade_sta
 ## to apply the fade effect.  This should be larger than any attrib overrides
 ## on the fading geometry.
 
-proc getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLODNode.h".}
+converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLODNode.h".}
 
 proc getTrav*(this: NodeCullCallbackData): CullTraverser {.importcpp: "#.get_trav()".} ## \
 ## Returns the CullTraverser in use at the time of the callback.  This object
@@ -20625,7 +20625,7 @@ proc getData*(this: NodeCullCallbackData): CullTraverserData {.importcpp: "#.get
 ## object contains data that changes at each node of the traversal, such as
 ## the current node and the current net transform to that node.
 
-proc getClassType*(_: typedesc[NodeCullCallbackData]): TypeHandle {.importcpp: "NodeCullCallbackData::get_class_type()", header: "nodeCullCallbackData.h".}
+converter getClassType*(_: typedesc[NodeCullCallbackData]): TypeHandle {.importcpp: "NodeCullCallbackData::get_class_type()", header: "nodeCullCallbackData.h".}
 
 proc newPointLight*(name: string): PointLight {.importcpp: "new PointLight(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20656,7 +20656,7 @@ proc getPoint*(this: PointLight): LPoint3 {.importcpp: "#->get_point()".} ## \
 proc setPoint*(this: PointLight, point: LPoint3) {.importcpp: "#->set_point(#)".} ## \
 ## Sets the point in space at which the light is located.  Usually 0.
 
-proc getClassType*(_: typedesc[PointLight]): TypeHandle {.importcpp: "PointLight::get_class_type()", header: "pointLight.h".}
+converter getClassType*(_: typedesc[PointLight]): TypeHandle {.importcpp: "PointLight::get_class_type()", header: "pointLight.h".}
 
 proc newRectangleLight*(name: string): RectangleLight {.importcpp: "new RectangleLight(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20668,11 +20668,11 @@ proc setMaxDistance*(this: RectangleLight, max_distance: float32) {.importcpp: "
 ## Sets the radius of the light's sphere of influence.  Beyond this distance, the
 ## light may be attenuated to zero, if this is supported by the shader.
 
-proc getClassType*(_: typedesc[RectangleLight]): TypeHandle {.importcpp: "RectangleLight::get_class_type()", header: "rectangleLight.h".}
+converter getClassType*(_: typedesc[RectangleLight]): TypeHandle {.importcpp: "RectangleLight::get_class_type()", header: "rectangleLight.h".}
 
 proc newSelectiveChildNode*(name: string): SelectiveChildNode {.importcpp: "new SelectiveChildNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp: "SelectiveChildNode::get_class_type()", header: "selectiveChildNode.h".}
+converter getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp: "SelectiveChildNode::get_class_type()", header: "selectiveChildNode.h".}
 
 converter upcastToSelectiveChildNode*(this: SequenceNode): SelectiveChildNode {.importcpp: "(PT(SelectiveChildNode)(#))".}
 
@@ -20691,7 +20691,7 @@ proc setFrameRate*(this: SequenceNode, frame_rate: float64) {.importcpp: "#->set
 ## conjunction with get_play_rate() to change the effective frame rate of the
 ## node.
 
-proc getClassType*(_: typedesc[SequenceNode]): TypeHandle {.importcpp: "SequenceNode::get_class_type()", header: "sequenceNode.h".}
+converter getClassType*(_: typedesc[SequenceNode]): TypeHandle {.importcpp: "SequenceNode::get_class_type()", header: "sequenceNode.h".}
 
 proc newShaderGenerator*(gsg: GraphicsStateGuardianBase): ShaderGenerator {.importcpp: "new ShaderGenerator(#)".} ## \
 ## Create a ShaderGenerator.  This has no state, except possibly to cache
@@ -20743,7 +20743,7 @@ proc clearGeneratedShaders*(this: ShaderGenerator) {.importcpp: "#->clear_genera
 ##
 ## @since 1.10.0
 
-proc getClassType*(_: typedesc[ShaderGenerator]): TypeHandle {.importcpp: "ShaderGenerator::get_class_type()", header: "shaderGenerator.h".}
+converter getClassType*(_: typedesc[ShaderGenerator]): TypeHandle {.importcpp: "ShaderGenerator::get_class_type()", header: "shaderGenerator.h".}
 
 proc newSphereLight*(name: string): SphereLight {.importcpp: "new SphereLight(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20753,7 +20753,7 @@ proc getRadius*(this: SphereLight): float32 {.importcpp: "#->get_radius()".} ## 
 proc setRadius*(this: SphereLight, radius: float32) {.importcpp: "#->set_radius(#)".} ## \
 ## Sets the radius of the sphere.
 
-proc getClassType*(_: typedesc[SphereLight]): TypeHandle {.importcpp: "SphereLight::get_class_type()", header: "sphereLight.h".}
+converter getClassType*(_: typedesc[SphereLight]): TypeHandle {.importcpp: "SphereLight::get_class_type()", header: "sphereLight.h".}
 
 proc newSpotlight*(name: string): Spotlight {.importcpp: "new Spotlight(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20797,7 +20797,7 @@ proc makeSpot*(_: typedesc[Spotlight], pixel_width: int, full_radius: float32, f
 ## of the fully bright center spot, and fg and bg are the colors of the
 ## interior and exterior of the spot, respectively.
 
-proc getClassType*(_: typedesc[Spotlight]): TypeHandle {.importcpp: "Spotlight::get_class_type()", header: "spotlight.h".}
+converter getClassType*(_: typedesc[Spotlight]): TypeHandle {.importcpp: "Spotlight::get_class_type()", header: "spotlight.h".}
 
 proc newSwitchNode*(name: string): SwitchNode {.importcpp: "new SwitchNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20808,7 +20808,7 @@ proc setVisibleChild*(this: SwitchNode, index: int) {.importcpp: "#->set_visible
 proc getVisibleChild*(this: SwitchNode): int {.importcpp: "#->get_visible_child()".} ## \
 ## Returns the index of the child that should be visible.
 
-proc getClassType*(_: typedesc[SwitchNode]): TypeHandle {.importcpp: "SwitchNode::get_class_type()", header: "switchNode.h".}
+converter getClassType*(_: typedesc[SwitchNode]): TypeHandle {.importcpp: "SwitchNode::get_class_type()", header: "switchNode.h".}
 
 proc newUvScrollNode*(name: string): UvScrollNode {.importcpp: "new UvScrollNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20830,7 +20830,7 @@ proc getWSpeed*(this: UvScrollNode): float32 {.importcpp: "#->get_w_speed()".}
 
 proc getRSpeed*(this: UvScrollNode): float32 {.importcpp: "#->get_r_speed()".}
 
-proc getClassType*(_: typedesc[UvScrollNode]): TypeHandle {.importcpp: "UvScrollNode::get_class_type()", header: "uvScrollNode.h".}
+converter getClassType*(_: typedesc[UvScrollNode]): TypeHandle {.importcpp: "UvScrollNode::get_class_type()", header: "uvScrollNode.h".}
 
 proc initSceneGraphAnalyzer*(): SceneGraphAnalyzer {.importcpp: "SceneGraphAnalyzer()".}
 
@@ -21382,7 +21382,7 @@ proc validateStates*(_: typedesc[TransformState]): bool {.importcpp: "TransformS
 ## false if there is a problem (which implies someone has modified one of the
 ## supposedly-const TransformState objects).
 
-proc getClassType*(_: typedesc[TransformState]): TypeHandle {.importcpp: "TransformState::get_class_type()", header: "transformState.h".}
+converter getClassType*(_: typedesc[TransformState]): TypeHandle {.importcpp: "TransformState::get_class_type()", header: "transformState.h".}
 
 proc getSlot*(this: RenderAttribRegistry, type_handle: TypeHandle): int {.importcpp: "#.get_slot(#)".} ## \
 ## Returns the slot number assigned to the indicated TypeHandle, or 0 if no
@@ -21497,7 +21497,7 @@ proc validateAttribs*(_: typedesc[RenderAttrib]): bool {.importcpp: "RenderAttri
 
 proc getSlot*(this: RenderAttrib): int {.importcpp: "#->get_slot()".}
 
-proc getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
+converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
 proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "RenderModeAttrib::make_default()", header: "renderModeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -21526,7 +21526,7 @@ proc getGeomRendering*(this: RenderModeAttrib, geom_rendering: int): int {.impor
 
 proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeAttrib::get_class_slot()", header: "renderModeAttrib.h".}
 
-proc getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
+converter getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
 proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "TexMatrixAttrib::make()", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies no stages at all.
@@ -21598,7 +21598,7 @@ proc getGeomRendering*(this: TexMatrixAttrib, geom_rendering: int): int {.import
 
 proc getClassSlot*(_: typedesc[TexMatrixAttrib]): int {.importcpp: "TexMatrixAttrib::get_class_slot()", header: "texMatrixAttrib.h".}
 
-proc getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
+converter getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
 
 proc compareTo*(this: RenderState, other: RenderState): int {.importcpp: "#->compare_to(#)".} ## \
 ## Provides an arbitrary ordering among all unique RenderStates, so we can
@@ -21919,7 +21919,7 @@ proc getGeomRendering*(this: RenderState, geom_rendering: int): int {.importcpp:
 ## once this RenderState is applied to a geom which includes the indicated
 ## geom_rendering bits.
 
-proc getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
+converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
 proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "AlphaTestAttrib::make_default()", header: "alphaTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -21930,7 +21930,7 @@ proc getReferenceAlpha*(this: AlphaTestAttrib): float32 {.importcpp: "#->get_ref
 
 proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
-proc getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
+converter getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
 proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "AntialiasAttrib::make(#)", header: "antialiasAttrib.h".} ## \
 ## Constructs a new AntialiasAttrib object.
@@ -21978,7 +21978,7 @@ proc getModeQuality*(this: AntialiasAttrib): int {.importcpp: "#->get_mode_quali
 
 proc getClassSlot*(_: typedesc[AntialiasAttrib]): int {.importcpp: "AntialiasAttrib::get_class_slot()", header: "antialiasAttrib.h".}
 
-proc getClassType*(_: typedesc[AntialiasAttrib]): TypeHandle {.importcpp: "AntialiasAttrib::get_class_type()", header: "antialiasAttrib.h".}
+converter getClassType*(_: typedesc[AntialiasAttrib]): TypeHandle {.importcpp: "AntialiasAttrib::get_class_type()", header: "antialiasAttrib.h".}
 
 proc compareTo*(this: RenderEffect, other: RenderEffect): int {.importcpp: "#->compare_to(#)".} ## \
 ## Provides an arbitrary ordering among all unique RenderEffects, so we can
@@ -22006,7 +22006,7 @@ proc validateEffects*(_: typedesc[RenderEffect]): bool {.importcpp: "RenderEffec
 ## so, false if there is a problem (which implies someone has modified one of
 ## the supposedly-const RenderEffect objects).
 
-proc getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
+converter getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
 
 proc `<`*(this: RenderEffects, other: RenderEffects): bool {.importcpp: "#->operator <(#)".}
 
@@ -22079,7 +22079,7 @@ proc validateStates*(_: typedesc[RenderEffects]): bool {.importcpp: "RenderEffec
 ## so, false if there is a problem (which implies someone has modified one of
 ## the supposedly-const RenderEffects objects).
 
-proc getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "RenderEffects::get_class_type()", header: "renderEffects.h".}
+converter getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "RenderEffects::get_class_type()", header: "renderEffects.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: PandaNode): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -22998,7 +22998,7 @@ proc getFancyBits*(this: PandaNode): int {.importcpp: "#->get_fancy_bits()".} ##
 ## traversal by quickly skipping past nodes that don't particularly affect the
 ## render state.
 
-proc getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
+converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
 proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "TransparencyAttrib::make_default()", header: "transparencyAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -23006,7 +23006,7 @@ proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "T
 
 proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
-proc getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
+converter getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
 proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicOpAttrib::make_off()", header: "logicOpAttrib.h".} ## \
 ## Constructs a new LogicOpAttrib object that disables special-effect
@@ -23018,7 +23018,7 @@ proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicO
 
 proc getClassSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
 
-proc getClassType*(_: typedesc[LogicOpAttrib]): TypeHandle {.importcpp: "LogicOpAttrib::get_class_type()", header: "logicOpAttrib.h".}
+converter getClassType*(_: typedesc[LogicOpAttrib]): TypeHandle {.importcpp: "LogicOpAttrib::get_class_type()", header: "logicOpAttrib.h".}
 
 proc getBlank*(_: typedesc[ShaderInput]): ShaderInput {.importcpp: "ShaderInput::get_blank()", header: "shaderInput.h".} ## \
 ## Returns a static ShaderInput object with name NULL, priority zero, type
@@ -26599,7 +26599,7 @@ proc writeBamFile*(this: NodePath, filename: Filename): bool {.importcpp: "#.wri
 proc writeBamStream*(this: NodePath, `out`: ostream): bool {.importcpp: "#.write_bam_stream(#)".} ## \
 ## Writes the contents of this node and below out to the indicated stream.
 
-proc getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePath::get_class_type()", header: "nodePath.h".}
+converter getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePath::get_class_type()", header: "nodePath.h".}
 
 proc addNode*(this: AttribNodeRegistry, attrib_node: NodePath) {.importcpp: "#.add_node(#)".} ## \
 ## Adds the indicated NodePath to the registry.  The name and type of the node
@@ -26698,7 +26698,7 @@ proc setVolume*(this: AudioVolumeAttrib, volume: float32): RenderAttrib {.import
 
 proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolumeAttrib::get_class_slot()", header: "audioVolumeAttrib.h".}
 
-proc getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
+converter getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
 proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make()", header: "auxBitplaneAttrib.h".} ## \
 ## Constructs a default AuxBitplaneAttrib object.
@@ -26715,7 +26715,7 @@ proc getOutputs*(this: AuxBitplaneAttrib): int {.importcpp: "#->get_outputs()".}
 
 proc getClassSlot*(_: typedesc[AuxBitplaneAttrib]): int {.importcpp: "AuxBitplaneAttrib::get_class_slot()", header: "auxBitplaneAttrib.h".}
 
-proc getClassType*(_: typedesc[AuxBitplaneAttrib]): TypeHandle {.importcpp: "AuxBitplaneAttrib::get_class_type()", header: "auxBitplaneAttrib.h".}
+converter getClassType*(_: typedesc[AuxBitplaneAttrib]): TypeHandle {.importcpp: "AuxBitplaneAttrib::get_class_type()", header: "auxBitplaneAttrib.h".}
 
 proc setDuration*(this: AuxSceneData, duration: float64) {.importcpp: "#->set_duration(#)".} ## \
 ## Specifies the minimum length in time, in seconds, to keep this AuxSceneData
@@ -26743,7 +26743,7 @@ proc write*(this: AuxSceneData, `out`: ostream, indent_level: int) {.importcpp: 
 
 proc write*(this: AuxSceneData, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[AuxSceneData]): TypeHandle {.importcpp: "AuxSceneData::get_class_type()", header: "auxSceneData.h".}
+converter getClassType*(_: typedesc[AuxSceneData]): TypeHandle {.importcpp: "AuxSceneData::get_class_type()", header: "auxSceneData.h".}
 
 proc newAuxSceneData*(param0: AuxSceneData): AuxSceneData {.importcpp: "new AuxSceneData(#)".}
 
@@ -26938,7 +26938,7 @@ proc getLookAtPoint*(this: BillboardEffect): LPoint3 {.importcpp: "#->get_look_a
 ## Returns the point, relative to the look_at node, towards which the
 ## billboard will rotate.  Normally this is (0, 0, 0).
 
-proc getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
+converter getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
 
 proc newLensNode*(name: string, lens: Lens): LensNode {.importcpp: "new LensNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -27002,7 +27002,7 @@ proc showFrustum*(this: LensNode) {.importcpp: "#->show_frustum()".} ## \
 proc hideFrustum*(this: LensNode) {.importcpp: "#->hide_frustum()".} ## \
 ## Disables the drawing of the lens's frustum to aid in visualization.
 
-proc getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
+converter getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
 
 proc initWeakNodePath*(node_path: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
@@ -27204,7 +27204,7 @@ proc cleanupAuxSceneData*(this: Camera): int {.importcpp: "#->cleanup_aux_scene_
 ## releases any that are past their expiration times.  Returns the number of
 ## elements released.
 
-proc getClassType*(_: typedesc[Camera]): TypeHandle {.importcpp: "Camera::get_class_type()", header: "camera.h".}
+converter getClassType*(_: typedesc[Camera]): TypeHandle {.importcpp: "Camera::get_class_type()", header: "camera.h".}
 
 proc newPlaneNode*(name: string, plane: LPlane): PlaneNode {.importcpp: "new PlaneNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -27249,7 +27249,7 @@ proc setClipEffect*(this: PlaneNode, clip_effect: int) {.importcpp: "#->set_clip
 proc getClipEffect*(this: PlaneNode): int {.importcpp: "#->get_clip_effect()".} ## \
 ## Returns the clip_effect bits for this clip plane.  See set_clip_effect().
 
-proc getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
+converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
 proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make()", header: "clipPlaneAttrib.h".} ## \
 ## The following is the new, more general interface to the ClipPlaneAttrib.
@@ -27348,7 +27348,7 @@ proc filterToMax*(this: ClipPlaneAttrib, max_clip_planes: int): ClipPlaneAttrib 
 
 proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAttrib::get_class_slot()", header: "clipPlaneAttrib.h".}
 
-proc getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
+converter getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
 proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_vertex()", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
@@ -27372,7 +27372,7 @@ proc getColor*(this: ColorAttrib): LColor {.importcpp: "#->get_color()".} ## \
 
 proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get_class_slot()", header: "colorAttrib.h".}
 
-proc getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
+converter getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
 proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "ColorBlendAttrib::make_off()", header: "colorBlendAttrib.h".} ## \
 ## Constructs a new ColorBlendAttrib object that disables special-effect
@@ -27394,7 +27394,7 @@ proc involvesColorScale*(this: ColorBlendAttrib): bool {.importcpp: "#->involves
 
 proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendAttrib::get_class_slot()", header: "colorBlendAttrib.h".}
 
-proc getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
+converter getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
 proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_identity()", header: "colorScaleAttrib.h".} ## \
 ## Constructs an identity scale attrib.
@@ -27443,7 +27443,7 @@ proc setScale*(this: ColorScaleAttrib, scale: LVecBase4): RenderAttrib {.importc
 
 proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleAttrib::get_class_slot()", header: "colorScaleAttrib.h".}
 
-proc getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
+converter getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
 proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "ColorWriteAttrib::make(#)", header: "colorWriteAttrib.h".} ## \
 ## Constructs a new ColorWriteAttrib object.
@@ -27457,7 +27457,7 @@ proc getChannels*(this: ColorWriteAttrib): int {.importcpp: "#->get_channels()".
 
 proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
-proc getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
+converter getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
 proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "CompassEffect::make(#, #)", header: "compassEffect.h".} ## \
 ## Constructs a new CompassEffect object.  If the reference is an empty
@@ -27481,7 +27481,7 @@ proc getProperties*(this: CompassEffect): int {.importcpp: "#->get_properties()"
 ## Returns the bitmask of properties that this CompassEffect object inherits
 ## from its reference node (or from the root).
 
-proc getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
+converter getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
 
 proc initCullBinEnums*(): CullBinEnums {.importcpp: "CullBinEnums()".}
 
@@ -27602,7 +27602,7 @@ proc writeGeoms*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp:
 proc writeVerbose*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp: "#->write_verbose(#, #)".} ## \
 ## Writes a detailed description of all the Geoms in the node.
 
-proc getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
+converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
 proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "CullBinAttrib::make(nimStringToStdString(#), #)", header: "cullBinAttrib.h".} ## \
 ## Constructs a new CullBinAttrib assigning geometry into the named bin.  If
@@ -27626,7 +27626,7 @@ proc getDrawOrder*(this: CullBinAttrib): int {.importcpp: "#->get_draw_order()".
 
 proc getClassSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib::get_class_slot()", header: "cullBinAttrib.h".}
 
-proc getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBinAttrib::get_class_type()", header: "cullBinAttrib.h".}
+converter getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBinAttrib::get_class_type()", header: "cullBinAttrib.h".}
 
 proc removeBin*(this: CullBinManager, bin_index: int) {.importcpp: "#.remove_bin(#)".} ## \
 ## Permanently removes the indicated bin.  This operation is not protected
@@ -27758,7 +27758,7 @@ proc getReverse*(this: CullFaceAttrib): bool {.importcpp: "#->get_reverse()".} #
 
 proc getClassSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
 
-proc getClassType*(_: typedesc[CullFaceAttrib]): TypeHandle {.importcpp: "CullFaceAttrib::get_class_type()", header: "cullFaceAttrib.h".}
+converter getClassType*(_: typedesc[CullFaceAttrib]): TypeHandle {.importcpp: "CullFaceAttrib::get_class_type()", header: "cullFaceAttrib.h".}
 
 proc node*(this: CullTraverserData): PandaNode {.importcpp: "#.node()".} ## \
 ## Returns the node traversed to so far.
@@ -27881,7 +27881,7 @@ proc getCsWorldTransform*(this: SceneSetup): TransformState {.importcpp: "#->get
 ## Returns the position from the starting node relative to the camera, in the
 ## GSG's internal coordinate system.
 
-proc getClassType*(_: typedesc[SceneSetup]): TypeHandle {.importcpp: "SceneSetup::get_class_type()", header: "sceneSetup.h".}
+converter getClassType*(_: typedesc[SceneSetup]): TypeHandle {.importcpp: "SceneSetup::get_class_type()", header: "sceneSetup.h".}
 
 proc newSceneSetup*(param0: SceneSetup): SceneSetup {.importcpp: "new SceneSetup(#)".}
 
@@ -27972,7 +27972,7 @@ proc setExpDensity*(this: Fog, exp_density: float32) {.importcpp: "#->set_exp_de
 ## If the mode is currently set to M_linear, this function implicitly sets it
 ## to M_exponential.
 
-proc getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
+converter getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
 proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "FogAttrib::make(#)", header: "fogAttrib.h".} ## \
 ## Constructs a new FogAttrib object suitable for rendering the indicated fog
@@ -27995,7 +27995,7 @@ proc getFog*(this: FogAttrib): Fog {.importcpp: "#->get_fog()".} ## \
 
 proc getClassSlot*(_: typedesc[FogAttrib]): int {.importcpp: "FogAttrib::get_class_slot()", header: "fogAttrib.h".}
 
-proc getClassType*(_: typedesc[FogAttrib]): TypeHandle {.importcpp: "FogAttrib::get_class_type()", header: "fogAttrib.h".}
+converter getClassType*(_: typedesc[FogAttrib]): TypeHandle {.importcpp: "FogAttrib::get_class_type()", header: "fogAttrib.h".}
 
 proc newCullTraverser*(): CullTraverser {.importcpp: "new CullTraverser()".}
 
@@ -28085,7 +28085,7 @@ proc flushLevel*(_: typedesc[CullTraverser]) {.importcpp: "CullTraverser::flush_
 proc drawBoundingVolume*(this: CullTraverser, vol: BoundingVolume, internal_transform: TransformState) {.importcpp: "#->draw_bounding_volume(#, #)".} ## \
 ## Draws an appropriate visualization of the indicated bounding volume.
 
-proc getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "CullTraverser::get_class_type()", header: "cullTraverser.h".}
+converter getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "CullTraverser::get_class_type()", header: "cullTraverser.h".}
 
 proc getGsg*(this: GeomDrawCallbackData): GraphicsStateGuardianBase {.importcpp: "#.get_gsg()".} ## \
 ## Returns a pointer to the current GSG.
@@ -28107,7 +28107,7 @@ proc setLostState*(this: GeomDrawCallbackData, lost_state: bool) {.importcpp: "#
 proc getLostState*(this: GeomDrawCallbackData): bool {.importcpp: "#.get_lost_state()".} ## \
 ## Returns the lost_state flag.  See set_lost_state().
 
-proc getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
+converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
 proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "RescaleNormalAttrib::make_default()", header: "rescaleNormalAttrib.h".} ## \
 ## Constructs a RescaleNormalAttrib object that's suitable for putting at the
@@ -28116,7 +28116,7 @@ proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "
 
 proc getClassSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
-proc getClassType*(_: typedesc[RescaleNormalAttrib]): TypeHandle {.importcpp: "RescaleNormalAttrib::get_class_type()", header: "rescaleNormalAttrib.h".}
+converter getClassType*(_: typedesc[RescaleNormalAttrib]): TypeHandle {.importcpp: "RescaleNormalAttrib::get_class_type()", header: "rescaleNormalAttrib.h".}
 
 proc makeNext*(this: CullResult): CullResult {.importcpp: "#->make_next()".} ## \
 ## Returns a newly-allocated CullResult object that contains a copy of just
@@ -28141,14 +28141,14 @@ proc makeResultGraph*(this: CullResult): PandaNode {.importcpp: "#->make_result_
 ## should not be mistaken for the low-level cull result itself.  For the low-
 ## level cull result, use draw() to efficiently draw the culled scene.
 
-proc getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullResult::get_class_type()", header: "cullResult.h".}
+converter getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullResult::get_class_type()", header: "cullResult.h".}
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
 proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "DecalEffect::make()", header: "decalEffect.h".} ## \
 ## Constructs a new DecalEffect object.
 
-proc getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
+converter getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
 proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "DepthOffsetAttrib::make(#)", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the relative
@@ -28182,7 +28182,7 @@ proc getMaxValue*(this: DepthOffsetAttrib): float32 {.importcpp: "#->get_max_val
 
 proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffsetAttrib::get_class_slot()", header: "depthOffsetAttrib.h".}
 
-proc getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
+converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
 proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "DepthTestAttrib::make_default()", header: "depthTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -28190,7 +28190,7 @@ proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "Dept
 
 proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
 
-proc getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
+converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
 proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "DepthWriteAttrib::make_default()", header: "depthWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -28198,7 +28198,7 @@ proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "Dep
 
 proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
-proc getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "DepthWriteAttrib::get_class_type()", header: "depthWriteAttrib.h".}
+converter getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "DepthWriteAttrib::get_class_type()", header: "depthWriteAttrib.h".}
 
 proc asNode*(this: Light): PandaNode {.importcpp: "#->as_node()".}
 
@@ -28262,7 +28262,7 @@ proc getPriority*(this: Light): int {.importcpp: "#->get_priority()".} ## \
 
 proc getClassPriority*(this: Light): int {.importcpp: "#->get_class_priority()".}
 
-proc getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
+converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
 proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make()", header: "lightAttrib.h".} ## \
 ## The following is the new, more general interface to the LightAttrib.
@@ -28379,7 +28379,7 @@ proc getAmbientContribution*(this: LightAttrib): LColor {.importcpp: "#->get_amb
 
 proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
 
-proc getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
+converter getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
 proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_default()", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This is the standard OpenGL
@@ -28481,7 +28481,7 @@ proc getThreshold*(this: LightRampAttrib, n: int): float32 {.importcpp: "#->get_
 
 proc getClassSlot*(_: typedesc[LightRampAttrib]): int {.importcpp: "LightRampAttrib::get_class_slot()", header: "lightRampAttrib.h".}
 
-proc getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "LightRampAttrib::get_class_type()", header: "lightRampAttrib.h".}
+converter getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "LightRampAttrib::get_class_type()", header: "lightRampAttrib.h".}
 
 converter upcastToTypedReferenceCount*(this: Loader): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
@@ -28576,7 +28576,7 @@ proc getGlobalPtr*(_: typedesc[Loader]): Loader {.importcpp: "Loader::get_global
 ## Returns a pointer to the global Loader.  This is the Loader that most code
 ## should use for loading models.
 
-proc getClassType*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()", header: "loader.h".}
+converter getClassType*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()", header: "loader.h".}
 
 proc getName*(this: LoaderFileType): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
 
@@ -28608,7 +28608,7 @@ proc supportsSave*(this: LoaderFileType): bool {.importcpp: "#.supports_save()".
 ## supported.  Returns false if save_file() is unimplemented and will always
 ## fail.
 
-proc getClassType*(_: typedesc[LoaderFileType]): TypeHandle {.importcpp: "LoaderFileType::get_class_type()", header: "loaderFileType.h".}
+converter getClassType*(_: typedesc[LoaderFileType]): TypeHandle {.importcpp: "LoaderFileType::get_class_type()", header: "loaderFileType.h".}
 
 proc getNumTypes*(this: LoaderFileTypeRegistry): int {.importcpp: "#.get_num_types()".} ## \
 ## Returns the total number of types registered.
@@ -28655,7 +28655,7 @@ proc getMaterial*(this: MaterialAttrib): Material {.importcpp: "#->get_material(
 
 proc getClassSlot*(_: typedesc[MaterialAttrib]): int {.importcpp: "MaterialAttrib::get_class_slot()", header: "materialAttrib.h".}
 
-proc getClassType*(_: typedesc[MaterialAttrib]): TypeHandle {.importcpp: "MaterialAttrib::get_class_type()", header: "materialAttrib.h".}
+converter getClassType*(_: typedesc[MaterialAttrib]): TypeHandle {.importcpp: "MaterialAttrib::get_class_type()", header: "materialAttrib.h".}
 
 proc newModelFlattenRequest*(param0: ModelFlattenRequest): ModelFlattenRequest {.importcpp: "new ModelFlattenRequest(#)".}
 
@@ -28678,7 +28678,7 @@ proc getModel*(this: ModelFlattenRequest): PandaNode {.importcpp: "#->get_model(
 ## unless done() returns true.
 ## @deprecated Use result() instead.
 
-proc getClassType*(_: typedesc[ModelFlattenRequest]): TypeHandle {.importcpp: "ModelFlattenRequest::get_class_type()", header: "modelFlattenRequest.h".}
+converter getClassType*(_: typedesc[ModelFlattenRequest]): TypeHandle {.importcpp: "ModelFlattenRequest::get_class_type()", header: "modelFlattenRequest.h".}
 
 proc newModelLoadRequest*(param0: ModelLoadRequest): ModelLoadRequest {.importcpp: "new ModelLoadRequest(#)".}
 
@@ -28709,7 +28709,7 @@ proc getModel*(this: ModelLoadRequest): PandaNode {.importcpp: "#->get_model()".
 ## was an error.  It is an error to call this unless done() returns true.
 ## @deprecated Use result() instead.
 
-proc getClassType*(_: typedesc[ModelLoadRequest]): TypeHandle {.importcpp: "ModelLoadRequest::get_class_type()", header: "modelLoadRequest.h".}
+converter getClassType*(_: typedesc[ModelLoadRequest]): TypeHandle {.importcpp: "ModelLoadRequest::get_class_type()", header: "modelLoadRequest.h".}
 
 proc newModelNode*(name: string): ModelNode {.importcpp: "new ModelNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -28726,7 +28726,7 @@ proc getPreserveAttributes*(this: ModelNode): int {.importcpp: "#->get_preserve_
 
 proc setTransformLimit*(this: ModelNode, limit: float32) {.importcpp: "#->set_transform_limit(#)".}
 
-proc getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
+converter getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
 
 proc newModelRoot*(fullpath: Filename, timestamp: int): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
 
@@ -28765,7 +28765,7 @@ proc setTimestamp*(this: ModelRoot, timestamp: int) {.importcpp: "#->set_timesta
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
 
-proc getClassType*(_: typedesc[ModelRoot]): TypeHandle {.importcpp: "ModelRoot::get_class_type()", header: "modelRoot.h".}
+converter getClassType*(_: typedesc[ModelRoot]): TypeHandle {.importcpp: "ModelRoot::get_class_type()", header: "modelRoot.h".}
 
 proc hasModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "ModelPool::has_model(#)", header: "modelPool.h".} ## \
 ## Returns true if the model has ever been loaded, false otherwise.  Note that
@@ -28878,7 +28878,7 @@ proc getSuccess*(this: ModelSaveRequest): bool {.importcpp: "#->get_success()".}
 ## Returns the true if the model was saved successfully, false otherwise.  It
 ## is an error to call this unless done() returns true.
 
-proc getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
+converter getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
 proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make()", header: "textureAttrib.h".} ## \
 ## The following methods define the new multitexture mode for TextureAttrib.
@@ -29020,7 +29020,7 @@ proc replaceTexture*(this: TextureAttrib, tex: Texture, new_tex: Texture): Rende
 
 proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib::get_class_slot()", header: "textureAttrib.h".}
 
-proc getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
+converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
 proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "TexGenAttrib::make()", header: "texGenAttrib.h".} ## \
 ## Constructs a TexGenAttrib that generates no stages at all.
@@ -29057,7 +29057,7 @@ proc getGeomRendering*(this: TexGenAttrib, geom_rendering: int): int {.importcpp
 
 proc getClassSlot*(_: typedesc[TexGenAttrib]): int {.importcpp: "TexGenAttrib::get_class_slot()", header: "texGenAttrib.h".}
 
-proc getClassType*(_: typedesc[TexGenAttrib]): TypeHandle {.importcpp: "TexGenAttrib::get_class_type()", header: "texGenAttrib.h".}
+converter getClassType*(_: typedesc[TexGenAttrib]): TypeHandle {.importcpp: "TexGenAttrib::get_class_type()", header: "texGenAttrib.h".}
 
 proc newOccluderNode*(name: string): OccluderNode {.importcpp: "new OccluderNode(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## The default constructor creates a default occlusion polygon in the XZ plane
@@ -29094,7 +29094,7 @@ proc getVertex*(this: OccluderNode, n: clonglong): LPoint3 {.importcpp: "#->get_
 proc setVertex*(this: OccluderNode, n: clonglong, v: LPoint3) {.importcpp: "#->set_vertex(#, #)".} ## \
 ## Sets the nth vertex of the occluder polygon.
 
-proc getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
+converter getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
 proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "OccluderEffect::make()", header: "occluderEffect.h".} ## \
 ## Constructs a new OccluderEffect object that does nothing.
@@ -29121,7 +29121,7 @@ proc removeOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {
 ## Returns a new OccluderEffect, just like this one, but with the indicated
 ## occluder removed from the list of occluders enabled by this effect.
 
-proc getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
+converter getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
 
 proc newPolylightNode*(param0: PolylightNode): PolylightNode {.importcpp: "new PolylightNode(#)".}
 
@@ -29246,7 +29246,7 @@ proc compareTo*(this: PolylightNode, other: PolylightNode): int {.importcpp: "#-
 proc isEnabled*(this: PolylightNode): bool {.importcpp: "#->is_enabled()".} ## \
 ## Is this light is enabled/disabled?
 
-proc getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
+converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
 proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "PolylightEffect::make()", header: "polylightEffect.h".} ## \
 ## Constructs a new PolylightEffect object.
@@ -29279,7 +29279,7 @@ proc hasLight*(this: PolylightEffect, light: NodePath): bool {.importcpp: "#->ha
 ## Returns true if the indicated light is listed in the PolylightEffect, false
 ## otherwise.
 
-proc getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
+converter getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
 proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "ShaderAttrib::make(#, #)", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
@@ -29408,7 +29408,7 @@ proc registerWithReadFactory*(_: typedesc[ShaderAttrib]) {.importcpp: "ShaderAtt
 
 proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::get_class_slot()", header: "shaderAttrib.h".}
 
-proc getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
+converter getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
 proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "ShowBoundsEffect::make(#)", header: "showBoundsEffect.h".} ## \
 ## Constructs a new ShowBoundsEffect object.
@@ -29420,7 +29420,7 @@ proc getTight*(this: ShowBoundsEffect): bool {.importcpp: "#->get_tight()".} ## 
 ## Returns true if the "tight" flag was set, meaning the effect should compute
 ## and draw the tight bounding-box of the node's vertices every frame.
 
-proc getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
+converter getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
 proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "TexProjectorEffect::make()", header: "texProjectorEffect.h".} ## \
 ## Constructs a TexProjectorEffect that modifies no stages at all.
@@ -29480,7 +29480,7 @@ proc getLensIndex*(this: TexProjectorEffect, stage: TextureStage): int {.importc
 ## indicated stage.  This is only used if the "to" node is a LensNode, in
 ## which case it specifies the particular lens that should be used.
 
-proc getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
+converter getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
 proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "ScissorEffect::make_screen(#, #)", header: "scissorEffect.h".} ## \
 ## Constructs a new screen-relative ScissorEffect.  The frame defines a left,
@@ -29569,7 +29569,7 @@ proc getClip*(this: ScissorEffect): bool {.importcpp: "#->get_clip()".} ## \
 ## Returns true if this ScissorEffect actually enables scissoring, or false if
 ## it culls only.
 
-proc getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
+converter getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
 
 proc initSceneGraphReducer*(gsg: GraphicsStateGuardianBase): SceneGraphReducer {.importcpp: "SceneGraphReducer(#)".}
 
@@ -29833,7 +29833,7 @@ proc setOpen*(this: PortalNode, value: bool) {.importcpp: "#->set_open(#)".} ## 
 proc isOpen*(this: PortalNode): bool {.importcpp: "#->is_open()".} ## \
 ## Is this portal open from current camera zone
 
-proc getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
+converter getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
 proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "ScissorAttrib::make_off()", header: "scissorAttrib.h".} ## \
 ## Constructs a new ScissorAttrib object that removes the scissor region and
@@ -29864,7 +29864,7 @@ proc getFrame*(this: ScissorAttrib): LVecBase4 {.importcpp: "#->get_frame()".} #
 
 proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib::get_class_slot()", header: "scissorAttrib.h".}
 
-proc getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
+converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
 proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "ShadeModelAttrib::make_default()", header: "shadeModelAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
@@ -29872,7 +29872,7 @@ proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "Sha
 
 proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
-proc getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
+converter getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
 proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "StencilAttrib::make_off()", header: "stencilAttrib.h".} ## \
 ## Constructs a StencilAttrib that has stenciling turned off.
@@ -29883,7 +29883,7 @@ proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "Stenci
 
 proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
 
-proc getClassType*(_: typedesc[StencilAttrib]): TypeHandle {.importcpp: "StencilAttrib::get_class_type()", header: "stencilAttrib.h".}
+converter getClassType*(_: typedesc[StencilAttrib]): TypeHandle {.importcpp: "StencilAttrib::get_class_type()", header: "stencilAttrib.h".}
 
 proc hasShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "ShaderPool::has_shader(#)", header: "shaderPool.h".} ## \
 ## Returns true if the shader has ever been loaded, false otherwise.
@@ -29952,7 +29952,7 @@ proc getFilename*(this: MovieAudio): Filename {.importcpp: "#->get_filename()".}
 ## Returns the movie's filename.  A movie is not guaranteed to have a
 ## filename, if not, then this function returns a null filename.
 
-proc getClassType*(_: typedesc[MovieAudio]): TypeHandle {.importcpp: "MovieAudio::get_class_type()", header: "movieAudio.h".}
+converter getClassType*(_: typedesc[MovieAudio]): TypeHandle {.importcpp: "MovieAudio::get_class_type()", header: "movieAudio.h".}
 
 proc newFlacAudio*(name: Filename): FlacAudio {.importcpp: "new FlacAudio(#)".} ## \
 ## xxx
@@ -29962,7 +29962,7 @@ proc newFlacAudio*(param0: FlacAudio): FlacAudio {.importcpp: "new FlacAudio(#)"
 proc make*(_: typedesc[FlacAudio], name: Filename): MovieAudio {.importcpp: "FlacAudio::make(#)", header: "flacAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
-proc getClassType*(_: typedesc[FlacAudio]): TypeHandle {.importcpp: "FlacAudio::get_class_type()", header: "flacAudio.h".}
+converter getClassType*(_: typedesc[FlacAudio]): TypeHandle {.importcpp: "FlacAudio::get_class_type()", header: "flacAudio.h".}
 
 proc newMovieAudioCursor*(src: MovieAudio): MovieAudioCursor {.importcpp: "new MovieAudioCursor(#)".} ## \
 ## This constructor returns a null audio stream --- a stream of total silence,
@@ -30072,7 +30072,7 @@ proc readSamples*(this: MovieAudioCursor, n: int, dg: Datagram) {.importcpp: "#-
 ## This is not particularly efficient, but it may be a convenient way to
 ## manipulate samples in python.
 
-proc getClassType*(_: typedesc[MovieAudioCursor]): TypeHandle {.importcpp: "MovieAudioCursor::get_class_type()", header: "movieAudioCursor.h".}
+converter getClassType*(_: typedesc[MovieAudioCursor]): TypeHandle {.importcpp: "MovieAudioCursor::get_class_type()", header: "movieAudioCursor.h".}
 
 proc newFlacAudioCursor*(src: FlacAudio, stream: istream): FlacAudioCursor {.importcpp: "new FlacAudioCursor(#, #)".} ## \
 ## Reads the .wav header from the indicated stream.  This leaves the read
@@ -30080,7 +30080,7 @@ proc newFlacAudioCursor*(src: FlacAudio, stream: istream): FlacAudioCursor {.imp
 
 proc newFlacAudioCursor*(param0: FlacAudioCursor): FlacAudioCursor {.importcpp: "new FlacAudioCursor(#)".}
 
-proc getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "FlacAudioCursor::get_class_type()", header: "flacAudioCursor.h".}
+converter getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "FlacAudioCursor::get_class_type()", header: "flacAudioCursor.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: MovieVideo): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -30114,14 +30114,14 @@ proc getSubfileInfo*(this: MovieVideo): SubfileInfo {.importcpp: "#->get_subfile
 ## If the movie is to be loaded from a subfile on disk, this returns the
 ## subfile info.  Check info.is_empty() to see if this is valid data.
 
-proc getClassType*(_: typedesc[MovieVideo]): TypeHandle {.importcpp: "MovieVideo::get_class_type()", header: "movieVideo.h".}
+converter getClassType*(_: typedesc[MovieVideo]): TypeHandle {.importcpp: "MovieVideo::get_class_type()", header: "movieVideo.h".}
 
 proc newInkblotVideo*(param0: InkblotVideo): InkblotVideo {.importcpp: "new InkblotVideo(#)".}
 
 proc newInkblotVideo*(x: int, y: int, fps: int): InkblotVideo {.importcpp: "new InkblotVideo(#, #, #)".} ## \
 ## xxx
 
-proc getClassType*(_: typedesc[InkblotVideo]): TypeHandle {.importcpp: "InkblotVideo::get_class_type()", header: "inkblotVideo.h".}
+converter getClassType*(_: typedesc[InkblotVideo]): TypeHandle {.importcpp: "InkblotVideo::get_class_type()", header: "inkblotVideo.h".}
 
 proc getSource*(this: MovieVideoCursor): MovieVideo {.importcpp: "#->get_source()".} ## \
 ## Get the MovieVideo which this cursor references.
@@ -30210,7 +30210,7 @@ proc setTime*(this: MovieVideoCursor, timestamp: float64, loop_count: int): bool
 ## quickly.  It may have to rewind the movie and then fast forward to the
 ## desired location.  Only if can_seek_fast returns true can it seek rapidly.
 
-proc getClassType*(_: typedesc[MovieVideoCursor]): TypeHandle {.importcpp: "MovieVideoCursor::get_class_type()", header: "movieVideoCursor.h".}
+converter getClassType*(_: typedesc[MovieVideoCursor]): TypeHandle {.importcpp: "MovieVideoCursor::get_class_type()", header: "movieVideoCursor.h".}
 
 proc newMovieVideoCursor*(param0: MovieVideoCursor): MovieVideoCursor {.importcpp: "new MovieVideoCursor(#)".}
 
@@ -30219,7 +30219,7 @@ proc newInkblotVideoCursor*(src: InkblotVideo): InkblotVideoCursor {.importcpp: 
 
 proc newInkblotVideoCursor*(param0: InkblotVideoCursor): InkblotVideoCursor {.importcpp: "new InkblotVideoCursor(#)".}
 
-proc getClassType*(_: typedesc[InkblotVideoCursor]): TypeHandle {.importcpp: "InkblotVideoCursor::get_class_type()", header: "inkblotVideoCursor.h".}
+converter getClassType*(_: typedesc[InkblotVideoCursor]): TypeHandle {.importcpp: "InkblotVideoCursor::get_class_type()", header: "inkblotVideoCursor.h".}
 
 proc getNumOptions*(_: typedesc[MicrophoneAudio]): int {.importcpp: "MicrophoneAudio::get_num_options()", header: "microphoneAudio.h".} ## \
 ## Returns the number of microphone options.  An "option" consists of a device
@@ -30235,7 +30235,7 @@ proc getChannels*(this: MicrophoneAudio): int {.importcpp: "#->get_channels()".}
 proc getRate*(this: MicrophoneAudio): int {.importcpp: "#->get_rate()".} ## \
 ## Returns the sample rate.
 
-proc getClassType*(_: typedesc[MicrophoneAudio]): TypeHandle {.importcpp: "MicrophoneAudio::get_class_type()", header: "microphoneAudio.h".}
+converter getClassType*(_: typedesc[MicrophoneAudio]): TypeHandle {.importcpp: "MicrophoneAudio::get_class_type()", header: "microphoneAudio.h".}
 
 proc newOpusAudio*(name: Filename): OpusAudio {.importcpp: "new OpusAudio(#)".} ## \
 ## xxx
@@ -30245,7 +30245,7 @@ proc newOpusAudio*(param0: OpusAudio): OpusAudio {.importcpp: "new OpusAudio(#)"
 proc make*(_: typedesc[OpusAudio], name: Filename): MovieAudio {.importcpp: "OpusAudio::make(#)", header: "opusAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
-proc getClassType*(_: typedesc[OpusAudio]): TypeHandle {.importcpp: "OpusAudio::get_class_type()", header: "opusAudio.h".}
+converter getClassType*(_: typedesc[OpusAudio]): TypeHandle {.importcpp: "OpusAudio::get_class_type()", header: "opusAudio.h".}
 
 proc newOpusAudioCursor*(src: OpusAudio, stream: istream): OpusAudioCursor {.importcpp: "new OpusAudioCursor(#, #)".} ## \
 ## Reads the .wav header from the indicated stream.  This leaves the read
@@ -30253,7 +30253,7 @@ proc newOpusAudioCursor*(src: OpusAudio, stream: istream): OpusAudioCursor {.imp
 
 proc newOpusAudioCursor*(param0: OpusAudioCursor): OpusAudioCursor {.importcpp: "new OpusAudioCursor(#)".}
 
-proc getClassType*(_: typedesc[OpusAudioCursor]): TypeHandle {.importcpp: "OpusAudioCursor::get_class_type()", header: "opusAudioCursor.h".}
+converter getClassType*(_: typedesc[OpusAudioCursor]): TypeHandle {.importcpp: "OpusAudioCursor::get_class_type()", header: "opusAudioCursor.h".}
 
 proc newUserDataAudio*(param0: UserDataAudio): UserDataAudio {.importcpp: "new UserDataAudio(#)".}
 
@@ -30282,13 +30282,13 @@ proc done*(this: UserDataAudio) {.importcpp: "#->done()".} ## \
 ## Promises not to append any more samples, ie, this marks the end of the
 ## audio stream.
 
-proc getClassType*(_: typedesc[UserDataAudio]): TypeHandle {.importcpp: "UserDataAudio::get_class_type()", header: "userDataAudio.h".}
+converter getClassType*(_: typedesc[UserDataAudio]): TypeHandle {.importcpp: "UserDataAudio::get_class_type()", header: "userDataAudio.h".}
 
 proc newUserDataAudioCursor*(src: UserDataAudio): UserDataAudioCursor {.importcpp: "new UserDataAudioCursor(#)".}
 
 proc newUserDataAudioCursor*(param0: UserDataAudioCursor): UserDataAudioCursor {.importcpp: "new UserDataAudioCursor(#)".}
 
-proc getClassType*(_: typedesc[UserDataAudioCursor]): TypeHandle {.importcpp: "UserDataAudioCursor::get_class_type()", header: "userDataAudioCursor.h".}
+converter getClassType*(_: typedesc[UserDataAudioCursor]): TypeHandle {.importcpp: "UserDataAudioCursor::get_class_type()", header: "userDataAudioCursor.h".}
 
 proc newVorbisAudio*(name: Filename): VorbisAudio {.importcpp: "new VorbisAudio(#)".} ## \
 ## xxx
@@ -30298,7 +30298,7 @@ proc newVorbisAudio*(param0: VorbisAudio): VorbisAudio {.importcpp: "new VorbisA
 proc make*(_: typedesc[VorbisAudio], name: Filename): MovieAudio {.importcpp: "VorbisAudio::make(#)", header: "vorbisAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
-proc getClassType*(_: typedesc[VorbisAudio]): TypeHandle {.importcpp: "VorbisAudio::get_class_type()", header: "vorbisAudio.h".}
+converter getClassType*(_: typedesc[VorbisAudio]): TypeHandle {.importcpp: "VorbisAudio::get_class_type()", header: "vorbisAudio.h".}
 
 proc newVorbisAudioCursor*(src: VorbisAudio, stream: istream): VorbisAudioCursor {.importcpp: "new VorbisAudioCursor(#, #)".} ## \
 ## Reads the .wav header from the indicated stream.  This leaves the read
@@ -30306,7 +30306,7 @@ proc newVorbisAudioCursor*(src: VorbisAudio, stream: istream): VorbisAudioCursor
 
 proc newVorbisAudioCursor*(param0: VorbisAudioCursor): VorbisAudioCursor {.importcpp: "new VorbisAudioCursor(#)".}
 
-proc getClassType*(_: typedesc[VorbisAudioCursor]): TypeHandle {.importcpp: "VorbisAudioCursor::get_class_type()", header: "vorbisAudioCursor.h".}
+converter getClassType*(_: typedesc[VorbisAudioCursor]): TypeHandle {.importcpp: "VorbisAudioCursor::get_class_type()", header: "vorbisAudioCursor.h".}
 
 proc newWavAudio*(name: Filename): WavAudio {.importcpp: "new WavAudio(#)".} ## \
 ## xxx
@@ -30316,7 +30316,7 @@ proc newWavAudio*(param0: WavAudio): WavAudio {.importcpp: "new WavAudio(#)".}
 proc make*(_: typedesc[WavAudio], name: Filename): MovieAudio {.importcpp: "WavAudio::make(#)", header: "wavAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
-proc getClassType*(_: typedesc[WavAudio]): TypeHandle {.importcpp: "WavAudio::get_class_type()", header: "wavAudio.h".}
+converter getClassType*(_: typedesc[WavAudio]): TypeHandle {.importcpp: "WavAudio::get_class_type()", header: "wavAudio.h".}
 
 proc newWavAudioCursor*(src: WavAudio, stream: istream): WavAudioCursor {.importcpp: "new WavAudioCursor(#, #)".} ## \
 ## Reads the .wav header from the indicated stream.  This leaves the read
@@ -30324,7 +30324,7 @@ proc newWavAudioCursor*(src: WavAudio, stream: istream): WavAudioCursor {.import
 
 proc newWavAudioCursor*(param0: WavAudioCursor): WavAudioCursor {.importcpp: "new WavAudioCursor(#)".}
 
-proc getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
+converter getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
 
 proc initCardMaker*(param0: CardMaker): CardMaker {.importcpp: "CardMaker(#)".}
 
@@ -30503,7 +30503,7 @@ proc update*(this: FrameRateMeter) {.importcpp: "#->update()".} ## \
 ## with the latest frame rate information.  Normally, it is not necessary to
 ## call this explicitly.
 
-proc getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
+converter getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
 
 proc initGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -30753,7 +30753,7 @@ proc update*(this: GeoMipTerrain): bool {.importcpp: "#.update()".} ## \
 ## terrain.  This call un-flattens the terrain, so make sure you have set
 ## auto-flatten if you want to keep your terrain flattened.
 
-proc getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
+converter getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
 
 proc initHeightfieldTesselator*(param0: HeightfieldTesselator): HeightfieldTesselator {.importcpp: "HeightfieldTesselator(#)".}
 
@@ -31008,7 +31008,7 @@ proc geometry*(this: MeshDrawer, node: NodePath) {.importcpp: "#.geometry(#)".} 
 ## very dynamic situations that share the same texture like physcal chunks of
 ## explosions.  It can be a little slow
 
-proc getClassType*(_: typedesc[MeshDrawer]): TypeHandle {.importcpp: "MeshDrawer::get_class_type()", header: "meshDrawer.h".}
+converter getClassType*(_: typedesc[MeshDrawer]): TypeHandle {.importcpp: "MeshDrawer::get_class_type()", header: "meshDrawer.h".}
 
 proc initMeshDrawer2D*(): MeshDrawer2D {.importcpp: "MeshDrawer2D()".} ## \
 ## Creates the MeshDrawer2D low level system.
@@ -31047,7 +31047,7 @@ proc rectangleTiled*(this: MeshDrawer2D, x: float32, y: float32, w: float32, h: 
 proc begin*(this: MeshDrawer2D) {.importcpp: "#.begin()".} ## \
 ## Opens up the geom for drawing, don't forget to call MeshDrawer2D::end()
 
-proc getClassType*(_: typedesc[MeshDrawer2D]): TypeHandle {.importcpp: "MeshDrawer2D::get_class_type()", header: "meshDrawer2D.h".}
+converter getClassType*(_: typedesc[MeshDrawer2D]): TypeHandle {.importcpp: "MeshDrawer2D::get_class_type()", header: "meshDrawer2D.h".}
 
 proc newMovieTexture*(video: MovieVideo): MovieTexture {.importcpp: "new MovieTexture(#)".} ## \
 ## Creates a texture playing the specified movie.
@@ -31128,7 +31128,7 @@ proc synchronizeTo*(this: MovieTexture, sound: AudioSound) {.importcpp: "#->sync
 proc unsynchronize*(this: MovieTexture) {.importcpp: "#->unsynchronize()".} ## \
 ## Stop synchronizing with a sound.
 
-proc getClassType*(_: typedesc[MovieTexture]): TypeHandle {.importcpp: "MovieTexture::get_class_type()", header: "movieTexture.h".}
+converter getClassType*(_: typedesc[MovieTexture]): TypeHandle {.importcpp: "MovieTexture::get_class_type()", header: "movieTexture.h".}
 
 proc initMultitexReducer*(): MultitexReducer {.importcpp: "MultitexReducer()".}
 
@@ -31182,7 +31182,7 @@ proc getPrev*(this: NodeVertexTransform): VertexTransform {.importcpp: "#->get_p
 ## Returns the VertexTransform object whose matrix will be composed with the
 ## result of this node's transform.
 
-proc getClassType*(_: typedesc[NodeVertexTransform]): TypeHandle {.importcpp: "NodeVertexTransform::get_class_type()", header: "nodeVertexTransform.h".}
+converter getClassType*(_: typedesc[NodeVertexTransform]): TypeHandle {.importcpp: "NodeVertexTransform::get_class_type()", header: "nodeVertexTransform.h".}
 
 proc newShaderTerrainMesh*(): ShaderTerrainMesh {.importcpp: "new ShaderTerrainMesh()".} ## \
 ## @brief Constructs a new Terrain Mesh
@@ -31305,7 +31305,7 @@ proc generate*(this: ShaderTerrainMesh): bool {.importcpp: "#->generate()".} ## 
 ##
 ## @return true if the terrain was initialized, false if an error occured
 
-proc getClassType*(_: typedesc[ShaderTerrainMesh]): TypeHandle {.importcpp: "ShaderTerrainMesh::get_class_type()", header: "shaderTerrainMesh.h".}
+converter getClassType*(_: typedesc[ShaderTerrainMesh]): TypeHandle {.importcpp: "ShaderTerrainMesh::get_class_type()", header: "shaderTerrainMesh.h".}
 
 proc newSceneGraphAnalyzerMeter*(param0: SceneGraphAnalyzerMeter): SceneGraphAnalyzerMeter {.importcpp: "new SceneGraphAnalyzerMeter(#)".}
 
@@ -31348,7 +31348,7 @@ proc update*(this: SceneGraphAnalyzerMeter) {.importcpp: "#->update()".} ## \
 ## itself with the latest scene graph analysis information.  Normally, it is
 ## not necessary to call this explicitly.
 
-proc getClassType*(_: typedesc[SceneGraphAnalyzerMeter]): TypeHandle {.importcpp: "SceneGraphAnalyzerMeter::get_class_type()", header: "sceneGraphAnalyzerMeter.h".}
+converter getClassType*(_: typedesc[SceneGraphAnalyzerMeter]): TypeHandle {.importcpp: "SceneGraphAnalyzerMeter::get_class_type()", header: "sceneGraphAnalyzerMeter.h".}
 
 proc newRigidBodyCombiner*(name: string): RigidBodyCombiner {.importcpp: "new RigidBodyCombiner(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -31377,7 +31377,7 @@ proc getInternalScene*(this: RigidBodyCombiner): NodePath {.importcpp: "#->get_i
 ##
 ## This node is filled up by the last call to collect().
 
-proc getClassType*(_: typedesc[RigidBodyCombiner]): TypeHandle {.importcpp: "RigidBodyCombiner::get_class_type()", header: "rigidBodyCombiner.h".}
+converter getClassType*(_: typedesc[RigidBodyCombiner]): TypeHandle {.importcpp: "RigidBodyCombiner::get_class_type()", header: "rigidBodyCombiner.h".}
 
 converter upcastToCullTraverser*(this: PipeOcclusionCullTraverser): CullTraverser {.importcpp: "(PT(CullTraverser)(#))".}
 
@@ -31395,7 +31395,7 @@ proc getTexture*(this: PipeOcclusionCullTraverser): Texture {.importcpp: "#->get
 ## Returns a Texture that can be used to visualize the efforts of the
 ## occlusion cull.
 
-proc getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
+converter getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
 
 proc initPfmVizzer*(pfm: PfmFile): PfmVizzer {.importcpp: "PfmVizzer(#)".} ## \
 ## The PfmVizzer constructor receives a reference to a PfmFile which it will
@@ -31613,7 +31613,7 @@ proc output*(this: AnimGroup, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 proc write*(this: AnimGroup, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".} ## \
 ## Writes a brief description of the group and all of its descendants.
 
-proc getClassType*(_: typedesc[AnimGroup]): TypeHandle {.importcpp: "AnimGroup::get_class_type()", header: "animGroup.h".}
+converter getClassType*(_: typedesc[AnimGroup]): TypeHandle {.importcpp: "AnimGroup::get_class_type()", header: "animGroup.h".}
 
 proc newAnimBundle*(param0: AnimBundle): AnimBundle {.importcpp: "new AnimBundle(#)".}
 
@@ -31634,7 +31634,7 @@ proc getNumFrames*(this: AnimBundle): int {.importcpp: "#->get_num_frames()".} #
 ## Returns the number of frames of animation, or 0 if the animation has no
 ## fixed number of frames.
 
-proc getClassType*(_: typedesc[AnimBundle]): TypeHandle {.importcpp: "AnimBundle::get_class_type()", header: "animBundle.h".}
+converter getClassType*(_: typedesc[AnimBundle]): TypeHandle {.importcpp: "AnimBundle::get_class_type()", header: "animBundle.h".}
 
 proc newAnimBundleNode*(name: string, bundle: AnimBundle): AnimBundleNode {.importcpp: "new AnimBundleNode(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## The AnimBundle and its node should be constructed together.  Generally, the
@@ -31648,7 +31648,7 @@ proc findAnimBundle*(_: typedesc[AnimBundleNode], root: PandaNode): AnimBundle {
 ## need not be an AnimBundleNode), and returns the first AnimBundle found.
 ## Returns NULL if no AnimBundle can be found.
 
-proc getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "AnimBundleNode::get_class_type()", header: "animBundleNode.h".}
+converter getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "AnimBundleNode::get_class_type()", header: "animBundleNode.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: PartGroup): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -31743,7 +31743,7 @@ proc writeWithValue*(this: PartGroup, `out`: ostream, indent_level: int) {.impor
 ## Writes a brief description of the group, showing its current value, and
 ## that of all of its descendants.
 
-proc getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGroup::get_class_type()", header: "partGroup.h".}
+converter getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGroup::get_class_type()", header: "partGroup.h".}
 
 converter upcastToTypedReferenceCount*(this: AnimControl): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
@@ -31811,11 +31811,11 @@ proc getAnimModel*(this: AnimControl): PandaNode {.importcpp: "#->get_anim_model
 
 proc output*(this: AnimControl, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[AnimControl]): TypeHandle {.importcpp: "AnimControl::get_class_type()", header: "animControl.h".}
+converter getClassType*(_: typedesc[AnimControl]): TypeHandle {.importcpp: "AnimControl::get_class_type()", header: "animControl.h".}
 
 proc getType*(this: AnimChannelBase): TypeHandle {.importcpp: "#->get_type()".}
 
-proc getClassType*(_: typedesc[AnimChannelBase]): TypeHandle {.importcpp: "AnimChannelBase::get_class_type()", header: "animChannelBase.h".}
+converter getClassType*(_: typedesc[AnimChannelBase]): TypeHandle {.importcpp: "AnimChannelBase::get_class_type()", header: "animChannelBase.h".}
 
 proc setValue*(this: AnimChannelMatrixDynamic, value: LMatrix4) {.importcpp: "#->set_value(#)".} ## \
 ## Explicitly sets the matrix value.
@@ -31835,7 +31835,7 @@ proc getValueTransform*(this: AnimChannelMatrixDynamic): TransformState {.import
 proc getValueNode*(this: AnimChannelMatrixDynamic): PandaNode {.importcpp: "#->get_value_node()".} ## \
 ## Returns the node that was set via set_value_node(), if any.
 
-proc getClassType*(_: typedesc[AnimChannelMatrixDynamic]): TypeHandle {.importcpp: "AnimChannelMatrixDynamic::get_class_type()", header: "animChannelMatrixDynamic.h".}
+converter getClassType*(_: typedesc[AnimChannelMatrixDynamic]): TypeHandle {.importcpp: "AnimChannelMatrixDynamic::get_class_type()", header: "animChannelMatrixDynamic.h".}
 
 proc newAnimChannelMatrixXfmTable*(parent: AnimGroup, name: string): AnimChannelMatrixXfmTable {.importcpp: "new AnimChannelMatrixXfmTable(#, nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -31852,7 +31852,7 @@ proc hasTable*(this: AnimChannelMatrixXfmTable, table_id: char): bool {.importcp
 proc clearTable*(this: AnimChannelMatrixXfmTable, table_id: char) {.importcpp: "#->clear_table(#)".} ## \
 ## Removes the indicated table from the definition.
 
-proc getClassType*(_: typedesc[AnimChannelMatrixXfmTable]): TypeHandle {.importcpp: "AnimChannelMatrixXfmTable::get_class_type()", header: "animChannelMatrixXfmTable.h".}
+converter getClassType*(_: typedesc[AnimChannelMatrixXfmTable]): TypeHandle {.importcpp: "AnimChannelMatrixXfmTable::get_class_type()", header: "animChannelMatrixXfmTable.h".}
 
 proc setValue*(this: AnimChannelScalarDynamic, value: float32) {.importcpp: "#->set_value(#)".} ## \
 ## Explicitly sets the value.  This will remove any node assigned via
@@ -31863,7 +31863,7 @@ proc setValueNode*(this: AnimChannelScalarDynamic, node: PandaNode) {.importcpp:
 ## specify the transform of this joint.  This will override the values set by
 ## set_value().
 
-proc getClassType*(_: typedesc[AnimChannelScalarDynamic]): TypeHandle {.importcpp: "AnimChannelScalarDynamic::get_class_type()", header: "animChannelScalarDynamic.h".}
+converter getClassType*(_: typedesc[AnimChannelScalarDynamic]): TypeHandle {.importcpp: "AnimChannelScalarDynamic::get_class_type()", header: "animChannelScalarDynamic.h".}
 
 proc newAnimChannelScalarTable*(parent: AnimGroup, name: string): AnimChannelScalarTable {.importcpp: "new AnimChannelScalarTable(#, nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -31873,7 +31873,7 @@ proc hasTable*(this: AnimChannelScalarTable): bool {.importcpp: "#->has_table()"
 proc clearTable*(this: AnimChannelScalarTable) {.importcpp: "#->clear_table()".} ## \
 ## Empties the data table.
 
-proc getClassType*(_: typedesc[AnimChannelScalarTable]): TypeHandle {.importcpp: "AnimChannelScalarTable::get_class_type()", header: "animChannelScalarTable.h".}
+converter getClassType*(_: typedesc[AnimChannelScalarTable]): TypeHandle {.importcpp: "AnimChannelScalarTable::get_class_type()", header: "animChannelScalarTable.h".}
 
 proc initAnimControlCollection*(): AnimControlCollection {.importcpp: "AnimControlCollection()".} ## \
 ## Returns the AnimControl associated with the given name, or NULL if no such
@@ -32016,7 +32016,7 @@ proc output*(this: AnimPreloadTable, `out`: ostream) {.importcpp: "#->output(#)"
 
 proc write*(this: AnimPreloadTable, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getClassType*(_: typedesc[AnimPreloadTable]): TypeHandle {.importcpp: "AnimPreloadTable::get_class_type()", header: "animPreloadTable.h".}
+converter getClassType*(_: typedesc[AnimPreloadTable]): TypeHandle {.importcpp: "AnimPreloadTable::get_class_type()", header: "animPreloadTable.h".}
 
 proc autoBind*(root_node: PandaNode, controls: AnimControlCollection, hierarchy_match_flags: int) {.importcpp: "auto_bind(#, #, #)".}
 
@@ -32065,7 +32065,7 @@ proc newBindAnimRequest*(param0: BindAnimRequest): BindAnimRequest {.importcpp: 
 
 proc newBindAnimRequest*(name: string, filename: Filename, options: LoaderOptions, loader: Loader, control: AnimControl, hierarchy_match_flags: int, subset: PartSubset): BindAnimRequest {.importcpp: "new BindAnimRequest(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[BindAnimRequest]): TypeHandle {.importcpp: "BindAnimRequest::get_class_type()", header: "bindAnimRequest.h".}
+converter getClassType*(_: typedesc[BindAnimRequest]): TypeHandle {.importcpp: "BindAnimRequest::get_class_type()", header: "bindAnimRequest.h".}
 
 proc newPartBundle*(name: string): PartBundle {.importcpp: "new PartBundle(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Normally, a PartBundle constructor should not be called directly--it will
@@ -32178,7 +32178,7 @@ proc getBundle*(this: PartBundleHandle): PartBundle {.importcpp: "#->get_bundle(
 proc setBundle*(this: PartBundleHandle, bundle: PartBundle) {.importcpp: "#->set_bundle(#)".} ## \
 ## Changes the actual PartBundle embedded within the handle.
 
-proc getClassType*(_: typedesc[PartBundleNode]): TypeHandle {.importcpp: "PartBundleNode::get_class_type()", header: "partBundleNode.h".}
+converter getClassType*(_: typedesc[PartBundleNode]): TypeHandle {.importcpp: "PartBundleNode::get_class_type()", header: "partBundleNode.h".}
 
 proc clearControlEffects*(this: PartBundle) {.importcpp: "#->clear_control_effects()".} ## \
 ## Sets the control effect of all AnimControls to zero (but does not "stop"
@@ -32337,7 +32337,7 @@ proc forceUpdate*(this: PartBundle): bool {.importcpp: "#->force_update()".} ## 
 ## Updates all the parts in the bundle to reflect the data for the current
 ## frame, whether we believe it needs it or not.
 
-proc getClassType*(_: typedesc[PartBundle]): TypeHandle {.importcpp: "PartBundle::get_class_type()", header: "partBundle.h".}
+converter getClassType*(_: typedesc[PartBundle]): TypeHandle {.importcpp: "PartBundle::get_class_type()", header: "partBundle.h".}
 
 proc getMaxBound*(this: MovingPartBase): int {.importcpp: "#->get_max_bound()".} ## \
 ## Returns the number of channels that might be bound to this PartGroup.  This
@@ -32356,11 +32356,11 @@ proc getBound*(this: MovingPartBase, n: int): AnimChannelBase {.importcpp: "#->g
 
 proc outputValue*(this: MovingPartBase, `out`: ostream) {.importcpp: "#->output_value(#)".}
 
-proc getClassType*(_: typedesc[MovingPartBase]): TypeHandle {.importcpp: "MovingPartBase::get_class_type()", header: "movingPartBase.h".}
+converter getClassType*(_: typedesc[MovingPartBase]): TypeHandle {.importcpp: "MovingPartBase::get_class_type()", header: "movingPartBase.h".}
 
-proc getClassType*(_: typedesc[MovingPartMatrix]): TypeHandle {.importcpp: "MovingPartMatrix::get_class_type()", header: "movingPartMatrix.h".}
+converter getClassType*(_: typedesc[MovingPartMatrix]): TypeHandle {.importcpp: "MovingPartMatrix::get_class_type()", header: "movingPartMatrix.h".}
 
-proc getClassType*(_: typedesc[MovingPartScalar]): TypeHandle {.importcpp: "MovingPartScalar::get_class_type()", header: "movingPartScalar.h".}
+converter getClassType*(_: typedesc[MovingPartScalar]): TypeHandle {.importcpp: "MovingPartScalar::get_class_type()", header: "movingPartScalar.h".}
 
 proc setClientName*(this: PStatClient, name: string) {.importcpp: "#.set_client_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Sets the name of the client.  This is reported to the PStatsServer, and
@@ -32792,13 +32792,13 @@ proc getNetTransform*(this: CharacterJoint, transform: LMatrix4) {.importcpp: "#
 proc getCharacter*(this: CharacterJoint): Character {.importcpp: "#->get_character()".} ## \
 ## Returns the Character that owns this joint.
 
-proc getClassType*(_: typedesc[CharacterJoint]): TypeHandle {.importcpp: "CharacterJoint::get_class_type()", header: "characterJoint.h".}
+converter getClassType*(_: typedesc[CharacterJoint]): TypeHandle {.importcpp: "CharacterJoint::get_class_type()", header: "characterJoint.h".}
 
 proc newCharacterSlider*(parent: PartGroup, name: string): CharacterSlider {.importcpp: "new CharacterSlider(#, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newCharacterSlider*(parent: PartGroup, name: string, default_value: float32): CharacterSlider {.importcpp: "new CharacterSlider(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[CharacterSlider]): TypeHandle {.importcpp: "CharacterSlider::get_class_type()", header: "characterSlider.h".}
+converter getClassType*(_: typedesc[CharacterSlider]): TypeHandle {.importcpp: "CharacterSlider::get_class_type()", header: "characterSlider.h".}
 
 proc newCharacterVertexSlider*(char_slider: CharacterSlider): CharacterVertexSlider {.importcpp: "new CharacterVertexSlider(#)".} ## \
 ## Constructs a new object that converts vertices from the indicated joint's
@@ -32808,7 +32808,7 @@ proc getCharSlider*(this: CharacterVertexSlider): CharacterSlider {.importcpp: "
 ## Returns the CharacterSlider object for which this object returns the slider
 ## value.
 
-proc getClassType*(_: typedesc[CharacterVertexSlider]): TypeHandle {.importcpp: "CharacterVertexSlider::get_class_type()", header: "characterVertexSlider.h".}
+converter getClassType*(_: typedesc[CharacterVertexSlider]): TypeHandle {.importcpp: "CharacterVertexSlider::get_class_type()", header: "characterVertexSlider.h".}
 
 proc newJointVertexTransform*(joint: CharacterJoint): JointVertexTransform {.importcpp: "new JointVertexTransform(#)".} ## \
 ## Constructs a new object that converts vertices from the indicated joint's
@@ -32817,7 +32817,7 @@ proc newJointVertexTransform*(joint: CharacterJoint): JointVertexTransform {.imp
 proc getJoint*(this: JointVertexTransform): CharacterJoint {.importcpp: "#->get_joint()".} ## \
 ## Returns the joint for which this object returns the transform.
 
-proc getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
+converter getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
 
 proc newCharacter*(param0: Character): Character {.importcpp: "new Character(#)".}
 
@@ -32914,7 +32914,7 @@ proc update*(this: Character) {.importcpp: "#->update()".} ## \
 proc forceUpdate*(this: Character) {.importcpp: "#->force_update()".} ## \
 ## Recalculates the character even if we think it doesn't need it.
 
-proc getClassType*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()", header: "character.h".}
+converter getClassType*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()", header: "character.h".}
 
 proc newCharacterJointBundle*(name: string): CharacterJointBundle {.importcpp: "new CharacterJointBundle(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Normally, there is no need to create a CharacterJointBundle directly.  The
@@ -32927,7 +32927,7 @@ proc newCharacterJointBundle*(): CharacterJointBundle {.importcpp: "new Characte
 proc getNode*(this: CharacterJointBundle, n: int): Character {.importcpp: "#->get_node(#)".} ## \
 ## Returns the nth Character associated with this PartBundle.
 
-proc getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
+converter getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
 proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "CharacterJointEffect::make(#)", header: "characterJointEffect.h".} ## \
 ## Constructs a new CharacterJointEffect object that references the indicated
@@ -32939,7 +32939,7 @@ proc getCharacter*(this: CharacterJointEffect): Character {.importcpp: "#->get_c
 ## Returns the Character that will get update() called on it when this node's
 ## relative transform is queried, or NULL if there is no such character.
 
-proc getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
+converter getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
 
 proc getCollisionOrigin*(this: CollisionSolid): LPoint3 {.importcpp: "#->get_collision_origin()".}
 
@@ -32994,7 +32994,7 @@ proc write*(this: CollisionSolid, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: CollisionSolid, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[CollisionSolid]): TypeHandle {.importcpp: "CollisionSolid::get_class_type()", header: "collisionSolid.h".}
+converter getClassType*(_: typedesc[CollisionSolid]): TypeHandle {.importcpp: "CollisionSolid::get_class_type()", header: "collisionSolid.h".}
 
 proc newCollisionBox*(min: LPoint3, max: LPoint3): CollisionBox {.importcpp: "new CollisionBox(#, #)".} ## \
 ## Create the Box by Specifying the Diagonal Points
@@ -33033,7 +33033,7 @@ proc getMax*(this: CollisionBox): LPoint3 {.importcpp: "#->get_max()".}
 
 proc getDimensions*(this: CollisionBox): LVector3 {.importcpp: "#->get_dimensions()".}
 
-proc getClassType*(_: typedesc[CollisionBox]): TypeHandle {.importcpp: "CollisionBox::get_class_type()", header: "collisionBox.h".}
+converter getClassType*(_: typedesc[CollisionBox]): TypeHandle {.importcpp: "CollisionBox::get_class_type()", header: "collisionBox.h".}
 
 proc newCollisionCapsule*(a: LPoint3, db: LPoint3, radius: float32): CollisionCapsule {.importcpp: "new CollisionCapsule(#, #, #)".}
 
@@ -33055,9 +33055,9 @@ proc setRadius*(this: CollisionCapsule, radius: float32) {.importcpp: "#->set_ra
 
 proc getRadius*(this: CollisionCapsule): float32 {.importcpp: "#->get_radius()".}
 
-proc getClassType*(_: typedesc[CollisionCapsule]): TypeHandle {.importcpp: "CollisionCapsule::get_class_type()", header: "collisionCapsule.h".}
+converter getClassType*(_: typedesc[CollisionCapsule]): TypeHandle {.importcpp: "CollisionCapsule::get_class_type()", header: "collisionCapsule.h".}
 
-proc getClassType*(_: typedesc[CollisionHandler]): TypeHandle {.importcpp: "CollisionHandler::get_class_type()", header: "collisionHandler.h".}
+converter getClassType*(_: typedesc[CollisionHandler]): TypeHandle {.importcpp: "CollisionHandler::get_class_type()", header: "collisionHandler.h".}
 
 proc newCollisionHandler*(param0: CollisionHandler): CollisionHandler {.importcpp: "new CollisionHandler(#)".}
 
@@ -33102,7 +33102,7 @@ proc setColliderSort*(this: CollisionNode, sort: int) {.importcpp: "#->set_colli
 ## optimization to group colliders that have similar bounding volumes together
 ## (by giving them similar sort values).
 
-proc getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
+converter getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
 
 proc initCollisionTraverser*(param0: CollisionTraverser): CollisionTraverser {.importcpp: "CollisionTraverser(#)".}
 
@@ -33193,7 +33193,7 @@ proc clearRecorder*(this: CollisionTraverser) {.importcpp: "#.clear_recorder()".
 
 proc output*(this: CollisionRecorder, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc getClassType*(_: typedesc[CollisionRecorder]): TypeHandle {.importcpp: "CollisionRecorder::get_class_type()", header: "collisionRecorder.h".}
+converter getClassType*(_: typedesc[CollisionRecorder]): TypeHandle {.importcpp: "CollisionRecorder::get_class_type()", header: "collisionRecorder.h".}
 
 proc showCollisions*(this: CollisionTraverser, root: NodePath): CollisionVisualizer {.importcpp: "#.show_collisions(#)".} ## \
 ## This is a high-level function to create a CollisionVisualizer object to
@@ -33208,7 +33208,7 @@ proc output*(this: CollisionTraverser, `out`: ostream) {.importcpp: "#.output(#)
 
 proc write*(this: CollisionTraverser, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
 
-proc getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
+converter getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
 
 proc getFrom*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_from()".} ## \
 ## Returns the CollisionSolid pointer for the particular solid that triggered
@@ -33384,7 +33384,7 @@ proc write*(this: CollisionEntry, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: CollisionEntry, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[CollisionEntry]): TypeHandle {.importcpp: "CollisionEntry::get_class_type()", header: "collisionEntry.h".}
+converter getClassType*(_: typedesc[CollisionEntry]): TypeHandle {.importcpp: "CollisionEntry::get_class_type()", header: "collisionEntry.h".}
 
 proc newCollisionPlane*(copy: CollisionPlane): CollisionPlane {.importcpp: "new CollisionPlane(#)".}
 
@@ -33401,7 +33401,7 @@ proc getPlane*(this: CollisionPlane): LPlane {.importcpp: "#->get_plane()".}
 proc flip*(this: CollisionPlane) {.importcpp: "#->flip()".} ## \
 ## Convenience method to flip the plane in-place.
 
-proc getClassType*(_: typedesc[CollisionPlane]): TypeHandle {.importcpp: "CollisionPlane::get_class_type()", header: "collisionPlane.h".}
+converter getClassType*(_: typedesc[CollisionPlane]): TypeHandle {.importcpp: "CollisionPlane::get_class_type()", header: "collisionPlane.h".}
 
 proc newCollisionFloorMesh*(): CollisionFloorMesh {.importcpp: "new CollisionFloorMesh()".} ## \
 ## This is only for the convenience of CollisionPolygon.  Normally, you should
@@ -33421,7 +33421,7 @@ proc getNumTriangles*(this: CollisionFloorMesh): int {.importcpp: "#->get_num_tr
 
 proc getTriangle*(this: CollisionFloorMesh, index: int): LPoint3i {.importcpp: "#->get_triangle(#)".}
 
-proc getClassType*(_: typedesc[CollisionFloorMesh]): TypeHandle {.importcpp: "CollisionFloorMesh::get_class_type()", header: "collisionFloorMesh.h".}
+converter getClassType*(_: typedesc[CollisionFloorMesh]): TypeHandle {.importcpp: "CollisionFloorMesh::get_class_type()", header: "collisionFloorMesh.h".}
 
 proc newCollisionPolygon*(a: LVecBase3, b: LVecBase3, c: LVecBase3): CollisionPolygon {.importcpp: "new CollisionPolygon(#, #, #)".}
 
@@ -33451,7 +33451,7 @@ proc isConcave*(this: CollisionPolygon): bool {.importcpp: "#->is_concave()".} #
 ## Returns true if the CollisionPolygon appears to be concave, or false if it
 ## is safely convex.
 
-proc getClassType*(_: typedesc[CollisionPolygon]): TypeHandle {.importcpp: "CollisionPolygon::get_class_type()", header: "collisionPolygon.h".}
+converter getClassType*(_: typedesc[CollisionPolygon]): TypeHandle {.importcpp: "CollisionPolygon::get_class_type()", header: "collisionPolygon.h".}
 
 proc newCollisionHandlerEvent*(): CollisionHandlerEvent {.importcpp: "new CollisionHandlerEvent()".} ## \
 ## The default CollisionHandlerEvent will throw no events.  Its pattern
@@ -33581,7 +33581,7 @@ proc readDatagram*(this: CollisionHandlerEvent, source: DatagramIterator) {.impo
 ## Restores the object state from the given datagram, previously obtained using
 ## __getstate__.
 
-proc getClassType*(_: typedesc[CollisionHandlerEvent]): TypeHandle {.importcpp: "CollisionHandlerEvent::get_class_type()", header: "collisionHandlerEvent.h".}
+converter getClassType*(_: typedesc[CollisionHandlerEvent]): TypeHandle {.importcpp: "CollisionHandlerEvent::get_class_type()", header: "collisionHandlerEvent.h".}
 
 proc addCollider*(this: CollisionHandlerPhysical, collider: NodePath, target: NodePath) {.importcpp: "#->add_collider(#, #)".} ## \
 ## Adds a new collider to the list with a NodePath that will be updated with
@@ -33631,7 +33631,7 @@ proc hasContact*(this: CollisionHandlerPhysical): bool {.importcpp: "#->has_cont
 ## handler is out of the world (i.e.  out of bounds). That is the original use
 ## of this call.
 
-proc getClassType*(_: typedesc[CollisionHandlerPhysical]): TypeHandle {.importcpp: "CollisionHandlerPhysical::get_class_type()", header: "collisionHandlerPhysical.h".}
+converter getClassType*(_: typedesc[CollisionHandlerPhysical]): TypeHandle {.importcpp: "CollisionHandlerPhysical::get_class_type()", header: "collisionHandlerPhysical.h".}
 
 proc newCollisionHandlerFloor*(): CollisionHandlerFloor {.importcpp: "new CollisionHandlerFloor()".}
 
@@ -33667,7 +33667,7 @@ proc readDatagram*(this: CollisionHandlerFloor, source: DatagramIterator) {.impo
 ## Restores the object state from the given datagram, previously obtained using
 ## __getstate__.
 
-proc getClassType*(_: typedesc[CollisionHandlerFloor]): TypeHandle {.importcpp: "CollisionHandlerFloor::get_class_type()", header: "collisionHandlerFloor.h".}
+converter getClassType*(_: typedesc[CollisionHandlerFloor]): TypeHandle {.importcpp: "CollisionHandlerFloor::get_class_type()", header: "collisionHandlerFloor.h".}
 
 proc newCollisionHandlerPusher*(): CollisionHandlerPusher {.importcpp: "new CollisionHandlerPusher()".}
 
@@ -33682,11 +33682,11 @@ proc readDatagram*(this: CollisionHandlerPusher, source: DatagramIterator) {.imp
 ## Restores the object state from the given datagram, previously obtained using
 ## __getstate__.
 
-proc getClassType*(_: typedesc[CollisionHandlerPusher]): TypeHandle {.importcpp: "CollisionHandlerPusher::get_class_type()", header: "collisionHandlerPusher.h".}
+converter getClassType*(_: typedesc[CollisionHandlerPusher]): TypeHandle {.importcpp: "CollisionHandlerPusher::get_class_type()", header: "collisionHandlerPusher.h".}
 
 proc newCollisionHandlerFluidPusher*(): CollisionHandlerFluidPusher {.importcpp: "new CollisionHandlerFluidPusher()".}
 
-proc getClassType*(_: typedesc[CollisionHandlerFluidPusher]): TypeHandle {.importcpp: "CollisionHandlerFluidPusher::get_class_type()", header: "collisionHandlerFluidPusher.h".}
+converter getClassType*(_: typedesc[CollisionHandlerFluidPusher]): TypeHandle {.importcpp: "CollisionHandlerFluidPusher::get_class_type()", header: "collisionHandlerFluidPusher.h".}
 
 proc newCollisionHandlerGravity*(): CollisionHandlerGravity {.importcpp: "new CollisionHandlerGravity()".}
 
@@ -33772,7 +33772,7 @@ proc readDatagram*(this: CollisionHandlerGravity, source: DatagramIterator) {.im
 ## Restores the object state from the given datagram, previously obtained using
 ## __getstate__.
 
-proc getClassType*(_: typedesc[CollisionHandlerGravity]): TypeHandle {.importcpp: "CollisionHandlerGravity::get_class_type()", header: "collisionHandlerGravity.h".}
+converter getClassType*(_: typedesc[CollisionHandlerGravity]): TypeHandle {.importcpp: "CollisionHandlerGravity::get_class_type()", header: "collisionHandlerGravity.h".}
 
 proc newCollisionHandlerHighestEvent*(): CollisionHandlerHighestEvent {.importcpp: "new CollisionHandlerHighestEvent()".} ## \
 ## The default CollisionHandlerEvent will throw no events.  Its pattern
@@ -33781,7 +33781,7 @@ proc newCollisionHandlerHighestEvent*(): CollisionHandlerHighestEvent {.importcp
 
 proc newCollisionHandlerHighestEvent*(param0: CollisionHandlerHighestEvent): CollisionHandlerHighestEvent {.importcpp: "new CollisionHandlerHighestEvent(#)".}
 
-proc getClassType*(_: typedesc[CollisionHandlerHighestEvent]): TypeHandle {.importcpp: "CollisionHandlerHighestEvent::get_class_type()", header: "collisionHandlerHighestEvent.h".}
+converter getClassType*(_: typedesc[CollisionHandlerHighestEvent]): TypeHandle {.importcpp: "CollisionHandlerHighestEvent::get_class_type()", header: "collisionHandlerHighestEvent.h".}
 
 proc newCollisionHandlerQueue*(): CollisionHandlerQueue {.importcpp: "new CollisionHandlerQueue()".}
 
@@ -33808,7 +33808,7 @@ proc write*(this: CollisionHandlerQueue, `out`: ostream, indent_level: int) {.im
 
 proc write*(this: CollisionHandlerQueue, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[CollisionHandlerQueue]): TypeHandle {.importcpp: "CollisionHandlerQueue::get_class_type()", header: "collisionHandlerQueue.h".}
+converter getClassType*(_: typedesc[CollisionHandlerQueue]): TypeHandle {.importcpp: "CollisionHandlerQueue::get_class_type()", header: "collisionHandlerQueue.h".}
 
 proc newCollisionSphere*(center: LPoint3, radius: float32): CollisionSphere {.importcpp: "new CollisionSphere(#, #)".}
 
@@ -33824,13 +33824,13 @@ proc setRadius*(this: CollisionSphere, radius: float32) {.importcpp: "#->set_rad
 
 proc getRadius*(this: CollisionSphere): float32 {.importcpp: "#->get_radius()".}
 
-proc getClassType*(_: typedesc[CollisionSphere]): TypeHandle {.importcpp: "CollisionSphere::get_class_type()", header: "collisionSphere.h".}
+converter getClassType*(_: typedesc[CollisionSphere]): TypeHandle {.importcpp: "CollisionSphere::get_class_type()", header: "collisionSphere.h".}
 
 proc newCollisionInvSphere*(center: LPoint3, radius: float32): CollisionInvSphere {.importcpp: "new CollisionInvSphere(#, #)".}
 
 proc newCollisionInvSphere*(cx: float32, cy: float32, cz: float32, radius: float32): CollisionInvSphere {.importcpp: "new CollisionInvSphere(#, #, #, #)".}
 
-proc getClassType*(_: typedesc[CollisionInvSphere]): TypeHandle {.importcpp: "CollisionInvSphere::get_class_type()", header: "collisionInvSphere.h".}
+converter getClassType*(_: typedesc[CollisionInvSphere]): TypeHandle {.importcpp: "CollisionInvSphere::get_class_type()", header: "collisionInvSphere.h".}
 
 proc newCollisionRay*(): CollisionRay {.importcpp: "new CollisionRay()".} ## \
 ## Creates an invalid ray.  This isn't terribly useful; it's expected that the
@@ -33867,7 +33867,7 @@ proc setFromLens*(this: CollisionRay, camera: LensNode, px: float32, py: float32
 ## infinity, making it suitable for picking objects from the screen given a
 ## camera and a mouse location.
 
-proc getClassType*(_: typedesc[CollisionRay]): TypeHandle {.importcpp: "CollisionRay::get_class_type()", header: "collisionRay.h".}
+converter getClassType*(_: typedesc[CollisionRay]): TypeHandle {.importcpp: "CollisionRay::get_class_type()", header: "collisionRay.h".}
 
 proc newCollisionLine*(): CollisionLine {.importcpp: "new CollisionLine()".} ## \
 ## Creates an invalid line.  This isn't terribly useful; it's expected that
@@ -33878,7 +33878,7 @@ proc newCollisionLine*(origin: LPoint3, direction: LVector3): CollisionLine {.im
 
 proc newCollisionLine*(ox: float32, oy: float32, oz: float32, dx: float32, dy: float32, dz: float32): CollisionLine {.importcpp: "new CollisionLine(#, #, #, #, #, #)".}
 
-proc getClassType*(_: typedesc[CollisionLine]): TypeHandle {.importcpp: "CollisionLine::get_class_type()", header: "collisionLine.h".}
+converter getClassType*(_: typedesc[CollisionLine]): TypeHandle {.importcpp: "CollisionLine::get_class_type()", header: "collisionLine.h".}
 
 proc newCollisionParabola*(): CollisionParabola {.importcpp: "new CollisionParabola()".} ## \
 ## Creates an invalid parabola.
@@ -33905,7 +33905,7 @@ proc setT2*(this: CollisionParabola, t2: float32) {.importcpp: "#->set_t2(#)".} 
 proc getT2*(this: CollisionParabola): float32 {.importcpp: "#->get_t2()".} ## \
 ## Returns the ending point on the parabola.
 
-proc getClassType*(_: typedesc[CollisionParabola]): TypeHandle {.importcpp: "CollisionParabola::get_class_type()", header: "collisionParabola.h".}
+converter getClassType*(_: typedesc[CollisionParabola]): TypeHandle {.importcpp: "CollisionParabola::get_class_type()", header: "collisionParabola.h".}
 
 proc newCollisionSegment*(): CollisionSegment {.importcpp: "new CollisionSegment()".} ## \
 ## Creates an invalid segment.  This isn't terribly useful; it's expected that
@@ -33942,7 +33942,7 @@ proc setFromLens*(this: CollisionSegment, camera: LensNode, px: float32, py: flo
 ## to the far plane, making it suitable for picking objects from the screen
 ## given a camera and a mouse location.
 
-proc getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: "CollisionSegment::get_class_type()", header: "collisionSegment.h".}
+converter getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: "CollisionSegment::get_class_type()", header: "collisionSegment.h".}
 
 converter upcastToPandaNode*(this: CollisionVisualizer): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
@@ -33978,7 +33978,7 @@ proc clear*(this: CollisionVisualizer) {.importcpp: "#->clear()".} ## \
 ## Removes all the visualization data from a previous traversal and resets the
 ## visualizer to empty.
 
-proc getClassType*(_: typedesc[CollisionVisualizer]): TypeHandle {.importcpp: "CollisionVisualizer::get_class_type()", header: "collisionVisualizer.h".}
+converter getClassType*(_: typedesc[CollisionVisualizer]): TypeHandle {.importcpp: "CollisionVisualizer::get_class_type()", header: "collisionVisualizer.h".}
 
 proc hasTracker*(this: InputDevice): bool {.importcpp: "#->has_tracker()".} ## \
 ## Returns true if the device features a tracker that can track position and/or
@@ -34045,7 +34045,7 @@ proc getPointerEvents*(this: InputDevice): PointerEventList {.importcpp: "#->get
 proc output*(this: InputDevice, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 ## Writes a one-line string describing the device.
 
-proc getClassType*(_: typedesc[InputDevice]): TypeHandle {.importcpp: "InputDevice::get_class_type()", header: "inputDevice.h".}
+converter getClassType*(_: typedesc[InputDevice]): TypeHandle {.importcpp: "InputDevice::get_class_type()", header: "inputDevice.h".}
 
 proc forkAsynchronousThread*(this: ClientBase, poll_time: float64): bool {.importcpp: "#->fork_asynchronous_thread(#)".} ## \
 ## Forks a separate thread to do all the polling of connected devices.  The
@@ -34074,7 +34074,7 @@ proc getCoordinateSystem*(this: ClientBase): CoordinateSystem {.importcpp: "#->g
 ## Returns the coordinate system that all devices associated with this client
 ## will operate in.  Normally, this is CS_default.
 
-proc getClassType*(_: typedesc[ClientBase]): TypeHandle {.importcpp: "ClientBase::get_class_type()", header: "clientBase.h".}
+converter getClassType*(_: typedesc[ClientBase]): TypeHandle {.importcpp: "ClientBase::get_class_type()", header: "clientBase.h".}
 
 proc newAnalogNode*(param0: AnalogNode): AnalogNode {.importcpp: "new AnalogNode(#)".}
 
@@ -34118,7 +34118,7 @@ proc isOutputFlipped*(this: AnalogNode, channel: int): bool {.importcpp: "#->is_
 ## Returns true if the analog control index that is output to the data graph
 ## on the indicated channel is flipped.  See set_output().
 
-proc getClassType*(_: typedesc[AnalogNode]): TypeHandle {.importcpp: "AnalogNode::get_class_type()", header: "analogNode.h".}
+converter getClassType*(_: typedesc[AnalogNode]): TypeHandle {.importcpp: "AnalogNode::get_class_type()", header: "analogNode.h".}
 
 proc newButtonNode*(param0: ButtonNode): ButtonNode {.importcpp: "new ButtonNode(#)".}
 
@@ -34159,7 +34159,7 @@ proc isButtonKnown*(this: ButtonNode, index: int): bool {.importcpp: "#->is_butt
 ## Returns true if the state of the indicated button is known, or false if we
 ## have never heard anything about this particular button.
 
-proc getClassType*(_: typedesc[ButtonNode]): TypeHandle {.importcpp: "ButtonNode::get_class_type()", header: "buttonNode.h".}
+converter getClassType*(_: typedesc[ButtonNode]): TypeHandle {.importcpp: "ButtonNode::get_class_type()", header: "buttonNode.h".}
 
 proc newDialNode*(client: ClientBase, device_name: string): DialNode {.importcpp: "new DialNode(#, nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -34182,7 +34182,7 @@ proc isDialKnown*(this: DialNode, index: int): bool {.importcpp: "#->is_dial_kno
 ## Returns true if the state of the indicated dial dial is known, or false if
 ## we have never heard anything about this particular dial.
 
-proc getClassType*(_: typedesc[DialNode]): TypeHandle {.importcpp: "DialNode::get_class_type()", header: "dialNode.h".}
+converter getClassType*(_: typedesc[DialNode]): TypeHandle {.importcpp: "DialNode::get_class_type()", header: "dialNode.h".}
 
 proc initInputDeviceSet*(): InputDeviceSet {.importcpp: "InputDeviceSet()".}
 
@@ -34239,7 +34239,7 @@ proc newInputDeviceNode*(device: InputDevice, name: string): InputDeviceNode {.i
 
 proc newInputDeviceNode*(param0: InputDeviceNode): InputDeviceNode {.importcpp: "new InputDeviceNode(#)".}
 
-proc getClassType*(_: typedesc[InputDeviceNode]): TypeHandle {.importcpp: "InputDeviceNode::get_class_type()", header: "inputDeviceNode.h".}
+converter getClassType*(_: typedesc[InputDeviceNode]): TypeHandle {.importcpp: "InputDeviceNode::get_class_type()", header: "inputDeviceNode.h".}
 
 proc newTrackerNode*(client: ClientBase, device_name: string): TrackerNode {.importcpp: "new TrackerNode(#, nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -34287,7 +34287,7 @@ proc getGraphCoordinateSystem*(this: TrackerNode): CoordinateSystem {.importcpp:
 ## transform into for passing down the data graph.  Normally, this is
 ## CS_default.
 
-proc getClassType*(_: typedesc[TrackerNode]): TypeHandle {.importcpp: "TrackerNode::get_class_type()", header: "trackerNode.h".}
+converter getClassType*(_: typedesc[TrackerNode]): TypeHandle {.importcpp: "TrackerNode::get_class_type()", header: "trackerNode.h".}
 
 proc newVirtualMouse*(param0: VirtualMouse): VirtualMouse {.importcpp: "new VirtualMouse(#)".}
 
@@ -34315,7 +34315,7 @@ proc releaseButton*(this: VirtualMouse, button: ButtonHandle) {.importcpp: "#->r
 ## Simulates the button being released.  This should follow a previous call to
 ## press_button().
 
-proc getClassType*(_: typedesc[VirtualMouse]): TypeHandle {.importcpp: "VirtualMouse::get_class_type()", header: "virtualMouse.h".}
+converter getClassType*(_: typedesc[VirtualMouse]): TypeHandle {.importcpp: "VirtualMouse::get_class_type()", header: "virtualMouse.h".}
 
 proc initDataGraphTraverser*(param0: DataGraphTraverser): DataGraphTraverser {.importcpp: "DataGraphTraverser(#)".}
 
@@ -34349,12 +34349,12 @@ proc writeConnections*(this: DataNode, `out`: ostream) {.importcpp: "#->write_co
 ## Writes to the indicated ostream a list of all the connections currently
 ## showing between this DataNode and its parent(s).
 
-proc getClassType*(_: typedesc[DataNode]): TypeHandle {.importcpp: "DataNode::get_class_type()", header: "dataNode.h".}
+converter getClassType*(_: typedesc[DataNode]): TypeHandle {.importcpp: "DataNode::get_class_type()", header: "dataNode.h".}
 
 proc getPipe*(this: GraphicsDevice): GraphicsPipe {.importcpp: "#->get_pipe()".} ## \
 ## Returns the GraphicsPipe that this device is associated with.
 
-proc getClassType*(_: typedesc[GraphicsDevice]): TypeHandle {.importcpp: "GraphicsDevice::get_class_type()", header: "graphicsDevice.h".}
+converter getClassType*(_: typedesc[GraphicsDevice]): TypeHandle {.importcpp: "GraphicsDevice::get_class_type()", header: "graphicsDevice.h".}
 
 proc isValid*(this: GraphicsPipe): bool {.importcpp: "#->is_valid()".} ## \
 ## Returns false if this pipe is known to be invalid, meaning that an attempt
@@ -34528,7 +34528,7 @@ proc lookupCpuData*(this: GraphicsPipe) {.importcpp: "#->lookup_cpu_data()".} ##
 
 proc getInterfaceName*(this: GraphicsPipe): string {.importcpp: "nimStringFromStdString(#->get_interface_name())", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[GraphicsPipe]): TypeHandle {.importcpp: "GraphicsPipe::get_class_type()", header: "graphicsPipe.h".}
+converter getClassType*(_: typedesc[GraphicsPipe]): TypeHandle {.importcpp: "GraphicsPipe::get_class_type()", header: "graphicsPipe.h".}
 
 proc setClearColorActive*(this: DrawableRegion, clear_color_active: bool) {.importcpp: "#->set_clear_color_active(#)".} ## \
 ## Toggles the flag that indicates whether the color buffer should be cleared
@@ -34668,7 +34668,7 @@ proc getIntHandle*(this: WindowHandle): clonglong {.importcpp: "#->get_int_handl
 
 proc output*(this: WindowHandle, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[WindowHandle]): TypeHandle {.importcpp: "WindowHandle::get_class_type()", header: "windowHandle.h".}
+converter getClassType*(_: typedesc[WindowHandle]): TypeHandle {.importcpp: "WindowHandle::get_class_type()", header: "windowHandle.h".}
 
 proc getConfigProperties*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_config_properties()", header: "windowProperties.h".} ## \
 ## Returns a WindowProperties structure with all of the default values filled
@@ -35455,7 +35455,7 @@ proc beginScene*(this: GraphicsStateGuardian): bool {.importcpp: "#->begin_scene
 
 proc endScene*(this: GraphicsStateGuardian) {.importcpp: "#->end_scene()".}
 
-proc getClassType*(_: typedesc[GraphicsStateGuardian]): TypeHandle {.importcpp: "GraphicsStateGuardian::get_class_type()", header: "graphicsStateGuardian.h".}
+converter getClassType*(_: typedesc[GraphicsStateGuardian]): TypeHandle {.importcpp: "GraphicsStateGuardian::get_class_type()", header: "graphicsStateGuardian.h".}
 
 proc newGraphicsEngine*(): GraphicsEngine {.importcpp: "new GraphicsEngine()".} ## \
 ## Creates a new GraphicsEngine object.  The Pipeline is normally left to
@@ -36373,7 +36373,7 @@ proc getHost*(this: GraphicsOutput): GraphicsOutput {.importcpp: "#->get_host()"
 ## called on a ParasiteBuffer, it returns the host of that buffer; but when
 ## called on some other buffer, it returns the buffer itself.
 
-proc getClassType*(_: typedesc[GraphicsOutput]): TypeHandle {.importcpp: "GraphicsOutput::get_class_type()", header: "graphicsOutput.h".}
+converter getClassType*(_: typedesc[GraphicsOutput]): TypeHandle {.importcpp: "GraphicsOutput::get_class_type()", header: "graphicsOutput.h".}
 
 proc setCamera*(this: DisplayRegion, camera: NodePath) {.importcpp: "#->set_camera(#)".} ## \
 ## Sets the camera that is associated with this DisplayRegion.  There is a
@@ -36654,7 +36654,7 @@ proc makeCullResultGraph*(this: DisplayRegion): PandaNode {.importcpp: "#->make_
 ## construct created for the purpose of making it easy to analyze the results
 ## of the cull operation.
 
-proc getClassType*(_: typedesc[DisplayRegion]): TypeHandle {.importcpp: "DisplayRegion::get_class_type()", header: "displayRegion.h".}
+converter getClassType*(_: typedesc[DisplayRegion]): TypeHandle {.importcpp: "DisplayRegion::get_class_type()", header: "displayRegion.h".}
 
 proc getLeftEye*(this: StereoDisplayRegion): DisplayRegion {.importcpp: "#->get_left_eye()".} ## \
 ## Returns a pointer to the left DisplayRegion managed by this stereo object.
@@ -36662,7 +36662,7 @@ proc getLeftEye*(this: StereoDisplayRegion): DisplayRegion {.importcpp: "#->get_
 proc getRightEye*(this: StereoDisplayRegion): DisplayRegion {.importcpp: "#->get_right_eye()".} ## \
 ## Returns a pointer to the right DisplayRegion managed by this stereo object.
 
-proc getClassType*(_: typedesc[StereoDisplayRegion]): TypeHandle {.importcpp: "StereoDisplayRegion::get_class_type()", header: "stereoDisplayRegion.h".}
+converter getClassType*(_: typedesc[StereoDisplayRegion]): TypeHandle {.importcpp: "StereoDisplayRegion::get_class_type()", header: "stereoDisplayRegion.h".}
 
 proc getDepthBits*(this: FrameBufferProperties): int {.importcpp: "#.get_depth_bits()".} ## \
 ## Individual queries.
@@ -36961,7 +36961,7 @@ proc removePointer*(this: GraphicsWindowInputDevice, id: int) {.importcpp: "#->r
 ## To be called by a particular kind of GraphicsWindow to indicate that the
 ## pointer no longer exists.
 
-proc getClassType*(_: typedesc[GraphicsWindowInputDevice]): TypeHandle {.importcpp: "GraphicsWindowInputDevice::get_class_type()", header: "graphicsWindowInputDevice.h".}
+converter getClassType*(_: typedesc[GraphicsWindowInputDevice]): TypeHandle {.importcpp: "GraphicsWindowInputDevice::get_class_type()", header: "graphicsWindowInputDevice.h".}
 
 proc getX*(this: TouchInfo): int {.importcpp: "#.get_x()".}
 
@@ -36994,7 +36994,7 @@ proc getNumTouches*(this: GraphicsWindowProcCallbackData): int {.importcpp: "#.g
 proc getTouchInfo*(this: GraphicsWindowProcCallbackData, index: int): TouchInfo {.importcpp: "#.get_touch_info(#)".} ## \
 ## Returns the TouchInfo object describing the specified touch.
 
-proc getClassType*(_: typedesc[GraphicsWindowProcCallbackData]): TypeHandle {.importcpp: "GraphicsWindowProcCallbackData::get_class_type()", header: "graphicsWindowProcCallbackData.h".}
+converter getClassType*(_: typedesc[GraphicsWindowProcCallbackData]): TypeHandle {.importcpp: "GraphicsWindowProcCallbackData::get_class_type()", header: "graphicsWindowProcCallbackData.h".}
 
 proc getProperties*(this: GraphicsWindow): WindowProperties {.importcpp: "#->get_properties()".} ## \
 ## Returns the current properties of the window.
@@ -37133,7 +37133,7 @@ proc movePointer*(this: GraphicsWindow, device: int, x: int, y: int): bool {.imp
 proc closeIme*(this: GraphicsWindow) {.importcpp: "#->close_ime()".} ## \
 ## Forces the ime window to close if any
 
-proc getClassType*(_: typedesc[GraphicsWindow]): TypeHandle {.importcpp: "GraphicsWindow::get_class_type()", header: "graphicsWindow.h".}
+converter getClassType*(_: typedesc[GraphicsWindow]): TypeHandle {.importcpp: "GraphicsWindow::get_class_type()", header: "graphicsWindow.h".}
 
 proc setEventsCallback*(this: CallbackGraphicsWindow, `object`: CallbackObject) {.importcpp: "#->set_events_callback(#)".} ## \
 ## Sets the CallbackObject that will be notified when this window is polled
@@ -37190,7 +37190,7 @@ proc createInputDevice*(this: CallbackGraphicsWindow, name: string): int {.impor
 ## Adds a new input device (mouse) to the window with the indicated name.
 ## Returns the index of the new device.
 
-proc getClassType*(_: typedesc[CallbackGraphicsWindow]): TypeHandle {.importcpp: "CallbackGraphicsWindow::get_class_type()", header: "callbackGraphicsWindow.h".}
+converter getClassType*(_: typedesc[CallbackGraphicsWindow]): TypeHandle {.importcpp: "CallbackGraphicsWindow::get_class_type()", header: "callbackGraphicsWindow.h".}
 
 proc `==`*(this: DisplayMode, other: DisplayMode): bool {.importcpp: "#.operator ==(#)".}
 
@@ -37206,7 +37206,7 @@ proc getSceneSetup*(this: DisplayRegionCullCallbackData): SceneSetup {.importcpp
 ## Returns a pointer to the SceneSetup object, which contains information
 ## about the camera and such.
 
-proc getClassType*(_: typedesc[DisplayRegionCullCallbackData]): TypeHandle {.importcpp: "DisplayRegionCullCallbackData::get_class_type()", header: "displayRegionCullCallbackData.h".}
+converter getClassType*(_: typedesc[DisplayRegionCullCallbackData]): TypeHandle {.importcpp: "DisplayRegionCullCallbackData::get_class_type()", header: "displayRegionCullCallbackData.h".}
 
 proc getCullResult*(this: DisplayRegionDrawCallbackData): CullResult {.importcpp: "#.get_cull_result()".} ## \
 ## Returns a pointer to the CullResult, the list of CullableObjects that
@@ -37216,7 +37216,7 @@ proc getSceneSetup*(this: DisplayRegionDrawCallbackData): SceneSetup {.importcpp
 ## Returns a pointer to the SceneSetup object, which contains information
 ## about the camera and such.
 
-proc getClassType*(_: typedesc[DisplayRegionDrawCallbackData]): TypeHandle {.importcpp: "DisplayRegionDrawCallbackData::get_class_type()", header: "displayRegionDrawCallbackData.h".}
+converter getClassType*(_: typedesc[DisplayRegionDrawCallbackData]): TypeHandle {.importcpp: "DisplayRegionDrawCallbackData::get_class_type()", header: "displayRegionDrawCallbackData.h".}
 
 proc initDisplaySearchParameters*(): DisplaySearchParameters {.importcpp: "DisplaySearchParameters()".}
 
@@ -37240,7 +37240,7 @@ proc setSize*(this: GraphicsBuffer, x: int, y: int) {.importcpp: "#->set_size(#,
 ## the actual resizing work doesn't take place until the next begin_frame.
 ## Not all buffers are resizeable.
 
-proc getClassType*(_: typedesc[GraphicsBuffer]): TypeHandle {.importcpp: "GraphicsBuffer::get_class_type()", header: "graphicsBuffer.h".}
+converter getClassType*(_: typedesc[GraphicsBuffer]): TypeHandle {.importcpp: "GraphicsBuffer::get_class_type()", header: "graphicsBuffer.h".}
 
 proc getNumPipeTypes*(this: GraphicsPipeSelection): int {.importcpp: "#->get_num_pipe_types()".} ## \
 ## Returns the number of different types of GraphicsPipes that are available
@@ -37304,7 +37304,7 @@ proc setSource*(this: MouseAndKeyboard, window: GraphicsWindow, device: int) {.i
 ## Redirects the class to get the data from the mouse and keyboard associated
 ## with a different window and/or device number.
 
-proc getClassType*(_: typedesc[MouseAndKeyboard]): TypeHandle {.importcpp: "MouseAndKeyboard::get_class_type()", header: "mouseAndKeyboard.h".}
+converter getClassType*(_: typedesc[MouseAndKeyboard]): TypeHandle {.importcpp: "MouseAndKeyboard::get_class_type()", header: "mouseAndKeyboard.h".}
 
 proc makeInt*(_: typedesc[NativeWindowHandle], window: clonglong): WindowHandle {.importcpp: "NativeWindowHandle::make_int(#)", header: "nativeWindowHandle.h".} ## \
 ## Constructs a new WindowHandle with an int value, which is understood to be
@@ -37320,7 +37320,7 @@ proc makeSubprocess*(_: typedesc[NativeWindowHandle], filename: Filename): Windo
 ## This is (at present, and maybe always) useful only on the OS X platform,
 ## where parenting child windows is particularly problematic.
 
-proc getClassType*(_: typedesc[NativeWindowHandle]): TypeHandle {.importcpp: "NativeWindowHandle::get_class_type()", header: "nativeWindowHandle.h".}
+converter getClassType*(_: typedesc[NativeWindowHandle]): TypeHandle {.importcpp: "NativeWindowHandle::get_class_type()", header: "nativeWindowHandle.h".}
 
 proc setSize*(this: ParasiteBuffer, x: int, y: int) {.importcpp: "#->set_size(#, #)".} ## \
 ## This is called by the GraphicsEngine to request that the buffer resize
@@ -37328,7 +37328,7 @@ proc setSize*(this: ParasiteBuffer, x: int, y: int) {.importcpp: "#->set_size(#,
 ## the actual resizing work doesn't take place until the next begin_frame.
 ## Not all buffers are resizeable.
 
-proc getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "ParasiteBuffer::get_class_type()", header: "parasiteBuffer.h".}
+converter getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "ParasiteBuffer::get_class_type()", header: "parasiteBuffer.h".}
 
 converter upcastToTypedReferenceCount*(this: Thread): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
@@ -37500,7 +37500,7 @@ proc prepareForExit*(_: typedesc[Thread]) {.importcpp: "Thread::prepare_for_exit
 ## Should be called by the main thread just before exiting the program, this
 ## blocks until any remaining thread cleanup has finished.
 
-proc getClassType*(_: typedesc[Thread]): TypeHandle {.importcpp: "Thread::get_class_type()", header: "thread.h".}
+converter getClassType*(_: typedesc[Thread]): TypeHandle {.importcpp: "Thread::get_class_type()", header: "thread.h".}
 
 proc acquire*(this: MutexDirect) {.importcpp: "#.acquire()".} ## \
 ## Grabs the mutex if it is available.  If it is not available, blocks until
@@ -37729,7 +37729,7 @@ proc initReMutex*(): ReMutex {.importcpp: "ReMutex()".}
 
 proc initReMutex*(name: string): ReMutex {.importcpp: "ReMutex(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[ExternalThread]): TypeHandle {.importcpp: "ExternalThread::get_class_type()", header: "externalThread.h".}
+converter getClassType*(_: typedesc[ExternalThread]): TypeHandle {.importcpp: "ExternalThread::get_class_type()", header: "externalThread.h".}
 
 proc acquire*(this: LightMutexDirect) {.importcpp: "#.acquire()".} ## \
 ## Grabs the lightMutex if it is available.  If it is not available, blocks
@@ -37833,7 +37833,7 @@ proc initLightReMutex*(): LightReMutex {.importcpp: "LightReMutex()".}
 
 proc initLightReMutex*(name: string): LightReMutex {.importcpp: "LightReMutex(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getClassType*(_: typedesc[MainThread]): TypeHandle {.importcpp: "MainThread::get_class_type()", header: "mainThread.h".}
+converter getClassType*(_: typedesc[MainThread]): TypeHandle {.importcpp: "MainThread::get_class_type()", header: "mainThread.h".}
 
 proc initSemaphore*(initial_count: int): Semaphore {.importcpp: "Semaphore(#)".}
 
@@ -37859,7 +37859,7 @@ proc getCount*(this: Semaphore): int {.importcpp: "#.get_count()".} ## \
 
 proc output*(this: Semaphore, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc getClassType*(_: typedesc[PythonThread]): TypeHandle {.importcpp: "PythonThread::get_class_type()", header: "pythonThread.h".}
+converter getClassType*(_: typedesc[PythonThread]): TypeHandle {.importcpp: "PythonThread::get_class_type()", header: "pythonThread.h".}
 
 proc initEventParameter*(): EventParameter {.importcpp: "EventParameter()".}
 
@@ -37985,7 +37985,7 @@ proc wait*(this: AsyncFuture) {.importcpp: "#->wait()".} ## \
 proc wait*(this: AsyncFuture, timeout: float64) {.importcpp: "#->wait(#)".} ## \
 ## Waits until the future is done, or until the timeout is reached.
 
-proc getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "AsyncFuture::get_class_type()", header: "asyncFuture.h".}
+converter getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "AsyncFuture::get_class_type()", header: "asyncFuture.h".}
 
 converter upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(AsyncFuture)(#))".}
 
@@ -38340,9 +38340,9 @@ proc getGlobalPtr*(_: typedesc[AsyncTaskManager]): AsyncTaskManager {.importcpp:
 ## Returns a pointer to the global AsyncTaskManager.  This is the
 ## AsyncTaskManager that most code should use for queueing tasks and suchlike.
 
-proc getClassType*(_: typedesc[AsyncTaskManager]): TypeHandle {.importcpp: "AsyncTaskManager::get_class_type()", header: "asyncTaskManager.h".}
+converter getClassType*(_: typedesc[AsyncTaskManager]): TypeHandle {.importcpp: "AsyncTaskManager::get_class_type()", header: "asyncTaskManager.h".}
 
-proc getClassType*(_: typedesc[AsyncTask]): TypeHandle {.importcpp: "AsyncTask::get_class_type()", header: "asyncTask.h".}
+converter getClassType*(_: typedesc[AsyncTask]): TypeHandle {.importcpp: "AsyncTask::get_class_type()", header: "asyncTask.h".}
 
 proc newAsyncTask*(param0: AsyncTask): AsyncTask {.importcpp: "new AsyncTask(#)".}
 
@@ -38485,13 +38485,13 @@ proc write*(this: AsyncTaskChain, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: AsyncTaskChain, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[AsyncTaskChain]): TypeHandle {.importcpp: "AsyncTaskChain::get_class_type()", header: "asyncTaskChain.h".}
+converter getClassType*(_: typedesc[AsyncTaskChain]): TypeHandle {.importcpp: "AsyncTaskChain::get_class_type()", header: "asyncTaskChain.h".}
 
 proc newAsyncTaskPause*(param0: AsyncTaskPause): AsyncTaskPause {.importcpp: "new AsyncTaskPause(#)".}
 
 proc newAsyncTaskPause*(delay: float64): AsyncTaskPause {.importcpp: "new AsyncTaskPause(#)".}
 
-proc getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "AsyncTaskPause::get_class_type()", header: "asyncTaskPause.h".}
+converter getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "AsyncTaskPause::get_class_type()", header: "asyncTaskPause.h".}
 
 converter upcastToAsyncTask*(this: AsyncTaskSequence): AsyncTask {.importcpp: "(PT(AsyncTask)(#))".}
 
@@ -38514,7 +38514,7 @@ proc getCurrentTaskIndex*(this: AsyncTaskSequence): clonglong {.importcpp: "#->g
 ## Returns the index of the task within the sequence that is currently being
 ## executed (or that will be executed at the next epoch).
 
-proc getClassType*(_: typedesc[AsyncTaskSequence]): TypeHandle {.importcpp: "AsyncTaskSequence::get_class_type()", header: "asyncTaskSequence.h".}
+converter getClassType*(_: typedesc[AsyncTaskSequence]): TypeHandle {.importcpp: "AsyncTaskSequence::get_class_type()", header: "asyncTaskSequence.h".}
 
 proc `==`*(this: ButtonEvent, other: ButtonEvent): bool {.importcpp: "#.operator ==(#)".}
 
@@ -38551,7 +38551,7 @@ proc write*(this: ButtonEventList, `out`: ostream, indent_level: int) {.importcp
 
 proc write*(this: ButtonEventList, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[ButtonEventList]): TypeHandle {.importcpp: "ButtonEventList::get_class_type()", header: "buttonEventList.h".}
+converter getClassType*(_: typedesc[ButtonEventList]): TypeHandle {.importcpp: "ButtonEventList::get_class_type()", header: "buttonEventList.h".}
 
 proc newEvent*(copy: Event): Event {.importcpp: "new Event(#)".}
 
@@ -38580,7 +38580,7 @@ proc clearReceiver*(this: Event) {.importcpp: "#->clear_receiver()".}
 
 proc output*(this: Event, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[Event]): TypeHandle {.importcpp: "Event::get_class_type()", header: "event.h".}
+converter getClassType*(_: typedesc[Event]): TypeHandle {.importcpp: "Event::get_class_type()", header: "event.h".}
 
 proc initEventHandler*(ev_queue: EventQueue): EventHandler {.importcpp: "EventHandler(#)".}
 
@@ -38606,7 +38606,7 @@ proc getGlobalEventHandler*(_: typedesc[EventHandler]): EventHandler {.importcpp
 ## Returns a pointer to the one global EventHandler object.  If the global
 ## object has not yet been created, this will create it.
 
-proc getClassType*(_: typedesc[EventHandler]): TypeHandle {.importcpp: "EventHandler::get_class_type()", header: "eventHandler.h".}
+converter getClassType*(_: typedesc[EventHandler]): TypeHandle {.importcpp: "EventHandler::get_class_type()", header: "eventHandler.h".}
 
 proc newEventQueue*(): EventQueue {.importcpp: "new EventQueue()".}
 
@@ -38698,7 +38698,7 @@ proc matchPattern*(this: PointerEventList, pattern: string, rot: float64, seglen
 ## amount before testing.  Seglen is the minimum length a mouse movement needs
 ## to be in order to be considered significant.
 
-proc getClassType*(_: typedesc[PointerEventList]): TypeHandle {.importcpp: "PointerEventList::get_class_type()", header: "pointerEventList.h".}
+converter getClassType*(_: typedesc[PointerEventList]): TypeHandle {.importcpp: "PointerEventList::get_class_type()", header: "pointerEventList.h".}
 
 proc newPythonTask*(): PythonTask {.importcpp: "new PythonTask()".}
 
@@ -38713,7 +38713,7 @@ proc clearDelay*(this: PythonTask) {.importcpp: "#->clear_delay()".} ## \
 ## to the queue, it will run immediately.  This does not affect the task's
 ## wake time if it has already been added to the queue.
 
-proc getClassType*(_: typedesc[PythonTask]): TypeHandle {.importcpp: "PythonTask::get_class_type()", header: "pythonTask.h".}
+converter getClassType*(_: typedesc[PythonTask]): TypeHandle {.importcpp: "PythonTask::get_class_type()", header: "pythonTask.h".}
 
 proc initAdaptiveLru*(name: string, max_size: clonglong): AdaptiveLru {.importcpp: "AdaptiveLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -39027,7 +39027,7 @@ proc getView*(_: typedesc[InternalName]): InternalName {.importcpp: "InternalNam
 ## Returns the standard InternalName "view".  This is used as a keyword in the
 ## shader subsystem.
 
-proc getClassType*(_: typedesc[InternalName]): TypeHandle {.importcpp: "InternalName::get_class_type()", header: "internalName.h".}
+converter getClassType*(_: typedesc[InternalName]): TypeHandle {.importcpp: "InternalName::get_class_type()", header: "internalName.h".}
 
 proc initGeomVertexColumn*(copy: GeomVertexColumn): GeomVertexColumn {.importcpp: "GeomVertexColumn(#)".}
 
@@ -39245,7 +39245,7 @@ proc getFormatString*(this: GeomVertexArrayFormat): string {.importcpp: "nimStri
 ## the columns in memory, as understood by Python's struct module.  If pad is
 ## true, extra padding bytes are added to the end as 'x' characters as needed.
 
-proc getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
+converter getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: GeomVertexFormat): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -39555,7 +39555,7 @@ proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: 
 ## pair, a 4-component color, a 3-component normal, and a 3-component vertex
 ## position.
 
-proc getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
+converter getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
 
 converter upcastToNamable*(this: SimpleLru): Namable {.importcpp: "#.upcast_to_Namable()".}
 
@@ -39788,7 +39788,7 @@ proc output*(this: VertexDataPage, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc write*(this: VertexDataPage, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
 
-proc getClassType*(_: typedesc[VertexDataPage]): TypeHandle {.importcpp: "VertexDataPage::get_class_type()", header: "vertexDataPage.h".}
+converter getClassType*(_: typedesc[VertexDataPage]): TypeHandle {.importcpp: "VertexDataPage::get_class_type()", header: "vertexDataPage.h".}
 
 proc initVertexDataBook*(block_size: clonglong): VertexDataBook {.importcpp: "VertexDataBook(#)".}
 
@@ -39977,7 +39977,7 @@ proc getBook*(_: typedesc[GeomVertexArrayData]): VertexDataBook {.importcpp: "Ge
 ## Returns the global VertexDataBook that will be used to allocate vertex data
 ## buffers.
 
-proc getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcpp: "GeomVertexArrayData::get_class_type()", header: "geomVertexArrayData.h".}
+converter getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcpp: "GeomVertexArrayData::get_class_type()", header: "geomVertexArrayData.h".}
 
 converter upcastToReferenceCount*(this: GeomVertexArrayDataHandle): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -40029,7 +40029,7 @@ proc copySubdataFrom*(this: GeomVertexArrayDataHandle, to_start: clonglong, to_s
 proc markUsed*(this: GeomVertexArrayDataHandle) {.importcpp: "#->mark_used()".} ## \
 ## Marks the array data recently-used.
 
-proc getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayData.h".}
+converter getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayData.h".}
 
 proc setMaxSize*(this: GeomCacheManager, max_size: int) {.importcpp: "#.set_max_size(#)".} ## \
 ## Specifies the maximum number of entries in the cache for storing pre-
@@ -40093,7 +40093,7 @@ proc getGlobalModified*(_: typedesc[VertexTransform], current_thread: Thread): U
 ## world.  This can be used as a quick way to determine if any
 ## VertexTransforms have changed value recently.
 
-proc getClassType*(_: typedesc[VertexTransform]): TypeHandle {.importcpp: "VertexTransform::get_class_type()", header: "vertexTransform.h".}
+converter getClassType*(_: typedesc[VertexTransform]): TypeHandle {.importcpp: "VertexTransform::get_class_type()", header: "vertexTransform.h".}
 
 proc newTransformTable*(): TransformTable {.importcpp: "new TransformTable()".}
 
@@ -40156,7 +40156,7 @@ proc addTransform*(this: TransformTable, transform: VertexTransform): clonglong 
 
 proc write*(this: TransformTable, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
+converter getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
 
 proc initTransformBlend*(): TransformBlend {.importcpp: "TransformBlend()".}
 
@@ -40270,7 +40270,7 @@ proc output*(this: TransformBlend, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc write*(this: TransformBlend, `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
 
-proc getClassType*(_: typedesc[TransformBlend]): TypeHandle {.importcpp: "TransformBlend::get_class_type()", header: "transformBlend.h".}
+converter getClassType*(_: typedesc[TransformBlend]): TypeHandle {.importcpp: "TransformBlend::get_class_type()", header: "transformBlend.h".}
 
 proc newTransformBlendTable*(): TransformBlendTable {.importcpp: "new TransformBlendTable()".}
 
@@ -40327,7 +40327,7 @@ proc modifyRows*(this: TransformBlendTable): SparseArray {.importcpp: "#->modify
 
 proc write*(this: TransformBlendTable, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
+converter getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
 
 proc getName*(this: VertexSlider): InternalName {.importcpp: "#->get_name()".} ## \
 ## Returns the name of this particular slider.  Every unique blend shape
@@ -40348,7 +40348,7 @@ proc output*(this: VertexSlider, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: VertexSlider, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getClassType*(_: typedesc[VertexSlider]): TypeHandle {.importcpp: "VertexSlider::get_class_type()", header: "vertexSlider.h".}
+converter getClassType*(_: typedesc[VertexSlider]): TypeHandle {.importcpp: "VertexSlider::get_class_type()", header: "vertexSlider.h".}
 
 proc newSliderTable*(): SliderTable {.importcpp: "new SliderTable()".}
 
@@ -40419,7 +40419,7 @@ proc addSlider*(this: SliderTable, slider: VertexSlider, rows: SparseArray): clo
 
 proc write*(this: SliderTable, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
+converter getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
 
 converter upcastToCopyOnWriteObject*(this: GeomVertexData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
@@ -40764,7 +40764,7 @@ proc clearCacheStage*(this: GeomVertexData) {.importcpp: "#->clear_cache_stage()
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc getClassType*(_: typedesc[GeomVertexData]): TypeHandle {.importcpp: "GeomVertexData::get_class_type()", header: "geomVertexData.h".}
+converter getClassType*(_: typedesc[GeomVertexData]): TypeHandle {.importcpp: "GeomVertexData::get_class_type()", header: "geomVertexData.h".}
 
 proc newAnimateVerticesRequest*(param0: AnimateVerticesRequest): AnimateVerticesRequest {.importcpp: "new AnimateVerticesRequest(#)".}
 
@@ -40776,9 +40776,9 @@ proc isReady*(this: AnimateVerticesRequest): bool {.importcpp: "#->is_ready()".}
 ## Equivalent to `req.done() and not req.cancelled()`.
 ## @see done()
 
-proc getClassType*(_: typedesc[AnimateVerticesRequest]): TypeHandle {.importcpp: "AnimateVerticesRequest::get_class_type()", header: "animateVerticesRequest.h".}
+converter getClassType*(_: typedesc[AnimateVerticesRequest]): TypeHandle {.importcpp: "AnimateVerticesRequest::get_class_type()", header: "animateVerticesRequest.h".}
 
-proc getClassType*(_: typedesc[SavedContext]): TypeHandle {.importcpp: "SavedContext::get_class_type()", header: "savedContext.h".}
+converter getClassType*(_: typedesc[SavedContext]): TypeHandle {.importcpp: "SavedContext::get_class_type()", header: "savedContext.h".}
 
 converter upcastToSavedContext*(this: BufferContext): SavedContext {.importcpp: "((SavedContext *)(#))".}
 
@@ -40800,7 +40800,7 @@ proc getResident*(this: BufferContext): bool {.importcpp: "#->get_resident()".} 
 ## Returns the resident flag associated with this object.  An object is
 ## considered "resident" if it appears to be resident in texture memory.
 
-proc getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "BufferContext::get_class_type()", header: "bufferContext.h".}
+converter getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "BufferContext::get_class_type()", header: "bufferContext.h".}
 
 converter upcastToCopyOnWriteObject*(this: GeomPrimitive): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
@@ -41267,7 +41267,7 @@ proc getNumUnusedVerticesPerPrimitive*(this: GeomPrimitive): int {.importcpp: "#
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-proc getClassType*(_: typedesc[GeomPrimitive]): TypeHandle {.importcpp: "GeomPrimitive::get_class_type()", header: "geomPrimitive.h".}
+converter getClassType*(_: typedesc[GeomPrimitive]): TypeHandle {.importcpp: "GeomPrimitive::get_class_type()", header: "geomPrimitive.h".}
 
 proc newTextureStage*(copy: TextureStage): TextureStage {.importcpp: "new TextureStage(#)".} ## \
 ## Initialize the texture stage from other
@@ -41434,7 +41434,7 @@ proc getDefault*(_: typedesc[TextureStage]): TextureStage {.importcpp: "TextureS
 ## does not name a particular stage.  This generally handles the normal
 ## single-texture case.
 
-proc getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "TextureStage::get_class_type()", header: "textureStage.h".}
+converter getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "TextureStage::get_class_type()", header: "textureStage.h".}
 
 converter upcastToCopyOnWriteObject*(this: Geom): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
@@ -41840,55 +41840,55 @@ proc prepareNow*(this: Geom, prepared_objects: PreparedGraphicsObjects, gsg: Gra
 ## a geom does not need to be explicitly prepared by the user before it may be
 ## rendered.
 
-proc getClassType*(_: typedesc[Geom]): TypeHandle {.importcpp: "Geom::get_class_type()", header: "geom.h".}
+converter getClassType*(_: typedesc[Geom]): TypeHandle {.importcpp: "Geom::get_class_type()", header: "geom.h".}
 
 proc getGeom*(this: GeomContext): Geom {.importcpp: "#.get_geom()".}
 
-proc getClassType*(_: typedesc[GeomContext]): TypeHandle {.importcpp: "GeomContext::get_class_type()", header: "geomContext.h".}
+converter getClassType*(_: typedesc[GeomContext]): TypeHandle {.importcpp: "GeomContext::get_class_type()", header: "geomContext.h".}
 
 proc newGeomLines*(copy: GeomLines): GeomLines {.importcpp: "new GeomLines(#)".}
 
-proc getClassType*(_: typedesc[GeomLines]): TypeHandle {.importcpp: "GeomLines::get_class_type()", header: "geomLines.h".}
+converter getClassType*(_: typedesc[GeomLines]): TypeHandle {.importcpp: "GeomLines::get_class_type()", header: "geomLines.h".}
 
 proc newGeomLinesAdjacency*(copy: GeomLinesAdjacency): GeomLinesAdjacency {.importcpp: "new GeomLinesAdjacency(#)".}
 
-proc getClassType*(_: typedesc[GeomLinesAdjacency]): TypeHandle {.importcpp: "GeomLinesAdjacency::get_class_type()", header: "geomLinesAdjacency.h".}
+converter getClassType*(_: typedesc[GeomLinesAdjacency]): TypeHandle {.importcpp: "GeomLinesAdjacency::get_class_type()", header: "geomLinesAdjacency.h".}
 
 proc newGeomLinestrips*(copy: GeomLinestrips): GeomLinestrips {.importcpp: "new GeomLinestrips(#)".}
 
-proc getClassType*(_: typedesc[GeomLinestrips]): TypeHandle {.importcpp: "GeomLinestrips::get_class_type()", header: "geomLinestrips.h".}
+converter getClassType*(_: typedesc[GeomLinestrips]): TypeHandle {.importcpp: "GeomLinestrips::get_class_type()", header: "geomLinestrips.h".}
 
 proc newGeomLinestripsAdjacency*(copy: GeomLinestripsAdjacency): GeomLinestripsAdjacency {.importcpp: "new GeomLinestripsAdjacency(#)".}
 
-proc getClassType*(_: typedesc[GeomLinestripsAdjacency]): TypeHandle {.importcpp: "GeomLinestripsAdjacency::get_class_type()", header: "geomLinestripsAdjacency.h".}
+converter getClassType*(_: typedesc[GeomLinestripsAdjacency]): TypeHandle {.importcpp: "GeomLinestripsAdjacency::get_class_type()", header: "geomLinestripsAdjacency.h".}
 
 proc newGeomPatches*(copy: GeomPatches): GeomPatches {.importcpp: "new GeomPatches(#)".}
 
-proc getClassType*(_: typedesc[GeomPatches]): TypeHandle {.importcpp: "GeomPatches::get_class_type()", header: "geomPatches.h".}
+converter getClassType*(_: typedesc[GeomPatches]): TypeHandle {.importcpp: "GeomPatches::get_class_type()", header: "geomPatches.h".}
 
 proc newGeomPoints*(copy: GeomPoints): GeomPoints {.importcpp: "new GeomPoints(#)".}
 
-proc getClassType*(_: typedesc[GeomPoints]): TypeHandle {.importcpp: "GeomPoints::get_class_type()", header: "geomPoints.h".}
+converter getClassType*(_: typedesc[GeomPoints]): TypeHandle {.importcpp: "GeomPoints::get_class_type()", header: "geomPoints.h".}
 
 proc newGeomTriangles*(copy: GeomTriangles): GeomTriangles {.importcpp: "new GeomTriangles(#)".}
 
-proc getClassType*(_: typedesc[GeomTriangles]): TypeHandle {.importcpp: "GeomTriangles::get_class_type()", header: "geomTriangles.h".}
+converter getClassType*(_: typedesc[GeomTriangles]): TypeHandle {.importcpp: "GeomTriangles::get_class_type()", header: "geomTriangles.h".}
 
 proc newGeomTrianglesAdjacency*(copy: GeomTrianglesAdjacency): GeomTrianglesAdjacency {.importcpp: "new GeomTrianglesAdjacency(#)".}
 
-proc getClassType*(_: typedesc[GeomTrianglesAdjacency]): TypeHandle {.importcpp: "GeomTrianglesAdjacency::get_class_type()", header: "geomTrianglesAdjacency.h".}
+converter getClassType*(_: typedesc[GeomTrianglesAdjacency]): TypeHandle {.importcpp: "GeomTrianglesAdjacency::get_class_type()", header: "geomTrianglesAdjacency.h".}
 
 proc newGeomTrifans*(copy: GeomTrifans): GeomTrifans {.importcpp: "new GeomTrifans(#)".}
 
-proc getClassType*(_: typedesc[GeomTrifans]): TypeHandle {.importcpp: "GeomTrifans::get_class_type()", header: "geomTrifans.h".}
+converter getClassType*(_: typedesc[GeomTrifans]): TypeHandle {.importcpp: "GeomTrifans::get_class_type()", header: "geomTrifans.h".}
 
 proc newGeomTristrips*(copy: GeomTristrips): GeomTristrips {.importcpp: "new GeomTristrips(#)".}
 
-proc getClassType*(_: typedesc[GeomTristrips]): TypeHandle {.importcpp: "GeomTristrips::get_class_type()", header: "geomTristrips.h".}
+converter getClassType*(_: typedesc[GeomTristrips]): TypeHandle {.importcpp: "GeomTristrips::get_class_type()", header: "geomTristrips.h".}
 
 proc newGeomTristripsAdjacency*(copy: GeomTristripsAdjacency): GeomTristripsAdjacency {.importcpp: "new GeomTristripsAdjacency(#)".}
 
-proc getClassType*(_: typedesc[GeomTristripsAdjacency]): TypeHandle {.importcpp: "GeomTristripsAdjacency::get_class_type()", header: "geomTristripsAdjacency.h".}
+converter getClassType*(_: typedesc[GeomTristripsAdjacency]): TypeHandle {.importcpp: "GeomTristripsAdjacency::get_class_type()", header: "geomTristripsAdjacency.h".}
 
 proc initGeomVertexReader*(array_data: GeomVertexArrayData, current_thread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#, #)".} ## \
 ## Constructs a new reader to process the vertices of the indicated array
@@ -42946,7 +42946,7 @@ proc release*(this: SamplerState, prepared_objects: PreparedGraphicsObjects) {.i
 ## Frees the texture context only on the indicated object, if it exists there.
 ## Returns true if it was released, false if it had not been prepared.
 
-proc getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "SamplerState::get_class_type()", header: "samplerState.h".}
+converter getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "SamplerState::get_class_type()", header: "samplerState.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: Texture): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -44281,7 +44281,7 @@ proc rescaleTexture*(this: Texture): bool {.importcpp: "#->rescale_texture()".} 
 ## be useful after loading a Texture image by hand, instead of reading it from
 ## a disk file.  Returns true if the texture is changed, false if it was not.
 
-proc getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
+converter getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
 
 proc load*(_: typedesc[Shader], file: Filename): Shader {.importcpp: "Shader::load(#)", header: "shader.h".} ## \
 ## Loads the shader with the given filename.
@@ -44352,7 +44352,7 @@ proc prepareNow*(this: Shader, prepared_objects: PreparedGraphicsObjects, gsg: G
 ## a shader does not need to be explicitly prepared by the user before it may
 ## be rendered.
 
-proc getClassType*(_: typedesc[Shader]): TypeHandle {.importcpp: "Shader::get_class_type()", header: "shader.h".}
+converter getClassType*(_: typedesc[Shader]): TypeHandle {.importcpp: "Shader::get_class_type()", header: "shader.h".}
 
 proc newShader*(param0: Shader): Shader {.importcpp: "new Shader(#)".}
 
@@ -44395,7 +44395,7 @@ proc releaseAll*(this: ShaderBuffer): int {.importcpp: "#->release_all()".} ## \
 ## Frees the context allocated on all objects for which the data has been
 ## declared.  Returns the number of contexts which have been freed.
 
-proc getClassType*(_: typedesc[ShaderBuffer]): TypeHandle {.importcpp: "ShaderBuffer::get_class_type()", header: "shaderBuffer.h".}
+converter getClassType*(_: typedesc[ShaderBuffer]): TypeHandle {.importcpp: "ShaderBuffer::get_class_type()", header: "shaderBuffer.h".}
 
 proc getName*(this: PreparedGraphicsObjects): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.} ## \
 ## Returns the name of the PreparedGraphicsObjects structure.  This is an
@@ -44827,7 +44827,7 @@ converter upcastToAdaptiveLruPage*(this: IndexBufferContext): AdaptiveLruPage {.
 proc getData*(this: IndexBufferContext): GeomPrimitive {.importcpp: "#.get_data()".} ## \
 ## Returns the pointer to the client-side array data object.
 
-proc getClassType*(_: typedesc[IndexBufferContext]): TypeHandle {.importcpp: "IndexBufferContext::get_class_type()", header: "indexBufferContext.h".}
+converter getClassType*(_: typedesc[IndexBufferContext]): TypeHandle {.importcpp: "IndexBufferContext::get_class_type()", header: "indexBufferContext.h".}
 
 proc makeCopy*(this: Lens): Lens {.importcpp: "#->make_copy()".}
 
@@ -45315,7 +45315,7 @@ proc getLastChange*(this: Lens): UpdateSeq {.importcpp: "#->get_last_change()".}
 ## changed.  As long as this number remains the same, you may assume the lens
 ## properties are unchanged.
 
-proc getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_class_type()", header: "lens.h".}
+converter getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_class_type()", header: "lens.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: Material): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -45540,7 +45540,7 @@ proc isAttribLocked*(this: Material): bool {.importcpp: "#->is_attrib_locked()".
 proc setAttribLock*(this: Material) {.importcpp: "#->set_attrib_lock()".} ## \
 ## @deprecated This no longer has any meaning in 1.10.
 
-proc getClassType*(_: typedesc[Material]): TypeHandle {.importcpp: "Material::get_class_type()", header: "material.h".}
+converter getClassType*(_: typedesc[Material]): TypeHandle {.importcpp: "Material::get_class_type()", header: "material.h".}
 
 proc getMaterial*(_: typedesc[MaterialPool], temp: Material): Material {.importcpp: "MaterialPool::get_material(#)", header: "materialPool.h".} ## \
 ## Returns a Material pointer that represents the same material described by
@@ -45637,11 +45637,11 @@ proc getRightEyeMat*(this: MatrixLens): LMatrix4 {.importcpp: "#->get_right_eye_
 ## Returns the custom projection matrix for the right eye, if any, or the
 ## center matrix if there is no custom matrix set for the right eye.
 
-proc getClassType*(_: typedesc[MatrixLens]): TypeHandle {.importcpp: "MatrixLens::get_class_type()", header: "matrixLens.h".}
+converter getClassType*(_: typedesc[MatrixLens]): TypeHandle {.importcpp: "MatrixLens::get_class_type()", header: "matrixLens.h".}
 
 proc newOrthographicLens*(): OrthographicLens {.importcpp: "new OrthographicLens()".}
 
-proc getClassType*(_: typedesc[OrthographicLens]): TypeHandle {.importcpp: "OrthographicLens::get_class_type()", header: "orthographicLens.h".}
+converter getClassType*(_: typedesc[OrthographicLens]): TypeHandle {.importcpp: "OrthographicLens::get_class_type()", header: "orthographicLens.h".}
 
 proc newParamTextureSampler*(tex: Texture, sampler: SamplerState): ParamTextureSampler {.importcpp: "new ParamTextureSampler(#, #)".} ## \
 ## Creates a new ParamTextureSampler storing the given texture and sampler
@@ -45653,7 +45653,7 @@ proc getTexture*(this: ParamTextureSampler): Texture {.importcpp: "#->get_textur
 proc getSampler*(this: ParamTextureSampler): SamplerState {.importcpp: "#->get_sampler()".} ## \
 ## Retrieves the sampler state stored in the parameter.
 
-proc getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTexture.h".}
+converter getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTexture.h".}
 
 proc newParamTextureImage*(tex: Texture, read: bool, write: bool, z: int, n: int): ParamTextureImage {.importcpp: "new ParamTextureImage(#, #, #, #, #)".} ## \
 ## Creates a new ParamTextureImage storing the given texture and image binding
@@ -45686,13 +45686,13 @@ proc getBindLayer*(this: ParamTextureImage): int {.importcpp: "#->get_bind_layer
 ## Returns the image layer that should be bound.  This is undefined if
 ## get_bind_layered() returns false.
 
-proc getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTexture.h".}
+converter getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTexture.h".}
 
 proc newPerspectiveLens*(): PerspectiveLens {.importcpp: "new PerspectiveLens()".}
 
 proc newPerspectiveLens*(hfov: float32, vfov: float32): PerspectiveLens {.importcpp: "new PerspectiveLens(#, #)".}
 
-proc getClassType*(_: typedesc[PerspectiveLens]): TypeHandle {.importcpp: "PerspectiveLens::get_class_type()", header: "perspectiveLens.h".}
+converter getClassType*(_: typedesc[PerspectiveLens]): TypeHandle {.importcpp: "PerspectiveLens::get_class_type()", header: "perspectiveLens.h".}
 
 proc newTextureReloadRequest*(param0: TextureReloadRequest): TextureReloadRequest {.importcpp: "new TextureReloadRequest(#)".}
 
@@ -45717,7 +45717,7 @@ proc isReady*(this: TextureReloadRequest): bool {.importcpp: "#->is_ready()".} #
 ## Equivalent to `req.done() and not req.cancelled()`.
 ## @see done()
 
-proc getClassType*(_: typedesc[TextureReloadRequest]): TypeHandle {.importcpp: "TextureReloadRequest::get_class_type()", header: "textureReloadRequest.h".}
+converter getClassType*(_: typedesc[TextureReloadRequest]): TypeHandle {.importcpp: "TextureReloadRequest::get_class_type()", header: "textureReloadRequest.h".}
 
 converter upcastToBufferContext*(this: TextureContext): BufferContext {.importcpp: "#.upcast_to_BufferContext()".}
 
@@ -45769,11 +45769,11 @@ proc getSimpleImageModified*(this: TextureContext): UpdateSeq {.importcpp: "#.ge
 ## Returns a sequence number which is guaranteed to change at least every time
 ## the texture's "simple" image data is modified.
 
-proc getClassType*(_: typedesc[TextureContext]): TypeHandle {.importcpp: "TextureContext::get_class_type()", header: "textureContext.h".}
+converter getClassType*(_: typedesc[TextureContext]): TypeHandle {.importcpp: "TextureContext::get_class_type()", header: "textureContext.h".}
 
 proc getShader*(this: ShaderContext): Shader {.importcpp: "#.get_shader()".}
 
-proc getClassType*(_: typedesc[ShaderContext]): TypeHandle {.importcpp: "ShaderContext::get_class_type()", header: "shaderContext.h".}
+converter getClassType*(_: typedesc[ShaderContext]): TypeHandle {.importcpp: "ShaderContext::get_class_type()", header: "shaderContext.h".}
 
 proc newUserVertexSlider*(name: InternalName): UserVertexSlider {.importcpp: "new UserVertexSlider(#)".}
 
@@ -45782,7 +45782,7 @@ proc newUserVertexSlider*(name: string): UserVertexSlider {.importcpp: "new User
 proc setSlider*(this: UserVertexSlider, slider: float32) {.importcpp: "#->set_slider(#)".} ## \
 ## Stores the indicated slider value.
 
-proc getClassType*(_: typedesc[UserVertexSlider]): TypeHandle {.importcpp: "UserVertexSlider::get_class_type()", header: "userVertexSlider.h".}
+converter getClassType*(_: typedesc[UserVertexSlider]): TypeHandle {.importcpp: "UserVertexSlider::get_class_type()", header: "userVertexSlider.h".}
 
 proc newUserVertexTransform*(name: string): UserVertexTransform {.importcpp: "new UserVertexTransform(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -45792,7 +45792,7 @@ proc getName*(this: UserVertexTransform): string {.importcpp: "nimStringFromStdS
 proc setMatrix*(this: UserVertexTransform, matrix: LMatrix4) {.importcpp: "#->set_matrix(#)".} ## \
 ## Stores the indicated matrix.
 
-proc getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcpp: "UserVertexTransform::get_class_type()", header: "userVertexTransform.h".}
+converter getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcpp: "UserVertexTransform::get_class_type()", header: "userVertexTransform.h".}
 
 converter upcastToTexture*(this: VideoTexture): Texture {.importcpp: "(PT(Texture)(#))".}
 
@@ -45813,7 +45813,7 @@ proc getVideoHeight*(this: VideoTexture): int {.importcpp: "#->get_video_height(
 ## necessarily the height of the actual texture, since the texture may have
 ## been expanded to raise it to a power of 2.
 
-proc getClassType*(_: typedesc[VideoTexture]): TypeHandle {.importcpp: "VideoTexture::get_class_type()", header: "videoTexture.h".}
+converter getClassType*(_: typedesc[VideoTexture]): TypeHandle {.importcpp: "VideoTexture::get_class_type()", header: "videoTexture.h".}
 
 converter upcastToBufferContext*(this: VertexBufferContext): BufferContext {.importcpp: "#.upcast_to_BufferContext()".}
 
@@ -45834,7 +45834,7 @@ proc wasModified*(this: VertexBufferContext, reader: GeomVertexArrayDataHandle):
 ## Returns true if the data has been modified since the last time
 ## mark_loaded() was called.
 
-proc getClassType*(_: typedesc[VertexBufferContext]): TypeHandle {.importcpp: "VertexBufferContext::get_class_type()", header: "vertexBufferContext.h".}
+converter getClassType*(_: typedesc[VertexBufferContext]): TypeHandle {.importcpp: "VertexBufferContext::get_class_type()", header: "vertexBufferContext.h".}
 
 proc initTextureCollection*(): TextureCollection {.importcpp: "TextureCollection()".}
 
@@ -46322,7 +46322,7 @@ proc getTexture*(this: GraphicsOutputBase, i: int): Texture {.importcpp: "#->get
 
 proc getTexture*(this: GraphicsOutputBase): Texture {.importcpp: "#->get_texture()".}
 
-proc getClassType*(_: typedesc[GraphicsOutputBase]): TypeHandle {.importcpp: "GraphicsOutputBase::get_class_type()", header: "graphicsOutputBase.h".}
+converter getClassType*(_: typedesc[GraphicsOutputBase]): TypeHandle {.importcpp: "GraphicsOutputBase::get_class_type()", header: "graphicsOutputBase.h".}
 
 proc getIncompleteRender*(this: GraphicsStateGuardianBase): bool {.importcpp: "#->get_incomplete_render()".}
 
@@ -46367,7 +46367,7 @@ proc getGsg*(_: typedesc[GraphicsStateGuardianBase], n: clonglong): GraphicsStat
 ## Returns the nth GSG in the universe.  GSG's automatically add themselves
 ## and remove themselves from this list as they are created and destroyed.
 
-proc getClassType*(_: typedesc[GraphicsStateGuardianBase]): TypeHandle {.importcpp: "GraphicsStateGuardianBase::get_class_type()", header: "graphicsStateGuardianBase.h".}
+converter getClassType*(_: typedesc[GraphicsStateGuardianBase]): TypeHandle {.importcpp: "GraphicsStateGuardianBase::get_class_type()", header: "graphicsStateGuardianBase.h".}
 
 proc initMathNumbers*(): MathNumbers {.importcpp: "MathNumbers()".}
 
@@ -46539,7 +46539,7 @@ proc writeDatagram*(this: LVecBase2f, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
+converter getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
 
 proc initLVecBase2d*(): LVecBase2d {.importcpp: "LVecBase2d()".}
 
@@ -46699,7 +46699,7 @@ proc writeDatagram*(this: LVecBase2d, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
+converter getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
 
 proc initLVecBase2i*(): LVecBase2i {.importcpp: "LVecBase2i()".}
 
@@ -46833,7 +46833,7 @@ proc writeDatagram*(this: LVecBase2i, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase2i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecBase2i::get_class_type()", header: "lvecBase2.h".}
+converter getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecBase2i::get_class_type()", header: "lvecBase2.h".}
 
 proc initLVector2f*(): LVector2f {.importcpp: "LVector2f()".}
 
@@ -46886,7 +46886,7 @@ proc signedAngleDeg*(this: LVector2f, other: LVector2f): float32 {.importcpp: "#
 ## returns the signed angled between two vectors.  normalization is NOT
 ## necessary
 
-proc getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVector2f::get_class_type()", header: "lvector2.h".}
+converter getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVector2f::get_class_type()", header: "lvector2.h".}
 
 proc initLVector2d*(): LVector2d {.importcpp: "LVector2d()".}
 
@@ -46939,7 +46939,7 @@ proc signedAngleDeg*(this: LVector2d, other: LVector2d): float64 {.importcpp: "#
 ## returns the signed angled between two vectors.  normalization is NOT
 ## necessary
 
-proc getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVector2d::get_class_type()", header: "lvector2.h".}
+converter getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVector2d::get_class_type()", header: "lvector2.h".}
 
 proc initLVector2i*(): LVector2i {.importcpp: "LVector2i()".}
 
@@ -46976,7 +46976,7 @@ proc `*`*(this: LVector2i, scalar: int): LVector2i {.importcpp: "#.operator *(#)
 
 proc `/`*(this: LVector2i, scalar: int): LVector2i {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LVector2i]): TypeHandle {.importcpp: "LVector2i::get_class_type()", header: "lvector2.h".}
+converter getClassType*(_: typedesc[LVector2i]): TypeHandle {.importcpp: "LVector2i::get_class_type()", header: "lvector2.h".}
 
 proc initLPoint2f*(): LPoint2f {.importcpp: "LPoint2f()".}
 
@@ -47024,7 +47024,7 @@ proc project*(this: LPoint2f, onto: LVecBase2f): LPoint2f {.importcpp: "#.projec
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LPoint2f]): TypeHandle {.importcpp: "LPoint2f::get_class_type()", header: "lpoint2.h".}
+converter getClassType*(_: typedesc[LPoint2f]): TypeHandle {.importcpp: "LPoint2f::get_class_type()", header: "lpoint2.h".}
 
 proc initLPoint2d*(): LPoint2d {.importcpp: "LPoint2d()".}
 
@@ -47072,7 +47072,7 @@ proc project*(this: LPoint2d, onto: LVecBase2d): LPoint2d {.importcpp: "#.projec
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LPoint2d]): TypeHandle {.importcpp: "LPoint2d::get_class_type()", header: "lpoint2.h".}
+converter getClassType*(_: typedesc[LPoint2d]): TypeHandle {.importcpp: "LPoint2d::get_class_type()", header: "lpoint2.h".}
 
 proc initLPoint2i*(): LPoint2i {.importcpp: "LPoint2i()".}
 
@@ -47112,7 +47112,7 @@ proc `*`*(this: LPoint2i, scalar: int): LPoint2i {.importcpp: "#.operator *(#)".
 
 proc `/`*(this: LPoint2i, scalar: int): LPoint2i {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
+converter getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
 
 proc initLVecBase3f*(): LVecBase3f {.importcpp: "LVecBase3f()".}
 
@@ -47311,7 +47311,7 @@ proc writeDatagram*(this: LVecBase3f, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
+converter getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
 
 proc initLVecBase3d*(): LVecBase3d {.importcpp: "LVecBase3d()".}
 
@@ -47510,7 +47510,7 @@ proc writeDatagram*(this: LVecBase3d, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
+converter getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
 
 proc initLVecBase3i*(): LVecBase3i {.importcpp: "LVecBase3i()".}
 
@@ -47671,7 +47671,7 @@ proc writeDatagram*(this: LVecBase3i, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase3i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase3i]): TypeHandle {.importcpp: "LVecBase3i::get_class_type()", header: "lvecBase3.h".}
+converter getClassType*(_: typedesc[LVecBase3i]): TypeHandle {.importcpp: "LVecBase3i::get_class_type()", header: "lvecBase3.h".}
 
 proc getDefaultCoordinateSystem*(): CoordinateSystem {.importcpp: "get_default_coordinate_system()".}
 
@@ -47815,7 +47815,7 @@ proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32): LV
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc getClassType*(_: typedesc[LVector3f]): TypeHandle {.importcpp: "LVector3f::get_class_type()", header: "lvector3.h".}
+converter getClassType*(_: typedesc[LVector3f]): TypeHandle {.importcpp: "LVector3f::get_class_type()", header: "lvector3.h".}
 
 proc initLVector3d*(): LVector3d {.importcpp: "LVector3d()".}
 
@@ -47949,7 +47949,7 @@ proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64): LV
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc getClassType*(_: typedesc[LVector3d]): TypeHandle {.importcpp: "LVector3d::get_class_type()", header: "lvector3.h".}
+converter getClassType*(_: typedesc[LVector3d]): TypeHandle {.importcpp: "LVector3d::get_class_type()", header: "lvector3.h".}
 
 proc initLVector3i*(): LVector3i {.importcpp: "LVector3i()".}
 
@@ -48047,7 +48047,7 @@ proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int): LVector3i {.im
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc getClassType*(_: typedesc[LVector3i]): TypeHandle {.importcpp: "LVector3i::get_class_type()", header: "lvector3.h".}
+converter getClassType*(_: typedesc[LVector3i]): TypeHandle {.importcpp: "LVector3i::get_class_type()", header: "lvector3.h".}
 
 proc initLPoint3f*(): LPoint3f {.importcpp: "LPoint3f()".}
 
@@ -48129,7 +48129,7 @@ proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32): LPo
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc getClassType*(_: typedesc[LPoint3f]): TypeHandle {.importcpp: "LPoint3f::get_class_type()", header: "lpoint3.h".}
+converter getClassType*(_: typedesc[LPoint3f]): TypeHandle {.importcpp: "LPoint3f::get_class_type()", header: "lpoint3.h".}
 
 proc initLPoint3d*(): LPoint3d {.importcpp: "LPoint3d()".}
 
@@ -48211,7 +48211,7 @@ proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64): LPo
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc getClassType*(_: typedesc[LPoint3d]): TypeHandle {.importcpp: "LPoint3d::get_class_type()", header: "lpoint3.h".}
+converter getClassType*(_: typedesc[LPoint3d]): TypeHandle {.importcpp: "LPoint3d::get_class_type()", header: "lpoint3.h".}
 
 proc initLPoint3i*(): LPoint3i {.importcpp: "LPoint3i()".}
 
@@ -48285,7 +48285,7 @@ proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int): LPoint3i {.impo
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
+converter getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
 
 proc initLVecBase4f*(): LVecBase4f {.importcpp: "LVecBase4f()".}
 
@@ -48479,7 +48479,7 @@ proc writeDatagram*(this: LVecBase4f, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
 proc initUnalignedLVecBase4f*(): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f()".}
 
@@ -48511,7 +48511,7 @@ proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.import
 
 proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVecBase4d*(): LVecBase4d {.importcpp: "LVecBase4d()".}
 
@@ -48705,7 +48705,7 @@ proc writeDatagram*(this: LVecBase4d, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
 proc initUnalignedLVecBase4d*(): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d()".}
 
@@ -48737,7 +48737,7 @@ proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.import
 
 proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVecBase4i*(): LVecBase4i {.importcpp: "LVecBase4i()".}
 
@@ -48905,7 +48905,7 @@ proc writeDatagram*(this: LVecBase4i, destination: Datagram) {.importcpp: "#.wri
 proc readDatagram*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
 proc initUnalignedLVecBase4i*(): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i()".}
 
@@ -48937,7 +48937,7 @@ proc `==`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.import
 
 proc `!=`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
+converter getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVector4f*(): LVector4f {.importcpp: "LVector4f()".}
 
@@ -48994,7 +48994,7 @@ proc project*(this: LVector4f, onto: LVecBase4f): LVector4f {.importcpp: "#.proj
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LVector4f]): TypeHandle {.importcpp: "LVector4f::get_class_type()", header: "lvector4.h".}
+converter getClassType*(_: typedesc[LVector4f]): TypeHandle {.importcpp: "LVector4f::get_class_type()", header: "lvector4.h".}
 
 proc initLVector4d*(): LVector4d {.importcpp: "LVector4d()".}
 
@@ -49051,7 +49051,7 @@ proc project*(this: LVector4d, onto: LVecBase4d): LVector4d {.importcpp: "#.proj
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LVector4d]): TypeHandle {.importcpp: "LVector4d::get_class_type()", header: "lvector4.h".}
+converter getClassType*(_: typedesc[LVector4d]): TypeHandle {.importcpp: "LVector4d::get_class_type()", header: "lvector4.h".}
 
 proc initLVector4i*(): LVector4i {.importcpp: "LVector4i()".}
 
@@ -49100,7 +49100,7 @@ proc `*`*(this: LVector4i, scalar: int): LVector4i {.importcpp: "#.operator *(#)
 
 proc `/`*(this: LVector4i, scalar: int): LVector4i {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LVector4i]): TypeHandle {.importcpp: "LVector4i::get_class_type()", header: "lvector4.h".}
+converter getClassType*(_: typedesc[LVector4i]): TypeHandle {.importcpp: "LVector4i::get_class_type()", header: "lvector4.h".}
 
 proc initLPoint4f*(): LPoint4f {.importcpp: "LPoint4f()".}
 
@@ -49159,7 +49159,7 @@ proc project*(this: LPoint4f, onto: LVecBase4f): LPoint4f {.importcpp: "#.projec
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LPoint4f]): TypeHandle {.importcpp: "LPoint4f::get_class_type()", header: "lpoint4.h".}
+converter getClassType*(_: typedesc[LPoint4f]): TypeHandle {.importcpp: "LPoint4f::get_class_type()", header: "lpoint4.h".}
 
 proc initLPoint4d*(): LPoint4d {.importcpp: "LPoint4d()".}
 
@@ -49218,7 +49218,7 @@ proc project*(this: LPoint4d, onto: LVecBase4d): LPoint4d {.importcpp: "#.projec
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc getClassType*(_: typedesc[LPoint4d]): TypeHandle {.importcpp: "LPoint4d::get_class_type()", header: "lpoint4.h".}
+converter getClassType*(_: typedesc[LPoint4d]): TypeHandle {.importcpp: "LPoint4d::get_class_type()", header: "lpoint4.h".}
 
 proc initLPoint4i*(): LPoint4i {.importcpp: "LPoint4i()".}
 
@@ -49269,7 +49269,7 @@ proc `*`*(this: LPoint4i, scalar: int): LPoint4i {.importcpp: "#.operator *(#)".
 
 proc `/`*(this: LPoint4i, scalar: int): LPoint4i {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LPoint4i]): TypeHandle {.importcpp: "LPoint4i::get_class_type()", header: "lpoint4.h".}
+converter getClassType*(_: typedesc[LPoint4i]): TypeHandle {.importcpp: "LPoint4i::get_class_type()", header: "lpoint4.h".}
 
 proc initLMatrix3f*(): LMatrix3f {.importcpp: "LMatrix3f()".}
 
@@ -49625,7 +49625,7 @@ proc writeDatagram*(this: LMatrix3f, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix3f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix.h".}
 
 proc transpose*(a: LMatrix3d): LMatrix3d {.importcpp: "transpose(#)".}
 
@@ -50016,7 +50016,7 @@ proc writeDatagram*(this: LMatrix4f, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix4f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4f*(): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f()".}
 
@@ -50039,7 +50039,7 @@ proc `==`*(this: UnalignedLMatrix4f, other: UnalignedLMatrix4f): bool {.importcp
 
 proc `!=`*(this: UnalignedLMatrix4f, other: UnalignedLMatrix4f): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix3d*(): LMatrix3d {.importcpp: "LMatrix3d()".}
 
@@ -50395,7 +50395,7 @@ proc writeDatagram*(this: LMatrix3d, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix3d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix4d*(): LMatrix4d {.importcpp: "LMatrix4d()".}
 
@@ -50766,7 +50766,7 @@ proc writeDatagram*(this: LMatrix4d, destination: Datagram) {.importcpp: "#.writ
 proc readDatagram*(this: LMatrix4d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
 ## Reads the matrix from the Datagram using get_stdfloat().
 
-proc getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4d*(): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d()".}
 
@@ -50789,7 +50789,7 @@ proc `==`*(this: UnalignedLMatrix4d, other: UnalignedLMatrix4d): bool {.importcp
 
 proc `!=`*(this: UnalignedLMatrix4d, other: UnalignedLMatrix4d): bool {.importcpp: "#.operator !=(#)".}
 
-proc getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "lmatrix.h".}
+converter getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc `*`*(m: LMatrix3d, q: LQuaterniond): LMatrix3d {.importcpp: "operator *(#, #)".}
 
@@ -51169,7 +51169,7 @@ proc isAlmostIdentity*(this: LQuaternionf, tolerance: float32): bool {.importcpp
 proc identQuat*(_: typedesc[LQuaternionf]): LQuaternionf {.importcpp: "LQuaternionf::ident_quat()", header: "lquaternion.h".} ## \
 ## Returns an identity quaternion.
 
-proc getClassType*(_: typedesc[LQuaternionf]): TypeHandle {.importcpp: "LQuaternionf::get_class_type()", header: "lquaternion.h".}
+converter getClassType*(_: typedesc[LQuaternionf]): TypeHandle {.importcpp: "LQuaternionf::get_class_type()", header: "lquaternion.h".}
 
 proc initLQuaterniond*(): LQuaterniond {.importcpp: "LQuaterniond()".}
 
@@ -51377,7 +51377,7 @@ proc isAlmostIdentity*(this: LQuaterniond, tolerance: float64): bool {.importcpp
 proc identQuat*(_: typedesc[LQuaterniond]): LQuaterniond {.importcpp: "LQuaterniond::ident_quat()", header: "lquaternion.h".} ## \
 ## Returns an identity quaternion.
 
-proc getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQuaterniond::get_class_type()", header: "lquaternion.h".}
+converter getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQuaterniond::get_class_type()", header: "lquaternion.h".}
 
 proc initLRotationf*(): LRotationf {.importcpp: "LRotationf()".}
 
@@ -51409,7 +51409,7 @@ proc `*`*(this: LRotationf, scalar: float32): LRotationf {.importcpp: "#.operato
 
 proc `/`*(this: LRotationf, scalar: float32): LRotationf {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRotationf::get_class_type()", header: "lrotation.h".}
+converter getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRotationf::get_class_type()", header: "lrotation.h".}
 
 proc initLRotationd*(): LRotationd {.importcpp: "LRotationd()".}
 
@@ -51441,7 +51441,7 @@ proc `*`*(this: LRotationd, scalar: float64): LRotationd {.importcpp: "#.operato
 
 proc `/`*(this: LRotationd, scalar: float64): LRotationd {.importcpp: "#.operator /(#)".}
 
-proc getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRotationd::get_class_type()", header: "lrotation.h".}
+converter getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRotationd::get_class_type()", header: "lrotation.h".}
 
 proc initLOrientationf*(): LOrientationf {.importcpp: "LOrientationf()".}
 
@@ -51464,7 +51464,7 @@ proc `*`*(this: LOrientationf, other: LQuaternionf): LOrientationf {.importcpp: 
 
 proc `*`*(this: LOrientationf, other: LRotationf): LOrientationf {.importcpp: "#.operator *(#)".}
 
-proc getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LOrientationf::get_class_type()", header: "lorientation.h".}
+converter getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LOrientationf::get_class_type()", header: "lorientation.h".}
 
 proc initLOrientationd*(): LOrientationd {.importcpp: "LOrientationd()".}
 
@@ -51487,7 +51487,7 @@ proc `*`*(this: LOrientationd, other: LQuaterniond): LOrientationd {.importcpp: 
 
 proc `*`*(this: LOrientationd, other: LRotationd): LOrientationd {.importcpp: "#.operator *(#)".}
 
-proc getClassType*(_: typedesc[LOrientationd]): TypeHandle {.importcpp: "LOrientationd::get_class_type()", header: "lorientation.h".}
+converter getClassType*(_: typedesc[LOrientationd]): TypeHandle {.importcpp: "LOrientationd::get_class_type()", header: "lorientation.h".}
 
 proc initConfigVariableColor*(param0: ConfigVariableColor): ConfigVariableColor {.importcpp: "ConfigVariableColor(#)".}
 
@@ -51553,7 +51553,7 @@ proc write*(this: BoundingVolume, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: BoundingVolume, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[BoundingVolume]): TypeHandle {.importcpp: "BoundingVolume::get_class_type()", header: "boundingVolume.h".}
+converter getClassType*(_: typedesc[BoundingVolume]): TypeHandle {.importcpp: "BoundingVolume::get_class_type()", header: "boundingVolume.h".}
 
 proc extendBy*(this: GeometricBoundingVolume, vol: GeometricBoundingVolume): bool {.importcpp: "#->extend_by(#)".} ## \
 ## Increases the size of the volume to include the given volume.
@@ -51577,7 +51577,7 @@ proc getApproxCenter*(this: GeometricBoundingVolume): LPoint3 {.importcpp: "#->g
 
 proc xform*(this: GeometricBoundingVolume, mat: LMatrix4) {.importcpp: "#->xform(#)".}
 
-proc getClassType*(_: typedesc[GeometricBoundingVolume]): TypeHandle {.importcpp: "GeometricBoundingVolume::get_class_type()", header: "geometricBoundingVolume.h".}
+converter getClassType*(_: typedesc[GeometricBoundingVolume]): TypeHandle {.importcpp: "GeometricBoundingVolume::get_class_type()", header: "geometricBoundingVolume.h".}
 
 proc getMin*(this: FiniteBoundingVolume): LPoint3 {.importcpp: "#->get_min()".}
 
@@ -51585,7 +51585,7 @@ proc getMax*(this: FiniteBoundingVolume): LPoint3 {.importcpp: "#->get_max()".}
 
 proc getVolume*(this: FiniteBoundingVolume): float32 {.importcpp: "#->get_volume()".}
 
-proc getClassType*(_: typedesc[FiniteBoundingVolume]): TypeHandle {.importcpp: "FiniteBoundingVolume::get_class_type()", header: "finiteBoundingVolume.h".}
+converter getClassType*(_: typedesc[FiniteBoundingVolume]): TypeHandle {.importcpp: "FiniteBoundingVolume::get_class_type()", header: "finiteBoundingVolume.h".}
 
 proc initLParabolaf*(): LParabolaf {.importcpp: "LParabolaf()".} ## \
 ## Constructs a meaningless degenerate parabola.
@@ -51878,7 +51878,7 @@ proc getPlane*(this: BoundingBox, n: int): LPlane {.importcpp: "#->get_plane(#)"
 proc setMinMax*(this: BoundingBox, min: LPoint3, max: LPoint3) {.importcpp: "#->set_min_max(#, #)".} ## \
 ## Sets the min and max point of the rectangular solid.
 
-proc getClassType*(_: typedesc[BoundingBox]): TypeHandle {.importcpp: "BoundingBox::get_class_type()", header: "boundingBox.h".}
+converter getClassType*(_: typedesc[BoundingBox]): TypeHandle {.importcpp: "BoundingBox::get_class_type()", header: "boundingBox.h".}
 
 proc initLFrustumf*(): LFrustumf {.importcpp: "LFrustumf()".}
 
@@ -51942,7 +51942,7 @@ proc getNumPlanes*(this: BoundingHexahedron): int {.importcpp: "#->get_num_plane
 proc getPlane*(this: BoundingHexahedron, n: int): LPlane {.importcpp: "#->get_plane(#)".} ## \
 ## Returns the nth face of the hexahedron.
 
-proc getClassType*(_: typedesc[BoundingHexahedron]): TypeHandle {.importcpp: "BoundingHexahedron::get_class_type()", header: "boundingHexahedron.h".}
+converter getClassType*(_: typedesc[BoundingHexahedron]): TypeHandle {.importcpp: "BoundingHexahedron::get_class_type()", header: "boundingHexahedron.h".}
 
 proc newBoundingLine*(a: LPoint3, b: LPoint3): BoundingLine {.importcpp: "new BoundingLine(#, #)".}
 
@@ -51952,7 +51952,7 @@ proc getPointA*(this: BoundingLine): LPoint3 {.importcpp: "#->get_point_a()".} #
 proc getPointB*(this: BoundingLine): LPoint3 {.importcpp: "#->get_point_b()".} ## \
 ## Returns the second point that defines the line.
 
-proc getClassType*(_: typedesc[BoundingLine]): TypeHandle {.importcpp: "BoundingLine::get_class_type()", header: "boundingLine.h".}
+converter getClassType*(_: typedesc[BoundingLine]): TypeHandle {.importcpp: "BoundingLine::get_class_type()", header: "boundingLine.h".}
 
 proc newBoundingPlane*(): BoundingPlane {.importcpp: "new BoundingPlane()".} ## \
 ## Constructs an empty "plane" that has no intersections.
@@ -51961,7 +51961,7 @@ proc newBoundingPlane*(plane: LPlane): BoundingPlane {.importcpp: "new BoundingP
 
 proc getPlane*(this: BoundingPlane): LPlane {.importcpp: "#->get_plane()".}
 
-proc getClassType*(_: typedesc[BoundingPlane]): TypeHandle {.importcpp: "BoundingPlane::get_class_type()", header: "boundingPlane.h".}
+converter getClassType*(_: typedesc[BoundingPlane]): TypeHandle {.importcpp: "BoundingPlane::get_class_type()", header: "boundingPlane.h".}
 
 proc newBoundingSphere*(): BoundingSphere {.importcpp: "new BoundingSphere()".} ## \
 ## Constructs an empty sphere.
@@ -51979,7 +51979,7 @@ proc setCenter*(this: BoundingSphere, center: LPoint3) {.importcpp: "#->set_cent
 proc setRadius*(this: BoundingSphere, radius: float32) {.importcpp: "#->set_radius(#)".} ## \
 ## Sets the radius of the sphere.
 
-proc getClassType*(_: typedesc[BoundingSphere]): TypeHandle {.importcpp: "BoundingSphere::get_class_type()", header: "boundingSphere.h".}
+converter getClassType*(_: typedesc[BoundingSphere]): TypeHandle {.importcpp: "BoundingSphere::get_class_type()", header: "boundingSphere.h".}
 
 proc newIntersectionBoundingVolume*(): IntersectionBoundingVolume {.importcpp: "new IntersectionBoundingVolume()".} ## \
 ## Constructs an empty intersection.
@@ -52000,7 +52000,7 @@ proc addComponent*(this: IntersectionBoundingVolume, component: GeometricBoundin
 ## certain optimizations may prevent the component from being added, or have
 ## other unexpected effects on the total set of components.
 
-proc getClassType*(_: typedesc[IntersectionBoundingVolume]): TypeHandle {.importcpp: "IntersectionBoundingVolume::get_class_type()", header: "intersectionBoundingVolume.h".}
+converter getClassType*(_: typedesc[IntersectionBoundingVolume]): TypeHandle {.importcpp: "IntersectionBoundingVolume::get_class_type()", header: "intersectionBoundingVolume.h".}
 
 proc headsUp*(mat: LMatrix3d, fwd: LVector3d, cs: CoordinateSystem) {.importcpp: "heads_up(#, #, #)".}
 
@@ -52108,7 +52108,7 @@ proc getUint31*(this: Mersenne): int {.importcpp: "#.get_uint31()".} ## \
 
 proc newOmniBoundingVolume*(): OmniBoundingVolume {.importcpp: "new OmniBoundingVolume()".}
 
-proc getClassType*(_: typedesc[OmniBoundingVolume]): TypeHandle {.importcpp: "OmniBoundingVolume::get_class_type()", header: "omniBoundingVolume.h".}
+converter getClassType*(_: typedesc[OmniBoundingVolume]): TypeHandle {.importcpp: "OmniBoundingVolume::get_class_type()", header: "omniBoundingVolume.h".}
 
 proc newUnionBoundingVolume*(): UnionBoundingVolume {.importcpp: "new UnionBoundingVolume()".} ## \
 ## Constructs an empty union.
@@ -52133,7 +52133,7 @@ proc filterIntersection*(this: UnionBoundingVolume, volume: BoundingVolume) {.im
 ## Removes from the union any components that have no intersection with the
 ## indicated volume.
 
-proc getClassType*(_: typedesc[UnionBoundingVolume]): TypeHandle {.importcpp: "UnionBoundingVolume::get_class_type()", header: "unionBoundingVolume.h".}
+converter getClassType*(_: typedesc[UnionBoundingVolume]): TypeHandle {.importcpp: "UnionBoundingVolume::get_class_type()", header: "unionBoundingVolume.h".}
 
 proc initRandomizer*(copy: Randomizer): Randomizer {.importcpp: "Randomizer(#)".}
 
@@ -52605,9 +52605,9 @@ proc writeEgg*(this: ParametricCurve, `out`: ostream, filename: Filename, cs: Co
 ## Writes an egg description of the nurbs curve to the specified output
 ## stream.  Returns true if the file is successfully written.
 
-proc getClassType*(_: typedesc[ParametricCurve]): TypeHandle {.importcpp: "ParametricCurve::get_class_type()", header: "parametricCurve.h".}
+converter getClassType*(_: typedesc[ParametricCurve]): TypeHandle {.importcpp: "ParametricCurve::get_class_type()", header: "parametricCurve.h".}
 
-proc getClassType*(_: typedesc[CubicCurveseg]): TypeHandle {.importcpp: "CubicCurveseg::get_class_type()", header: "cubicCurveseg.h".}
+converter getClassType*(_: typedesc[CubicCurveseg]): TypeHandle {.importcpp: "CubicCurveseg::get_class_type()", header: "cubicCurveseg.h".}
 
 proc newParametricCurveCollection*(): ParametricCurveCollection {.importcpp: "new ParametricCurveCollection()".}
 
@@ -52872,11 +52872,11 @@ proc output*(this: CurveFitter, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc write*(this: CurveFitter, `out`: ostream) {.importcpp: "#.write(#)".}
 
-proc getClassType*(_: typedesc[CurveFitter]): TypeHandle {.importcpp: "CurveFitter::get_class_type()", header: "curveFitter.h".}
+converter getClassType*(_: typedesc[CurveFitter]): TypeHandle {.importcpp: "CurveFitter::get_class_type()", header: "curveFitter.h".}
 
 proc newPiecewiseCurve*(): PiecewiseCurve {.importcpp: "new PiecewiseCurve()".}
 
-proc getClassType*(_: typedesc[PiecewiseCurve]): TypeHandle {.importcpp: "PiecewiseCurve::get_class_type()", header: "piecewiseCurve.h".}
+converter getClassType*(_: typedesc[PiecewiseCurve]): TypeHandle {.importcpp: "PiecewiseCurve::get_class_type()", header: "piecewiseCurve.h".}
 
 proc newHermiteCurve*(): HermiteCurve {.importcpp: "new HermiteCurve()".}
 
@@ -52973,7 +52973,7 @@ proc getCvName*(this: HermiteCurve, n: int): string {.importcpp: "nimStringFromS
 
 proc writeCv*(this: HermiteCurve, `out`: ostream, n: int) {.importcpp: "#->write_cv(#, #)".}
 
-proc getClassType*(_: typedesc[HermiteCurve]): TypeHandle {.importcpp: "HermiteCurve::get_class_type()", header: "hermiteCurve.h".}
+converter getClassType*(_: typedesc[HermiteCurve]): TypeHandle {.importcpp: "HermiteCurve::get_class_type()", header: "hermiteCurve.h".}
 
 proc setOrder*(this: NurbsCurveInterface, order: int) {.importcpp: "#->set_order(#)".}
 
@@ -53021,7 +53021,7 @@ proc getKnot*(this: NurbsCurveInterface, n: int): float32 {.importcpp: "#->get_k
 
 proc writeCv*(this: NurbsCurveInterface, `out`: ostream, n: int) {.importcpp: "#->write_cv(#, #)".}
 
-proc getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcpp: "NurbsCurveInterface::get_class_type()", header: "nurbsCurveInterface.h".}
+converter getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcpp: "NurbsCurveInterface::get_class_type()", header: "nurbsCurveInterface.h".}
 
 converter upcastToPiecewiseCurve*(this: NurbsCurve): PiecewiseCurve {.importcpp: "(PT(PiecewiseCurve)(#))".}
 
@@ -53033,7 +53033,7 @@ proc newNurbsCurve*(pc: ParametricCurve): NurbsCurve {.importcpp: "new NurbsCurv
 ## Constructs a NURBS curve equivalent to the indicated (possibly non-NURBS)
 ## curve.
 
-proc getClassType*(_: typedesc[NurbsCurve]): TypeHandle {.importcpp: "NurbsCurve::get_class_type()", header: "nurbsCurve.h".}
+converter getClassType*(_: typedesc[NurbsCurve]): TypeHandle {.importcpp: "NurbsCurve::get_class_type()", header: "nurbsCurve.h".}
 
 proc getStartT*(this: NurbsCurveResult): float32 {.importcpp: "#->get_start_t()".} ## \
 ## Returns the first legal value of t on the curve.  Usually this is 0.0.
@@ -53583,7 +53583,7 @@ proc resetBound*(this: RopeNode, rel_to: NodePath) {.importcpp: "#->reset_bound(
 ## it must occasionally be called explicitly when the curve has changed
 ## properties outside of this node's knowledge.
 
-proc getClassType*(_: typedesc[RopeNode]): TypeHandle {.importcpp: "RopeNode::get_class_type()", header: "ropeNode.h".}
+converter getClassType*(_: typedesc[RopeNode]): TypeHandle {.importcpp: "RopeNode::get_class_type()", header: "ropeNode.h".}
 
 proc newSheetNode*(name: string): SheetNode {.importcpp: "new SheetNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -53625,7 +53625,7 @@ proc resetBound*(this: SheetNode, rel_to: NodePath) {.importcpp: "#->reset_bound
 ## it must occasionally be called explicitly when the surface has changed
 ## properties outside of this node's knowledge.
 
-proc getClassType*(_: typedesc[SheetNode]): TypeHandle {.importcpp: "SheetNode::get_class_type()", header: "sheetNode.h".}
+converter getClassType*(_: typedesc[SheetNode]): TypeHandle {.importcpp: "SheetNode::get_class_type()", header: "sheetNode.h".}
 
 proc initpixel*(): pixel {.importcpp: "pixel()".}
 
@@ -53689,7 +53689,7 @@ proc getSuggestedExtension*(this: PNMFileType): string {.importcpp: "nimStringFr
 ## Returns a suitable filename extension (without a leading dot) to suggest
 ## for files of this type, or empty string if no suggestions are available.
 
-proc getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pNMFileType.h".}
+converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pNMFileType.h".}
 
 proc getNumTypes*(this: PNMFileTypeRegistry): int {.importcpp: "#.get_num_types()".} ## \
 ## Returns the total number of types registered.
@@ -55668,7 +55668,7 @@ proc isWhitespace*(this: TextGlyph): bool {.importcpp: "#->is_whitespace()".} ##
 ## Returns true if this glyph represents invisible whitespace, or false if it
 ## corresponds to some visible character.
 
-proc getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGlyph::get_class_type()", header: "textGlyph.h".}
+converter getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGlyph::get_class_type()", header: "textGlyph.h".}
 
 converter upcastToTypedReferenceCount*(this: TextFont): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
@@ -55706,7 +55706,7 @@ proc getKerning*(this: TextFont, first: int, second: int): float32 {.importcpp: 
 
 proc write*(this: TextFont, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getClassType*(_: typedesc[TextFont]): TypeHandle {.importcpp: "TextFont::get_class_type()", header: "textFont.h".}
+converter getClassType*(_: typedesc[TextFont]): TypeHandle {.importcpp: "TextFont::get_class_type()", header: "textFont.h".}
 
 proc getPage*(this: DynamicTextGlyph): DynamicTextPage {.importcpp: "#->get_page()".} ## \
 ## Returns the DynamicTextPage that this glyph is on.
@@ -55723,7 +55723,7 @@ proc getYSize*(this: DynamicTextPage): int {.importcpp: "#->get_y_size()".} ## \
 proc isEmpty*(this: DynamicTextPage): bool {.importcpp: "#->is_empty()".} ## \
 ## Returns true if the page has no glyphs, false otherwise.
 
-proc getClassType*(_: typedesc[DynamicTextPage]): TypeHandle {.importcpp: "DynamicTextPage::get_class_type()", header: "dynamicTextPage.h".}
+converter getClassType*(_: typedesc[DynamicTextPage]): TypeHandle {.importcpp: "DynamicTextPage::get_class_type()", header: "dynamicTextPage.h".}
 
 proc newDynamicTextPage*(param0: DynamicTextPage): DynamicTextPage {.importcpp: "new DynamicTextPage(#)".}
 
@@ -55764,7 +55764,7 @@ proc getUvTop*(this: DynamicTextGlyph): float32 {.importcpp: "#->get_uv_top()".}
 ## Returns the UV coordinates that can be used when creating a custom text
 ## renderer.
 
-proc getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: "DynamicTextGlyph::get_class_type()", header: "dynamicTextGlyph.h".}
+converter getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: "DynamicTextGlyph::get_class_type()", header: "dynamicTextGlyph.h".}
 
 converter upcastToTextFont*(this: DynamicTextFont): TextFont {.importcpp: "(PT(TextFont)(#))".}
 
@@ -55995,7 +55995,7 @@ proc clear*(this: DynamicTextFont) {.importcpp: "#->clear()".} ## \
 
 proc write*(this: DynamicTextFont, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
+converter getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
 
 proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::has_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Returns true if the font has ever been loaded, false otherwise.
@@ -56036,7 +56036,7 @@ proc listContents*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "FontPool
 proc write*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "FontPool::write(#)", header: "fontPool.h".} ## \
 ## Lists the contents of the font pool to the indicated output stream.
 
-proc getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
+converter getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
 
 proc newStaticTextFont*(font_def: PandaNode, cs: CoordinateSystem): StaticTextFont {.importcpp: "new StaticTextFont(#, #)".} ## \
 ## The constructor expects the root node to a model generated via egg-mkfont,
@@ -56054,7 +56054,7 @@ proc newStaticTextFont*(font_def: PandaNode): StaticTextFont {.importcpp: "new S
 ## coordinate system in which this model was generated.  "up" in this
 ## coordinate system will be the direction of the top of the letters.
 
-proc getClassType*(_: typedesc[StaticTextFont]): TypeHandle {.importcpp: "StaticTextFont::get_class_type()", header: "staticTextFont.h".}
+converter getClassType*(_: typedesc[StaticTextFont]): TypeHandle {.importcpp: "StaticTextFont::get_class_type()", header: "staticTextFont.h".}
 
 proc initTextProperties*(): TextProperties {.importcpp: "TextProperties()".}
 
@@ -56355,7 +56355,7 @@ proc write*(this: TextProperties, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: TextProperties, `out`: ostream) {.importcpp: "#.write(#)".}
 
-proc getClassType*(_: typedesc[TextProperties]): TypeHandle {.importcpp: "TextProperties::get_class_type()", header: "textProperties.h".}
+converter getClassType*(_: typedesc[TextProperties]): TypeHandle {.importcpp: "TextProperties::get_class_type()", header: "textProperties.h".}
 
 proc initTextGraphic*(): TextGraphic {.importcpp: "TextGraphic()".}
 
@@ -57224,7 +57224,7 @@ proc hasTextScale*(this: TextNode): bool {.importcpp: "#->has_text_scale()".}
 
 proc clearTextScale*(this: TextNode) {.importcpp: "#->clear_text_scale()".}
 
-proc getClassType*(_: typedesc[TextNode]): TypeHandle {.importcpp: "TextNode::get_class_type()", header: "textNode.h".}
+converter getClassType*(_: typedesc[TextNode]): TypeHandle {.importcpp: "TextNode::get_class_type()", header: "textNode.h".}
 
 proc newButtonThrower*(param0: ButtonThrower): ButtonThrower {.importcpp: "new ButtonThrower(#)".}
 
@@ -57448,7 +57448,7 @@ proc clearThrowButtons*(this: ButtonThrower) {.importcpp: "#->clear_throw_button
 ## Empties the set of buttons that were added via add_throw_button().  See
 ## add_throw_button().
 
-proc getClassType*(_: typedesc[ButtonThrower]): TypeHandle {.importcpp: "ButtonThrower::get_class_type()", header: "buttonThrower.h".}
+converter getClassType*(_: typedesc[ButtonThrower]): TypeHandle {.importcpp: "ButtonThrower::get_class_type()", header: "buttonThrower.h".}
 
 proc requireButton*(this: MouseInterfaceNode, button: ButtonHandle, is_down: bool) {.importcpp: "#->require_button(#, #)".} ## \
 ## Indicates that the indicated button must be in the required state (either
@@ -57464,7 +57464,7 @@ proc clearAllButtons*(this: MouseInterfaceNode) {.importcpp: "#->clear_all_butto
 ## Removes all requirements on buttons set by an earlier call to
 ## require_button().
 
-proc getClassType*(_: typedesc[MouseInterfaceNode]): TypeHandle {.importcpp: "MouseInterfaceNode::get_class_type()", header: "mouseInterfaceNode.h".}
+converter getClassType*(_: typedesc[MouseInterfaceNode]): TypeHandle {.importcpp: "MouseInterfaceNode::get_class_type()", header: "mouseInterfaceNode.h".}
 
 proc newMouseInterfaceNode*(param0: MouseInterfaceNode): MouseInterfaceNode {.importcpp: "new MouseInterfaceNode(#)".}
 
@@ -57653,7 +57653,7 @@ proc forceDgraph*(this: DriveInterface) {.importcpp: "#->force_dgraph()".} ## \
 ## for all data graph nodes below this node, causing all data nodes that
 ## depend on this matrix to be updated immediately.
 
-proc getClassType*(_: typedesc[DriveInterface]): TypeHandle {.importcpp: "DriveInterface::get_class_type()", header: "driveInterface.h".}
+converter getClassType*(_: typedesc[DriveInterface]): TypeHandle {.importcpp: "DriveInterface::get_class_type()", header: "driveInterface.h".}
 
 proc newMouseSubregion*(param0: MouseSubregion): MouseSubregion {.importcpp: "new MouseSubregion(#)".}
 
@@ -57681,7 +57681,7 @@ proc setDimensions*(this: MouseSubregion, l: float32, r: float32, b: float32, t:
 ## range from 0 to 1, where 0,0 is the lower left corner and 1,1 is the upper
 ## right; (0, 1, 0, 1) represents the whole window.
 
-proc getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "MouseSubregion::get_class_type()", header: "mouseSubregion.h".}
+converter getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "MouseSubregion::get_class_type()", header: "mouseSubregion.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: MouseWatcherRegion): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -57749,7 +57749,7 @@ proc write*(this: MouseWatcherRegion, `out`: ostream, indent_level: int) {.impor
 
 proc write*(this: MouseWatcherRegion, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[MouseWatcherRegion]): TypeHandle {.importcpp: "MouseWatcherRegion::get_class_type()", header: "mouseWatcherRegion.h".}
+converter getClassType*(_: typedesc[MouseWatcherRegion]): TypeHandle {.importcpp: "MouseWatcherRegion::get_class_type()", header: "mouseWatcherRegion.h".}
 
 proc addRegion*(this: MouseWatcherBase, region: MouseWatcherRegion) {.importcpp: "#->add_region(#)".} ## \
 ## Adds the indicated region to the set of regions in the group.  It is no
@@ -57806,13 +57806,13 @@ proc hideRegions*(this: MouseWatcherBase) {.importcpp: "#->hide_regions()".} ## 
 proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#->update_regions()".} ## \
 ## Refreshes the visualization created by show_regions().
 
-proc getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
+converter getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
 
 converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(#.p()))".}
 
 converter upcastToReferenceCount*(this: MouseWatcherGroup): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
-proc getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp: "MouseWatcherGroup::get_class_type()", header: "mouseWatcherGroup.h".}
+converter getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp: "MouseWatcherGroup::get_class_type()", header: "mouseWatcherGroup.h".}
 
 converter upcastToDataNode*(this: MouseWatcher): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
@@ -58148,7 +58148,7 @@ proc noteActivity*(this: MouseWatcher) {.importcpp: "#->note_activity()".} ## \
 ## with no keyboard or mouse activity and no calls to note_activity(), then
 ## any buttons held will be automatically released.
 
-proc getClassType*(_: typedesc[MouseWatcher]): TypeHandle {.importcpp: "MouseWatcher::get_class_type()", header: "mouseWatcher.h".}
+converter getClassType*(_: typedesc[MouseWatcher]): TypeHandle {.importcpp: "MouseWatcher::get_class_type()", header: "mouseWatcher.h".}
 
 proc hasButton*(this: MouseWatcherParameter): bool {.importcpp: "#.has_button()".} ## \
 ## Returns true if this parameter has an associated mouse or keyboard button,
@@ -58314,7 +58314,7 @@ proc getTransMat*(this: Trackball): LMatrix4 {.importcpp: "#->get_trans_mat()".}
 ## Returns the actual transform that will be applied to the scene graph.  This
 ## is the same as get_mat(), unless invert is in effect.
 
-proc getClassType*(_: typedesc[Trackball]): TypeHandle {.importcpp: "Trackball::get_class_type()", header: "trackball.h".}
+converter getClassType*(_: typedesc[Trackball]): TypeHandle {.importcpp: "Trackball::get_class_type()", header: "trackball.h".}
 
 proc newTransform2SG*(param0: Transform2SG): Transform2SG {.importcpp: "new Transform2SG(#)".}
 
@@ -58327,7 +58327,7 @@ proc getNode*(this: Transform2SG): PandaNode {.importcpp: "#->get_node()".} ## \
 ## Returns the node that this object will adjust, or NULL if the node has not
 ## yet been set.
 
-proc getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2SG.h".}
+converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2SG.h".}
 
 proc play*(this: AnimInterface) {.importcpp: "#->play()".} ## \
 ## Runs the entire animation from beginning to end and stops.
@@ -58435,7 +58435,7 @@ proc isPlaying*(this: AnimInterface): bool {.importcpp: "#->is_playing()".} ## \
 
 proc output*(this: AnimInterface, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[AnimInterface]): TypeHandle {.importcpp: "AnimInterface::get_class_type()", header: "animInterface.h".}
+converter getClassType*(_: typedesc[AnimInterface]): TypeHandle {.importcpp: "AnimInterface::get_class_type()", header: "animInterface.h".}
 
 proc initUpdateSeq*(): UpdateSeq {.importcpp: "UpdateSeq()".} ## \
 ## Creates an UpdateSeq in the 'initial' state.
@@ -58503,13 +58503,13 @@ proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#.get_bam_mod
 ## Returns the current bam_modified counter.  This counter is normally
 ## incremented automatically whenever the object is modified.
 
-proc getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
+converter getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
 
 converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(#.p()))".}
 
 converter upcastToReferenceCount*(this: TypedWritableReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
-proc getClassType*(_: typedesc[TypedWritableReferenceCount]): TypeHandle {.importcpp: "TypedWritableReferenceCount::get_class_type()", header: "typedWritableReferenceCount.h".}
+converter getClassType*(_: typedesc[TypedWritableReferenceCount]): TypeHandle {.importcpp: "TypedWritableReferenceCount::get_class_type()", header: "typedWritableReferenceCount.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: BamCacheRecord): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -58601,7 +58601,7 @@ proc write*(this: BamCacheRecord, `out`: ostream, indent_level: int) {.importcpp
 
 proc write*(this: BamCacheRecord, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[BamCacheRecord]): TypeHandle {.importcpp: "BamCacheRecord::get_class_type()", header: "bamCacheRecord.h".}
+converter getClassType*(_: typedesc[BamCacheRecord]): TypeHandle {.importcpp: "BamCacheRecord::get_class_type()", header: "bamCacheRecord.h".}
 
 proc initBamCache*(): BamCache {.importcpp: "BamCache()".}
 
@@ -59179,7 +59179,7 @@ proc `<<=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator <<=(#
 
 proc `>>=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator >>=(#)".}
 
-proc getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
+converter getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
 
 proc initButtonHandle*(): ButtonHandle {.importcpp: "ButtonHandle()".} ## \
 ## The default constructor must do nothing, because we can't guarantee
@@ -59259,7 +59259,7 @@ proc none*(_: typedesc[ButtonHandle]): ButtonHandle {.importcpp: "ButtonHandle::
 
 proc `typecast bool`*(this: ButtonHandle): bool {.importcpp: "#.operator typecast bool()".}
 
-proc getClassType*(_: typedesc[ButtonHandle]): TypeHandle {.importcpp: "ButtonHandle::get_class_type()", header: "buttonHandle.h".}
+converter getClassType*(_: typedesc[ButtonHandle]): TypeHandle {.importcpp: "ButtonHandle::get_class_type()", header: "buttonHandle.h".}
 
 proc getButton*(this: ButtonRegistry, name: string): ButtonHandle {.importcpp: "#.get_button(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Finds a ButtonHandle in the registry matching the indicated name.  If there
@@ -59324,7 +59324,7 @@ proc write*(this: ButtonMap, `out`: ostream, indent_level: int) {.importcpp: "#-
 
 proc write*(this: ButtonMap, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[ButtonMap]): TypeHandle {.importcpp: "ButtonMap::get_class_type()", header: "buttonMap.h".}
+converter getClassType*(_: typedesc[ButtonMap]): TypeHandle {.importcpp: "ButtonMap::get_class_type()", header: "buttonMap.h".}
 
 proc newButtonMap*(): ButtonMap {.importcpp: "new ButtonMap()".}
 
@@ -59332,7 +59332,7 @@ proc newButtonMap*(param0: ButtonMap): ButtonMap {.importcpp: "new ButtonMap(#)"
 
 proc output*(this: CallbackObject, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[CallbackObject]): TypeHandle {.importcpp: "CallbackObject::get_class_type()", header: "callbackObject.h".}
+converter getClassType*(_: typedesc[CallbackObject]): TypeHandle {.importcpp: "CallbackObject::get_class_type()", header: "callbackObject.h".}
 
 proc newCallbackObject*(param0: CallbackObject): CallbackObject {.importcpp: "new CallbackObject(#)".}
 
@@ -59354,7 +59354,7 @@ proc testRefCountIntegrity*(this: CachedTypedWritableReferenceCount): bool {.imp
 ## Does some easy checks to make sure that the reference count isn't
 ## completely bogus.
 
-proc getClassType*(_: typedesc[CachedTypedWritableReferenceCount]): TypeHandle {.importcpp: "CachedTypedWritableReferenceCount::get_class_type()", header: "cachedTypedWritableReferenceCount.h".}
+converter getClassType*(_: typedesc[CachedTypedWritableReferenceCount]): TypeHandle {.importcpp: "CachedTypedWritableReferenceCount::get_class_type()", header: "cachedTypedWritableReferenceCount.h".}
 
 proc output*(this: CallbackData, `out`: ostream) {.importcpp: "#.output(#)".}
 
@@ -59362,13 +59362,13 @@ proc upcall*(this: CallbackData) {.importcpp: "#.upcall()".} ## \
 ## You should make this call during the callback if you want to continue the
 ## normal function that would have been done in the absence of a callback.
 
-proc getClassType*(_: typedesc[CallbackData]): TypeHandle {.importcpp: "CallbackData::get_class_type()", header: "callbackData.h".}
+converter getClassType*(_: typedesc[CallbackData]): TypeHandle {.importcpp: "CallbackData::get_class_type()", header: "callbackData.h".}
 
 proc newPythonCallbackObject*(): PythonCallbackObject {.importcpp: "new PythonCallbackObject()".}
 
 proc newPythonCallbackObject*(param0: PythonCallbackObject): PythonCallbackObject {.importcpp: "new PythonCallbackObject(#)".}
 
-proc getClassType*(_: typedesc[PythonCallbackObject]): TypeHandle {.importcpp: "PythonCallbackObject::get_class_type()", header: "pythonCallbackObject.h".}
+converter getClassType*(_: typedesc[PythonCallbackObject]): TypeHandle {.importcpp: "PythonCallbackObject::get_class_type()", header: "pythonCallbackObject.h".}
 
 proc initTimeVal*(): TimeVal {.importcpp: "TimeVal()".}
 
@@ -59614,7 +59614,7 @@ proc getGlobalClock*(_: typedesc[ClockObject]): ClockObject {.importcpp: "ClockO
 ## Returns a pointer to the global ClockObject.  This is the ClockObject that
 ## most code should use for handling scene graph rendering and animation.
 
-proc getClassType*(_: typedesc[ClockObject]): TypeHandle {.importcpp: "ClockObject::get_class_type()", header: "clockObject.h".}
+converter getClassType*(_: typedesc[ClockObject]): TypeHandle {.importcpp: "ClockObject::get_class_type()", header: "clockObject.h".}
 
 proc parseColorSpaceString*(str: string): ColorSpace {.importcpp: "parse_color_space_string(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -59630,7 +59630,7 @@ proc cacheRef*(this: CopyOnWriteObject) {.importcpp: "#->cache_ref()".} ## \
 proc cacheUnref*(this: CopyOnWriteObject): bool {.importcpp: "#->cache_unref()".} ## \
 ## @see CachedTypedWritableReferenceCount::cache_unref()
 
-proc getClassType*(_: typedesc[CopyOnWriteObject]): TypeHandle {.importcpp: "CopyOnWriteObject::get_class_type()", header: "copyOnWriteObject.h".}
+converter getClassType*(_: typedesc[CopyOnWriteObject]): TypeHandle {.importcpp: "CopyOnWriteObject::get_class_type()", header: "copyOnWriteObject.h".}
 
 converter upcastToDatagramSink*(this: DatagramBuffer): DatagramSink {.importcpp: "#.upcast_to_DatagramSink()".}
 
@@ -60090,7 +60090,7 @@ proc getReferencedBits*(this: NodeCachedReferenceCount): int {.importcpp: "#->ge
 ## If R_node is included, at least one node is holding a pointer; if R_cache
 ## is included, at least one cache element is.
 
-proc getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.importcpp: "NodeCachedReferenceCount::get_class_type()", header: "nodeCachedReferenceCount.h".}
+converter getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.importcpp: "NodeCachedReferenceCount::get_class_type()", header: "nodeCachedReferenceCount.h".}
 
 proc initSparseArray*(): SparseArray {.importcpp: "SparseArray()".}
 
@@ -60283,23 +60283,23 @@ proc getSubrangeEnd*(this: SparseArray, n: clonglong): int {.importcpp: "#.get_s
 ##
 ## Also see is_inverse().
 
-proc getClassType*(_: typedesc[SparseArray]): TypeHandle {.importcpp: "SparseArray::get_class_type()", header: "sparseArray.h".}
+converter getClassType*(_: typedesc[SparseArray]): TypeHandle {.importcpp: "SparseArray::get_class_type()", header: "sparseArray.h".}
 
 proc getValueType*(this: ParamValueBase): TypeHandle {.importcpp: "#->get_value_type()".} ## \
 ## Returns the type of the underlying value.
 
 proc output*(this: ParamValueBase, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValue.h".}
+converter getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValue.h".}
 
 proc newParamTypedRefCount*(value: TypedReferenceCount): ParamTypedRefCount {.importcpp: "new ParamTypedRefCount(#)".}
 
 proc getValue*(this: ParamTypedRefCount): TypedReferenceCount {.importcpp: "#->get_value()".} ## \
 ## Retrieves the value stored in the parameter.
 
-proc getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramValue.h".}
+converter getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramValue.h".}
 
-proc getClassType*(_: typedesc[WritableConfigurable]): TypeHandle {.importcpp: "WritableConfigurable::get_class_type()", header: "writableConfigurable.h".}
+converter getClassType*(_: typedesc[WritableConfigurable]): TypeHandle {.importcpp: "WritableConfigurable::get_class_type()", header: "writableConfigurable.h".}
 
 proc initUniqueIdAllocator*(param0: UniqueIdAllocator): UniqueIdAllocator {.importcpp: "UniqueIdAllocator(#)".}
 
@@ -60423,7 +60423,7 @@ proc addSfxreverb*(this: FilterProperties) {.importcpp: "#->add_sfxreverb()".} #
 proc addCompress*(this: FilterProperties, threshold: float32, attack: float32, release: float32, gainmakeup: float32) {.importcpp: "#->add_compress(#, #, #, #)".} ## \
 ## Add a compress filter to the end of the DSP chain.
 
-proc getClassType*(_: typedesc[FilterProperties]): TypeHandle {.importcpp: "FilterProperties::get_class_type()", header: "filterProperties.h".}
+converter getClassType*(_: typedesc[FilterProperties]): TypeHandle {.importcpp: "FilterProperties::get_class_type()", header: "filterProperties.h".}
 
 proc play*(this: AudioSound) {.importcpp: "#->play()".} ## \
 ## For best compatibility, set the loop_count, volume, and balance, prior to
@@ -60588,7 +60588,7 @@ proc output*(this: AudioSound, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: AudioSound, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getClassType*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()", header: "audioSound.h".}
+converter getClassType*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()", header: "audioSound.h".}
 
 proc getSpeakerSetup*(this: AudioManager): int {.importcpp: "#->get_speaker_setup()".}
 
@@ -60744,7 +60744,7 @@ proc setSpeakerConfiguration*(this: AudioManager, speaker1: LVecBase3, speaker2:
 proc setSpeakerConfiguration*(this: AudioManager, speaker1: LVecBase3) {.importcpp: "#->set_speaker_configuration(#)".} ## \
 ## set_speaker_configuration is a Miles only method.
 
-proc getClassType*(_: typedesc[AudioManager]): TypeHandle {.importcpp: "AudioManager::get_class_type()", header: "audioManager.h".}
+converter getClassType*(_: typedesc[AudioManager]): TypeHandle {.importcpp: "AudioManager::get_class_type()", header: "audioManager.h".}
 
 proc newAudioLoadRequest*(param0: AudioLoadRequest): AudioLoadRequest {.importcpp: "new AudioLoadRequest(#)".}
 
@@ -60776,7 +60776,7 @@ proc getSound*(this: AudioLoadRequest): AudioSound {.importcpp: "#->get_sound()"
 ## true.
 ## @deprecated Use result() instead.
 
-proc getClassType*(_: typedesc[AudioLoadRequest]): TypeHandle {.importcpp: "AudioLoadRequest::get_class_type()", header: "audioLoadRequest.h".}
+converter getClassType*(_: typedesc[AudioLoadRequest]): TypeHandle {.importcpp: "AudioLoadRequest::get_class_type()", header: "audioLoadRequest.h".}
 
 proc initPGFrameStyle*(): PGFrameStyle {.importcpp: "PGFrameStyle()".}
 
@@ -61109,7 +61109,7 @@ proc getFocusItem*(_: typedesc[PGItem]): PGItem {.importcpp: "PGItem::get_focus_
 ## any, or NULL if no item has keyboard focus.  Use PGItem::set_focus() to
 ## activate or deactivate keyboard focus on a particular item.
 
-proc getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pgItem.h".}
+converter getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pgItem.h".}
 
 proc newPGButton*(name: string): PGButton {.importcpp: "new PGButton(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61165,7 +61165,7 @@ proc getClickEvent*(this: PGButton, button: ButtonHandle): string {.importcpp: "
 ## Returns the event name that will be thrown when the button is clicked
 ## normally.
 
-proc getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pgButton.h".}
+converter getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pgButton.h".}
 
 proc newPGTop*(name: string): PGTop {.importcpp: "new PGTop(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61199,7 +61199,7 @@ proc getStartSort*(this: PGTop): int {.importcpp: "#->get_start_sort()".} ## \
 ## Returns the sort index that is assigned during the traversal to the first
 ## PGItem that is discovered during traversal.  See set_start_sort().
 
-proc getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pgTop.h".}
+converter getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pgTop.h".}
 
 proc newPGEntry*(name: string): PGEntry {.importcpp: "new PGEntry(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61463,7 +61463,7 @@ proc isWtext*(this: PGEntry): bool {.importcpp: "#->is_wtext()".} ## \
 ## are out of the range of an ASCII character (and, therefore, get_wtext()
 ## should be called in preference to get_text()).
 
-proc getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pgEntry.h".}
+converter getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pgEntry.h".}
 
 converter upcastToTypedWritableReferenceCount*(this: PGMouseWatcherParameter): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
@@ -61471,7 +61471,7 @@ converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWa
 
 proc output*(this: PGMouseWatcherParameter, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pgMouseWatcherParameter.h".}
+converter getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pgMouseWatcherParameter.h".}
 
 proc newPGMouseWatcherParameter*(param0: PGMouseWatcherParameter): PGMouseWatcherParameter {.importcpp: "new PGMouseWatcherParameter(#)".}
 
@@ -61479,7 +61479,7 @@ proc newPGMouseWatcherBackground*(): PGMouseWatcherBackground {.importcpp: "new 
 
 proc newPGMouseWatcherBackground*(param0: PGMouseWatcherBackground): PGMouseWatcherBackground {.importcpp: "new PGMouseWatcherBackground(#)".}
 
-proc getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pgMouseWatcherBackground.h".}
+converter getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pgMouseWatcherBackground.h".}
 
 proc newPGVirtualFrame*(name: string): PGVirtualFrame {.importcpp: "new PGVirtualFrame(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61526,7 +61526,7 @@ proc getCanvasNode*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas
 proc getCanvasParent*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas_parent()".} ## \
 ## Returns the parent node of the canvas_node.
 
-proc getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pgVirtualFrame.h".}
+converter getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pgVirtualFrame.h".}
 
 converter upcastToPGItem*(this: PGSliderBar): PGItem {.importcpp: "(PT(PGItem)(#))".}
 
@@ -61698,7 +61698,7 @@ proc recompute*(this: PGSliderBar) {.importcpp: "#->recompute()".} ## \
 ## Recomputes the position and size of the thumb.  Normally this should not
 ## need to be called directly.
 
-proc getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pgSliderBar.h".}
+converter getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pgSliderBar.h".}
 
 converter upcastToPGVirtualFrame*(this: PGScrollFrame): PGVirtualFrame {.importcpp: "(PT(PGVirtualFrame)(#))".}
 
@@ -61787,7 +61787,7 @@ proc recompute*(this: PGScrollFrame) {.importcpp: "#->recompute()".} ## \
 ## Forces the PGScrollFrame to recompute itself right now.  Normally this
 ## should not be required.
 
-proc getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pgScrollFrame.h".}
+converter getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pgScrollFrame.h".}
 
 proc newPGWaitBar*(name: string): PGWaitBar {.importcpp: "new PGWaitBar(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -61821,7 +61821,7 @@ proc getBarStyle*(this: PGWaitBar): PGFrameStyle {.importcpp: "#->get_bar_style(
 ## Returns the kind of frame that is drawn on top of the WaitBar to represent
 ## the amount completed.
 
-proc getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pgWaitBar.h".}
+converter getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pgWaitBar.h".}
 
 proc initNetAddress*(): NetAddress {.importcpp: "NetAddress()".} ## \
 ## Constructs an unspecified address.
@@ -62058,7 +62058,7 @@ proc getAddress*(this: NetDatagram): NetAddress {.importcpp: "#.get_address()".}
 ## Retrieves the host from which the datagram was read, or to which it is
 ## scheduled to be sent.
 
-proc getClassType*(_: typedesc[NetDatagram]): TypeHandle {.importcpp: "NetDatagram::get_class_type()", header: "netDatagram.h".}
+converter getClassType*(_: typedesc[NetDatagram]): TypeHandle {.importcpp: "NetDatagram::get_class_type()", header: "netDatagram.h".}
 
 proc newConnectionManager*(): ConnectionManager {.importcpp: "new ConnectionManager()".}
 
@@ -62539,7 +62539,7 @@ proc GetPeerName*(this: Socket_IP): Socket_Address {.importcpp: "#.GetPeerName()
 
 proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_IP.h".}
 
-proc getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_IP.h".}
+converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_IP.h".}
 
 proc initSocketTCP*(): Socket_TCP {.importcpp: "Socket_TCP()".}
 
@@ -62584,7 +62584,7 @@ proc RecvData*(this: Socket_TCP, max_len: int): string {.importcpp: "nimStringFr
 ## Read the data from the connection - if error 0 if socket closed for read or
 ## length is 0 + bytes read (May be smaller than requested)
 
-proc getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_TCP.h".}
+converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_TCP.h".}
 
 proc initSocketTCPListen*(): Socket_TCP_Listen {.importcpp: "Socket_TCP_Listen()".}
 
@@ -62602,7 +62602,7 @@ proc OpenForListen*(this: Socket_TCP_Listen, port: int): bool {.importcpp: "#.Op
 
 proc GetIncomingConnection*(this: Socket_TCP_Listen, newsession: Socket_TCP, address: Socket_Address): bool {.importcpp: "#.GetIncomingConnection(#, #)".}
 
-proc getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_TCP_Listen.h".}
+converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_TCP_Listen.h".}
 
 proc initSocketUDPIncoming*(): Socket_UDP_Incoming {.importcpp: "Socket_UDP_Incoming()".}
 
@@ -62624,7 +62624,7 @@ proc InitNoAddress*(this: Socket_UDP_Incoming): bool {.importcpp: "#.InitNoAddre
 proc SetToBroadCast*(this: Socket_UDP_Incoming): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Flips the OS bits that allow for brodcast packets to come in on this port.
 
-proc getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_UDP_Incoming.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_UDP_Incoming.h".}
 
 proc initSocketUDPOutgoing*(): Socket_UDP_Outgoing {.importcpp: "Socket_UDP_Outgoing()".}
 
@@ -62643,7 +62643,7 @@ proc SendTo*(this: Socket_UDP_Outgoing, data: string, address: Socket_Address): 
 proc SetToBroadCast*(this: Socket_UDP_Outgoing): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-proc getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_UDP_Outgoing.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_UDP_Outgoing.h".}
 
 proc initSocketFdset*(): Socket_fdset {.importcpp: "Socket_fdset()".} ## \
 ## The constructor
@@ -62708,7 +62708,7 @@ proc AddAddress*(this: Buffered_DatagramConnection, inadr: Socket_Address) {.imp
 
 proc ClearAddresses*(this: Buffered_DatagramConnection) {.importcpp: "#.ClearAddresses()".}
 
-proc getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_DatagramConnection.h".}
+converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_DatagramConnection.h".}
 
 proc initSocketUDP*(): Socket_UDP {.importcpp: "Socket_UDP()".}
 
@@ -62724,7 +62724,7 @@ proc SendTo*(this: Socket_UDP, data: string, address: Socket_Address): bool {.im
 proc SetToBroadCast*(this: Socket_UDP): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-proc getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_UDP.h".}
+converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_UDP.h".}
 
 proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "TiXmlBase::SetCondenseWhiteSpace(#)", header: "tinyxml.h".} ## \
 ## The world does not agree on whether white space should be kept or

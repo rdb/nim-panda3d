@@ -7333,9 +7333,9 @@ func magicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStd
 ## Returns a string with the first n bytes written to a Multifile, to identify
 ## it as a Multifile.
 
-func name*(this: Namable): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
+func name*(this: Namable): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
-proc `name=`*(this: Namable, name: string) {.importcpp: "#.set_name(nimStringToStdString(#))", header: stringConversionCode.}
+proc `name=`*(this: Namable, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.}
 
 func longTime*(this: TrueClock): float64 {.importcpp: "#.get_long_time()".} ## \
 ## get_long_time() returns the most accurate timer we have over a long

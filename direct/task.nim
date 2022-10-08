@@ -8,6 +8,7 @@ public:
   typedef int TaskProc(PT(AsyncTask) task, void *env);
 
   NimTask(TaskProc *proc, void *env) : _proc(proc), _env(env) {}
+  virtual ~NimTask();
 
   ALLOC_DELETED_CHAIN(NimTask);
 
@@ -19,6 +20,17 @@ private:
   TaskProc *_proc;
   void *_env;
 };
+""".}
+
+proc unrefEnv(envp: pointer): string {.noinit, exportcpp: "unrefEnv".} =
+  GC_unref(cast[RootRef](envp))
+
+{.emit: """
+NimTask::~NimTask() {
+  if (_env != nullptr) {
+    unrefEnv(_env);
+  }
+}
 """.}
 
 type
@@ -55,6 +67,9 @@ type
 proc add*(this: TaskManager, function: (proc(task: Task): DoneStatus), name: string, sort: int = 0) : AsyncTask {.discardable.} =
   var procp = rawProc(function);
   var envp = rawEnv(function);
+  if envp != nil:
+    GC_ref(cast[RootRef](envp))
+
   {.emit: """
   `result` = new NimTask((NimTask::TaskProc *)`procp`, `envp`);
   `this`->mgr->add(`result`.p());

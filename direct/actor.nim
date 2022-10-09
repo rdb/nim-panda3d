@@ -65,3 +65,8 @@ proc pingpong*(this: var Actor, animName: string, restart: bool = true, partName
 
 proc pose*(this: var Actor, animName: string, frame: float, partName: string = "modelRoot") =
   this.getAnimControl(animName, partName).pose(frame)
+
+proc getCurrentAnim*(this: var Actor, partName: string = "modelRoot"): string =
+  for animName, anim in this.partDict[partName]:
+    if anim.animControl and anim.animControl.isPlaying():
+      return animName

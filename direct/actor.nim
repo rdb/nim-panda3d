@@ -70,3 +70,6 @@ proc getCurrentAnim*(this: var Actor, partName: string = "modelRoot"): string =
   for animName, anim in this.partDict[partName]:
     if anim.animControl and anim.animControl.isPlaying():
       return animName
+
+proc setPlayRate*(this: var Actor, rate: float, animName: string, partName: string = "modelRoot") =
+  this.getAnimControl(animName, partName).setPlayRate(rate)

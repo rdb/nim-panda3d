@@ -114,7 +114,6 @@ var directionalLight = newDirectionalLight("directionalLight")
 directionalLight.setDirection(initLVector3f(-5, -5, -5))
 directionalLight.setColor(initLVector4f(1))
 directionalLight.setSpecularColor(initLVector4f(1))
-# TODO: typemismatch:
 base.render.setLight(base.render.attachNewNode(directionalLight))
 
 
@@ -147,7 +146,7 @@ base.accept("arrow_down-up", proc () = setKey(backward, false))
 base.accept("a-up", proc () = setKey(cam_left, false))
 base.accept("s-up", proc () = setKey(cam_right, false))
 
-var currentAnim: string = "none"
+var currentAnim: string
 
 # Accepts arrow keys to move either the player or the menu cursor,
 # Also deals with grid checking and collision detection
@@ -169,26 +168,26 @@ proc move(task:Task): auto =
 
   # If ralph is moving, loop the run animation.
   # If he is standing still, stop the animation.
+  currentAnim = ralph.getCurrentAnim()
+  if currentAnim == "":
+    currentAnim = "none"
+
   if keyMap[forward]:
     if currentAnim != "run":
       ralph.loop("run")
-      currentAnim = "run"
   elif keyMap[backward]:
     # Play the walk animation backwards.
     if currentAnim != "walk":
       ralph.loop("walk")
-      currentAnim = "walk"
     ralph.setPlayRate(-1.0, "walk")
   elif keyMap[left] or keyMap[right]:
     if currentAnim != "walk":
       ralph.loop("walk")
-      currentAnim = "walk"
     ralph.setPlayRate(1.0, "walk")
   else:
     ralph.stop("run")
     ralph.stop("walk")
     ralph.pose("walk", 5)
-    currentAnim = "none"
 
   var camvec = ralph.getPos() - base.camera.getPos()
   camvec.setZ(0)

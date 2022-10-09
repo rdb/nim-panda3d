@@ -80,8 +80,8 @@ var
 ralphGroundRay.setOrigin(0, 0, 9)
 ralphGroundRay.setDirection(0, 0, -1)
 discard ralphGroundCol.addSolid(ralphGroundRay)
-ralphGroundCol.setFromCollideMask(0)
-ralphGroundCol.setIntoCollideMask(1)
+#ralphGroundCol.setFromCollideMask(0)
+#ralphGroundCol.setIntoCollideMask(1)
 cTrav.addCollider(ralphGroundColNp, ralphGroundHandler)
 
 var
@@ -115,7 +115,7 @@ directionalLight.setDirection(initLVector3f(-5, -5, -5))
 directionalLight.setColor(initLVector4f(1))
 directionalLight.setSpecularColor(initLVector4f(1))
 # TODO: typemismatch:
-#base.render.setLight(base.render.attachNewNode(directionalLight))
+base.render.setLight(base.render.attachNewNode(directionalLight))
 
 
 # This is used to store which keys are currently pressed.

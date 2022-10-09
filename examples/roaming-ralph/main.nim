@@ -80,8 +80,8 @@ var
 ralphGroundRay.setOrigin(0, 0, 9)
 ralphGroundRay.setDirection(0, 0, -1)
 discard ralphGroundCol.addSolid(ralphGroundRay)
-#ralphGroundCol.setFromCollideMask(0)
-#ralphGroundCol.setIntoCollideMask(1)
+ralphGroundCol.setFromCollideMask(0)
+ralphGroundCol.setIntoCollideMask(1)
 cTrav.addCollider(ralphGroundColNp, ralphGroundHandler)
 
 var
@@ -147,10 +147,12 @@ base.accept("arrow_down-up", proc () = setKey(backward, false))
 base.accept("a-up", proc () = setKey(cam_left, false))
 base.accept("s-up", proc () = setKey(cam_right, false))
 
+var currentAnim: string = "none"
+
 # Accepts arrow keys to move either the player or the menu cursor,
 # Also deals with grid checking and collision detection
 proc move(task:Task): auto =
-  var dt = 0.5 #base.clock.get_dt()
+  var dt = base.clock.get_dt()
   if keyMap[cam_left]:
     base.camera.setX(base.camera, -20 * dt)
   if keyMap[cam_right]:
@@ -167,23 +169,26 @@ proc move(task:Task): auto =
 
   # If ralph is moving, loop the run animation.
   # If he is standing still, stop the animation.
-  var currentAnim = "walk" #ralph.getCurrentAnim()
   if keyMap[forward]:
     if currentAnim != "run":
       ralph.loop("run")
+      currentAnim = "run"
   elif keyMap[backward]:
     # Play the walk animation backwards.
     if currentAnim != "walk":
       ralph.loop("walk")
-    #ralph.setPlayRate(-1.0, "walk")
+      currentAnim = "walk"
+    ralph.setPlayRate(-1.0, "walk")
   elif keyMap[left] or keyMap[right]:
     if currentAnim != "walk":
       ralph.loop("walk")
-    #ralph.setPlayRate(1.0, "walk")
+      currentAnim = "walk"
+    ralph.setPlayRate(1.0, "walk")
   else:
     ralph.stop("run")
     ralph.stop("walk")
     ralph.pose("walk", 5)
+    currentAnim = "none"
 
   var camvec = ralph.getPos() - base.camera.getPos()
   camvec.setZ(0)

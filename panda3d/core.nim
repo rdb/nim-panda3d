@@ -1164,7 +1164,7 @@ converter toBool*(this: LODNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: LODNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LODNode], obj: TypedObject): LODNode {.importcpp: "DCAST(LODNode, @)".}
 
-type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLODNode.h".} = object of LODNode
+type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLodNode.h".} = object of LODNode
   ## A Level-of-Detail node with alpha based switching.
 
 converter toFadeLODNode*(_: type(nil)): FadeLODNode {.importcpp: "(nullptr)".}
@@ -5542,14 +5542,14 @@ type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".}
 
 type xel* = pixel
 
-type PNMFileType* {.importcpp: "PNMFileType", pure, inheritable, header: "pNMFileType.h".} = object of TypedWritable
+type PNMFileType* {.importcpp: "PNMFileType", pure, inheritable, header: "pnmFileType.h".} = object of TypedWritable
   ## This is the base class of a family of classes that represent particular
   ## image file types that PNMImage supports.
 
-type PNMFileTypeRegistry* {.importcpp: "PNMFileTypeRegistry", pure, inheritable, header: "pNMFileTypeRegistry.h".} = object
+type PNMFileTypeRegistry* {.importcpp: "PNMFileTypeRegistry", pure, inheritable, header: "pnmFileTypeRegistry.h".} = object
   ## This class maintains the set of all known PNMFileTypes in the universe.
 
-type PNMImageHeader* {.importcpp: "PNMImageHeader", pure, inheritable, header: "pNMImageHeader.h".} = object
+type PNMImageHeader* {.importcpp: "PNMImageHeader", pure, inheritable, header: "pnmImageHeader.h".} = object
   ## This is the base class of PNMImage, PNMReader, and PNMWriter.  It
   ## encapsulates all the information associated with an image that describes
   ## its size, number of channels, etc; that is, all the information about the
@@ -5560,7 +5560,7 @@ type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} =
   ## Defines a pfm file, a 2-d table of floating-point numbers, either
   ## 3-component or 1-component, or with a special extension, 2- or 4-component.
 
-type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pNMBrush.h".} = object of ReferenceCount
+type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pnmBrush.h".} = object of ReferenceCount
   ## This class is used to control the shape and color of the drawing operations
   ## performed by a PNMPainter object.
   ##
@@ -5577,7 +5577,7 @@ converter toBool*(this: PNMBrush): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PNMBrush, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PNMBrush], obj: TypedObject): PNMBrush {.importcpp: "DCAST(PNMBrush, @)".}
 
-type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pNMImage.h".} = object of PNMImageHeader
+type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pnmImage.h".} = object of PNMImageHeader
   ## The name of this class derives from the fact that we originally implemented
   ## it as a layer on top of the "pnm library", based on netpbm, which was built
   ## to implement pbm, pgm, and pbm files, and is the underlying support of a
@@ -5606,7 +5606,7 @@ type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pNMImage.h".
   ## This class is not inherently thread-safe; use it from a single thread or
   ## protect access using a mutex.
 
-type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pNMPainter.h".} = object
+type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pnmPainter.h".} = object
   ## This class provides a number of convenient methods for painting drawings
   ## directly into a PNMImage.
   ##
@@ -6457,7 +6457,7 @@ converter toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr
 converter toBool*(this: Socket_Address): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Socket_Address, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_IP.h".} = object of TypedObject
+type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_ip.h".} = object of TypedObject
   ## Base functionality for a INET domain Socket This call should be the
   ## starting point for all other unix domain sockets.
   ##
@@ -6466,28 +6466,28 @@ type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_IP.
   ## \|                       \|                           \| SocketTCP
   ## SocketTCP_Listen    SocketUDP_Incoming   SocketUDP_OutBound
 
-type Socket_TCP* {.importcpp: "Socket_TCP", pure, inheritable, header: "socket_TCP.h".} = object of Socket_IP
+type Socket_TCP* {.importcpp: "Socket_TCP", pure, inheritable, header: "socket_tcp.h".} = object of Socket_IP
   ## Base functionality for a TCP connected socket This class is pretty useless
   ## by itself but it does hide some of the platform differences from machine to
   ## machine
 
-type Socket_TCP_Listen* {.importcpp: "Socket_TCP_Listen", pure, inheritable, header: "socket_TCP_Listen.h".} = object of Socket_IP
+type Socket_TCP_Listen* {.importcpp: "Socket_TCP_Listen", pure, inheritable, header: "socket_tcp_listen.h".} = object of Socket_IP
   ## Base functionality for a TCP rendezvous socket
 
-type Socket_UDP_Incoming* {.importcpp: "Socket_UDP_Incoming", pure, inheritable, header: "socket_UDP_Incoming.h".} = object of Socket_IP
+type Socket_UDP_Incoming* {.importcpp: "Socket_UDP_Incoming", pure, inheritable, header: "socket_udp_incoming.h".} = object of Socket_IP
   ## Base functionality for a UDP Reader
 
-type Socket_UDP_Outgoing* {.importcpp: "Socket_UDP_Outgoing", pure, inheritable, header: "socket_UDP_Outgoing.h".} = object of Socket_IP
+type Socket_UDP_Outgoing* {.importcpp: "Socket_UDP_Outgoing", pure, inheritable, header: "socket_udp_outgoing.h".} = object of Socket_IP
   ## Base functionality for a UDP sending socket
 
 type Socket_fdset* {.importcpp: "Socket_fdset", pure, inheritable, header: "socket_fdset.h".} = object
 
-type Buffered_DatagramConnection* {.importcpp: "Buffered_DatagramConnection", pure, inheritable, header: "buffered_DatagramConnection.h".} = object of Socket_TCP
+type Buffered_DatagramConnection* {.importcpp: "Buffered_DatagramConnection", pure, inheritable, header: "buffered_datagramconnection.h".} = object of Socket_TCP
   ## there are 3 states 1. Socket not even assigned,,,, 2. Socket Assigned and
   ## trying to get a active connect open 3. Socket is open and  writable.. (
   ## Fully powered up )...
 
-type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_UDP.h".} = object of Socket_UDP_Incoming
+type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_udp.h".} = object of Socket_UDP_Incoming
   ## Base functionality for a combination UDP Reader and Writer.  This
   ## duplicates code from Socket_UDP_Outgoing, to avoid the problems of multiple
   ## inheritance.
@@ -6753,10 +6753,10 @@ type TiXmlPrinter* {.importcpp: "TiXmlPrinter", pure, inheritable, header: "tiny
   ## fprintf( stdout, "%s", printer.CStr() );
   ## @endverbatim
 
-type PNMTextGlyph* {.importcpp: "PNMTextGlyph", pure, inheritable, header: "pNMTextGlyph.h".} = object
+type PNMTextGlyph* {.importcpp: "PNMTextGlyph", pure, inheritable, header: "pnmTextGlyph.h".} = object
   ## A single glyph in a PNMTextMaker.
 
-type PNMTextMaker* {.importcpp: "PNMTextMaker", pure, inheritable, header: "pNMTextMaker.h".} = object of FreetypeFont
+type PNMTextMaker* {.importcpp: "PNMTextMaker", pure, inheritable, header: "pnmTextMaker.h".} = object of FreetypeFont
   ## This object uses the Freetype library to generate text directly into an
   ## image.  It is different from the TextNode/DynamicTextFont interface, which
   ## use the Freetype library to generate text in the scene graph, to be
@@ -20613,7 +20613,7 @@ proc getFadeStateOverride*(this: FadeLODNode): int {.importcpp: "#->get_fade_sta
 ## to apply the fade effect.  This should be larger than any attrib overrides
 ## on the fading geometry.
 
-converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLODNode.h".}
+converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLodNode.h".}
 
 proc getTrav*(this: NodeCullCallbackData): CullTraverser {.importcpp: "#.get_trav()".} ## \
 ## Returns the CullTraverser in use at the time of the callback.  This object
@@ -53689,7 +53689,7 @@ proc getSuggestedExtension*(this: PNMFileType): string {.importcpp: "nimStringFr
 ## Returns a suitable filename extension (without a leading dot) to suggest
 ## for files of this type, or empty string if no suggestions are available.
 
-converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pNMFileType.h".}
+converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pnmFileType.h".}
 
 proc getNumTypes*(this: PNMFileTypeRegistry): int {.importcpp: "#.get_num_types()".} ## \
 ## Returns the total number of types registered.
@@ -53721,7 +53721,7 @@ proc write*(this: PNMFileTypeRegistry, `out`: ostream) {.importcpp: "#.write(#)"
 ## Writes a list of supported image file types to the indicated output stream,
 ## one per line.
 
-proc getGlobalPtr*(_: typedesc[PNMFileTypeRegistry]): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry::get_global_ptr()", header: "pNMFileTypeRegistry.h".} ## \
+proc getGlobalPtr*(_: typedesc[PNMFileTypeRegistry]): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry::get_global_ptr()", header: "pnmFileTypeRegistry.h".} ## \
 ## Returns a pointer to the global PNMFileTypeRegistry object.
 
 proc initPNMFileTypeRegistry*(param0: PNMFileTypeRegistry): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry(#)".}
@@ -54478,19 +54478,19 @@ proc applyExponent*(this: PfmFile, c0_exponent: float32, c1_exponent: float32, c
 
 proc output*(this: PfmFile, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc makeTransparent*(_: typedesc[PNMBrush]): PNMBrush {.importcpp: "PNMBrush::make_transparent()", header: "pNMBrush.h".} ## \
+proc makeTransparent*(_: typedesc[PNMBrush]): PNMBrush {.importcpp: "PNMBrush::make_transparent()", header: "pnmBrush.h".} ## \
 ## Returns a new brush that does not paint anything.  Can be used as either a
 ## pen or a fill brush to make borderless or unfilled shapes, respectively.
 
-proc makePixel*(_: typedesc[PNMBrush], color: LColorf): PNMBrush {.importcpp: "PNMBrush::make_pixel(#)", header: "pNMBrush.h".} ## \
+proc makePixel*(_: typedesc[PNMBrush], color: LColorf): PNMBrush {.importcpp: "PNMBrush::make_pixel(#)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a single pixel of the indicated color on a
 ## border, or paints a solid color in an interior.
 
-proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool): PNMBrush {.importcpp: "PNMBrush::make_spot(#, #, #)", header: "pNMBrush.h".} ## \
+proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool): PNMBrush {.importcpp: "PNMBrush::make_spot(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a spot of the indicated color and radius.
 ## If fuzzy is true, the spot is fuzzy; otherwise, it is hard-edged.
 
-proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32): PNMBrush {.importcpp: "PNMBrush::make_image(#, #, #)", header: "pNMBrush.h".} ## \
+proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32): PNMBrush {.importcpp: "PNMBrush::make_image(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints with the indicated image.  xc and yc
 ## indicate the pixel in the center of the brush.
 ##
@@ -58327,7 +58327,7 @@ proc getNode*(this: Transform2SG): PandaNode {.importcpp: "#->get_node()".} ## \
 ## Returns the node that this object will adjust, or NULL if the node has not
 ## yet been set.
 
-converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2SG.h".}
+converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2sg.h".}
 
 proc play*(this: AnimInterface) {.importcpp: "#->play()".} ## \
 ## Runs the entire animation from beginning to end and stops.
@@ -62502,7 +62502,7 @@ proc initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".} ## \
 proc Close*(this: Socket_IP) {.importcpp: "#.Close()".} ## \
 ## Closes a socket if it is open (allocated).
 
-proc GetLastError*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::GetLastError()", header: "socket_IP.h".} ## \
+proc GetLastError*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::GetLastError()", header: "socket_ip.h".} ## \
 ## Gets the last errcode from a socket operation.
 
 proc SetNonBlocking*(this: Socket_IP): int {.importcpp: "#.SetNonBlocking()".} ## \
@@ -62537,9 +62537,9 @@ proc GetSocket*(this: Socket_IP): int {.importcpp: "#.GetSocket()".} ## \
 proc GetPeerName*(this: Socket_IP): Socket_Address {.importcpp: "#.GetPeerName()".} ## \
 ## Wrapper on berkly getpeername...
 
-proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_IP.h".}
+proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_ip.h".}
 
-converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_IP.h".}
+converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_ip.h".}
 
 proc initSocketTCP*(): Socket_TCP {.importcpp: "Socket_TCP()".}
 
@@ -62584,7 +62584,7 @@ proc RecvData*(this: Socket_TCP, max_len: int): string {.importcpp: "nimStringFr
 ## Read the data from the connection - if error 0 if socket closed for read or
 ## length is 0 + bytes read (May be smaller than requested)
 
-converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_TCP.h".}
+converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_tcp.h".}
 
 proc initSocketTCPListen*(): Socket_TCP_Listen {.importcpp: "Socket_TCP_Listen()".}
 
@@ -62602,7 +62602,7 @@ proc OpenForListen*(this: Socket_TCP_Listen, port: int): bool {.importcpp: "#.Op
 
 proc GetIncomingConnection*(this: Socket_TCP_Listen, newsession: Socket_TCP, address: Socket_Address): bool {.importcpp: "#.GetIncomingConnection(#, #)".}
 
-converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_TCP_Listen.h".}
+converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_tcp_listen.h".}
 
 proc initSocketUDPIncoming*(): Socket_UDP_Incoming {.importcpp: "Socket_UDP_Incoming()".}
 
@@ -62624,7 +62624,7 @@ proc InitNoAddress*(this: Socket_UDP_Incoming): bool {.importcpp: "#.InitNoAddre
 proc SetToBroadCast*(this: Socket_UDP_Incoming): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Flips the OS bits that allow for brodcast packets to come in on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_UDP_Incoming.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_udp_incoming.h".}
 
 proc initSocketUDPOutgoing*(): Socket_UDP_Outgoing {.importcpp: "Socket_UDP_Outgoing()".}
 
@@ -62643,7 +62643,7 @@ proc SendTo*(this: Socket_UDP_Outgoing, data: string, address: Socket_Address): 
 proc SetToBroadCast*(this: Socket_UDP_Outgoing): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_UDP_Outgoing.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_udp_outgoing.h".}
 
 proc initSocketFdset*(): Socket_fdset {.importcpp: "Socket_fdset()".} ## \
 ## The constructor
@@ -62708,7 +62708,7 @@ proc AddAddress*(this: Buffered_DatagramConnection, inadr: Socket_Address) {.imp
 
 proc ClearAddresses*(this: Buffered_DatagramConnection) {.importcpp: "#.ClearAddresses()".}
 
-converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_DatagramConnection.h".}
+converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_datagramconnection.h".}
 
 proc initSocketUDP*(): Socket_UDP {.importcpp: "Socket_UDP()".}
 
@@ -62724,7 +62724,7 @@ proc SendTo*(this: Socket_UDP, data: string, address: Socket_Address): bool {.im
 proc SetToBroadCast*(this: Socket_UDP): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_UDP.h".}
+converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_udp.h".}
 
 proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "TiXmlBase::SetCondenseWhiteSpace(#)", header: "tinyxml.h".} ## \
 ## The world does not agree on whether white space should be kept or

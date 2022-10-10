@@ -17,16 +17,27 @@ import ../../panda3d/core
 var base = ShowBase()
 base.openDefaultWindow()
 
-#TODO: post the instructions
-# title = addTitle()
-# inst1 = addInstructions()
-# ...
+proc makeText(y:float, text: string, scale: float = 0.05) =
+    var textnode = newTextNode("text")
+    var nodepath = base.aspect2d.attach_new_node(textnode)
+    textnode.set_text(text)
+    nodepath.set_scale(scale)
+    nodepath.set_pos(-0.8,0,0.8-y)
+
+makeText(0, "Panda3D Tutorial: Roaming Ralph, written in Nim.", 0.06)
+makeText(0.06, "[ESC]: Quit")
+makeText(0.12, "[Left Arrow]: Rotate Ralph Left")
+makeText(0.18, "[Right Arrow]: Rotate Ralph Right")
+makeText(0.24, "[Up Arrow]: Run Ralph Forward")
+makeText(0.30, "[Down Arrow]: Walk Ralph Backward")
+makeText(0.36, "[A]: Rotate Camera Left")
+makeText(0.42, "[S]: Rotate Camera Right")
 
 var environ = base.loader.loadModel("models/world")
 environ.reparentTo(base.render)
 
 # We do not have a skybox, so we will just use a sky blue background color
-#TODO: setBackgroundColor(0.53, 0.80, 0.92, 1)
+base.setBackgroundColor(0.53, 0.80, 0.92, 1)
 
 # Create the main character, Ralph
 var
@@ -65,8 +76,8 @@ var
 
 discard ralphCol.addSolid(newCollisionSphere(0, 0, 2, 1.5))
 discard ralphCol.addSolid(newCollisionSphere(0, -0.25, 5, 1.5))
-#ralphCol.setFromCollideMask(0)
-#ralphCol.setIntoCollideMask(1)
+ralphCol.setFromCollideMask(CollideMask.bit(0))
+ralphCol.setIntoCollideMask(CollideMask.allOff())
 ralphPusher.horizontal = true
 ralphPusher.addCollider(ralphColNp, ralph)
 cTrav.addCollider(ralphColNp, ralphPusher)
@@ -80,8 +91,8 @@ var
 ralphGroundRay.setOrigin(0, 0, 9)
 ralphGroundRay.setDirection(0, 0, -1)
 discard ralphGroundCol.addSolid(ralphGroundRay)
-#ralphGroundCol.setFromCollideMask(0)
-#ralphGroundCol.setIntoCollideMask(1)
+ralphGroundCol.setFromCollideMask(CollideMask.bit(0))
+ralphGroundCol.setIntoCollideMask(CollideMask.allOff())
 cTrav.addCollider(ralphGroundColNp, ralphGroundHandler)
 
 var
@@ -93,8 +104,8 @@ var
 camGroundRay.setOrigin(0, 0, 9)
 camGroundRay.setDirection(0, 0, -1)
 discard camGroundCol.addSolid(camGroundRay)
-#camGroundCol.setFromCollideMask(0)
-#camGroundCol.setIntoCollideMask(1)
+camGroundCol.setFromCollideMask(CollideMask.bit(0))
+camGroundCol.setIntoCollideMask(CollideMask.allOff())
 cTrav.addCollider(camGroundColNp, camGroundHandler)
 
 # Uncomment this line to see the collision rays
@@ -129,9 +140,9 @@ var keyMap: KeyMap
 proc setKey(key: Keys, value: bool) =
   keyMap[key] = value
 
+
 # TODO: input?
-#base.accept("escape", quit)
-#base.accept("arrow_left", quit)
+base.accept("escape", proc () = quit(0))
 base.accept("arrow_left", proc () = setKey(left, true))
 base.accept("arrow_right", proc () = setKey(right, true))
 base.accept("arrow_up", proc () = setKey(forward, true))

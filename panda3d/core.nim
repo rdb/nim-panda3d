@@ -62,8 +62,8 @@ const wrappedLVecBase2fCode = """
 #include "lvecBase2.h"
 
 struct alignas(LVecBase2f) WrappedLVecBase2f {
-  float x;
-  float y;
+  float x = 0;
+  float y = 0;
 
   constexpr WrappedLVecBase2f() = default;
   WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
@@ -76,8 +76,8 @@ const wrappedLVecBase2dCode = """
 #include "lvecBase2.h"
 
 struct alignas(LVecBase2d) WrappedLVecBase2d {
-  double x;
-  double y;
+  double x = 0;
+  double y = 0;
 
   constexpr WrappedLVecBase2d() = default;
   WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
@@ -90,8 +90,8 @@ const wrappedLVecBase2iCode = """
 #include "lvecBase2.h"
 
 struct alignas(LVecBase2i) WrappedLVecBase2i {
-  int x;
-  int y;
+  int x = 0;
+  int y = 0;
 
   constexpr WrappedLVecBase2i() = default;
   WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
@@ -104,9 +104,9 @@ const wrappedLVecBase3fCode = """
 #include "lvecBase3.h"
 
 struct alignas(LVecBase3f) WrappedLVecBase3f {
-  float x;
-  float y;
-  float z;
+  float x = 0;
+  float y = 0;
+  float z = 0;
 
   constexpr WrappedLVecBase3f() = default;
   WrappedLVecBase3f(float v0, float v1, float v2) : x(v0), y(v1), z(v2) { }
@@ -120,9 +120,9 @@ const wrappedLVecBase3dCode = """
 #include "lvecBase3.h"
 
 struct alignas(LVecBase3d) WrappedLVecBase3d {
-  double x;
-  double y;
-  double z;
+  double x = 0;
+  double y = 0;
+  double z = 0;
 
   constexpr WrappedLVecBase3d() = default;
   WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
@@ -135,9 +135,9 @@ const wrappedLVecBase3iCode = """
 #include "lvecBase3.h"
 
 struct alignas(LVecBase3i) WrappedLVecBase3i {
-  int x;
-  int y;
-  int z;
+  int x = 0;
+  int y = 0;
+  int z = 0;
 
   constexpr WrappedLVecBase3i() = default;
   WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
@@ -150,10 +150,10 @@ const wrappedLVecBase4fCode = """
 #include "lvecBase4.h"
 
 struct alignas(LVecBase4f) WrappedLVecBase4f {
-  float x;
-  float y;
-  float z;
-  float w;
+  float x = 0;
+  float y = 0;
+  float z = 0;
+  float w = 0;
 
   constexpr WrappedLVecBase4f() = default;
   WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
@@ -169,10 +169,10 @@ const wrappedLVecBase4dCode = """
 #include "lvecBase4.h"
 
 struct alignas(LVecBase4d) WrappedLVecBase4d {
-  double x;
-  double y;
-  double z;
-  double w;
+  double x = 0;
+  double y = 0;
+  double z = 0;
+  double w = 0;
 
   constexpr WrappedLVecBase4d() = default;
   WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
@@ -188,10 +188,10 @@ const wrappedLVecBase4iCode = """
 #include "lvecBase4.h"
 
 struct alignas(LVecBase4i) WrappedLVecBase4i {
-  int x;
-  int y;
-  int z;
-  int w;
+  int x = 0;
+  int y = 0;
+  int z = 0;
+  int w = 0;
 
   constexpr WrappedLVecBase4i() = default;
   WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }

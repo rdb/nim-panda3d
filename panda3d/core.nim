@@ -1082,7 +1082,7 @@ converter toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
 converter toBool*(this: Light): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Light, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of Light
+type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of PandaNode
   ## A derivative of Light and of PandaNode.  All kinds of Light except
   ## Spotlight (which must inherit from LensNode instead) inherit from this
   ## class.
@@ -1143,7 +1143,7 @@ converter toBool*(this: Camera): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Camera, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Camera], obj: TypedObject): Camera {.importcpp: "DCAST(Camera, @)".}
 
-type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of PandaNode
+type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of Camera
   ## A derivative of Light and of Camera.  The name might be misleading: it does
   ## not directly derive from LensNode, but through the Camera class.  The
   ## Camera serves no purpose unless shadows are enabled.

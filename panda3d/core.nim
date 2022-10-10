@@ -813,9 +813,13 @@ converter toBool*(this: Multifile): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Multifile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Multifile], obj: TypedObject): Multifile {.importcpp: "DCAST(Multifile, @)".}
 
-type Namable* {.importcpp: "Namable", pure, inheritable, header: "namable.h".} = object
+type Namable* {.importcpp: "Namable*", bycopy, pure, inheritable, header: "namable.h".} = object
   ## A base class for all things which can have a name.  The name is either
   ## empty or nonempty, but it is never NULL.
+
+converter toNamable*(_: type(nil)): Namable {.importcpp: "(nullptr)".}
+converter toBool*(this: Namable): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: Namable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type OpenSSLWrapper* {.importcpp: "OpenSSLWrapper", pure, inheritable, header: "openSSLWrapper.h".} = object
   ## Provides an interface wrapper around the OpenSSL library, to ensure that
@@ -988,10 +992,14 @@ converter toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
 converter toBool*(this: RecorderBase): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RecorderBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type TypedWritable* {.importcpp: "TypedWritable", pure, inheritable, header: "typedWritable.h".} = object of TypedObject
+type TypedWritable* {.importcpp: "TypedWritable*", bycopy, pure, inheritable, header: "typedWritable.h".} = object of TypedObject
   ## Base class for objects that can be written to and read from Bam files.
   ##
   ## See also TypedObject for detailed instructions.
+
+converter toTypedWritable*(_: type(nil)): TypedWritable {.importcpp: "(nullptr)".}
+converter toBool*(this: TypedWritable): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TypedWritable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TypedWritableReferenceCount* {.importcpp: "PT(TypedWritableReferenceCount)", bycopy, pure, inheritable, header: "typedWritableReferenceCount.h".} = object of TypedWritable
   ## A base class for things which need to inherit from both TypedWritable and
@@ -4158,8 +4166,12 @@ converter toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullp
 converter toBool*(this: SimpleAllocator): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: SimpleAllocator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock", pure, inheritable, header: "simpleAllocator.h".} = object
+type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
   ## A single block as returned from SimpleAllocator::alloc().
+
+converter toSimpleAllocatorBlock*(_: type(nil)): SimpleAllocatorBlock {.importcpp: "(nullptr)".}
+converter toBool*(this: SimpleAllocatorBlock): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SimpleAllocatorBlock, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile*", bycopy, pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
   ## A temporary file to hold the vertex data that has been evicted from memory
@@ -4327,10 +4339,14 @@ converter toBool*(this: AnimateVerticesRequest): bool {.importcpp: "(# != nullpt
 func `==`*(x: AnimateVerticesRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimateVerticesRequest], obj: TypedObject): AnimateVerticesRequest {.importcpp: "DCAST(AnimateVerticesRequest, @)".}
 
-type SavedContext* {.importcpp: "SavedContext", pure, inheritable, header: "savedContext.h".} = object of TypedObject
+type SavedContext* {.importcpp: "SavedContext*", bycopy, pure, inheritable, header: "savedContext.h".} = object of TypedObject
   ## This is the base class for all GSG-specific context objects, such as
   ## TextureContext and GeomContext.  It exists mainly to provide some
   ## structural organization.
+
+converter toSavedContext*(_: type(nil)): SavedContext {.importcpp: "(nullptr)".}
+converter toBool*(this: SavedContext): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SavedContext, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type BufferContext* {.importcpp: "BufferContext*", bycopy, pure, inheritable, header: "bufferContext.h".} = object of SavedContext
   ## This is a base class for those kinds of SavedContexts that occupy an
@@ -6355,13 +6371,17 @@ converter toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nul
 converter toBool*(this: ConnectionReader): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type ConnectionListener* {.importcpp: "ConnectionListener", pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
+type ConnectionListener* {.importcpp: "ConnectionListener*", bycopy, pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
   ## This is a special kind of ConnectionReader that waits for activity on a
   ## rendezvous port and accepts a TCP connection (instead of attempting to read
   ## a datagram from the rendezvous port).
   ##
   ## It is itself an abstract class, as it doesn't define what to do with the
   ## established connection.  See QueuedConnectionListener.
+
+converter toConnectionListener*(_: type(nil)): ConnectionListener {.importcpp: "(nullptr)".}
+converter toBool*(this: ConnectionListener): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: ConnectionListener, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NetDatagram* {.importcpp: "NetDatagram", pure, inheritable, header: "netDatagram.h".} = object of Datagram
   ## A specific kind of Datagram, especially for sending across or receiving
@@ -19282,24 +19302,24 @@ proc getHeaderPrefix*(this: Multifile): string {.importcpp: "nimStringFromStdStr
 ## Returns the string that preceded the Multifile header on the file, if any.
 ## See set_header_prefix().
 
-proc initNamable*(param0: Namable): Namable {.importcpp: "Namable(#)".}
+proc newNamable*(param0: Namable): Namable {.importcpp: "new Namable(#)".}
 
-proc initNamable*(initial_name: string): Namable {.importcpp: "Namable(nimStringToStdString(#))", header: stringConversionCode.}
+proc newNamable*(initial_name: string): Namable {.importcpp: "new Namable(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initNamable*(): Namable {.importcpp: "Namable()".}
+proc newNamable*(): Namable {.importcpp: "new Namable()".}
 
-proc setName*(this: Namable, name: string) {.importcpp: "#.set_name(nimStringToStdString(#))", header: stringConversionCode.}
+proc setName*(this: Namable, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc clearName*(this: Namable) {.importcpp: "#.clear_name()".} ## \
+proc clearName*(this: Namable) {.importcpp: "#->clear_name()".} ## \
 ## Resets the Namable's name to empty.
 
-proc hasName*(this: Namable): bool {.importcpp: "#.has_name()".} ## \
+proc hasName*(this: Namable): bool {.importcpp: "#->has_name()".} ## \
 ## Returns true if the Namable has a nonempty name set, false if the name is
 ## empty.
 
-proc getName*(this: Namable): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
+proc getName*(this: Namable): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
-proc output*(this: Namable, `out`: ostream) {.importcpp: "#.output(#)".} ## \
+proc output*(this: Namable, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 ## Outputs the Namable.  This function simply writes the name to the output
 ## stream; most Namable derivatives will probably redefine this.
 
@@ -39685,37 +39705,37 @@ proc output*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->output(#)".
 
 proc write*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc free*(this: SimpleAllocatorBlock) {.importcpp: "#.free()".} ## \
+proc free*(this: SimpleAllocatorBlock) {.importcpp: "#->free()".} ## \
 ## Releases the allocated space.
 
-proc getAllocator*(this: SimpleAllocatorBlock): SimpleAllocator {.importcpp: "#.get_allocator()".} ## \
+proc getAllocator*(this: SimpleAllocatorBlock): SimpleAllocator {.importcpp: "#->get_allocator()".} ## \
 ## Returns the SimpleAllocator object that owns this block.  Returns NULL if
 ## the block has been freed.
 
-proc getStart*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_start()".} ## \
+proc getStart*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_start()".} ## \
 ## Returns the starting point of this block.  It is an error to call this if
 ## the block has been freed.
 
-proc getSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_size()".} ## \
+proc getSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_size()".} ## \
 ## Returns the size of this block.  It is an error to call this if the block
 ## has been freed.
 
-proc isFree*(this: SimpleAllocatorBlock): bool {.importcpp: "#.is_free()".} ## \
+proc isFree*(this: SimpleAllocatorBlock): bool {.importcpp: "#->is_free()".} ## \
 ## Returns true if the block has been freed, false if it is still valid.
 
-proc getMaxSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_max_size()".} ## \
+proc getMaxSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_max_size()".} ## \
 ## Returns the maximum size this block can be reallocated to, as limited by
 ## the following block.
 
-proc realloc*(this: SimpleAllocatorBlock, size: clonglong): bool {.importcpp: "#.realloc(#)".} ## \
+proc realloc*(this: SimpleAllocatorBlock, size: clonglong): bool {.importcpp: "#->realloc(#)".} ## \
 ## Changes the size of this block to the specified size.  Returns true if the
 ## change is accepted, false if there was not enough room.
 
-proc getNextBlock*(this: SimpleAllocatorBlock): SimpleAllocatorBlock {.importcpp: "#.get_next_block()".} ## \
+proc getNextBlock*(this: SimpleAllocatorBlock): SimpleAllocatorBlock {.importcpp: "#->get_next_block()".} ## \
 ## Returns a pointer to the next allocated block in the chain, or NULL if
 ## there are no more allocated blocks.
 
-proc output*(this: SimpleAllocatorBlock, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: SimpleAllocatorBlock, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc isValid*(this: VertexDataSaveFile): bool {.importcpp: "#->is_valid()".} ## \
 ## Returns true if the save file was successfully created and is ready for
@@ -58486,20 +58506,20 @@ proc getSeq*(this: UpdateSeq): int {.importcpp: "#.get_seq()".} ## \
 
 proc output*(this: UpdateSeq, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc fillin*(this: TypedWritable, scan: DatagramIterator, manager: BamReader) {.importcpp: "#.fillin(#, #)".} ## \
+proc fillin*(this: TypedWritable, scan: DatagramIterator, manager: BamReader) {.importcpp: "#->fillin(#, #)".} ## \
 ## This internal function is intended to be called by each class's
 ## make_from_bam() method to read in all of the relevant data from the BamFile
 ## for the new object.  It is also called directly by the BamReader to re-read
 ## the data for an object that has been placed on the stream for an update.
 
-proc markBamModified*(this: TypedWritable) {.importcpp: "#.mark_bam_modified()".} ## \
+proc markBamModified*(this: TypedWritable) {.importcpp: "#->mark_bam_modified()".} ## \
 ## Increments the bam_modified counter, so that this object will be
 ## invalidated and retransmitted on any open bam streams.  This should
 ## normally not need to be called by user code; it should be called internally
 ## when the object has been changed in a way that legitimately requires its
 ## retransmission to any connected clients.
 
-proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#.get_bam_modified()".} ## \
+proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#->get_bam_modified()".} ## \
 ## Returns the current bam_modified counter.  This counter is normally
 ## incremented automatically whenever the object is modified.
 

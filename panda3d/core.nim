@@ -19,6 +19,21 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
+const deconstifyCode = """
+#include "pointerTo.h"
+
+template<class T> PT(T) deconstify(CPT(T) value) {
+  PT(T) result;
+  result.cheat() = (T *)value.p();
+  value.cheat() = nullptr;
+  return result;
+}
+
+template<class T> T *deconstify(const T *value) {
+  return (T *)value;
+}
+""";
+
 const stringConversionCode = """
 #include <string>
 
@@ -7337,7 +7352,7 @@ func filename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()".} 
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-func file*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
+func file*(this: DatagramSink): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
@@ -7404,13 +7419,13 @@ func sourceHash*(this: Patchfile): HashVal {.importcpp: "#.get_source_hash()".} 
 func resultHash*(this: Patchfile): HashVal {.importcpp: "#.get_result_hash()".} ## \
 ## Returns the MD5 hash for the file after the patch has been applied.
 
-func state*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "#->get_state(#)".} ## \
+func state*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "deconstify(#->get_state(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
 ## inherited from above.
 
-func state*(this: PandaNode): RenderState {.importcpp: "#->get_state()".} ## \
+func state*(this: PandaNode): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
@@ -7430,10 +7445,10 @@ proc `state=`*(this: PandaNode, state: RenderState) {.importcpp: "#->set_state(#
 ## This completely replaces whatever has been set on this node via repeated
 ## calls to set_attrib().
 
-func effects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "#->get_effects(#)".} ## \
+func effects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "deconstify(#->get_effects(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
-func effects*(this: PandaNode): RenderEffects {.importcpp: "#->get_effects()".} ## \
+func effects*(this: PandaNode): RenderEffects {.importcpp: "deconstify(#->get_effects())", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
 proc `effects=`*(this: PandaNode, effects: RenderEffects, current_thread: Thread) {.importcpp: "#->set_effects(#, #)".} ## \
@@ -7446,12 +7461,12 @@ proc `effects=`*(this: PandaNode, effects: RenderEffects) {.importcpp: "#->set_e
 ## completely replaces whatever has been set on this node via repeated calls
 ## to set_attrib().
 
-func transform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_transform(#)".} ## \
+func transform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
 
-func transform*(this: PandaNode): TransformState {.importcpp: "#->get_transform()".} ## \
+func transform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
@@ -7464,11 +7479,11 @@ proc `transform=`*(this: PandaNode, transform: TransformState) {.importcpp: "#->
 ## Sets the transform that will be applied to this node and below.  This
 ## defines a new coordinate space at this point in the scene graph and below.
 
-func prevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_prev_transform(#)".} ## \
+func prevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_prev_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
-func prevTransform*(this: PandaNode): TransformState {.importcpp: "#->get_prev_transform()".} ## \
+func prevTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_prev_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
@@ -7503,12 +7518,12 @@ func nestedVertices*(this: PandaNode): int {.importcpp: "#->get_nested_vertices(
 ## also include hidden nodes.  It may also omit or only approximate certain
 ## kinds of dynamic geometry.  However, it will not include stashed nodes.
 
-func internalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_internal_bounds(#)".} ## \
+func internalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
 
-func internalBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_internal_bounds()".} ## \
+func internalBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds())", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
@@ -7696,7 +7711,7 @@ proc `lodCenter=`*(this: Camera, lod_center: NodePath) {.importcpp: "#->set_lod_
 ## some other viewpoint.  This may be used, for instance, to reduce LOD
 ## popping when the camera rotates in a small circle about an avatar.
 
-func initialState*(this: Camera): RenderState {.importcpp: "#->get_initial_state()".} ## \
+func initialState*(this: Camera): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc `initialState=`*(this: Camera, state: RenderState) {.importcpp: "#->set_initial_state(#)".} ## \
@@ -8430,7 +8445,7 @@ proc `minCoverage=`*(this: OccluderNode, value: float32) {.importcpp: "#->set_mi
 ## 1. For example, setting to 0.2 would mean that the occluder needs to cover
 ## 20% of the screen to be considered.
 
-func shader*(this: ShaderAttrib): Shader {.importcpp: "#->get_shader()".} ## \
+func shader*(this: ShaderAttrib): Shader {.importcpp: "deconstify(#->get_shader())", header: deconstifyCode.} ## \
 ## Returns the shader object associated with the node.  If get_override
 ## returns true, but get_shader returns NULL, that means that this attribute
 ## should disable the shader.
@@ -9287,10 +9302,10 @@ func modified*(this: VertexTransform): UpdateSeq {.importcpp: "#->get_modified()
 ## Returns a sequence number that's guaranteed to change at least every time
 ## the value reported by get_matrix() changes.
 
-func node*(this: NodeVertexTransform): PandaNode {.importcpp: "#->get_node()".} ## \
+func node*(this: NodeVertexTransform): PandaNode {.importcpp: "deconstify(#->get_node())", header: deconstifyCode.} ## \
 ## Returns the PandaNode whose transform supplies this object.
 
-func prev*(this: NodeVertexTransform): VertexTransform {.importcpp: "#->get_prev()".} ## \
+func prev*(this: NodeVertexTransform): VertexTransform {.importcpp: "deconstify(#->get_prev())", header: deconstifyCode.} ## \
 ## Returns the VertexTransform object whose matrix will be composed with the
 ## result of this node's transform.
 
@@ -9516,7 +9531,7 @@ func thread*(this: PStatThread): Thread {.importcpp: "#.get_thread()".} ## \
 func index*(this: PStatThread): int {.importcpp: "#.get_index()".} ## \
 ## Returns the index number of this particular thread within the PStatClient.
 
-func name*(this: VertexSlider): InternalName {.importcpp: "#->get_name()".} ## \
+func name*(this: VertexSlider): InternalName {.importcpp: "deconstify(#->get_name())", header: deconstifyCode.} ## \
 ## Returns the name of this particular slider.  Every unique blend shape
 ## within a particular Geom must be identified with a different name, which is
 ## shared by the slider that controls it.
@@ -9554,7 +9569,7 @@ proc `respectEffectiveNormal=`*(this: CollisionSolid, respect_effective_normal: 
 ## that this particular solid does not care about the "effective" normal of
 ## other solids it meets, but rather always uses the true normal.
 
-func bounds*(this: CollisionSolid): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+func bounds*(this: CollisionSolid): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the solid's bounding volume.
 
 proc `bounds=`*(this: CollisionSolid, bounding_volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
@@ -9631,11 +9646,11 @@ proc `recorder=`*(this: CollisionTraverser, recorder: CollisionRecorder) {.impor
 ## CollisionRecorder is destructed, it will cleanly remove itself from the
 ## traverser.
 
-func fromSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_from()".} ## \
+func fromSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_from())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid that triggered
 ## this collision.
 
-func intoSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_into()".} ## \
+func intoSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_into())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid was collided
 ## into.  This pointer might be NULL if the collision was into a piece of
 ## visible geometry, instead of a normal CollisionSolid collision; see
@@ -11192,7 +11207,7 @@ func saveFile*(_: typedesc[VertexDataPage]): VertexDataSaveFile {.importcpp: "Ve
 ## Returns the global VertexDataSaveFile that will be used to save vertex data
 ## buffers to disk when necessary.
 
-func arrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".} ## \
+func arrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
 
 func dataSizeBytes*(this: GeomVertexArrayData): clonglong {.importcpp: "#->get_data_size_bytes()".} ## \
@@ -11202,7 +11217,7 @@ func modified*(this: GeomVertexArrayData): UpdateSeq {.importcpp: "#->get_modifi
 ## Returns a sequence number which is guaranteed to change at least every time
 ## the array vertex data is modified.
 
-func arrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".}
+func arrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
 
 func dataSizeBytes*(this: GeomVertexArrayDataHandle): clonglong {.importcpp: "#->get_data_size_bytes()".}
 
@@ -11280,7 +11295,7 @@ proc `name=`*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimS
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
 
-func format*(this: GeomVertexData): GeomVertexFormat {.importcpp: "#->get_format()".} ## \
+func format*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
 
 proc `format=`*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#->set_format(#)".} ## \
@@ -11290,7 +11305,7 @@ proc `format=`*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#-
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-func transformTable*(this: GeomVertexData): TransformTable {.importcpp: "#->get_transform_table()".} ## \
+func transformTable*(this: GeomVertexData): TransformTable {.importcpp: "deconstify(#->get_transform_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -11309,7 +11324,7 @@ proc `transformTable=`*(this: GeomVertexData, table: TransformTable) {.importcpp
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-func sliderTable*(this: GeomVertexData): SliderTable {.importcpp: "#->get_slider_table()".} ## \
+func sliderTable*(this: GeomVertexData): SliderTable {.importcpp: "deconstify(#->get_slider_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the SliderTable assigned to this data.  Vertices
 ## within the vertex data will look up their morph offsets, if any, within
 ## this table.
@@ -11386,7 +11401,7 @@ func stripCutIndex*(this: GeomPrimitive): int {.importcpp: "#->get_strip_cut_ind
 ## signify the end of a primitive.  This is typically the highest value that
 ## the numeric type can store.
 
-func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()".} ## \
+func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_mins())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive mins array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax() for this.
@@ -11397,7 +11412,7 @@ func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-func maxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_maxs()".} ## \
+func maxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_maxs())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive maxs array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax().
@@ -12549,7 +12564,7 @@ func character*(this: TextGlyph): int {.importcpp: "#->get_character()".} ## \
 ## Returns the Unicode value that corresponds to the character this glyph
 ## represents.
 
-func state*(this: TextGlyph): RenderState {.importcpp: "#->get_state()".} ## \
+func state*(this: TextGlyph): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the state in which the glyph should be rendered.
 
 func advance*(this: TextGlyph): float32 {.importcpp: "#->get_advance()".} ## \
@@ -18291,7 +18306,7 @@ proc getTimestamp*(this: DatagramGenerator): int {.importcpp: "#->get_timestamp(
 ## Returns the on-disk timestamp of the file that was read, at the time it was
 ## opened, if that is available, or 0 if it is not.
 
-proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "#->get_file()".} ## \
+proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the source for these datagrams, if
 ## any, or NULL if the datagrams do not originate from a file on disk.
 
@@ -18444,7 +18459,7 @@ proc getFilename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()"
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-proc getFile*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
+proc getFile*(this: DatagramSink): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
@@ -18456,7 +18471,7 @@ proc getFilePos*(this: DatagramSink): clonglong {.importcpp: "#->get_file_pos()"
 ## pointing to the first byte following the datagram returned after a call to
 ## put_datagram().
 
-converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(#.p()))".}
+converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(TypedReferenceCount *)(#))".}
 
 converter upcastToReferenceCount*(this: TypedReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -20126,7 +20141,7 @@ converter getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "Rec
 
 converter upcastToDataNode*(this: MouseRecorder): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
-converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(#.p()))".}
+converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(MouseRecorder *)(#))".}
 
 proc newMouseRecorder*(name: string): MouseRecorder {.importcpp: "new MouseRecorder(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20253,7 +20268,7 @@ proc playFrame*(this: RecorderController) {.importcpp: "#->play_frame()".} ## \
 
 converter getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
 
-converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(#.p()))".}
+converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(SocketStreamRecorder *)(#))".}
 
 converter upcastToReferenceCount*(this: SocketStreamRecorder): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -20296,7 +20311,7 @@ proc flush*(this: SocketStreamRecorder): bool {.importcpp: "#->flush()".} ## \
 
 converter getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
 
-converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(#.p()))".}
+converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(LightNode *)(#))".}
 
 converter upcastToPandaNode*(this: LightNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
@@ -20408,7 +20423,7 @@ proc clearDispatches*(this: ComputeNode) {.importcpp: "#->clear_dispatches()".} 
 
 converter getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
 
-converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(#.p()))".}
+converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(LightLensNode *)(#))".}
 
 converter upcastToCamera*(this: LightLensNode): Camera {.importcpp: "(PT(Camera)(#))".}
 
@@ -20696,7 +20711,7 @@ converter getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp
 
 converter upcastToSelectiveChildNode*(this: SequenceNode): SelectiveChildNode {.importcpp: "(PT(SelectiveChildNode)(#))".}
 
-converter upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(SequenceNode *)(#))".}
 
 proc newSequenceNode*(name: string): SequenceNode {.importcpp: "new SequenceNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20720,7 +20735,7 @@ proc newShaderGenerator*(gsg: GraphicsStateGuardianBase): ShaderGenerator {.impo
 
 proc newShaderGenerator*(param0: ShaderGenerator): ShaderGenerator {.importcpp: "new ShaderGenerator(#)".}
 
-proc synthesizeShader*(this: ShaderGenerator, rs: RenderState, anim: GeomVertexAnimationSpec): ShaderAttrib {.importcpp: "#->synthesize_shader(#, #)".} ## \
+proc synthesizeShader*(this: ShaderGenerator, rs: RenderState, anim: GeomVertexAnimationSpec): ShaderAttrib {.importcpp: "deconstify(#->synthesize_shader(#, #))", header: deconstifyCode.} ## \
 ## This is the routine that implements the next-gen fixed function pipeline by
 ## synthesizing a shader.  It also takes care of setting up any buffers needed
 ## to produce the requested effects.
@@ -20951,74 +20966,74 @@ proc `==`*(this: TransformState, other: TransformState): bool {.importcpp: "#->o
 proc getHash*(this: TransformState): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
-proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "TransformState::make_identity()", header: "transformState.h".} ## \
+proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "transformState.h".} ## \
 ## Constructs an identity transform.
 
-proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "TransformState::make_invalid()", header: "transformState.h".} ## \
+proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "transformState.h".} ## \
 ## Constructs an invalid transform; for instance, the result of inverting a
 ## singular matrix.
 
-proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "TransformState::make_pos(#)", header: "transformState.h".} ## \
+proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "TransformState::make_hpr(#)", header: "transformState.h".} ## \
+proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_hpr(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "TransformState::make_quat(#)", header: "transformState.h".} ## \
+proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(TransformState::make_quat(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr(#, #)", header: "transformState.h".} ## \
+proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos_hpr(#, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "TransformState::make_scale(#)", header: "transformState.h".} ## \
+proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_scale(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeScale*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "TransformState::make_scale(#)", header: "transformState.h".} ## \
+proc makeScale*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "deconstify(TransformState::make_scale(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "TransformState::make_shear(#)", header: "transformState.h".} ## \
+proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_shear(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr_scale(#, #, #)", header: "transformState.h".} ## \
+proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos_hpr_scale(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_quat_scale(#, #, #)", header: "transformState.h".} ## \
+proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos_quat_scale(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr_scale_shear(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos_hpr_scale_shear(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_quat_scale_shear(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(TransformState::make_pos_quat_scale_shear(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "TransformState::make_mat(#)", header: "transformState.h".} ## \
+proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(TransformState::make_mat(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified transformation matrix.
 
-proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "TransformState::make_pos2d(#)", header: "transformState.h".} ## \
+proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(TransformState::make_pos2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeRotate2d*(_: typedesc[TransformState], rotate: float32): TransformState {.importcpp: "TransformState::make_rotate2d(#)", header: "transformState.h".} ## \
+proc makeRotate2d*(_: typedesc[TransformState], rotate: float32): TransformState {.importcpp: "deconstify(TransformState::make_rotate2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32): TransformState {.importcpp: "TransformState::make_pos_rotate2d(#, #)", header: "transformState.h".} ## \
+proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32): TransformState {.importcpp: "deconstify(TransformState::make_pos_rotate2d(#, #))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "TransformState::make_scale2d(#)", header: "transformState.h".} ## \
+proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(TransformState::make_scale2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeScale2d*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "TransformState::make_scale2d(#)", header: "transformState.h".} ## \
+proc makeScale2d*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "deconstify(TransformState::make_scale2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeShear2d*(_: typedesc[TransformState], shear: float32): TransformState {.importcpp: "TransformState::make_shear2d(#)", header: "transformState.h".} ## \
+proc makeShear2d*(_: typedesc[TransformState], shear: float32): TransformState {.importcpp: "deconstify(TransformState::make_shear2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2): TransformState {.importcpp: "TransformState::make_pos_rotate_scale2d(#, #, #)", header: "transformState.h".} ## \
+proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2): TransformState {.importcpp: "deconstify(TransformState::make_pos_rotate_scale2d(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2, shear: float32): TransformState {.importcpp: "TransformState::make_pos_rotate_scale_shear2d(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2, shear: float32): TransformState {.importcpp: "deconstify(TransformState::make_pos_rotate_scale_shear2d(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new two-dimensional TransformState with the specified components.
 
-proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "TransformState::make_mat3(#)", header: "transformState.h".} ## \
+proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(TransformState::make_mat3(#))", header: "transformState.h".} ## \
 ## Makes a new two-dimensional TransformState with the specified 3x3
 ## transformation matrix.
 
@@ -21171,50 +21186,50 @@ proc getMat3*(this: TransformState): LMatrix3 {.importcpp: "#->get_mat3()".} ## 
 ## Returns the 3x3 matrix that describes the 2-d transform.  It is an error to
 ## call this if is_2d() returned false.
 
-proc setPos*(this: TransformState, pos: LVecBase3): TransformState {.importcpp: "#->set_pos(#)".} ## \
+proc setPos*(this: TransformState, pos: LVecBase3): TransformState {.importcpp: "deconstify(#->set_pos(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its pos component replaced with the indicated value.
 
-proc setHpr*(this: TransformState, hpr: LVecBase3): TransformState {.importcpp: "#->set_hpr(#)".} ## \
+proc setHpr*(this: TransformState, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#->set_hpr(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setQuat*(this: TransformState, quat: LQuaternion): TransformState {.importcpp: "#->set_quat(#)".} ## \
+proc setQuat*(this: TransformState, quat: LQuaternion): TransformState {.importcpp: "deconstify(#->set_quat(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setScale*(this: TransformState, scale: LVecBase3): TransformState {.importcpp: "#->set_scale(#)".} ## \
+proc setScale*(this: TransformState, scale: LVecBase3): TransformState {.importcpp: "deconstify(#->set_scale(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its scale component replaced with the indicated value,
 ## if possible.
 
-proc setShear*(this: TransformState, shear: LVecBase3): TransformState {.importcpp: "#->set_shear(#)".} ## \
+proc setShear*(this: TransformState, shear: LVecBase3): TransformState {.importcpp: "deconstify(#->set_shear(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its shear component replaced with the indicated value,
 ## if possible.
 
-proc setPos2d*(this: TransformState, pos: LVecBase2): TransformState {.importcpp: "#->set_pos2d(#)".} ## \
+proc setPos2d*(this: TransformState, pos: LVecBase2): TransformState {.importcpp: "deconstify(#->set_pos2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its pos component replaced with the indicated value.
 
-proc setRotate2d*(this: TransformState, rotate: float32): TransformState {.importcpp: "#->set_rotate2d(#)".} ## \
+proc setRotate2d*(this: TransformState, rotate: float32): TransformState {.importcpp: "deconstify(#->set_rotate2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setScale2d*(this: TransformState, scale: LVecBase2): TransformState {.importcpp: "#->set_scale2d(#)".} ## \
+proc setScale2d*(this: TransformState, scale: LVecBase2): TransformState {.importcpp: "deconstify(#->set_scale2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its scale component replaced with the indicated value,
 ## if possible.
 
-proc setShear2d*(this: TransformState, shear: float32): TransformState {.importcpp: "#->set_shear2d(#)".} ## \
+proc setShear2d*(this: TransformState, shear: float32): TransformState {.importcpp: "deconstify(#->set_shear2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its shear component replaced with the indicated value,
 ## if possible.
 
-proc compose*(this: TransformState, other: TransformState): TransformState {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: TransformState, other: TransformState): TransformState {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the composition of this
 ## state with the other state.
 ##
@@ -21223,19 +21238,19 @@ proc compose*(this: TransformState, other: TransformState): TransformState {.imp
 ## continue to exist.  Should one of them destruct, the cached entry will be
 ## removed, and its pointer will be allowed to destruct as well.
 
-proc invertCompose*(this: TransformState, other: TransformState): TransformState {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: TransformState, other: TransformState): TransformState {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the composition of this
 ## state's inverse with the other state.
 ##
 ## This is similar to compose(), but is particularly useful for computing the
 ## relative state of a node as viewed from some other node.
 
-proc getInverse*(this: TransformState): TransformState {.importcpp: "#->get_inverse()".} ## \
+proc getInverse*(this: TransformState): TransformState {.importcpp: "deconstify(#->get_inverse())", header: deconstifyCode.} ## \
 ## Returns the inverse of this transform.  If you are going to immediately
 ## compose this result with another TransformState, it is faster to do it in
 ## one operation with invert_compose().
 
-proc getUnique*(this: TransformState): TransformState {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: TransformState): TransformState {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique TransformState in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21281,7 +21296,7 @@ proc getCompositionCacheSize*(this: TransformState): clonglong {.importcpp: "#->
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_composition_cache_source(#)".} ## \
+proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source TransformState of the nth element in the composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.  See get_composition_cache_result().
@@ -21289,7 +21304,7 @@ proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformSt
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_composition_cache_result(#)".} ## \
+proc getCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result TransformState of the nth element in the composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.
@@ -21309,7 +21324,7 @@ proc getInvertCompositionCacheSize*(this: TransformState): clonglong {.importcpp
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_invert_composition_cache_source(#)".} ## \
+proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_invert_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source TransformState of the nth element in the invert
 ## composition cache.  Returns NULL if there doesn't happen to be an entry in
 ## the nth element.  See get_invert_composition_cache_result().
@@ -21317,7 +21332,7 @@ proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): Trans
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_invert_composition_cache_result(#)".} ## \
+proc getInvertCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_invert_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result TransformState of the nth element in the invert
 ## composition cache.  Returns NULL if there doesn't happen to be an entry in
 ## the nth element.
@@ -21438,14 +21453,14 @@ proc getSortedSlot*(this: RenderAttribRegistry, n: int): int {.importcpp: "#.get
 
 proc getGlobalPtr*(_: typedesc[RenderAttribRegistry]): RenderAttribRegistry {.importcpp: "RenderAttribRegistry::get_global_ptr()", header: "renderAttribRegistry.h".}
 
-proc compose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderAttrib object that represents the composition of this
 ## attrib with the other attrib.  In most cases, this is the same as the other
 ## attrib; a compose b produces b.  Some kinds of attributes, like a
 ## TextureTransform, for instance, might produce a new result: a compose b
 ## produces c.
 
-proc invertCompose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderAttrib object that represents the composition of the
 ## inverse of this attrib with the other attrib.  In most cases, this is the
 ## same as the other attrib; !a compose b produces b.  Some kinds of
@@ -21486,7 +21501,7 @@ proc compareTo*(this: RenderAttrib, other: RenderAttrib): int {.importcpp: "#->c
 proc getHash*(this: RenderAttrib): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
-proc getUnique*(this: RenderAttrib): RenderAttrib {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique RenderAttrib in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21519,7 +21534,7 @@ proc getSlot*(this: RenderAttrib): int {.importcpp: "#->get_slot()".}
 
 converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
-proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "RenderModeAttrib::make_default()", header: "renderModeAttrib.h".} ## \
+proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "renderModeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -21548,34 +21563,34 @@ proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeA
 
 converter getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
-proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "TexMatrixAttrib::make()", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies no stages at all.
 
-proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "TexMatrixAttrib::make(#)", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make(#))", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies the indicated matrix to the
 ## default texture stage.  This interface is deprecated.
 ##
 ## @deprecated Use the constructor that takes a TextureStage instead.
 
-proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "TexMatrixAttrib::make(#, #)", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make(#, #))", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies the indicated transform to the
 ## named texture stage.
 
-proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "TexMatrixAttrib::make_default()", header: "texMatrixAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "texMatrixAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
-proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState, override: int): RenderAttrib {.importcpp: "#->add_stage(#, #, #)".} ## \
+proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState, override: int): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated
 ## transform for the given stage.  If this stage already exists, its transform
 ## is replaced.
 
-proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "#->add_stage(#, #)".} ## \
+proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated
 ## transform for the given stage.  If this stage already exists, its transform
 ## is replaced.
 
-proc removeStage*(this: TexMatrixAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexMatrixAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated stage
 ## removed.
 
@@ -21604,7 +21619,7 @@ proc getMat*(this: TexMatrixAttrib, stage: TextureStage): LMatrix4 {.importcpp: 
 ## stage, or identity matrix if nothing is associated with the indicated
 ## stage.
 
-proc getTransform*(this: TexMatrixAttrib, stage: TextureStage): TransformState {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: TexMatrixAttrib, stage: TextureStage): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transformation associated with the indicated texture stage, or
 ## identity matrix if nothing is associated with the indicated stage.
 
@@ -21650,40 +21665,40 @@ proc cullCallback*(this: RenderState, trav: CullTraverser, data: CullTraverserDa
 ## interrupts the list and returns false immediately; otherwise, completes the
 ## list and returns true.
 
-proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "RenderState::make_empty()", header: "renderState.h".} ## \
+proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "renderState.h".} ## \
 ## Returns a RenderState with no attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with five attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with five attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with four attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with four attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with three attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with three attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(RenderState::make(#, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with two attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(RenderState::make(#, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with two attributes set.
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(RenderState::make(#, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with one attribute set.
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "RenderState::make(#)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(RenderState::make(#))", header: "renderState.h".} ## \
 ## Returns a RenderState with one attribute set.
 
-proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the composition of this
 ## state with the other state.
 ##
@@ -21692,44 +21707,44 @@ proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "
 ## exist.  Should one of them destruct, the cached entry will be removed, and
 ## its pointer will be allowed to destruct as well.
 
-proc invertCompose*(this: RenderState, other: RenderState): RenderState {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: RenderState, other: RenderState): RenderState {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the composition of this
 ## state's inverse with the other state.
 ##
 ## This is similar to compose(), but is particularly useful for computing the
 ## relative state of a node as viewed from some other node.
 
-proc addAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "#->add_attrib(#, #)".} ## \
+proc addAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#->add_attrib(#, #))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced (unless the override is lower).
 
-proc addAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "#->add_attrib(#)".} ## \
+proc addAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#->add_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced (unless the override is lower).
 
-proc setAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "#->set_attrib(#)".} ## \
+proc setAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#->set_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced unconditionally.  The override is not
 ## changed.
 
-proc setAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "#->set_attrib(#, #)".} ## \
+proc setAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#->set_attrib(#, #))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced unconditionally.  The override is also
 ## replaced unconditionally.
 
-proc removeAttrib*(this: RenderState, `type`: TypeHandle): RenderState {.importcpp: "#->remove_attrib(#)".} ## \
+proc removeAttrib*(this: RenderState, `type`: TypeHandle): RenderState {.importcpp: "deconstify(#->remove_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the indicated RenderAttrib removed.
 
-proc removeAttrib*(this: RenderState, slot: int): RenderState {.importcpp: "#->remove_attrib(#)".} ## \
+proc removeAttrib*(this: RenderState, slot: int): RenderState {.importcpp: "deconstify(#->remove_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the indicated RenderAttrib removed.
 
-proc adjustAllPriorities*(this: RenderState, adjustment: int): RenderState {.importcpp: "#->adjust_all_priorities(#)".} ## \
+proc adjustAllPriorities*(this: RenderState, adjustment: int): RenderState {.importcpp: "deconstify(#->adjust_all_priorities(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with all attributes' override values incremented (or decremented, if
 ## negative) by the indicated amount.  If the override would drop below zero,
@@ -21743,15 +21758,15 @@ proc hasAttrib*(this: RenderState, slot: int): bool {.importcpp: "#->has_attrib(
 ## Returns true if an attrib of the indicated type is present, false
 ## otherwise.
 
-proc getAttrib*(this: RenderState, `type`: TypeHandle): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: RenderState, `type`: TypeHandle): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Looks for a RenderAttrib of the indicated type in the state, and returns it
 ## if it is found, or NULL if it is not.
 
-proc getAttrib*(this: RenderState, slot: int): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: RenderState, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the RenderAttrib with the indicated slot index, or NULL if there is
 ## no such RenderAttrib in the state.
 
-proc getAttribDef*(this: RenderState, slot: int): RenderAttrib {.importcpp: "#->get_attrib_def(#)".} ## \
+proc getAttribDef*(this: RenderState, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib_def(#))", header: deconstifyCode.} ## \
 ## Returns the RenderAttrib with the indicated slot index, or the default
 ## attrib for that slot if there is no such RenderAttrib in the state.
 
@@ -21763,7 +21778,7 @@ proc getOverride*(this: RenderState, slot: int): int {.importcpp: "#->get_overri
 ## Looks for a RenderAttrib of the indicated type in the state, and returns
 ## its override value if it is found, or 0 if it is not.
 
-proc getUnique*(this: RenderState): RenderState {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: RenderState): RenderState {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique RenderState in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21802,7 +21817,7 @@ proc getCompositionCacheSize*(this: RenderState): clonglong {.importcpp: "#->get
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_composition_cache_source(#)".} ## \
+proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source RenderState of the nth element in the composition cache.
 ## Returns NULL if there doesn't happen to be an entry in the nth element.
 ## See get_composition_cache_result().
@@ -21810,7 +21825,7 @@ proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_composition_cache_result(#)".} ## \
+proc getCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result RenderState of the nth element in the composition cache.
 ## Returns NULL if there doesn't happen to be an entry in the nth element.
 ##
@@ -21829,7 +21844,7 @@ proc getInvertCompositionCacheSize*(this: RenderState): clonglong {.importcpp: "
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_invert_composition_cache_source(#)".} ## \
+proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_invert_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source RenderState of the nth element in the invert composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.  See get_invert_composition_cache_result().
@@ -21837,7 +21852,7 @@ proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderSt
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_invert_composition_cache_result(#)".} ## \
+proc getInvertCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_invert_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result RenderState of the nth element in the invert composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.
@@ -21941,7 +21956,7 @@ proc getGeomRendering*(this: RenderState, geom_rendering: int): int {.importcpp:
 
 converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
-proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "AlphaTestAttrib::make_default()", header: "alphaTestAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "alphaTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -21952,7 +21967,7 @@ proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAtt
 
 converter getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
-proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "AntialiasAttrib::make(#)", header: "antialiasAttrib.h".} ## \
+proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make(#))", header: "antialiasAttrib.h".} ## \
 ## Constructs a new AntialiasAttrib object.
 ##
 ## The mode should be either M_none, M_auto, or a union of any or all of
@@ -21979,7 +21994,7 @@ proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "
 ## case M_line or M_point is selected (these two generally produce better
 ## results than M_multisample)
 
-proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "AntialiasAttrib::make_default()", header: "antialiasAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "antialiasAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -22037,47 +22052,47 @@ proc getNumEffects*(this: RenderEffects): clonglong {.importcpp: "#->get_num_eff
 ## Returns the number of separate effects indicated in the state.
 ## @deprecated in Python, use len(effects) instead, or effects.size() in C++.
 
-proc getEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Looks for a RenderEffect of the indicated type in the state, and returns it
 ## if it is found, or NULL if it is not.
 
-proc getEffect*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Returns the nth effect in the state.
 
 proc size*(this: RenderEffects): clonglong {.importcpp: "#->size()".} ## \
 ## Returns the number of separate effects indicated in the state.
 
-proc `[]`*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "#->operator [](#)".} ## \
+proc `[]`*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->operator [](#))", header: deconstifyCode.} ## \
 ## Returns the effect in the state with the given type.
 
-proc `[]`*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "#->operator [](#)".} ## \
+proc `[]`*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "deconstify(#->operator [](#))", header: deconstifyCode.} ## \
 ## Returns the nth effect in the state.
 
 proc findEffect*(this: RenderEffects, `type`: TypeHandle): int {.importcpp: "#->find_effect(#)".} ## \
 ## Searches for an effect with the indicated type in the state, and returns
 ## its index if it is found, or -1 if it is not.
 
-proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "RenderEffects::make_empty()", header: "renderEffects.h".} ## \
+proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with no effects set.
 
-proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(RenderEffects::make(#))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with one effect set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(RenderEffects::make(#, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with two effects set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(RenderEffects::make(#, #, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with three effects set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #, #, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(RenderEffects::make(#, #, #, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with four effects set.
 
-proc addEffect*(this: RenderEffects, effect: RenderEffect): RenderEffects {.importcpp: "#->add_effect(#)".} ## \
+proc addEffect*(this: RenderEffects, effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#->add_effect(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderEffects object that represents the same as the source
 ## state, with the new RenderEffect added.  If there is already a RenderEffect
 ## with the same type, it is replaced.
 
-proc removeEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffects {.importcpp: "#->remove_effect(#)".} ## \
+proc removeEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffects {.importcpp: "deconstify(#->remove_effect(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderEffects object that represents the same as the source
 ## state, with the indicated RenderEffect removed.
 
@@ -22103,7 +22118,7 @@ converter getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "Re
 
 converter upcastToTypedWritableReferenceCount*(this: PandaNode): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(PandaNode *)(#))".}
 
 proc newPandaNode*(name: string): PandaNode {.importcpp: "new PandaNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -22448,13 +22463,13 @@ proc setAttrib*(this: PandaNode, attrib: RenderAttrib) {.importcpp: "#->set_attr
 ## attribute will now apply to this node and everything below.  If there was
 ## already an attribute of the same type, it is replaced.
 
-proc getAttrib*(this: PandaNode, `type`: TypeHandle): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: PandaNode, `type`: TypeHandle): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the render attribute of the indicated type, if it is defined on the
 ## node, or NULL if it is not.  This checks only what is set on this
 ## particular node level, and has nothing to do with what render attributes
 ## may be inherited from parent nodes.
 
-proc getAttrib*(this: PandaNode, slot: int): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: PandaNode, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the render attribute of the indicated type, if it is defined on the
 ## node, or NULL if it is not.  This checks only what is set on this
 ## particular node level, and has nothing to do with what render attributes
@@ -22482,7 +22497,7 @@ proc setEffect*(this: PandaNode, effect: RenderEffect) {.importcpp: "#->set_effe
 ## Adds the indicated render effect to the scene graph on this node.  If there
 ## was already an effect of the same type, it is replaced.
 
-proc getEffect*(this: PandaNode, `type`: TypeHandle): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: PandaNode, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Returns the render effect of the indicated type, if it is defined on the
 ## node, or NULL if it is not.
 
@@ -22507,13 +22522,13 @@ proc setState*(this: PandaNode, state: RenderState) {.importcpp: "#->set_state(#
 ## This completely replaces whatever has been set on this node via repeated
 ## calls to set_attrib().
 
-proc getState*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "#->get_state(#)".} ## \
+proc getState*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "deconstify(#->get_state(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
 ## inherited from above.
 
-proc getState*(this: PandaNode): RenderState {.importcpp: "#->get_state()".} ## \
+proc getState*(this: PandaNode): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
@@ -22539,10 +22554,10 @@ proc setEffects*(this: PandaNode, effects: RenderEffects) {.importcpp: "#->set_e
 ## completely replaces whatever has been set on this node via repeated calls
 ## to set_attrib().
 
-proc getEffects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "#->get_effects(#)".} ## \
+proc getEffects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "deconstify(#->get_effects(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
-proc getEffects*(this: PandaNode): RenderEffects {.importcpp: "#->get_effects()".} ## \
+proc getEffects*(this: PandaNode): RenderEffects {.importcpp: "deconstify(#->get_effects())", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
 proc clearEffects*(this: PandaNode, current_thread: Thread) {.importcpp: "#->clear_effects(#)".} ## \
@@ -22559,12 +22574,12 @@ proc setTransform*(this: PandaNode, transform: TransformState) {.importcpp: "#->
 ## Sets the transform that will be applied to this node and below.  This
 ## defines a new coordinate space at this point in the scene graph and below.
 
-proc getTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
 
-proc getTransform*(this: PandaNode): TransformState {.importcpp: "#->get_transform()".} ## \
+proc getTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
@@ -22585,11 +22600,11 @@ proc setPrevTransform*(this: PandaNode, transform: TransformState) {.importcpp: 
 ## frame ago, for the purposes of detecting motion for accurate collision
 ## calculations.
 
-proc getPrevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_prev_transform(#)".} ## \
+proc getPrevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_prev_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
-proc getPrevTransform*(this: PandaNode): TransformState {.importcpp: "#->get_prev_transform()".} ## \
+proc getPrevTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_prev_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
@@ -22773,11 +22788,11 @@ proc setOverallHidden*(this: PandaNode, overall_hidden: bool) {.importcpp: "#->s
 ## This actually works by twiddling the reserved _overall_bit in the node's
 ## draw mask, which has special meaning.
 
-proc getOffClipPlanes*(this: PandaNode, current_thread: Thread): RenderAttrib {.importcpp: "#->get_off_clip_planes(#)".} ## \
+proc getOffClipPlanes*(this: PandaNode, current_thread: Thread): RenderAttrib {.importcpp: "deconstify(#->get_off_clip_planes(#))", header: deconstifyCode.} ## \
 ## Returns a ClipPlaneAttrib which represents the union of all of the clip
 ## planes that have been turned \*off\* at this level and below.
 
-proc getOffClipPlanes*(this: PandaNode): RenderAttrib {.importcpp: "#->get_off_clip_planes()".} ## \
+proc getOffClipPlanes*(this: PandaNode): RenderAttrib {.importcpp: "deconstify(#->get_off_clip_planes())", header: deconstifyCode.} ## \
 ## Returns a ClipPlaneAttrib which represents the union of all of the clip
 ## planes that have been turned \*off\* at this level and below.
 
@@ -22827,17 +22842,17 @@ proc clearBounds*(this: PandaNode) {.importcpp: "#->clear_bounds()".} ## \
 ## node's bounding volume to be automatically computed once more based on the
 ## contents of the node.
 
-proc getBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the external bounding volume of this node: a bounding volume that
 ## contains the user bounding volume, the internal bounding volume, and all of
 ## the children's bounding volumes.
 
-proc getBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the external bounding volume of this node: a bounding volume that
 ## contains the user bounding volume, the internal bounding volume, and all of
 ## the children's bounding volumes.
 
-proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#, #)".} ## \
+proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#, #))", header: deconstifyCode.} ## \
 ## This flavor of get_bounds() return the external bounding volume, and also
 ## fills in seq with the bounding volume's current sequence number.  When this
 ## sequence number changes, it indicates that the bounding volume might have
@@ -22848,7 +22863,7 @@ proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): Boundi
 ## counter, so as long as this counter remains unchanged you can be confident
 ## the bounding volume is also unchanged.
 
-proc getBounds*(this: PandaNode, seq: UpdateSeq): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: PandaNode, seq: UpdateSeq): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## This flavor of get_bounds() return the external bounding volume, and also
 ## fills in seq with the bounding volume's current sequence number.  When this
 ## sequence number changes, it indicates that the bounding volume might have
@@ -22877,12 +22892,12 @@ proc getNestedVertices*(this: PandaNode): int {.importcpp: "#->get_nested_vertic
 ## also include hidden nodes.  It may also omit or only approximate certain
 ## kinds of dynamic geometry.  However, it will not include stashed nodes.
 
-proc getInternalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_internal_bounds(#)".} ## \
+proc getInternalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
 
-proc getInternalBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_internal_bounds()".} ## \
+proc getInternalBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds())", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
@@ -23020,7 +23035,7 @@ proc getFancyBits*(this: PandaNode): int {.importcpp: "#->get_fancy_bits()".} ##
 
 converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
-proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "TransparencyAttrib::make_default()", header: "transparencyAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "transparencyAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -23028,11 +23043,11 @@ proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "Transpare
 
 converter getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
-proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicOpAttrib::make_off()", header: "logicOpAttrib.h".} ## \
+proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "logicOpAttrib.h".} ## \
 ## Constructs a new LogicOpAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
-proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicOpAttrib::make_default()", header: "logicOpAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "logicOpAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -26683,19 +26698,19 @@ proc write*(this: AttribNodeRegistry, `out`: ostream) {.importcpp: "#.write(#)".
 
 proc getGlobalPtr*(_: typedesc[AttribNodeRegistry]): AttribNodeRegistry {.importcpp: "AttribNodeRegistry::get_global_ptr()", header: "attribNodeRegistry.h".}
 
-proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_identity()", header: "audioVolumeAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "audioVolumeAttrib.h".} ## \
 ## Constructs an identity audio volume attrib.
 
-proc make*(_: typedesc[AudioVolumeAttrib], volume: float32): RenderAttrib {.importcpp: "AudioVolumeAttrib::make(#)", header: "audioVolumeAttrib.h".} ## \
+proc make*(_: typedesc[AudioVolumeAttrib], volume: float32): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make(#))", header: "audioVolumeAttrib.h".} ## \
 ## Constructs a new AudioVolumeAttrib object that indicates audio volume
 ## should be scaled by the indicated factor.
 
-proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_off()", header: "audioVolumeAttrib.h".} ## \
+proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "audioVolumeAttrib.h".} ## \
 ## Constructs a new AudioVolumeAttrib object that ignores any
 ## AudioVolumeAttrib inherited from above.  You may also specify an additional
 ## volume scale to apply to geometry below (using set_volume()).
 
-proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_default()", header: "audioVolumeAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "audioVolumeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -26712,7 +26727,7 @@ proc hasVolume*(this: AudioVolumeAttrib): bool {.importcpp: "#->has_volume()".} 
 proc getVolume*(this: AudioVolumeAttrib): float32 {.importcpp: "#->get_volume()".} ## \
 ## Returns the volume to be applied to sounds.
 
-proc setVolume*(this: AudioVolumeAttrib, volume: float32): RenderAttrib {.importcpp: "#->set_volume(#)".} ## \
+proc setVolume*(this: AudioVolumeAttrib, volume: float32): RenderAttrib {.importcpp: "deconstify(#->set_volume(#))", header: deconstifyCode.} ## \
 ## Returns a new AudioVolumeAttrib, just like this one, but with the volume
 ## changed to the indicated value.
 
@@ -26720,13 +26735,13 @@ proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolum
 
 converter getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
-proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make()", header: "auxBitplaneAttrib.h".} ## \
+proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "auxBitplaneAttrib.h".} ## \
 ## Constructs a default AuxBitplaneAttrib object.
 
-proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make(#)", header: "auxBitplaneAttrib.h".} ## \
+proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make(#))", header: "auxBitplaneAttrib.h".} ## \
 ## Constructs a specified AuxBitplaneAttrib object.
 
-proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make_default()", header: "auxBitplaneAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "auxBitplaneAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -26905,20 +26920,20 @@ proc getWriter*(this: BamFile): BamWriter {.importcpp: "#.get_writer()".} ## \
 ## Returns the BamWriter in charge of performing the write operations.  This
 ## will return NULL unless open_write() was called.
 
-proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3, fixed_depth: bool): RenderEffect {.importcpp: "BillboardEffect::make(#, #, #, #, #, #, #)", header: "billboardEffect.h".} ## \
+proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3, fixed_depth: bool): RenderEffect {.importcpp: "deconstify(BillboardEffect::make(#, #, #, #, #, #, #))", header: "billboardEffect.h".} ## \
 ## Constructs a new BillboardEffect object with the indicated properties.
 
-proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3): RenderEffect {.importcpp: "BillboardEffect::make(#, #, #, #, #, #)", header: "billboardEffect.h".} ## \
+proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3): RenderEffect {.importcpp: "deconstify(BillboardEffect::make(#, #, #, #, #, #))", header: "billboardEffect.h".} ## \
 ## Constructs a new BillboardEffect object with the indicated properties.
 
-proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_axis()", header: "billboardEffect.h".} ## \
+proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical axis-rotating billboard.
 
-proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_point_eye()", header: "billboardEffect.h".} ## \
+proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical eye-relative point-rotating
 ## billboard.
 
-proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_point_world()", header: "billboardEffect.h".} ## \
+proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical world-relative point-rotating
 ## billboard.
 
@@ -27155,7 +27170,7 @@ proc setInitialState*(this: Camera, state: RenderState) {.importcpp: "#->set_ini
 ## Sets the initial state which is applied to all nodes in the scene, as if it
 ## were set at the top of the scene graph.
 
-proc getInitialState*(this: Camera): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: Camera): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc setTagStateKey*(this: Camera, tag_state_key: string) {.importcpp: "#->set_tag_state_key(nimStringToStdString(#))", header: stringConversionCode.} ## \
@@ -27195,7 +27210,7 @@ proc hasTagState*(this: Camera, tag_state: string): bool {.importcpp: "#->has_ta
 ## Returns true if set_tag_state() has previously been called with the
 ## indicated tag state, false otherwise.
 
-proc getTagState*(this: Camera, tag_state: string): RenderState {.importcpp: "#->get_tag_state(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getTagState*(this: Camera, tag_state: string): RenderState {.importcpp: "deconstify(#->get_tag_state(nimStringToStdString(#)))", header: deconstifyCode.} ## \
 ## Returns the state associated with the indicated tag state by a previous
 ## call to set_tag_state(), or the empty state if nothing has been associated.
 
@@ -27271,10 +27286,10 @@ proc getClipEffect*(this: PlaneNode): int {.importcpp: "#->get_clip_effect()".} 
 
 converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
-proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make()", header: "clipPlaneAttrib.h".} ## \
+proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".} ## \
 ## The following is the new, more general interface to the ClipPlaneAttrib.
 
-proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make_default()", header: "clipPlaneAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "clipPlaneAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27300,19 +27315,19 @@ proc hasPlane*(this: ClipPlaneAttrib, plane: PlaneNode): bool {.importcpp: "#->h
 ## off_planes, so this method no longer makes sense.  Query the lists
 ## independently.
 
-proc addPlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "#->add_plane(#)".} ## \
+proc addPlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#->add_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes.
 ##
 ## @deprecated Use add_on_plane() or add_off_plane() instead.
 
-proc removePlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "#->remove_plane(#)".} ## \
+proc removePlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#->remove_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes.
 ##
 ## @deprecated Use remove_on_plane() or remove_off_plane() instead.
 
-proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make_all_off()", header: "clipPlaneAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "clipPlaneAttrib.h".} ## \
 ## Constructs a new ClipPlaneAttrib object that disables all planes (and hence
 ## disables clipping).
 
@@ -27345,23 +27360,23 @@ proc isIdentity*(this: ClipPlaneAttrib): bool {.importcpp: "#->is_identity()".} 
 ## Returns true if this is an identity attrib: it does not change the set of
 ## planes in use.
 
-proc addOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->add_on_plane(#)".} ## \
+proc addOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_on_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes enabled by this attrib.
 
-proc removeOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->remove_on_plane(#)".} ## \
+proc removeOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_on_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes enabled by this attrib.
 
-proc addOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->add_off_plane(#)".} ## \
+proc addOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_off_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes disabled by this attrib.
 
-proc removeOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->remove_off_plane(#)".} ## \
+proc removeOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_off_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes disabled by this attrib.
 
-proc filterToMax*(this: ClipPlaneAttrib, max_clip_planes: int): ClipPlaneAttrib {.importcpp: "#->filter_to_max(#)".} ## \
+proc filterToMax*(this: ClipPlaneAttrib, max_clip_planes: int): ClipPlaneAttrib {.importcpp: "deconstify(#->filter_to_max(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, very much like this one, but with the number
 ## of on_planes reduced to be no more than max_clip_planes.  The number of
 ## off_planes in the new ClipPlaneAttrib is undefined.
@@ -27370,19 +27385,19 @@ proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAtt
 
 converter getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
-proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_vertex()", header: "colorAttrib.h".} ## \
+proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered according to its own vertex color.
 
-proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "ColorAttrib::make_flat(#)", header: "colorAttrib.h".} ## \
+proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_flat(#))", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered in the indicated color.
 
-proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_off()", header: "colorAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered in white.
 
-proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_default()", header: "colorAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "colorAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27394,11 +27409,11 @@ proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get
 
 converter getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
-proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "ColorBlendAttrib::make_off()", header: "colorBlendAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "colorBlendAttrib.h".} ## \
 ## Constructs a new ColorBlendAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
-proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "ColorBlendAttrib::make_default()", header: "colorBlendAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "colorBlendAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27416,19 +27431,19 @@ proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendA
 
 converter getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
-proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_identity()", header: "colorScaleAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "colorScaleAttrib.h".} ## \
 ## Constructs an identity scale attrib.
 
-proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "ColorScaleAttrib::make(#)", header: "colorScaleAttrib.h".} ## \
+proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make(#))", header: "colorScaleAttrib.h".} ## \
 ## Constructs a new ColorScaleAttrib object that indicates geometry should be
 ## scaled by the indicated factor.
 
-proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_off()", header: "colorScaleAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "colorScaleAttrib.h".} ## \
 ## Constructs a new ColorScaleAttrib object that ignores any ColorScaleAttrib
 ## inherited from above.  You may also specify an additional color scale to
 ## apply to geometry below (using set_scale()).
 
-proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_default()", header: "colorScaleAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "colorScaleAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27457,7 +27472,7 @@ proc hasAlphaScale*(this: ColorScaleAttrib): bool {.importcpp: "#->has_alpha_sca
 proc getScale*(this: ColorScaleAttrib): LVecBase4 {.importcpp: "#->get_scale()".} ## \
 ## Returns the scale to be applied to colors.
 
-proc setScale*(this: ColorScaleAttrib, scale: LVecBase4): RenderAttrib {.importcpp: "#->set_scale(#)".} ## \
+proc setScale*(this: ColorScaleAttrib, scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#->set_scale(#))", header: deconstifyCode.} ## \
 ## Returns a new ColorScaleAttrib, just like this one, but with the scale
 ## changed to the indicated value.
 
@@ -27465,10 +27480,10 @@ proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleA
 
 converter getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
-proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "ColorWriteAttrib::make(#)", header: "colorWriteAttrib.h".} ## \
+proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make(#))", header: "colorWriteAttrib.h".} ## \
 ## Constructs a new ColorWriteAttrib object.
 
-proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "ColorWriteAttrib::make_default()", header: "colorWriteAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "colorWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27479,14 +27494,14 @@ proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteA
 
 converter getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "CompassEffect::make(#, #)", header: "compassEffect.h".} ## \
+proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(CompassEffect::make(#, #))", header: "compassEffect.h".} ## \
 ## Constructs a new CompassEffect object.  If the reference is an empty
 ## NodePath, it means the CompassEffect is relative to the root of the scene
 ## graph; otherwise, it's relative to the indicated node.  The properties
 ## bitmask specifies the set of properties that the compass node inherits from
 ## the reference instead of from its parent.
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "CompassEffect::make(#)", header: "compassEffect.h".} ## \
+proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(CompassEffect::make(#))", header: "compassEffect.h".} ## \
 ## Constructs a new CompassEffect object.  If the reference is an empty
 ## NodePath, it means the CompassEffect is relative to the root of the scene
 ## graph; otherwise, it's relative to the indicated node.  The properties
@@ -27520,7 +27535,7 @@ proc getPreserved*(this: GeomNode): bool {.importcpp: "#->get_preserved()".} ## 
 proc getNumGeoms*(this: GeomNode): int {.importcpp: "#->get_num_geoms()".} ## \
 ## Returns the number of geoms in the node.
 
-proc getGeom*(this: GeomNode, n: int): Geom {.importcpp: "#->get_geom(#)".} ## \
+proc getGeom*(this: GeomNode, n: int): Geom {.importcpp: "deconstify(#->get_geom(#))", header: deconstifyCode.} ## \
 ## Returns the nth geom of the node.  This object should not be modified,
 ## since the same object might be shared between multiple different GeomNodes,
 ## but see modify_geom().
@@ -27537,7 +27552,7 @@ proc modifyGeom*(this: GeomNode, n: int): Geom {.importcpp: "#->modify_geom(#)".
 ## all the way to pipeline stage 0, which may step on changes that were made
 ## independently in pipeline stage 0. Use with caution.
 
-proc getGeomState*(this: GeomNode, n: int): RenderState {.importcpp: "#->get_geom_state(#)".} ## \
+proc getGeomState*(this: GeomNode, n: int): RenderState {.importcpp: "deconstify(#->get_geom_state(#))", header: deconstifyCode.} ## \
 ## Returns the RenderState associated with the nth geom of the node.  This is
 ## just the RenderState directly associated with the Geom; the actual state in
 ## which the Geom is rendered will also be affected by RenderStates that
@@ -27624,14 +27639,14 @@ proc writeVerbose*(this: GeomNode, `out`: ostream, indent_level: int) {.importcp
 
 converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
-proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "CullBinAttrib::make(nimStringToStdString(#), #)", header: "cullBinAttrib.h".} ## \
+proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".} ## \
 ## Constructs a new CullBinAttrib assigning geometry into the named bin.  If
 ## the bin name is the empty string, the default bin is used.
 ##
 ## The draw_order specifies further ordering information which is relevant
 ## only to certain kinds of bins (in particular CullBinFixed type bins).
 
-proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "CullBinAttrib::make_default()", header: "cullBinAttrib.h".} ## \
+proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "cullBinAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27751,7 +27766,7 @@ proc write*(this: CullBinManager, `out`: ostream) {.importcpp: "#.write(#)".}
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".} ## \
 ## Returns the pointer to the global CullBinManager object.
 
-proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make()", header: "cullFaceAttrib.h".} ## \
+proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "cullFaceAttrib.h".} ## \
 ## Constructs a new CullFaceAttrib object that specifies how to cull geometry.
 ## By Panda convention, vertices are ordered counterclockwise when seen from
 ## the front, so the M_cull_clockwise will cull backfacing polygons.
@@ -27760,13 +27775,13 @@ proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttr
 ## without any other intervening attrib, it is the same as applying the
 ## default attrib.
 
-proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make_reverse()", header: "cullFaceAttrib.h".} ## \
+proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "cullFaceAttrib.h".} ## \
 ## Constructs a new CullFaceAttrib object that reverses the effects of any
 ## other CullFaceAttrib objects in the scene graph.  M_cull_clockwise will be
 ## treated as M_cull_counter_clockwise, and vice-versa.  M_cull_none is
 ## unchanged.
 
-proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make_default()", header: "cullFaceAttrib.h".} ## \
+proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "cullFaceAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27840,7 +27855,7 @@ proc getCameraNode*(this: SceneSetup): Camera {.importcpp: "#->get_camera_node()
 proc setLens*(this: SceneSetup, lens: Lens) {.importcpp: "#->set_lens(#)".} ## \
 ## Indicates the particular Lens used for rendering.
 
-proc getLens*(this: SceneSetup): Lens {.importcpp: "#->get_lens()".} ## \
+proc getLens*(this: SceneSetup): Lens {.importcpp: "deconstify(#->get_lens())", header: deconstifyCode.} ## \
 ## Returns the particular Lens used for rendering.
 
 proc setInverted*(this: SceneSetup, inverted: bool) {.importcpp: "#->set_inverted(#)".} ## \
@@ -27868,20 +27883,20 @@ proc setInitialState*(this: SceneSetup, initial_state: RenderState) {.importcpp:
 ## Sets the initial state which is applied to all nodes in the scene, as if it
 ## were set at the top of the scene graph.
 
-proc getInitialState*(this: SceneSetup): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: SceneSetup): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc setCameraTransform*(this: SceneSetup, camera_transform: TransformState) {.importcpp: "#->set_camera_transform(#)".} ## \
 ## Specifies the position of the camera relative to the starting node.
 
-proc getCameraTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_camera_transform()".} ## \
+proc getCameraTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_camera_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the camera relative to the starting node.
 
 proc setWorldTransform*(this: SceneSetup, world_transform: TransformState) {.importcpp: "#->set_world_transform(#)".} ## \
 ## Specifies the position of the starting node relative to the camera.  This
 ## is the inverse of the camera transform.
 
-proc getWorldTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_world_transform()".} ## \
+proc getWorldTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the starting node relative to the camera.  This is
 ## the inverse of the camera transform.
 
@@ -27889,7 +27904,7 @@ proc setCsTransform*(this: SceneSetup, cs_transform: TransformState) {.importcpp
 ## Specifies the transform from the camera's coordinate system to the GSG's
 ## internal coordinate system.
 
-proc getCsTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_cs_transform()".} ## \
+proc getCsTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_cs_transform())", header: deconstifyCode.} ## \
 ## Returns the transform from the camera's coordinate system to the GSG's
 ## internal coordinate system.
 
@@ -27897,7 +27912,7 @@ proc setCsWorldTransform*(this: SceneSetup, cs_world_transform: TransformState) 
 ## Specifies the position from the starting node relative to the camera, in
 ## the GSG's internal coordinate system.
 
-proc getCsWorldTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_cs_world_transform()".} ## \
+proc getCsWorldTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_cs_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position from the starting node relative to the camera, in the
 ## GSG's internal coordinate system.
 
@@ -27994,14 +28009,14 @@ proc setExpDensity*(this: Fog, exp_density: float32) {.importcpp: "#->set_exp_de
 
 converter getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
-proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "FogAttrib::make(#)", header: "fogAttrib.h".} ## \
+proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(FogAttrib::make(#))", header: "fogAttrib.h".} ## \
 ## Constructs a new FogAttrib object suitable for rendering the indicated fog
 ## onto geometry.
 
-proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "FogAttrib::make_off()", header: "fogAttrib.h".} ## \
+proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "fogAttrib.h".} ## \
 ## Constructs a new FogAttrib object suitable for rendering unfogd geometry.
 
-proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "FogAttrib::make_default()", header: "fogAttrib.h".} ## \
+proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "fogAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28043,10 +28058,10 @@ proc getTagStateKey*(this: CullTraverser): string {.importcpp: "nimStringFromStd
 ## Returns the tag state key that has been specified for the scene's camera,
 ## if any.
 
-proc getCameraTransform*(this: CullTraverser): TransformState {.importcpp: "#->get_camera_transform()".} ## \
+proc getCameraTransform*(this: CullTraverser): TransformState {.importcpp: "deconstify(#->get_camera_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the camera relative to the starting node.
 
-proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "#->get_world_transform()".} ## \
+proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "deconstify(#->get_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the starting node relative to the camera.  This is
 ## the inverse of the camera transform.
 ##
@@ -28055,7 +28070,7 @@ proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "#->ge
 ## transform of the current node use
 ## CullTraverserData::get_modelview_transform().
 
-proc getInitialState*(this: CullTraverser): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: CullTraverser): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial RenderState at the top of the scene graph we are
 ## traversing, or the empty state if the initial state was never set.
 
@@ -28129,7 +28144,7 @@ proc getLostState*(this: GeomDrawCallbackData): bool {.importcpp: "#.get_lost_st
 
 converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
-proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "RescaleNormalAttrib::make_default()", header: "rescaleNormalAttrib.h".} ## \
+proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "rescaleNormalAttrib.h".} ## \
 ## Constructs a RescaleNormalAttrib object that's suitable for putting at the
 ## top of a scene graph.  This will contain whatever attrib was suggested by
 ## the user's rescale-normals Config variable.
@@ -28165,27 +28180,27 @@ converter getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullR
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
-proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "DecalEffect::make()", header: "decalEffect.h".} ## \
+proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "decalEffect.h".} ## \
 ## Constructs a new DecalEffect object.
 
 converter getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "DepthOffsetAttrib::make(#)", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make(#))", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the relative
 ## amount of bias to write to the depth buffer for subsequent geometry.
 
-proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "DepthOffsetAttrib::make()", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the relative
 ## amount of bias to write to the depth buffer for subsequent geometry.
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int, min_value: float32, max_value: float32): RenderAttrib {.importcpp: "DepthOffsetAttrib::make(#, #, #)", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int, min_value: float32, max_value: float32): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make(#, #, #))", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the bias, and also
 ## specifies a minimum and maximum (or, more precisely, nearest and farthest)
 ## values to write to the depth buffer, in the range 0 .. 1.  This range is 0,
 ## 1 by default; setting it to some other range can be used to create
 ## additional depth buffer effects.
 
-proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "DepthOffsetAttrib::make_default()", header: "depthOffsetAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "depthOffsetAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28204,7 +28219,7 @@ proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffse
 
 converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
-proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "DepthTestAttrib::make_default()", header: "depthTestAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "depthTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28212,7 +28227,7 @@ proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAtt
 
 converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
-proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "DepthWriteAttrib::make_default()", header: "depthWriteAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "depthWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28284,10 +28299,10 @@ proc getClassPriority*(this: Light): int {.importcpp: "#->get_class_priority()".
 
 converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
-proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make()", header: "lightAttrib.h".} ## \
+proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".} ## \
 ## The following is the new, more general interface to the LightAttrib.
 
-proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make_default()", header: "lightAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "lightAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28313,19 +28328,19 @@ proc hasLight*(this: LightAttrib, light: Light): bool {.importcpp: "#->has_light
 ## off_lights, so this method no longer makes sense.  Query the lists
 ## independently.
 
-proc addLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "#->add_light(#)".} ## \
+proc addLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights.
 ##
 ## @deprecated Use add_on_light() or add_off_light() instead.
 
-proc removeLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "#->remove_light(#)".} ## \
+proc removeLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights.
 ##
 ## @deprecated Use remove_on_light() or remove_off_light() instead.
 
-proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make_all_off()", header: "lightAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "lightAttrib.h".} ## \
 ## Constructs a new LightAttrib object that turns off all lights (and hence
 ## disables lighting).
 
@@ -28365,27 +28380,27 @@ proc isIdentity*(this: LightAttrib): bool {.importcpp: "#->is_identity()".} ## \
 ## Returns true if this is an identity attrib: it does not change the set of
 ## lights in use.
 
-proc addOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->add_on_light(#)".} ## \
+proc addOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_on_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights turned on by this attrib.
 
-proc removeOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->remove_on_light(#)".} ## \
+proc removeOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_on_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights turned on by this attrib.
 
-proc replaceOnLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "#->replace_on_light(#, #)".} ## \
+proc replaceOnLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "deconstify(#->replace_on_light(#, #))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## replaced with the given other light.
 
-proc addOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->add_off_light(#)".} ## \
+proc addOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_off_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights turned off by this attrib.
 
-proc removeOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->remove_off_light(#)".} ## \
+proc removeOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_off_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights turned off by this attrib.
 
-proc replaceOffLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "#->replace_off_light(#, #)".} ## \
+proc replaceOffLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "deconstify(#->replace_off_light(#, #))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## replaced with the given other light.
 
@@ -28401,16 +28416,16 @@ proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get
 
 converter getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
-proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_default()", header: "lightRampAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This is the standard OpenGL
 ## lighting ramp, which clamps the final light total to the 0-1 range.
 
-proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_identity()", header: "lightRampAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This differs from the usual
 ## OpenGL lighting model in that it does not clamp the final lighting total to
 ## (0,1).
 
-proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32): RenderAttrib {.importcpp: "LightRampAttrib::make_single_threshold(#, #)", header: "lightRampAttrib.h".} ## \
+proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_single_threshold(#, #))", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes the luminance of the
 ## diffuse lighting contribution to be quantized using a single threshold:
 ##
@@ -28422,7 +28437,7 @@ proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: 
 ## }
 ## @endcode
 
-proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32, thresh1: float32, lev1: float32): RenderAttrib {.importcpp: "LightRampAttrib::make_double_threshold(#, #, #, #)", header: "lightRampAttrib.h".} ## \
+proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32, thresh1: float32, lev1: float32): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_double_threshold(#, #, #, #))", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes the luminance of the
 ## diffuse lighting contribution to be quantized using two thresholds:
 ##
@@ -28436,7 +28451,7 @@ proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: 
 ## }
 ## @endcode
 
-proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr0()", header: "lightRampAttrib.h".} ## \
+proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28455,7 +28470,7 @@ proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRa
 ## FINAL_RGB = (RGB^3 + RGB^2 + RGB) / (RGB^3 + RGB^2 + RGB + 1)
 ## @endcode
 
-proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr1()", header: "lightRampAttrib.h".} ## \
+proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28474,7 +28489,7 @@ proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRa
 ## FINAL_RGB = (RGB^2 + RGB) / (RGB^2 + RGB + 1)
 ## @endcode
 
-proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr2()", header: "lightRampAttrib.h".} ## \
+proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28505,7 +28520,7 @@ converter getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "
 
 converter upcastToTypedReferenceCount*(this: Loader): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(Loader *)(#))".}
 
 proc newLoader*(param0: Loader): Loader {.importcpp: "new Loader(#)".}
 
@@ -28653,15 +28668,15 @@ proc getGlobalPtr*(_: typedesc[LoaderFileTypeRegistry]): LoaderFileTypeRegistry 
 
 proc initLoaderFileTypeRegistry*(param0: LoaderFileTypeRegistry): LoaderFileTypeRegistry {.importcpp: "LoaderFileTypeRegistry(#)".}
 
-proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "MaterialAttrib::make(#)", header: "materialAttrib.h".} ## \
+proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make(#))", header: "materialAttrib.h".} ## \
 ## Constructs a new MaterialAttrib object suitable for rendering the indicated
 ## material onto geometry.
 
-proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "MaterialAttrib::make_off()", header: "materialAttrib.h".} ## \
+proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "materialAttrib.h".} ## \
 ## Constructs a new MaterialAttrib object suitable for rendering unmateriald
 ## geometry.
 
-proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "MaterialAttrib::make_default()", header: "materialAttrib.h".} ## \
+proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "materialAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28900,21 +28915,21 @@ proc getSuccess*(this: ModelSaveRequest): bool {.importcpp: "#->get_success()".}
 
 converter getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
-proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make()", header: "textureAttrib.h".} ## \
+proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "textureAttrib.h".} ## \
 ## The following methods define the new multitexture mode for TextureAttrib.
 ## Each TextureAttrib can add or remove individual texture stages from the
 ## complete set of textures that are to be applied; this is similar to the
 ## mechanism of LightAttrib.
 
-proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "TextureAttrib::make(#)", header: "textureAttrib.h".} ## \
+proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make(#))", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object suitable for rendering the indicated
 ## texture onto geometry, using the default TextureStage.
 
-proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_off()", header: "textureAttrib.h".} ## \
+proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object suitable for rendering untextured
 ## geometry.
 
-proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_default()", header: "textureAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "textureAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28931,7 +28946,7 @@ proc getTexture*(this: TextureAttrib): Texture {.importcpp: "#->get_texture()".}
 ## If the TextureAttrib is not an 'off' TextureAttrib, returns the base-level
 ## texture that is associated.  Otherwise, return NULL.
 
-proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_all_off()", header: "textureAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object that turns off all stages (and hence
 ## disables texturing).
 
@@ -28995,44 +29010,44 @@ proc isIdentity*(this: TextureAttrib): bool {.importcpp: "#->is_identity()".} ##
 ## Returns true if this is an identity attrib: it does not change the set of
 ## stages in use.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState, override: int): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState, override: int): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, override: int): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, override: int): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture): RenderAttrib {.importcpp: "#->add_on_stage(#, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc removeOnStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_on_stage(#)".} ## \
+proc removeOnStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_on_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage removed from the list of stages turned on by this attrib.
 
-proc addOffStage*(this: TextureAttrib, stage: TextureStage, override: int): RenderAttrib {.importcpp: "#->add_off_stage(#, #)".} ## \
+proc addOffStage*(this: TextureAttrib, stage: TextureStage, override: int): RenderAttrib {.importcpp: "deconstify(#->add_off_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned off by this attrib.
 
-proc addOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->add_off_stage(#)".} ## \
+proc addOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->add_off_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned off by this attrib.
 
-proc removeOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_off_stage(#)".} ## \
+proc removeOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_off_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage removed from the list of stages turned off by this attrib.
 
-proc unifyTextureStages*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->unify_texture_stages(#)".} ## \
+proc unifyTextureStages*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->unify_texture_stages(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with any included
 ## TextureAttribs that happen to have the same name as the given object
 ## replaced with the object.
 
-proc replaceTexture*(this: TextureAttrib, tex: Texture, new_tex: Texture): RenderAttrib {.importcpp: "#->replace_texture(#, #)".} ## \
+proc replaceTexture*(this: TextureAttrib, tex: Texture, new_tex: Texture): RenderAttrib {.importcpp: "deconstify(#->replace_texture(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with all references to
 ## the given texture replaced with the new texture.
 ##
@@ -29042,14 +29057,14 @@ proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib:
 
 converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
-proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "TexGenAttrib::make()", header: "texGenAttrib.h".} ## \
+proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".} ## \
 ## Constructs a TexGenAttrib that generates no stages at all.
 
-proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "TexGenAttrib::make_default()", header: "texGenAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "texGenAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
-proc removeStage*(this: TexGenAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexGenAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexGenAttrib just like this one, with the indicated stage
 ## removed.
 
@@ -29116,7 +29131,7 @@ proc setVertex*(this: OccluderNode, n: clonglong, v: LPoint3) {.importcpp: "#->s
 
 converter getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
-proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "OccluderEffect::make()", header: "occluderEffect.h".} ## \
+proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "occluderEffect.h".} ## \
 ## Constructs a new OccluderEffect object that does nothing.
 
 proc getNumOnOccluders*(this: OccluderEffect): int {.importcpp: "#->get_num_on_occluders()".} ## \
@@ -29133,11 +29148,11 @@ proc isIdentity*(this: OccluderEffect): bool {.importcpp: "#->is_identity()".} #
 ## Returns true if this is an identity effect: it does not change the set of
 ## occluders in use.
 
-proc addOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "#->add_on_occluder(#)".} ## \
+proc addOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "deconstify(#->add_on_occluder(#))", header: deconstifyCode.} ## \
 ## Returns a new OccluderEffect, just like this one, but with the indicated
 ## occluder added to the list of occluders enabled by this effect.
 
-proc removeOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "#->remove_on_occluder(#)".} ## \
+proc removeOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "deconstify(#->remove_on_occluder(#))", header: deconstifyCode.} ## \
 ## Returns a new OccluderEffect, just like this one, but with the indicated
 ## occluder removed from the list of occluders enabled by this effect.
 
@@ -29268,22 +29283,22 @@ proc isEnabled*(this: PolylightNode): bool {.importcpp: "#->is_enabled()".} ## \
 
 converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
-proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "PolylightEffect::make()", header: "polylightEffect.h".} ## \
+proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".} ## \
 ## Constructs a new PolylightEffect object.
 
-proc addLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "#->add_light(#)".} ## \
+proc addLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.} ## \
 ## Add a PolylightNode object to this effect and return a new effect
 
-proc removeLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "#->remove_light(#)".} ## \
+proc removeLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.} ## \
 ## Remove a light from this effect.  Return the new updated effect
 
-proc setWeight*(this: PolylightEffect, w: float32): RenderEffect {.importcpp: "#->set_weight(#)".} ## \
+proc setWeight*(this: PolylightEffect, w: float32): RenderEffect {.importcpp: "deconstify(#->set_weight(#))", header: deconstifyCode.} ## \
 ## Set weight and return a new effect... the reason this couldnt be done
 ## through make was because that would return a new effect without the
 ## lightgroup which is static and cant be accessed Here, we just pass that to
 ## the make
 
-proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.importcpp: "#->set_effect_center(#)".} ## \
+proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.importcpp: "deconstify(#->set_effect_center(#))", header: deconstifyCode.} ## \
 ## Set weight and return a new effect... the reason this couldnt be done
 ## through make was because that would return a new effect without the
 ## lightgroup which is static and cant be accessed Here, we just pass that to
@@ -29301,20 +29316,20 @@ proc hasLight*(this: PolylightEffect, light: NodePath): bool {.importcpp: "#->ha
 
 converter getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "ShaderAttrib::make(#, #)", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make(#, #))", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "ShaderAttrib::make(#)", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make(#))", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make()", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make_off()", header: "shaderAttrib.h".} ## \
+proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object that disables the use of shaders (it
 ## does not clear out all shader data, however.)
 
-proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make_default()", header: "shaderAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "shaderAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29342,37 +29357,37 @@ proc autoRampOn*(this: ShaderAttrib): bool {.importcpp: "#->auto_ramp_on()".}
 
 proc autoShadowOn*(this: ShaderAttrib): bool {.importcpp: "#->auto_shadow_on()".}
 
-proc setShader*(this: ShaderAttrib, s: Shader, priority: int): RenderAttrib {.importcpp: "#->set_shader(#, #)".}
+proc setShader*(this: ShaderAttrib, s: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader(#, #))", header: deconstifyCode.}
 
-proc setShader*(this: ShaderAttrib, s: Shader): RenderAttrib {.importcpp: "#->set_shader(#)".}
+proc setShader*(this: ShaderAttrib, s: Shader): RenderAttrib {.importcpp: "deconstify(#->set_shader(#))", header: deconstifyCode.}
 
-proc setShaderOff*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "#->set_shader_off(#)".}
+proc setShaderOff*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_off(#))", header: deconstifyCode.}
 
-proc setShaderOff*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->set_shader_off()".}
+proc setShaderOff*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_off())", header: deconstifyCode.}
 
-proc setShaderAuto*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "#->set_shader_auto(#)".}
+proc setShaderAuto*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#))", header: deconstifyCode.}
 
-proc setShaderAuto*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->set_shader_auto()".}
+proc setShaderAuto*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto())", header: deconstifyCode.}
 
-proc clearShader*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->clear_shader()".}
+proc clearShader*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->clear_shader())", header: deconstifyCode.}
 
-proc setShaderInput*(this: ShaderAttrib, input: ShaderInput): RenderAttrib {.importcpp: "#->set_shader_input(#)".} ## \
+proc setShaderInput*(this: ShaderAttrib, input: ShaderInput): RenderAttrib {.importcpp: "deconstify(#->set_shader_input(#))", header: deconstifyCode.} ## \
 ## Shader Inputs
 
-proc setInstanceCount*(this: ShaderAttrib, instance_count: int): RenderAttrib {.importcpp: "#->set_instance_count(#)".} ## \
+proc setInstanceCount*(this: ShaderAttrib, instance_count: int): RenderAttrib {.importcpp: "deconstify(#->set_instance_count(#))", header: deconstifyCode.} ## \
 ## Sets the geometry instance count.  Do not confuse this with instanceTo,
 ## which is used for animation instancing, and has nothing to do with this.  A
 ## value of 0 means not to use instancing at all.
 
-proc setFlag*(this: ShaderAttrib, flag: int, value: bool): RenderAttrib {.importcpp: "#->set_flag(#, #)".}
+proc setFlag*(this: ShaderAttrib, flag: int, value: bool): RenderAttrib {.importcpp: "deconstify(#->set_flag(#, #))", header: deconstifyCode.}
 
-proc clearFlag*(this: ShaderAttrib, flag: int): RenderAttrib {.importcpp: "#->clear_flag(#)".}
+proc clearFlag*(this: ShaderAttrib, flag: int): RenderAttrib {.importcpp: "deconstify(#->clear_flag(#))", header: deconstifyCode.}
 
-proc clearShaderInput*(this: ShaderAttrib, id: InternalName): RenderAttrib {.importcpp: "#->clear_shader_input(#)".}
+proc clearShaderInput*(this: ShaderAttrib, id: InternalName): RenderAttrib {.importcpp: "deconstify(#->clear_shader_input(#))", header: deconstifyCode.}
 
-proc clearShaderInput*(this: ShaderAttrib, id: string): RenderAttrib {.importcpp: "#->clear_shader_input(nimStringToStdString(#))", header: stringConversionCode.}
+proc clearShaderInput*(this: ShaderAttrib, id: string): RenderAttrib {.importcpp: "deconstify(#->clear_shader_input(nimStringToStdString(#)))", header: deconstifyCode.}
 
-proc clearAllShaderInputs*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->clear_all_shader_inputs()".} ## \
+proc clearAllShaderInputs*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->clear_all_shader_inputs())", header: deconstifyCode.} ## \
 ## Clears all the shader inputs on the attrib.
 
 proc getFlag*(this: ShaderAttrib, flag: int): bool {.importcpp: "#->get_flag(#)".}
@@ -29380,7 +29395,7 @@ proc getFlag*(this: ShaderAttrib, flag: int): bool {.importcpp: "#->get_flag(#)"
 proc hasShaderInput*(this: ShaderAttrib, id: InternalName): bool {.importcpp: "#->has_shader_input(#)".} ## \
 ## Returns true if there is a ShaderInput of the given name.
 
-proc getShader*(this: ShaderAttrib): Shader {.importcpp: "#->get_shader()".} ## \
+proc getShader*(this: ShaderAttrib): Shader {.importcpp: "deconstify(#->get_shader())", header: deconstifyCode.} ## \
 ## Returns the shader object associated with the node.  If get_override
 ## returns true, but get_shader returns NULL, that means that this attribute
 ## should disable the shader.
@@ -29430,10 +29445,10 @@ proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::g
 
 converter getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
-proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "ShowBoundsEffect::make(#)", header: "showBoundsEffect.h".} ## \
+proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make(#))", header: "showBoundsEffect.h".} ## \
 ## Constructs a new ShowBoundsEffect object.
 
-proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "ShowBoundsEffect::make()", header: "showBoundsEffect.h".} ## \
+proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "showBoundsEffect.h".} ## \
 ## Constructs a new ShowBoundsEffect object.
 
 proc getTight*(this: ShowBoundsEffect): bool {.importcpp: "#->get_tight()".} ## \
@@ -29442,10 +29457,10 @@ proc getTight*(this: ShowBoundsEffect): bool {.importcpp: "#->get_tight()".} ## 
 
 converter getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
-proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "TexProjectorEffect::make()", header: "texProjectorEffect.h".} ## \
+proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "texProjectorEffect.h".} ## \
 ## Constructs a TexProjectorEffect that modifies no stages at all.
 
-proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath, lens_index: int): RenderEffect {.importcpp: "#->add_stage(#, #, #, #)".} ## \
+proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath, lens_index: int): RenderEffect {.importcpp: "deconstify(#->add_stage(#, #, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## projection for the given stage.  If this stage already exists, its
 ## projection definition is replaced.
@@ -29457,7 +29472,7 @@ proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, 
 ## applied to the texture transform.  In this case, the lens_index may be used
 ## to select the particular lens that should be used.
 
-proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath): RenderEffect {.importcpp: "#->add_stage(#, #, #)".} ## \
+proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath): RenderEffect {.importcpp: "deconstify(#->add_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## projection for the given stage.  If this stage already exists, its
 ## projection definition is replaced.
@@ -29469,7 +29484,7 @@ proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, 
 ## applied to the texture transform.  In this case, the lens_index may be used
 ## to select the particular lens that should be used.
 
-proc removeStage*(this: TexProjectorEffect, stage: TextureStage): RenderEffect {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexProjectorEffect, stage: TextureStage): RenderEffect {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## stage removed.
 
@@ -29502,51 +29517,51 @@ proc getLensIndex*(this: TexProjectorEffect, stage: TextureStage): int {.importc
 
 converter getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "ScissorEffect::make_screen(#, #)", header: "scissorEffect.h".} ## \
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_screen(#, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new screen-relative ScissorEffect.  The frame defines a left,
 ## right, bottom, top region, relative to the DisplayRegion.  See
 ## ScissorAttrib.
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "ScissorEffect::make_screen(#)", header: "scissorEffect.h".} ## \
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_screen(#))", header: "scissorEffect.h".} ## \
 ## Constructs a new screen-relative ScissorEffect.  The frame defines a left,
 ## right, bottom, top region, relative to the DisplayRegion.  See
 ## ScissorAttrib.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node(#, #, #, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The four points are
 ## understood to be relative to the indicated node, or the current node if the
 ## indicated NodePath is empty, and determine four points surrounding the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node(#, #, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The four points are
 ## understood to be relative to the indicated node, or the current node if the
 ## indicated NodePath is empty, and determine four points surrounding the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node(#, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The two points are
 ## understood to be relative to the indicated node, or the current node if the
 ## NodePath is empty, and determine the diagonally opposite corners of the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node(#, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The two points are
 ## understood to be relative to the indicated node, or the current node if the
 ## NodePath is empty, and determine the diagonally opposite corners of the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "ScissorEffect::make_node(#)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node(#))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect, with no points.  This empty
 ## ScissorEffect does nothing.  You must then call add_point a number of times
 ## to add the points you require.
 
-proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "ScissorEffect::make_node()", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect, with no points.  This empty
 ## ScissorEffect does nothing.  You must then call add_point a number of times
 ## to add the points you require.
 
-proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffect {.importcpp: "#->add_point(#, #)".} ## \
+proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#->add_point(#, #))", header: deconstifyCode.} ## \
 ## Returns a new ScissorEffect with the indicated point added.  It is only
 ## valid to call this on a "node" type ScissorEffect.  The full set of points,
 ## projected into screen space, defines the bounding volume of the rectangular
@@ -29554,7 +29569,7 @@ proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffec
 ##
 ## Each point may be relative to a different node, if desired.
 
-proc addPoint*(this: ScissorEffect, point: LPoint3): RenderEffect {.importcpp: "#->add_point(#)".} ## \
+proc addPoint*(this: ScissorEffect, point: LPoint3): RenderEffect {.importcpp: "deconstify(#->add_point(#))", header: deconstifyCode.} ## \
 ## Returns a new ScissorEffect with the indicated point added.  It is only
 ## valid to call this on a "node" type ScissorEffect.  The full set of points,
 ## projected into screen space, defines the bounding volume of the rectangular
@@ -29855,21 +29870,21 @@ proc isOpen*(this: PortalNode): bool {.importcpp: "#->is_open()".} ## \
 
 converter getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
-proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "ScissorAttrib::make_off()", header: "scissorAttrib.h".} ## \
+proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "scissorAttrib.h".} ## \
 ## Constructs a new ScissorAttrib object that removes the scissor region and
 ## fills the DisplayRegion.
 
-proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "ScissorAttrib::make(#)", header: "scissorAttrib.h".} ## \
+proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make(#))", header: "scissorAttrib.h".} ## \
 ## Constructs a ScissorAttrib that restricts rendering to the indicated frame
 ## within the current DisplayRegion.  (0,0) is the lower-left corner of the
 ## DisplayRegion, and (1,1) is the upper-right corner.
 
-proc make*(_: typedesc[ScissorAttrib], left: float32, right: float32, bottom: float32, top: float32): RenderAttrib {.importcpp: "ScissorAttrib::make(#, #, #, #)", header: "scissorAttrib.h".} ## \
+proc make*(_: typedesc[ScissorAttrib], left: float32, right: float32, bottom: float32, top: float32): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make(#, #, #, #))", header: "scissorAttrib.h".} ## \
 ## Constructs a ScissorAttrib that restricts rendering to the indicated frame
 ## within the current DisplayRegion.  (0,0) is the lower-left corner of the
 ## DisplayRegion, and (1,1) is the upper-right corner.
 
-proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "ScissorAttrib::make_default()", header: "scissorAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "scissorAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29886,7 +29901,7 @@ proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib:
 
 converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
-proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "ShadeModelAttrib::make_default()", header: "shadeModelAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "shadeModelAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29894,10 +29909,10 @@ proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelA
 
 converter getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
-proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "StencilAttrib::make_off()", header: "stencilAttrib.h".} ## \
+proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "stencilAttrib.h".} ## \
 ## Constructs a StencilAttrib that has stenciling turned off.
 
-proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "StencilAttrib::make_default()", header: "stencilAttrib.h".} ## \
+proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "stencilAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29947,7 +29962,7 @@ proc write*(_: typedesc[ShaderPool], `out`: ostream) {.importcpp: "ShaderPool::w
 
 converter upcastToTypedWritableReferenceCount*(this: MovieAudio): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(MovieAudio *)(#))".}
 
 proc newMovieAudio*(param0: MovieAudio): MovieAudio {.importcpp: "new MovieAudio(#)".}
 
@@ -30104,7 +30119,7 @@ converter getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "
 
 converter upcastToTypedWritableReferenceCount*(this: MovieVideo): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(MovieVideo *)(#))".}
 
 proc newMovieVideo*(param0: MovieVideo): MovieVideo {.importcpp: "new MovieVideo(#)".}
 
@@ -31195,10 +31210,10 @@ proc newNodeVertexTransform*(node: PandaNode, prev: VertexTransform): NodeVertex
 
 proc newNodeVertexTransform*(node: PandaNode): NodeVertexTransform {.importcpp: "new NodeVertexTransform(#)".}
 
-proc getNode*(this: NodeVertexTransform): PandaNode {.importcpp: "#->get_node()".} ## \
+proc getNode*(this: NodeVertexTransform): PandaNode {.importcpp: "deconstify(#->get_node())", header: deconstifyCode.} ## \
 ## Returns the PandaNode whose transform supplies this object.
 
-proc getPrev*(this: NodeVertexTransform): VertexTransform {.importcpp: "#->get_prev()".} ## \
+proc getPrev*(this: NodeVertexTransform): VertexTransform {.importcpp: "deconstify(#->get_prev())", header: deconstifyCode.} ## \
 ## Returns the VertexTransform object whose matrix will be composed with the
 ## result of this node's transform.
 
@@ -31596,7 +31611,7 @@ proc makeDisplacement*(this: PfmVizzer, result: PfmFile, max_u: float64, max_v: 
 
 converter upcastToTypedWritableReferenceCount*(this: AnimGroup): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(AnimGroup *)(#))".}
 
 proc newAnimGroup*(parent: AnimGroup, name: string): AnimGroup {.importcpp: "new AnimGroup(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Creates the AnimGroup, and adds it to the indicated parent.  The only way
@@ -31672,7 +31687,7 @@ converter getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "A
 
 converter upcastToTypedWritableReferenceCount*(this: PartGroup): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(PartGroup *)(#))".}
 
 proc newPartGroup*(parent: PartGroup, name: string): PartGroup {.importcpp: "new PartGroup(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Creates the PartGroup, and adds it to the indicated parent.  The only way
@@ -31767,9 +31782,9 @@ converter getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGr
 
 converter upcastToTypedReferenceCount*(this: AnimControl): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(AnimControl *)(#))".}
 
-converter upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(AnimControl *)(#))".}
 
 proc isPending*(this: AnimControl): bool {.importcpp: "#->is_pending()".} ## \
 ## Returns true if the AnimControl is being bound asynchronously, and has not
@@ -31848,7 +31863,7 @@ proc setValueNode*(this: AnimChannelMatrixDynamic, node: PandaNode) {.importcpp:
 ## Specifies a node whose transform will be queried each frame to implicitly
 ## specify the transform of this joint.
 
-proc getValueTransform*(this: AnimChannelMatrixDynamic): TransformState {.importcpp: "#->get_value_transform()".} ## \
+proc getValueTransform*(this: AnimChannelMatrixDynamic): TransformState {.importcpp: "deconstify(#->get_value_transform())", header: deconstifyCode.} ## \
 ## Returns the explicit TransformState value that was set via set_value(), if
 ## any.
 
@@ -32095,7 +32110,7 @@ proc newPartBundle*(): PartBundle {.importcpp: "new PartBundle()".} ## \
 ## Normally, a PartBundle constructor should not be called directly--it will
 ## get created when a PartBundleNode is created.
 
-proc getAnimPreload*(this: PartBundle): AnimPreloadTable {.importcpp: "#->get_anim_preload()".} ## \
+proc getAnimPreload*(this: PartBundle): AnimPreloadTable {.importcpp: "deconstify(#->get_anim_preload())", header: deconstifyCode.} ## \
 ## Returns the AnimPreloadTable associated with the PartBundle.  This table,
 ## if present, can be used for the benefit of load_bind_anim() to allow
 ## asynchronous binding.
@@ -32803,7 +32818,7 @@ proc getTransform*(this: CharacterJoint): LMatrix4 {.importcpp: "#->get_transfor
 proc getTransform*(this: CharacterJoint, transform: LMatrix4) {.importcpp: "#->get_transform(#)".} ## \
 ## Copies the joint's current transform into the indicated matrix.
 
-proc getTransformState*(this: CharacterJoint): TransformState {.importcpp: "#->get_transform_state()".}
+proc getTransformState*(this: CharacterJoint): TransformState {.importcpp: "deconstify(#->get_transform_state())", header: deconstifyCode.}
 
 proc getNetTransform*(this: CharacterJoint, transform: LMatrix4) {.importcpp: "#->get_net_transform(#)".} ## \
 ## Copies the joint's current net transform (composed from the root of the
@@ -32824,7 +32839,7 @@ proc newCharacterVertexSlider*(char_slider: CharacterSlider): CharacterVertexSli
 ## Constructs a new object that converts vertices from the indicated joint's
 ## coordinate space, into the other indicated joint's space.
 
-proc getCharSlider*(this: CharacterVertexSlider): CharacterSlider {.importcpp: "#->get_char_slider()".} ## \
+proc getCharSlider*(this: CharacterVertexSlider): CharacterSlider {.importcpp: "deconstify(#->get_char_slider())", header: deconstifyCode.} ## \
 ## Returns the CharacterSlider object for which this object returns the slider
 ## value.
 
@@ -32834,7 +32849,7 @@ proc newJointVertexTransform*(joint: CharacterJoint): JointVertexTransform {.imp
 ## Constructs a new object that converts vertices from the indicated joint's
 ## coordinate space, into the other indicated joint's space.
 
-proc getJoint*(this: JointVertexTransform): CharacterJoint {.importcpp: "#->get_joint()".} ## \
+proc getJoint*(this: JointVertexTransform): CharacterJoint {.importcpp: "deconstify(#->get_joint())", header: deconstifyCode.} ## \
 ## Returns the joint for which this object returns the transform.
 
 converter getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
@@ -32949,7 +32964,7 @@ proc getNode*(this: CharacterJointBundle, n: int): Character {.importcpp: "#->ge
 
 converter getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
-proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "CharacterJointEffect::make(#)", header: "characterJointEffect.h".} ## \
+proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(CharacterJointEffect::make(#))", header: "characterJointEffect.h".} ## \
 ## Constructs a new CharacterJointEffect object that references the indicated
 ## character.  When a relative get_transform() is called on the node that
 ## contains the CharacterJointEffect, it will implicitly call
@@ -33002,7 +33017,7 @@ proc setRespectEffectiveNormal*(this: CollisionSolid, respect_effective_normal: 
 proc getRespectEffectiveNormal*(this: CollisionSolid): bool {.importcpp: "#->get_respect_effective_normal()".} ## \
 ## See set_respect_effective_normal().
 
-proc getBounds*(this: CollisionSolid): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: CollisionSolid): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the solid's bounding volume.
 
 proc setBounds*(this: CollisionSolid, bounding_volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
@@ -33088,7 +33103,7 @@ proc clearSolids*(this: CollisionNode) {.importcpp: "#->clear_solids()".} ## \
 
 proc getNumSolids*(this: CollisionNode): clonglong {.importcpp: "#->get_num_solids()".}
 
-proc getSolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "#->get_solid(#)".}
+proc getSolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "deconstify(#->get_solid(#))", header: deconstifyCode.}
 
 proc modifySolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "#->modify_solid(#)".}
 
@@ -33230,7 +33245,7 @@ proc write*(this: CollisionTraverser, `out`: ostream, indent_level: int) {.impor
 
 converter getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
 
-proc getFrom*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_from()".} ## \
+proc getFrom*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_from())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid that triggered
 ## this collision.
 
@@ -33240,7 +33255,7 @@ proc hasInto*(this: CollisionEntry): bool {.importcpp: "#->has_into()".} ## \
 ## If this returns false, the collision was detected into a GeomNode, and
 ## there is no CollisionSolid pointer to be retrieved.
 
-proc getInto*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_into()".} ## \
+proc getInto*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_into())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid was collided
 ## into.  This pointer might be NULL if the collision was into a piece of
 ## visible geometry, instead of a normal CollisionSolid collision; see
@@ -33251,7 +33266,7 @@ proc getFromNode*(this: CollisionEntry): CollisionNode {.importcpp: "#->get_from
 ## collision.  This will be a node that has been added to a CollisionTraverser
 ## via add_collider().
 
-proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "(PT(PandaNode)(#->get_into_node()))".} ## \
+proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "#->get_into_node()".} ## \
 ## Returns the node that contains the CollisionSolid that was collided into.
 ## This returns a PandaNode pointer instead of something more specific,
 ## because it might be either a CollisionNode or a GeomNode.
@@ -33966,7 +33981,7 @@ converter getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: 
 
 converter upcastToPandaNode*(this: CollisionVisualizer): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
-converter upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(#.p()))".}
+converter upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(CollisionVisualizer *)(#))".}
 
 proc newCollisionVisualizer*(copy: CollisionVisualizer): CollisionVisualizer {.importcpp: "new CollisionVisualizer(#)".} ## \
 ## Copy constructor.
@@ -34993,7 +35008,7 @@ proc output*(this: WindowProperties, `out`: ostream) {.importcpp: "#.output(#)".
 
 converter upcastToTypedReferenceCount*(this: DisplayRegion): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(#.p()))".}
+converter upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(DisplayRegion *)(#))".}
 
 proc getNumRegions*(this: DisplayRegion): int {.importcpp: "#->get_num_regions()".} ## \
 ## Returns the number of regions, see set_num_regions.
@@ -35080,7 +35095,7 @@ proc isStereo*(this: DisplayRegion): bool {.importcpp: "#->is_stereo()".} ## \
 
 converter upcastToGraphicsOutputBase*(this: GraphicsOutput): GraphicsOutputBase {.importcpp: "(PT(GraphicsOutputBase)(#))".}
 
-converter upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(#.p()))".}
+converter upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(GraphicsOutput *)(#))".}
 
 proc getGsg*(this: GraphicsOutput): GraphicsStateGuardian {.importcpp: "#->get_gsg()".} ## \
 ## Returns the GSG that is associated with this window.  There is a one-to-one
@@ -37352,7 +37367,7 @@ converter getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "P
 
 converter upcastToTypedReferenceCount*(this: Thread): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(Thread *)(#))".}
 
 proc bindThread*(_: typedesc[Thread], name: string, sync_name: string): Thread {.importcpp: "Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: "thread.h".} ## \
 ## Returns a new Panda Thread object associated with the current thread (which
@@ -38009,7 +38024,7 @@ converter getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "Asyn
 
 converter upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(AsyncFuture)(#))".}
 
-converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(AsyncTask *)(#))".}
 
 proc isAlive*(this: AsyncTask): bool {.importcpp: "#->is_alive()".} ## \
 ## Returns true if the task is currently active or sleeping on some task
@@ -38172,7 +38187,7 @@ proc output*(this: AsyncTask, `out`: ostream) {.importcpp: "#->output(#)".}
 
 converter upcastToTypedReferenceCount*(this: AsyncTaskManager): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(AsyncTaskManager *)(#))".}
 
 proc newAsyncTaskManager*(name: string): AsyncTaskManager {.importcpp: "new AsyncTaskManager(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -38368,7 +38383,7 @@ proc newAsyncTask*(param0: AsyncTask): AsyncTask {.importcpp: "new AsyncTask(#)"
 
 converter upcastToTypedReferenceCount*(this: AsyncTaskChain): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(AsyncTaskChain *)(#))".}
 
 proc setTickClock*(this: AsyncTaskChain, tick_clock: bool) {.importcpp: "#->set_tick_clock(#)".} ## \
 ## Sets the tick_clock flag.  When this is true, get_clock()->tick() will be
@@ -38515,7 +38530,7 @@ converter getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "A
 
 converter upcastToAsyncTask*(this: AsyncTaskSequence): AsyncTask {.importcpp: "(PT(AsyncTask)(#))".}
 
-converter upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(#.p()))".}
+converter upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(AsyncTaskSequence *)(#))".}
 
 proc newAsyncTaskSequence*(param0: AsyncTaskSequence): AsyncTaskSequence {.importcpp: "new AsyncTaskSequence(#)".}
 
@@ -38640,8 +38655,7 @@ proc isQueueEmpty*(this: EventQueue): bool {.importcpp: "#->is_queue_empty()".}
 proc isQueueFull*(this: EventQueue): bool {.importcpp: "#->is_queue_full()".} ## \
 ## @deprecated Always returns false; the queue can never be full.
 
-proc dequeueEvent*(this: EventQueue): Event {.noinit.} =
-  {.emit: [this, "->dequeue_event().swap(result);"]}
+proc dequeueEvent*(this: EventQueue): Event {.importcpp: "deconstify(#->dequeue_event())", header: deconstifyCode.}
 
 proc getGlobalEventQueue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "EventQueue::get_global_event_queue()", header: "eventQueue.h".} ## \
 ## Returns a pointer to the one global EventQueue object.  If the global
@@ -38907,12 +38921,12 @@ proc findAncestor*(this: InternalName, basename: string): int {.importcpp: "#->f
 ## This index value may be passed to get_ancestor() or get_net_basename() to
 ## retrieve more information about the indicated name.
 
-proc getAncestor*(this: InternalName, n: int): InternalName {.importcpp: "#->get_ancestor(#)".} ## \
+proc getAncestor*(this: InternalName, n: int): InternalName {.importcpp: "deconstify(#->get_ancestor(#))", header: deconstifyCode.} ## \
 ## Returns the ancestor with the indicated index number.  0 is this name
 ## itself, 1 is the name's parent, 2 is the parent's parent, and so on.  If
 ## there are not enough ancestors, returns the root InternalName.
 
-proc getTop*(this: InternalName): InternalName {.importcpp: "#->get_top()".} ## \
+proc getTop*(this: InternalName): InternalName {.importcpp: "deconstify(#->get_top())", header: deconstifyCode.} ## \
 ## Returns the oldest ancestor in the InternalName's chain, not counting the
 ## root.  This will be the first name in the string, e.g.  "texcoord.foo.bar"
 ## will return the InternalName "texcoord".
@@ -39130,7 +39144,7 @@ proc output*(this: GeomVertexColumn, `out`: ostream) {.importcpp: "#.output(#)".
 
 converter upcastToTypedWritableReferenceCount*(this: GeomVertexArrayFormat): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayFormat *)(#))".}
 
 proc newGeomVertexArrayFormat*(): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat()".}
 
@@ -39145,7 +39159,7 @@ proc isRegistered*(this: GeomVertexArrayFormat): bool {.importcpp: "#->is_regist
 ## may not be used for a Geom until it has been registered, but once
 ## registered, it may no longer be modified.
 
-proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "GeomVertexArrayFormat::register_format(#)", header: "geomVertexArrayFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(GeomVertexArrayFormat::register_format(#))", header: "geomVertexArrayFormat.h".} ## \
 ## Adds the indicated format to the registry, if there is not an equivalent
 ## format already there; in either case, returns the pointer to the equivalent
 ## format now in the registry.
@@ -39269,7 +39283,7 @@ converter getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.import
 
 converter upcastToTypedWritableReferenceCount*(this: GeomVertexFormat): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexFormat *)(#))".}
 
 proc newGeomVertexFormat*(): GeomVertexFormat {.importcpp: "new GeomVertexFormat()".}
 
@@ -39286,11 +39300,11 @@ proc isRegistered*(this: GeomVertexFormat): bool {.importcpp: "#->is_registered(
 ## may not be used for a Geom until it has been registered, but once
 ## registered, it may no longer be modified.
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "GeomVertexFormat::register_format(#)", header: "geomVertexFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".} ## \
 ## This flavor of register_format() implicitly creates a one-array vertex
 ## format from the array definition.
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "GeomVertexFormat::register_format(#)", header: "geomVertexFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".} ## \
 ## Adds the indicated format to the registry, if there is not an equivalent
 ## format already there; in either case, returns the pointer to the equivalent
 ## format now in the registry.
@@ -39311,7 +39325,7 @@ proc setAnimation*(this: GeomVertexFormat, animation: GeomVertexAnimationSpec) {
 ##
 ## This may not be called once the format has been registered.
 
-proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcpp: "#->get_post_animated_format()".} ## \
+proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#->get_post_animated_format())", header: deconstifyCode.} ## \
 ## Returns a suitable vertex format for sending the animated vertices to the
 ## graphics backend.  This is the same format as the source format, with the
 ## CPU-animation data elements removed.
@@ -39319,7 +39333,7 @@ proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcp
 ## This may only be called after the format has been registered.  The return
 ## value will have been already registered.
 
-proc getUnionFormat*(this: GeomVertexFormat, other: GeomVertexFormat): GeomVertexFormat {.importcpp: "#->get_union_format(#)".} ## \
+proc getUnionFormat*(this: GeomVertexFormat, other: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#->get_union_format(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexFormat that includes all of the columns defined in
 ## either this GeomVertexFormat or the other one.  If any column is defined in
 ## both formats with different sizes (for instance, texcoord2 vs.  texcoord3),
@@ -39333,7 +39347,7 @@ proc getNumArrays*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_a
 ## array data is completely interleaved, this will be 1; if it is completely
 ## parallel, this will be the same as the number of data types.
 
-proc getArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "#->get_array(#)".} ## \
+proc getArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array(#))", header: deconstifyCode.} ## \
 ## Returns the description of the nth array used by the format.
 
 proc modifyArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "#->modify_array(#)".} ## \
@@ -39408,7 +39422,7 @@ proc getColumn*(this: GeomVertexFormat, i: clonglong): GeomVertexColumn {.import
 proc hasColumn*(this: GeomVertexFormat, name: InternalName): bool {.importcpp: "#->has_column(#)".} ## \
 ## Returns true if the format has the named column, false otherwise.
 
-proc getColumnName*(this: GeomVertexFormat, i: clonglong): InternalName {.importcpp: "#->get_column_name(#)".} ## \
+proc getColumnName*(this: GeomVertexFormat, i: clonglong): InternalName {.importcpp: "deconstify(#->get_column_name(#))", header: deconstifyCode.} ## \
 ## Returns the name of the ith column, across all arrays.
 
 proc removeColumn*(this: GeomVertexFormat, name: InternalName, keep_empty_array: bool) {.importcpp: "#->remove_column(#, #)".} ## \
@@ -39448,7 +39462,7 @@ proc getNumPoints*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_p
 ##
 ## This may only be called after the format has been registered.
 
-proc getPoint*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_point(#)".} ## \
+proc getPoint*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_point(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth point column.  This represents a point in
 ## space, which should be transformed by any spatial transform matrix.
 ##
@@ -39460,7 +39474,7 @@ proc getNumVectors*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_
 ##
 ## This may only be called after the format has been registered.
 
-proc getVector*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_vector(#)".} ## \
+proc getVector*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_vector(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth vector column.  This represents a directional
 ## vector, which should be transformed by any spatial transform matrix as a
 ## vector.
@@ -39473,7 +39487,7 @@ proc getNumTexcoords*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_nu
 ##
 ## This may only be called after the format has been registered.
 
-proc getTexcoord*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_texcoord(#)".} ## \
+proc getTexcoord*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_texcoord(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth texcoord column.  This represents a texture
 ## coordinate.
 ##
@@ -39485,21 +39499,21 @@ proc getNumMorphs*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_m
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphSlider*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_slider(#)".} ## \
+proc getMorphSlider*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_slider(#))", header: deconstifyCode.} ## \
 ## Returns the slider name associated with the nth morph column.  This is the
 ## name of the slider that will control the morph, and should be defined
 ## within the SliderTable associated with the GeomVertexData.
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphBase*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_base(#)".} ## \
+proc getMorphBase*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_base(#))", header: deconstifyCode.} ## \
 ## Returns the name of the base column that the nth morph modifies.  This
 ## column will also be defined within the format, and can be retrieved via
 ## get_array_with() and/or get_column().
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphDelta*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_delta(#)".} ## \
+proc getMorphDelta*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_delta(#))", header: deconstifyCode.} ## \
 ## Returns the name of the column that defines the nth morph.  This contains
 ## the delta offsets that are to be applied to the column defined by
 ## get_morph_base().  This column will be defined within the format, and can
@@ -39515,62 +39529,62 @@ proc write*(this: GeomVertexFormat, `out`: ostream) {.importcpp: "#->write(#)".}
 
 proc writeWithData*(this: GeomVertexFormat, `out`: ostream, indent_level: int, data: GeomVertexData) {.importcpp: "#->write_with_data(#, #, #)".}
 
-proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_empty()", header: "geomVertexFormat.h".} ## \
+proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format containing no arrays at all, useful for
 ## pull-style vertex rendering.
 
-proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3()", header: "geomVertexFormat.h".} ## \
+proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "geomVertexFormat.h".} ## \
 ## Some standard vertex formats.  No particular requirement to use one of
 ## these, but the DirectX renderers can use these formats directly, whereas
 ## any other format will have to be converted first.
 
-proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3()", header: "geomVertexFormat.h".} ## \
+proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 3-component normal and a
 ## 3-component vertex position.
 
-proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3t2()", header: "geomVertexFormat.h".} ## \
+proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate pair
 ## and a 3-component vertex position.
 
-proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3t2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 3-component normal, and a 3-component vertex position.
 
-proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3cp()", header: "geomVertexFormat.h".} ## \
+proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "geomVertexFormat.h".} ## \
 ## These formats, with the DirectX-style packed color, may not be supported
 ## directly by OpenGL.  If you use them and the driver does not support
 ## them, the GLGraphicsStateGuardian will automatically convert to native
 ## OpenGL form (with a small runtime overhead).
 
-proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3cpt2()", header: "geomVertexFormat.h".} ## \
+proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a packed color, and a 3-component vertex position.
 
-proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3cp()", header: "geomVertexFormat.h".} ## \
+proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a packed color, a 3-component normal,
 ## and a 3-component vertex position.
 
-proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3cpt2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a packed color, a 3-component normal, and a 3-component vertex
 ## position.
 
-proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3c4()", header: "geomVertexFormat.h".} ## \
+proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "geomVertexFormat.h".} ## \
 ## These formats, with an OpenGL-style four-byte color, are not supported
 ## directly by DirectX.  If you use them, the DXGraphicsStateGuardian will
 ## automatically convert to DirectX form (with a larger runtime overhead,
 ## since DirectX8, and old DirectX9 drivers, require everything to be
 ## interleaved together).
 
-proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3c4t2()", header: "geomVertexFormat.h".} ## \
+proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 4-component color, and a 3-component vertex position.
 
-proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3c4()", header: "geomVertexFormat.h".} ## \
+proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 4-component color, a 3-component
 ## normal, and a 3-component vertex position.
 
-proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3c4t2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 4-component color, a 3-component normal, and a 3-component vertex
 ## position.
@@ -39830,7 +39844,7 @@ proc saveToDisk*(this: VertexDataBook) {.importcpp: "#.save_to_disk()".} ## \
 ## It makes sense to make this call just before taking down a loading screen,
 ## to minimize chugs from saving pages inadvertently later.
 
-converter upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(#.p()))".}
+converter upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(VertexDataBlock *)(#))".}
 
 converter upcastToReferenceCount*(this: VertexDataBlock): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -39843,9 +39857,9 @@ proc getNextBlock*(this: VertexDataBlock): VertexDataBlock {.importcpp: "#->get_
 
 converter upcastToCopyOnWriteObject*(this: GeomVertexArrayData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(#.p()))".}
+converter upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(GeomVertexArrayData *)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayData *)(#))".}
 
 proc newGeomVertexArrayData*(copy: GeomVertexArrayData): GeomVertexArrayData {.importcpp: "new GeomVertexArrayData(#)".}
 
@@ -39853,7 +39867,7 @@ proc compareTo*(this: GeomVertexArrayData, other: GeomVertexArrayData): int {.im
 ## Returns 0 if the two arrays are equivalent, even if they are not the same
 ## pointer.
 
-proc getArrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".} ## \
+proc getArrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
 
 proc hasColumn*(this: GeomVertexArrayData, name: InternalName): bool {.importcpp: "#->has_column(#)".} ## \
@@ -39926,13 +39940,13 @@ proc requestResident*(this: GeomVertexArrayData): bool {.importcpp: "#->request_
 ## probably not block.  If this returns false, the vertex data will be brought
 ## back into memory shortly; try again later.
 
-proc getHandle*(this: GeomVertexArrayData, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "#->get_handle(#)".} ## \
+proc getHandle*(this: GeomVertexArrayData, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_handle(#))", header: deconstifyCode.} ## \
 ## Returns an object that can be used to read the actual data bytes stored in
 ## the array.  Calling this method locks the data, and will block any other
 ## threads attempting to read or write the data, until the returned object
 ## destructs.
 
-proc getHandle*(this: GeomVertexArrayData): GeomVertexArrayDataHandle {.importcpp: "#->get_handle()".} ## \
+proc getHandle*(this: GeomVertexArrayData): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_handle())", header: deconstifyCode.} ## \
 ## Returns an object that can be used to read the actual data bytes stored in
 ## the array.  Calling this method locks the data, and will block any other
 ## threads attempting to read or write the data, until the returned object
@@ -40001,11 +40015,11 @@ converter getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcp
 
 converter upcastToReferenceCount*(this: GeomVertexArrayDataHandle): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayDataHandle *)(#))".}
 
 proc getObject*(this: GeomVertexArrayDataHandle): GeomVertexArrayData {.importcpp: "#->get_object()".}
 
-proc getArrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".}
+proc getArrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
 
 proc getNumRows*(this: GeomVertexArrayDataHandle): int {.importcpp: "#->get_num_rows()".}
 
@@ -40124,7 +40138,7 @@ proc isRegistered*(this: TransformTable): bool {.importcpp: "#->is_registered()"
 ## registered, the set of transforms in a TransformTable may not be further
 ## modified; but it must be registered before it can be assigned to a Geom.
 
-proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "TransformTable::register_table(#)", header: "transformTable.h".} ## \
+proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(TransformTable::register_table(#))", header: "transformTable.h".} ## \
 ## Registers a TransformTable for use.  This is similar to
 ## GeomVertexFormat::register_format().  Once registered, a TransformTable may
 ## no longer be modified (although the individual VertexTransform objects may
@@ -40138,7 +40152,7 @@ proc registerTable*(_: typedesc[TransformTable], table: TransformTable): Transfo
 proc getNumTransforms*(this: TransformTable): clonglong {.importcpp: "#->get_num_transforms()".} ## \
 ## Returns the number of transforms in the table.
 
-proc getTransform*(this: TransformTable, n: clonglong): VertexTransform {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: TransformTable, n: clonglong): VertexTransform {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the nth transform in the table.
 
 proc getModified*(this: TransformTable, current_thread: Thread): UpdateSeq {.importcpp: "#->get_modified(#)".} ## \
@@ -40349,7 +40363,7 @@ proc write*(this: TransformBlendTable, `out`: ostream, indent_level: int) {.impo
 
 converter getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
 
-proc getName*(this: VertexSlider): InternalName {.importcpp: "#->get_name()".} ## \
+proc getName*(this: VertexSlider): InternalName {.importcpp: "deconstify(#->get_name())", header: deconstifyCode.} ## \
 ## Returns the name of this particular slider.  Every unique blend shape
 ## within a particular Geom must be identified with a different name, which is
 ## shared by the slider that controls it.
@@ -40379,7 +40393,7 @@ proc isRegistered*(this: SliderTable): bool {.importcpp: "#->is_registered()".} 
 ## registered, the set of sliders in a SliderTable may not be further
 ## modified; but it must be registered before it can be assigned to a Geom.
 
-proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "SliderTable::register_table(#)", header: "sliderTable.h".} ## \
+proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(SliderTable::register_table(#))", header: "sliderTable.h".} ## \
 ## Registers a SliderTable for use.  This is similar to
 ## GeomVertexFormat::register_format().  Once registered, a SliderTable may no
 ## longer be modified (although the individual VertexSlider objects may modify
@@ -40393,7 +40407,7 @@ proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {
 proc getNumSliders*(this: SliderTable): clonglong {.importcpp: "#->get_num_sliders()".} ## \
 ## Returns the number of sliders in the table.
 
-proc getSlider*(this: SliderTable, n: clonglong): VertexSlider {.importcpp: "#->get_slider(#)".} ## \
+proc getSlider*(this: SliderTable, n: clonglong): VertexSlider {.importcpp: "deconstify(#->get_slider(#))", header: deconstifyCode.} ## \
 ## Returns the nth slider in the table.
 
 proc getSliderRows*(this: SliderTable, n: clonglong): SparseArray {.importcpp: "#->get_slider_rows(#)".} ## \
@@ -40443,7 +40457,7 @@ converter getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "Slid
 
 converter upcastToCopyOnWriteObject*(this: GeomVertexData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexData *)(#))".}
 
 proc newGeomVertexData*(copy: GeomVertexData): GeomVertexData {.importcpp: "new GeomVertexData(#)".}
 
@@ -40464,7 +40478,7 @@ proc setName*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimS
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
 
-proc getFormat*(this: GeomVertexData): GeomVertexFormat {.importcpp: "#->get_format()".} ## \
+proc getFormat*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
 
 proc setFormat*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#->set_format(#)".} ## \
@@ -40540,12 +40554,12 @@ proc getNumArrays*(this: GeomVertexData): clonglong {.importcpp: "#->get_num_arr
 ## Returns the number of individual arrays stored within the data.  This must
 ## match get_format()->get_num_arrays().
 
-proc getArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "#->get_array(#)".} ## \
+proc getArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "deconstify(#->get_array(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the vertex data for the indicated array, for
 ## application code to directly examine (but not modify) the underlying vertex
 ## data.
 
-proc getArrayHandle*(this: GeomVertexData, i: clonglong): GeomVertexArrayDataHandle {.importcpp: "#->get_array_handle(#)".} ## \
+proc getArrayHandle*(this: GeomVertexData, i: clonglong): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_array_handle(#))", header: deconstifyCode.} ## \
 ## Equivalent to get_array(i).get_handle().
 
 proc modifyArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "#->modify_array(#)".} ## \
@@ -40568,7 +40582,7 @@ proc setArray*(this: GeomVertexData, i: clonglong, array: GeomVertexArrayData) {
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc getTransformTable*(this: GeomVertexData): TransformTable {.importcpp: "#->get_transform_table()".} ## \
+proc getTransformTable*(this: GeomVertexData): TransformTable {.importcpp: "deconstify(#->get_transform_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -40591,7 +40605,7 @@ proc clearTransformTable*(this: GeomVertexData) {.importcpp: "#->clear_transform
 ## Sets the TransformTable pointer to NULL, removing the table from the vertex
 ## data.  This disables hardware-driven vertex animation.
 
-proc getTransformBlendTable*(this: GeomVertexData): TransformBlendTable {.importcpp: "#->get_transform_blend_table()".} ## \
+proc getTransformBlendTable*(this: GeomVertexData): TransformBlendTable {.importcpp: "deconstify(#->get_transform_blend_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformBlendTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -40621,7 +40635,7 @@ proc clearTransformBlendTable*(this: GeomVertexData) {.importcpp: "#->clear_tran
 ## Sets the TransformBlendTable pointer to NULL, removing the table from the
 ## vertex data.  This disables CPU-driven vertex animation.
 
-proc getSliderTable*(this: GeomVertexData): SliderTable {.importcpp: "#->get_slider_table()".} ## \
+proc getSliderTable*(this: GeomVertexData): SliderTable {.importcpp: "deconstify(#->get_slider_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the SliderTable assigned to this data.  Vertices
 ## within the vertex data will look up their morph offsets, if any, within
 ## this table.
@@ -40697,32 +40711,32 @@ proc copyRowFrom*(this: GeomVertexData, dest_row: int, source: GeomVertexData, s
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc convertTo*(this: GeomVertexData, new_format: GeomVertexFormat): GeomVertexData {.importcpp: "#->convert_to(#)".} ## \
+proc convertTo*(this: GeomVertexData, new_format: GeomVertexFormat): GeomVertexData {.importcpp: "deconstify(#->convert_to(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData that represents the same contents as this one,
 ## with all data types matched up name-by-name to the indicated new format.
 
-proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4): GeomVertexData {.importcpp: "#->scale_color(#)".} ## \
+proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4): GeomVertexData {.importcpp: "deconstify(#->scale_color(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the color table modified in-place
 ## to apply the indicated scale.
 ##
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
 
-proc setColor*(this: GeomVertexData, color: LColor): GeomVertexData {.importcpp: "#->set_color(#)".} ## \
+proc setColor*(this: GeomVertexData, color: LColor): GeomVertexData {.importcpp: "deconstify(#->set_color(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the color data modified in-place
 ## with the new value.
 ##
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
 
-proc reverseNormals*(this: GeomVertexData): GeomVertexData {.importcpp: "#->reverse_normals()".} ## \
+proc reverseNormals*(this: GeomVertexData): GeomVertexData {.importcpp: "deconstify(#->reverse_normals())", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the normal data modified in-place,
 ## so that each lighting normal is now facing in the opposite direction.
 ##
 ## If the vertex data does not include a normal column, this returns the
 ## original GeomVertexData object, unchanged.
 
-proc animateVertices*(this: GeomVertexData, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "#->animate_vertices(#, #)".} ## \
+proc animateVertices*(this: GeomVertexData, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->animate_vertices(#, #))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this GeomVertexData.
 ##
@@ -40824,7 +40838,7 @@ converter getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "Bu
 
 converter upcastToCopyOnWriteObject*(this: GeomPrimitive): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(GeomPrimitive *)(#))".}
 
 proc makeCopy*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_copy()".}
 
@@ -41008,7 +41022,7 @@ proc getPrimitiveMaxVertex*(this: GeomPrimitive, n: int): int {.importcpp: "#->g
 ## Returns the maximum vertex index number used by the nth primitive in this
 ## object.
 
-proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->decompose()".} ## \
+proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->decompose())", header: deconstifyCode.} ## \
 ## Decomposes a complex primitive type into a simpler primitive type, for
 ## instance triangle strips to triangles, and returns a pointer to the new
 ## primitive definition.  If the decomposition cannot be performed, this might
@@ -41018,7 +41032,7 @@ proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->decompose()
 ## the set of triangles on the primitive without having to write handlers for
 ## each possible kind of primitive type.
 
-proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->rotate()".} ## \
+proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->rotate())", header: deconstifyCode.} ## \
 ## Returns a new primitive with the shade_model reversed (if it is flat
 ## shaded), if possible.  If the primitive type cannot be rotated, returns the
 ## original primitive, unrotated.
@@ -41027,7 +41041,7 @@ proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->rotate()".} ##
 ## the last vertex to the first position; if it indicates flat_vertex_first,
 ## this should bring the first vertex to the last position.
 
-proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->doubleside()".} ## \
+proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->doubleside())", header: deconstifyCode.} ## \
 ## Duplicates triangles in the primitive so that each triangle is back-to-back
 ## with another triangle facing in the opposite direction.  Note that this
 ## doesn't affect vertex normals, so this operation alone won't work in the
@@ -41037,7 +41051,7 @@ proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->doubleside
 ## triangle without having to duplicate it (but which doesn't necessarily work
 ## in the presence of lighting).
 
-proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->reverse()".} ## \
+proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->reverse())", header: deconstifyCode.} ## \
 ## Reverses the winding order in the primitive so that each triangle is facing
 ## in the opposite direction it was originally.  Note that this doesn't affect
 ## vertex normals, so this operation alone won't work in the presence of
@@ -41047,18 +41061,18 @@ proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->reverse()".} 
 ## triangle without having to duplicate it (but which doesn't necessarily work
 ## in the presence of lighting).
 
-proc makePoints*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_points()".} ## \
+proc makePoints*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_points())", header: deconstifyCode.} ## \
 ## Returns a new GeomPoints primitive that represents each of the vertices in
 ## the original primitive, rendered exactly once.  If the original primitive
 ## is already a GeomPoints primitive, returns the original primitive
 ## unchanged.
 
-proc makeLines*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_lines()".} ## \
+proc makeLines*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_lines())", header: deconstifyCode.} ## \
 ## Returns a new GeomLines primitive that represents each of the edges in the
 ## original primitive rendered as a line.  If the original primitive is
 ## already a GeomLines primitive, returns the original primitive unchanged.
 
-proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_patches()".} ## \
+proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_patches())", header: deconstifyCode.} ## \
 ## Decomposes a complex primitive type into a simpler primitive type, for
 ## instance triangle strips to triangles, puts these in a new GeomPatches
 ## object and returns a pointer to the new primitive definition.  If the
@@ -41067,7 +41081,7 @@ proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_patc
 ## This method is useful for application code that wants to use tesselation
 ## shaders on arbitrary geometry.
 
-proc makeAdjacency*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_adjacency()".} ## \
+proc makeAdjacency*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_adjacency())", header: deconstifyCode.} ## \
 ## Adds adjacency information to this primitive.  May return null if this type
 ## of geometry does not support adjacency information.
 ##
@@ -41103,7 +41117,7 @@ proc output*(this: GeomPrimitive, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: GeomPrimitive, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_vertices()".} ## \
+proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_vertices())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the vertex index array so application code can
 ## read it directly.  This might return NULL if the primitive is nonindexed.
 ## Do not attempt to modify the returned array; use modify_vertices() or
@@ -41113,7 +41127,7 @@ proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-proc getVerticesHandle*(this: GeomPrimitive, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "#->get_vertices_handle(#)".} ## \
+proc getVerticesHandle*(this: GeomPrimitive, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_vertices_handle(#))", header: deconstifyCode.} ## \
 ## Equivalent to get_vertices().get_handle().
 
 proc modifyVertices*(this: GeomPrimitive, num_vertices: int): GeomVertexArrayData {.importcpp: "#->modify_vertices(#)".} ## \
@@ -41213,7 +41227,7 @@ proc getStripCutIndex*(this: GeomPrimitive): int {.importcpp: "#->get_strip_cut_
 ## signify the end of a primitive.  This is typically the highest value that
 ## the numeric type can store.
 
-proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()".} ## \
+proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_mins())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive mins array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax() for this.
@@ -41224,7 +41238,7 @@ proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_min
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-proc getMaxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_maxs()".} ## \
+proc getMaxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_maxs())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive maxs array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax().
@@ -41458,7 +41472,7 @@ converter getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "Tex
 
 converter upcastToCopyOnWriteObject*(this: Geom): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(Geom *)(#))".}
 
 proc newGeom*(data: GeomVertexData): Geom {.importcpp: "new Geom(#)".}
 
@@ -41471,11 +41485,11 @@ proc getGeomRendering*(this: Geom): int {.importcpp: "#->get_geom_rendering()".}
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this Geom.
 
-proc getVertexData*(this: Geom, current_thread: Thread): GeomVertexData {.importcpp: "#->get_vertex_data(#)".} ## \
+proc getVertexData*(this: Geom, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->get_vertex_data(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the GeomVertexData, for application code to
 ## directly examine (but not modify) the geom's underlying data.
 
-proc getVertexData*(this: Geom): GeomVertexData {.importcpp: "#->get_vertex_data()".} ## \
+proc getVertexData*(this: Geom): GeomVertexData {.importcpp: "deconstify(#->get_vertex_data())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the GeomVertexData, for application code to
 ## directly examine (but not modify) the geom's underlying data.
 
@@ -41512,7 +41526,7 @@ proc makeNonindexed*(this: Geom, composite_only: bool): int {.importcpp: "#->mak
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "#->get_animated_vertex_data(#, #)".} ## \
+proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->get_animated_vertex_data(#, #))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this Geom's vertex data.
 ##
@@ -41529,7 +41543,7 @@ proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): Ge
 ## the vertex data is not completely resident.  If force is true, this method
 ## will never return stale data, but may block until the data is available.
 
-proc getAnimatedVertexData*(this: Geom, force: bool): GeomVertexData {.importcpp: "#->get_animated_vertex_data(#)".} ## \
+proc getAnimatedVertexData*(this: Geom, force: bool): GeomVertexData {.importcpp: "deconstify(#->get_animated_vertex_data(#))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this Geom's vertex data.
 ##
@@ -41554,7 +41568,7 @@ proc getNumPrimitives*(this: Geom): clonglong {.importcpp: "#->get_num_primitive
 ## Returns the number of GeomPrimitive objects stored within the Geom, each of
 ## which represents a number of primitives of a particular type.
 
-proc getPrimitive*(this: Geom, i: clonglong): GeomPrimitive {.importcpp: "#->get_primitive(#)".} ## \
+proc getPrimitive*(this: Geom, i: clonglong): GeomPrimitive {.importcpp: "deconstify(#->get_primitive(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the ith GeomPrimitive object stored within the
 ## Geom.  Use this call only to inspect the ith object; use modify_primitive()
 ## or set_primitive() if you want to modify it.
@@ -41775,10 +41789,10 @@ proc checkValid*(this: Geom, vertex_data: GeomVertexData): bool {.importcpp: "#-
 ## that actually exist within the indicated GeomVertexData.  Returns true if
 ## the geom appears to be valid, false otherwise.
 
-proc getBounds*(this: Geom, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: Geom, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the bounding volume for the Geom.
 
-proc getBounds*(this: Geom): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: Geom): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the bounding volume for the Geom.
 
 proc getNestedVertices*(this: Geom, current_thread: Thread): int {.importcpp: "#->get_nested_vertices(#)".} ## \
@@ -42970,7 +42984,7 @@ converter getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "Sam
 
 converter upcastToTypedWritableReferenceCount*(this: Texture): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(Texture *)(#))".}
 
 proc newTexture*(name: string): Texture {.importcpp: "new Texture(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Constructs an empty texture.  The default is to set up the texture as an
@@ -44378,9 +44392,9 @@ proc newShader*(param0: Shader): Shader {.importcpp: "new Shader(#)".}
 
 converter upcastToTypedWritableReferenceCount*(this: ShaderBuffer): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(ShaderBuffer *)(#))".}
 
-converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(ShaderBuffer *)(#))".}
 
 proc newShaderBuffer*(param0: ShaderBuffer): ShaderBuffer {.importcpp: "new ShaderBuffer(#)".}
 
@@ -45339,7 +45353,7 @@ converter getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_c
 
 converter upcastToTypedWritableReferenceCount*(this: Material): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(Material *)(#))".}
 
 proc newMaterial*(copy: Material): Material {.importcpp: "new Material(#)".}
 
@@ -45816,7 +45830,7 @@ converter getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcp
 
 converter upcastToTexture*(this: VideoTexture): Texture {.importcpp: "(PT(Texture)(#))".}
 
-converter upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(VideoTexture *)(#))".}
 
 proc getKeepRamImage*(this: VideoTexture): bool {.importcpp: "#->get_keep_ram_image()".} ## \
 ## Returns the flag that indicates whether this Texture is eligible to have
@@ -52007,7 +52021,7 @@ proc newIntersectionBoundingVolume*(): IntersectionBoundingVolume {.importcpp: "
 proc getNumComponents*(this: IntersectionBoundingVolume): int {.importcpp: "#->get_num_components()".} ## \
 ## Returns the number of components in the intersection.
 
-proc getComponent*(this: IntersectionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "#->get_component(#)".} ## \
+proc getComponent*(this: IntersectionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "deconstify(#->get_component(#))", header: deconstifyCode.} ## \
 ## Returns the nth component in the intersection.
 
 proc clearComponents*(this: IntersectionBoundingVolume) {.importcpp: "#->clear_components()".} ## \
@@ -52136,7 +52150,7 @@ proc newUnionBoundingVolume*(): UnionBoundingVolume {.importcpp: "new UnionBound
 proc getNumComponents*(this: UnionBoundingVolume): int {.importcpp: "#->get_num_components()".} ## \
 ## Returns the number of components in the union.
 
-proc getComponent*(this: UnionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "#->get_component(#)".} ## \
+proc getComponent*(this: UnionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "deconstify(#->get_component(#))", header: deconstifyCode.} ## \
 ## Returns the nth component in the union.
 
 proc clearComponents*(this: UnionBoundingVolume) {.importcpp: "#->clear_components()".} ## \
@@ -53045,7 +53059,7 @@ converter getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcp
 
 converter upcastToPiecewiseCurve*(this: NurbsCurve): PiecewiseCurve {.importcpp: "(PT(PiecewiseCurve)(#))".}
 
-converter upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(#.p()))".}
+converter upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(NurbsCurve *)(#))".}
 
 proc newNurbsCurve*(): NurbsCurve {.importcpp: "new NurbsCurve()".}
 
@@ -55676,7 +55690,7 @@ proc getQuad*(this: TextGlyph, dimensions: LVecBase4, texcoords: LVecBase4): boo
 ##
 ## The order of the components is left, bottom, right, top.
 
-proc getState*(this: TextGlyph): RenderState {.importcpp: "#->get_state()".} ## \
+proc getState*(this: TextGlyph): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the state in which the glyph should be rendered.
 
 proc getAdvance*(this: TextGlyph): float32 {.importcpp: "#->get_advance()".} ## \
@@ -55692,7 +55706,7 @@ converter getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGl
 
 converter upcastToTypedReferenceCount*(this: TextFont): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(TextFont *)(#))".}
 
 proc makeCopy*(this: TextFont): TextFont {.importcpp: "#->make_copy()".}
 
@@ -55713,7 +55727,7 @@ proc getSpaceAdvance*(this: TextFont): float32 {.importcpp: "#->get_space_advanc
 proc setSpaceAdvance*(this: TextFont, space_advance: float32) {.importcpp: "#->set_space_advance(#)".} ## \
 ## Changes the number of units wide a space is.
 
-proc getGlyph*(this: TextFont, character: int): TextGlyph {.importcpp: "#->get_glyph(#)".} ## \
+proc getGlyph*(this: TextFont, character: int): TextGlyph {.importcpp: "deconstify(#->get_glyph(#))", header: deconstifyCode.} ## \
 ## Gets the glyph associated with the given character code, as well as an
 ## optional scaling parameter that should be applied to the glyph's geometry
 ## and advance parameters.  Returns the glyph on success.  On failure, it may
@@ -55788,7 +55802,7 @@ converter getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: 
 
 converter upcastToTextFont*(this: DynamicTextFont): TextFont {.importcpp: "(PT(TextFont)(#))".}
 
-converter upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(#.p()))".}
+converter upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(DynamicTextFont *)(#))".}
 
 proc newDynamicTextFont*(copy: DynamicTextFont): DynamicTextFont {.importcpp: "new DynamicTextFont(#)".}
 
@@ -56735,9 +56749,9 @@ proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextP
 
 converter upcastToPandaNode*(this: TextNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
-converter upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(#.p()))".}
+converter upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(TextNode *)(#))".}
 
-converter upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(#.p()))".}
+converter upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(TextNode *)(#))".}
 
 proc newTextNode*(name: string): TextNode {.importcpp: "new TextNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -57705,7 +57719,7 @@ converter getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "M
 
 converter upcastToTypedWritableReferenceCount*(this: MouseWatcherRegion): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
 
 proc newMouseWatcherRegion*(param0: MouseWatcherRegion): MouseWatcherRegion {.importcpp: "new MouseWatcherRegion(#)".}
 
@@ -57828,7 +57842,7 @@ proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#->update_regions()".}
 
 converter getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(#.p()))".}
+converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcherGroup *)(#))".}
 
 converter upcastToReferenceCount*(this: MouseWatcherGroup): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -57836,7 +57850,7 @@ converter getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp:
 
 converter upcastToDataNode*(this: MouseWatcher): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(#.p()))".}
+converter upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcher *)(#))".}
 
 proc newMouseWatcher*(name: string): MouseWatcher {.importcpp: "new MouseWatcher(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -58118,7 +58132,7 @@ proc getInactivityTimeoutEvent*(this: MouseWatcher): string {.importcpp: "nimStr
 ## Returns the event string that will be generated when the inactivity timeout
 ## counter expires.  See set_inactivity_timeout().
 
-proc getTrailLog*(this: MouseWatcher): PointerEventList {.importcpp: "#->get_trail_log()".} ## \
+proc getTrailLog*(this: MouseWatcher): PointerEventList {.importcpp: "deconstify(#->get_trail_log())", header: deconstifyCode.} ## \
 ## Obtain the mouse trail log.  This is a PointerEventList.  Does not make a
 ## copy, therefore, this PointerEventList will be updated each time
 ## process_events gets called.
@@ -58525,7 +58539,7 @@ proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#->get_bam_mo
 
 converter getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
 
-converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(#.p()))".}
+converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(TypedWritableReferenceCount *)(#))".}
 
 converter upcastToReferenceCount*(this: TypedWritableReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -61487,7 +61501,7 @@ converter getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry:
 
 converter upcastToTypedWritableReferenceCount*(this: PGMouseWatcherParameter): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(#.p()))".}
+converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(PGMouseWatcherParameter *)(#))".}
 
 proc output*(this: PGMouseWatcherParameter, `out`: ostream) {.importcpp: "#->output(#)".}
 
@@ -61535,7 +61549,7 @@ proc setCanvasTransform*(this: PGVirtualFrame, transform: TransformState) {.impo
 ## Changes the transform of the virtual canvas.  This transform is applied to
 ## all child nodes of the canvas_node.
 
-proc getCanvasTransform*(this: PGVirtualFrame): TransformState {.importcpp: "#->get_canvas_transform()".} ## \
+proc getCanvasTransform*(this: PGVirtualFrame): TransformState {.importcpp: "deconstify(#->get_canvas_transform())", header: deconstifyCode.} ## \
 ## Returns the transform of the virtual canvas.  This transform is applied to
 ## all child nodes of the canvas_node.
 

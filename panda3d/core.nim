@@ -64282,6 +64282,10 @@ proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#
 
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}
 
+proc setText*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+func text*(this: TextEncoder) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
+func `text=`*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
 
 proc initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)

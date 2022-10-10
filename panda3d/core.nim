@@ -6002,6 +6002,14 @@ type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.
   ## See also BamFile, which defines a higher-level interface to read and write
   ## Bam files on disk.
 
+type BitMask*[T: typedesc, U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
+
+type BitMask16* = BitMask[uint16, 16]
+
+type BitMask32* = BitMask[uint32, 32]
+
+type BitMask64* = BitMask[uint64, 64]
+
 type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMask.h".} = object
 
 type BitArray* {.importcpp: "BitArray", pure, inheritable, header: "bitArray.h".} = object
@@ -6078,6 +6086,8 @@ converter toBool*(this: ClockObject): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ClockObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClockObject], obj: TypedObject): ClockObject {.importcpp: "DCAST(ClockObject, @)".}
 
+type CollideMask* = BitMask32
+
 type ColorSpace* = enum
   CS_unspecified = 0
   CS_linear = 1
@@ -6099,6 +6109,8 @@ type DatagramInputFile* {.importcpp: "DatagramInputFile", pure, inheritable, hea
 type DatagramOutputFile* {.importcpp: "DatagramOutputFile", pure, inheritable, header: "datagramOutputFile.h".} = object of DatagramSink
   ## This class can be used to write a binary file that consists of an arbitrary
   ## header followed by a number of datagrams.
+
+type DrawMask* = BitMask32
 
 type GamepadButton* {.importcpp: "GamepadButton", pure, inheritable, header: "gamepadButton.h".} = object
   ## This class is just used as a convenient namespace for grouping all of these
@@ -6181,6 +6193,8 @@ type UniqueIdAllocator* {.importcpp: "UniqueIdAllocator", pure, inheritable, hea
   ## track the age of freed IDs, which is required for what we wanted.  If you
   ## would like to kick around other implementation ideas, please contact
   ## Schuyler.
+
+type PortalMask* = BitMask32
 
 type FilterProperties* {.importcpp: "PT(FilterProperties)", bycopy, pure, inheritable, header: "filterProperties.h".} = object of TypedReferenceCount
 
@@ -7487,6 +7501,14 @@ func prevTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#-
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
+func overallBit*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_overall_bit()", header: "pandaNode.h".} ## \
+## Returns the special bit that, when specifically cleared in the node's
+## DrawMask, indicates that the node is hidden to all cameras, regardless of
+## the remaining DrawMask bits.
+
+func allCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_all_camera_mask()", header: "pandaNode.h".} ## \
+## Returns a DrawMask that is appropriate for rendering to all cameras.
+
 func overallHidden*(this: PandaNode): bool {.importcpp: "#->is_overall_hidden()".} ## \
 ## Returns true if the node has been hidden to all cameras by clearing its
 ## overall bit.
@@ -7499,6 +7521,37 @@ proc `overallHidden=`*(this: PandaNode, overall_hidden: bool) {.importcpp: "#->s
 ##
 ## This actually works by twiddling the reserved _overall_bit in the node's
 ## draw mask, which has special meaning.
+
+func drawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_control_mask()".} ## \
+## Returns the set of bits in draw_show_mask that are considered meaningful.
+## See adjust_draw_mask().
+
+func drawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_show_mask()".} ## \
+## Returns the hide/show bits of this particular node.  See
+## adjust_draw_mask().
+
+func intoCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the "into" collide mask for this node.
+
+proc `intoCollideMask=`*(this: PandaNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.
+##
+## This specifies the set of bits that must be shared with a CollisionNode's
+## "from" CollideMask in order for the CollisionNode to detect a collision
+## with this particular node.
+##
+## The actual CollideMask that will be set is masked by the return value from
+## get_legal_collide_mask(). Thus, the into_collide_mask cannot be set to
+## anything other than nonzero except for those types of nodes that can be
+## collided into, such as CollisionNodes and GeomNodes.
+
+func legalCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_legal_collide_mask()".} ## \
+## Returns the subset of CollideMask bits that may be set for this particular
+## type of PandaNode.  For most nodes, this is 0; it doesn't make sense to set
+## a CollideMask for most kinds of nodes.
+##
+## For nodes that can be collided with, such as GeomNode and CollisionNode,
+## this returns all bits on.
 
 func nestedVertices*(this: PandaNode, current_thread: Thread): int {.importcpp: "#->get_nested_vertices(#)".} ## \
 ## Returns the total number of vertices that will be rendered by this node and
@@ -7677,6 +7730,19 @@ proc `scene=`*(this: Camera, scene: NodePath) {.importcpp: "#->set_scene(#)".} #
 ## explicit scene set on the camera, the camera will render whatever scene it
 ## is parented into.  This is the preferred way to specify the scene, since it
 ## is the more intuitive mechanism.
+
+func cameraMask*(this: Camera): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the set of bits that represent the subset of the scene graph the
+## camera will render.  See set_camera_mask().
+
+proc `cameraMask=`*(this: Camera, mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the set of bits that represent the subset of the scene graph the
+## camera will render.
+##
+## During the cull traversal, a node is not visited if none of its draw mask
+## bits intersect with the camera's camera mask bits.  These masks can be used
+## to selectively hide and show different parts of the scene graph from
+## different cameras that are otherwise viewing the same scene.
 
 func cullCenter*(this: Camera): NodePath {.importcpp: "#->get_cull_center()".} ## \
 ## Returns the point from which the culling operations will be performed, if
@@ -8181,6 +8247,9 @@ func channels*(this: ColorWriteAttrib): int {.importcpp: "#->get_channels()".} #
 
 func classSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
+func defaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "GeomNode::get_default_collide_mask()", header: "geomNode.h".} ## \
+## Returns the default into_collide_mask assigned to new GeomNodes.
+
 func binName*(this: CullBinAttrib): string {.importcpp: "nimStringFromStdString(#->get_bin_name())", header: stringConversionCode.} ## \
 ## Returns the name of the bin this attribute specifies.  If this is the empty
 ## string, it refers to the default bin.
@@ -8455,6 +8524,26 @@ func instanceCount*(this: ShaderAttrib): int {.importcpp: "#->get_instance_count
 ## instancing at all.
 
 func classSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::get_class_slot()", header: "shaderAttrib.h".}
+
+func intoPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_into_portal_mask()".} ## \
+## Returns the current "into" PortalMask.  In order for a portal to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
+proc `intoPortalMask=`*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_into_portal_mask(#)".} ## \
+## Sets the "into" PortalMask.  In order for a portal to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+func fromPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_from_portal_mask()".} ## \
+## Returns the current "from" PortalMask.  In order for a portal to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc `fromPortalMask=`*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_from_portal_mask(#)".} ## \
+## Sets the "from" PortalMask.  In order for a portal to be detected from this
+## object into another object, the intersection of this object's "from" mask
+## and the other object's "into" mask must be nonzero.
 
 func portalGeom*(this: PortalNode): bool {.importcpp: "#->get_portal_geom()".} ## \
 ## Returns the current state of the portal_geom flag.  See set_portal_geom().
@@ -9599,6 +9688,26 @@ func radius*(this: CollisionCapsule): float32 {.importcpp: "#->get_radius()".}
 
 proc `radius=`*(this: CollisionCapsule, radius: float32) {.importcpp: "#->set_radius(#)".}
 
+func fromCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_from_collide_mask()".} ## \
+## Returns the current "from" CollideMask.  In order for a collision to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc `fromCollideMask=`*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_from_collide_mask(#)".} ## \
+## Sets the "from" CollideMask.  In order for a collision to be detected from
+## this object into another object, the intersection of this object's "from"
+## mask and the other object's "into" mask must be nonzero.
+
+func intoCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the current "into" CollideMask.  In order for a collision to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
+proc `intoCollideMask=`*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.  In order for a collision to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
 func colliderSort*(this: CollisionNode): int {.importcpp: "#->get_collider_sort()".} ## \
 ## Returns the collider_sort value that has been set for this particular node.
 ## See set_collider_sort().
@@ -9614,6 +9723,9 @@ proc `colliderSort=`*(this: CollisionNode, sort: int) {.importcpp: "#->set_colli
 ## multiple passes through the data; in that case, it may be a useful
 ## optimization to group colliders that have similar bounding volumes together
 ## (by giving them similar sort values).
+
+func defaultCollideMask*(_: typedesc[CollisionNode]): CollideMask {.importcpp: "CollisionNode::get_default_collide_mask()", header: "collisionNode.h".} ## \
+## Returns the default into_collide_mask assigned to new CollisionNodes.
 
 func respectPrevTransform*(this: CollisionTraverser): bool {.importcpp: "#.get_respect_prev_transform()".} ## \
 ## Returns the flag that indicates whether the prev_transform stored on a node
@@ -21650,6 +21762,11 @@ proc compareSort*(this: RenderState, other: RenderState): int {.importcpp: "#->c
 ## more likely to be grouped together.  This is not related to the sorting
 ## order defined by compare_to.
 
+proc compareMask*(this: RenderState, other: RenderState, compare_mask: BitMask32): int {.importcpp: "#->compare_mask(#, #)".} ## \
+## This version of compare_to takes a slot mask that indicates which
+## attributes to include in the comparison.  Unlike compare_to, this method
+## compares the attributes by pointer.
+
 proc getHash*(this: RenderState): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
@@ -22775,6 +22892,14 @@ proc clearUnexpectedChange*(this: PandaNode, flags: int) {.importcpp: "#->clear_
 ## Since this is a developer debugging tool only, this function does nothing
 ## in a production (NDEBUG) build.
 
+proc getOverallBit*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_overall_bit()", header: "pandaNode.h".} ## \
+## Returns the special bit that, when specifically cleared in the node's
+## DrawMask, indicates that the node is hidden to all cameras, regardless of
+## the remaining DrawMask bits.
+
+proc getAllCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_all_camera_mask()", header: "pandaNode.h".} ## \
+## Returns a DrawMask that is appropriate for rendering to all cameras.
+
 proc isOverallHidden*(this: PandaNode): bool {.importcpp: "#->is_overall_hidden()".} ## \
 ## Returns true if the node has been hidden to all cameras by clearing its
 ## overall bit.
@@ -22787,6 +22912,95 @@ proc setOverallHidden*(this: PandaNode, overall_hidden: bool) {.importcpp: "#->s
 ##
 ## This actually works by twiddling the reserved _overall_bit in the node's
 ## draw mask, which has special meaning.
+
+proc adjustDrawMask*(this: PandaNode, show_mask: DrawMask, hide_mask: DrawMask, clear_mask: DrawMask) {.importcpp: "#->adjust_draw_mask(#, #, #)".} ## \
+## Adjusts the hide/show bits of this particular node.
+##
+## These three parameters can be used to adjust the _draw_control_mask and
+## _draw_show_mask independently, which work together to provide per-camera
+## visibility for the node and its descendents.
+##
+## _draw_control_mask indicates the bits in _draw_show_mask that are
+## significant.  Each different bit corresponds to a different camera (and
+## these bits are assigned via Camera::set_camera_mask()).
+##
+## Where _draw_control_mask has a 1 bit, a 1 bit in _draw_show_mask indicates
+## the node is visible to that camera, and a 0 bit indicates the node is
+## hidden to that camera.  Where _draw_control_mask is 0, the node is hidden
+## only if a parent node is hidden.
+##
+## The meaning of the three parameters is as follows:
+##
+## Wherever show_mask is 1, _draw_show_mask and _draw_control_mask will be
+## set 1.  Thus, show_mask indicates the set of cameras to which the node
+## should be shown.
+##
+## Wherever hide_mask is 1, _draw_show_mask will be set 0 and
+## _draw_control_mask will be set 1.  Thus, hide_mask indicates the set of
+## cameras from which the node should be hidden.
+##
+## Wherever clear_mask is 1, _draw_control_mask will be set 0.  Thus,
+## clear_mask indicates the set of cameras from which the hidden state should
+## be inherited from a parent.
+
+proc getDrawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_control_mask()".} ## \
+## Returns the set of bits in draw_show_mask that are considered meaningful.
+## See adjust_draw_mask().
+
+proc getDrawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_show_mask()".} ## \
+## Returns the hide/show bits of this particular node.  See
+## adjust_draw_mask().
+
+proc getNetDrawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_net_draw_control_mask()".} ## \
+## Returns the set of bits in get_net_draw_show_mask() that have been
+## explicitly set via adjust_draw_mask(), rather than implicitly inherited.
+##
+## A 1 bit in any position of this mask indicates that (a) this node has
+## renderable children, and (b) some child of this node has made an explicit
+## hide() or show_through() call for the corresponding bit.
+
+proc getNetDrawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_net_draw_show_mask()".} ## \
+## Returns the union of all draw_show_mask values--of renderable nodes only--
+## at this level and below.  If any bit in this mask is 0, there is no reason
+## to traverse below this node for a camera with the corresponding
+## camera_mask.
+##
+## The bits in this mask that do not correspond to a 1 bit in the
+## net_draw_control_mask are meaningless (and will be set to 1).  For bits
+## that \*do\* correspond to a 1 bit in the net_draw_control_mask, a 1 bit
+## indicates that at least one child should be visible, while a 0 bit
+## indicates that all children are hidden.
+
+proc setIntoCollideMask*(this: PandaNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.
+##
+## This specifies the set of bits that must be shared with a CollisionNode's
+## "from" CollideMask in order for the CollisionNode to detect a collision
+## with this particular node.
+##
+## The actual CollideMask that will be set is masked by the return value from
+## get_legal_collide_mask(). Thus, the into_collide_mask cannot be set to
+## anything other than nonzero except for those types of nodes that can be
+## collided into, such as CollisionNodes and GeomNodes.
+
+proc getIntoCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the "into" collide mask for this node.
+
+proc getLegalCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_legal_collide_mask()".} ## \
+## Returns the subset of CollideMask bits that may be set for this particular
+## type of PandaNode.  For most nodes, this is 0; it doesn't make sense to set
+## a CollideMask for most kinds of nodes.
+##
+## For nodes that can be collided with, such as GeomNode and CollisionNode,
+## this returns all bits on.
+
+proc getNetCollideMask*(this: PandaNode, current_thread: Thread): CollideMask {.importcpp: "#->get_net_collide_mask(#)".} ## \
+## Returns the union of all into_collide_mask() values set at CollisionNodes
+## at this level and below.
+
+proc getNetCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_net_collide_mask()".} ## \
+## Returns the union of all into_collide_mask() values set at CollisionNodes
+## at this level and below.
 
 proc getOffClipPlanes*(this: PandaNode, current_thread: Thread): RenderAttrib {.importcpp: "deconstify(#->get_off_clip_planes(#))", header: deconstifyCode.} ## \
 ## Returns a ClipPlaneAttrib which represents the union of all of the clip
@@ -23636,6 +23850,37 @@ proc unstash*(this: NodePathCollection) {.importcpp: "#.unstash()".} ## \
 
 proc detach*(this: NodePathCollection) {.importcpp: "#.detach()".} ## \
 ## Detaches all NodePaths in the collection.
+
+proc getCollideMask*(this: NodePathCollection): CollideMask {.importcpp: "#.get_collide_mask()".} ## \
+## Returns the union of all of the into_collide_masks for nodes at this level
+## and below.  This is the same thing as node()->get_net_collide_mask().
+##
+## If you want to return what the into_collide_mask of this node itself is,
+## without regard to its children, use node()->get_into_collide_mask().
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask, bits_to_change: CollideMask, node_type: TypeHandle) {.importcpp: "#.set_collide_mask(#, #, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask, bits_to_change: CollideMask) {.importcpp: "#.set_collide_mask(#, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask) {.importcpp: "#.set_collide_mask(#)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
 
 proc calcTightBounds*(this: NodePathCollection, min_point: LPoint3, max_point: LPoint3): bool {.importcpp: "#.calc_tight_bounds(#, #)".} ## \
 ## Calculates the minimum and maximum vertices of all Geoms at these
@@ -25359,6 +25604,12 @@ proc setShaderOff*(this: NodePath, priority: int) {.importcpp: "#.set_shader_off
 
 proc setShaderOff*(this: NodePath) {.importcpp: "#.set_shader_off()".}
 
+proc setShaderAuto*(this: NodePath, shader_switch: BitMask32, priority: int) {.importcpp: "#.set_shader_auto(#, #)".} ## \
+## overloaded for auto shader customization
+
+proc setShaderAuto*(this: NodePath, shader_switch: BitMask32) {.importcpp: "#.set_shader_auto(#)".} ## \
+## overloaded for auto shader customization
+
 proc setShaderAuto*(this: NodePath, priority: int) {.importcpp: "#.set_shader_auto(#)".}
 
 proc setShaderAuto*(this: NodePath) {.importcpp: "#.set_shader_auto()".}
@@ -26271,12 +26522,28 @@ proc show*(this: NodePath) {.importcpp: "#.show()".} ## \
 ##
 ## This will not reveal the node if a parent node has been hidden.
 
+proc show*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.show(#)".} ## \
+## Makes the referenced node visible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## This undoes the effect of a previous hide() call.  It will not reveal the
+## node if a parent node has been hidden.  However, see show_through().
+
 proc showThrough*(this: NodePath) {.importcpp: "#.show_through()".} ## \
 ## Makes the referenced node visible just to the cameras whose camera_mask
 ## shares the indicated bits.
 ##
 ## Unlike show(), this will reveal the node even if a parent node has been
 ## hidden, thus "showing through" a parent's hide().
+
+proc showThrough*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.show_through(#)".} ## \
+## Makes the referenced node visible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## Unlike show(), this will reveal the node even if a parent node has been
+## hidden via the one-parameter hide() method, thus "showing through" a
+## parent's hide().  (However, it will not show through a parent's hide() call
+## if the no-parameter form of hide() was used.)
 
 proc hide*(this: NodePath) {.importcpp: "#.hide()".} ## \
 ## Makes the referenced node (and the entire subgraph below this node)
@@ -26286,9 +26553,31 @@ proc hide*(this: NodePath) {.importcpp: "#.hide()".} ## \
 ##
 ## To undo this, call show().
 
+proc hide*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.hide(#)".} ## \
+## Makes the referenced node invisible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## This will also hide any nodes below this node in the scene graph, including
+## those nodes for which show() has been called, but it will not hide
+## descendent nodes for which show_through() has been called.
+
+proc isHidden*(this: NodePath, camera_mask: DrawMask): bool {.importcpp: "#.is_hidden(#)".} ## \
+## Returns true if the referenced node is hidden from the indicated camera(s)
+## either directly, or because some ancestor is hidden.
+
 proc isHidden*(this: NodePath): bool {.importcpp: "#.is_hidden()".} ## \
 ## Returns true if the referenced node is hidden from the indicated camera(s)
 ## either directly, or because some ancestor is hidden.
+
+proc getHiddenAncestor*(this: NodePath, camera_mask: DrawMask, current_thread: Thread): NodePath {.importcpp: "#.get_hidden_ancestor(#, #)".} ## \
+## Returns the NodePath at or above the referenced node that is hidden to the
+## indicated camera(s), or an empty NodePath if no ancestor of the referenced
+## node is hidden (and the node should be visible).
+
+proc getHiddenAncestor*(this: NodePath, camera_mask: DrawMask): NodePath {.importcpp: "#.get_hidden_ancestor(#)".} ## \
+## Returns the NodePath at or above the referenced node that is hidden to the
+## indicated camera(s), or an empty NodePath if no ancestor of the referenced
+## node is hidden (and the node should be visible).
 
 proc getHiddenAncestor*(this: NodePath): NodePath {.importcpp: "#.get_hidden_ancestor()".} ## \
 ## Returns the NodePath at or above the referenced node that is hidden to the
@@ -26359,6 +26648,43 @@ proc getStashedAncestor*(this: NodePath): NodePath {.importcpp: "#.get_stashed_a
 ## Returns the NodePath at or above the referenced node that is stashed, or an
 ## empty NodePath if no ancestor of the referenced node is stashed (and the
 ## node should be visible).
+
+proc getCollideMask*(this: NodePath): CollideMask {.importcpp: "#.get_collide_mask()".} ## \
+## Returns the union of all of the into_collide_masks for nodes at this level
+## and below.  This is the same thing as node()->get_net_collide_mask().
+##
+## If you want to return what the into_collide_mask of this node itself is,
+## without regard to its children, use node()->get_into_collide_mask().
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask, bits_to_change: CollideMask, node_type: TypeHandle) {.importcpp: "#.set_collide_mask(#, #, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask, bits_to_change: CollideMask) {.importcpp: "#.set_collide_mask(#, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask) {.importcpp: "#.set_collide_mask(#)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
 
 proc `==`*(this: NodePath, other: NodePath): bool {.importcpp: "#.operator ==(#)".} ## \
 ## Comparison methods
@@ -27133,6 +27459,19 @@ proc getNumDisplayRegions*(this: Camera): clonglong {.importcpp: "#->get_num_dis
 proc getDisplayRegion*(this: Camera, n: clonglong): DisplayRegion {.importcpp: "#->get_display_region(#)".} ## \
 ## Returns the nth display region associated with the camera.
 
+proc setCameraMask*(this: Camera, mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the set of bits that represent the subset of the scene graph the
+## camera will render.
+##
+## During the cull traversal, a node is not visited if none of its draw mask
+## bits intersect with the camera's camera mask bits.  These masks can be used
+## to selectively hide and show different parts of the scene graph from
+## different cameras that are otherwise viewing the same scene.
+
+proc getCameraMask*(this: Camera): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the set of bits that represent the subset of the scene graph the
+## camera will render.  See set_camera_mask().
+
 proc setCullCenter*(this: Camera, cull_center: NodePath) {.importcpp: "#->set_cull_center(#)".} ## \
 ## Specifies the point from which the culling operations are performed.
 ## Normally, this is the same as the camera, and that is the default if this
@@ -27637,6 +27976,9 @@ proc writeGeoms*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp:
 proc writeVerbose*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp: "#->write_verbose(#, #)".} ## \
 ## Writes a detailed description of all the Geoms in the node.
 
+proc getDefaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "GeomNode::get_default_collide_mask()", header: "geomNode.h".} ## \
+## Returns the default into_collide_mask assigned to new GeomNodes.
+
 converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
 proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".} ## \
@@ -27809,6 +28151,17 @@ proc getInternalTransform*(this: CullTraverserData, trav: CullTraverser): Transf
 proc getNetTransform*(this: CullTraverserData, trav: CullTraverser): TransformState {.importcpp: "#.get_net_transform(#)".} ## \
 ## Returns the net transform: the relative transform from root of the scene
 ## graph to the current node.
+
+proc isInView*(this: CullTraverserData, camera_mask: DrawMask): bool {.importcpp: "#.is_in_view(#)".} ## \
+## Returns true if the current node is within the view frustum, false
+## otherwise.  If the node's bounding volume falls completely within the view
+## frustum, this will also reset the view frustum pointer, saving some work
+## for future nodes.
+
+proc isThisNodeHidden*(this: CullTraverserData, camera_mask: DrawMask): bool {.importcpp: "#.is_this_node_hidden(#)".} ## \
+## Returns true if this particular node is hidden, even though we might be
+## traversing past this node to find a child node that has had show_through()
+## called for it.  If this returns true, the node should not be rendered.
 
 proc applyTransformAndState*(this: CullTraverserData, trav: CullTraverser) {.importcpp: "#.apply_transform_and_state(#)".} ## \
 ## Applies the transform and state from the current node onto the current
@@ -28057,6 +28410,15 @@ proc hasTagStateKey*(this: CullTraverser): bool {.importcpp: "#->has_tag_state_k
 proc getTagStateKey*(this: CullTraverser): string {.importcpp: "nimStringFromStdString(#->get_tag_state_key())", header: stringConversionCode.} ## \
 ## Returns the tag state key that has been specified for the scene's camera,
 ## if any.
+
+proc setCameraMask*(this: CullTraverser, camera_mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the visibility mask for the camera viewing the scene.  This is
+## normally set automatically at the time setup_scene() is called; you should
+## change this only if you want to render some set of objects different from
+## what the camera normally would draw.
+
+proc getCameraMask*(this: CullTraverser): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the visibility mask from the camera viewing the scene.
 
 proc getCameraTransform*(this: CullTraverser): TransformState {.importcpp: "deconstify(#->get_camera_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the camera relative to the starting node.
@@ -29365,6 +29727,14 @@ proc setShaderOff*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp:
 
 proc setShaderOff*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_off())", header: deconstifyCode.}
 
+proc setShaderAuto*(this: ShaderAttrib, shader_switch: BitMask32, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#, #))", header: deconstifyCode.} ## \
+## Set auto shader with bitmask to customize use, e.g., to keep normal, glow,
+## etc., on or off
+
+proc setShaderAuto*(this: ShaderAttrib, shader_switch: BitMask32): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#))", header: deconstifyCode.} ## \
+## Set auto shader with bitmask to customize use, e.g., to keep normal, glow,
+## etc., on or off
+
 proc setShaderAuto*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#))", header: deconstifyCode.}
 
 proc setShaderAuto*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto())", header: deconstifyCode.}
@@ -29805,6 +30175,30 @@ proc newPortalNode*(name: string, pos: LPoint3, scale: float32): PortalNode {.im
 proc newPortalNode*(name: string, pos: LPoint3): PortalNode {.importcpp: "new PortalNode(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Create a default rectangle as portal.  Use this to create an arbitrary
 ## portal and setup from Python
+
+proc setPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_portal_mask(#)".} ## \
+## Simultaneously sets both the "from" and "into" PortalMask values to the
+## same thing.
+
+proc setFromPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_from_portal_mask(#)".} ## \
+## Sets the "from" PortalMask.  In order for a portal to be detected from this
+## object into another object, the intersection of this object's "from" mask
+## and the other object's "into" mask must be nonzero.
+
+proc setIntoPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_into_portal_mask(#)".} ## \
+## Sets the "into" PortalMask.  In order for a portal to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+proc getFromPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_from_portal_mask()".} ## \
+## Returns the current "from" PortalMask.  In order for a portal to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc getIntoPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_into_portal_mask()".} ## \
+## Returns the current "into" PortalMask.  In order for a portal to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
 
 proc setPortalGeom*(this: PortalNode, flag: bool) {.importcpp: "#->set_portal_geom(#)".} ## \
 ## Sets the state of the "portal geom" flag for this PortalNode.  Normally,
@@ -31429,6 +31823,15 @@ proc getBuffer*(this: PipeOcclusionCullTraverser): GraphicsOutput {.importcpp: "
 proc getTexture*(this: PipeOcclusionCullTraverser): Texture {.importcpp: "#->get_texture()".} ## \
 ## Returns a Texture that can be used to visualize the efforts of the
 ## occlusion cull.
+
+proc setOcclusionMask*(this: PipeOcclusionCullTraverser, occlusion_mask: DrawMask) {.importcpp: "#->set_occlusion_mask(#)".} ## \
+## Specifies the DrawMask that should be set on occlusion polygons for this
+## scene.  This identifies the polygons that are to be treated as occluders.
+## Polygons that do not have this draw mask set will not be considered
+## occluders.
+
+proc getOcclusionMask*(this: PipeOcclusionCullTraverser): DrawMask {.importcpp: "#->get_occlusion_mask()".} ## \
+## Returns the DrawMask for occlusion polygons.  See set_occlusion_mask().
 
 converter getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
 
@@ -33098,6 +33501,30 @@ proc newCollisionHandler*(param0: CollisionHandler): CollisionHandler {.importcp
 
 proc newCollisionNode*(name: string): CollisionNode {.importcpp: "new CollisionNode(nimStringToStdString(#))", header: stringConversionCode.}
 
+proc setCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_collide_mask(#)".} ## \
+## Simultaneously sets both the "from" and "into" CollideMask values to the
+## same thing.
+
+proc setFromCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_from_collide_mask(#)".} ## \
+## Sets the "from" CollideMask.  In order for a collision to be detected from
+## this object into another object, the intersection of this object's "from"
+## mask and the other object's "into" mask must be nonzero.
+
+proc setIntoCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.  In order for a collision to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+proc getFromCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_from_collide_mask()".} ## \
+## Returns the current "from" CollideMask.  In order for a collision to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc getIntoCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the current "into" CollideMask.  In order for a collision to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
 proc clearSolids*(this: CollisionNode) {.importcpp: "#->clear_solids()".} ## \
 ## Removes all solids from the node.
 
@@ -33136,6 +33563,9 @@ proc setColliderSort*(this: CollisionNode, sort: int) {.importcpp: "#->set_colli
 ## multiple passes through the data; in that case, it may be a useful
 ## optimization to group colliders that have similar bounding volumes together
 ## (by giving them similar sort values).
+
+proc getDefaultCollideMask*(_: typedesc[CollisionNode]): CollideMask {.importcpp: "CollisionNode::get_default_collide_mask()", header: "collisionNode.h".} ## \
+## Returns the default into_collide_mask assigned to new CollisionNodes.
 
 converter getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
 
@@ -36311,6 +36741,51 @@ proc makeTextureBuffer*(this: GraphicsOutput, name: string, x_size: int, y_size:
 ##
 ## When you are done using the buffer, you should remove it with a call to
 ## GraphicsEngine::remove_window().
+
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask, to_ram: bool, fbp: FrameBufferProperties): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
+
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask, to_ram: bool): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
+
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
 
 proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## This is similar to make_texture_buffer() in that it allocates a separate
@@ -59010,6 +59485,426 @@ proc getRootNode*(this: BamWriter): TypedWritable {.importcpp: "#.get_root_node(
 proc setRootNode*(this: BamWriter, root_node: TypedWritable) {.importcpp: "#.set_root_node(#)".} ## \
 ## Sets the root node of the part of the scene graph we are currently writing
 ## out.  NodePaths written to this bam file will be relative to this node.
+
+proc initBitMask16*(): BitMask16 {.importcpp: "BitMask16()".}
+
+proc initBitMask16*(param0: BitMask[uint16, 16]): BitMask16 {.importcpp: "BitMask16(#)".}
+
+converter initBitMask16*(init_value: int): BitMask16 {.importcpp: "BitMask16(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask[uint16, 16]::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask[uint16, 16]::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint16, 16]], on_bits: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint16, 16]], index: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint16, 16]], low_bit: int, size: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): bool {.importcpp: "BitMask[uint16, 16]::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): int {.importcpp: "BitMask[uint16, 16]::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint16, 16], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint16, 16], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint16, 16], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint16, 16], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint16, 16]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint16, 16]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint16, 16], low_bit: int, size: int): int {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint16, 16], value: int, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint16, 16], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint16, 16], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint16, 16], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint16, 16], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint16, 16], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint16, 16], value: int) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint16, 16], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint16, 16]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint16, 16], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint16, 16], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint16, 16], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16], index: int): BitMask16 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16], index: int): BitMask16 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask[uint16, 16]::get_class_type()", header: "bitMask.h".}
+
+proc initBitMask32*(): BitMask32 {.importcpp: "BitMask32()".}
+
+proc initBitMask32*(param0: BitMask[uint32, 32]): BitMask32 {.importcpp: "BitMask32(#)".}
+
+converter initBitMask32*(init_value: int): BitMask32 {.importcpp: "BitMask32(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask[uint32, 32]::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask[uint32, 32]::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint32, 32]], on_bits: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint32, 32]], index: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint32, 32]], low_bit: int, size: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): bool {.importcpp: "BitMask[uint32, 32]::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): int {.importcpp: "BitMask[uint32, 32]::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint32, 32], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint32, 32], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint32, 32], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint32, 32], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint32, 32]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint32, 32]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint32, 32], low_bit: int, size: int): int {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint32, 32], value: int, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint32, 32], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint32, 32], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint32, 32], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint32, 32], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint32, 32], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint32, 32], value: int) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint32, 32], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint32, 32]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint32, 32], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint32, 32], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint32, 32], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32], index: int): BitMask32 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32], index: int): BitMask32 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask[uint32, 32]::get_class_type()", header: "bitMask.h".}
+
+proc initBitMask64*(): BitMask64 {.importcpp: "BitMask64()".}
+
+proc initBitMask64*(param0: BitMask[uint64, 64]): BitMask64 {.importcpp: "BitMask64(#)".}
+
+converter initBitMask64*(init_value: clonglong): BitMask64 {.importcpp: "BitMask64(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask[uint64, 64]::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask[uint64, 64]::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint64, 64]], on_bits: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint64, 64]], index: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint64, 64]], low_bit: int, size: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): bool {.importcpp: "BitMask[uint64, 64]::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): int {.importcpp: "BitMask[uint64, 64]::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint64, 64], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint64, 64], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint64, 64], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint64, 64], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint64, 64]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint64, 64]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint64, 64], low_bit: int, size: int): clonglong {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint64, 64], value: clonglong, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint64, 64], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint64, 64], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint64, 64], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint64, 64], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint64, 64], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint64, 64]): clonglong {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint64, 64], value: clonglong) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint64, 64], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint64, 64]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint64, 64], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint64, 64], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint64, 64], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64], index: int): BitMask64 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64], index: int): BitMask64 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask[uint64, 64]::get_class_type()", header: "bitMask.h".}
 
 proc initBitArray*(): BitArray {.importcpp: "BitArray()".}
 

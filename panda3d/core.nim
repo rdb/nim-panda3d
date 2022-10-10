@@ -58,6 +58,151 @@ func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp
 func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString"} =
   {.emit: "result = std::string(desc->data, desc->len);"}
 
+const wrappedLVecBase2fCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2f) WrappedLVecBase2f {
+  float x;
+  float y;
+
+  constexpr WrappedLVecBase2f() = default;
+  WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2f &() const { return *(const LVecBase2f *)this; }
+  operator LVecBase2f &() { return *(LVecBase2f *)this; }
+};
+""";
+
+const wrappedLVecBase2dCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2d) WrappedLVecBase2d {
+  double x;
+  double y;
+
+  constexpr WrappedLVecBase2d() = default;
+  WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2d &() const { return *(const LVecBase2d *)this; }
+  operator LVecBase2d &() { return *(LVecBase2d *)this; }
+};
+""";
+
+const wrappedLVecBase2iCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2i) WrappedLVecBase2i {
+  int x;
+  int y;
+
+  constexpr WrappedLVecBase2i() = default;
+  WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2i &() const { return *(const LVecBase2i *)this; }
+  operator LVecBase2i &() { return *(LVecBase2i *)this; }
+};
+""";
+
+const wrappedLVecBase3fCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3f) WrappedLVecBase3f {
+  float x;
+  float y;
+  float z;
+
+  constexpr WrappedLVecBase3f() = default;
+  WrappedLVecBase3f(float v0, float v1, float v2) : x(v0), y(v1), z(v2) { }
+  WrappedLVecBase3f(const LVecBase3f &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3f &() const { return *(const LVecBase3f *)this; }
+  operator LVecBase3f &() { return *(LVecBase3f *)this; }
+};
+""";
+
+const wrappedLVecBase3dCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3d) WrappedLVecBase3d {
+  double x;
+  double y;
+  double z;
+
+  constexpr WrappedLVecBase3d() = default;
+  WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3d &() const { return *(const LVecBase3d *)this; }
+  operator LVecBase3d &() { return *(LVecBase3d *)this; }
+};
+""";
+
+const wrappedLVecBase3iCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3i) WrappedLVecBase3i {
+  int x;
+  int y;
+  int z;
+
+  constexpr WrappedLVecBase3i() = default;
+  WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3i &() const { return *(const LVecBase3i *)this; }
+  operator LVecBase3i &() { return *(LVecBase3i *)this; }
+};
+""";
+
+const wrappedLVecBase4fCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4f) WrappedLVecBase4f {
+  float x;
+  float y;
+  float z;
+  float w;
+
+  constexpr WrappedLVecBase4f() = default;
+  WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4f(const UnalignedLVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4f &() const { return *(const LVecBase4f *)this; }
+  operator const UnalignedLVecBase4f &() const { return *(const UnalignedLVecBase4f *)this; }
+  operator LVecBase4f &() { return *(LVecBase4f *)this; }
+  operator UnalignedLVecBase4f &() { return *(UnalignedLVecBase4f *)this; }
+};
+"""
+
+const wrappedLVecBase4dCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4d) WrappedLVecBase4d {
+  double x;
+  double y;
+  double z;
+  double w;
+
+  constexpr WrappedLVecBase4d() = default;
+  WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4d(const UnalignedLVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4d &() const { return *(const LVecBase4d *)this; }
+  operator const UnalignedLVecBase4d &() const { return *(const UnalignedLVecBase4d *)this; }
+  operator LVecBase4d &() { return *(LVecBase4d *)this; }
+  operator UnalignedLVecBase4d &() { return *(UnalignedLVecBase4d *)this; }
+};
+""";
+
+const wrappedLVecBase4iCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4i) WrappedLVecBase4i {
+  int x;
+  int y;
+  int z;
+  int w;
+
+  constexpr WrappedLVecBase4i() = default;
+  WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4i(const UnalignedLVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4i &() const { return *(const LVecBase4i *)this; }
+  operator const UnalignedLVecBase4i &() const { return *(const UnalignedLVecBase4i *)this; }
+  operator LVecBase4i &() { return *(LVecBase4i *)this; }
+  operator UnalignedLVecBase4i &() { return *(UnalignedLVecBase4i *)this; }
+};
+""";
+
 type NeverFreeMemory* {.importcpp: "NeverFreeMemory", pure, inheritable, header: "neverFreeMemory.h".} = object
   ## This class is used to allocate bytes of memory from a pool that is never
   ## intended to be freed.  It is particularly useful to support DeletedChain,
@@ -4842,14 +4987,20 @@ type TextureStagePool* {.importcpp: "TextureStagePool", pure, inheritable, heade
 
 type MathNumbers* {.importcpp: "MathNumbers", pure, inheritable, header: "mathNumbers.h".} = object
 
-type LVecBase2f* {.importcpp: "LVecBase2f", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2f* {.importcpp: "WrappedLVecBase2f", header: wrappedLVecBase2fCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: float32
+  y*: float32
 
-type LVecBase2d* {.importcpp: "LVecBase2d", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2d* {.importcpp: "WrappedLVecBase2d", header: wrappedLVecBase2dCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: float64
+  y*: float64
 
-type LVecBase2i* {.importcpp: "LVecBase2i", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2i* {.importcpp: "WrappedLVecBase2i", header: wrappedLVecBase2iCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: int32
+  y*: int32
 
 type LVector2f* {.importcpp: "LVector2f", pure, inheritable, header: "lvector2.h".} = object of LVecBase2f
   ## This is a two-component vector offset.
@@ -4869,14 +5020,23 @@ type LPoint2d* {.importcpp: "LPoint2d", pure, inheritable, header: "lpoint2.h".}
 type LPoint2i* {.importcpp: "LPoint2i", pure, inheritable, header: "lpoint2.h".} = object of LVecBase2i
   ## This is a two-component point in space.
 
-type LVecBase3f* {.importcpp: "LVecBase3f", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3f* {.importcpp: "WrappedLVecBase3f", header: wrappedLVecBase3fCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float32
+  y*: float32
+  z*: float32
 
-type LVecBase3d* {.importcpp: "LVecBase3d", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3d* {.importcpp: "WrappedLVecBase3d", header: wrappedLVecBase3dCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float64
+  y*: float64
+  z*: float64
 
-type LVecBase3i* {.importcpp: "LVecBase3i", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3i* {.importcpp: "WrappedLVecBase3i", header: wrappedLVecBase3iCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: int32
+  y*: int32
+  z*: int32
 
 type CoordinateSystem* = enum
   CS_default = 0
@@ -4928,10 +5088,14 @@ type LPoint3i* {.importcpp: "LPoint3i", pure, inheritable, header: "lpoint3.h".}
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LVecBase4f* {.importcpp: "LVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float32
+  y*: float32
+  z*: float32
+  w*: float32
 
-type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4939,11 +5103,19 @@ type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: float32
+  y*: float32
+  z*: float32
+  w*: float32
 
-type LVecBase4d* {.importcpp: "LVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float64
+  y*: float64
+  z*: float64
+  w*: float64
 
-type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4951,11 +5123,19 @@ type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: float64
+  y*: float64
+  z*: float64
+  w*: float64
 
-type LVecBase4i* {.importcpp: "LVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: int32
+  y*: int32
+  z*: int32
+  w*: int32
 
-type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4963,6 +5143,10 @@ type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: int32
+  y*: int32
+  z*: int32
+  w*: int32
 
 type LVector4f* {.importcpp: "LVector4f", pure, inheritable, header: "lvector4.h".} = object of LVecBase4f
   ## This is a four-component vector distance.
@@ -12187,101 +12371,35 @@ func videoHeight*(this: VideoTexture): int {.importcpp: "#->get_video_height()".
 ## necessarily the height of the actual texture, since the texture may have
 ## been expanded to raise it to a power of 2.
 
-func x*(this: LVecBase2f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase2d): float64 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2d): float64 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase2i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase3f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase3f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase3f): float32 {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_z(#)".}
-
-func xy*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
-
-func x*(this: LVecBase3d): float64 {.importcpp: "#.get_x()".}
 
 proc `x=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_x(#)".}
 
-func y*(this: LVecBase3d): float64 {.importcpp: "#.get_y()".}
-
 proc `y=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_y(#)".}
-
-func z*(this: LVecBase3d): float64 {.importcpp: "#.get_z()".}
 
 proc `z=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_z(#)".}
 
-func xy*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
-
-func x*(this: LVecBase3i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase3i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase3i): int {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_z(#)".}
-
-func xy*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
 
 func xy*(this: LVector3f): LVector2f {.importcpp: "#.get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
@@ -12355,59 +12473,23 @@ func yz*(this: LPoint3i): LPoint2i {.importcpp: "#.get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
 
-func x*(this: LVecBase4f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase4f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase4f): float32 {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_z(#)".}
-
-func xyz*(this: LVecBase4f): LVecBase3f {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
-
-func x*(this: LVecBase4d): float64 {.importcpp: "#.get_x()".}
 
 proc `x=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_x(#)".}
 
-func y*(this: LVecBase4d): float64 {.importcpp: "#.get_y()".}
-
 proc `y=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_y(#)".}
-
-func z*(this: LVecBase4d): float64 {.importcpp: "#.get_z()".}
 
 proc `z=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_z(#)".}
 
-func xyz*(this: LVecBase4d): LVecBase3d {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
-
-func x*(this: LVecBase4i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase4i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase4i): int {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_z(#)".}
-
-func xyz*(this: LVecBase4i): LVecBase3i {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
 
 func xyz*(this: LVector4f): LVector3f {.importcpp: "#.get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
@@ -46892,14 +46974,6 @@ proc rad2Deg*(f: float64): float64 {.importcpp: "rad_2_deg(#)".}
 
 proc rad2Deg*(f: float32): float32 {.importcpp: "rad_2_deg(#)".}
 
-proc initLVecBase2f*(): LVecBase2f {.importcpp: "LVecBase2f()".}
-
-proc initLVecBase2f*(param0: LVecBase2f): LVecBase2f {.importcpp: "LVecBase2f(#)".}
-
-proc initLVecBase2f*(fill_value: float32): LVecBase2f {.importcpp: "LVecBase2f(#)".}
-
-proc initLVecBase2f*(x: float32, y: float32): LVecBase2f {.importcpp: "LVecBase2f(#, #)".}
-
 proc zero*(_: typedesc[LVecBase2f]): LVecBase2f {.importcpp: "LVecBase2f::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
 
@@ -47052,14 +47126,6 @@ proc readDatagram*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
 
-proc initLVecBase2d*(): LVecBase2d {.importcpp: "LVecBase2d()".}
-
-proc initLVecBase2d*(param0: LVecBase2d): LVecBase2d {.importcpp: "LVecBase2d(#)".}
-
-proc initLVecBase2d*(fill_value: float64): LVecBase2d {.importcpp: "LVecBase2d(#)".}
-
-proc initLVecBase2d*(x: float64, y: float64): LVecBase2d {.importcpp: "LVecBase2d(#, #)".}
-
 proc zero*(_: typedesc[LVecBase2d]): LVecBase2d {.importcpp: "LVecBase2d::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
 
@@ -47211,14 +47277,6 @@ proc readDatagram*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
-
-proc initLVecBase2i*(): LVecBase2i {.importcpp: "LVecBase2i()".}
-
-proc initLVecBase2i*(param0: LVecBase2i): LVecBase2i {.importcpp: "LVecBase2i(#)".}
-
-proc initLVecBase2i*(fill_value: int): LVecBase2i {.importcpp: "LVecBase2i(#)".}
-
-proc initLVecBase2i*(x: int, y: int): LVecBase2i {.importcpp: "LVecBase2i(#, #)".}
 
 proc zero*(_: typedesc[LVecBase2i]): LVecBase2i {.importcpp: "LVecBase2i::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
@@ -47625,16 +47683,6 @@ proc `/`*(this: LPoint2i, scalar: int): LPoint2i {.importcpp: "#.operator /(#)".
 
 converter getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
 
-proc initLVecBase3f*(): LVecBase3f {.importcpp: "LVecBase3f()".}
-
-proc initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f {.importcpp: "LVecBase3f(#, #)".}
-
-proc initLVecBase3f*(param0: LVecBase3f): LVecBase3f {.importcpp: "LVecBase3f(#)".}
-
-proc initLVecBase3f*(fill_value: float32): LVecBase3f {.importcpp: "LVecBase3f(#)".}
-
-proc initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f {.importcpp: "LVecBase3f(#, #, #)".}
-
 proc zero*(_: typedesc[LVecBase3f]): LVecBase3f {.importcpp: "LVecBase3f::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
 
@@ -47824,16 +47872,6 @@ proc readDatagram*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
 
-proc initLVecBase3d*(): LVecBase3d {.importcpp: "LVecBase3d()".}
-
-proc initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d {.importcpp: "LVecBase3d(#, #)".}
-
-proc initLVecBase3d*(param0: LVecBase3d): LVecBase3d {.importcpp: "LVecBase3d(#)".}
-
-proc initLVecBase3d*(fill_value: float64): LVecBase3d {.importcpp: "LVecBase3d(#)".}
-
-proc initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d {.importcpp: "LVecBase3d(#, #, #)".}
-
 proc zero*(_: typedesc[LVecBase3d]): LVecBase3d {.importcpp: "LVecBase3d::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
 
@@ -48022,16 +48060,6 @@ proc readDatagram*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
-
-proc initLVecBase3i*(): LVecBase3i {.importcpp: "LVecBase3i()".}
-
-proc initLVecBase3i*(copy: LVecBase2i, z: int): LVecBase3i {.importcpp: "LVecBase3i(#, #)".}
-
-proc initLVecBase3i*(param0: LVecBase3i): LVecBase3i {.importcpp: "LVecBase3i(#)".}
-
-proc initLVecBase3i*(fill_value: int): LVecBase3i {.importcpp: "LVecBase3i(#)".}
-
-proc initLVecBase3i*(x: int, y: int, z: int): LVecBase3i {.importcpp: "LVecBase3i(#, #, #)".}
 
 proc zero*(_: typedesc[LVecBase3i]): LVecBase3i {.importcpp: "LVecBase3i::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
@@ -48798,24 +48826,6 @@ proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int): LPoint3i {.impo
 
 converter getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
 
-proc initLVecBase4f*(): LVecBase4f {.importcpp: "LVecBase4f()".}
-
-converter initLVecBase4f*(point: LPoint3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f {.importcpp: "LVecBase4f(#, #)".}
-
-proc initLVecBase4f*(param0: LVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-converter initLVecBase4f*(vector: LVector3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-proc initLVecBase4f*(fill_value: float32): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-proc initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f {.importcpp: "LVecBase4f(#, #, #, #)".}
-
 proc zero*(_: typedesc[LVecBase4f]): LVecBase4f {.importcpp: "LVecBase4f::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
 
@@ -48992,16 +49002,6 @@ proc readDatagram*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
-proc initUnalignedLVecBase4f*(): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f()".}
-
-converter initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(param0: UnalignedLVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(fill_value: float32): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(x: float32, y: float32, z: float32, w: float32): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#, #, #, #)".}
-
 proc fill*(this: UnalignedLVecBase4f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
@@ -49023,24 +49023,6 @@ proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.import
 proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
-
-proc initLVecBase4d*(): LVecBase4d {.importcpp: "LVecBase4d()".}
-
-converter initLVecBase4d*(point: LPoint3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d {.importcpp: "LVecBase4d(#, #)".}
-
-proc initLVecBase4d*(param0: LVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-converter initLVecBase4d*(vector: LVector3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-proc initLVecBase4d*(fill_value: float64): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-proc initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d {.importcpp: "LVecBase4d(#, #, #, #)".}
 
 proc zero*(_: typedesc[LVecBase4d]): LVecBase4d {.importcpp: "LVecBase4d::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
@@ -49218,16 +49200,6 @@ proc readDatagram*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
-proc initUnalignedLVecBase4d*(): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d()".}
-
-converter initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(param0: UnalignedLVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(fill_value: float64): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(x: float64, y: float64, z: float64, w: float64): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#, #, #, #)".}
-
 proc fill*(this: UnalignedLVecBase4d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
@@ -49249,24 +49221,6 @@ proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.import
 proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
-
-proc initLVecBase4i*(): LVecBase4i {.importcpp: "LVecBase4i()".}
-
-converter initLVecBase4i*(point: LPoint3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4i*(copy: LVecBase3i, w: int): LVecBase4i {.importcpp: "LVecBase4i(#, #)".}
-
-proc initLVecBase4i*(param0: LVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-converter initLVecBase4i*(vector: LVector3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-proc initLVecBase4i*(fill_value: int): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-proc initLVecBase4i*(x: int, y: int, z: int, w: int): LVecBase4i {.importcpp: "LVecBase4i(#, #, #, #)".}
 
 proc zero*(_: typedesc[LVecBase4i]): LVecBase4i {.importcpp: "LVecBase4i::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
@@ -49417,16 +49371,6 @@ proc readDatagram*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
-
-proc initUnalignedLVecBase4i*(): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i()".}
-
-converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(param0: UnalignedLVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(fill_value: int): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(x: int, y: int, z: int, w: int): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#, #, #, #)".}
 
 proc fill*(this: UnalignedLVecBase4i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
@@ -64339,3 +64283,1530 @@ proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
+
+proc initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
+proc initLVecBase2f*(param0: LVecBase2f): LVecBase2f = LVecBase2f(x: param0.x, y: param0.y)
+proc initLVecBase2f*(fill_value: float32): LVecBase2f = LVecBase2f(x: fill_value, y: fill_value)
+proc initLVecBase2f*(x: float32, y: float32): LVecBase2f = LVecBase2f(x: x, y: y)
+converter initLVecBase2f*(args: tuple[x: float32, y: float32]): LVecBase2f = LVecBase2f(x: args.x, y: args.y)
+converter initLVecBase2f*(args: tuple[x: float64, y: float64]): LVecBase2f = LVecBase2f(x: args.x, y: args.y)
+
+proc initLVecBase2d*(): LVecBase2d = LVecBase2d(x: 0, y: 0)
+proc initLVecBase2d*(param0: LVecBase2d): LVecBase2d = LVecBase2d(x: param0.x, y: param0.y)
+proc initLVecBase2d*(fill_value: float64): LVecBase2d = LVecBase2d(x: fill_value, y: fill_value)
+converter initLVecBase2d*(args: tuple[x: float64, y: float64]): LVecBase2d = LVecBase2d(x: args.x, y: args.y)
+proc initLVecBase2d*(x: float32, y: float32): LVecBase2d = LVecBase2d(x: x, y: y)
+proc initLVecBase2d*(x: float64, y: float64): LVecBase2d = LVecBase2d(x: x, y: y)
+
+proc initLVecBase2i*(): LVecBase2i = LVecBase2i(x: 0, y: 0)
+proc initLVecBase2i*(param0: LVecBase2i): LVecBase2i = LVecBase2i(x: param0.x, y: param0.y)
+proc initLVecBase2i*(fill_value: int32): LVecBase2i = LVecBase2i(x: fill_value, y: fill_value)
+proc initLVecBase2i*(x: int32, y: int32): LVecBase2i = LVecBase2i(x: x, y: y)
+converter initLVecBase2i*(args: tuple[x: int32, y: int32]): LVecBase2i = LVecBase2i(x: args.x, y: args.y)
+
+proc initLVecBase3f*(): LVecBase3f = LVecBase3f(x: 0, y: 0, z: 0)
+proc initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3f*(param0: LVecBase3f): LVecBase3f = LVecBase3f(x: param0.x, y: param0.y, z: param0.z)
+proc initLVecBase3f*(fill_value: float32): LVecBase3f = LVecBase3f(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f = LVecBase3f(x: x, y: y, z: z)
+converter initLVecBase3f*(args: tuple[x: float32, y: float32, z: float32]): LVecBase3f = LVecBase3f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase3f*(args: tuple[x: float64, y: float64, z: float64]): LVecBase3f = LVecBase3f(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase3d*(): LVecBase3d = LVecBase3d(x: 0, y: 0, z: 0)
+proc initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3d*(param0: LVecBase3d): LVecBase3d = LVecBase3d(x: param0.x, y: param0.y, z: param0.z)
+proc initLVecBase3d*(fill_value: float64): LVecBase3d = LVecBase3d(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d = LVecBase3d(x: x, y: y, z: z)
+converter initLVecBase3d*(args: tuple[x: float32, y: float32, z: float32]): LVecBase3d = LVecBase3d(x: args.x, y: args.y, z: args.z)
+converter initLVecBase3d*(args: tuple[x: float64, y: float64, z: float64]): LVecBase3d = LVecBase3d(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase3i*(): LVecBase3i = LVecBase3i(x: 0, y: 0, z: 0)
+proc initLVecBase3i*(copy: LVecBase2i, z: int32): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3i*(param0: LVecBase3i): LVecBase3i = LVecBase3i(x: param0.x, y: param0.y, z: param0.z)
+proc initLVecBase3i*(fill_value: int32): LVecBase3i = LVecBase3i(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3i*(x: int32, y: int32, z: int32): LVecBase3i = LVecBase3i(x: x, y: y, z: z)
+converter initLVecBase3i*(args: tuple[x: int32, y: int32, z: int32]): LVecBase3i = LVecBase3i(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase4f*(): LVecBase4f = LVecBase4f(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4f*(param0: LVecBase4f): LVecBase4f = LVecBase4f(x: param0.x, y: param0.y, z: param0.z, w: param0.w)
+proc initLVecBase4f*(fill_value: float32): LVecBase4f = LVecBase4f(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f = LVecBase4f(x: x, y: y, z: z, w: w)
+converter initLVecBase4f*(args: tuple[x: float32, y: float32, z: float32, w: float32]): LVecBase4f = LVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase4f*(args: tuple[x: float64, y: float64, z: float64, w: float64]): LVecBase4f = LVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4f*(point: LPoint3f): LVecBase4f = LVecBase4f(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4f*(vector: LVector3f): LVecBase4f = LVecBase4f(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+proc initLVecBase4d*(): LVecBase4d = LVecBase4d(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4d*(param0: LVecBase4d): LVecBase4d = LVecBase4d(x: param0.x, y: param0.y, z: param0.z, w: param0.w)
+proc initLVecBase4d*(fill_value: float64): LVecBase4d = LVecBase4d(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d = LVecBase4d(x: x, y: y, z: z, w: w)
+converter initLVecBase4d*(args: tuple[x: float32, y: float32, z: float32, w: float32]): LVecBase4d = LVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4d*(args: tuple[x: float64, y: float64, z: float64, w: float64]): LVecBase4d = LVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4d*(point: LPoint3d): LVecBase4d = LVecBase4d(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4d*(vector: LVector3d): LVecBase4d = LVecBase4d(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+proc initLVecBase4i*(): LVecBase4i = LVecBase4i(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4i*(copy: LVecBase3i, w: int32): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4i*(param0: LVecBase4i): LVecBase4i = LVecBase4i(x: param0.x, y: param0.y, z: param0.z, w: param0.w)
+proc initLVecBase4i*(fill_value: int32): LVecBase4i = LVecBase4i(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4i*(x: int32, y: int32, z: int32, w: int32): LVecBase4i = LVecBase4i(x: x, y: y, z: z, w: w)
+converter initLVecBase4i*(args: tuple[x: int32, y: int32, z: int32, w: int32]): LVecBase4i = LVecBase4i(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4i*(point: LPoint3i): LVecBase4i = LVecBase4i(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4i*(vector: LVector3i): LVecBase4i = LVecBase4i(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+func xx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func xzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func yzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func zxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func zyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
+func zzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func xzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.w)
+func xwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func yzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.w)
+func ywx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func zxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func zyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
+func zzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.w)
+func zwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.x)
+func wxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.y)
+func wyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.z)
+func wzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.w)
+func wwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.w)
+
+func xx*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func xzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func yzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func zxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func zyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
+func zzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func xzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.w)
+func xwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func yzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.w)
+func ywx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func zxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func zyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
+func zzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.w)
+func zwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.x)
+func wxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.y)
+func wyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.z)
+func wzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.w)
+func wwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.w)
+
+func xx*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func xzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func yzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func zxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func zyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
+func zzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func xzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.w)
+func xwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func yzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.w)
+func ywx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func zxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func zyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
+func zzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.w)
+func zwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.x)
+func wxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.y)
+func wyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.z)
+func wzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.w)
+func wwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.w)

@@ -1,4 +1,6 @@
 
+import std/time_t
+
 when defined(pandaDir):
   const pandaDir {.strdefine.}: string = ""
   when len(pandaDir) < 1:
@@ -8470,14 +8472,14 @@ proc `fullpath=`*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-func timestamp*(this: ModelRoot): int {.importcpp: "#->get_timestamp()".} ## \
+func timestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc `timestamp=`*(this: ModelRoot, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc `timestamp=`*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
@@ -13149,12 +13151,12 @@ func cacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cache_f
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-func sourceTimestamp*(this: BamCacheRecord): int {.importcpp: "#->get_source_timestamp()".} ## \
+func sourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-func recordedTime*(this: BamCacheRecord): int {.importcpp: "#->get_recorded_time()".} ## \
+func recordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 func data*(this: BamCacheRecord): TypedWritable {.importcpp: "#->get_data()".} ## \
@@ -14119,7 +14121,7 @@ proc substr*(this: Filename, begin: clonglong): string {.importcpp: "nimStringFr
 
 proc substr*(this: Filename, begin: clonglong, `end`: clonglong): string {.importcpp: "nimStringFromStdString(#.substr(#, #))", header: stringConversionCode.}
 
-proc `+=`*(this: Filename, other: string): Filename {.importcpp: "#.operator +=(nimStringToStdString(#))", header: stringConversionCode.}
+proc `+=`*(this: var Filename, other: string): Filename {.importcpp: "#.operator +=(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `+`*(this: Filename, other: string): Filename {.importcpp: "#.operator +(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -14393,7 +14395,7 @@ proc compareTimestamps*(this: Filename, other: Filename): int {.importcpp: "#.co
 ## will be treated as if it were newer than any other file.  Similarly for
 ## other_missing_is_old.
 
-proc getTimestamp*(this: Filename): int {.importcpp: "#.get_timestamp()".} ## \
+proc getTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -14403,7 +14405,7 @@ proc getTimestamp*(this: Filename): int {.importcpp: "#.get_timestamp()".} ## \
 ## by the operating system or because there is some error (such as file not
 ## found), returns 0.
 
-proc getAccessTimestamp*(this: Filename): int {.importcpp: "#.get_access_timestamp()".} ## \
+proc getAccessTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_access_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last accessed,
 ## if this information is available.  See also get_timestamp(), which returns
 ## the last modification time.
@@ -14782,11 +14784,11 @@ proc initDSearchPath*(): DSearchPath {.importcpp: "DSearchPath()".}
 
 proc initDSearchPath*(copy: DSearchPath): DSearchPath {.importcpp: "DSearchPath(#)".}
 
-proc initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
+converter initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
 
 proc initDSearchPath*(path: string, separator: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
+converter initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc clear*(this: DSearchPath) {.importcpp: "#.clear()".} ## \
 ## Removes all the directories from the search list.
@@ -14904,7 +14906,7 @@ proc initExecutionEnvironment*(param0: ExecutionEnvironment): ExecutionEnvironme
 
 proc initGlobPattern*(copy: GlobPattern): GlobPattern {.importcpp: "GlobPattern(#)".}
 
-proc initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
+converter initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initGlobPattern*(): GlobPattern {.importcpp: "GlobPattern()".}
 
@@ -16465,7 +16467,7 @@ proc initURLSpec*(url: URLSpec, path: Filename): URLSpec {.importcpp: "URLSpec(#
 
 proc initURLSpec*(url: string, server_name_expected: bool): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
+converter initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `==`*(this: URLSpec, other: URLSpec): bool {.importcpp: "#.operator ==(#)".}
 
@@ -16664,11 +16666,11 @@ proc initHTTPDate*(): HTTPDate {.importcpp: "HTTPDate()".}
 
 proc initHTTPDate*(copy: HTTPDate): HTTPDate {.importcpp: "HTTPDate(#)".}
 
-proc initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Decodes the string into a sensible date.  Returns 0 (!is_valid()) if the
 ## string cannot be correctly decoded.
 
-proc initHTTPDate*(time: int): HTTPDate {.importcpp: "HTTPDate(#)".}
+converter initHTTPDate*(time: time_t.Time): HTTPDate {.importcpp: "HTTPDate(#)".}
 
 proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "httpDate.h".} ## \
 ## Returns an HTTPDate that represents the current time and date.
@@ -16679,7 +16681,7 @@ proc isValid*(this: HTTPDate): bool {.importcpp: "#.is_valid()".} ## \
 
 proc getString*(this: HTTPDate): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
 
-proc getTime*(this: HTTPDate): int {.importcpp: "#.get_time()".} ## \
+proc getTime*(this: HTTPDate): time_t.Time {.importcpp: "#.get_time()".} ## \
 ## Returns the date as a C time_t value.
 
 proc `==`*(this: HTTPDate, other: HTTPDate): bool {.importcpp: "#.operator ==(#)".}
@@ -16694,9 +16696,9 @@ proc compareTo*(this: HTTPDate, other: HTTPDate): int {.importcpp: "#.compare_to
 ## Returns a number less than zero if this HTTPDate sorts before the other
 ## one, greater than zero if it sorts after, or zero if they are equivalent.
 
-proc `+=`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator -=(#)".}
 
 proc `+`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +(#)".}
 
@@ -17065,7 +17067,7 @@ proc initHTTPEntityTag*(weak: bool, tag: string): HTTPEntityTag {.importcpp: "HT
 ## This constructor accepts an explicit weak flag and a literal (not quoted)
 ## tag string.
 
-proc initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## This constructor accepts a string as formatted from an HTTP server (e.g.
 ## the tag is quoted, with an optional W/ prefix.)
 
@@ -17107,9 +17109,9 @@ proc initDocumentSpec*(): DocumentSpec {.importcpp: "DocumentSpec()".}
 
 proc initDocumentSpec*(copy: DocumentSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-proc initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
+converter initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-proc initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
+converter initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `==`*(this: DocumentSpec, other: DocumentSpec): bool {.importcpp: "#.operator ==(#)".}
 
@@ -18414,7 +18416,7 @@ proc getFilename*(this: DatagramGenerator): Filename {.importcpp: "#->get_filena
 ## Returns the filename that provides the source for these datagrams, if any,
 ## or empty string if the datagrams do not originate from a file on disk.
 
-proc getTimestamp*(this: DatagramGenerator): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: DatagramGenerator): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the on-disk timestamp of the file that was read, at the time it was
 ## opened, if that is available, or 0 if it is not.
 
@@ -18438,7 +18440,7 @@ proc initDatagramIterator*(): DatagramIterator {.importcpp: "DatagramIterator()"
 
 proc initDatagramIterator*(datagram: Datagram, offset: clonglong): DatagramIterator {.importcpp: "DatagramIterator(#, #)".}
 
-proc initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
+converter initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
 proc initDatagramIterator*(param0: DatagramIterator): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
@@ -18959,13 +18961,13 @@ proc needsRepack*(this: Multifile): bool {.importcpp: "#->needs_repack()".} ## \
 ## Returns true if the Multifile index is suboptimal and should be repacked.
 ## Call repack() to achieve this.
 
-proc getTimestamp*(this: Multifile): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: Multifile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the modification timestamp of the overall Multifile.  This
 ## indicates the most recent date at which subfiles were added or removed from
 ## the Multifile.  Note that it is logically possible for an individual
 ## subfile to have a more recent timestamp than the overall timestamp.
 
-proc setTimestamp*(this: Multifile, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: Multifile, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Changes the overall mudification timestamp of the multifile.  Note that this
 ## will be reset to the current time every time you modify a subfile.
 ## Only set this if you know what you are doing!
@@ -19317,7 +19319,7 @@ proc getSubfileLength*(this: Multifile, index: int): clonglong {.importcpp: "#->
 ## 0 if the subfile has recently been added and flush() has not yet been
 ## called.
 
-proc getSubfileTimestamp*(this: Multifile, index: int): int {.importcpp: "#->get_subfile_timestamp(#)".} ## \
+proc getSubfileTimestamp*(this: Multifile, index: int): time_t.Time {.importcpp: "#->get_subfile_timestamp(#)".} ## \
 ## Returns the modification time of the nth subfile.  If this is called on an
 ## older .mf file, which did not store individual timestamps in the file (or
 ## if get_record_timestamp() is false), this will return the modification time
@@ -19666,7 +19668,7 @@ proc getFileSize*(this: VirtualFile, stream: istream): clonglong {.importcpp: "#
 ## file.  Pass in the stream that was returned by open_read_file(); some
 ## implementations may require this stream to determine the size.
 
-proc getTimestamp*(this: VirtualFile): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: VirtualFile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -19775,7 +19777,7 @@ proc `[]`*(this: VirtualFileList, n: clonglong): VirtualFile {.importcpp: "#->op
 proc size*(this: VirtualFileList): clonglong {.importcpp: "#->size()".} ## \
 ## Returns the number of files in the list.
 
-proc `+=`*(this: VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +=(#)".}
+proc `+=`*(this: var VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +=(#)".}
 
 proc `+`*(this: VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +(#)".}
 
@@ -20275,7 +20277,7 @@ proc beginPlayback*(this: RecorderController, filename: Filename): bool {.import
 proc close*(this: RecorderController) {.importcpp: "#->close()".} ## \
 ## Finishes recording data to the indicated filename.
 
-proc getStartTime*(this: RecorderController): int {.importcpp: "#->get_start_time()".} ## \
+proc getStartTime*(this: RecorderController): time_t.Time {.importcpp: "#->get_start_time()".} ## \
 ## Returns the time (and date) at which the current session was originally
 ## recorded (or, in recording mode, the time at which the current session
 ## began).
@@ -23364,7 +23366,7 @@ proc size*(this: InternalNameCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of names in the collection.  This is the same thing as
 ## get_num_names().
 
-proc `+=`*(this: InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +(#)".}
 
@@ -23430,7 +23432,7 @@ proc size*(this: MaterialCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of materials in the collection.  This is the same thing
 ## as get_num_materials().
 
-proc `+=`*(this: MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +(#)".}
 
@@ -23497,7 +23499,7 @@ proc size*(this: TextureStageCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of texture stages in the collection.  This is the same
 ## thing as get_num_texture_stages().
 
-proc `+=`*(this: TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +(#)".}
 
@@ -23800,7 +23802,7 @@ proc size*(this: NodePathCollection): clonglong {.importcpp: "#.size()".} ## \
 ## Returns the number of paths in the collection.  This is the same thing as
 ## get_num_paths().
 
-proc `+=`*(this: NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +(#)".}
 
@@ -27365,7 +27367,7 @@ proc hideFrustum*(this: LensNode) {.importcpp: "#->hide_frustum()".} ## \
 
 converter getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
 
-proc initWeakNodePath*(node_path: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
+converter initWeakNodePath*(node_path: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
 proc initWeakNodePath*(copy: WeakNodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
@@ -29125,7 +29127,7 @@ proc setTransformLimit*(this: ModelNode, limit: float32) {.importcpp: "#->set_tr
 
 converter getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
 
-proc newModelRoot*(fullpath: Filename, timestamp: int): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
+proc newModelRoot*(fullpath: Filename, timestamp: time_t.Time): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
 
 proc newModelRoot*(name: string): ModelRoot {.importcpp: "new ModelRoot(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -29150,14 +29152,14 @@ proc setFullpath*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-proc getTimestamp*(this: ModelRoot): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc setTimestamp*(this: ModelRoot, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
@@ -33071,7 +33073,7 @@ proc initPStatThread*(thread: Thread, client: PStatClient): PStatThread {.import
 ## Creates a new named thread.  This will be used to unify tasks that share a
 ## common thread, and differentiate tasks that occur in different threads.
 
-proc initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".} ## \
+converter initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".} ## \
 ## Creates a new named thread.  This will be used to unify tasks that share a
 ## common thread, and differentiate tasks that occur in different threads.
 
@@ -35938,7 +35940,7 @@ proc getThreadingModel*(this: GraphicsEngine): GraphicsThreadingModel {.importcp
 
 proc initGraphicsThreadingModel*(copy: GraphicsThreadingModel): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(#)".}
 
-proc initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## The threading model accepts a string representing the names of the two
 ## threads that will process cull and draw for the given window, separated by
 ## a slash.  The names are completely arbitrary and are used only to
@@ -38375,7 +38377,7 @@ proc initEventParameter*(): EventParameter {.importcpp: "EventParameter()".}
 
 proc initEventParameter*(copy: EventParameter): EventParameter {.importcpp: "EventParameter(#)".}
 
-proc initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a pointer to a TypedReferenceCount
 ## object.  Note that a TypedReferenceCount is not the same kind of pointer as
 ## a TypedWritableReferenceCount, hence we require both constructors.
@@ -38385,7 +38387,7 @@ proc initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp
 ## const and non-const pointers to be stored, but it does lose the constness.
 ## Be careful.
 
-proc initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a pointer to any kind of
 ## TypedWritableReferenceCount object.  This is the most general constructor.
 ##
@@ -38394,15 +38396,15 @@ proc initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.i
 ## const and non-const pointers to be stored, but it does lose the constness.
 ## Be careful.
 
-proc initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a floating-point value.
 
-proc initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores an integer value.
 
-proc initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
+converter initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
 
-proc initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Defines an EventParameter that stores a string value.
 
 proc isEmpty*(this: EventParameter): bool {.importcpp: "#.is_empty()".} ## \
@@ -38814,7 +38816,7 @@ proc size*(this: AsyncTaskCollection): clonglong {.importcpp: "#.size()".} ## \
 ## Returns the number of tasks in the collection.  This is the same thing as
 ## get_num_tasks().
 
-proc `+=`*(this: AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +(#)".}
 
@@ -42403,7 +42405,7 @@ proc initGeomVertexReader*(array_data: GeomVertexArrayData, current_thread: Thre
 ## Constructs a new reader to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexReader*(array_data: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(array_data: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs a new reader to process the vertices of the indicated array
 ## only.
 
@@ -42429,13 +42431,13 @@ proc initGeomVertexReader*(vertex_data: GeomVertexData, current_thread: Thread):
 ## Constructs a new reader to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexReader*(vertex_data: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(vertex_data: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs a new reader to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexReader*(copy: GeomVertexReader): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
-proc initGeomVertexReader*(current_thread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(current_thread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs an invalid GeomVertexReader.  You must use the assignment
 ## operator to assign a valid GeomVertexReader to this object before you can
 ## use it.
@@ -42650,7 +42652,7 @@ proc initGeomVertexWriter*(array_data: GeomVertexArrayData, current_thread: Thre
 ## Constructs a new writer to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexWriter*(array_data: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(array_data: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs a new writer to process the vertices of the indicated array
 ## only.
 
@@ -42676,13 +42678,13 @@ proc initGeomVertexWriter*(vertex_data: GeomVertexData, current_thread: Thread):
 ## Constructs a new writer to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexWriter*(vertex_data: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(vertex_data: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs a new writer to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexWriter*(copy: GeomVertexWriter): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
-proc initGeomVertexWriter*(current_thread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(current_thread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs an invalid GeomVertexWriter.  You must use the assignment
 ## operator to assign a valid GeomVertexWriter to this object before you can
 ## use it.
@@ -43240,7 +43242,7 @@ proc initGeomVertexRewriter*(array_data: GeomVertexArrayData, current_thread: Th
 ## Constructs a new rewriter to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexRewriter*(array_data: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(array_data: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs a new rewriter to process the vertices of the indicated array
 ## only.
 
@@ -43266,13 +43268,13 @@ proc initGeomVertexRewriter*(vertex_data: GeomVertexData, current_thread: Thread
 ## Constructs a new rewriter to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexRewriter*(vertex_data: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(vertex_data: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs a new rewriter to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexRewriter*(copy: GeomVertexRewriter): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
-proc initGeomVertexRewriter*(current_thread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(current_thread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs an invalid GeomVertexRewriter.  You must use the assignment
 ## operator to assign a valid GeomVertexRewriter to this object before you can
 ## use it.
@@ -46399,7 +46401,7 @@ proc size*(this: TextureCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of textures in the collection.  This is the same thing
 ## as get_num_textures().
 
-proc `+=`*(this: TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +(#)".}
 
@@ -47005,13 +47007,13 @@ proc `*`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2f, other: LVecBase2f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47165,13 +47167,13 @@ proc `*`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2d, other: LVecBase2d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47299,13 +47301,13 @@ proc `*`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2i, other: LVecBase2i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47346,7 +47348,7 @@ converter getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecB
 
 proc initLVector2f*(): LVector2f {.importcpp: "LVector2f()".}
 
-proc initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f(#)".} ## \
+converter initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2f*(param0: LVector2f): LVector2f {.importcpp: "LVector2f(#)".}
@@ -47399,7 +47401,7 @@ converter getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVecto
 
 proc initLVector2d*(): LVector2d {.importcpp: "LVector2d()".}
 
-proc initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d(#)".} ## \
+converter initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2d*(param0: LVector2d): LVector2d {.importcpp: "LVector2d(#)".}
@@ -47452,7 +47454,7 @@ converter getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVecto
 
 proc initLVector2i*(): LVector2i {.importcpp: "LVector2i()".}
 
-proc initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i(#)".} ## \
+converter initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2i*(param0: LVector2i): LVector2i {.importcpp: "LVector2i(#)".}
@@ -47491,7 +47493,7 @@ proc initLPoint2f*(): LPoint2f {.importcpp: "LPoint2f()".}
 
 proc initLPoint2f*(param0: LPoint2f): LPoint2f {.importcpp: "LPoint2f(#)".}
 
-proc initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
+converter initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2f*(fill_value: float32): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
@@ -47539,7 +47541,7 @@ proc initLPoint2d*(): LPoint2d {.importcpp: "LPoint2d()".}
 
 proc initLPoint2d*(param0: LPoint2d): LPoint2d {.importcpp: "LPoint2d(#)".}
 
-proc initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
+converter initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2d*(fill_value: float64): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
@@ -47587,7 +47589,7 @@ proc initLPoint2i*(): LPoint2i {.importcpp: "LPoint2i()".}
 
 proc initLPoint2i*(param0: LPoint2i): LPoint2i {.importcpp: "LPoint2i(#)".}
 
-proc initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
+converter initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2i*(fill_value: int): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
@@ -47775,13 +47777,13 @@ proc `*`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47974,13 +47976,13 @@ proc `*`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48135,13 +48137,13 @@ proc `*`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48196,7 +48198,7 @@ proc initLVector3f*(): LVector3f {.importcpp: "LVector3f()".}
 
 proc initLVector3f*(copy: LVecBase2f, z: float32): LVector3f {.importcpp: "LVector3f(#, #)".}
 
-proc initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f(#)".}
+converter initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f(#)".}
 
 proc initLVector3f*(param0: LVector3f): LVector3f {.importcpp: "LVector3f(#)".}
 
@@ -48330,7 +48332,7 @@ proc initLVector3d*(): LVector3d {.importcpp: "LVector3d()".}
 
 proc initLVector3d*(copy: LVecBase2d, z: float64): LVector3d {.importcpp: "LVector3d(#, #)".}
 
-proc initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d(#)".}
+converter initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d(#)".}
 
 proc initLVector3d*(param0: LVector3d): LVector3d {.importcpp: "LVector3d(#)".}
 
@@ -48464,7 +48466,7 @@ proc initLVector3i*(): LVector3i {.importcpp: "LVector3i()".}
 
 proc initLVector3i*(copy: LVecBase2i, z: int): LVector3i {.importcpp: "LVector3i(#, #)".}
 
-proc initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i(#)".}
+converter initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i(#)".}
 
 proc initLVector3i*(param0: LVector3i): LVector3i {.importcpp: "LVector3i(#)".}
 
@@ -48564,7 +48566,7 @@ proc initLPoint3f*(param0: LPoint3f): LPoint3f {.importcpp: "LPoint3f(#)".}
 
 proc initLPoint3f*(copy: LVecBase2f, z: float32): LPoint3f {.importcpp: "LPoint3f(#, #)".}
 
-proc initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f(#)".}
+converter initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f(#)".}
 
 proc initLPoint3f*(fill_value: float32): LPoint3f {.importcpp: "LPoint3f(#)".}
 
@@ -48646,7 +48648,7 @@ proc initLPoint3d*(param0: LPoint3d): LPoint3d {.importcpp: "LPoint3d(#)".}
 
 proc initLPoint3d*(copy: LVecBase2d, z: float64): LPoint3d {.importcpp: "LPoint3d(#, #)".}
 
-proc initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d(#)".}
+converter initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d(#)".}
 
 proc initLPoint3d*(fill_value: float64): LPoint3d {.importcpp: "LPoint3d(#)".}
 
@@ -48728,7 +48730,7 @@ proc initLPoint3i*(param0: LPoint3i): LPoint3i {.importcpp: "LPoint3i(#)".}
 
 proc initLPoint3i*(copy: LVecBase2i, z: int): LPoint3i {.importcpp: "LPoint3i(#, #)".}
 
-proc initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i(#)".}
+converter initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i(#)".}
 
 proc initLPoint3i*(fill_value: int): LPoint3i {.importcpp: "LPoint3i(#)".}
 
@@ -48798,17 +48800,17 @@ converter getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3
 
 proc initLVecBase4f*(): LVecBase4f {.importcpp: "LVecBase4f()".}
 
-proc initLVecBase4f*(point: LPoint3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
+converter initLVecBase4f*(point: LPoint3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
 ## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
 
 proc initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f {.importcpp: "LVecBase4f(#, #)".}
 
 proc initLVecBase4f*(param0: LVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
 
-proc initLVecBase4f*(vector: LVector3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
+converter initLVecBase4f*(vector: LVector3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
 ## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
 
-proc initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
+converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
 
 proc initLVecBase4f*(fill_value: float32): LVecBase4f {.importcpp: "LVecBase4f(#)".}
 
@@ -48945,13 +48947,13 @@ proc `*`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4f, other: LVecBase4f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48992,7 +48994,7 @@ converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecB
 
 proc initUnalignedLVecBase4f*(): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f()".}
 
-proc initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
+converter initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
 
 proc initUnalignedLVecBase4f*(param0: UnalignedLVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
 
@@ -49024,17 +49026,17 @@ converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcp
 
 proc initLVecBase4d*(): LVecBase4d {.importcpp: "LVecBase4d()".}
 
-proc initLVecBase4d*(point: LPoint3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
+converter initLVecBase4d*(point: LPoint3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
 ## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
 
 proc initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d {.importcpp: "LVecBase4d(#, #)".}
 
 proc initLVecBase4d*(param0: LVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
 
-proc initLVecBase4d*(vector: LVector3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
+converter initLVecBase4d*(vector: LVector3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
 ## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
 
-proc initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
+converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
 
 proc initLVecBase4d*(fill_value: float64): LVecBase4d {.importcpp: "LVecBase4d(#)".}
 
@@ -49171,13 +49173,13 @@ proc `*`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4d, other: LVecBase4d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -49218,7 +49220,7 @@ converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecB
 
 proc initUnalignedLVecBase4d*(): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d()".}
 
-proc initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
+converter initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
 
 proc initUnalignedLVecBase4d*(param0: UnalignedLVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
 
@@ -49250,17 +49252,17 @@ converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcp
 
 proc initLVecBase4i*(): LVecBase4i {.importcpp: "LVecBase4i()".}
 
-proc initLVecBase4i*(point: LPoint3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
+converter initLVecBase4i*(point: LPoint3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
 ## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
 
 proc initLVecBase4i*(copy: LVecBase3i, w: int): LVecBase4i {.importcpp: "LVecBase4i(#, #)".}
 
 proc initLVecBase4i*(param0: LVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
 
-proc initLVecBase4i*(vector: LVector3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
+converter initLVecBase4i*(vector: LVector3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
 ## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
 
-proc initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
+converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
 
 proc initLVecBase4i*(fill_value: int): LVecBase4i {.importcpp: "LVecBase4i(#)".}
 
@@ -49371,13 +49373,13 @@ proc `*`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4i, other: LVecBase4i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -49418,7 +49420,7 @@ converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecB
 
 proc initUnalignedLVecBase4i*(): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i()".}
 
-proc initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
+converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
 
 proc initUnalignedLVecBase4i*(param0: UnalignedLVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
 
@@ -49452,7 +49454,7 @@ proc initLVector4f*(): LVector4f {.importcpp: "LVector4f()".}
 
 proc initLVector4f*(copy: LVecBase3f, w: float32): LVector4f {.importcpp: "LVector4f(#, #)".}
 
-proc initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f(#)".}
+converter initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f(#)".}
 
 proc initLVector4f*(param0: LVector4f): LVector4f {.importcpp: "LVector4f(#)".}
 
@@ -49509,7 +49511,7 @@ proc initLVector4d*(): LVector4d {.importcpp: "LVector4d()".}
 
 proc initLVector4d*(copy: LVecBase3d, w: float64): LVector4d {.importcpp: "LVector4d(#, #)".}
 
-proc initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d(#)".}
+converter initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d(#)".}
 
 proc initLVector4d*(param0: LVector4d): LVector4d {.importcpp: "LVector4d(#)".}
 
@@ -49566,7 +49568,7 @@ proc initLVector4i*(): LVector4i {.importcpp: "LVector4i()".}
 
 proc initLVector4i*(copy: LVecBase3i, w: int): LVector4i {.importcpp: "LVector4i(#, #)".}
 
-proc initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i(#)".}
+converter initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i(#)".}
 
 proc initLVector4i*(param0: LVector4i): LVector4i {.importcpp: "LVector4i(#)".}
 
@@ -49617,7 +49619,7 @@ proc initLPoint4f*(param0: LPoint4f): LPoint4f {.importcpp: "LPoint4f(#)".}
 
 proc initLPoint4f*(copy: LVecBase3f, w: float32): LPoint4f {.importcpp: "LPoint4f(#, #)".}
 
-proc initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f(#)".}
+converter initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f(#)".}
 
 proc initLPoint4f*(fill_value: float32): LPoint4f {.importcpp: "LPoint4f(#)".}
 
@@ -49676,7 +49678,7 @@ proc initLPoint4d*(param0: LPoint4d): LPoint4d {.importcpp: "LPoint4d(#)".}
 
 proc initLPoint4d*(copy: LVecBase3d, w: float64): LPoint4d {.importcpp: "LPoint4d(#, #)".}
 
-proc initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d(#)".}
+converter initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d(#)".}
 
 proc initLPoint4d*(fill_value: float64): LPoint4d {.importcpp: "LPoint4d(#)".}
 
@@ -49735,7 +49737,7 @@ proc initLPoint4i*(param0: LPoint4i): LPoint4i {.importcpp: "LPoint4i(#)".}
 
 proc initLPoint4i*(copy: LVecBase3i, w: int): LPoint4i {.importcpp: "LPoint4i(#, #)".}
 
-proc initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i(#)".}
+converter initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i(#)".}
 
 proc initLPoint4i*(fill_value: int): LPoint4i {.importcpp: "LPoint4i(#)".}
 
@@ -49928,18 +49930,18 @@ proc `*`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator *=(#)".} ## \
+proc `*=`*(this: var LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator *=(#)".} ## \
 ## Performs a memberwise scale.
 
-proc `/=`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /=(#)".} ## \
+proc `/=`*(this: var LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /=(#)".} ## \
 ## Performs a memberwise scale.
 
 proc componentwiseMult*(this: LMatrix3f, other: LMatrix3f) {.importcpp: "#.componentwise_mult(#)".}
@@ -50158,7 +50160,7 @@ proc invert*(a: LQuaternionf): LQuaternionf {.importcpp: "invert(#)".}
 
 proc initLMatrix4f*(): LMatrix4f {.importcpp: "LMatrix4f()".}
 
-proc initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".} ## \
+converter initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".} ## \
 ## Construct a 4x4 matrix given a 3x3 rotation matrix and an optional
 ## translation component.
 
@@ -50169,7 +50171,7 @@ proc initLMatrix4f*(other: LMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 proc initLMatrix4f*(param0: LVecBase4f, param1: LVecBase4f, param2: LVecBase4f, param3: LVecBase4f): LMatrix4f {.importcpp: "LMatrix4f(#, #, #, #)".} ## \
 ## Constructs the matrix from four individual rows.
 
-proc initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
+converter initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 
 proc initLMatrix4f*(param0: float32, param1: float32, param2: float32, param3: float32, param4: float32, param5: float32, param6: float32, param7: float32, param8: float32, param9: float32, param10: float32, param11: float32, param12: float32, param13: float32, param14: float32, param15: float32): LMatrix4f {.importcpp: "LMatrix4f(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -50325,17 +50327,17 @@ proc `*`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LMatrix4f, other: LMatrix4f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -50529,7 +50531,7 @@ converter getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatri
 
 proc initUnalignedLMatrix4f*(): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f()".}
 
-proc initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
+converter initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
 proc initUnalignedLMatrix4f*(copy: UnalignedLMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
@@ -50698,18 +50700,18 @@ proc `*`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator *=(#)".} ## \
+proc `*=`*(this: var LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator *=(#)".} ## \
 ## Performs a memberwise scale.
 
-proc `/=`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /=(#)".} ## \
+proc `/=`*(this: var LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /=(#)".} ## \
 ## Performs a memberwise scale.
 
 proc componentwiseMult*(this: LMatrix3d, other: LMatrix3d) {.importcpp: "#.componentwise_mult(#)".}
@@ -50908,7 +50910,7 @@ converter getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatri
 
 proc initLMatrix4d*(): LMatrix4d {.importcpp: "LMatrix4d()".}
 
-proc initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".} ## \
+converter initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".} ## \
 ## Construct a 4x4 matrix given a 3x3 rotation matrix and an optional
 ## translation component.
 
@@ -50919,7 +50921,7 @@ proc initLMatrix4d*(other: LMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 proc initLMatrix4d*(param0: LVecBase4d, param1: LVecBase4d, param2: LVecBase4d, param3: LVecBase4d): LMatrix4d {.importcpp: "LMatrix4d(#, #, #, #)".} ## \
 ## Constructs the matrix from four individual rows.
 
-proc initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
+converter initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 
 proc initLMatrix4d*(param0: float64, param1: float64, param2: float64, param3: float64, param4: float64, param5: float64, param6: float64, param7: float64, param8: float64, param9: float64, param10: float64, param11: float64, param12: float64, param13: float64, param14: float64, param15: float64): LMatrix4d {.importcpp: "LMatrix4d(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -51075,17 +51077,17 @@ proc `*`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LMatrix4d, other: LMatrix4d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -51279,7 +51281,7 @@ converter getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatri
 
 proc initUnalignedLMatrix4d*(): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d()".}
 
-proc initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
+converter initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
 proc initUnalignedLMatrix4d*(copy: UnalignedLMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
@@ -51476,7 +51478,7 @@ proc initLQuaternionf*(): LQuaternionf {.importcpp: "LQuaternionf()".}
 
 proc initLQuaternionf*(param0: LQuaternionf): LQuaternionf {.importcpp: "LQuaternionf(#)".}
 
-proc initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf(#)".}
+converter initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf(#)".}
 
 proc initLQuaternionf*(r: float32, copy: LVecBase3f): LQuaternionf {.importcpp: "LQuaternionf(#, #)".}
 
@@ -51516,7 +51518,7 @@ proc `*`*(this: LQuaternionf, param0: LMatrix4f): LMatrix4f {.importcpp: "#.oper
 
 proc `/`*(this: LQuaternionf, scalar: float32): LQuaternionf {.importcpp: "#.operator /(#)".}
 
-proc `*=`*(this: LQuaternionf, param0: LQuaternionf): LQuaternionf {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LQuaternionf, param0: LQuaternionf): LQuaternionf {.importcpp: "#.operator *=(#)".}
 
 proc almostEqual*(this: LQuaternionf, other: LQuaternionf): bool {.importcpp: "#.almost_equal(#)".} ## \
 ## Returns true if two quaternions are memberwise equal within a default
@@ -51684,7 +51686,7 @@ proc initLQuaterniond*(): LQuaterniond {.importcpp: "LQuaterniond()".}
 
 proc initLQuaterniond*(param0: LQuaterniond): LQuaterniond {.importcpp: "LQuaterniond(#)".}
 
-proc initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond(#)".}
+converter initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond(#)".}
 
 proc initLQuaterniond*(r: float64, copy: LVecBase3d): LQuaterniond {.importcpp: "LQuaterniond(#, #)".}
 
@@ -51724,7 +51726,7 @@ proc `*`*(this: LQuaterniond, param0: LMatrix4d): LMatrix4d {.importcpp: "#.oper
 
 proc `/`*(this: LQuaterniond, scalar: float64): LQuaterniond {.importcpp: "#.operator /(#)".}
 
-proc `*=`*(this: LQuaterniond, param0: LQuaterniond): LQuaterniond {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LQuaterniond, param0: LQuaterniond): LQuaterniond {.importcpp: "#.operator *=(#)".}
 
 proc almostEqual*(this: LQuaterniond, other: LQuaterniond): bool {.importcpp: "#.almost_equal(#)".} ## \
 ## Returns true if two quaternions are memberwise equal within a default
@@ -51890,17 +51892,17 @@ converter getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQu
 
 proc initLRotationf*(): LRotationf {.importcpp: "LRotationf()".}
 
-proc initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".} ## \
+converter initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".} ## \
 ## lmatrix3
 
-proc initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".} ## \
+converter initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".} ## \
 ## lmatrix4
 
-proc initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
+converter initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
 
 proc initLRotationf*(param0: LRotationf): LRotationf {.importcpp: "LRotationf(#)".}
 
-proc initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf(#)".}
+converter initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf(#)".}
 
 proc initLRotationf*(axis: LVector3f, angle: float32): LRotationf {.importcpp: "LRotationf(#, #)".} ## \
 ## axis + angle (in degrees)
@@ -51922,17 +51924,17 @@ converter getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRota
 
 proc initLRotationd*(): LRotationd {.importcpp: "LRotationd()".}
 
-proc initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".} ## \
+converter initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".} ## \
 ## lmatrix3
 
-proc initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".} ## \
+converter initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".} ## \
 ## lmatrix4
 
-proc initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
+converter initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
 
 proc initLRotationd*(param0: LRotationd): LRotationd {.importcpp: "LRotationd(#)".}
 
-proc initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd(#)".}
+converter initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd(#)".}
 
 proc initLRotationd*(axis: LVector3d, angle: float64): LRotationd {.importcpp: "LRotationd(#, #)".} ## \
 ## axis + angle (in degrees)
@@ -51954,15 +51956,15 @@ converter getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRota
 
 proc initLOrientationf*(): LOrientationf {.importcpp: "LOrientationf()".}
 
-proc initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
+converter initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
 ## matrix3
 
-proc initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
+converter initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
 ## matrix4
 
 proc initLOrientationf*(param0: LOrientationf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
-proc initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
+converter initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
 proc initLOrientationf*(point_at: LVector3f, twist: float32): LOrientationf {.importcpp: "LOrientationf(#, #)".} ## \
 ## vector + twist
@@ -51977,15 +51979,15 @@ converter getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LO
 
 proc initLOrientationd*(): LOrientationd {.importcpp: "LOrientationd()".}
 
-proc initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
+converter initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
 ## matrix3
 
-proc initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
+converter initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
 ## matrix4
 
 proc initLOrientationd*(param0: LOrientationd): LOrientationd {.importcpp: "LOrientationd(#)".}
 
-proc initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
+converter initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
 
 proc initLOrientationd*(point_at: LVector3d, twist: float64): LOrientationd {.importcpp: "LOrientationd(#, #)".} ## \
 ## vector + twist
@@ -52211,7 +52213,7 @@ proc initLPlanef*(a: LPoint3f, b: LPoint3f, c: LPoint3f): LPlanef {.importcpp: "
 ## front of the plane (that is, viewed from the end of the normal vector,
 ## looking down).
 
-proc initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef(#)".}
+converter initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef(#)".}
 
 proc initLPlanef*(normal: LVector3f, point: LPoint3f): LPlanef {.importcpp: "LPlanef(#, #)".} ## \
 ## Constructs a plane given a surface normal vector and a point within the
@@ -52224,7 +52226,7 @@ proc `*`*(this: LPlanef, mat: LMatrix3f): LPlanef {.importcpp: "#.operator *(#)"
 
 proc `*`*(this: LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *(#)".}
 
-proc `*=`*(this: LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *=(#)".}
 
 proc xform*(this: LPlanef, mat: LMatrix4f) {.importcpp: "#.xform(#)".} ## \
 ## Transforms the plane by the indicated matrix.
@@ -52294,7 +52296,7 @@ proc initLPlaned*(a: LPoint3d, b: LPoint3d, c: LPoint3d): LPlaned {.importcpp: "
 ## front of the plane (that is, viewed from the end of the normal vector,
 ## looking down).
 
-proc initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned(#)".}
+converter initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned(#)".}
 
 proc initLPlaned*(normal: LVector3d, point: LPoint3d): LPlaned {.importcpp: "LPlaned(#, #)".} ## \
 ## Constructs a plane given a surface normal vector and a point within the
@@ -52307,7 +52309,7 @@ proc `*`*(this: LPlaned, mat: LMatrix3d): LPlaned {.importcpp: "#.operator *(#)"
 
 proc `*`*(this: LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *(#)".}
 
-proc `*=`*(this: LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *=(#)".}
 
 proc xform*(this: LPlaned, mat: LMatrix4d) {.importcpp: "#.xform(#)".} ## \
 ## Transforms the plane by the indicated matrix.
@@ -54152,11 +54154,11 @@ proc `-`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator -(#)".}
 
 proc `*`*(this: pixel, mult: float64): pixel {.importcpp: "#.operator *(#)".}
 
-proc `+=`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var pixel, other: pixel): pixel {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var pixel, other: pixel): pixel {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: pixel, mult: float64): pixel {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var pixel, mult: float64): pixel {.importcpp: "#.operator *=(#)".}
 
 proc `==`*(this: pixel, other: pixel): bool {.importcpp: "#.operator ==(#)".}
 
@@ -54940,7 +54942,7 @@ proc divideSubImage*(this: PfmFile, copy: PfmFile, xto: int, yto: int) {.importc
 ## pixels of the destination, after scaling by the specified pixel_scale.
 ## dest(x, y) = dest(x, y) / (copy(x, y) \* pixel_scale).
 
-proc `*=`*(this: PfmFile, multiplier: float32): PfmFile {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PfmFile, multiplier: float32): PfmFile {.importcpp: "#.operator *=(#)".}
 
 proc indirect1dLookup*(this: PfmFile, index_image: PfmFile, channel: int, pixel_values: PfmFile) {.importcpp: "#.indirect_1d_lookup(#, #, #)".} ## \
 ## index_image is a WxH 1-channel image, while pixel_values is an Nx1
@@ -56065,19 +56067,19 @@ proc `*`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *(
 
 proc `*`*(this: PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *(#)".}
 
-proc `+=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator +=(#)".}
 
-proc `+=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator -=(#)".}
 
-proc `-=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *=(#)".}
 
 proc initPNMPainter*(image: PNMImage, xo: int, yo: int): PNMPainter {.importcpp: "PNMPainter(#, #, #)".} ## \
 ## The constructor stores a pointer to the PNMImage you pass it, but it does
@@ -59039,12 +59041,12 @@ proc getCacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cach
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-proc getSourceTimestamp*(this: BamCacheRecord): int {.importcpp: "#->get_source_timestamp()".} ## \
+proc getSourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-proc getRecordedTime*(this: BamCacheRecord): int {.importcpp: "#->get_recorded_time()".} ## \
+proc getRecordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 proc getNumDependentFiles*(this: BamCacheRecord): int {.importcpp: "#->get_num_dependent_files()".} ## \
@@ -59592,15 +59594,15 @@ proc `<<`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.ope
 
 proc `>>`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>=(#)".}
 
 proc floodDownInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.flood_down_in_place()".}
 
@@ -59732,15 +59734,15 @@ proc `<<`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.ope
 
 proc `>>`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>=(#)".}
 
 proc floodDownInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.flood_down_in_place()".}
 
@@ -59872,15 +59874,15 @@ proc `<<`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.ope
 
 proc `>>`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>=(#)".}
 
 proc floodDownInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.flood_down_in_place()".}
 
@@ -59910,9 +59912,9 @@ proc initBitArray*(): BitArray {.importcpp: "BitArray()".}
 
 proc initBitArray*(param0: BitArray): BitArray {.importcpp: "BitArray(#)".}
 
-proc initBitArray*(init_value: clonglong): BitArray {.importcpp: "BitArray(#)".}
+converter initBitArray*(init_value: clonglong): BitArray {.importcpp: "BitArray(#)".}
 
-proc initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
+converter initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
 
 proc allOn*(_: typedesc[BitArray]): BitArray {.importcpp: "BitArray::all_on()", header: "bitArray.h".} ## \
 ## Returns a BitArray with an infinite array of bits, all on.
@@ -60098,15 +60100,15 @@ proc `<<`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator <<(#)"
 
 proc `>>`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var BitArray, shift: int): BitArray {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var BitArray, shift: int): BitArray {.importcpp: "#.operator >>=(#)".}
 
 converter getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
 
@@ -60122,7 +60124,7 @@ proc initButtonHandle*(index: int): ButtonHandle {.importcpp: "ButtonHandle(#)".
 ## Constructs a ButtonHandle with the corresponding index number, which may
 ## have been returned by an earlier call to ButtonHandle::get_index().
 
-proc initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Constructs a ButtonHandle with the corresponding name, which is looked up
 ## in the ButtonRegistry.  This exists for the purpose of being able to
 ## automatically coerce a string into a ButtonHandle; for most purposes, you
@@ -60849,9 +60851,9 @@ proc `&`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.impo
 
 proc `|`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |(#)".}
 
-proc `&=`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |=(#)".}
 
 proc setButtonList*(this: ModifierButtons, other: ModifierButtons) {.importcpp: "#.set_button_list(#)".} ## \
 ## Sets the list of buttons to watch to be the same as that of the other
@@ -61023,7 +61025,7 @@ converter getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.imp
 
 proc initSparseArray*(): SparseArray {.importcpp: "SparseArray()".}
 
-proc initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
+converter initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
 
 proc initSparseArray*(param0: SparseArray): SparseArray {.importcpp: "SparseArray(#)".}
 
@@ -61178,15 +61180,15 @@ proc `<<`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator 
 
 proc `>>`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var SparseArray, shift: int): SparseArray {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>=(#)".}
 
 proc isInverse*(this: SparseArray): bool {.importcpp: "#.is_inverse()".} ## \
 ## If this is true, the SparseArray is actually defined as a list of subranges
@@ -62757,7 +62759,7 @@ proc initNetAddress*(): NetAddress {.importcpp: "NetAddress()".} ## \
 
 proc initNetAddress*(param0: NetAddress): NetAddress {.importcpp: "NetAddress(#)".}
 
-proc initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".} ## \
+converter initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".} ## \
 ## Constructs an address from a given Socket_Address.  Normally, this
 ## constructor should not be used by user code; instead, create a default
 ## NetAddress and use one of the set_\*() functions to set up an address.
@@ -62969,7 +62971,7 @@ proc shutdown*(this: ConnectionReader) {.importcpp: "#->shutdown()".} ## \
 proc initNetDatagram*(): NetDatagram {.importcpp: "NetDatagram()".} ## \
 ## Constructs an empty datagram.
 
-proc initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
+converter initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
 proc initNetDatagram*(copy: NetDatagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
@@ -63425,7 +63427,7 @@ proc isMcastRange*(this: Socket_Address): bool {.importcpp: "#->is_mcast_range()
 proc initSocketIP*(): Socket_IP {.importcpp: "Socket_IP()".} ## \
 ## Def Constructor
 
-proc initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".} ## \
+converter initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".} ## \
 ## Assigns an existing socket to this class
 
 proc Close*(this: Socket_IP) {.importcpp: "#.Close()".} ## \
@@ -63472,7 +63474,7 @@ converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket
 
 proc initSocketTCP*(): Socket_TCP {.importcpp: "Socket_TCP()".}
 
-proc initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
+converter initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
 
 proc SetNoDelay*(this: Socket_TCP, flag: bool): int {.importcpp: "#.SetNoDelay(#)".} ## \
 ## Disable Nagle algorithm.  Don't delay send to coalesce packets

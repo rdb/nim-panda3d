@@ -151,6 +151,15 @@ proc openDefaultWindow*(this: ShowBase, props: WindowProperties = WindowProperti
   this.openMainWindow()
   return this.win != nil
 
+proc setBackgroundColor*(this: ShowBase, color: LVecBase4) =
+  this.win.setClearColor(color)
+
+proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float) =
+  this.setBackgroundColor(initLVecBase4f(r, g, b, 0.0f))
+
+proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float, a: float) =
+  this.setBackgroundColor(initLVecBase4f(r, g, b, a))
+
 proc setFrameRateMeter*(this: ShowBase, flag: bool) =
   if flag:
     if this.frameRateMeter == nil:

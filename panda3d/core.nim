@@ -1,4 +1,6 @@
 
+import std/time_t
+
 when defined(pandaDir):
   const pandaDir {.strdefine.}: string = ""
   when len(pandaDir) < 1:
@@ -18,6 +20,21 @@ when defined(vcc):
 
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
+
+const deconstifyCode = """
+#include "pointerTo.h"
+
+template<class T> PT(T) deconstify(CPT(T) value) {
+  PT(T) result;
+  result.cheat() = (T *)value.p();
+  value.cheat() = nullptr;
+  return result;
+}
+
+template<class T> T *deconstify(const T *value) {
+  return (T *)value;
+}
+""";
 
 const stringConversionCode = """
 #include <string>
@@ -40,6 +57,151 @@ func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp
 
 func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString"} =
   {.emit: "result = std::string(desc->data, desc->len);"}
+
+const wrappedLVecBase2fCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2f) WrappedLVecBase2f {
+  float x;
+  float y;
+
+  constexpr WrappedLVecBase2f() = default;
+  WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2f &() const { return *(const LVecBase2f *)this; }
+  operator LVecBase2f &() { return *(LVecBase2f *)this; }
+};
+""";
+
+const wrappedLVecBase2dCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2d) WrappedLVecBase2d {
+  double x;
+  double y;
+
+  constexpr WrappedLVecBase2d() = default;
+  WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2d &() const { return *(const LVecBase2d *)this; }
+  operator LVecBase2d &() { return *(LVecBase2d *)this; }
+};
+""";
+
+const wrappedLVecBase2iCode = """
+#include "lvecBase2.h"
+
+struct alignas(LVecBase2i) WrappedLVecBase2i {
+  int x;
+  int y;
+
+  constexpr WrappedLVecBase2i() = default;
+  WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
+  operator const LVecBase2i &() const { return *(const LVecBase2i *)this; }
+  operator LVecBase2i &() { return *(LVecBase2i *)this; }
+};
+""";
+
+const wrappedLVecBase3fCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3f) WrappedLVecBase3f {
+  float x;
+  float y;
+  float z;
+
+  constexpr WrappedLVecBase3f() = default;
+  WrappedLVecBase3f(float v0, float v1, float v2) : x(v0), y(v1), z(v2) { }
+  WrappedLVecBase3f(const LVecBase3f &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3f &() const { return *(const LVecBase3f *)this; }
+  operator LVecBase3f &() { return *(LVecBase3f *)this; }
+};
+""";
+
+const wrappedLVecBase3dCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3d) WrappedLVecBase3d {
+  double x;
+  double y;
+  double z;
+
+  constexpr WrappedLVecBase3d() = default;
+  WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3d &() const { return *(const LVecBase3d *)this; }
+  operator LVecBase3d &() { return *(LVecBase3d *)this; }
+};
+""";
+
+const wrappedLVecBase3iCode = """
+#include "lvecBase3.h"
+
+struct alignas(LVecBase3i) WrappedLVecBase3i {
+  int x;
+  int y;
+  int z;
+
+  constexpr WrappedLVecBase3i() = default;
+  WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const LVecBase3i &() const { return *(const LVecBase3i *)this; }
+  operator LVecBase3i &() { return *(LVecBase3i *)this; }
+};
+""";
+
+const wrappedLVecBase4fCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4f) WrappedLVecBase4f {
+  float x;
+  float y;
+  float z;
+  float w;
+
+  constexpr WrappedLVecBase4f() = default;
+  WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4f(const UnalignedLVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4f &() const { return *(const LVecBase4f *)this; }
+  operator const UnalignedLVecBase4f &() const { return *(const UnalignedLVecBase4f *)this; }
+  operator LVecBase4f &() { return *(LVecBase4f *)this; }
+  operator UnalignedLVecBase4f &() { return *(UnalignedLVecBase4f *)this; }
+};
+"""
+
+const wrappedLVecBase4dCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4d) WrappedLVecBase4d {
+  double x;
+  double y;
+  double z;
+  double w;
+
+  constexpr WrappedLVecBase4d() = default;
+  WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4d(const UnalignedLVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4d &() const { return *(const LVecBase4d *)this; }
+  operator const UnalignedLVecBase4d &() const { return *(const UnalignedLVecBase4d *)this; }
+  operator LVecBase4d &() { return *(LVecBase4d *)this; }
+  operator UnalignedLVecBase4d &() { return *(UnalignedLVecBase4d *)this; }
+};
+""";
+
+const wrappedLVecBase4iCode = """
+#include "lvecBase4.h"
+
+struct alignas(LVecBase4i) WrappedLVecBase4i {
+  int x;
+  int y;
+  int z;
+  int w;
+
+  constexpr WrappedLVecBase4i() = default;
+  WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  WrappedLVecBase4i(const UnalignedLVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const LVecBase4i &() const { return *(const LVecBase4i *)this; }
+  operator const UnalignedLVecBase4i &() const { return *(const UnalignedLVecBase4i *)this; }
+  operator LVecBase4i &() { return *(LVecBase4i *)this; }
+  operator UnalignedLVecBase4i &() { return *(UnalignedLVecBase4i *)this; }
+};
+""";
 
 type NeverFreeMemory* {.importcpp: "NeverFreeMemory", pure, inheritable, header: "neverFreeMemory.h".} = object
   ## This class is used to allocate bytes of memory from a pool that is never
@@ -813,9 +975,13 @@ converter toBool*(this: Multifile): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Multifile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Multifile], obj: TypedObject): Multifile {.importcpp: "DCAST(Multifile, @)".}
 
-type Namable* {.importcpp: "Namable", pure, inheritable, header: "namable.h".} = object
+type Namable* {.importcpp: "Namable*", bycopy, pure, inheritable, header: "namable.h".} = object
   ## A base class for all things which can have a name.  The name is either
   ## empty or nonempty, but it is never NULL.
+
+converter toNamable*(_: type(nil)): Namable {.importcpp: "(nullptr)".}
+converter toBool*(this: Namable): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: Namable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type OpenSSLWrapper* {.importcpp: "OpenSSLWrapper", pure, inheritable, header: "openSSLWrapper.h".} = object
   ## Provides an interface wrapper around the OpenSSL library, to ensure that
@@ -988,10 +1154,14 @@ converter toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
 converter toBool*(this: RecorderBase): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RecorderBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type TypedWritable* {.importcpp: "TypedWritable", pure, inheritable, header: "typedWritable.h".} = object of TypedObject
+type TypedWritable* {.importcpp: "TypedWritable*", bycopy, pure, inheritable, header: "typedWritable.h".} = object of TypedObject
   ## Base class for objects that can be written to and read from Bam files.
   ##
   ## See also TypedObject for detailed instructions.
+
+converter toTypedWritable*(_: type(nil)): TypedWritable {.importcpp: "(nullptr)".}
+converter toBool*(this: TypedWritable): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: TypedWritable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TypedWritableReferenceCount* {.importcpp: "PT(TypedWritableReferenceCount)", bycopy, pure, inheritable, header: "typedWritableReferenceCount.h".} = object of TypedWritable
   ## A base class for things which need to inherit from both TypedWritable and
@@ -1074,7 +1244,7 @@ converter toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
 converter toBool*(this: Light): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Light, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of Light
+type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of PandaNode
   ## A derivative of Light and of PandaNode.  All kinds of Light except
   ## Spotlight (which must inherit from LensNode instead) inherit from this
   ## class.
@@ -1135,7 +1305,7 @@ converter toBool*(this: Camera): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Camera, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Camera], obj: TypedObject): Camera {.importcpp: "DCAST(Camera, @)".}
 
-type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of PandaNode
+type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of Camera
   ## A derivative of Light and of Camera.  The name might be misleading: it does
   ## not directly derive from LensNode, but through the Camera class.  The
   ## Camera serves no purpose unless shadows are enabled.
@@ -1164,7 +1334,7 @@ converter toBool*(this: LODNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: LODNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LODNode], obj: TypedObject): LODNode {.importcpp: "DCAST(LODNode, @)".}
 
-type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLODNode.h".} = object of LODNode
+type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLodNode.h".} = object of LODNode
   ## A Level-of-Detail node with alpha based switching.
 
 converter toFadeLODNode*(_: type(nil)): FadeLODNode {.importcpp: "(nullptr)".}
@@ -4158,8 +4328,12 @@ converter toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullp
 converter toBool*(this: SimpleAllocator): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: SimpleAllocator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock", pure, inheritable, header: "simpleAllocator.h".} = object
+type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
   ## A single block as returned from SimpleAllocator::alloc().
+
+converter toSimpleAllocatorBlock*(_: type(nil)): SimpleAllocatorBlock {.importcpp: "(nullptr)".}
+converter toBool*(this: SimpleAllocatorBlock): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SimpleAllocatorBlock, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile*", bycopy, pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
   ## A temporary file to hold the vertex data that has been evicted from memory
@@ -4327,10 +4501,14 @@ converter toBool*(this: AnimateVerticesRequest): bool {.importcpp: "(# != nullpt
 func `==`*(x: AnimateVerticesRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimateVerticesRequest], obj: TypedObject): AnimateVerticesRequest {.importcpp: "DCAST(AnimateVerticesRequest, @)".}
 
-type SavedContext* {.importcpp: "SavedContext", pure, inheritable, header: "savedContext.h".} = object of TypedObject
+type SavedContext* {.importcpp: "SavedContext*", bycopy, pure, inheritable, header: "savedContext.h".} = object of TypedObject
   ## This is the base class for all GSG-specific context objects, such as
   ## TextureContext and GeomContext.  It exists mainly to provide some
   ## structural organization.
+
+converter toSavedContext*(_: type(nil)): SavedContext {.importcpp: "(nullptr)".}
+converter toBool*(this: SavedContext): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: SavedContext, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type BufferContext* {.importcpp: "BufferContext*", bycopy, pure, inheritable, header: "bufferContext.h".} = object of SavedContext
   ## This is a base class for those kinds of SavedContexts that occupy an
@@ -4809,14 +4987,20 @@ type TextureStagePool* {.importcpp: "TextureStagePool", pure, inheritable, heade
 
 type MathNumbers* {.importcpp: "MathNumbers", pure, inheritable, header: "mathNumbers.h".} = object
 
-type LVecBase2f* {.importcpp: "LVecBase2f", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2f* {.importcpp: "WrappedLVecBase2f", header: wrappedLVecBase2fCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: float32
+  y*: float32
 
-type LVecBase2d* {.importcpp: "LVecBase2d", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2d* {.importcpp: "WrappedLVecBase2d", header: wrappedLVecBase2dCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: float64
+  y*: float64
 
-type LVecBase2i* {.importcpp: "LVecBase2i", pure, inheritable, header: "lvecBase2.h".} = object
+type LVecBase2i* {.importcpp: "WrappedLVecBase2i", header: wrappedLVecBase2iCode, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
+  x*: int32
+  y*: int32
 
 type LVector2f* {.importcpp: "LVector2f", pure, inheritable, header: "lvector2.h".} = object of LVecBase2f
   ## This is a two-component vector offset.
@@ -4836,14 +5020,23 @@ type LPoint2d* {.importcpp: "LPoint2d", pure, inheritable, header: "lpoint2.h".}
 type LPoint2i* {.importcpp: "LPoint2i", pure, inheritable, header: "lpoint2.h".} = object of LVecBase2i
   ## This is a two-component point in space.
 
-type LVecBase3f* {.importcpp: "LVecBase3f", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3f* {.importcpp: "WrappedLVecBase3f", header: wrappedLVecBase3fCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float32
+  y*: float32
+  z*: float32
 
-type LVecBase3d* {.importcpp: "LVecBase3d", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3d* {.importcpp: "WrappedLVecBase3d", header: wrappedLVecBase3dCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float64
+  y*: float64
+  z*: float64
 
-type LVecBase3i* {.importcpp: "LVecBase3i", pure, inheritable, header: "lvecBase3.h".} = object
+type LVecBase3i* {.importcpp: "WrappedLVecBase3i", header: wrappedLVecBase3iCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: int32
+  y*: int32
+  z*: int32
 
 type CoordinateSystem* = enum
   CS_default = 0
@@ -4895,10 +5088,14 @@ type LPoint3i* {.importcpp: "LPoint3i", pure, inheritable, header: "lpoint3.h".}
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LVecBase4f* {.importcpp: "LVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float32
+  y*: float32
+  z*: float32
+  w*: float32
 
-type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4906,11 +5103,19 @@ type UnalignedLVecBase4f* {.importcpp: "UnalignedLVecBase4f", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: float32
+  y*: float32
+  z*: float32
+  w*: float32
 
-type LVecBase4d* {.importcpp: "LVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: float64
+  y*: float64
+  z*: float64
+  w*: float64
 
-type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4918,11 +5123,19 @@ type UnalignedLVecBase4d* {.importcpp: "UnalignedLVecBase4d", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: float64
+  y*: float64
+  z*: float64
+  w*: float64
 
-type LVecBase4i* {.importcpp: "LVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
+type LVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
+  x*: int32
+  y*: int32
+  z*: int32
+  w*: int32
 
-type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable, header: "lvecBase4.h".} = object
+type UnalignedLVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -4930,6 +5143,10 @@ type UnalignedLVecBase4i* {.importcpp: "UnalignedLVecBase4i", pure, inheritable,
   ## Use it only when you need to pack numbers tightly without respect to
   ## alignment, and then copy it to a proper LVecBase4 to get actual use from
   ## it.
+  x*: int32
+  y*: int32
+  z*: int32
+  w*: int32
 
 type LVector4f* {.importcpp: "LVector4f", pure, inheritable, header: "lvector4.h".} = object of LVecBase4f
   ## This is a four-component vector distance.
@@ -5542,14 +5759,14 @@ type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".}
 
 type xel* = pixel
 
-type PNMFileType* {.importcpp: "PNMFileType", pure, inheritable, header: "pNMFileType.h".} = object of TypedWritable
+type PNMFileType* {.importcpp: "PNMFileType", pure, inheritable, header: "pnmFileType.h".} = object of TypedWritable
   ## This is the base class of a family of classes that represent particular
   ## image file types that PNMImage supports.
 
-type PNMFileTypeRegistry* {.importcpp: "PNMFileTypeRegistry", pure, inheritable, header: "pNMFileTypeRegistry.h".} = object
+type PNMFileTypeRegistry* {.importcpp: "PNMFileTypeRegistry", pure, inheritable, header: "pnmFileTypeRegistry.h".} = object
   ## This class maintains the set of all known PNMFileTypes in the universe.
 
-type PNMImageHeader* {.importcpp: "PNMImageHeader", pure, inheritable, header: "pNMImageHeader.h".} = object
+type PNMImageHeader* {.importcpp: "PNMImageHeader", pure, inheritable, header: "pnmImageHeader.h".} = object
   ## This is the base class of PNMImage, PNMReader, and PNMWriter.  It
   ## encapsulates all the information associated with an image that describes
   ## its size, number of channels, etc; that is, all the information about the
@@ -5560,7 +5777,7 @@ type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} =
   ## Defines a pfm file, a 2-d table of floating-point numbers, either
   ## 3-component or 1-component, or with a special extension, 2- or 4-component.
 
-type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pNMBrush.h".} = object of ReferenceCount
+type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pnmBrush.h".} = object of ReferenceCount
   ## This class is used to control the shape and color of the drawing operations
   ## performed by a PNMPainter object.
   ##
@@ -5577,7 +5794,7 @@ converter toBool*(this: PNMBrush): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PNMBrush, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PNMBrush], obj: TypedObject): PNMBrush {.importcpp: "DCAST(PNMBrush, @)".}
 
-type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pNMImage.h".} = object of PNMImageHeader
+type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pnmImage.h".} = object of PNMImageHeader
   ## The name of this class derives from the fact that we originally implemented
   ## it as a layer on top of the "pnm library", based on netpbm, which was built
   ## to implement pbm, pgm, and pbm files, and is the underlying support of a
@@ -5606,7 +5823,7 @@ type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pNMImage.h".
   ## This class is not inherently thread-safe; use it from a single thread or
   ## protect access using a mutex.
 
-type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pNMPainter.h".} = object
+type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pnmPainter.h".} = object
   ## This class provides a number of convenient methods for painting drawings
   ## directly into a PNMImage.
   ##
@@ -5971,6 +6188,14 @@ type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.
   ## See also BamFile, which defines a higher-level interface to read and write
   ## Bam files on disk.
 
+type BitMask*[T: typedesc, U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
+
+type BitMask16* = BitMask[uint16, 16]
+
+type BitMask32* = BitMask[uint32, 32]
+
+type BitMask64* = BitMask[uint64, 64]
+
 type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMask.h".} = object
 
 type BitArray* {.importcpp: "BitArray", pure, inheritable, header: "bitArray.h".} = object
@@ -6047,6 +6272,8 @@ converter toBool*(this: ClockObject): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ClockObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClockObject], obj: TypedObject): ClockObject {.importcpp: "DCAST(ClockObject, @)".}
 
+type CollideMask* = BitMask32
+
 type ColorSpace* = enum
   CS_unspecified = 0
   CS_linear = 1
@@ -6068,6 +6295,8 @@ type DatagramInputFile* {.importcpp: "DatagramInputFile", pure, inheritable, hea
 type DatagramOutputFile* {.importcpp: "DatagramOutputFile", pure, inheritable, header: "datagramOutputFile.h".} = object of DatagramSink
   ## This class can be used to write a binary file that consists of an arbitrary
   ## header followed by a number of datagrams.
+
+type DrawMask* = BitMask32
 
 type GamepadButton* {.importcpp: "GamepadButton", pure, inheritable, header: "gamepadButton.h".} = object
   ## This class is just used as a convenient namespace for grouping all of these
@@ -6150,6 +6379,8 @@ type UniqueIdAllocator* {.importcpp: "UniqueIdAllocator", pure, inheritable, hea
   ## track the age of freed IDs, which is required for what we wanted.  If you
   ## would like to kick around other implementation ideas, please contact
   ## Schuyler.
+
+type PortalMask* = BitMask32
 
 type FilterProperties* {.importcpp: "PT(FilterProperties)", bycopy, pure, inheritable, header: "filterProperties.h".} = object of TypedReferenceCount
 
@@ -6355,13 +6586,17 @@ converter toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nul
 converter toBool*(this: ConnectionReader): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type ConnectionListener* {.importcpp: "ConnectionListener", pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
+type ConnectionListener* {.importcpp: "ConnectionListener*", bycopy, pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
   ## This is a special kind of ConnectionReader that waits for activity on a
   ## rendezvous port and accepts a TCP connection (instead of attempting to read
   ## a datagram from the rendezvous port).
   ##
   ## It is itself an abstract class, as it doesn't define what to do with the
   ## established connection.  See QueuedConnectionListener.
+
+converter toConnectionListener*(_: type(nil)): ConnectionListener {.importcpp: "(nullptr)".}
+converter toBool*(this: ConnectionListener): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: ConnectionListener, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NetDatagram* {.importcpp: "NetDatagram", pure, inheritable, header: "netDatagram.h".} = object of Datagram
   ## A specific kind of Datagram, especially for sending across or receiving
@@ -6457,7 +6692,7 @@ converter toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr
 converter toBool*(this: Socket_Address): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Socket_Address, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_IP.h".} = object of TypedObject
+type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_ip.h".} = object of TypedObject
   ## Base functionality for a INET domain Socket This call should be the
   ## starting point for all other unix domain sockets.
   ##
@@ -6466,28 +6701,28 @@ type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_IP.
   ## \|                       \|                           \| SocketTCP
   ## SocketTCP_Listen    SocketUDP_Incoming   SocketUDP_OutBound
 
-type Socket_TCP* {.importcpp: "Socket_TCP", pure, inheritable, header: "socket_TCP.h".} = object of Socket_IP
+type Socket_TCP* {.importcpp: "Socket_TCP", pure, inheritable, header: "socket_tcp.h".} = object of Socket_IP
   ## Base functionality for a TCP connected socket This class is pretty useless
   ## by itself but it does hide some of the platform differences from machine to
   ## machine
 
-type Socket_TCP_Listen* {.importcpp: "Socket_TCP_Listen", pure, inheritable, header: "socket_TCP_Listen.h".} = object of Socket_IP
+type Socket_TCP_Listen* {.importcpp: "Socket_TCP_Listen", pure, inheritable, header: "socket_tcp_listen.h".} = object of Socket_IP
   ## Base functionality for a TCP rendezvous socket
 
-type Socket_UDP_Incoming* {.importcpp: "Socket_UDP_Incoming", pure, inheritable, header: "socket_UDP_Incoming.h".} = object of Socket_IP
+type Socket_UDP_Incoming* {.importcpp: "Socket_UDP_Incoming", pure, inheritable, header: "socket_udp_incoming.h".} = object of Socket_IP
   ## Base functionality for a UDP Reader
 
-type Socket_UDP_Outgoing* {.importcpp: "Socket_UDP_Outgoing", pure, inheritable, header: "socket_UDP_Outgoing.h".} = object of Socket_IP
+type Socket_UDP_Outgoing* {.importcpp: "Socket_UDP_Outgoing", pure, inheritable, header: "socket_udp_outgoing.h".} = object of Socket_IP
   ## Base functionality for a UDP sending socket
 
 type Socket_fdset* {.importcpp: "Socket_fdset", pure, inheritable, header: "socket_fdset.h".} = object
 
-type Buffered_DatagramConnection* {.importcpp: "Buffered_DatagramConnection", pure, inheritable, header: "buffered_DatagramConnection.h".} = object of Socket_TCP
+type Buffered_DatagramConnection* {.importcpp: "Buffered_DatagramConnection", pure, inheritable, header: "buffered_datagramconnection.h".} = object of Socket_TCP
   ## there are 3 states 1. Socket not even assigned,,,, 2. Socket Assigned and
   ## trying to get a active connect open 3. Socket is open and  writable.. (
   ## Fully powered up )...
 
-type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_UDP.h".} = object of Socket_UDP_Incoming
+type Socket_UDP* {.importcpp: "Socket_UDP", pure, inheritable, header: "socket_udp.h".} = object of Socket_UDP_Incoming
   ## Base functionality for a combination UDP Reader and Writer.  This
   ## duplicates code from Socket_UDP_Outgoing, to avoid the problems of multiple
   ## inheritance.
@@ -6753,10 +6988,10 @@ type TiXmlPrinter* {.importcpp: "TiXmlPrinter", pure, inheritable, header: "tiny
   ## fprintf( stdout, "%s", printer.CStr() );
   ## @endverbatim
 
-type PNMTextGlyph* {.importcpp: "PNMTextGlyph", pure, inheritable, header: "pNMTextGlyph.h".} = object
+type PNMTextGlyph* {.importcpp: "PNMTextGlyph", pure, inheritable, header: "pnmTextGlyph.h".} = object
   ## A single glyph in a PNMTextMaker.
 
-type PNMTextMaker* {.importcpp: "PNMTextMaker", pure, inheritable, header: "pNMTextMaker.h".} = object of FreetypeFont
+type PNMTextMaker* {.importcpp: "PNMTextMaker", pure, inheritable, header: "pnmTextMaker.h".} = object of FreetypeFont
   ## This object uses the Freetype library to generate text directly into an
   ## image.  It is different from the TextNode/DynamicTextFont interface, which
   ## use the Freetype library to generate text in the scene graph, to be
@@ -6841,14 +7076,14 @@ func binaryName*(_: typedesc[ExecutionEnvironment]): string {.importcpp: "nimStr
 ## Returns the name of the binary executable that started this program, if it
 ## can be determined.
 
-proc `binaryName=`*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "ExecutionEnvironment::set_binary_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc `binaryName=`*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "#ExecutionEnvironment::set_binary_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Do not use.
 
 func dtoolName*(_: typedesc[ExecutionEnvironment]): string {.importcpp: "nimStringFromStdString(ExecutionEnvironment::get_dtool_name())", header: "executionEnvironment.h".} ## \
 ## Returns the name of the libdtool DLL that is used in this program, if it
 ## can be determined.
 
-proc `dtoolName=`*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "ExecutionEnvironment::set_dtool_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc `dtoolName=`*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "#ExecutionEnvironment::set_dtool_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Do not use.
 
 func cwd*(_: typedesc[ExecutionEnvironment]): Filename {.importcpp: "ExecutionEnvironment::get_cwd()", header: "executionEnvironment.h".} ## \
@@ -7317,7 +7552,7 @@ func filename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()".} 
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-func file*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
+func file*(this: DatagramSink): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
@@ -7384,13 +7619,13 @@ func sourceHash*(this: Patchfile): HashVal {.importcpp: "#.get_source_hash()".} 
 func resultHash*(this: Patchfile): HashVal {.importcpp: "#.get_result_hash()".} ## \
 ## Returns the MD5 hash for the file after the patch has been applied.
 
-func state*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "#->get_state(#)".} ## \
+func state*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "deconstify(#->get_state(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
 ## inherited from above.
 
-func state*(this: PandaNode): RenderState {.importcpp: "#->get_state()".} ## \
+func state*(this: PandaNode): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
@@ -7410,10 +7645,10 @@ proc `state=`*(this: PandaNode, state: RenderState) {.importcpp: "#->set_state(#
 ## This completely replaces whatever has been set on this node via repeated
 ## calls to set_attrib().
 
-func effects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "#->get_effects(#)".} ## \
+func effects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "deconstify(#->get_effects(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
-func effects*(this: PandaNode): RenderEffects {.importcpp: "#->get_effects()".} ## \
+func effects*(this: PandaNode): RenderEffects {.importcpp: "deconstify(#->get_effects())", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
 proc `effects=`*(this: PandaNode, effects: RenderEffects, current_thread: Thread) {.importcpp: "#->set_effects(#, #)".} ## \
@@ -7426,12 +7661,12 @@ proc `effects=`*(this: PandaNode, effects: RenderEffects) {.importcpp: "#->set_e
 ## completely replaces whatever has been set on this node via repeated calls
 ## to set_attrib().
 
-func transform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_transform(#)".} ## \
+func transform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
 
-func transform*(this: PandaNode): TransformState {.importcpp: "#->get_transform()".} ## \
+func transform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
@@ -7444,13 +7679,21 @@ proc `transform=`*(this: PandaNode, transform: TransformState) {.importcpp: "#->
 ## Sets the transform that will be applied to this node and below.  This
 ## defines a new coordinate space at this point in the scene graph and below.
 
-func prevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_prev_transform(#)".} ## \
+func prevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_prev_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
-func prevTransform*(this: PandaNode): TransformState {.importcpp: "#->get_prev_transform()".} ## \
+func prevTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_prev_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
+
+func overallBit*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_overall_bit()", header: "pandaNode.h".} ## \
+## Returns the special bit that, when specifically cleared in the node's
+## DrawMask, indicates that the node is hidden to all cameras, regardless of
+## the remaining DrawMask bits.
+
+func allCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_all_camera_mask()", header: "pandaNode.h".} ## \
+## Returns a DrawMask that is appropriate for rendering to all cameras.
 
 func overallHidden*(this: PandaNode): bool {.importcpp: "#->is_overall_hidden()".} ## \
 ## Returns true if the node has been hidden to all cameras by clearing its
@@ -7464,6 +7707,37 @@ proc `overallHidden=`*(this: PandaNode, overall_hidden: bool) {.importcpp: "#->s
 ##
 ## This actually works by twiddling the reserved _overall_bit in the node's
 ## draw mask, which has special meaning.
+
+func drawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_control_mask()".} ## \
+## Returns the set of bits in draw_show_mask that are considered meaningful.
+## See adjust_draw_mask().
+
+func drawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_show_mask()".} ## \
+## Returns the hide/show bits of this particular node.  See
+## adjust_draw_mask().
+
+func intoCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the "into" collide mask for this node.
+
+proc `intoCollideMask=`*(this: PandaNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.
+##
+## This specifies the set of bits that must be shared with a CollisionNode's
+## "from" CollideMask in order for the CollisionNode to detect a collision
+## with this particular node.
+##
+## The actual CollideMask that will be set is masked by the return value from
+## get_legal_collide_mask(). Thus, the into_collide_mask cannot be set to
+## anything other than nonzero except for those types of nodes that can be
+## collided into, such as CollisionNodes and GeomNodes.
+
+func legalCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_legal_collide_mask()".} ## \
+## Returns the subset of CollideMask bits that may be set for this particular
+## type of PandaNode.  For most nodes, this is 0; it doesn't make sense to set
+## a CollideMask for most kinds of nodes.
+##
+## For nodes that can be collided with, such as GeomNode and CollisionNode,
+## this returns all bits on.
 
 func nestedVertices*(this: PandaNode, current_thread: Thread): int {.importcpp: "#->get_nested_vertices(#)".} ## \
 ## Returns the total number of vertices that will be rendered by this node and
@@ -7483,12 +7757,12 @@ func nestedVertices*(this: PandaNode): int {.importcpp: "#->get_nested_vertices(
 ## also include hidden nodes.  It may also omit or only approximate certain
 ## kinds of dynamic geometry.  However, it will not include stashed nodes.
 
-func internalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_internal_bounds(#)".} ## \
+func internalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
 
-func internalBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_internal_bounds()".} ## \
+func internalBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds())", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
@@ -7643,6 +7917,19 @@ proc `scene=`*(this: Camera, scene: NodePath) {.importcpp: "#->set_scene(#)".} #
 ## is parented into.  This is the preferred way to specify the scene, since it
 ## is the more intuitive mechanism.
 
+func cameraMask*(this: Camera): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the set of bits that represent the subset of the scene graph the
+## camera will render.  See set_camera_mask().
+
+proc `cameraMask=`*(this: Camera, mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the set of bits that represent the subset of the scene graph the
+## camera will render.
+##
+## During the cull traversal, a node is not visited if none of its draw mask
+## bits intersect with the camera's camera mask bits.  These masks can be used
+## to selectively hide and show different parts of the scene graph from
+## different cameras that are otherwise viewing the same scene.
+
 func cullCenter*(this: Camera): NodePath {.importcpp: "#->get_cull_center()".} ## \
 ## Returns the point from which the culling operations will be performed, if
 ## it was set by set_cull_center(), or the empty NodePath otherwise.
@@ -7676,7 +7963,7 @@ proc `lodCenter=`*(this: Camera, lod_center: NodePath) {.importcpp: "#->set_lod_
 ## some other viewpoint.  This may be used, for instance, to reduce LOD
 ## popping when the camera rotates in a small circle about an avatar.
 
-func initialState*(this: Camera): RenderState {.importcpp: "#->get_initial_state()".} ## \
+func initialState*(this: Camera): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc `initialState=`*(this: Camera, state: RenderState) {.importcpp: "#->set_initial_state(#)".} ## \
@@ -8146,6 +8433,9 @@ func channels*(this: ColorWriteAttrib): int {.importcpp: "#->get_channels()".} #
 
 func classSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
+func defaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "GeomNode::get_default_collide_mask()", header: "geomNode.h".} ## \
+## Returns the default into_collide_mask assigned to new GeomNodes.
+
 func binName*(this: CullBinAttrib): string {.importcpp: "nimStringFromStdString(#->get_bin_name())", header: stringConversionCode.} ## \
 ## Returns the name of the bin this attribute specifies.  If this is the empty
 ## string, it refers to the default bin.
@@ -8366,14 +8656,14 @@ proc `fullpath=`*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-func timestamp*(this: ModelRoot): int {.importcpp: "#->get_timestamp()".} ## \
+func timestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc `timestamp=`*(this: ModelRoot, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc `timestamp=`*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
@@ -8410,7 +8700,7 @@ proc `minCoverage=`*(this: OccluderNode, value: float32) {.importcpp: "#->set_mi
 ## 1. For example, setting to 0.2 would mean that the occluder needs to cover
 ## 20% of the screen to be considered.
 
-func shader*(this: ShaderAttrib): Shader {.importcpp: "#->get_shader()".} ## \
+func shader*(this: ShaderAttrib): Shader {.importcpp: "deconstify(#->get_shader())", header: deconstifyCode.} ## \
 ## Returns the shader object associated with the node.  If get_override
 ## returns true, but get_shader returns NULL, that means that this attribute
 ## should disable the shader.
@@ -8420,6 +8710,26 @@ func instanceCount*(this: ShaderAttrib): int {.importcpp: "#->get_instance_count
 ## instancing at all.
 
 func classSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::get_class_slot()", header: "shaderAttrib.h".}
+
+func intoPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_into_portal_mask()".} ## \
+## Returns the current "into" PortalMask.  In order for a portal to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
+proc `intoPortalMask=`*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_into_portal_mask(#)".} ## \
+## Sets the "into" PortalMask.  In order for a portal to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+func fromPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_from_portal_mask()".} ## \
+## Returns the current "from" PortalMask.  In order for a portal to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc `fromPortalMask=`*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_from_portal_mask(#)".} ## \
+## Sets the "from" PortalMask.  In order for a portal to be detected from this
+## object into another object, the intersection of this object's "from" mask
+## and the other object's "into" mask must be nonzero.
 
 func portalGeom*(this: PortalNode): bool {.importcpp: "#->get_portal_geom()".} ## \
 ## Returns the current state of the portal_geom flag.  See set_portal_geom().
@@ -9267,10 +9577,10 @@ func modified*(this: VertexTransform): UpdateSeq {.importcpp: "#->get_modified()
 ## Returns a sequence number that's guaranteed to change at least every time
 ## the value reported by get_matrix() changes.
 
-func node*(this: NodeVertexTransform): PandaNode {.importcpp: "#->get_node()".} ## \
+func node*(this: NodeVertexTransform): PandaNode {.importcpp: "deconstify(#->get_node())", header: deconstifyCode.} ## \
 ## Returns the PandaNode whose transform supplies this object.
 
-func prev*(this: NodeVertexTransform): VertexTransform {.importcpp: "#->get_prev()".} ## \
+func prev*(this: NodeVertexTransform): VertexTransform {.importcpp: "deconstify(#->get_prev())", header: deconstifyCode.} ## \
 ## Returns the VertexTransform object whose matrix will be composed with the
 ## result of this node's transform.
 
@@ -9496,7 +9806,7 @@ func thread*(this: PStatThread): Thread {.importcpp: "#.get_thread()".} ## \
 func index*(this: PStatThread): int {.importcpp: "#.get_index()".} ## \
 ## Returns the index number of this particular thread within the PStatClient.
 
-func name*(this: VertexSlider): InternalName {.importcpp: "#->get_name()".} ## \
+func name*(this: VertexSlider): InternalName {.importcpp: "deconstify(#->get_name())", header: deconstifyCode.} ## \
 ## Returns the name of this particular slider.  Every unique blend shape
 ## within a particular Geom must be identified with a different name, which is
 ## shared by the slider that controls it.
@@ -9534,7 +9844,7 @@ proc `respectEffectiveNormal=`*(this: CollisionSolid, respect_effective_normal: 
 ## that this particular solid does not care about the "effective" normal of
 ## other solids it meets, but rather always uses the true normal.
 
-func bounds*(this: CollisionSolid): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+func bounds*(this: CollisionSolid): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the solid's bounding volume.
 
 proc `bounds=`*(this: CollisionSolid, bounding_volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
@@ -9564,6 +9874,26 @@ func radius*(this: CollisionCapsule): float32 {.importcpp: "#->get_radius()".}
 
 proc `radius=`*(this: CollisionCapsule, radius: float32) {.importcpp: "#->set_radius(#)".}
 
+func fromCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_from_collide_mask()".} ## \
+## Returns the current "from" CollideMask.  In order for a collision to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc `fromCollideMask=`*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_from_collide_mask(#)".} ## \
+## Sets the "from" CollideMask.  In order for a collision to be detected from
+## this object into another object, the intersection of this object's "from"
+## mask and the other object's "into" mask must be nonzero.
+
+func intoCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the current "into" CollideMask.  In order for a collision to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
+proc `intoCollideMask=`*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.  In order for a collision to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
 func colliderSort*(this: CollisionNode): int {.importcpp: "#->get_collider_sort()".} ## \
 ## Returns the collider_sort value that has been set for this particular node.
 ## See set_collider_sort().
@@ -9579,6 +9909,9 @@ proc `colliderSort=`*(this: CollisionNode, sort: int) {.importcpp: "#->set_colli
 ## multiple passes through the data; in that case, it may be a useful
 ## optimization to group colliders that have similar bounding volumes together
 ## (by giving them similar sort values).
+
+func defaultCollideMask*(_: typedesc[CollisionNode]): CollideMask {.importcpp: "CollisionNode::get_default_collide_mask()", header: "collisionNode.h".} ## \
+## Returns the default into_collide_mask assigned to new CollisionNodes.
 
 func respectPrevTransform*(this: CollisionTraverser): bool {.importcpp: "#.get_respect_prev_transform()".} ## \
 ## Returns the flag that indicates whether the prev_transform stored on a node
@@ -9611,11 +9944,11 @@ proc `recorder=`*(this: CollisionTraverser, recorder: CollisionRecorder) {.impor
 ## CollisionRecorder is destructed, it will cleanly remove itself from the
 ## traverser.
 
-func fromSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_from()".} ## \
+func fromSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_from())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid that triggered
 ## this collision.
 
-func intoSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_into()".} ## \
+func intoSolid*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_into())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid was collided
 ## into.  This pointer might be NULL if the collision was into a piece of
 ## visible geometry, instead of a normal CollisionSolid collision; see
@@ -9939,7 +10272,7 @@ func default*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "Win
 ## this returns that WindowProperties structure; otherwise, this returns
 ## get_config_properties().
 
-proc `default=`*(_: typedesc[WindowProperties], default_properties: WindowProperties) {.importcpp: "WindowProperties::set_default(#)", header: "windowProperties.h".} ## \
+proc `default=`*(_: typedesc[WindowProperties], default_properties: WindowProperties) {.importcpp: "#WindowProperties::set_default(#)", header: "windowProperties.h".} ## \
 ## Replaces the "default" WindowProperties with the specified structure.  The
 ## specified WindowProperties will be returned by future calls to
 ## get_default(), until clear_default() is called.
@@ -11172,7 +11505,7 @@ func saveFile*(_: typedesc[VertexDataPage]): VertexDataSaveFile {.importcpp: "Ve
 ## Returns the global VertexDataSaveFile that will be used to save vertex data
 ## buffers to disk when necessary.
 
-func arrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".} ## \
+func arrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
 
 func dataSizeBytes*(this: GeomVertexArrayData): clonglong {.importcpp: "#->get_data_size_bytes()".} ## \
@@ -11182,7 +11515,7 @@ func modified*(this: GeomVertexArrayData): UpdateSeq {.importcpp: "#->get_modifi
 ## Returns a sequence number which is guaranteed to change at least every time
 ## the array vertex data is modified.
 
-func arrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".}
+func arrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
 
 func dataSizeBytes*(this: GeomVertexArrayDataHandle): clonglong {.importcpp: "#->get_data_size_bytes()".}
 
@@ -11260,7 +11593,7 @@ proc `name=`*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimS
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
 
-func format*(this: GeomVertexData): GeomVertexFormat {.importcpp: "#->get_format()".} ## \
+func format*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
 
 proc `format=`*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#->set_format(#)".} ## \
@@ -11270,7 +11603,7 @@ proc `format=`*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#-
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-func transformTable*(this: GeomVertexData): TransformTable {.importcpp: "#->get_transform_table()".} ## \
+func transformTable*(this: GeomVertexData): TransformTable {.importcpp: "deconstify(#->get_transform_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -11289,7 +11622,7 @@ proc `transformTable=`*(this: GeomVertexData, table: TransformTable) {.importcpp
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-func sliderTable*(this: GeomVertexData): SliderTable {.importcpp: "#->get_slider_table()".} ## \
+func sliderTable*(this: GeomVertexData): SliderTable {.importcpp: "deconstify(#->get_slider_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the SliderTable assigned to this data.  Vertices
 ## within the vertex data will look up their morph offsets, if any, within
 ## this table.
@@ -11366,7 +11699,7 @@ func stripCutIndex*(this: GeomPrimitive): int {.importcpp: "#->get_strip_cut_ind
 ## signify the end of a primitive.  This is typically the highest value that
 ## the numeric type can store.
 
-func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()".} ## \
+func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_mins())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive mins array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax() for this.
@@ -11377,7 +11710,7 @@ func mins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-func maxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_maxs()".} ## \
+func maxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_maxs())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive maxs array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax().
@@ -12038,101 +12371,35 @@ func videoHeight*(this: VideoTexture): int {.importcpp: "#->get_video_height()".
 ## necessarily the height of the actual texture, since the texture may have
 ## been expanded to raise it to a power of 2.
 
-func x*(this: LVecBase2f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase2d): float64 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2d): float64 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase2i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase2i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_y(#)".}
 
-func x*(this: LVecBase3f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase3f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase3f): float32 {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_z(#)".}
-
-func xy*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
-
-func x*(this: LVecBase3d): float64 {.importcpp: "#.get_x()".}
 
 proc `x=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_x(#)".}
 
-func y*(this: LVecBase3d): float64 {.importcpp: "#.get_y()".}
-
 proc `y=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_y(#)".}
-
-func z*(this: LVecBase3d): float64 {.importcpp: "#.get_z()".}
 
 proc `z=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_z(#)".}
 
-func xy*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
-
-func x*(this: LVecBase3i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase3i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase3i): int {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_z(#)".}
-
-func xy*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
-## Returns a 2-component vector that shares just the first two components of
-## this vector.
-
-func xz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xz()".} ## \
-## Returns a 2-component vector that shares just the first and last components
-## of this vector.
-
-func yz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_yz()".} ## \
-## Returns a 2-component vector that shares just the last two components of
-## this vector.
 
 func xy*(this: LVector3f): LVector2f {.importcpp: "#.get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
@@ -12206,59 +12473,23 @@ func yz*(this: LPoint3i): LPoint2i {.importcpp: "#.get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
 
-func x*(this: LVecBase4f): float32 {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase4f): float32 {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase4f): float32 {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_z(#)".}
-
-func xyz*(this: LVecBase4f): LVecBase3f {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
-
-func x*(this: LVecBase4d): float64 {.importcpp: "#.get_x()".}
 
 proc `x=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_x(#)".}
 
-func y*(this: LVecBase4d): float64 {.importcpp: "#.get_y()".}
-
 proc `y=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_y(#)".}
-
-func z*(this: LVecBase4d): float64 {.importcpp: "#.get_z()".}
 
 proc `z=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_z(#)".}
 
-func xyz*(this: LVecBase4d): LVecBase3d {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
-
-func x*(this: LVecBase4i): int {.importcpp: "#.get_x()".}
-
 proc `x=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_x(#)".}
-
-func y*(this: LVecBase4i): int {.importcpp: "#.get_y()".}
 
 proc `y=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_y(#)".}
 
-func z*(this: LVecBase4i): int {.importcpp: "#.get_z()".}
-
 proc `z=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_z(#)".}
-
-func xyz*(this: LVecBase4i): LVecBase3i {.importcpp: "#.get_xyz()".} ## \
-## Returns the x, y and z component of this vector
-
-func xy*(this: LVecBase4i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
-## Returns the x and y component of this vector
 
 func xyz*(this: LVector4f): LVector3f {.importcpp: "#.get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
@@ -12529,7 +12760,7 @@ func character*(this: TextGlyph): int {.importcpp: "#->get_character()".} ## \
 ## Returns the Unicode value that corresponds to the character this glyph
 ## represents.
 
-func state*(this: TextGlyph): RenderState {.importcpp: "#->get_state()".} ## \
+func state*(this: TextGlyph): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the state in which the glyph should be rendered.
 
 func advance*(this: TextGlyph): float32 {.importcpp: "#->get_advance()".} ## \
@@ -13002,12 +13233,12 @@ func cacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cache_f
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-func sourceTimestamp*(this: BamCacheRecord): int {.importcpp: "#->get_source_timestamp()".} ## \
+func sourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-func recordedTime*(this: BamCacheRecord): int {.importcpp: "#->get_recorded_time()".} ## \
+func recordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 func data*(this: BamCacheRecord): TypedWritable {.importcpp: "#->get_data()".} ## \
@@ -13803,43 +14034,43 @@ proc getTextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdSt
 ## will be converted to ASCII, and the nonconvertible characters will remain
 ## encoded in the encoding specified by set_encoding().
 
-proc unicodeIsalpha*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_isalpha(#)", header: "textEncoder.h".} ## \
+proc unicodeIsalpha*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_isalpha(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is an alphabetic letter, false
 ## otherwise.  This is akin to ctype's isalpha(), extended to Unicode.
 
-proc unicodeIsdigit*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_isdigit(#)", header: "textEncoder.h".} ## \
+proc unicodeIsdigit*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_isdigit(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is a numeric digit, false
 ## otherwise.  This is akin to ctype's isdigit(), extended to Unicode.
 
-proc unicodeIspunct*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_ispunct(#)", header: "textEncoder.h".} ## \
+proc unicodeIspunct*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_ispunct(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is a punctuation mark, false
 ## otherwise.  This is akin to ctype's ispunct(), extended to Unicode.
 
-proc unicodeIslower*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_islower(#)", header: "textEncoder.h".} ## \
+proc unicodeIslower*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_islower(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is a lowercase letter, false
 ## otherwise.  This is akin to ctype's islower(), extended to Unicode.
 
-proc unicodeIsupper*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_isupper(#)", header: "textEncoder.h".} ## \
+proc unicodeIsupper*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_isupper(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is an uppercase letter, false
 ## otherwise.  This is akin to ctype's isupper(), extended to Unicode.
 
-proc unicodeIsspace*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "TextEncoder::unicode_isspace(#)", header: "textEncoder.h".} ## \
+proc unicodeIsspace*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_isspace(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is a whitespace letter, false
 ## otherwise.  This is akin to ctype's isspace(), extended to Unicode.
 
-proc unicodeToupper*(_: typedesc[TextEncoder], character: int): int {.importcpp: "TextEncoder::unicode_toupper(#)", header: "textEncoder.h".} ## \
+proc unicodeToupper*(_: typedesc[TextEncoder], character: int): int {.importcpp: "#TextEncoder::unicode_toupper(#)", header: "textEncoder.h".} ## \
 ## Returns the uppercase equivalent of the given Unicode character.  This is
 ## akin to ctype's toupper(), extended to Unicode.
 
-proc unicodeTolower*(_: typedesc[TextEncoder], character: int): int {.importcpp: "TextEncoder::unicode_tolower(#)", header: "textEncoder.h".} ## \
+proc unicodeTolower*(_: typedesc[TextEncoder], character: int): int {.importcpp: "#TextEncoder::unicode_tolower(#)", header: "textEncoder.h".} ## \
 ## Returns the uppercase equivalent of the given Unicode character.  This is
 ## akin to ctype's tolower(), extended to Unicode.
 
-proc upper*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::upper(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
+proc upper*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(#TextEncoder::upper(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
 ## Converts the string to uppercase, assuming the string is encoded in the
 ## default encoding.
 
-proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(TextEncoder::lower(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
+proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(#TextEncoder::lower(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
 ## Converts the string to lowercase, assuming the string is encoded in the
 ## default encoding.
 
@@ -13880,26 +14111,26 @@ proc initFilename*(dirname: Filename, basename: Filename): Filename {.importcpp:
 ## This constructor composes the filename out of a directory part and a
 ## basename part.  It will insert an intervening '/' if necessary.
 
-proc textFilename*(_: typedesc[Filename], filename: Filename): Filename {.importcpp: "Filename::text_filename(#)", header: "filename.h".} ## \
+proc textFilename*(_: typedesc[Filename], filename: Filename): Filename {.importcpp: "#Filename::text_filename(#)", header: "filename.h".} ## \
 ## Static constructors to explicitly create a filename that refers to a text
 ## or binary file.  This is in lieu of calling set_text() or set_binary() or
 ## set_type().
 
-proc textFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::text_filename(nimStringToStdString(#))", header: "filename.h".}
+proc textFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "#Filename::text_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc binaryFilename*(_: typedesc[Filename], filename: Filename): Filename {.importcpp: "Filename::binary_filename(#)", header: "filename.h".}
+proc binaryFilename*(_: typedesc[Filename], filename: Filename): Filename {.importcpp: "#Filename::binary_filename(#)", header: "filename.h".}
 
-proc binaryFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::binary_filename(nimStringToStdString(#))", header: "filename.h".}
+proc binaryFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "#Filename::binary_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc dsoFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::dso_filename(nimStringToStdString(#))", header: "filename.h".}
+proc dsoFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "#Filename::dso_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc executableFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::executable_filename(nimStringToStdString(#))", header: "filename.h".}
+proc executableFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "#Filename::executable_filename(nimStringToStdString(#))", header: "filename.h".}
 
-proc patternFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "Filename::pattern_filename(nimStringToStdString(#))", header: "filename.h".} ## \
+proc patternFilename*(_: typedesc[Filename], filename: string): Filename {.importcpp: "#Filename::pattern_filename(nimStringToStdString(#))", header: "filename.h".} ## \
 ## Constructs a filename that represents a sequence of numbered files.  See
 ## set_pattern().
 
-proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific(nimStringToStdString(#))", header: "filename.h".} ## \
+proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "#Filename::from_os_specific(nimStringToStdString(#))", header: "filename.h".} ## \
 ## This named constructor returns a Panda-style filename (that is, using
 ## forward slashes, and no drive letter) based on the supplied filename string
 ## that describes a filename in the local system conventions (for instance, on
@@ -13913,16 +14144,16 @@ proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.imp
 ## local conventions and partially Panda conventions; e.g.  some backslashes
 ## and some forward slashes.
 
-proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "Filename::from_os_specific_w(nimStringToStdString(#))", header: "filename.h".} ## \
+proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "#Filename::from_os_specific_w(nimStringToStdString(#))", header: "filename.h".} ## \
 ## The wide-string variant of from_os_specific(). Returns a new Filename,
 ## converted from an os-specific wide-character string.
 
-proc expandFrom*(_: typedesc[Filename], user_string: string): Filename {.importcpp: "Filename::expand_from(nimStringToStdString(#))", header: "filename.h".} ## \
+proc expandFrom*(_: typedesc[Filename], user_string: string): Filename {.importcpp: "#Filename::expand_from(nimStringToStdString(#))", header: "filename.h".} ## \
 ## Returns the same thing as from_os_specific(), but embedded environment
 ## variable references (e.g.  "$DMODELS/foo.txt") are expanded out.  It also
 ## automatically elevates the file to its true case if needed.
 
-proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
+proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string): Filename {.importcpp: "#Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
 ## Generates a temporary filename within the indicated directory, using the
 ## indicated prefix.  If the directory is empty, a system-defined directory is
 ## chosen instead.
@@ -13931,7 +14162,7 @@ proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: 
 ## it does not specifically create the file, it is possible that another
 ## process could simultaneously create a file by the same name.
 
-proc temporary*(_: typedesc[Filename], dirname: string, prefix: string): Filename {.importcpp: "Filename::temporary(nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
+proc temporary*(_: typedesc[Filename], dirname: string, prefix: string): Filename {.importcpp: "#Filename::temporary(nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
 ## Generates a temporary filename within the indicated directory, using the
 ## indicated prefix.  If the directory is empty, a system-defined directory is
 ## chosen instead.
@@ -13972,7 +14203,7 @@ proc substr*(this: Filename, begin: clonglong): string {.importcpp: "nimStringFr
 
 proc substr*(this: Filename, begin: clonglong, `end`: clonglong): string {.importcpp: "nimStringFromStdString(#.substr(#, #))", header: stringConversionCode.}
 
-proc `+=`*(this: Filename, other: string): Filename {.importcpp: "#.operator +=(nimStringToStdString(#))", header: stringConversionCode.}
+proc `+=`*(this: var Filename, other: string): Filename {.importcpp: "#.operator +=(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `+`*(this: Filename, other: string): Filename {.importcpp: "#.operator +(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -14246,7 +14477,7 @@ proc compareTimestamps*(this: Filename, other: Filename): int {.importcpp: "#.co
 ## will be treated as if it were newer than any other file.  Similarly for
 ## other_missing_is_old.
 
-proc getTimestamp*(this: Filename): int {.importcpp: "#.get_timestamp()".} ## \
+proc getTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -14256,7 +14487,7 @@ proc getTimestamp*(this: Filename): int {.importcpp: "#.get_timestamp()".} ## \
 ## by the operating system or because there is some error (such as file not
 ## found), returns 0.
 
-proc getAccessTimestamp*(this: Filename): int {.importcpp: "#.get_access_timestamp()".} ## \
+proc getAccessTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_access_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last accessed,
 ## if this information is available.  See also get_timestamp(), which returns
 ## the last modification time.
@@ -14635,11 +14866,11 @@ proc initDSearchPath*(): DSearchPath {.importcpp: "DSearchPath()".}
 
 proc initDSearchPath*(copy: DSearchPath): DSearchPath {.importcpp: "DSearchPath(#)".}
 
-proc initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
+converter initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
 
 proc initDSearchPath*(path: string, separator: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
+converter initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc clear*(this: DSearchPath) {.importcpp: "#.clear()".} ## \
 ## Removes all the directories from the search list.
@@ -14680,13 +14911,13 @@ proc findFile*(this: DSearchPath, filename: Filename): Filename {.importcpp: "#.
 ## order.  Returns the full matching pathname of the first match if found, or
 ## the empty string if not found.
 
-proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string, separator: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#), nimStringToStdString(#))", header: "dSearchPath.h".} ## \
+proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string, separator: string): Filename {.importcpp: "#DSearchPath::search_path(#, nimStringToStdString(#), nimStringToStdString(#))", header: "dSearchPath.h".} ## \
 ## A quick-and-easy way to search a searchpath for a file when you don't feel
 ## like building or keeping around a DSearchPath object.  This simply
 ## constructs a temporary DSearchPath based on the indicated path string, and
 ## searches that.
 
-proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string): Filename {.importcpp: "DSearchPath::search_path(#, nimStringToStdString(#))", header: "dSearchPath.h".} ## \
+proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string): Filename {.importcpp: "#DSearchPath::search_path(#, nimStringToStdString(#))", header: "dSearchPath.h".} ## \
 ## A quick-and-easy way to search a searchpath for a file when you don't feel
 ## like building or keeping around a DSearchPath object.  This simply
 ## constructs a temporary DSearchPath based on the indicated path string, and
@@ -14700,27 +14931,27 @@ proc write*(this: DSearchPath, `out`: ostream, indent_level: int) {.importcpp: "
 
 proc write*(this: DSearchPath, `out`: ostream) {.importcpp: "#.write(#)".}
 
-proc hasEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string): bool {.importcpp: "ExecutionEnvironment::has_environment_variable(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc hasEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string): bool {.importcpp: "#ExecutionEnvironment::has_environment_variable(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Returns true if the indicated environment variable is defined.
 
-proc getEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string): string {.importcpp: "nimStringFromStdString(ExecutionEnvironment::get_environment_variable(nimStringToStdString(#)))", header: "executionEnvironment.h".} ## \
+proc getEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string): string {.importcpp: "nimStringFromStdString(#ExecutionEnvironment::get_environment_variable(nimStringToStdString(#)))", header: "executionEnvironment.h".} ## \
 ## Returns the definition of the indicated environment variable, or the empty
 ## string if the variable is undefined.
 
-proc setEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string, value: string) {.importcpp: "ExecutionEnvironment::set_environment_variable(nimStringToStdString(#), nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc setEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string, value: string) {.importcpp: "#ExecutionEnvironment::set_environment_variable(nimStringToStdString(#), nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Changes the definition of the indicated environment variable.
 
-proc shadowEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string, value: string) {.importcpp: "ExecutionEnvironment::shadow_environment_variable(nimStringToStdString(#), nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc shadowEnvironmentVariable*(_: typedesc[ExecutionEnvironment], `var`: string, value: string) {.importcpp: "#ExecutionEnvironment::shadow_environment_variable(nimStringToStdString(#), nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Changes the apparent definition of the indicated environment variable by
 ## masking it within this class with a new value.  This does not change the
 ## actual environment variable, but future calls to get_environment_variable()
 ## will return this new value.
 
-proc clearShadow*(_: typedesc[ExecutionEnvironment], `var`: string) {.importcpp: "ExecutionEnvironment::clear_shadow(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc clearShadow*(_: typedesc[ExecutionEnvironment], `var`: string) {.importcpp: "#ExecutionEnvironment::clear_shadow(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Removes a value set by a previous call to shadow_environment_variable(),
 ## and lets the actual value of the variable show again.
 
-proc expandString*(_: typedesc[ExecutionEnvironment], str: string): string {.importcpp: "nimStringFromStdString(ExecutionEnvironment::expand_string(nimStringToStdString(#)))", header: "executionEnvironment.h".} ## \
+proc expandString*(_: typedesc[ExecutionEnvironment], str: string): string {.importcpp: "nimStringFromStdString(#ExecutionEnvironment::expand_string(nimStringToStdString(#)))", header: "executionEnvironment.h".} ## \
 ## Reads the string, looking for environment variable names marked by a $.
 ## Expands all such variable names.  A repeated dollar sign ($$) is mapped to
 ## a single dollar sign.
@@ -14731,7 +14962,7 @@ proc getNumArgs*(_: typedesc[ExecutionEnvironment]): clonglong {.importcpp: "Exe
 ## Returns the number of command-line arguments available, not counting arg 0,
 ## the binary name.
 
-proc getArg*(_: typedesc[ExecutionEnvironment], n: clonglong): string {.importcpp: "nimStringFromStdString(ExecutionEnvironment::get_arg(#))", header: "executionEnvironment.h".} ## \
+proc getArg*(_: typedesc[ExecutionEnvironment], n: clonglong): string {.importcpp: "nimStringFromStdString(#ExecutionEnvironment::get_arg(#))", header: "executionEnvironment.h".} ## \
 ## Returns the nth command-line argument.  The index n must be in the range [0
 ## .. get_num_args()).  The first parameter, n == 0, is the first actual
 ## parameter, not the binary name.
@@ -14744,10 +14975,10 @@ proc getDtoolName*(_: typedesc[ExecutionEnvironment]): string {.importcpp: "nimS
 ## Returns the name of the libdtool DLL that is used in this program, if it
 ## can be determined.
 
-proc setBinaryName*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "ExecutionEnvironment::set_binary_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc setBinaryName*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "#ExecutionEnvironment::set_binary_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Do not use.
 
-proc setDtoolName*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "ExecutionEnvironment::set_dtool_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
+proc setDtoolName*(_: typedesc[ExecutionEnvironment], name: string) {.importcpp: "#ExecutionEnvironment::set_dtool_name(nimStringToStdString(#))", header: "executionEnvironment.h".} ## \
 ## Do not use.
 
 proc getCwd*(_: typedesc[ExecutionEnvironment]): Filename {.importcpp: "ExecutionEnvironment::get_cwd()", header: "executionEnvironment.h".} ## \
@@ -14757,7 +14988,7 @@ proc initExecutionEnvironment*(param0: ExecutionEnvironment): ExecutionEnvironme
 
 proc initGlobPattern*(copy: GlobPattern): GlobPattern {.importcpp: "GlobPattern(#)".}
 
-proc initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
+converter initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initGlobPattern*(): GlobPattern {.importcpp: "GlobPattern()".}
 
@@ -15245,7 +15476,7 @@ proc null*(_: typedesc[Notify]): ostream {.importcpp: "Notify::null()", header: 
 ## A convenient way to get an ostream that doesn't do anything.  Returned by
 ## Category::out() when a particular Category and/or Severity is disabled.
 
-proc writeString*(_: typedesc[Notify], str: string) {.importcpp: "Notify::write_string(nimStringToStdString(#))", header: "pnotify.h".} ## \
+proc writeString*(_: typedesc[Notify], str: string) {.importcpp: "#Notify::write_string(nimStringToStdString(#))", header: "pnotify.h".} ## \
 ## A convenient way for scripting languages, which may know nothing about
 ## ostreams, to write to Notify.  This writes a single string, followed by an
 ## implicit newline, to the Notify output stream.
@@ -15908,7 +16139,7 @@ proc getNumChildren*(this: NotifyCategory): clonglong {.importcpp: "#.get_num_ch
 proc getChild*(this: NotifyCategory, i: clonglong): NotifyCategory {.importcpp: "#.get_child(#)".} ## \
 ## Returns the nth child Category of this particular Category.
 
-proc setServerDelta*(_: typedesc[NotifyCategory], delta: int) {.importcpp: "NotifyCategory::set_server_delta(#)", header: "notifyCategory.h".} ## \
+proc setServerDelta*(_: typedesc[NotifyCategory], delta: int) {.importcpp: "#NotifyCategory::set_server_delta(#)", header: "notifyCategory.h".} ## \
 ## Sets a global delta (in seconds) between the local time and the server's
 ## time, for the purpose of synchronizing the time stamps in the log messages
 ## of the client with that of a known server.
@@ -16318,7 +16549,7 @@ proc initURLSpec*(url: URLSpec, path: Filename): URLSpec {.importcpp: "URLSpec(#
 
 proc initURLSpec*(url: string, server_name_expected: bool): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
+converter initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `==`*(this: URLSpec, other: URLSpec): bool {.importcpp: "#.operator ==(#)".}
 
@@ -16394,7 +16625,7 @@ proc isDefaultPort*(this: URLSpec): bool {.importcpp: "#.is_default_port()".} ##
 ## number for the scheme (or if there is no port number), or false if it is a
 ## nonstandard port.
 
-proc getDefaultPortForScheme*(_: typedesc[URLSpec], scheme: string): int {.importcpp: "URLSpec::get_default_port_for_scheme(nimStringToStdString(#))", header: "urlSpec.h".} ## \
+proc getDefaultPortForScheme*(_: typedesc[URLSpec], scheme: string): int {.importcpp: "#URLSpec::get_default_port_for_scheme(nimStringToStdString(#))", header: "urlSpec.h".} ## \
 ## Returns the default port number for the indicated scheme, or 0 if there is
 ## no known default.
 
@@ -16480,31 +16711,31 @@ proc input*(this: URLSpec, `in`: istream): bool {.importcpp: "#.input(#)".}
 
 proc output*(this: URLSpec, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc quote*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc quote*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(#URLSpec::quote(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Returns the source string with all "unsafe" characters quoted, making a
 ## string suitable for placing in a URL.  Letters, digits, and the underscore,
 ## comma, period, and hyphen characters, as well as any included in the safe
 ## string, are left alone; all others are converted to hex representation.
 
-proc quote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc quote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(#URLSpec::quote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Returns the source string with all "unsafe" characters quoted, making a
 ## string suitable for placing in a URL.  Letters, digits, and the underscore,
 ## comma, period, and hyphen characters, as well as any included in the safe
 ## string, are left alone; all others are converted to hex representation.
 
-proc quotePlus*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc quotePlus*(_: typedesc[URLSpec], source: string, safe: string): string {.importcpp: "nimStringFromStdString(#URLSpec::quote_plus(nimStringToStdString(#), nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Behaves like quote() with the additional behavior of replacing spaces with
 ## plus signs.
 
-proc quotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::quote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc quotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(#URLSpec::quote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Behaves like quote() with the additional behavior of replacing spaces with
 ## plus signs.
 
-proc unquote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc unquote*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(#URLSpec::unquote(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Reverses the operation of quote(): converts escaped characters of the form
 ## "%xx" to their ascii equivalent.
 
-proc unquotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(URLSpec::unquote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
+proc unquotePlus*(_: typedesc[URLSpec], source: string): string {.importcpp: "nimStringFromStdString(#URLSpec::unquote_plus(nimStringToStdString(#)))", header: "urlSpec.h".} ## \
 ## Reverses the operation of quote_plus(): converts escaped characters of the
 ## form "%xx" to their ascii equivalent, and also converts plus signs to
 ## spaces.
@@ -16517,11 +16748,11 @@ proc initHTTPDate*(): HTTPDate {.importcpp: "HTTPDate()".}
 
 proc initHTTPDate*(copy: HTTPDate): HTTPDate {.importcpp: "HTTPDate(#)".}
 
-proc initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Decodes the string into a sensible date.  Returns 0 (!is_valid()) if the
 ## string cannot be correctly decoded.
 
-proc initHTTPDate*(time: int): HTTPDate {.importcpp: "HTTPDate(#)".}
+converter initHTTPDate*(time: time_t.Time): HTTPDate {.importcpp: "HTTPDate(#)".}
 
 proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "httpDate.h".} ## \
 ## Returns an HTTPDate that represents the current time and date.
@@ -16532,7 +16763,7 @@ proc isValid*(this: HTTPDate): bool {.importcpp: "#.is_valid()".} ## \
 
 proc getString*(this: HTTPDate): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
 
-proc getTime*(this: HTTPDate): int {.importcpp: "#.get_time()".} ## \
+proc getTime*(this: HTTPDate): time_t.Time {.importcpp: "#.get_time()".} ## \
 ## Returns the date as a C time_t value.
 
 proc `==`*(this: HTTPDate, other: HTTPDate): bool {.importcpp: "#.operator ==(#)".}
@@ -16547,9 +16778,9 @@ proc compareTo*(this: HTTPDate, other: HTTPDate): int {.importcpp: "#.compare_to
 ## Returns a number less than zero if this HTTPDate sorts before the other
 ## one, greater than zero if it sorts after, or zero if they are equivalent.
 
-proc `+=`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator -=(#)".}
 
 proc `+`*(this: HTTPDate, seconds: int): HTTPDate {.importcpp: "#.operator +(#)".}
 
@@ -16897,12 +17128,12 @@ proc getHeader*(this: HTTPClient, url: URLSpec): HTTPChannel {.importcpp: "#->ge
 ## might also return the size of the document (if the server gives us this
 ## information).
 
-proc base64Encode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_encode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
+proc base64Encode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(#HTTPClient::base64_encode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
 ## Implements HTTPAuthorization::base64_encode().  This is provided here just
 ## as a convenient place to publish it for access by the scripting language;
 ## C++ code should probably use HTTPAuthorization directly.
 
-proc base64Decode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(HTTPClient::base64_decode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
+proc base64Decode*(_: typedesc[HTTPClient], s: string): string {.importcpp: "nimStringFromStdString(#HTTPClient::base64_decode(nimStringToStdString(#)))", header: "httpClient.h".} ## \
 ## Implements HTTPAuthorization::base64_decode().  This is provided here just
 ## as a convenient place to publish it for access by the scripting language;
 ## C++ code should probably use HTTPAuthorization directly.
@@ -16918,7 +17149,7 @@ proc initHTTPEntityTag*(weak: bool, tag: string): HTTPEntityTag {.importcpp: "HT
 ## This constructor accepts an explicit weak flag and a literal (not quoted)
 ## tag string.
 
-proc initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## This constructor accepts a string as formatted from an HTTP server (e.g.
 ## the tag is quoted, with an optional W/ prefix.)
 
@@ -16960,9 +17191,9 @@ proc initDocumentSpec*(): DocumentSpec {.importcpp: "DocumentSpec()".}
 
 proc initDocumentSpec*(copy: DocumentSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-proc initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
+converter initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-proc initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
+converter initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc `==`*(this: DocumentSpec, other: DocumentSpec): bool {.importcpp: "#.operator ==(#)".}
 
@@ -17990,19 +18221,19 @@ proc getTotalSize*(_: typedesc[MemoryUsage]): clonglong {.importcpp: "MemoryUsag
 proc getNumPointers*(_: typedesc[MemoryUsage]): int {.importcpp: "MemoryUsage::get_num_pointers()", header: "memoryUsage.h".} ## \
 ## Returns the number of pointers currently active.
 
-proc getPointers*(_: typedesc[MemoryUsage], result: MemoryUsagePointers) {.importcpp: "MemoryUsage::get_pointers(#)", header: "memoryUsage.h".} ## \
+proc getPointers*(_: typedesc[MemoryUsage], result: MemoryUsagePointers) {.importcpp: "#MemoryUsage::get_pointers(#)", header: "memoryUsage.h".} ## \
 ## Fills the indicated MemoryUsagePointers with the set of all pointers
 ## currently active.
 
-proc getPointersOfType*(_: typedesc[MemoryUsage], result: MemoryUsagePointers, `type`: TypeHandle) {.importcpp: "MemoryUsage::get_pointers_of_type(#, #)", header: "memoryUsage.h".} ## \
+proc getPointersOfType*(_: typedesc[MemoryUsage], result: MemoryUsagePointers, `type`: TypeHandle) {.importcpp: "#MemoryUsage::get_pointers_of_type(#, #)", header: "memoryUsage.h".} ## \
 ## Fills the indicated MemoryUsagePointers with the set of all pointers of the
 ## indicated type currently active.
 
-proc getPointersOfAge*(_: typedesc[MemoryUsage], result: MemoryUsagePointers, `from`: float64, to: float64) {.importcpp: "MemoryUsage::get_pointers_of_age(#, #, #)", header: "memoryUsage.h".} ## \
+proc getPointersOfAge*(_: typedesc[MemoryUsage], result: MemoryUsagePointers, `from`: float64, to: float64) {.importcpp: "#MemoryUsage::get_pointers_of_age(#, #, #)", header: "memoryUsage.h".} ## \
 ## Fills the indicated MemoryUsagePointers with the set of all pointers that
 ## were allocated within the range of the indicated number of seconds ago.
 
-proc getPointersWithZeroCount*(_: typedesc[MemoryUsage], result: MemoryUsagePointers) {.importcpp: "MemoryUsage::get_pointers_with_zero_count(#)", header: "memoryUsage.h".} ## \
+proc getPointersWithZeroCount*(_: typedesc[MemoryUsage], result: MemoryUsagePointers) {.importcpp: "#MemoryUsage::get_pointers_with_zero_count(#)", header: "memoryUsage.h".} ## \
 ## Fills the indicated MemoryUsagePointers with the set of all currently
 ## active pointers (that is, pointers allocated since the last call to
 ## freeze(), and not yet freed) that have a zero reference count.
@@ -18267,11 +18498,11 @@ proc getFilename*(this: DatagramGenerator): Filename {.importcpp: "#->get_filena
 ## Returns the filename that provides the source for these datagrams, if any,
 ## or empty string if the datagrams do not originate from a file on disk.
 
-proc getTimestamp*(this: DatagramGenerator): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: DatagramGenerator): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the on-disk timestamp of the file that was read, at the time it was
 ## opened, if that is available, or 0 if it is not.
 
-proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "#->get_file()".} ## \
+proc getFile*(this: DatagramGenerator): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the source for these datagrams, if
 ## any, or NULL if the datagrams do not originate from a file on disk.
 
@@ -18291,7 +18522,7 @@ proc initDatagramIterator*(): DatagramIterator {.importcpp: "DatagramIterator()"
 
 proc initDatagramIterator*(datagram: Datagram, offset: clonglong): DatagramIterator {.importcpp: "DatagramIterator(#, #)".}
 
-proc initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
+converter initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
 proc initDatagramIterator*(param0: DatagramIterator): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
@@ -18424,7 +18655,7 @@ proc getFilename*(this: DatagramSink): Filename {.importcpp: "#->get_filename()"
 ## Returns the filename that provides the target for these datagrams, if any,
 ## or empty string if the datagrams do not get written to a file on disk.
 
-proc getFile*(this: DatagramSink): FileReference {.importcpp: "#->get_file()".} ## \
+proc getFile*(this: DatagramSink): FileReference {.importcpp: "deconstify(#->get_file())", header: deconstifyCode.} ## \
 ## Returns the FileReference that provides the target for these datagrams, if
 ## any, or NULL if the datagrams do not written to a file on disk.
 
@@ -18436,7 +18667,7 @@ proc getFilePos*(this: DatagramSink): clonglong {.importcpp: "#->get_file_pos()"
 ## pointing to the first byte following the datagram returned after a call to
 ## put_datagram().
 
-converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(#.p()))".}
+converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(TypedReferenceCount *)(#))".}
 
 converter upcastToReferenceCount*(this: TypedReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -18812,13 +19043,13 @@ proc needsRepack*(this: Multifile): bool {.importcpp: "#->needs_repack()".} ## \
 ## Returns true if the Multifile index is suboptimal and should be repacked.
 ## Call repack() to achieve this.
 
-proc getTimestamp*(this: Multifile): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: Multifile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the modification timestamp of the overall Multifile.  This
 ## indicates the most recent date at which subfiles were added or removed from
 ## the Multifile.  Note that it is logically possible for an individual
 ## subfile to have a more recent timestamp than the overall timestamp.
 
-proc setTimestamp*(this: Multifile, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: Multifile, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Changes the overall mudification timestamp of the multifile.  Note that this
 ## will be reset to the current time every time you modify a subfile.
 ## Only set this if you know what you are doing!
@@ -19170,7 +19401,7 @@ proc getSubfileLength*(this: Multifile, index: int): clonglong {.importcpp: "#->
 ## 0 if the subfile has recently been added and flush() has not yet been
 ## called.
 
-proc getSubfileTimestamp*(this: Multifile, index: int): int {.importcpp: "#->get_subfile_timestamp(#)".} ## \
+proc getSubfileTimestamp*(this: Multifile, index: int): time_t.Time {.importcpp: "#->get_subfile_timestamp(#)".} ## \
 ## Returns the modification time of the nth subfile.  If this is called on an
 ## older .mf file, which did not store individual timestamps in the file (or
 ## if get_record_timestamp() is false), this will return the modification time
@@ -19231,7 +19462,7 @@ proc openReadSubfile*(this: Multifile, index: int): istream {.importcpp: "#->ope
 ## The return value will be NULL if the stream cannot be opened for some
 ## reason.
 
-proc closeReadSubfile*(_: typedesc[Multifile], stream: istream) {.importcpp: "Multifile::close_read_subfile(#)", header: "multifile.h".} ## \
+proc closeReadSubfile*(_: typedesc[Multifile], stream: istream) {.importcpp: "#Multifile::close_read_subfile(#)", header: "multifile.h".} ## \
 ## Closes a file opened by a previous call to open_read_subfile().  This
 ## really just deletes the istream pointer, but it is recommended to use this
 ## interface instead of deleting it explicitly, to help work around compiler
@@ -19282,24 +19513,24 @@ proc getHeaderPrefix*(this: Multifile): string {.importcpp: "nimStringFromStdStr
 ## Returns the string that preceded the Multifile header on the file, if any.
 ## See set_header_prefix().
 
-proc initNamable*(param0: Namable): Namable {.importcpp: "Namable(#)".}
+proc newNamable*(param0: Namable): Namable {.importcpp: "new Namable(#)".}
 
-proc initNamable*(initial_name: string): Namable {.importcpp: "Namable(nimStringToStdString(#))", header: stringConversionCode.}
+proc newNamable*(initial_name: string): Namable {.importcpp: "new Namable(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initNamable*(): Namable {.importcpp: "Namable()".}
+proc newNamable*(): Namable {.importcpp: "new Namable()".}
 
-proc setName*(this: Namable, name: string) {.importcpp: "#.set_name(nimStringToStdString(#))", header: stringConversionCode.}
+proc setName*(this: Namable, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc clearName*(this: Namable) {.importcpp: "#.clear_name()".} ## \
+proc clearName*(this: Namable) {.importcpp: "#->clear_name()".} ## \
 ## Resets the Namable's name to empty.
 
-proc hasName*(this: Namable): bool {.importcpp: "#.has_name()".} ## \
+proc hasName*(this: Namable): bool {.importcpp: "#->has_name()".} ## \
 ## Returns true if the Namable has a nonempty name set, false if the name is
 ## empty.
 
-proc getName*(this: Namable): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
+proc getName*(this: Namable): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
-proc output*(this: Namable, `out`: ostream) {.importcpp: "#.output(#)".} ## \
+proc output*(this: Namable, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 ## Outputs the Namable.  This function simply writes the name to the output
 ## stream; most Namable derivatives will probably redefine this.
 
@@ -19519,7 +19750,7 @@ proc getFileSize*(this: VirtualFile, stream: istream): clonglong {.importcpp: "#
 ## file.  Pass in the stream that was returned by open_read_file(); some
 ## implementations may require this stream to determine the size.
 
-proc getTimestamp*(this: VirtualFile): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: VirtualFile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -19628,7 +19859,7 @@ proc `[]`*(this: VirtualFileList, n: clonglong): VirtualFile {.importcpp: "#->op
 proc size*(this: VirtualFileList): clonglong {.importcpp: "#->size()".} ## \
 ## Returns the number of files in the list.
 
-proc `+=`*(this: VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +=(#)".}
+proc `+=`*(this: var VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +=(#)".}
 
 proc `+`*(this: VirtualFileList, other: VirtualFileList): VirtualFileList {.importcpp: "#->operator +(#)".}
 
@@ -19866,7 +20097,7 @@ proc openReadFile*(this: VirtualFileSystem, filename: Filename, auto_unwrap: boo
 ## than vfs-implicit-pz, which will automatically decompress a file if the
 ## extension .pz is \*not\* given.
 
-proc closeReadFile*(_: typedesc[VirtualFileSystem], stream: istream) {.importcpp: "VirtualFileSystem::close_read_file(#)", header: "virtualFileSystem.h".} ## \
+proc closeReadFile*(_: typedesc[VirtualFileSystem], stream: istream) {.importcpp: "#VirtualFileSystem::close_read_file(#)", header: "virtualFileSystem.h".} ## \
 ## Closes a file opened by a previous call to open_read_file().  This really
 ## just deletes the istream pointer, but it is recommended to use this
 ## interface instead of deleting it explicitly, to help work around compiler
@@ -19885,7 +20116,7 @@ proc openAppendFile*(this: VirtualFileSystem, filename: Filename): ostream {.imp
 ## open_write_file, the returned pointer should eventually be passed to
 ## close_write_file().
 
-proc closeWriteFile*(_: typedesc[VirtualFileSystem], stream: ostream) {.importcpp: "VirtualFileSystem::close_write_file(#)", header: "virtualFileSystem.h".} ## \
+proc closeWriteFile*(_: typedesc[VirtualFileSystem], stream: ostream) {.importcpp: "#VirtualFileSystem::close_write_file(#)", header: "virtualFileSystem.h".} ## \
 ## Closes a file opened by a previous call to open_write_file().  This really
 ## just deletes the ostream pointer, but it is recommended to use this
 ## interface instead of deleting it explicitly, to help work around compiler
@@ -19901,7 +20132,7 @@ proc openReadAppendFile*(this: VirtualFileSystem, filename: Filename): iostream 
 ## Like open_read_write_file, the returned pointer should eventually be passed
 ## to close_read_write_file().
 
-proc closeReadWriteFile*(_: typedesc[VirtualFileSystem], stream: iostream) {.importcpp: "VirtualFileSystem::close_read_write_file(#)", header: "virtualFileSystem.h".} ## \
+proc closeReadWriteFile*(_: typedesc[VirtualFileSystem], stream: iostream) {.importcpp: "#VirtualFileSystem::close_read_write_file(#)", header: "virtualFileSystem.h".} ## \
 ## Closes a file opened by a previous call to open_read_write_file().  This
 ## really just deletes the iostream pointer, but it is recommended to use this
 ## interface instead of deleting it explicitly, to help work around compiler
@@ -20039,7 +20270,7 @@ proc getTotalTime*(this: ProfileTimer): float64 {.importcpp: "#.getTotalTime()".
 ## Don't call any of the following during timing: (Because they are slow,
 ## not because anything will break).
 
-proc consolidateAllTo*(_: typedesc[ProfileTimer], `out`: ostream) {.importcpp: "ProfileTimer::consolidateAllTo(#)", header: "profileTimer.h".}
+proc consolidateAllTo*(_: typedesc[ProfileTimer], `out`: ostream) {.importcpp: "#ProfileTimer::consolidateAllTo(#)", header: "profileTimer.h".}
 
 proc consolidateAllTo*(_: typedesc[ProfileTimer]) {.importcpp: "ProfileTimer::consolidateAllTo()", header: "profileTimer.h".}
 
@@ -20047,7 +20278,7 @@ proc consolidateTo*(this: ProfileTimer, `out`: ostream) {.importcpp: "#.consolid
 
 proc consolidateTo*(this: ProfileTimer) {.importcpp: "#.consolidateTo()".}
 
-proc printAllTo*(_: typedesc[ProfileTimer], `out`: ostream) {.importcpp: "ProfileTimer::printAllTo(#)", header: "profileTimer.h".}
+proc printAllTo*(_: typedesc[ProfileTimer], `out`: ostream) {.importcpp: "#ProfileTimer::printAllTo(#)", header: "profileTimer.h".}
 
 proc printAllTo*(_: typedesc[ProfileTimer]) {.importcpp: "ProfileTimer::printAllTo()", header: "profileTimer.h".}
 
@@ -20067,23 +20298,23 @@ proc isValidPointer*(this: WeakPointerToVoid): bool {.importcpp: "#.is_valid_poi
 ## Returns true if the pointer is not null and the object has not been
 ## deleted.  See was_deleted() for caveats.
 
-proc setStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: string): bool {.importcpp: "WindowsRegistry::set_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "windowsRegistry.h".} ## \
+proc setStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: string): bool {.importcpp: "#WindowsRegistry::set_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "windowsRegistry.h".} ## \
 ## Sets the registry key to the indicated value as a string.  The supplied
 ## string value is automatically converted from whatever encoding is set by
 ## TextEncoder::set_default_encoding() and written as a Unicode string.  The
 ## registry key must already exist prior to calling this function.
 
-proc setIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: int): bool {.importcpp: "WindowsRegistry::set_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
+proc setIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: int): bool {.importcpp: "#WindowsRegistry::set_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
 ## Sets the registry key to the indicated value as an integer.  The registry
 ## key must already exist prior to calling this function.
 
-proc getStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: string): string {.importcpp: "nimStringFromStdString(WindowsRegistry::get_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#)))", header: "windowsRegistry.h".} ## \
+proc getStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: string): string {.importcpp: "nimStringFromStdString(#WindowsRegistry::get_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#)))", header: "windowsRegistry.h".} ## \
 ## Returns the value associated with the indicated registry key, assuming it
 ## is a string value.  The string value is automatically encoded using
 ## TextEncoder::get_default_encoding().  If the key is not defined or is not a
 ## string type value, default_value is returned instead.
 
-proc getIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: int): int {.importcpp: "WindowsRegistry::get_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
+proc getIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: int): int {.importcpp: "#WindowsRegistry::get_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
 ## Returns the value associated with the indicated registry key, assuming it
 ## is an integer value.  If the key is not defined or is not an integer type
 ## value, default_value is returned instead.
@@ -20106,7 +20337,7 @@ converter getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "Rec
 
 converter upcastToDataNode*(this: MouseRecorder): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
-converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(#.p()))".}
+converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(MouseRecorder *)(#))".}
 
 proc newMouseRecorder*(name: string): MouseRecorder {.importcpp: "new MouseRecorder(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20128,7 +20359,7 @@ proc beginPlayback*(this: RecorderController, filename: Filename): bool {.import
 proc close*(this: RecorderController) {.importcpp: "#->close()".} ## \
 ## Finishes recording data to the indicated filename.
 
-proc getStartTime*(this: RecorderController): int {.importcpp: "#->get_start_time()".} ## \
+proc getStartTime*(this: RecorderController): time_t.Time {.importcpp: "#->get_start_time()".} ## \
 ## Returns the time (and date) at which the current session was originally
 ## recorded (or, in recording mode, the time at which the current session
 ## began).
@@ -20233,7 +20464,7 @@ proc playFrame*(this: RecorderController) {.importcpp: "#->play_frame()".} ## \
 
 converter getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
 
-converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(#.p()))".}
+converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(SocketStreamRecorder *)(#))".}
 
 converter upcastToReferenceCount*(this: SocketStreamRecorder): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -20276,7 +20507,7 @@ proc flush*(this: SocketStreamRecorder): bool {.importcpp: "#->flush()".} ## \
 
 converter getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
 
-converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(#.p()))".}
+converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(LightNode *)(#))".}
 
 converter upcastToPandaNode*(this: LightNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
@@ -20388,7 +20619,7 @@ proc clearDispatches*(this: ComputeNode) {.importcpp: "#->clear_dispatches()".} 
 
 converter getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
 
-converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(#.p()))".}
+converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(LightLensNode *)(#))".}
 
 converter upcastToCamera*(this: LightLensNode): Camera {.importcpp: "(PT(Camera)(#))".}
 
@@ -20472,7 +20703,7 @@ converter getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: 
 
 proc newLODNode*(name: string): LODNode {.importcpp: "new LODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc makeDefaultLod*(_: typedesc[LODNode], name: string): LODNode {.importcpp: "LODNode::make_default_lod(nimStringToStdString(#))", header: "lodNode.h".} ## \
+proc makeDefaultLod*(_: typedesc[LODNode], name: string): LODNode {.importcpp: "#LODNode::make_default_lod(nimStringToStdString(#))", header: "lodNode.h".} ## \
 ## Creates a new LODNode of the type specified by the default-lod-type config
 ## variable.
 
@@ -20613,7 +20844,7 @@ proc getFadeStateOverride*(this: FadeLODNode): int {.importcpp: "#->get_fade_sta
 ## to apply the fade effect.  This should be larger than any attrib overrides
 ## on the fading geometry.
 
-converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLODNode.h".}
+converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLodNode.h".}
 
 proc getTrav*(this: NodeCullCallbackData): CullTraverser {.importcpp: "#.get_trav()".} ## \
 ## Returns the CullTraverser in use at the time of the callback.  This object
@@ -20676,7 +20907,7 @@ converter getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp
 
 converter upcastToSelectiveChildNode*(this: SequenceNode): SelectiveChildNode {.importcpp: "(PT(SelectiveChildNode)(#))".}
 
-converter upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(SequenceNode *)(#))".}
 
 proc newSequenceNode*(name: string): SequenceNode {.importcpp: "new SequenceNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -20700,7 +20931,7 @@ proc newShaderGenerator*(gsg: GraphicsStateGuardianBase): ShaderGenerator {.impo
 
 proc newShaderGenerator*(param0: ShaderGenerator): ShaderGenerator {.importcpp: "new ShaderGenerator(#)".}
 
-proc synthesizeShader*(this: ShaderGenerator, rs: RenderState, anim: GeomVertexAnimationSpec): ShaderAttrib {.importcpp: "#->synthesize_shader(#, #)".} ## \
+proc synthesizeShader*(this: ShaderGenerator, rs: RenderState, anim: GeomVertexAnimationSpec): ShaderAttrib {.importcpp: "deconstify(#->synthesize_shader(#, #))", header: deconstifyCode.} ## \
 ## This is the routine that implements the next-gen fixed function pipeline by
 ## synthesizing a shader.  It also takes care of setting up any buffers needed
 ## to produce the requested effects.
@@ -20785,7 +21016,7 @@ proc setMaxDistance*(this: Spotlight, max_distance: float32) {.importcpp: "#->se
 ## Sets the radius of the light's sphere of influence.  Beyond this distance, the
 ## light may be attenuated to zero, if this is supported by the shader.
 
-proc makeSpot*(_: typedesc[Spotlight], pixel_width: int, full_radius: float32, fg: LColor, bg: LColor): Texture {.importcpp: "Spotlight::make_spot(#, #, #, #)", header: "spotlight.h".} ## \
+proc makeSpot*(_: typedesc[Spotlight], pixel_width: int, full_radius: float32, fg: LColor, bg: LColor): Texture {.importcpp: "#Spotlight::make_spot(#, #, #, #)", header: "spotlight.h".} ## \
 ## Returns a newly-generated Texture that renders a circular spot image as
 ## might be cast from the spotlight.  This may be projected onto target
 ## geometry (for instance, via NodePath::project_texture()) instead of
@@ -20931,74 +21162,74 @@ proc `==`*(this: TransformState, other: TransformState): bool {.importcpp: "#->o
 proc getHash*(this: TransformState): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
-proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "TransformState::make_identity()", header: "transformState.h".} ## \
+proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "transformState.h".} ## \
 ## Constructs an identity transform.
 
-proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "TransformState::make_invalid()", header: "transformState.h".} ## \
+proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "transformState.h".} ## \
 ## Constructs an invalid transform; for instance, the result of inverting a
 ## singular matrix.
 
-proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "TransformState::make_pos(#)", header: "transformState.h".} ## \
+proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "TransformState::make_hpr(#)", header: "transformState.h".} ## \
+proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_hpr(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "TransformState::make_quat(#)", header: "transformState.h".} ## \
+proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(#TransformState::make_quat(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr(#, #)", header: "transformState.h".} ## \
+proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr(#, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "TransformState::make_scale(#)", header: "transformState.h".} ## \
+proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeScale*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "TransformState::make_scale(#)", header: "transformState.h".} ## \
+proc makeScale*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "TransformState::make_shear(#)", header: "transformState.h".} ## \
+proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_shear(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr_scale(#, #, #)", header: "transformState.h".} ## \
+proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_quat_scale(#, #, #)", header: "transformState.h".} ## \
+proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_hpr_scale_shear(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale_shear(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "TransformState::make_pos_quat_scale_shear(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale_shear(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified components.
 
-proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "TransformState::make_mat(#)", header: "transformState.h".} ## \
+proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(#TransformState::make_mat(#))", header: "transformState.h".} ## \
 ## Makes a new TransformState with the specified transformation matrix.
 
-proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "TransformState::make_pos2d(#)", header: "transformState.h".} ## \
+proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeRotate2d*(_: typedesc[TransformState], rotate: float32): TransformState {.importcpp: "TransformState::make_rotate2d(#)", header: "transformState.h".} ## \
+proc makeRotate2d*(_: typedesc[TransformState], rotate: float32): TransformState {.importcpp: "deconstify(#TransformState::make_rotate2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32): TransformState {.importcpp: "TransformState::make_pos_rotate2d(#, #)", header: "transformState.h".} ## \
+proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate2d(#, #))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "TransformState::make_scale2d(#)", header: "transformState.h".} ## \
+proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeScale2d*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "TransformState::make_scale2d(#)", header: "transformState.h".} ## \
+proc makeScale2d*(_: typedesc[TransformState], scale: float32): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makeShear2d*(_: typedesc[TransformState], shear: float32): TransformState {.importcpp: "TransformState::make_shear2d(#)", header: "transformState.h".} ## \
+proc makeShear2d*(_: typedesc[TransformState], shear: float32): TransformState {.importcpp: "deconstify(#TransformState::make_shear2d(#))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2): TransformState {.importcpp: "TransformState::make_pos_rotate_scale2d(#, #, #)", header: "transformState.h".} ## \
+proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale2d(#, #, #))", header: "transformState.h".} ## \
 ## Makes a new 2-d TransformState with the specified components.
 
-proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2, shear: float32): TransformState {.importcpp: "TransformState::make_pos_rotate_scale_shear2d(#, #, #, #)", header: "transformState.h".} ## \
+proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float32, scale: LVecBase2, shear: float32): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale_shear2d(#, #, #, #))", header: "transformState.h".} ## \
 ## Makes a new two-dimensional TransformState with the specified components.
 
-proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "TransformState::make_mat3(#)", header: "transformState.h".} ## \
+proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(#TransformState::make_mat3(#))", header: "transformState.h".} ## \
 ## Makes a new two-dimensional TransformState with the specified 3x3
 ## transformation matrix.
 
@@ -21151,50 +21382,50 @@ proc getMat3*(this: TransformState): LMatrix3 {.importcpp: "#->get_mat3()".} ## 
 ## Returns the 3x3 matrix that describes the 2-d transform.  It is an error to
 ## call this if is_2d() returned false.
 
-proc setPos*(this: TransformState, pos: LVecBase3): TransformState {.importcpp: "#->set_pos(#)".} ## \
+proc setPos*(this: TransformState, pos: LVecBase3): TransformState {.importcpp: "deconstify(#->set_pos(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its pos component replaced with the indicated value.
 
-proc setHpr*(this: TransformState, hpr: LVecBase3): TransformState {.importcpp: "#->set_hpr(#)".} ## \
+proc setHpr*(this: TransformState, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#->set_hpr(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setQuat*(this: TransformState, quat: LQuaternion): TransformState {.importcpp: "#->set_quat(#)".} ## \
+proc setQuat*(this: TransformState, quat: LQuaternion): TransformState {.importcpp: "deconstify(#->set_quat(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setScale*(this: TransformState, scale: LVecBase3): TransformState {.importcpp: "#->set_scale(#)".} ## \
+proc setScale*(this: TransformState, scale: LVecBase3): TransformState {.importcpp: "deconstify(#->set_scale(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its scale component replaced with the indicated value,
 ## if possible.
 
-proc setShear*(this: TransformState, shear: LVecBase3): TransformState {.importcpp: "#->set_shear(#)".} ## \
+proc setShear*(this: TransformState, shear: LVecBase3): TransformState {.importcpp: "deconstify(#->set_shear(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original
 ## TransformState with its shear component replaced with the indicated value,
 ## if possible.
 
-proc setPos2d*(this: TransformState, pos: LVecBase2): TransformState {.importcpp: "#->set_pos2d(#)".} ## \
+proc setPos2d*(this: TransformState, pos: LVecBase2): TransformState {.importcpp: "deconstify(#->set_pos2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its pos component replaced with the indicated value.
 
-proc setRotate2d*(this: TransformState, rotate: float32): TransformState {.importcpp: "#->set_rotate2d(#)".} ## \
+proc setRotate2d*(this: TransformState, rotate: float32): TransformState {.importcpp: "deconstify(#->set_rotate2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its rotation component replaced with the indicated
 ## value, if possible.
 
-proc setScale2d*(this: TransformState, scale: LVecBase2): TransformState {.importcpp: "#->set_scale2d(#)".} ## \
+proc setScale2d*(this: TransformState, scale: LVecBase2): TransformState {.importcpp: "deconstify(#->set_scale2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its scale component replaced with the indicated value,
 ## if possible.
 
-proc setShear2d*(this: TransformState, shear: float32): TransformState {.importcpp: "#->set_shear2d(#)".} ## \
+proc setShear2d*(this: TransformState, shear: float32): TransformState {.importcpp: "deconstify(#->set_shear2d(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the original 2-d
 ## TransformState with its shear component replaced with the indicated value,
 ## if possible.
 
-proc compose*(this: TransformState, other: TransformState): TransformState {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: TransformState, other: TransformState): TransformState {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the composition of this
 ## state with the other state.
 ##
@@ -21203,19 +21434,19 @@ proc compose*(this: TransformState, other: TransformState): TransformState {.imp
 ## continue to exist.  Should one of them destruct, the cached entry will be
 ## removed, and its pointer will be allowed to destruct as well.
 
-proc invertCompose*(this: TransformState, other: TransformState): TransformState {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: TransformState, other: TransformState): TransformState {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new TransformState object that represents the composition of this
 ## state's inverse with the other state.
 ##
 ## This is similar to compose(), but is particularly useful for computing the
 ## relative state of a node as viewed from some other node.
 
-proc getInverse*(this: TransformState): TransformState {.importcpp: "#->get_inverse()".} ## \
+proc getInverse*(this: TransformState): TransformState {.importcpp: "deconstify(#->get_inverse())", header: deconstifyCode.} ## \
 ## Returns the inverse of this transform.  If you are going to immediately
 ## compose this result with another TransformState, it is faster to do it in
 ## one operation with invert_compose().
 
-proc getUnique*(this: TransformState): TransformState {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: TransformState): TransformState {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique TransformState in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21261,7 +21492,7 @@ proc getCompositionCacheSize*(this: TransformState): clonglong {.importcpp: "#->
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_composition_cache_source(#)".} ## \
+proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source TransformState of the nth element in the composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.  See get_composition_cache_result().
@@ -21269,7 +21500,7 @@ proc getCompositionCacheSource*(this: TransformState, n: clonglong): TransformSt
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_composition_cache_result(#)".} ## \
+proc getCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result TransformState of the nth element in the composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.
@@ -21289,7 +21520,7 @@ proc getInvertCompositionCacheSize*(this: TransformState): clonglong {.importcpp
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_invert_composition_cache_source(#)".} ## \
+proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_invert_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source TransformState of the nth element in the invert
 ## composition cache.  Returns NULL if there doesn't happen to be an entry in
 ## the nth element.  See get_invert_composition_cache_result().
@@ -21297,7 +21528,7 @@ proc getInvertCompositionCacheSource*(this: TransformState, n: clonglong): Trans
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "#->get_invert_composition_cache_result(#)".} ## \
+proc getInvertCompositionCacheResult*(this: TransformState, n: clonglong): TransformState {.importcpp: "deconstify(#->get_invert_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result TransformState of the nth element in the invert
 ## composition cache.  Returns NULL if there doesn't happen to be an entry in
 ## the nth element.
@@ -21358,7 +21589,7 @@ proc garbageCollect*(_: typedesc[TransformState]): int {.importcpp: "TransformSt
 ## up appropriately.  It does no harm to call it even if this variable is not
 ## true, but there is probably no advantage in that case.
 
-proc listCycles*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "TransformState::list_cycles(#)", header: "transformState.h".} ## \
+proc listCycles*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "#TransformState::list_cycles(#)", header: "transformState.h".} ## \
 ## Detects all of the reference-count cycles in the cache and reports them to
 ## standard output.
 ##
@@ -21371,7 +21602,7 @@ proc listCycles*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "Tran
 ## since they can be reclaimed by a call to clear_cache(); but they will not
 ## be reclaimed automatically.
 
-proc listStates*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "TransformState::list_states(#)", header: "transformState.h".} ## \
+proc listStates*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "#TransformState::list_states(#)", header: "transformState.h".} ## \
 ## Lists all of the TransformStates in the cache to the output stream, one per
 ## line.  This can be quite a lot of output if the cache is large, so be
 ## prepared.
@@ -21418,14 +21649,14 @@ proc getSortedSlot*(this: RenderAttribRegistry, n: int): int {.importcpp: "#.get
 
 proc getGlobalPtr*(_: typedesc[RenderAttribRegistry]): RenderAttribRegistry {.importcpp: "RenderAttribRegistry::get_global_ptr()", header: "renderAttribRegistry.h".}
 
-proc compose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderAttrib object that represents the composition of this
 ## attrib with the other attrib.  In most cases, this is the same as the other
 ## attrib; a compose b produces b.  Some kinds of attributes, like a
 ## TextureTransform, for instance, might produce a new result: a compose b
 ## produces c.
 
-proc invertCompose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: RenderAttrib, other: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderAttrib object that represents the composition of the
 ## inverse of this attrib with the other attrib.  In most cases, this is the
 ## same as the other attrib; !a compose b produces b.  Some kinds of
@@ -21466,7 +21697,7 @@ proc compareTo*(this: RenderAttrib, other: RenderAttrib): int {.importcpp: "#->c
 proc getHash*(this: RenderAttrib): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
-proc getUnique*(this: RenderAttrib): RenderAttrib {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: RenderAttrib): RenderAttrib {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique RenderAttrib in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21481,7 +21712,7 @@ proc getNumAttribs*(_: typedesc[RenderAttrib]): int {.importcpp: "RenderAttrib::
 ## Returns the total number of unique RenderAttrib objects allocated in the
 ## world.  This will go up and down during normal operations.
 
-proc listAttribs*(_: typedesc[RenderAttrib], `out`: ostream) {.importcpp: "RenderAttrib::list_attribs(#)", header: "renderAttrib.h".} ## \
+proc listAttribs*(_: typedesc[RenderAttrib], `out`: ostream) {.importcpp: "#RenderAttrib::list_attribs(#)", header: "renderAttrib.h".} ## \
 ## Lists all of the RenderAttribs in the cache to the output stream, one per
 ## line.  This can be quite a lot of output if the cache is large, so be
 ## prepared.
@@ -21499,7 +21730,7 @@ proc getSlot*(this: RenderAttrib): int {.importcpp: "#->get_slot()".}
 
 converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
-proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "RenderModeAttrib::make_default()", header: "renderModeAttrib.h".} ## \
+proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "renderModeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -21528,34 +21759,34 @@ proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeA
 
 converter getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
-proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "TexMatrixAttrib::make()", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies no stages at all.
 
-proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "TexMatrixAttrib::make(#)", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#))", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies the indicated matrix to the
 ## default texture stage.  This interface is deprecated.
 ##
 ## @deprecated Use the constructor that takes a TextureStage instead.
 
-proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "TexMatrixAttrib::make(#, #)", header: "texMatrixAttrib.h".} ## \
+proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#, #))", header: "texMatrixAttrib.h".} ## \
 ## Constructs a TexMatrixAttrib that applies the indicated transform to the
 ## named texture stage.
 
-proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "TexMatrixAttrib::make_default()", header: "texMatrixAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "texMatrixAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
-proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState, override: int): RenderAttrib {.importcpp: "#->add_stage(#, #, #)".} ## \
+proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState, override: int): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated
 ## transform for the given stage.  If this stage already exists, its transform
 ## is replaced.
 
-proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "#->add_stage(#, #)".} ## \
+proc addStage*(this: TexMatrixAttrib, stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated
 ## transform for the given stage.  If this stage already exists, its transform
 ## is replaced.
 
-proc removeStage*(this: TexMatrixAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexMatrixAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexMatrixAttrib just like this one, with the indicated stage
 ## removed.
 
@@ -21584,7 +21815,7 @@ proc getMat*(this: TexMatrixAttrib, stage: TextureStage): LMatrix4 {.importcpp: 
 ## stage, or identity matrix if nothing is associated with the indicated
 ## stage.
 
-proc getTransform*(this: TexMatrixAttrib, stage: TextureStage): TransformState {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: TexMatrixAttrib, stage: TextureStage): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transformation associated with the indicated texture stage, or
 ## identity matrix if nothing is associated with the indicated stage.
 
@@ -21615,6 +21846,11 @@ proc compareSort*(this: RenderState, other: RenderState): int {.importcpp: "#->c
 ## more likely to be grouped together.  This is not related to the sorting
 ## order defined by compare_to.
 
+proc compareMask*(this: RenderState, other: RenderState, compare_mask: BitMask32): int {.importcpp: "#->compare_mask(#, #)".} ## \
+## This version of compare_to takes a slot mask that indicates which
+## attributes to include in the comparison.  Unlike compare_to, this method
+## compares the attributes by pointer.
+
 proc getHash*(this: RenderState): clonglong {.importcpp: "#->get_hash()".} ## \
 ## Returns a suitable hash value for phash_map.
 
@@ -21630,40 +21866,40 @@ proc cullCallback*(this: RenderState, trav: CullTraverser, data: CullTraverserDa
 ## interrupts the list and returns false immediately; otherwise, completes the
 ## list and returns true.
 
-proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "RenderState::make_empty()", header: "renderState.h".} ## \
+proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "renderState.h".} ## \
 ## Returns a RenderState with no attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with five attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with five attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with four attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with four attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with three attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with three attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with two attributes set.
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "RenderState::make(#, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with two attributes set.
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "RenderState::make(#, #)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".} ## \
 ## Returns a RenderState with one attribute set.
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "RenderState::make(#)", header: "renderState.h".} ## \
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#))", header: "renderState.h".} ## \
 ## Returns a RenderState with one attribute set.
 
-proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "#->compose(#)".} ## \
+proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "deconstify(#->compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the composition of this
 ## state with the other state.
 ##
@@ -21672,44 +21908,44 @@ proc compose*(this: RenderState, other: RenderState): RenderState {.importcpp: "
 ## exist.  Should one of them destruct, the cached entry will be removed, and
 ## its pointer will be allowed to destruct as well.
 
-proc invertCompose*(this: RenderState, other: RenderState): RenderState {.importcpp: "#->invert_compose(#)".} ## \
+proc invertCompose*(this: RenderState, other: RenderState): RenderState {.importcpp: "deconstify(#->invert_compose(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the composition of this
 ## state's inverse with the other state.
 ##
 ## This is similar to compose(), but is particularly useful for computing the
 ## relative state of a node as viewed from some other node.
 
-proc addAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "#->add_attrib(#, #)".} ## \
+proc addAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#->add_attrib(#, #))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced (unless the override is lower).
 
-proc addAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "#->add_attrib(#)".} ## \
+proc addAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#->add_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced (unless the override is lower).
 
-proc setAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "#->set_attrib(#)".} ## \
+proc setAttrib*(this: RenderState, attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#->set_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced unconditionally.  The override is not
 ## changed.
 
-proc setAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "#->set_attrib(#, #)".} ## \
+proc setAttrib*(this: RenderState, attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#->set_attrib(#, #))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the new RenderAttrib added.  If there is already a RenderAttrib
 ## with the same type, it is replaced unconditionally.  The override is also
 ## replaced unconditionally.
 
-proc removeAttrib*(this: RenderState, `type`: TypeHandle): RenderState {.importcpp: "#->remove_attrib(#)".} ## \
+proc removeAttrib*(this: RenderState, `type`: TypeHandle): RenderState {.importcpp: "deconstify(#->remove_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the indicated RenderAttrib removed.
 
-proc removeAttrib*(this: RenderState, slot: int): RenderState {.importcpp: "#->remove_attrib(#)".} ## \
+proc removeAttrib*(this: RenderState, slot: int): RenderState {.importcpp: "deconstify(#->remove_attrib(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with the indicated RenderAttrib removed.
 
-proc adjustAllPriorities*(this: RenderState, adjustment: int): RenderState {.importcpp: "#->adjust_all_priorities(#)".} ## \
+proc adjustAllPriorities*(this: RenderState, adjustment: int): RenderState {.importcpp: "deconstify(#->adjust_all_priorities(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderState object that represents the same as the source
 ## state, with all attributes' override values incremented (or decremented, if
 ## negative) by the indicated amount.  If the override would drop below zero,
@@ -21723,15 +21959,15 @@ proc hasAttrib*(this: RenderState, slot: int): bool {.importcpp: "#->has_attrib(
 ## Returns true if an attrib of the indicated type is present, false
 ## otherwise.
 
-proc getAttrib*(this: RenderState, `type`: TypeHandle): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: RenderState, `type`: TypeHandle): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Looks for a RenderAttrib of the indicated type in the state, and returns it
 ## if it is found, or NULL if it is not.
 
-proc getAttrib*(this: RenderState, slot: int): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: RenderState, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the RenderAttrib with the indicated slot index, or NULL if there is
 ## no such RenderAttrib in the state.
 
-proc getAttribDef*(this: RenderState, slot: int): RenderAttrib {.importcpp: "#->get_attrib_def(#)".} ## \
+proc getAttribDef*(this: RenderState, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib_def(#))", header: deconstifyCode.} ## \
 ## Returns the RenderAttrib with the indicated slot index, or the default
 ## attrib for that slot if there is no such RenderAttrib in the state.
 
@@ -21743,7 +21979,7 @@ proc getOverride*(this: RenderState, slot: int): int {.importcpp: "#->get_overri
 ## Looks for a RenderAttrib of the indicated type in the state, and returns
 ## its override value if it is found, or 0 if it is not.
 
-proc getUnique*(this: RenderState): RenderState {.importcpp: "#->get_unique()".} ## \
+proc getUnique*(this: RenderState): RenderState {.importcpp: "deconstify(#->get_unique())", header: deconstifyCode.} ## \
 ## Returns the pointer to the unique RenderState in the cache that is
 ## equivalent to this one.  This may be the same pointer as this object, or it
 ## may be a different pointer; but it will be an equivalent object, and it
@@ -21782,7 +22018,7 @@ proc getCompositionCacheSize*(this: RenderState): clonglong {.importcpp: "#->get
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_composition_cache_source(#)".} ## \
+proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source RenderState of the nth element in the composition cache.
 ## Returns NULL if there doesn't happen to be an entry in the nth element.
 ## See get_composition_cache_result().
@@ -21790,7 +22026,7 @@ proc getCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_composition_cache_result(#)".} ## \
+proc getCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result RenderState of the nth element in the composition cache.
 ## Returns NULL if there doesn't happen to be an entry in the nth element.
 ##
@@ -21809,7 +22045,7 @@ proc getInvertCompositionCacheSize*(this: RenderState): clonglong {.importcpp: "
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_invert_composition_cache_source(#)".} ## \
+proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_invert_composition_cache_source(#))", header: deconstifyCode.} ## \
 ## Returns the source RenderState of the nth element in the invert composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.  See get_invert_composition_cache_result().
@@ -21817,7 +22053,7 @@ proc getInvertCompositionCacheSource*(this: RenderState, n: clonglong): RenderSt
 ## This has no practical value other than for examining the cache for
 ## performance analysis.
 
-proc getInvertCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "#->get_invert_composition_cache_result(#)".} ## \
+proc getInvertCompositionCacheResult*(this: RenderState, n: clonglong): RenderState {.importcpp: "deconstify(#->get_invert_composition_cache_result(#))", header: deconstifyCode.} ## \
 ## Returns the result RenderState of the nth element in the invert composition
 ## cache.  Returns NULL if there doesn't happen to be an entry in the nth
 ## element.
@@ -21880,7 +22116,7 @@ proc garbageCollect*(_: typedesc[RenderState]): int {.importcpp: "RenderState::g
 ##
 ## This automatically calls RenderAttrib::garbage_collect() as well.
 
-proc listCycles*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "RenderState::list_cycles(#)", header: "renderState.h".} ## \
+proc listCycles*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "#RenderState::list_cycles(#)", header: "renderState.h".} ## \
 ## Detects all of the reference-count cycles in the cache and reports them to
 ## standard output.
 ##
@@ -21893,7 +22129,7 @@ proc listCycles*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "RenderS
 ## since they can be reclaimed by a call to clear_cache(); but they will not
 ## be reclaimed automatically.
 
-proc listStates*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "RenderState::list_states(#)", header: "renderState.h".} ## \
+proc listStates*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "#RenderState::list_states(#)", header: "renderState.h".} ## \
 ## Lists all of the RenderStates in the cache to the output stream, one per
 ## line.  This can be quite a lot of output if the cache is large, so be
 ## prepared.
@@ -21921,7 +22157,7 @@ proc getGeomRendering*(this: RenderState, geom_rendering: int): int {.importcpp:
 
 converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
-proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "AlphaTestAttrib::make_default()", header: "alphaTestAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "alphaTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -21932,7 +22168,7 @@ proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAtt
 
 converter getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
-proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "AntialiasAttrib::make(#)", header: "antialiasAttrib.h".} ## \
+proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "antialiasAttrib.h".} ## \
 ## Constructs a new AntialiasAttrib object.
 ##
 ## The mode should be either M_none, M_auto, or a union of any or all of
@@ -21959,7 +22195,7 @@ proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "
 ## case M_line or M_point is selected (these two generally produce better
 ## results than M_multisample)
 
-proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "AntialiasAttrib::make_default()", header: "antialiasAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "antialiasAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -21996,7 +22232,7 @@ proc getNumEffects*(_: typedesc[RenderEffect]): int {.importcpp: "RenderEffect::
 ## Returns the total number of unique RenderEffect objects allocated in the
 ## world.  This will go up and down during normal operations.
 
-proc listEffects*(_: typedesc[RenderEffect], `out`: ostream) {.importcpp: "RenderEffect::list_effects(#)", header: "renderEffect.h".} ## \
+proc listEffects*(_: typedesc[RenderEffect], `out`: ostream) {.importcpp: "#RenderEffect::list_effects(#)", header: "renderEffect.h".} ## \
 ## Lists all of the RenderEffects in the cache to the output stream, one per
 ## line.  This can be quite a lot of output if the cache is large, so be
 ## prepared.
@@ -22017,47 +22253,47 @@ proc getNumEffects*(this: RenderEffects): clonglong {.importcpp: "#->get_num_eff
 ## Returns the number of separate effects indicated in the state.
 ## @deprecated in Python, use len(effects) instead, or effects.size() in C++.
 
-proc getEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Looks for a RenderEffect of the indicated type in the state, and returns it
 ## if it is found, or NULL if it is not.
 
-proc getEffect*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Returns the nth effect in the state.
 
 proc size*(this: RenderEffects): clonglong {.importcpp: "#->size()".} ## \
 ## Returns the number of separate effects indicated in the state.
 
-proc `[]`*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "#->operator [](#)".} ## \
+proc `[]`*(this: RenderEffects, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->operator [](#))", header: deconstifyCode.} ## \
 ## Returns the effect in the state with the given type.
 
-proc `[]`*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "#->operator [](#)".} ## \
+proc `[]`*(this: RenderEffects, n: clonglong): RenderEffect {.importcpp: "deconstify(#->operator [](#))", header: deconstifyCode.} ## \
 ## Returns the nth effect in the state.
 
 proc findEffect*(this: RenderEffects, `type`: TypeHandle): int {.importcpp: "#->find_effect(#)".} ## \
 ## Searches for an effect with the indicated type in the state, and returns
 ## its index if it is found, or -1 if it is not.
 
-proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "RenderEffects::make_empty()", header: "renderEffects.h".} ## \
+proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with no effects set.
 
-proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with one effect set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with two effects set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with three effects set.
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "RenderEffects::make(#, #, #, #)", header: "renderEffects.h".} ## \
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #, #))", header: "renderEffects.h".} ## \
 ## Returns a RenderEffects with four effects set.
 
-proc addEffect*(this: RenderEffects, effect: RenderEffect): RenderEffects {.importcpp: "#->add_effect(#)".} ## \
+proc addEffect*(this: RenderEffects, effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#->add_effect(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderEffects object that represents the same as the source
 ## state, with the new RenderEffect added.  If there is already a RenderEffect
 ## with the same type, it is replaced.
 
-proc removeEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffects {.importcpp: "#->remove_effect(#)".} ## \
+proc removeEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffects {.importcpp: "deconstify(#->remove_effect(#))", header: deconstifyCode.} ## \
 ## Returns a new RenderEffects object that represents the same as the source
 ## state, with the indicated RenderEffect removed.
 
@@ -22069,7 +22305,7 @@ proc getNumStates*(_: typedesc[RenderEffects]): int {.importcpp: "RenderEffects:
 ## Returns the total number of unique RenderEffects objects allocated in the
 ## world.  This will go up and down during normal operations.
 
-proc listStates*(_: typedesc[RenderEffects], `out`: ostream) {.importcpp: "RenderEffects::list_states(#)", header: "renderEffects.h".} ## \
+proc listStates*(_: typedesc[RenderEffects], `out`: ostream) {.importcpp: "#RenderEffects::list_states(#)", header: "renderEffects.h".} ## \
 ## Lists all of the RenderEffects in the cache to the output stream, one per
 ## line.  This can be quite a lot of output if the cache is large, so be
 ## prepared.
@@ -22083,7 +22319,7 @@ converter getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "Re
 
 converter upcastToTypedWritableReferenceCount*(this: PandaNode): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(PandaNode *)(#))".}
 
 proc newPandaNode*(name: string): PandaNode {.importcpp: "new PandaNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -22428,13 +22664,13 @@ proc setAttrib*(this: PandaNode, attrib: RenderAttrib) {.importcpp: "#->set_attr
 ## attribute will now apply to this node and everything below.  If there was
 ## already an attribute of the same type, it is replaced.
 
-proc getAttrib*(this: PandaNode, `type`: TypeHandle): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: PandaNode, `type`: TypeHandle): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the render attribute of the indicated type, if it is defined on the
 ## node, or NULL if it is not.  This checks only what is set on this
 ## particular node level, and has nothing to do with what render attributes
 ## may be inherited from parent nodes.
 
-proc getAttrib*(this: PandaNode, slot: int): RenderAttrib {.importcpp: "#->get_attrib(#)".} ## \
+proc getAttrib*(this: PandaNode, slot: int): RenderAttrib {.importcpp: "deconstify(#->get_attrib(#))", header: deconstifyCode.} ## \
 ## Returns the render attribute of the indicated type, if it is defined on the
 ## node, or NULL if it is not.  This checks only what is set on this
 ## particular node level, and has nothing to do with what render attributes
@@ -22462,7 +22698,7 @@ proc setEffect*(this: PandaNode, effect: RenderEffect) {.importcpp: "#->set_effe
 ## Adds the indicated render effect to the scene graph on this node.  If there
 ## was already an effect of the same type, it is replaced.
 
-proc getEffect*(this: PandaNode, `type`: TypeHandle): RenderEffect {.importcpp: "#->get_effect(#)".} ## \
+proc getEffect*(this: PandaNode, `type`: TypeHandle): RenderEffect {.importcpp: "deconstify(#->get_effect(#))", header: deconstifyCode.} ## \
 ## Returns the render effect of the indicated type, if it is defined on the
 ## node, or NULL if it is not.
 
@@ -22487,13 +22723,13 @@ proc setState*(this: PandaNode, state: RenderState) {.importcpp: "#->set_state(#
 ## This completely replaces whatever has been set on this node via repeated
 ## calls to set_attrib().
 
-proc getState*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "#->get_state(#)".} ## \
+proc getState*(this: PandaNode, current_thread: Thread): RenderState {.importcpp: "deconstify(#->get_state(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
 ## inherited from above.
 
-proc getState*(this: PandaNode): RenderState {.importcpp: "#->get_state()".} ## \
+proc getState*(this: PandaNode): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the complete RenderState that will be applied to all nodes at this
 ## level and below, as set on this node.  This returns only the RenderState
 ## set on this particular node, and has nothing to do with state that might be
@@ -22519,10 +22755,10 @@ proc setEffects*(this: PandaNode, effects: RenderEffects) {.importcpp: "#->set_e
 ## completely replaces whatever has been set on this node via repeated calls
 ## to set_attrib().
 
-proc getEffects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "#->get_effects(#)".} ## \
+proc getEffects*(this: PandaNode, current_thread: Thread): RenderEffects {.importcpp: "deconstify(#->get_effects(#))", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
-proc getEffects*(this: PandaNode): RenderEffects {.importcpp: "#->get_effects()".} ## \
+proc getEffects*(this: PandaNode): RenderEffects {.importcpp: "deconstify(#->get_effects())", header: deconstifyCode.} ## \
 ## Returns the complete RenderEffects that will be applied to this node.
 
 proc clearEffects*(this: PandaNode, current_thread: Thread) {.importcpp: "#->clear_effects(#)".} ## \
@@ -22539,12 +22775,12 @@ proc setTransform*(this: PandaNode, transform: TransformState) {.importcpp: "#->
 ## Sets the transform that will be applied to this node and below.  This
 ## defines a new coordinate space at this point in the scene graph and below.
 
-proc getTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
 
-proc getTransform*(this: PandaNode): TransformState {.importcpp: "#->get_transform()".} ## \
+proc getTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set on this particular node.  This is
 ## not the net transform from the root, but simply the transform on this
 ## particular node.
@@ -22565,11 +22801,11 @@ proc setPrevTransform*(this: PandaNode, transform: TransformState) {.importcpp: 
 ## frame ago, for the purposes of detecting motion for accurate collision
 ## calculations.
 
-proc getPrevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "#->get_prev_transform(#)".} ## \
+proc getPrevTransform*(this: PandaNode, current_thread: Thread): TransformState {.importcpp: "deconstify(#->get_prev_transform(#))", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
-proc getPrevTransform*(this: PandaNode): TransformState {.importcpp: "#->get_prev_transform()".} ## \
+proc getPrevTransform*(this: PandaNode): TransformState {.importcpp: "deconstify(#->get_prev_transform())", header: deconstifyCode.} ## \
 ## Returns the transform that has been set as this node's "previous" position.
 ## See set_prev_transform().
 
@@ -22589,7 +22825,7 @@ proc hasDirtyPrevTransform*(this: PandaNode): bool {.importcpp: "#->has_dirty_pr
 ## pipeline stage 0).  In this case, the node will be visited by
 ## reset_prev_transform().
 
-proc resetAllPrevTransform*(_: typedesc[PandaNode], current_thread: Thread) {.importcpp: "PandaNode::reset_all_prev_transform(#)", header: "pandaNode.h".} ## \
+proc resetAllPrevTransform*(_: typedesc[PandaNode], current_thread: Thread) {.importcpp: "#PandaNode::reset_all_prev_transform(#)", header: "pandaNode.h".} ## \
 ## Visits all nodes in the world with the _dirty_prev_transform flag--that is,
 ## all nodes whose _prev_transform is different from the _transform in
 ## pipeline stage 0--and resets the _prev_transform to be the same as
@@ -22740,6 +22976,14 @@ proc clearUnexpectedChange*(this: PandaNode, flags: int) {.importcpp: "#->clear_
 ## Since this is a developer debugging tool only, this function does nothing
 ## in a production (NDEBUG) build.
 
+proc getOverallBit*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_overall_bit()", header: "pandaNode.h".} ## \
+## Returns the special bit that, when specifically cleared in the node's
+## DrawMask, indicates that the node is hidden to all cameras, regardless of
+## the remaining DrawMask bits.
+
+proc getAllCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_all_camera_mask()", header: "pandaNode.h".} ## \
+## Returns a DrawMask that is appropriate for rendering to all cameras.
+
 proc isOverallHidden*(this: PandaNode): bool {.importcpp: "#->is_overall_hidden()".} ## \
 ## Returns true if the node has been hidden to all cameras by clearing its
 ## overall bit.
@@ -22753,11 +22997,100 @@ proc setOverallHidden*(this: PandaNode, overall_hidden: bool) {.importcpp: "#->s
 ## This actually works by twiddling the reserved _overall_bit in the node's
 ## draw mask, which has special meaning.
 
-proc getOffClipPlanes*(this: PandaNode, current_thread: Thread): RenderAttrib {.importcpp: "#->get_off_clip_planes(#)".} ## \
+proc adjustDrawMask*(this: PandaNode, show_mask: DrawMask, hide_mask: DrawMask, clear_mask: DrawMask) {.importcpp: "#->adjust_draw_mask(#, #, #)".} ## \
+## Adjusts the hide/show bits of this particular node.
+##
+## These three parameters can be used to adjust the _draw_control_mask and
+## _draw_show_mask independently, which work together to provide per-camera
+## visibility for the node and its descendents.
+##
+## _draw_control_mask indicates the bits in _draw_show_mask that are
+## significant.  Each different bit corresponds to a different camera (and
+## these bits are assigned via Camera::set_camera_mask()).
+##
+## Where _draw_control_mask has a 1 bit, a 1 bit in _draw_show_mask indicates
+## the node is visible to that camera, and a 0 bit indicates the node is
+## hidden to that camera.  Where _draw_control_mask is 0, the node is hidden
+## only if a parent node is hidden.
+##
+## The meaning of the three parameters is as follows:
+##
+## Wherever show_mask is 1, _draw_show_mask and _draw_control_mask will be
+## set 1.  Thus, show_mask indicates the set of cameras to which the node
+## should be shown.
+##
+## Wherever hide_mask is 1, _draw_show_mask will be set 0 and
+## _draw_control_mask will be set 1.  Thus, hide_mask indicates the set of
+## cameras from which the node should be hidden.
+##
+## Wherever clear_mask is 1, _draw_control_mask will be set 0.  Thus,
+## clear_mask indicates the set of cameras from which the hidden state should
+## be inherited from a parent.
+
+proc getDrawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_control_mask()".} ## \
+## Returns the set of bits in draw_show_mask that are considered meaningful.
+## See adjust_draw_mask().
+
+proc getDrawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_draw_show_mask()".} ## \
+## Returns the hide/show bits of this particular node.  See
+## adjust_draw_mask().
+
+proc getNetDrawControlMask*(this: PandaNode): DrawMask {.importcpp: "#->get_net_draw_control_mask()".} ## \
+## Returns the set of bits in get_net_draw_show_mask() that have been
+## explicitly set via adjust_draw_mask(), rather than implicitly inherited.
+##
+## A 1 bit in any position of this mask indicates that (a) this node has
+## renderable children, and (b) some child of this node has made an explicit
+## hide() or show_through() call for the corresponding bit.
+
+proc getNetDrawShowMask*(this: PandaNode): DrawMask {.importcpp: "#->get_net_draw_show_mask()".} ## \
+## Returns the union of all draw_show_mask values--of renderable nodes only--
+## at this level and below.  If any bit in this mask is 0, there is no reason
+## to traverse below this node for a camera with the corresponding
+## camera_mask.
+##
+## The bits in this mask that do not correspond to a 1 bit in the
+## net_draw_control_mask are meaningless (and will be set to 1).  For bits
+## that \*do\* correspond to a 1 bit in the net_draw_control_mask, a 1 bit
+## indicates that at least one child should be visible, while a 0 bit
+## indicates that all children are hidden.
+
+proc setIntoCollideMask*(this: PandaNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.
+##
+## This specifies the set of bits that must be shared with a CollisionNode's
+## "from" CollideMask in order for the CollisionNode to detect a collision
+## with this particular node.
+##
+## The actual CollideMask that will be set is masked by the return value from
+## get_legal_collide_mask(). Thus, the into_collide_mask cannot be set to
+## anything other than nonzero except for those types of nodes that can be
+## collided into, such as CollisionNodes and GeomNodes.
+
+proc getIntoCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the "into" collide mask for this node.
+
+proc getLegalCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_legal_collide_mask()".} ## \
+## Returns the subset of CollideMask bits that may be set for this particular
+## type of PandaNode.  For most nodes, this is 0; it doesn't make sense to set
+## a CollideMask for most kinds of nodes.
+##
+## For nodes that can be collided with, such as GeomNode and CollisionNode,
+## this returns all bits on.
+
+proc getNetCollideMask*(this: PandaNode, current_thread: Thread): CollideMask {.importcpp: "#->get_net_collide_mask(#)".} ## \
+## Returns the union of all into_collide_mask() values set at CollisionNodes
+## at this level and below.
+
+proc getNetCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_net_collide_mask()".} ## \
+## Returns the union of all into_collide_mask() values set at CollisionNodes
+## at this level and below.
+
+proc getOffClipPlanes*(this: PandaNode, current_thread: Thread): RenderAttrib {.importcpp: "deconstify(#->get_off_clip_planes(#))", header: deconstifyCode.} ## \
 ## Returns a ClipPlaneAttrib which represents the union of all of the clip
 ## planes that have been turned \*off\* at this level and below.
 
-proc getOffClipPlanes*(this: PandaNode): RenderAttrib {.importcpp: "#->get_off_clip_planes()".} ## \
+proc getOffClipPlanes*(this: PandaNode): RenderAttrib {.importcpp: "deconstify(#->get_off_clip_planes())", header: deconstifyCode.} ## \
 ## Returns a ClipPlaneAttrib which represents the union of all of the clip
 ## planes that have been turned \*off\* at this level and below.
 
@@ -22807,17 +23140,17 @@ proc clearBounds*(this: PandaNode) {.importcpp: "#->clear_bounds()".} ## \
 ## node's bounding volume to be automatically computed once more based on the
 ## contents of the node.
 
-proc getBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the external bounding volume of this node: a bounding volume that
 ## contains the user bounding volume, the internal bounding volume, and all of
 ## the children's bounding volumes.
 
-proc getBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the external bounding volume of this node: a bounding volume that
 ## contains the user bounding volume, the internal bounding volume, and all of
 ## the children's bounding volumes.
 
-proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#, #)".} ## \
+proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#, #))", header: deconstifyCode.} ## \
 ## This flavor of get_bounds() return the external bounding volume, and also
 ## fills in seq with the bounding volume's current sequence number.  When this
 ## sequence number changes, it indicates that the bounding volume might have
@@ -22828,7 +23161,7 @@ proc getBounds*(this: PandaNode, seq: UpdateSeq, current_thread: Thread): Boundi
 ## counter, so as long as this counter remains unchanged you can be confident
 ## the bounding volume is also unchanged.
 
-proc getBounds*(this: PandaNode, seq: UpdateSeq): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: PandaNode, seq: UpdateSeq): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## This flavor of get_bounds() return the external bounding volume, and also
 ## fills in seq with the bounding volume's current sequence number.  When this
 ## sequence number changes, it indicates that the bounding volume might have
@@ -22857,12 +23190,12 @@ proc getNestedVertices*(this: PandaNode): int {.importcpp: "#->get_nested_vertic
 ## also include hidden nodes.  It may also omit or only approximate certain
 ## kinds of dynamic geometry.  However, it will not include stashed nodes.
 
-proc getInternalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "#->get_internal_bounds(#)".} ## \
+proc getInternalBounds*(this: PandaNode, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
 
-proc getInternalBounds*(this: PandaNode): BoundingVolume {.importcpp: "#->get_internal_bounds()".} ## \
+proc getInternalBounds*(this: PandaNode): BoundingVolume {.importcpp: "deconstify(#->get_internal_bounds())", header: deconstifyCode.} ## \
 ## Returns the node's internal bounding volume.  This is the bounding volume
 ## around the node alone, without including children.  If the user has called
 ## set_bounds(), it will be the specified bounding volume.
@@ -23000,7 +23333,7 @@ proc getFancyBits*(this: PandaNode): int {.importcpp: "#->get_fancy_bits()".} ##
 
 converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
-proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "TransparencyAttrib::make_default()", header: "transparencyAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "transparencyAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -23008,11 +23341,11 @@ proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "Transpare
 
 converter getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
-proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicOpAttrib::make_off()", header: "logicOpAttrib.h".} ## \
+proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "logicOpAttrib.h".} ## \
 ## Constructs a new LogicOpAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
-proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "LogicOpAttrib::make_default()", header: "logicOpAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "logicOpAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -23115,7 +23448,7 @@ proc size*(this: InternalNameCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of names in the collection.  This is the same thing as
 ## get_num_names().
 
-proc `+=`*(this: InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: InternalNameCollection, other: InternalNameCollection): InternalNameCollection {.importcpp: "#.operator +(#)".}
 
@@ -23181,7 +23514,7 @@ proc size*(this: MaterialCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of materials in the collection.  This is the same thing
 ## as get_num_materials().
 
-proc `+=`*(this: MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: MaterialCollection, other: MaterialCollection): MaterialCollection {.importcpp: "#.operator +(#)".}
 
@@ -23248,7 +23581,7 @@ proc size*(this: TextureStageCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of texture stages in the collection.  This is the same
 ## thing as get_num_texture_stages().
 
-proc `+=`*(this: TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: TextureStageCollection, other: TextureStageCollection): TextureStageCollection {.importcpp: "#.operator +(#)".}
 
@@ -23303,12 +23636,12 @@ proc initNodePath*(top_node_name: string): NodePath {.importcpp: "NodePath(nimSt
 ## This constructs a new NodePath with a single node.  An ordinary, unattached
 ## PandaNode is created with the indicated name.
 
-proc anyPath*(_: typedesc[NodePath], node: PandaNode, current_thread: Thread): NodePath {.importcpp: "NodePath::any_path(#, #)", header: "nodePath.h".} ## \
+proc anyPath*(_: typedesc[NodePath], node: PandaNode, current_thread: Thread): NodePath {.importcpp: "#NodePath::any_path(#, #)", header: "nodePath.h".} ## \
 ## Returns a new NodePath that represents any arbitrary path from the root to
 ## the indicated node.  This is the same thing that would be returned by
 ## NodePath(node), except that no warning is issued if the path is ambiguous.
 
-proc anyPath*(_: typedesc[NodePath], node: PandaNode): NodePath {.importcpp: "NodePath::any_path(#)", header: "nodePath.h".} ## \
+proc anyPath*(_: typedesc[NodePath], node: PandaNode): NodePath {.importcpp: "#NodePath::any_path(#)", header: "nodePath.h".} ## \
 ## Returns a new NodePath that represents any arbitrary path from the root to
 ## the indicated node.  This is the same thing that would be returned by
 ## NodePath(node), except that no warning is issued if the path is ambiguous.
@@ -23326,7 +23659,7 @@ proc removed*(_: typedesc[NodePath]): NodePath {.importcpp: "NodePath::removed()
 proc fail*(_: typedesc[NodePath]): NodePath {.importcpp: "NodePath::fail()", header: "nodePath.h".} ## \
 ## Creates a NodePath with the ET_fail error type set.
 
-proc setMaxSearchDepth*(_: typedesc[NodePath], max_search_depth: int) {.importcpp: "NodePath::set_max_search_depth(#)", header: "nodePath.h".} ## \
+proc setMaxSearchDepth*(_: typedesc[NodePath], max_search_depth: int) {.importcpp: "#NodePath::set_max_search_depth(#)", header: "nodePath.h".} ## \
 ## Certain operations, such as find() or find_all_matches(), require a
 ## traversal of the scene graph to search for the target node or nodes.  This
 ## traversal does not attempt to detect cycles, so an arbitrary cap is set on
@@ -23551,7 +23884,7 @@ proc size*(this: NodePathCollection): clonglong {.importcpp: "#.size()".} ## \
 ## Returns the number of paths in the collection.  This is the same thing as
 ## get_num_paths().
 
-proc `+=`*(this: NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: NodePathCollection, other: NodePathCollection): NodePathCollection {.importcpp: "#.operator +(#)".}
 
@@ -23601,6 +23934,37 @@ proc unstash*(this: NodePathCollection) {.importcpp: "#.unstash()".} ## \
 
 proc detach*(this: NodePathCollection) {.importcpp: "#.detach()".} ## \
 ## Detaches all NodePaths in the collection.
+
+proc getCollideMask*(this: NodePathCollection): CollideMask {.importcpp: "#.get_collide_mask()".} ## \
+## Returns the union of all of the into_collide_masks for nodes at this level
+## and below.  This is the same thing as node()->get_net_collide_mask().
+##
+## If you want to return what the into_collide_mask of this node itself is,
+## without regard to its children, use node()->get_into_collide_mask().
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask, bits_to_change: CollideMask, node_type: TypeHandle) {.importcpp: "#.set_collide_mask(#, #, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask, bits_to_change: CollideMask) {.importcpp: "#.set_collide_mask(#, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePathCollection, new_mask: CollideMask) {.importcpp: "#.set_collide_mask(#)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
 
 proc calcTightBounds*(this: NodePathCollection, min_point: LPoint3, max_point: LPoint3): bool {.importcpp: "#.calc_tight_bounds(#, #)".} ## \
 ## Calculates the minimum and maximum vertices of all Geoms at these
@@ -25324,6 +25688,12 @@ proc setShaderOff*(this: NodePath, priority: int) {.importcpp: "#.set_shader_off
 
 proc setShaderOff*(this: NodePath) {.importcpp: "#.set_shader_off()".}
 
+proc setShaderAuto*(this: NodePath, shader_switch: BitMask32, priority: int) {.importcpp: "#.set_shader_auto(#, #)".} ## \
+## overloaded for auto shader customization
+
+proc setShaderAuto*(this: NodePath, shader_switch: BitMask32) {.importcpp: "#.set_shader_auto(#)".} ## \
+## overloaded for auto shader customization
+
 proc setShaderAuto*(this: NodePath, priority: int) {.importcpp: "#.set_shader_auto(#)".}
 
 proc setShaderAuto*(this: NodePath) {.importcpp: "#.set_shader_auto()".}
@@ -26236,12 +26606,28 @@ proc show*(this: NodePath) {.importcpp: "#.show()".} ## \
 ##
 ## This will not reveal the node if a parent node has been hidden.
 
+proc show*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.show(#)".} ## \
+## Makes the referenced node visible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## This undoes the effect of a previous hide() call.  It will not reveal the
+## node if a parent node has been hidden.  However, see show_through().
+
 proc showThrough*(this: NodePath) {.importcpp: "#.show_through()".} ## \
 ## Makes the referenced node visible just to the cameras whose camera_mask
 ## shares the indicated bits.
 ##
 ## Unlike show(), this will reveal the node even if a parent node has been
 ## hidden, thus "showing through" a parent's hide().
+
+proc showThrough*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.show_through(#)".} ## \
+## Makes the referenced node visible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## Unlike show(), this will reveal the node even if a parent node has been
+## hidden via the one-parameter hide() method, thus "showing through" a
+## parent's hide().  (However, it will not show through a parent's hide() call
+## if the no-parameter form of hide() was used.)
 
 proc hide*(this: NodePath) {.importcpp: "#.hide()".} ## \
 ## Makes the referenced node (and the entire subgraph below this node)
@@ -26251,9 +26637,31 @@ proc hide*(this: NodePath) {.importcpp: "#.hide()".} ## \
 ##
 ## To undo this, call show().
 
+proc hide*(this: NodePath, camera_mask: DrawMask) {.importcpp: "#.hide(#)".} ## \
+## Makes the referenced node invisible just to the cameras whose camera_mask
+## shares the indicated bits.
+##
+## This will also hide any nodes below this node in the scene graph, including
+## those nodes for which show() has been called, but it will not hide
+## descendent nodes for which show_through() has been called.
+
+proc isHidden*(this: NodePath, camera_mask: DrawMask): bool {.importcpp: "#.is_hidden(#)".} ## \
+## Returns true if the referenced node is hidden from the indicated camera(s)
+## either directly, or because some ancestor is hidden.
+
 proc isHidden*(this: NodePath): bool {.importcpp: "#.is_hidden()".} ## \
 ## Returns true if the referenced node is hidden from the indicated camera(s)
 ## either directly, or because some ancestor is hidden.
+
+proc getHiddenAncestor*(this: NodePath, camera_mask: DrawMask, current_thread: Thread): NodePath {.importcpp: "#.get_hidden_ancestor(#, #)".} ## \
+## Returns the NodePath at or above the referenced node that is hidden to the
+## indicated camera(s), or an empty NodePath if no ancestor of the referenced
+## node is hidden (and the node should be visible).
+
+proc getHiddenAncestor*(this: NodePath, camera_mask: DrawMask): NodePath {.importcpp: "#.get_hidden_ancestor(#)".} ## \
+## Returns the NodePath at or above the referenced node that is hidden to the
+## indicated camera(s), or an empty NodePath if no ancestor of the referenced
+## node is hidden (and the node should be visible).
 
 proc getHiddenAncestor*(this: NodePath): NodePath {.importcpp: "#.get_hidden_ancestor()".} ## \
 ## Returns the NodePath at or above the referenced node that is hidden to the
@@ -26324,6 +26732,43 @@ proc getStashedAncestor*(this: NodePath): NodePath {.importcpp: "#.get_stashed_a
 ## Returns the NodePath at or above the referenced node that is stashed, or an
 ## empty NodePath if no ancestor of the referenced node is stashed (and the
 ## node should be visible).
+
+proc getCollideMask*(this: NodePath): CollideMask {.importcpp: "#.get_collide_mask()".} ## \
+## Returns the union of all of the into_collide_masks for nodes at this level
+## and below.  This is the same thing as node()->get_net_collide_mask().
+##
+## If you want to return what the into_collide_mask of this node itself is,
+## without regard to its children, use node()->get_into_collide_mask().
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask, bits_to_change: CollideMask, node_type: TypeHandle) {.importcpp: "#.set_collide_mask(#, #, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask, bits_to_change: CollideMask) {.importcpp: "#.set_collide_mask(#, #)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
+
+proc setCollideMask*(this: NodePath, new_mask: CollideMask) {.importcpp: "#.set_collide_mask(#)".} ## \
+## Recursively applies the indicated CollideMask to the into_collide_masks for
+## all nodes at this level and below.  If node_type is not TypeHandle::none(),
+## then only nodes matching (or inheriting from) the indicated PandaNode
+## subclass are modified.
+##
+## The default is to change all bits, but if bits_to_change is not all bits
+## on, then only the bits that are set in bits_to_change are modified,
+## allowing this call to change only a subset of the bits in the subgraph.
 
 proc `==`*(this: NodePath, other: NodePath): bool {.importcpp: "#.operator ==(#)".} ## \
 ## Comparison methods
@@ -26663,19 +27108,19 @@ proc write*(this: AttribNodeRegistry, `out`: ostream) {.importcpp: "#.write(#)".
 
 proc getGlobalPtr*(_: typedesc[AttribNodeRegistry]): AttribNodeRegistry {.importcpp: "AttribNodeRegistry::get_global_ptr()", header: "attribNodeRegistry.h".}
 
-proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_identity()", header: "audioVolumeAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "audioVolumeAttrib.h".} ## \
 ## Constructs an identity audio volume attrib.
 
-proc make*(_: typedesc[AudioVolumeAttrib], volume: float32): RenderAttrib {.importcpp: "AudioVolumeAttrib::make(#)", header: "audioVolumeAttrib.h".} ## \
+proc make*(_: typedesc[AudioVolumeAttrib], volume: float32): RenderAttrib {.importcpp: "deconstify(#AudioVolumeAttrib::make(#))", header: "audioVolumeAttrib.h".} ## \
 ## Constructs a new AudioVolumeAttrib object that indicates audio volume
 ## should be scaled by the indicated factor.
 
-proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_off()", header: "audioVolumeAttrib.h".} ## \
+proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "audioVolumeAttrib.h".} ## \
 ## Constructs a new AudioVolumeAttrib object that ignores any
 ## AudioVolumeAttrib inherited from above.  You may also specify an additional
 ## volume scale to apply to geometry below (using set_volume()).
 
-proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "AudioVolumeAttrib::make_default()", header: "audioVolumeAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "audioVolumeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -26692,7 +27137,7 @@ proc hasVolume*(this: AudioVolumeAttrib): bool {.importcpp: "#->has_volume()".} 
 proc getVolume*(this: AudioVolumeAttrib): float32 {.importcpp: "#->get_volume()".} ## \
 ## Returns the volume to be applied to sounds.
 
-proc setVolume*(this: AudioVolumeAttrib, volume: float32): RenderAttrib {.importcpp: "#->set_volume(#)".} ## \
+proc setVolume*(this: AudioVolumeAttrib, volume: float32): RenderAttrib {.importcpp: "deconstify(#->set_volume(#))", header: deconstifyCode.} ## \
 ## Returns a new AudioVolumeAttrib, just like this one, but with the volume
 ## changed to the indicated value.
 
@@ -26700,13 +27145,13 @@ proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolum
 
 converter getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
-proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make()", header: "auxBitplaneAttrib.h".} ## \
+proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "auxBitplaneAttrib.h".} ## \
 ## Constructs a default AuxBitplaneAttrib object.
 
-proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make(#)", header: "auxBitplaneAttrib.h".} ## \
+proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(#AuxBitplaneAttrib::make(#))", header: "auxBitplaneAttrib.h".} ## \
 ## Constructs a specified AuxBitplaneAttrib object.
 
-proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "AuxBitplaneAttrib::make_default()", header: "auxBitplaneAttrib.h".} ## \
+proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "auxBitplaneAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -26885,20 +27330,20 @@ proc getWriter*(this: BamFile): BamWriter {.importcpp: "#.get_writer()".} ## \
 ## Returns the BamWriter in charge of performing the write operations.  This
 ## will return NULL unless open_write() was called.
 
-proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3, fixed_depth: bool): RenderEffect {.importcpp: "BillboardEffect::make(#, #, #, #, #, #, #)", header: "billboardEffect.h".} ## \
+proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3, fixed_depth: bool): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make(#, #, #, #, #, #, #))", header: "billboardEffect.h".} ## \
 ## Constructs a new BillboardEffect object with the indicated properties.
 
-proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3): RenderEffect {.importcpp: "BillboardEffect::make(#, #, #, #, #, #)", header: "billboardEffect.h".} ## \
+proc make*(_: typedesc[BillboardEffect], up_vector: LVector3, eye_relative: bool, axial_rotate: bool, offset: float32, look_at: NodePath, look_at_point: LPoint3): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make(#, #, #, #, #, #))", header: "billboardEffect.h".} ## \
 ## Constructs a new BillboardEffect object with the indicated properties.
 
-proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_axis()", header: "billboardEffect.h".} ## \
+proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical axis-rotating billboard.
 
-proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_point_eye()", header: "billboardEffect.h".} ## \
+proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical eye-relative point-rotating
 ## billboard.
 
-proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "BillboardEffect::make_point_world()", header: "billboardEffect.h".} ## \
+proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "billboardEffect.h".} ## \
 ## A convenience function to make a typical world-relative point-rotating
 ## billboard.
 
@@ -27004,7 +27449,7 @@ proc hideFrustum*(this: LensNode) {.importcpp: "#->hide_frustum()".} ## \
 
 converter getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
 
-proc initWeakNodePath*(node_path: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
+converter initWeakNodePath*(node_path: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
 proc initWeakNodePath*(copy: WeakNodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
@@ -27098,6 +27543,19 @@ proc getNumDisplayRegions*(this: Camera): clonglong {.importcpp: "#->get_num_dis
 proc getDisplayRegion*(this: Camera, n: clonglong): DisplayRegion {.importcpp: "#->get_display_region(#)".} ## \
 ## Returns the nth display region associated with the camera.
 
+proc setCameraMask*(this: Camera, mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the set of bits that represent the subset of the scene graph the
+## camera will render.
+##
+## During the cull traversal, a node is not visited if none of its draw mask
+## bits intersect with the camera's camera mask bits.  These masks can be used
+## to selectively hide and show different parts of the scene graph from
+## different cameras that are otherwise viewing the same scene.
+
+proc getCameraMask*(this: Camera): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the set of bits that represent the subset of the scene graph the
+## camera will render.  See set_camera_mask().
+
 proc setCullCenter*(this: Camera, cull_center: NodePath) {.importcpp: "#->set_cull_center(#)".} ## \
 ## Specifies the point from which the culling operations are performed.
 ## Normally, this is the same as the camera, and that is the default if this
@@ -27135,7 +27593,7 @@ proc setInitialState*(this: Camera, state: RenderState) {.importcpp: "#->set_ini
 ## Sets the initial state which is applied to all nodes in the scene, as if it
 ## were set at the top of the scene graph.
 
-proc getInitialState*(this: Camera): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: Camera): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc setTagStateKey*(this: Camera, tag_state_key: string) {.importcpp: "#->set_tag_state_key(nimStringToStdString(#))", header: stringConversionCode.} ## \
@@ -27175,7 +27633,7 @@ proc hasTagState*(this: Camera, tag_state: string): bool {.importcpp: "#->has_ta
 ## Returns true if set_tag_state() has previously been called with the
 ## indicated tag state, false otherwise.
 
-proc getTagState*(this: Camera, tag_state: string): RenderState {.importcpp: "#->get_tag_state(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getTagState*(this: Camera, tag_state: string): RenderState {.importcpp: "deconstify(#->get_tag_state(nimStringToStdString(#)))", header: deconstifyCode.} ## \
 ## Returns the state associated with the indicated tag state by a previous
 ## call to set_tag_state(), or the empty state if nothing has been associated.
 
@@ -27251,10 +27709,10 @@ proc getClipEffect*(this: PlaneNode): int {.importcpp: "#->get_clip_effect()".} 
 
 converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
-proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make()", header: "clipPlaneAttrib.h".} ## \
+proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".} ## \
 ## The following is the new, more general interface to the ClipPlaneAttrib.
 
-proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make_default()", header: "clipPlaneAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "clipPlaneAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27280,19 +27738,19 @@ proc hasPlane*(this: ClipPlaneAttrib, plane: PlaneNode): bool {.importcpp: "#->h
 ## off_planes, so this method no longer makes sense.  Query the lists
 ## independently.
 
-proc addPlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "#->add_plane(#)".} ## \
+proc addPlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#->add_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes.
 ##
 ## @deprecated Use add_on_plane() or add_off_plane() instead.
 
-proc removePlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "#->remove_plane(#)".} ## \
+proc removePlane*(this: ClipPlaneAttrib, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#->remove_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes.
 ##
 ## @deprecated Use remove_on_plane() or remove_off_plane() instead.
 
-proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "ClipPlaneAttrib::make_all_off()", header: "clipPlaneAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "clipPlaneAttrib.h".} ## \
 ## Constructs a new ClipPlaneAttrib object that disables all planes (and hence
 ## disables clipping).
 
@@ -27325,23 +27783,23 @@ proc isIdentity*(this: ClipPlaneAttrib): bool {.importcpp: "#->is_identity()".} 
 ## Returns true if this is an identity attrib: it does not change the set of
 ## planes in use.
 
-proc addOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->add_on_plane(#)".} ## \
+proc addOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_on_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes enabled by this attrib.
 
-proc removeOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->remove_on_plane(#)".} ## \
+proc removeOnPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_on_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes enabled by this attrib.
 
-proc addOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->add_off_plane(#)".} ## \
+proc addOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_off_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane added to the list of planes disabled by this attrib.
 
-proc removeOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "#->remove_off_plane(#)".} ## \
+proc removeOffPlane*(this: ClipPlaneAttrib, plane: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_off_plane(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, just like this one, but with the indicated
 ## plane removed from the list of planes disabled by this attrib.
 
-proc filterToMax*(this: ClipPlaneAttrib, max_clip_planes: int): ClipPlaneAttrib {.importcpp: "#->filter_to_max(#)".} ## \
+proc filterToMax*(this: ClipPlaneAttrib, max_clip_planes: int): ClipPlaneAttrib {.importcpp: "deconstify(#->filter_to_max(#))", header: deconstifyCode.} ## \
 ## Returns a new ClipPlaneAttrib, very much like this one, but with the number
 ## of on_planes reduced to be no more than max_clip_planes.  The number of
 ## off_planes in the new ClipPlaneAttrib is undefined.
@@ -27350,19 +27808,19 @@ proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAtt
 
 converter getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
-proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_vertex()", header: "colorAttrib.h".} ## \
+proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered according to its own vertex color.
 
-proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "ColorAttrib::make_flat(#)", header: "colorAttrib.h".} ## \
+proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorAttrib::make_flat(#))", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered in the indicated color.
 
-proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_off()", header: "colorAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "colorAttrib.h".} ## \
 ## Constructs a new ColorAttrib object that indicates geometry should be
 ## rendered in white.
 
-proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "ColorAttrib::make_default()", header: "colorAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "colorAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27374,11 +27832,11 @@ proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get
 
 converter getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
-proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "ColorBlendAttrib::make_off()", header: "colorBlendAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "colorBlendAttrib.h".} ## \
 ## Constructs a new ColorBlendAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
-proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "ColorBlendAttrib::make_default()", header: "colorBlendAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "colorBlendAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27396,19 +27854,19 @@ proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendA
 
 converter getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
-proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_identity()", header: "colorScaleAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "colorScaleAttrib.h".} ## \
 ## Constructs an identity scale attrib.
 
-proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "ColorScaleAttrib::make(#)", header: "colorScaleAttrib.h".} ## \
+proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ColorScaleAttrib::make(#))", header: "colorScaleAttrib.h".} ## \
 ## Constructs a new ColorScaleAttrib object that indicates geometry should be
 ## scaled by the indicated factor.
 
-proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_off()", header: "colorScaleAttrib.h".} ## \
+proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "colorScaleAttrib.h".} ## \
 ## Constructs a new ColorScaleAttrib object that ignores any ColorScaleAttrib
 ## inherited from above.  You may also specify an additional color scale to
 ## apply to geometry below (using set_scale()).
 
-proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "ColorScaleAttrib::make_default()", header: "colorScaleAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "colorScaleAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27437,7 +27895,7 @@ proc hasAlphaScale*(this: ColorScaleAttrib): bool {.importcpp: "#->has_alpha_sca
 proc getScale*(this: ColorScaleAttrib): LVecBase4 {.importcpp: "#->get_scale()".} ## \
 ## Returns the scale to be applied to colors.
 
-proc setScale*(this: ColorScaleAttrib, scale: LVecBase4): RenderAttrib {.importcpp: "#->set_scale(#)".} ## \
+proc setScale*(this: ColorScaleAttrib, scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#->set_scale(#))", header: deconstifyCode.} ## \
 ## Returns a new ColorScaleAttrib, just like this one, but with the scale
 ## changed to the indicated value.
 
@@ -27445,10 +27903,10 @@ proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleA
 
 converter getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
-proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "ColorWriteAttrib::make(#)", header: "colorWriteAttrib.h".} ## \
+proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "colorWriteAttrib.h".} ## \
 ## Constructs a new ColorWriteAttrib object.
 
-proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "ColorWriteAttrib::make_default()", header: "colorWriteAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "colorWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27459,14 +27917,14 @@ proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteA
 
 converter getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "CompassEffect::make(#, #)", header: "compassEffect.h".} ## \
+proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "compassEffect.h".} ## \
 ## Constructs a new CompassEffect object.  If the reference is an empty
 ## NodePath, it means the CompassEffect is relative to the root of the scene
 ## graph; otherwise, it's relative to the indicated node.  The properties
 ## bitmask specifies the set of properties that the compass node inherits from
 ## the reference instead of from its parent.
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "CompassEffect::make(#)", header: "compassEffect.h".} ## \
+proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "compassEffect.h".} ## \
 ## Constructs a new CompassEffect object.  If the reference is an empty
 ## NodePath, it means the CompassEffect is relative to the root of the scene
 ## graph; otherwise, it's relative to the indicated node.  The properties
@@ -27500,7 +27958,7 @@ proc getPreserved*(this: GeomNode): bool {.importcpp: "#->get_preserved()".} ## 
 proc getNumGeoms*(this: GeomNode): int {.importcpp: "#->get_num_geoms()".} ## \
 ## Returns the number of geoms in the node.
 
-proc getGeom*(this: GeomNode, n: int): Geom {.importcpp: "#->get_geom(#)".} ## \
+proc getGeom*(this: GeomNode, n: int): Geom {.importcpp: "deconstify(#->get_geom(#))", header: deconstifyCode.} ## \
 ## Returns the nth geom of the node.  This object should not be modified,
 ## since the same object might be shared between multiple different GeomNodes,
 ## but see modify_geom().
@@ -27517,7 +27975,7 @@ proc modifyGeom*(this: GeomNode, n: int): Geom {.importcpp: "#->modify_geom(#)".
 ## all the way to pipeline stage 0, which may step on changes that were made
 ## independently in pipeline stage 0. Use with caution.
 
-proc getGeomState*(this: GeomNode, n: int): RenderState {.importcpp: "#->get_geom_state(#)".} ## \
+proc getGeomState*(this: GeomNode, n: int): RenderState {.importcpp: "deconstify(#->get_geom_state(#))", header: deconstifyCode.} ## \
 ## Returns the RenderState associated with the nth geom of the node.  This is
 ## just the RenderState directly associated with the Geom; the actual state in
 ## which the Geom is rendered will also be affected by RenderStates that
@@ -27602,16 +28060,19 @@ proc writeGeoms*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp:
 proc writeVerbose*(this: GeomNode, `out`: ostream, indent_level: int) {.importcpp: "#->write_verbose(#, #)".} ## \
 ## Writes a detailed description of all the Geoms in the node.
 
+proc getDefaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "GeomNode::get_default_collide_mask()", header: "geomNode.h".} ## \
+## Returns the default into_collide_mask assigned to new GeomNodes.
+
 converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
-proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "CullBinAttrib::make(nimStringToStdString(#), #)", header: "cullBinAttrib.h".} ## \
+proc make*(_: typedesc[CullBinAttrib], bin_name: string, draw_order: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".} ## \
 ## Constructs a new CullBinAttrib assigning geometry into the named bin.  If
 ## the bin name is the empty string, the default bin is used.
 ##
 ## The draw_order specifies further ordering information which is relevant
 ## only to certain kinds of bins (in particular CullBinFixed type bins).
 
-proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "CullBinAttrib::make_default()", header: "cullBinAttrib.h".} ## \
+proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "cullBinAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27731,7 +28192,7 @@ proc write*(this: CullBinManager, `out`: ostream) {.importcpp: "#.write(#)".}
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".} ## \
 ## Returns the pointer to the global CullBinManager object.
 
-proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make()", header: "cullFaceAttrib.h".} ## \
+proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "cullFaceAttrib.h".} ## \
 ## Constructs a new CullFaceAttrib object that specifies how to cull geometry.
 ## By Panda convention, vertices are ordered counterclockwise when seen from
 ## the front, so the M_cull_clockwise will cull backfacing polygons.
@@ -27740,13 +28201,13 @@ proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttr
 ## without any other intervening attrib, it is the same as applying the
 ## default attrib.
 
-proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make_reverse()", header: "cullFaceAttrib.h".} ## \
+proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "cullFaceAttrib.h".} ## \
 ## Constructs a new CullFaceAttrib object that reverses the effects of any
 ## other CullFaceAttrib objects in the scene graph.  M_cull_clockwise will be
 ## treated as M_cull_counter_clockwise, and vice-versa.  M_cull_none is
 ## unchanged.
 
-proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "CullFaceAttrib::make_default()", header: "cullFaceAttrib.h".} ## \
+proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "cullFaceAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -27774,6 +28235,17 @@ proc getInternalTransform*(this: CullTraverserData, trav: CullTraverser): Transf
 proc getNetTransform*(this: CullTraverserData, trav: CullTraverser): TransformState {.importcpp: "#.get_net_transform(#)".} ## \
 ## Returns the net transform: the relative transform from root of the scene
 ## graph to the current node.
+
+proc isInView*(this: CullTraverserData, camera_mask: DrawMask): bool {.importcpp: "#.is_in_view(#)".} ## \
+## Returns true if the current node is within the view frustum, false
+## otherwise.  If the node's bounding volume falls completely within the view
+## frustum, this will also reset the view frustum pointer, saving some work
+## for future nodes.
+
+proc isThisNodeHidden*(this: CullTraverserData, camera_mask: DrawMask): bool {.importcpp: "#.is_this_node_hidden(#)".} ## \
+## Returns true if this particular node is hidden, even though we might be
+## traversing past this node to find a child node that has had show_through()
+## called for it.  If this returns true, the node should not be rendered.
 
 proc applyTransformAndState*(this: CullTraverserData, trav: CullTraverser) {.importcpp: "#.apply_transform_and_state(#)".} ## \
 ## Applies the transform and state from the current node onto the current
@@ -27820,7 +28292,7 @@ proc getCameraNode*(this: SceneSetup): Camera {.importcpp: "#->get_camera_node()
 proc setLens*(this: SceneSetup, lens: Lens) {.importcpp: "#->set_lens(#)".} ## \
 ## Indicates the particular Lens used for rendering.
 
-proc getLens*(this: SceneSetup): Lens {.importcpp: "#->get_lens()".} ## \
+proc getLens*(this: SceneSetup): Lens {.importcpp: "deconstify(#->get_lens())", header: deconstifyCode.} ## \
 ## Returns the particular Lens used for rendering.
 
 proc setInverted*(this: SceneSetup, inverted: bool) {.importcpp: "#->set_inverted(#)".} ## \
@@ -27848,20 +28320,20 @@ proc setInitialState*(this: SceneSetup, initial_state: RenderState) {.importcpp:
 ## Sets the initial state which is applied to all nodes in the scene, as if it
 ## were set at the top of the scene graph.
 
-proc getInitialState*(this: SceneSetup): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: SceneSetup): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial state as set by a previous call to set_initial_state().
 
 proc setCameraTransform*(this: SceneSetup, camera_transform: TransformState) {.importcpp: "#->set_camera_transform(#)".} ## \
 ## Specifies the position of the camera relative to the starting node.
 
-proc getCameraTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_camera_transform()".} ## \
+proc getCameraTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_camera_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the camera relative to the starting node.
 
 proc setWorldTransform*(this: SceneSetup, world_transform: TransformState) {.importcpp: "#->set_world_transform(#)".} ## \
 ## Specifies the position of the starting node relative to the camera.  This
 ## is the inverse of the camera transform.
 
-proc getWorldTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_world_transform()".} ## \
+proc getWorldTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the starting node relative to the camera.  This is
 ## the inverse of the camera transform.
 
@@ -27869,7 +28341,7 @@ proc setCsTransform*(this: SceneSetup, cs_transform: TransformState) {.importcpp
 ## Specifies the transform from the camera's coordinate system to the GSG's
 ## internal coordinate system.
 
-proc getCsTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_cs_transform()".} ## \
+proc getCsTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_cs_transform())", header: deconstifyCode.} ## \
 ## Returns the transform from the camera's coordinate system to the GSG's
 ## internal coordinate system.
 
@@ -27877,7 +28349,7 @@ proc setCsWorldTransform*(this: SceneSetup, cs_world_transform: TransformState) 
 ## Specifies the position from the starting node relative to the camera, in
 ## the GSG's internal coordinate system.
 
-proc getCsWorldTransform*(this: SceneSetup): TransformState {.importcpp: "#->get_cs_world_transform()".} ## \
+proc getCsWorldTransform*(this: SceneSetup): TransformState {.importcpp: "deconstify(#->get_cs_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position from the starting node relative to the camera, in the
 ## GSG's internal coordinate system.
 
@@ -27974,14 +28446,14 @@ proc setExpDensity*(this: Fog, exp_density: float32) {.importcpp: "#->set_exp_de
 
 converter getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
-proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "FogAttrib::make(#)", header: "fogAttrib.h".} ## \
+proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "fogAttrib.h".} ## \
 ## Constructs a new FogAttrib object suitable for rendering the indicated fog
 ## onto geometry.
 
-proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "FogAttrib::make_off()", header: "fogAttrib.h".} ## \
+proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "fogAttrib.h".} ## \
 ## Constructs a new FogAttrib object suitable for rendering unfogd geometry.
 
-proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "FogAttrib::make_default()", header: "fogAttrib.h".} ## \
+proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "fogAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28023,10 +28495,19 @@ proc getTagStateKey*(this: CullTraverser): string {.importcpp: "nimStringFromStd
 ## Returns the tag state key that has been specified for the scene's camera,
 ## if any.
 
-proc getCameraTransform*(this: CullTraverser): TransformState {.importcpp: "#->get_camera_transform()".} ## \
+proc setCameraMask*(this: CullTraverser, camera_mask: DrawMask) {.importcpp: "#->set_camera_mask(#)".} ## \
+## Changes the visibility mask for the camera viewing the scene.  This is
+## normally set automatically at the time setup_scene() is called; you should
+## change this only if you want to render some set of objects different from
+## what the camera normally would draw.
+
+proc getCameraMask*(this: CullTraverser): DrawMask {.importcpp: "#->get_camera_mask()".} ## \
+## Returns the visibility mask from the camera viewing the scene.
+
+proc getCameraTransform*(this: CullTraverser): TransformState {.importcpp: "deconstify(#->get_camera_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the camera relative to the starting node.
 
-proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "#->get_world_transform()".} ## \
+proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "deconstify(#->get_world_transform())", header: deconstifyCode.} ## \
 ## Returns the position of the starting node relative to the camera.  This is
 ## the inverse of the camera transform.
 ##
@@ -28035,7 +28516,7 @@ proc getWorldTransform*(this: CullTraverser): TransformState {.importcpp: "#->ge
 ## transform of the current node use
 ## CullTraverserData::get_modelview_transform().
 
-proc getInitialState*(this: CullTraverser): RenderState {.importcpp: "#->get_initial_state()".} ## \
+proc getInitialState*(this: CullTraverser): RenderState {.importcpp: "deconstify(#->get_initial_state())", header: deconstifyCode.} ## \
 ## Returns the initial RenderState at the top of the scene graph we are
 ## traversing, or the empty state if the initial state was never set.
 
@@ -28109,7 +28590,7 @@ proc getLostState*(this: GeomDrawCallbackData): bool {.importcpp: "#.get_lost_st
 
 converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
-proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "RescaleNormalAttrib::make_default()", header: "rescaleNormalAttrib.h".} ## \
+proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "rescaleNormalAttrib.h".} ## \
 ## Constructs a RescaleNormalAttrib object that's suitable for putting at the
 ## top of a scene graph.  This will contain whatever attrib was suggested by
 ## the user's rescale-normals Config variable.
@@ -28145,27 +28626,27 @@ converter getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullR
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
-proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "DecalEffect::make()", header: "decalEffect.h".} ## \
+proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "decalEffect.h".} ## \
 ## Constructs a new DecalEffect object.
 
 converter getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "DepthOffsetAttrib::make(#)", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the relative
 ## amount of bias to write to the depth buffer for subsequent geometry.
 
-proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "DepthOffsetAttrib::make()", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the relative
 ## amount of bias to write to the depth buffer for subsequent geometry.
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int, min_value: float32, max_value: float32): RenderAttrib {.importcpp: "DepthOffsetAttrib::make(#, #, #)", header: "depthOffsetAttrib.h".} ## \
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int, min_value: float32, max_value: float32): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#, #, #))", header: "depthOffsetAttrib.h".} ## \
 ## Constructs a new DepthOffsetAttrib object that indicates the bias, and also
 ## specifies a minimum and maximum (or, more precisely, nearest and farthest)
 ## values to write to the depth buffer, in the range 0 .. 1.  This range is 0,
 ## 1 by default; setting it to some other range can be used to create
 ## additional depth buffer effects.
 
-proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "DepthOffsetAttrib::make_default()", header: "depthOffsetAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "depthOffsetAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28184,7 +28665,7 @@ proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffse
 
 converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
-proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "DepthTestAttrib::make_default()", header: "depthTestAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "depthTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28192,7 +28673,7 @@ proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAtt
 
 converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
-proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "DepthWriteAttrib::make_default()", header: "depthWriteAttrib.h".} ## \
+proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "depthWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28264,10 +28745,10 @@ proc getClassPriority*(this: Light): int {.importcpp: "#->get_class_priority()".
 
 converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
-proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make()", header: "lightAttrib.h".} ## \
+proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".} ## \
 ## The following is the new, more general interface to the LightAttrib.
 
-proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make_default()", header: "lightAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "lightAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28293,19 +28774,19 @@ proc hasLight*(this: LightAttrib, light: Light): bool {.importcpp: "#->has_light
 ## off_lights, so this method no longer makes sense.  Query the lists
 ## independently.
 
-proc addLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "#->add_light(#)".} ## \
+proc addLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights.
 ##
 ## @deprecated Use add_on_light() or add_off_light() instead.
 
-proc removeLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "#->remove_light(#)".} ## \
+proc removeLight*(this: LightAttrib, light: Light): RenderAttrib {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights.
 ##
 ## @deprecated Use remove_on_light() or remove_off_light() instead.
 
-proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "LightAttrib::make_all_off()", header: "lightAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "lightAttrib.h".} ## \
 ## Constructs a new LightAttrib object that turns off all lights (and hence
 ## disables lighting).
 
@@ -28345,27 +28826,27 @@ proc isIdentity*(this: LightAttrib): bool {.importcpp: "#->is_identity()".} ## \
 ## Returns true if this is an identity attrib: it does not change the set of
 ## lights in use.
 
-proc addOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->add_on_light(#)".} ## \
+proc addOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_on_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights turned on by this attrib.
 
-proc removeOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->remove_on_light(#)".} ## \
+proc removeOnLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_on_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights turned on by this attrib.
 
-proc replaceOnLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "#->replace_on_light(#, #)".} ## \
+proc replaceOnLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "deconstify(#->replace_on_light(#, #))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## replaced with the given other light.
 
-proc addOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->add_off_light(#)".} ## \
+proc addOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->add_off_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## added to the list of lights turned off by this attrib.
 
-proc removeOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "#->remove_off_light(#)".} ## \
+proc removeOffLight*(this: LightAttrib, light: NodePath): RenderAttrib {.importcpp: "deconstify(#->remove_off_light(#))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## removed from the list of lights turned off by this attrib.
 
-proc replaceOffLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "#->replace_off_light(#, #)".} ## \
+proc replaceOffLight*(this: LightAttrib, source: NodePath, dest: NodePath): RenderAttrib {.importcpp: "deconstify(#->replace_off_light(#, #))", header: deconstifyCode.} ## \
 ## Returns a new LightAttrib, just like this one, but with the indicated light
 ## replaced with the given other light.
 
@@ -28381,16 +28862,16 @@ proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get
 
 converter getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
-proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_default()", header: "lightRampAttrib.h".} ## \
+proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This is the standard OpenGL
 ## lighting ramp, which clamps the final light total to the 0-1 range.
 
-proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_identity()", header: "lightRampAttrib.h".} ## \
+proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This differs from the usual
 ## OpenGL lighting model in that it does not clamp the final lighting total to
 ## (0,1).
 
-proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32): RenderAttrib {.importcpp: "LightRampAttrib::make_single_threshold(#, #)", header: "lightRampAttrib.h".} ## \
+proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_single_threshold(#, #))", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes the luminance of the
 ## diffuse lighting contribution to be quantized using a single threshold:
 ##
@@ -28402,7 +28883,7 @@ proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: 
 ## }
 ## @endcode
 
-proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32, thresh1: float32, lev1: float32): RenderAttrib {.importcpp: "LightRampAttrib::make_double_threshold(#, #, #, #)", header: "lightRampAttrib.h".} ## \
+proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: float32, thresh1: float32, lev1: float32): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_double_threshold(#, #, #, #))", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes the luminance of the
 ## diffuse lighting contribution to be quantized using two thresholds:
 ##
@@ -28416,7 +28897,7 @@ proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float32, lev0: 
 ## }
 ## @endcode
 
-proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr0()", header: "lightRampAttrib.h".} ## \
+proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28435,7 +28916,7 @@ proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRa
 ## FINAL_RGB = (RGB^3 + RGB^2 + RGB) / (RGB^3 + RGB^2 + RGB + 1)
 ## @endcode
 
-proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr1()", header: "lightRampAttrib.h".} ## \
+proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28454,7 +28935,7 @@ proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRa
 ## FINAL_RGB = (RGB^2 + RGB) / (RGB^2 + RGB + 1)
 ## @endcode
 
-proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "LightRampAttrib::make_hdr2()", header: "lightRampAttrib.h".} ## \
+proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "lightRampAttrib.h".} ## \
 ## Constructs a new LightRampAttrib object.  This causes an HDR tone mapping
 ## operation to be applied.
 ##
@@ -28485,7 +28966,7 @@ converter getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "
 
 converter upcastToTypedReferenceCount*(this: Loader): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(Loader *)(#))".}
 
 proc newLoader*(param0: Loader): Loader {.importcpp: "new Loader(#)".}
 
@@ -28633,15 +29114,15 @@ proc getGlobalPtr*(_: typedesc[LoaderFileTypeRegistry]): LoaderFileTypeRegistry 
 
 proc initLoaderFileTypeRegistry*(param0: LoaderFileTypeRegistry): LoaderFileTypeRegistry {.importcpp: "LoaderFileTypeRegistry(#)".}
 
-proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "MaterialAttrib::make(#)", header: "materialAttrib.h".} ## \
+proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(#MaterialAttrib::make(#))", header: "materialAttrib.h".} ## \
 ## Constructs a new MaterialAttrib object suitable for rendering the indicated
 ## material onto geometry.
 
-proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "MaterialAttrib::make_off()", header: "materialAttrib.h".} ## \
+proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "materialAttrib.h".} ## \
 ## Constructs a new MaterialAttrib object suitable for rendering unmateriald
 ## geometry.
 
-proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "MaterialAttrib::make_default()", header: "materialAttrib.h".} ## \
+proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "materialAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28728,7 +29209,7 @@ proc setTransformLimit*(this: ModelNode, limit: float32) {.importcpp: "#->set_tr
 
 converter getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
 
-proc newModelRoot*(fullpath: Filename, timestamp: int): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
+proc newModelRoot*(fullpath: Filename, timestamp: time_t.Time): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
 
 proc newModelRoot*(name: string): ModelRoot {.importcpp: "new ModelRoot(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -28753,25 +29234,25 @@ proc setFullpath*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-proc getTimestamp*(this: ModelRoot): int {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc setTimestamp*(this: ModelRoot, timestamp: int) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
 
 converter getClassType*(_: typedesc[ModelRoot]): TypeHandle {.importcpp: "ModelRoot::get_class_type()", header: "modelRoot.h".}
 
-proc hasModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "ModelPool::has_model(#)", header: "modelPool.h".} ## \
+proc hasModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "#ModelPool::has_model(#)", header: "modelPool.h".} ## \
 ## Returns true if the model has ever been loaded, false otherwise.  Note that
 ## this does not guarantee that the model is still up-to-date.
 
-proc verifyModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "ModelPool::verify_model(#)", header: "modelPool.h".} ## \
+proc verifyModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "#ModelPool::verify_model(#)", header: "modelPool.h".} ## \
 ## Loads the given filename up as a model, if it has not already been loaded,
 ## and returns true to indicate success, or false to indicate failure.  If
 ## this returns true, it is probable that a subsequent call to load_model()
@@ -28782,37 +29263,37 @@ proc verifyModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp:
 ## true, and the on-disk file is subsequently modified to replace it with an
 ## invalid model.
 
-proc getModel*(_: typedesc[ModelPool], filename: Filename, verify: bool): ModelRoot {.importcpp: "ModelPool::get_model(#, #)", header: "modelPool.h".} ## \
+proc getModel*(_: typedesc[ModelPool], filename: Filename, verify: bool): ModelRoot {.importcpp: "#ModelPool::get_model(#, #)", header: "modelPool.h".} ## \
 ## Returns the model that has already been previously loaded, or NULL
 ## otherwise.  If verify is true, it will check if the file is still up-to-
 ## date (and hasn't been modified in the meantime), and if not, will still
 ## return NULL.
 
-proc loadModel*(_: typedesc[ModelPool], filename: Filename, options: LoaderOptions): ModelRoot {.importcpp: "ModelPool::load_model(#, #)", header: "modelPool.h".} ## \
+proc loadModel*(_: typedesc[ModelPool], filename: Filename, options: LoaderOptions): ModelRoot {.importcpp: "#ModelPool::load_model(#, #)", header: "modelPool.h".} ## \
 ## Loads the given filename up as a model, if it has not already been loaded,
 ## and returns the new model.  If a model with the same filename was
 ## previously loaded, returns that one instead (unless cache-check-timestamps
 ## is true and the file has recently changed).  If the model file cannot be
 ## found, or cannot be loaded for some reason, returns NULL.
 
-proc loadModel*(_: typedesc[ModelPool], filename: Filename): ModelRoot {.importcpp: "ModelPool::load_model(#)", header: "modelPool.h".} ## \
+proc loadModel*(_: typedesc[ModelPool], filename: Filename): ModelRoot {.importcpp: "#ModelPool::load_model(#)", header: "modelPool.h".} ## \
 ## Loads the given filename up as a model, if it has not already been loaded,
 ## and returns the new model.  If a model with the same filename was
 ## previously loaded, returns that one instead (unless cache-check-timestamps
 ## is true and the file has recently changed).  If the model file cannot be
 ## found, or cannot be loaded for some reason, returns NULL.
 
-proc addModel*(_: typedesc[ModelPool], filename: Filename, model: ModelRoot) {.importcpp: "ModelPool::add_model(#, #)", header: "modelPool.h".} ## \
+proc addModel*(_: typedesc[ModelPool], filename: Filename, model: ModelRoot) {.importcpp: "#ModelPool::add_model(#, #)", header: "modelPool.h".} ## \
 ## Adds the indicated already-loaded model to the pool.  The model will
 ## replace any previously-loaded model in the pool that had the same filename.
 ##
 ## @deprecated Use the one-parameter add_model(model) instead.
 
-proc addModel*(_: typedesc[ModelPool], model: ModelRoot) {.importcpp: "ModelPool::add_model(#)", header: "modelPool.h".} ## \
+proc addModel*(_: typedesc[ModelPool], model: ModelRoot) {.importcpp: "#ModelPool::add_model(#)", header: "modelPool.h".} ## \
 ## Adds the indicated already-loaded model to the pool.  The model will
 ## replace any previously-loaded model in the pool that had the same filename.
 
-proc releaseModel*(_: typedesc[ModelPool], filename: Filename) {.importcpp: "ModelPool::release_model(#)", header: "modelPool.h".} ## \
+proc releaseModel*(_: typedesc[ModelPool], filename: Filename) {.importcpp: "#ModelPool::release_model(#)", header: "modelPool.h".} ## \
 ## Removes the indicated model from the pool, indicating it will never be
 ## loaded again; the model may then be freed.  If this function is never
 ## called, a reference count will be maintained on every model every loaded,
@@ -28820,7 +29301,7 @@ proc releaseModel*(_: typedesc[ModelPool], filename: Filename) {.importcpp: "Mod
 ##
 ## @deprecated Use release_model(model) instead.
 
-proc releaseModel*(_: typedesc[ModelPool], model: ModelRoot) {.importcpp: "ModelPool::release_model(#)", header: "modelPool.h".} ## \
+proc releaseModel*(_: typedesc[ModelPool], model: ModelRoot) {.importcpp: "#ModelPool::release_model(#)", header: "modelPool.h".} ## \
 ## Removes the indicated model from the pool, indicating it will never be
 ## loaded again; the model may then be freed.  If this function (and
 ## garbage_collect()) is never called, a reference count will be maintained on
@@ -28840,10 +29321,10 @@ proc garbageCollect*(_: typedesc[ModelPool]): int {.importcpp: "ModelPool::garba
 proc listContents*(_: typedesc[ModelPool]) {.importcpp: "ModelPool::list_contents()", header: "modelPool.h".} ## \
 ## Lists the contents of the model pool to cout.
 
-proc listContents*(_: typedesc[ModelPool], `out`: ostream) {.importcpp: "ModelPool::list_contents(#)", header: "modelPool.h".} ## \
+proc listContents*(_: typedesc[ModelPool], `out`: ostream) {.importcpp: "#ModelPool::list_contents(#)", header: "modelPool.h".} ## \
 ## Lists the contents of the model pool to the indicated output stream.
 
-proc write*(_: typedesc[ModelPool], `out`: ostream) {.importcpp: "ModelPool::write(#)", header: "modelPool.h".} ## \
+proc write*(_: typedesc[ModelPool], `out`: ostream) {.importcpp: "#ModelPool::write(#)", header: "modelPool.h".} ## \
 ## Lists the contents of the model pool to the indicated output stream.  Helps
 ## with debugging.
 
@@ -28880,21 +29361,21 @@ proc getSuccess*(this: ModelSaveRequest): bool {.importcpp: "#->get_success()".}
 
 converter getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
-proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make()", header: "textureAttrib.h".} ## \
+proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "textureAttrib.h".} ## \
 ## The following methods define the new multitexture mode for TextureAttrib.
 ## Each TextureAttrib can add or remove individual texture stages from the
 ## complete set of textures that are to be applied; this is similar to the
 ## mechanism of LightAttrib.
 
-proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "TextureAttrib::make(#)", header: "textureAttrib.h".} ## \
+proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(#TextureAttrib::make(#))", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object suitable for rendering the indicated
 ## texture onto geometry, using the default TextureStage.
 
-proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_off()", header: "textureAttrib.h".} ## \
+proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object suitable for rendering untextured
 ## geometry.
 
-proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_default()", header: "textureAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "textureAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -28911,7 +29392,7 @@ proc getTexture*(this: TextureAttrib): Texture {.importcpp: "#->get_texture()".}
 ## If the TextureAttrib is not an 'off' TextureAttrib, returns the base-level
 ## texture that is associated.  Otherwise, return NULL.
 
-proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "TextureAttrib::make_all_off()", header: "textureAttrib.h".} ## \
+proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "textureAttrib.h".} ## \
 ## Constructs a new TextureAttrib object that turns off all stages (and hence
 ## disables texturing).
 
@@ -28975,44 +29456,44 @@ proc isIdentity*(this: TextureAttrib): bool {.importcpp: "#->is_identity()".} ##
 ## Returns true if this is an identity attrib: it does not change the set of
 ## stages in use.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState, override: int): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState, override: int): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, sampler: SamplerState): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, override: int): RenderAttrib {.importcpp: "#->add_on_stage(#, #, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture, override: int): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture): RenderAttrib {.importcpp: "#->add_on_stage(#, #)".} ## \
+proc addOnStage*(this: TextureAttrib, stage: TextureStage, tex: Texture): RenderAttrib {.importcpp: "deconstify(#->add_on_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned on by this attrib.
 
-proc removeOnStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_on_stage(#)".} ## \
+proc removeOnStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_on_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage removed from the list of stages turned on by this attrib.
 
-proc addOffStage*(this: TextureAttrib, stage: TextureStage, override: int): RenderAttrib {.importcpp: "#->add_off_stage(#, #)".} ## \
+proc addOffStage*(this: TextureAttrib, stage: TextureStage, override: int): RenderAttrib {.importcpp: "deconstify(#->add_off_stage(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned off by this attrib.
 
-proc addOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->add_off_stage(#)".} ## \
+proc addOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->add_off_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage added to the list of stages turned off by this attrib.
 
-proc removeOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_off_stage(#)".} ## \
+proc removeOffStage*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_off_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with the indicated
 ## stage removed from the list of stages turned off by this attrib.
 
-proc unifyTextureStages*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->unify_texture_stages(#)".} ## \
+proc unifyTextureStages*(this: TextureAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->unify_texture_stages(#))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with any included
 ## TextureAttribs that happen to have the same name as the given object
 ## replaced with the object.
 
-proc replaceTexture*(this: TextureAttrib, tex: Texture, new_tex: Texture): RenderAttrib {.importcpp: "#->replace_texture(#, #)".} ## \
+proc replaceTexture*(this: TextureAttrib, tex: Texture, new_tex: Texture): RenderAttrib {.importcpp: "deconstify(#->replace_texture(#, #))", header: deconstifyCode.} ## \
 ## Returns a new TextureAttrib, just like this one, but with all references to
 ## the given texture replaced with the new texture.
 ##
@@ -29022,14 +29503,14 @@ proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib:
 
 converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
-proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "TexGenAttrib::make()", header: "texGenAttrib.h".} ## \
+proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".} ## \
 ## Constructs a TexGenAttrib that generates no stages at all.
 
-proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "TexGenAttrib::make_default()", header: "texGenAttrib.h".} ## \
+proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "texGenAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
-proc removeStage*(this: TexGenAttrib, stage: TextureStage): RenderAttrib {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexGenAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexGenAttrib just like this one, with the indicated stage
 ## removed.
 
@@ -29096,7 +29577,7 @@ proc setVertex*(this: OccluderNode, n: clonglong, v: LPoint3) {.importcpp: "#->s
 
 converter getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
-proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "OccluderEffect::make()", header: "occluderEffect.h".} ## \
+proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "occluderEffect.h".} ## \
 ## Constructs a new OccluderEffect object that does nothing.
 
 proc getNumOnOccluders*(this: OccluderEffect): int {.importcpp: "#->get_num_on_occluders()".} ## \
@@ -29113,11 +29594,11 @@ proc isIdentity*(this: OccluderEffect): bool {.importcpp: "#->is_identity()".} #
 ## Returns true if this is an identity effect: it does not change the set of
 ## occluders in use.
 
-proc addOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "#->add_on_occluder(#)".} ## \
+proc addOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "deconstify(#->add_on_occluder(#))", header: deconstifyCode.} ## \
 ## Returns a new OccluderEffect, just like this one, but with the indicated
 ## occluder added to the list of occluders enabled by this effect.
 
-proc removeOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "#->remove_on_occluder(#)".} ## \
+proc removeOnOccluder*(this: OccluderEffect, occluder: NodePath): RenderEffect {.importcpp: "deconstify(#->remove_on_occluder(#))", header: deconstifyCode.} ## \
 ## Returns a new OccluderEffect, just like this one, but with the indicated
 ## occluder removed from the list of occluders enabled by this effect.
 
@@ -29248,22 +29729,22 @@ proc isEnabled*(this: PolylightNode): bool {.importcpp: "#->is_enabled()".} ## \
 
 converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
-proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "PolylightEffect::make()", header: "polylightEffect.h".} ## \
+proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".} ## \
 ## Constructs a new PolylightEffect object.
 
-proc addLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "#->add_light(#)".} ## \
+proc addLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.} ## \
 ## Add a PolylightNode object to this effect and return a new effect
 
-proc removeLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "#->remove_light(#)".} ## \
+proc removeLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.} ## \
 ## Remove a light from this effect.  Return the new updated effect
 
-proc setWeight*(this: PolylightEffect, w: float32): RenderEffect {.importcpp: "#->set_weight(#)".} ## \
+proc setWeight*(this: PolylightEffect, w: float32): RenderEffect {.importcpp: "deconstify(#->set_weight(#))", header: deconstifyCode.} ## \
 ## Set weight and return a new effect... the reason this couldnt be done
 ## through make was because that would return a new effect without the
 ## lightgroup which is static and cant be accessed Here, we just pass that to
 ## the make
 
-proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.importcpp: "#->set_effect_center(#)".} ## \
+proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.importcpp: "deconstify(#->set_effect_center(#))", header: deconstifyCode.} ## \
 ## Set weight and return a new effect... the reason this couldnt be done
 ## through make was because that would return a new effect without the
 ## lightgroup which is static and cant be accessed Here, we just pass that to
@@ -29281,20 +29762,20 @@ proc hasLight*(this: PolylightEffect, light: NodePath): bool {.importcpp: "#->ha
 
 converter getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "ShaderAttrib::make(#, #)", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "ShaderAttrib::make(#)", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#))", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make()", header: "shaderAttrib.h".} ## \
+proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object with nothing set.
 
-proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make_off()", header: "shaderAttrib.h".} ## \
+proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "shaderAttrib.h".} ## \
 ## Constructs a new ShaderAttrib object that disables the use of shaders (it
 ## does not clear out all shader data, however.)
 
-proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "ShaderAttrib::make_default()", header: "shaderAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "shaderAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29322,37 +29803,45 @@ proc autoRampOn*(this: ShaderAttrib): bool {.importcpp: "#->auto_ramp_on()".}
 
 proc autoShadowOn*(this: ShaderAttrib): bool {.importcpp: "#->auto_shadow_on()".}
 
-proc setShader*(this: ShaderAttrib, s: Shader, priority: int): RenderAttrib {.importcpp: "#->set_shader(#, #)".}
+proc setShader*(this: ShaderAttrib, s: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader(#, #))", header: deconstifyCode.}
 
-proc setShader*(this: ShaderAttrib, s: Shader): RenderAttrib {.importcpp: "#->set_shader(#)".}
+proc setShader*(this: ShaderAttrib, s: Shader): RenderAttrib {.importcpp: "deconstify(#->set_shader(#))", header: deconstifyCode.}
 
-proc setShaderOff*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "#->set_shader_off(#)".}
+proc setShaderOff*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_off(#))", header: deconstifyCode.}
 
-proc setShaderOff*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->set_shader_off()".}
+proc setShaderOff*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_off())", header: deconstifyCode.}
 
-proc setShaderAuto*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "#->set_shader_auto(#)".}
+proc setShaderAuto*(this: ShaderAttrib, shader_switch: BitMask32, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#, #))", header: deconstifyCode.} ## \
+## Set auto shader with bitmask to customize use, e.g., to keep normal, glow,
+## etc., on or off
 
-proc setShaderAuto*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->set_shader_auto()".}
+proc setShaderAuto*(this: ShaderAttrib, shader_switch: BitMask32): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#))", header: deconstifyCode.} ## \
+## Set auto shader with bitmask to customize use, e.g., to keep normal, glow,
+## etc., on or off
 
-proc clearShader*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->clear_shader()".}
+proc setShaderAuto*(this: ShaderAttrib, priority: int): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto(#))", header: deconstifyCode.}
 
-proc setShaderInput*(this: ShaderAttrib, input: ShaderInput): RenderAttrib {.importcpp: "#->set_shader_input(#)".} ## \
+proc setShaderAuto*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->set_shader_auto())", header: deconstifyCode.}
+
+proc clearShader*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->clear_shader())", header: deconstifyCode.}
+
+proc setShaderInput*(this: ShaderAttrib, input: ShaderInput): RenderAttrib {.importcpp: "deconstify(#->set_shader_input(#))", header: deconstifyCode.} ## \
 ## Shader Inputs
 
-proc setInstanceCount*(this: ShaderAttrib, instance_count: int): RenderAttrib {.importcpp: "#->set_instance_count(#)".} ## \
+proc setInstanceCount*(this: ShaderAttrib, instance_count: int): RenderAttrib {.importcpp: "deconstify(#->set_instance_count(#))", header: deconstifyCode.} ## \
 ## Sets the geometry instance count.  Do not confuse this with instanceTo,
 ## which is used for animation instancing, and has nothing to do with this.  A
 ## value of 0 means not to use instancing at all.
 
-proc setFlag*(this: ShaderAttrib, flag: int, value: bool): RenderAttrib {.importcpp: "#->set_flag(#, #)".}
+proc setFlag*(this: ShaderAttrib, flag: int, value: bool): RenderAttrib {.importcpp: "deconstify(#->set_flag(#, #))", header: deconstifyCode.}
 
-proc clearFlag*(this: ShaderAttrib, flag: int): RenderAttrib {.importcpp: "#->clear_flag(#)".}
+proc clearFlag*(this: ShaderAttrib, flag: int): RenderAttrib {.importcpp: "deconstify(#->clear_flag(#))", header: deconstifyCode.}
 
-proc clearShaderInput*(this: ShaderAttrib, id: InternalName): RenderAttrib {.importcpp: "#->clear_shader_input(#)".}
+proc clearShaderInput*(this: ShaderAttrib, id: InternalName): RenderAttrib {.importcpp: "deconstify(#->clear_shader_input(#))", header: deconstifyCode.}
 
-proc clearShaderInput*(this: ShaderAttrib, id: string): RenderAttrib {.importcpp: "#->clear_shader_input(nimStringToStdString(#))", header: stringConversionCode.}
+proc clearShaderInput*(this: ShaderAttrib, id: string): RenderAttrib {.importcpp: "deconstify(#->clear_shader_input(nimStringToStdString(#)))", header: deconstifyCode.}
 
-proc clearAllShaderInputs*(this: ShaderAttrib): RenderAttrib {.importcpp: "#->clear_all_shader_inputs()".} ## \
+proc clearAllShaderInputs*(this: ShaderAttrib): RenderAttrib {.importcpp: "deconstify(#->clear_all_shader_inputs())", header: deconstifyCode.} ## \
 ## Clears all the shader inputs on the attrib.
 
 proc getFlag*(this: ShaderAttrib, flag: int): bool {.importcpp: "#->get_flag(#)".}
@@ -29360,7 +29849,7 @@ proc getFlag*(this: ShaderAttrib, flag: int): bool {.importcpp: "#->get_flag(#)"
 proc hasShaderInput*(this: ShaderAttrib, id: InternalName): bool {.importcpp: "#->has_shader_input(#)".} ## \
 ## Returns true if there is a ShaderInput of the given name.
 
-proc getShader*(this: ShaderAttrib): Shader {.importcpp: "#->get_shader()".} ## \
+proc getShader*(this: ShaderAttrib): Shader {.importcpp: "deconstify(#->get_shader())", header: deconstifyCode.} ## \
 ## Returns the shader object associated with the node.  If get_override
 ## returns true, but get_shader returns NULL, that means that this attribute
 ## should disable the shader.
@@ -29410,10 +29899,10 @@ proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::g
 
 converter getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
-proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "ShowBoundsEffect::make(#)", header: "showBoundsEffect.h".} ## \
+proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "showBoundsEffect.h".} ## \
 ## Constructs a new ShowBoundsEffect object.
 
-proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "ShowBoundsEffect::make()", header: "showBoundsEffect.h".} ## \
+proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "showBoundsEffect.h".} ## \
 ## Constructs a new ShowBoundsEffect object.
 
 proc getTight*(this: ShowBoundsEffect): bool {.importcpp: "#->get_tight()".} ## \
@@ -29422,10 +29911,10 @@ proc getTight*(this: ShowBoundsEffect): bool {.importcpp: "#->get_tight()".} ## 
 
 converter getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
-proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "TexProjectorEffect::make()", header: "texProjectorEffect.h".} ## \
+proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "texProjectorEffect.h".} ## \
 ## Constructs a TexProjectorEffect that modifies no stages at all.
 
-proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath, lens_index: int): RenderEffect {.importcpp: "#->add_stage(#, #, #, #)".} ## \
+proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath, lens_index: int): RenderEffect {.importcpp: "deconstify(#->add_stage(#, #, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## projection for the given stage.  If this stage already exists, its
 ## projection definition is replaced.
@@ -29437,7 +29926,7 @@ proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, 
 ## applied to the texture transform.  In this case, the lens_index may be used
 ## to select the particular lens that should be used.
 
-proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath): RenderEffect {.importcpp: "#->add_stage(#, #, #)".} ## \
+proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, to: NodePath): RenderEffect {.importcpp: "deconstify(#->add_stage(#, #, #))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## projection for the given stage.  If this stage already exists, its
 ## projection definition is replaced.
@@ -29449,7 +29938,7 @@ proc addStage*(this: TexProjectorEffect, stage: TextureStage, `from`: NodePath, 
 ## applied to the texture transform.  In this case, the lens_index may be used
 ## to select the particular lens that should be used.
 
-proc removeStage*(this: TexProjectorEffect, stage: TextureStage): RenderEffect {.importcpp: "#->remove_stage(#)".} ## \
+proc removeStage*(this: TexProjectorEffect, stage: TextureStage): RenderEffect {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexProjectorEffect just like this one, with the indicated
 ## stage removed.
 
@@ -29482,51 +29971,51 @@ proc getLensIndex*(this: TexProjectorEffect, stage: TextureStage): int {.importc
 
 converter getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "ScissorEffect::make_screen(#, #)", header: "scissorEffect.h".} ## \
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen(#, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new screen-relative ScissorEffect.  The frame defines a left,
 ## right, bottom, top region, relative to the DisplayRegion.  See
 ## ScissorAttrib.
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "ScissorEffect::make_screen(#)", header: "scissorEffect.h".} ## \
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen(#))", header: "scissorEffect.h".} ## \
 ## Constructs a new screen-relative ScissorEffect.  The frame defines a left,
 ## right, bottom, top region, relative to the DisplayRegion.  See
 ## ScissorAttrib.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#, #, #, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The four points are
 ## understood to be relative to the indicated node, or the current node if the
 ## indicated NodePath is empty, and determine four points surrounding the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#, #, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The four points are
 ## understood to be relative to the indicated node, or the current node if the
 ## indicated NodePath is empty, and determine four points surrounding the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#, #, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The two points are
 ## understood to be relative to the indicated node, or the current node if the
 ## NodePath is empty, and determine the diagonally opposite corners of the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "ScissorEffect::make_node(#, #)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#, #))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect.  The two points are
 ## understood to be relative to the indicated node, or the current node if the
 ## NodePath is empty, and determine the diagonally opposite corners of the
 ## scissor region.
 
-proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "ScissorEffect::make_node(#)", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#))", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect, with no points.  This empty
 ## ScissorEffect does nothing.  You must then call add_point a number of times
 ## to add the points you require.
 
-proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "ScissorEffect::make_node()", header: "scissorEffect.h".} ## \
+proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "scissorEffect.h".} ## \
 ## Constructs a new node-relative ScissorEffect, with no points.  This empty
 ## ScissorEffect does nothing.  You must then call add_point a number of times
 ## to add the points you require.
 
-proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffect {.importcpp: "#->add_point(#, #)".} ## \
+proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#->add_point(#, #))", header: deconstifyCode.} ## \
 ## Returns a new ScissorEffect with the indicated point added.  It is only
 ## valid to call this on a "node" type ScissorEffect.  The full set of points,
 ## projected into screen space, defines the bounding volume of the rectangular
@@ -29534,7 +30023,7 @@ proc addPoint*(this: ScissorEffect, point: LPoint3, node: NodePath): RenderEffec
 ##
 ## Each point may be relative to a different node, if desired.
 
-proc addPoint*(this: ScissorEffect, point: LPoint3): RenderEffect {.importcpp: "#->add_point(#)".} ## \
+proc addPoint*(this: ScissorEffect, point: LPoint3): RenderEffect {.importcpp: "deconstify(#->add_point(#))", header: deconstifyCode.} ## \
 ## Returns a new ScissorEffect with the indicated point added.  It is only
 ## valid to call this on a "node" type ScissorEffect.  The full set of points,
 ## projected into screen space, defines the bounding volume of the rectangular
@@ -29771,6 +30260,30 @@ proc newPortalNode*(name: string, pos: LPoint3): PortalNode {.importcpp: "new Po
 ## Create a default rectangle as portal.  Use this to create an arbitrary
 ## portal and setup from Python
 
+proc setPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_portal_mask(#)".} ## \
+## Simultaneously sets both the "from" and "into" PortalMask values to the
+## same thing.
+
+proc setFromPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_from_portal_mask(#)".} ## \
+## Sets the "from" PortalMask.  In order for a portal to be detected from this
+## object into another object, the intersection of this object's "from" mask
+## and the other object's "into" mask must be nonzero.
+
+proc setIntoPortalMask*(this: PortalNode, mask: PortalMask) {.importcpp: "#->set_into_portal_mask(#)".} ## \
+## Sets the "into" PortalMask.  In order for a portal to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+proc getFromPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_from_portal_mask()".} ## \
+## Returns the current "from" PortalMask.  In order for a portal to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc getIntoPortalMask*(this: PortalNode): PortalMask {.importcpp: "#->get_into_portal_mask()".} ## \
+## Returns the current "into" PortalMask.  In order for a portal to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
 proc setPortalGeom*(this: PortalNode, flag: bool) {.importcpp: "#->set_portal_geom(#)".} ## \
 ## Sets the state of the "portal geom" flag for this PortalNode.  Normally,
 ## this is false; when this is set true, the PortalSolids in this node will
@@ -29835,21 +30348,21 @@ proc isOpen*(this: PortalNode): bool {.importcpp: "#->is_open()".} ## \
 
 converter getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
-proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "ScissorAttrib::make_off()", header: "scissorAttrib.h".} ## \
+proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "scissorAttrib.h".} ## \
 ## Constructs a new ScissorAttrib object that removes the scissor region and
 ## fills the DisplayRegion.
 
-proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "ScissorAttrib::make(#)", header: "scissorAttrib.h".} ## \
+proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#))", header: "scissorAttrib.h".} ## \
 ## Constructs a ScissorAttrib that restricts rendering to the indicated frame
 ## within the current DisplayRegion.  (0,0) is the lower-left corner of the
 ## DisplayRegion, and (1,1) is the upper-right corner.
 
-proc make*(_: typedesc[ScissorAttrib], left: float32, right: float32, bottom: float32, top: float32): RenderAttrib {.importcpp: "ScissorAttrib::make(#, #, #, #)", header: "scissorAttrib.h".} ## \
+proc make*(_: typedesc[ScissorAttrib], left: float32, right: float32, bottom: float32, top: float32): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#, #, #, #))", header: "scissorAttrib.h".} ## \
 ## Constructs a ScissorAttrib that restricts rendering to the indicated frame
 ## within the current DisplayRegion.  (0,0) is the lower-left corner of the
 ## DisplayRegion, and (1,1) is the upper-right corner.
 
-proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "ScissorAttrib::make_default()", header: "scissorAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "scissorAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29866,7 +30379,7 @@ proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib:
 
 converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
-proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "ShadeModelAttrib::make_default()", header: "shadeModelAttrib.h".} ## \
+proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "shadeModelAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29874,10 +30387,10 @@ proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelA
 
 converter getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
-proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "StencilAttrib::make_off()", header: "stencilAttrib.h".} ## \
+proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "stencilAttrib.h".} ## \
 ## Constructs a StencilAttrib that has stenciling turned off.
 
-proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "StencilAttrib::make_default()", header: "stencilAttrib.h".} ## \
+proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "stencilAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
@@ -29885,27 +30398,27 @@ proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib:
 
 converter getClassType*(_: typedesc[StencilAttrib]): TypeHandle {.importcpp: "StencilAttrib::get_class_type()", header: "stencilAttrib.h".}
 
-proc hasShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "ShaderPool::has_shader(#)", header: "shaderPool.h".} ## \
+proc hasShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "#ShaderPool::has_shader(#)", header: "shaderPool.h".} ## \
 ## Returns true if the shader has ever been loaded, false otherwise.
 
-proc verifyShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "ShaderPool::verify_shader(#)", header: "shaderPool.h".} ## \
+proc verifyShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "#ShaderPool::verify_shader(#)", header: "shaderPool.h".} ## \
 ## Loads the given filename up into a shader, if it has not already been
 ## loaded, and returns true to indicate success, or false to indicate failure.
 ## If this returns true, it is guaranteed that a subsequent call to
 ## load_shader() with the same shader name will return a valid Shader pointer.
 
-proc loadShader*(_: typedesc[ShaderPool], filename: Filename): Shader {.importcpp: "ShaderPool::load_shader(#)", header: "shaderPool.h".} ## \
+proc loadShader*(_: typedesc[ShaderPool], filename: Filename): Shader {.importcpp: "#ShaderPool::load_shader(#)", header: "shaderPool.h".} ## \
 ## Loads the given filename up into a shader, if it has not already been
 ## loaded, and returns the new shader.  If a shader with the same filename was
 ## previously loaded, returns that one instead.  If the shader file cannot be
 ## found, returns NULL.
 
-proc addShader*(_: typedesc[ShaderPool], filename: Filename, shader: Shader) {.importcpp: "ShaderPool::add_shader(#, #)", header: "shaderPool.h".} ## \
+proc addShader*(_: typedesc[ShaderPool], filename: Filename, shader: Shader) {.importcpp: "#ShaderPool::add_shader(#, #)", header: "shaderPool.h".} ## \
 ## Adds the indicated already-loaded shader to the pool.  The shader will
 ## always replace any previously-loaded shader in the pool that had the same
 ## filename.
 
-proc releaseShader*(_: typedesc[ShaderPool], filename: Filename) {.importcpp: "ShaderPool::release_shader(#)", header: "shaderPool.h".} ## \
+proc releaseShader*(_: typedesc[ShaderPool], filename: Filename) {.importcpp: "#ShaderPool::release_shader(#)", header: "shaderPool.h".} ## \
 ## Removes the indicated shader from the pool, indicating it will never be
 ## loaded again; the shader may then be freed.  If this function is never
 ## called, a reference count will be maintained on every shader every loaded,
@@ -29919,15 +30432,15 @@ proc garbageCollect*(_: typedesc[ShaderPool]): int {.importcpp: "ShaderPool::gar
 ## exactly 1; i.e.  only those shaders that are not being used outside of the
 ## pool.  Returns the number of shaders released.
 
-proc listContents*(_: typedesc[ShaderPool], `out`: ostream) {.importcpp: "ShaderPool::list_contents(#)", header: "shaderPool.h".} ## \
+proc listContents*(_: typedesc[ShaderPool], `out`: ostream) {.importcpp: "#ShaderPool::list_contents(#)", header: "shaderPool.h".} ## \
 ## Lists the contents of the shader pool to the indicated output stream.
 
-proc write*(_: typedesc[ShaderPool], `out`: ostream) {.importcpp: "ShaderPool::write(#)", header: "shaderPool.h".} ## \
+proc write*(_: typedesc[ShaderPool], `out`: ostream) {.importcpp: "#ShaderPool::write(#)", header: "shaderPool.h".} ## \
 ## Lists the contents of the shader pool to the indicated output stream.
 
 converter upcastToTypedWritableReferenceCount*(this: MovieAudio): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(MovieAudio *)(#))".}
 
 proc newMovieAudio*(param0: MovieAudio): MovieAudio {.importcpp: "new MovieAudio(#)".}
 
@@ -29944,7 +30457,7 @@ proc newMovieAudio*(): MovieAudio {.importcpp: "new MovieAudio()".} ## \
 proc open*(this: MovieAudio): MovieAudioCursor {.importcpp: "#->open()".} ## \
 ## Open this audio, returning a MovieAudioCursor
 
-proc get*(_: typedesc[MovieAudio], name: Filename): MovieAudio {.importcpp: "MovieAudio::get(#)", header: "movieAudio.h".} ## \
+proc get*(_: typedesc[MovieAudio], name: Filename): MovieAudio {.importcpp: "#MovieAudio::get(#)", header: "movieAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.  Just calls
 ## MovieTypeRegistry::make_audio().
 
@@ -29959,7 +30472,7 @@ proc newFlacAudio*(name: Filename): FlacAudio {.importcpp: "new FlacAudio(#)".} 
 
 proc newFlacAudio*(param0: FlacAudio): FlacAudio {.importcpp: "new FlacAudio(#)".}
 
-proc make*(_: typedesc[FlacAudio], name: Filename): MovieAudio {.importcpp: "FlacAudio::make(#)", header: "flacAudio.h".} ## \
+proc make*(_: typedesc[FlacAudio], name: Filename): MovieAudio {.importcpp: "#FlacAudio::make(#)", header: "flacAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
 converter getClassType*(_: typedesc[FlacAudio]): TypeHandle {.importcpp: "FlacAudio::get_class_type()", header: "flacAudio.h".}
@@ -30084,7 +30597,7 @@ converter getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "
 
 converter upcastToTypedWritableReferenceCount*(this: MovieVideo): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(MovieVideo *)(#))".}
 
 proc newMovieVideo*(param0: MovieVideo): MovieVideo {.importcpp: "new MovieVideo(#)".}
 
@@ -30102,7 +30615,7 @@ proc open*(this: MovieVideo): MovieVideoCursor {.importcpp: "#->open()".} ## \
 ## Open this video, returning a MovieVideoCursor of the appropriate type.
 ## Returns NULL on error.
 
-proc get*(_: typedesc[MovieVideo], name: Filename): MovieVideo {.importcpp: "MovieVideo::get(#)", header: "movieVideo.h".} ## \
+proc get*(_: typedesc[MovieVideo], name: Filename): MovieVideo {.importcpp: "#MovieVideo::get(#)", header: "movieVideo.h".} ## \
 ## Obtains a MovieVideo that references a file.  Just calls
 ## MovieTypeRegistry::make_video().
 
@@ -30226,7 +30739,7 @@ proc getNumOptions*(_: typedesc[MicrophoneAudio]): int {.importcpp: "MicrophoneA
 ## plus a set of configuration parameters.  For example, "Soundblaster Audigy
 ## Line in at 44,100 samples/sec" would be an option.
 
-proc getOption*(_: typedesc[MicrophoneAudio], n: int): MicrophoneAudio {.importcpp: "MicrophoneAudio::get_option(#)", header: "microphoneAudio.h".} ## \
+proc getOption*(_: typedesc[MicrophoneAudio], n: int): MicrophoneAudio {.importcpp: "#MicrophoneAudio::get_option(#)", header: "microphoneAudio.h".} ## \
 ## Returns the nth microphone option.
 
 proc getChannels*(this: MicrophoneAudio): int {.importcpp: "#->get_channels()".} ## \
@@ -30242,7 +30755,7 @@ proc newOpusAudio*(name: Filename): OpusAudio {.importcpp: "new OpusAudio(#)".} 
 
 proc newOpusAudio*(param0: OpusAudio): OpusAudio {.importcpp: "new OpusAudio(#)".}
 
-proc make*(_: typedesc[OpusAudio], name: Filename): MovieAudio {.importcpp: "OpusAudio::make(#)", header: "opusAudio.h".} ## \
+proc make*(_: typedesc[OpusAudio], name: Filename): MovieAudio {.importcpp: "#OpusAudio::make(#)", header: "opusAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
 converter getClassType*(_: typedesc[OpusAudio]): TypeHandle {.importcpp: "OpusAudio::get_class_type()", header: "opusAudio.h".}
@@ -30295,7 +30808,7 @@ proc newVorbisAudio*(name: Filename): VorbisAudio {.importcpp: "new VorbisAudio(
 
 proc newVorbisAudio*(param0: VorbisAudio): VorbisAudio {.importcpp: "new VorbisAudio(#)".}
 
-proc make*(_: typedesc[VorbisAudio], name: Filename): MovieAudio {.importcpp: "VorbisAudio::make(#)", header: "vorbisAudio.h".} ## \
+proc make*(_: typedesc[VorbisAudio], name: Filename): MovieAudio {.importcpp: "#VorbisAudio::make(#)", header: "vorbisAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
 converter getClassType*(_: typedesc[VorbisAudio]): TypeHandle {.importcpp: "VorbisAudio::get_class_type()", header: "vorbisAudio.h".}
@@ -30313,7 +30826,7 @@ proc newWavAudio*(name: Filename): WavAudio {.importcpp: "new WavAudio(#)".} ## 
 
 proc newWavAudio*(param0: WavAudio): WavAudio {.importcpp: "new WavAudio(#)".}
 
-proc make*(_: typedesc[WavAudio], name: Filename): MovieAudio {.importcpp: "WavAudio::make(#)", header: "wavAudio.h".} ## \
+proc make*(_: typedesc[WavAudio], name: Filename): MovieAudio {.importcpp: "#WavAudio::make(#)", header: "wavAudio.h".} ## \
 ## Obtains a MovieAudio that references a file.
 
 converter getClassType*(_: typedesc[WavAudio]): TypeHandle {.importcpp: "WavAudio::get_class_type()", header: "wavAudio.h".}
@@ -31175,10 +31688,10 @@ proc newNodeVertexTransform*(node: PandaNode, prev: VertexTransform): NodeVertex
 
 proc newNodeVertexTransform*(node: PandaNode): NodeVertexTransform {.importcpp: "new NodeVertexTransform(#)".}
 
-proc getNode*(this: NodeVertexTransform): PandaNode {.importcpp: "#->get_node()".} ## \
+proc getNode*(this: NodeVertexTransform): PandaNode {.importcpp: "deconstify(#->get_node())", header: deconstifyCode.} ## \
 ## Returns the PandaNode whose transform supplies this object.
 
-proc getPrev*(this: NodeVertexTransform): VertexTransform {.importcpp: "#->get_prev()".} ## \
+proc getPrev*(this: NodeVertexTransform): VertexTransform {.importcpp: "deconstify(#->get_prev())", header: deconstifyCode.} ## \
 ## Returns the VertexTransform object whose matrix will be composed with the
 ## result of this node's transform.
 
@@ -31395,6 +31908,15 @@ proc getTexture*(this: PipeOcclusionCullTraverser): Texture {.importcpp: "#->get
 ## Returns a Texture that can be used to visualize the efforts of the
 ## occlusion cull.
 
+proc setOcclusionMask*(this: PipeOcclusionCullTraverser, occlusion_mask: DrawMask) {.importcpp: "#->set_occlusion_mask(#)".} ## \
+## Specifies the DrawMask that should be set on occlusion polygons for this
+## scene.  This identifies the polygons that are to be treated as occluders.
+## Polygons that do not have this draw mask set will not be considered
+## occluders.
+
+proc getOcclusionMask*(this: PipeOcclusionCullTraverser): DrawMask {.importcpp: "#->get_occlusion_mask()".} ## \
+## Returns the DrawMask for occlusion polygons.  See set_occlusion_mask().
+
 converter getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
 
 proc initPfmVizzer*(pfm: PfmFile): PfmVizzer {.importcpp: "PfmVizzer(#)".} ## \
@@ -31576,7 +32098,7 @@ proc makeDisplacement*(this: PfmVizzer, result: PfmFile, max_u: float64, max_v: 
 
 converter upcastToTypedWritableReferenceCount*(this: AnimGroup): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(AnimGroup *)(#))".}
 
 proc newAnimGroup*(parent: AnimGroup, name: string): AnimGroup {.importcpp: "new AnimGroup(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Creates the AnimGroup, and adds it to the indicated parent.  The only way
@@ -31643,7 +32165,7 @@ proc newAnimBundleNode*(name: string, bundle: AnimBundle): AnimBundleNode {.impo
 
 proc getBundle*(this: AnimBundleNode): AnimBundle {.importcpp: "#->get_bundle()".}
 
-proc findAnimBundle*(_: typedesc[AnimBundleNode], root: PandaNode): AnimBundle {.importcpp: "AnimBundleNode::find_anim_bundle(#)", header: "animBundleNode.h".} ## \
+proc findAnimBundle*(_: typedesc[AnimBundleNode], root: PandaNode): AnimBundle {.importcpp: "#AnimBundleNode::find_anim_bundle(#)", header: "animBundleNode.h".} ## \
 ## Recursively walks the scene graph beginning at the indicated node (which
 ## need not be an AnimBundleNode), and returns the first AnimBundle found.
 ## Returns NULL if no AnimBundle can be found.
@@ -31652,7 +32174,7 @@ converter getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "A
 
 converter upcastToTypedWritableReferenceCount*(this: PartGroup): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(PartGroup *)(#))".}
 
 proc newPartGroup*(parent: PartGroup, name: string): PartGroup {.importcpp: "new PartGroup(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Creates the PartGroup, and adds it to the indicated parent.  The only way
@@ -31747,9 +32269,9 @@ converter getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGr
 
 converter upcastToTypedReferenceCount*(this: AnimControl): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(AnimControl *)(#))".}
 
-converter upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(AnimControl *)(#))".}
 
 proc isPending*(this: AnimControl): bool {.importcpp: "#->is_pending()".} ## \
 ## Returns true if the AnimControl is being bound asynchronously, and has not
@@ -31828,7 +32350,7 @@ proc setValueNode*(this: AnimChannelMatrixDynamic, node: PandaNode) {.importcpp:
 ## Specifies a node whose transform will be queried each frame to implicitly
 ## specify the transform of this joint.
 
-proc getValueTransform*(this: AnimChannelMatrixDynamic): TransformState {.importcpp: "#->get_value_transform()".} ## \
+proc getValueTransform*(this: AnimChannelMatrixDynamic): TransformState {.importcpp: "deconstify(#->get_value_transform())", header: deconstifyCode.} ## \
 ## Returns the explicit TransformState value that was set via set_value(), if
 ## any.
 
@@ -31839,7 +32361,7 @@ converter getClassType*(_: typedesc[AnimChannelMatrixDynamic]): TypeHandle {.imp
 
 proc newAnimChannelMatrixXfmTable*(parent: AnimGroup, name: string): AnimChannelMatrixXfmTable {.importcpp: "new AnimChannelMatrixXfmTable(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc isValidId*(_: typedesc[AnimChannelMatrixXfmTable], table_id: char): bool {.importcpp: "AnimChannelMatrixXfmTable::is_valid_id(#)", header: "animChannelMatrixXfmTable.h".} ## \
+proc isValidId*(_: typedesc[AnimChannelMatrixXfmTable], table_id: char): bool {.importcpp: "#AnimChannelMatrixXfmTable::is_valid_id(#)", header: "animChannelMatrixXfmTable.h".} ## \
 ## Returns true if the given letter is one of the nine valid table id's.
 
 proc clearAllTables*(this: AnimChannelMatrixXfmTable) {.importcpp: "#->clear_all_tables()".} ## \
@@ -32075,7 +32597,7 @@ proc newPartBundle*(): PartBundle {.importcpp: "new PartBundle()".} ## \
 ## Normally, a PartBundle constructor should not be called directly--it will
 ## get created when a PartBundleNode is created.
 
-proc getAnimPreload*(this: PartBundle): AnimPreloadTable {.importcpp: "#->get_anim_preload()".} ## \
+proc getAnimPreload*(this: PartBundle): AnimPreloadTable {.importcpp: "deconstify(#->get_anim_preload())", header: deconstifyCode.} ## \
 ## Returns the AnimPreloadTable associated with the PartBundle.  This table,
 ## if present, can be used for the benefit of load_bind_anim() to allow
 ## asynchronous binding.
@@ -32633,7 +33155,7 @@ proc initPStatThread*(thread: Thread, client: PStatClient): PStatThread {.import
 ## Creates a new named thread.  This will be used to unify tasks that share a
 ## common thread, and differentiate tasks that occur in different threads.
 
-proc initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".} ## \
+converter initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".} ## \
 ## Creates a new named thread.  This will be used to unify tasks that share a
 ## common thread, and differentiate tasks that occur in different threads.
 
@@ -32652,11 +33174,11 @@ proc getThread*(this: PStatThread): Thread {.importcpp: "#.get_thread()".} ## \
 proc getIndex*(this: PStatThread): int {.importcpp: "#.get_index()".} ## \
 ## Returns the index number of this particular thread within the PStatClient.
 
-proc connect*(_: typedesc[PStatClient], hostname: string, port: int): bool {.importcpp: "PStatClient::connect(nimStringToStdString(#), #)", header: "pStatClient.h".} ## \
+proc connect*(_: typedesc[PStatClient], hostname: string, port: int): bool {.importcpp: "#PStatClient::connect(nimStringToStdString(#), #)", header: "pStatClient.h".} ## \
 ## Attempts to establish a connection to the indicated PStatServer.  Returns
 ## true if successful, false on failure.
 
-proc connect*(_: typedesc[PStatClient], hostname: string): bool {.importcpp: "PStatClient::connect(nimStringToStdString(#))", header: "pStatClient.h".} ## \
+proc connect*(_: typedesc[PStatClient], hostname: string): bool {.importcpp: "#PStatClient::connect(nimStringToStdString(#))", header: "pStatClient.h".} ## \
 ## Attempts to establish a connection to the indicated PStatServer.  Returns
 ## true if successful, false on failure.
 
@@ -32680,7 +33202,7 @@ proc mainTick*(_: typedesc[PStatClient]) {.importcpp: "PStatClient::main_tick()"
 ## A convenience function to call new_frame() on the global PStatClient's main
 ## thread, and any other threads with a sync_name of "Main".
 
-proc threadTick*(_: typedesc[PStatClient], sync_name: string) {.importcpp: "PStatClient::thread_tick(nimStringToStdString(#))", header: "pStatClient.h".} ## \
+proc threadTick*(_: typedesc[PStatClient], sync_name: string) {.importcpp: "#PStatClient::thread_tick(nimStringToStdString(#))", header: "pStatClient.h".} ## \
 ## A convenience function to call new_frame() on any threads with the
 ## indicated sync_name
 
@@ -32783,7 +33305,7 @@ proc getTransform*(this: CharacterJoint): LMatrix4 {.importcpp: "#->get_transfor
 proc getTransform*(this: CharacterJoint, transform: LMatrix4) {.importcpp: "#->get_transform(#)".} ## \
 ## Copies the joint's current transform into the indicated matrix.
 
-proc getTransformState*(this: CharacterJoint): TransformState {.importcpp: "#->get_transform_state()".}
+proc getTransformState*(this: CharacterJoint): TransformState {.importcpp: "deconstify(#->get_transform_state())", header: deconstifyCode.}
 
 proc getNetTransform*(this: CharacterJoint, transform: LMatrix4) {.importcpp: "#->get_net_transform(#)".} ## \
 ## Copies the joint's current net transform (composed from the root of the
@@ -32804,7 +33326,7 @@ proc newCharacterVertexSlider*(char_slider: CharacterSlider): CharacterVertexSli
 ## Constructs a new object that converts vertices from the indicated joint's
 ## coordinate space, into the other indicated joint's space.
 
-proc getCharSlider*(this: CharacterVertexSlider): CharacterSlider {.importcpp: "#->get_char_slider()".} ## \
+proc getCharSlider*(this: CharacterVertexSlider): CharacterSlider {.importcpp: "deconstify(#->get_char_slider())", header: deconstifyCode.} ## \
 ## Returns the CharacterSlider object for which this object returns the slider
 ## value.
 
@@ -32814,7 +33336,7 @@ proc newJointVertexTransform*(joint: CharacterJoint): JointVertexTransform {.imp
 ## Constructs a new object that converts vertices from the indicated joint's
 ## coordinate space, into the other indicated joint's space.
 
-proc getJoint*(this: JointVertexTransform): CharacterJoint {.importcpp: "#->get_joint()".} ## \
+proc getJoint*(this: JointVertexTransform): CharacterJoint {.importcpp: "deconstify(#->get_joint())", header: deconstifyCode.} ## \
 ## Returns the joint for which this object returns the transform.
 
 converter getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
@@ -32929,7 +33451,7 @@ proc getNode*(this: CharacterJointBundle, n: int): Character {.importcpp: "#->ge
 
 converter getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
-proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "CharacterJointEffect::make(#)", header: "characterJointEffect.h".} ## \
+proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "characterJointEffect.h".} ## \
 ## Constructs a new CharacterJointEffect object that references the indicated
 ## character.  When a relative get_transform() is called on the node that
 ## contains the CharacterJointEffect, it will implicitly call
@@ -32982,7 +33504,7 @@ proc setRespectEffectiveNormal*(this: CollisionSolid, respect_effective_normal: 
 proc getRespectEffectiveNormal*(this: CollisionSolid): bool {.importcpp: "#->get_respect_effective_normal()".} ## \
 ## See set_respect_effective_normal().
 
-proc getBounds*(this: CollisionSolid): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: CollisionSolid): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the solid's bounding volume.
 
 proc setBounds*(this: CollisionSolid, bounding_volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
@@ -33063,12 +33585,36 @@ proc newCollisionHandler*(param0: CollisionHandler): CollisionHandler {.importcp
 
 proc newCollisionNode*(name: string): CollisionNode {.importcpp: "new CollisionNode(nimStringToStdString(#))", header: stringConversionCode.}
 
+proc setCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_collide_mask(#)".} ## \
+## Simultaneously sets both the "from" and "into" CollideMask values to the
+## same thing.
+
+proc setFromCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_from_collide_mask(#)".} ## \
+## Sets the "from" CollideMask.  In order for a collision to be detected from
+## this object into another object, the intersection of this object's "from"
+## mask and the other object's "into" mask must be nonzero.
+
+proc setIntoCollideMask*(this: CollisionNode, mask: CollideMask) {.importcpp: "#->set_into_collide_mask(#)".} ## \
+## Sets the "into" CollideMask.  In order for a collision to be detected from
+## another object into this object, the intersection of the other object's
+## "from" mask and this object's "into" mask must be nonzero.
+
+proc getFromCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_from_collide_mask()".} ## \
+## Returns the current "from" CollideMask.  In order for a collision to be
+## detected from this object into another object, the intersection of this
+## object's "from" mask and the other object's "into" mask must be nonzero.
+
+proc getIntoCollideMask*(this: CollisionNode): CollideMask {.importcpp: "#->get_into_collide_mask()".} ## \
+## Returns the current "into" CollideMask.  In order for a collision to be
+## detected from another object into this object, the intersection of the
+## other object's "from" mask and this object's "into" mask must be nonzero.
+
 proc clearSolids*(this: CollisionNode) {.importcpp: "#->clear_solids()".} ## \
 ## Removes all solids from the node.
 
 proc getNumSolids*(this: CollisionNode): clonglong {.importcpp: "#->get_num_solids()".}
 
-proc getSolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "#->get_solid(#)".}
+proc getSolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "deconstify(#->get_solid(#))", header: deconstifyCode.}
 
 proc modifySolid*(this: CollisionNode, n: clonglong): CollisionSolid {.importcpp: "#->modify_solid(#)".}
 
@@ -33101,6 +33647,9 @@ proc setColliderSort*(this: CollisionNode, sort: int) {.importcpp: "#->set_colli
 ## multiple passes through the data; in that case, it may be a useful
 ## optimization to group colliders that have similar bounding volumes together
 ## (by giving them similar sort values).
+
+proc getDefaultCollideMask*(_: typedesc[CollisionNode]): CollideMask {.importcpp: "CollisionNode::get_default_collide_mask()", header: "collisionNode.h".} ## \
+## Returns the default into_collide_mask assigned to new CollisionNodes.
 
 converter getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
 
@@ -33210,7 +33759,7 @@ proc write*(this: CollisionTraverser, `out`: ostream, indent_level: int) {.impor
 
 converter getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
 
-proc getFrom*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_from()".} ## \
+proc getFrom*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_from())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid that triggered
 ## this collision.
 
@@ -33220,7 +33769,7 @@ proc hasInto*(this: CollisionEntry): bool {.importcpp: "#->has_into()".} ## \
 ## If this returns false, the collision was detected into a GeomNode, and
 ## there is no CollisionSolid pointer to be retrieved.
 
-proc getInto*(this: CollisionEntry): CollisionSolid {.importcpp: "#->get_into()".} ## \
+proc getInto*(this: CollisionEntry): CollisionSolid {.importcpp: "deconstify(#->get_into())", header: deconstifyCode.} ## \
 ## Returns the CollisionSolid pointer for the particular solid was collided
 ## into.  This pointer might be NULL if the collision was into a piece of
 ## visible geometry, instead of a normal CollisionSolid collision; see
@@ -33231,7 +33780,7 @@ proc getFromNode*(this: CollisionEntry): CollisionNode {.importcpp: "#->get_from
 ## collision.  This will be a node that has been added to a CollisionTraverser
 ## via add_collider().
 
-proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "(PT(PandaNode)(#->get_into_node()))".} ## \
+proc getIntoNode*(this: CollisionEntry): PandaNode {.importcpp: "#->get_into_node()".} ## \
 ## Returns the node that contains the CollisionSolid that was collided into.
 ## This returns a PandaNode pointer instead of something more specific,
 ## because it might be either a CollisionNode or a GeomNode.
@@ -33433,12 +33982,12 @@ proc getNumPoints*(this: CollisionPolygon): clonglong {.importcpp: "#->get_num_p
 proc getPoint*(this: CollisionPolygon, n: clonglong): LPoint3 {.importcpp: "#->get_point(#)".} ## \
 ## Returns the nth vertex of the CollisionPolygon, expressed in 3-D space.
 
-proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPoint3): bool {.importcpp: "CollisionPolygon::verify_points(#, #, #)", header: "collisionPolygon.h".} ## \
+proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPoint3): bool {.importcpp: "#CollisionPolygon::verify_points(#, #, #)", header: "collisionPolygon.h".} ## \
 ## Verifies that the indicated set of points will define a valid
 ## CollisionPolygon: that is, at least three non-collinear points, with no
 ## points repeated.
 
-proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): bool {.importcpp: "CollisionPolygon::verify_points(#, #, #, #)", header: "collisionPolygon.h".} ## \
+proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): bool {.importcpp: "#CollisionPolygon::verify_points(#, #, #, #)", header: "collisionPolygon.h".} ## \
 ## Verifies that the indicated set of points will define a valid
 ## CollisionPolygon: that is, at least three non-collinear points, with no
 ## points repeated.
@@ -33946,7 +34495,7 @@ converter getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: 
 
 converter upcastToPandaNode*(this: CollisionVisualizer): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
-converter upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(#.p()))".}
+converter upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(CollisionVisualizer *)(#))".}
 
 proc newCollisionVisualizer*(copy: CollisionVisualizer): CollisionVisualizer {.importcpp: "new CollisionVisualizer(#)".} ## \
 ## Copy constructor.
@@ -34651,7 +35200,7 @@ proc supportsPixelZoom*(this: DrawableRegion): bool {.importcpp: "#->supports_pi
 ## zooming, or if you have called this on a DisplayRegion that doesn't have
 ## both set_clear_color() and set_clear_depth() enabled.
 
-proc getRenderbufferType*(_: typedesc[DrawableRegion], plane: int): int {.importcpp: "DrawableRegion::get_renderbuffer_type(#)", header: "drawableRegion.h".} ## \
+proc getRenderbufferType*(_: typedesc[DrawableRegion], plane: int): int {.importcpp: "#DrawableRegion::get_renderbuffer_type(#)", header: "drawableRegion.h".} ## \
 ## Returns the RenderBuffer::Type that corresponds to a RenderTexturePlane.
 
 proc newWindowHandle*(copy: WindowHandle): WindowHandle {.importcpp: "new WindowHandle(#)".}
@@ -34679,7 +35228,7 @@ proc getDefault*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "
 ## this returns that WindowProperties structure; otherwise, this returns
 ## get_config_properties().
 
-proc setDefault*(_: typedesc[WindowProperties], default_properties: WindowProperties) {.importcpp: "WindowProperties::set_default(#)", header: "windowProperties.h".} ## \
+proc setDefault*(_: typedesc[WindowProperties], default_properties: WindowProperties) {.importcpp: "#WindowProperties::set_default(#)", header: "windowProperties.h".} ## \
 ## Replaces the "default" WindowProperties with the specified structure.  The
 ## specified WindowProperties will be returned by future calls to
 ## get_default(), until clear_default() is called.
@@ -34691,13 +35240,13 @@ proc clearDefault*(_: typedesc[WindowProperties]) {.importcpp: "WindowProperties
 ## Returns the "default" WindowProperties to whatever is specified in the
 ## user's config file.
 
-proc size*(_: typedesc[WindowProperties], size: LVecBase2i): WindowProperties {.importcpp: "WindowProperties::size(#)", header: "windowProperties.h".} ## \
+proc size*(_: typedesc[WindowProperties], size: LVecBase2i): WindowProperties {.importcpp: "#WindowProperties::size(#)", header: "windowProperties.h".} ## \
 ## Returns a WindowProperties structure with only the size specified.  The
 ## size is the only property that matters to buffers.
 ##
 ## @deprecated in the Python API, use WindowProperties(size=(x, y)) instead.
 
-proc size*(_: typedesc[WindowProperties], x_size: int, y_size: int): WindowProperties {.importcpp: "WindowProperties::size(#, #)", header: "windowProperties.h".}
+proc size*(_: typedesc[WindowProperties], x_size: int, y_size: int): WindowProperties {.importcpp: "#WindowProperties::size(#, #)", header: "windowProperties.h".}
 
 proc `==`*(this: WindowProperties, other: WindowProperties): bool {.importcpp: "#.operator ==(#)".}
 
@@ -34973,7 +35522,7 @@ proc output*(this: WindowProperties, `out`: ostream) {.importcpp: "#.output(#)".
 
 converter upcastToTypedReferenceCount*(this: DisplayRegion): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(#.p()))".}
+converter upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(DisplayRegion *)(#))".}
 
 proc getNumRegions*(this: DisplayRegion): int {.importcpp: "#->get_num_regions()".} ## \
 ## Returns the number of regions, see set_num_regions.
@@ -35060,7 +35609,7 @@ proc isStereo*(this: DisplayRegion): bool {.importcpp: "#->is_stereo()".} ## \
 
 converter upcastToGraphicsOutputBase*(this: GraphicsOutput): GraphicsOutputBase {.importcpp: "(PT(GraphicsOutputBase)(#))".}
 
-converter upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(#.p()))".}
+converter upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(GraphicsOutput *)(#))".}
 
 proc getGsg*(this: GraphicsOutput): GraphicsStateGuardian {.importcpp: "#->get_gsg()".} ## \
 ## Returns the GSG that is associated with this window.  There is a one-to-one
@@ -35473,7 +36022,7 @@ proc getThreadingModel*(this: GraphicsEngine): GraphicsThreadingModel {.importcp
 
 proc initGraphicsThreadingModel*(copy: GraphicsThreadingModel): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(#)".}
 
-proc initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## The threading model accepts a string representing the names of the two
 ## threads that will process cull and draw for the given window, separated by
 ## a slash.  The names are completely arbitrary and are used only to
@@ -36277,6 +36826,51 @@ proc makeTextureBuffer*(this: GraphicsOutput, name: string, x_size: int, y_size:
 ## When you are done using the buffer, you should remove it with a call to
 ## GraphicsEngine::remove_window().
 
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask, to_ram: bool, fbp: FrameBufferProperties): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
+
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask, to_ram: bool): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
+
+proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath, camera_mask: DrawMask): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #, #)", header: stringConversionCode.} ## \
+## This is similar to make_texture_buffer() in that it allocates a separate
+## buffer suitable for rendering to a texture that can be assigned to geometry
+## in this window, but in this case, the buffer is set up to render the six
+## faces of a cube map.
+##
+## The buffer is automatically set up with six display regions and six
+## cameras, each of which are assigned the indicated draw_mask and parented to
+## the given camera_rig node (which you should then put in your scene to
+## render the cube map from the appropriate point of view).
+##
+## You may take the texture associated with the buffer and apply it to
+## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
+## to apply a reflection of everything seen by the camera rig.
+
 proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: NodePath): GraphicsOutput {.importcpp: "#->make_cube_map(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## This is similar to make_texture_buffer() in that it allocates a separate
 ## buffer suitable for rendering to a texture that can be assigned to geometry
@@ -36292,7 +36886,7 @@ proc makeCubeMap*(this: GraphicsOutput, name: string, size: int, camera_rig: Nod
 ## geometry, particularly with TexGenAttrib::M_world_cube_map also in effect,
 ## to apply a reflection of everything seen by the camera rig.
 
-proc makeScreenshotFilename*(_: typedesc[GraphicsOutput], prefix: string): Filename {.importcpp: "GraphicsOutput::make_screenshot_filename(nimStringToStdString(#))", header: "graphicsOutput.h".} ## \
+proc makeScreenshotFilename*(_: typedesc[GraphicsOutput], prefix: string): Filename {.importcpp: "#GraphicsOutput::make_screenshot_filename(nimStringToStdString(#))", header: "graphicsOutput.h".} ## \
 ## Saves a screenshot of the region to a default filename, and returns the
 ## filename, or empty string if the screenshot failed.  The default filename
 ## is generated from the supplied prefix and from the Config variable
@@ -36593,7 +37187,7 @@ proc getPixelSize*(this: DisplayRegion): LVecBase2i {.importcpp: "#->get_pixel_s
 
 proc output*(this: DisplayRegion, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc makeScreenshotFilename*(_: typedesc[DisplayRegion], prefix: string): Filename {.importcpp: "DisplayRegion::make_screenshot_filename(nimStringToStdString(#))", header: "displayRegion.h".} ## \
+proc makeScreenshotFilename*(_: typedesc[DisplayRegion], prefix: string): Filename {.importcpp: "#DisplayRegion::make_screenshot_filename(nimStringToStdString(#))", header: "displayRegion.h".} ## \
 ## Synthesizes a suitable default filename for passing to save_screenshot().
 ##
 ## The default filename is generated from the supplied prefix and from the
@@ -37306,13 +37900,13 @@ proc setSource*(this: MouseAndKeyboard, window: GraphicsWindow, device: int) {.i
 
 converter getClassType*(_: typedesc[MouseAndKeyboard]): TypeHandle {.importcpp: "MouseAndKeyboard::get_class_type()", header: "mouseAndKeyboard.h".}
 
-proc makeInt*(_: typedesc[NativeWindowHandle], window: clonglong): WindowHandle {.importcpp: "NativeWindowHandle::make_int(#)", header: "nativeWindowHandle.h".} ## \
+proc makeInt*(_: typedesc[NativeWindowHandle], window: clonglong): WindowHandle {.importcpp: "#NativeWindowHandle::make_int(#)", header: "nativeWindowHandle.h".} ## \
 ## Constructs a new WindowHandle with an int value, which is understood to be
 ## either an HWND or a Window, cast to int.  This method exists for the
 ## convenience of Python, which likes to deal with ints; C++ code should use
 ## one of the more specific make_x11() or make_win32() methods instead.
 
-proc makeSubprocess*(_: typedesc[NativeWindowHandle], filename: Filename): WindowHandle {.importcpp: "NativeWindowHandle::make_subprocess(#)", header: "nativeWindowHandle.h".} ## \
+proc makeSubprocess*(_: typedesc[NativeWindowHandle], filename: Filename): WindowHandle {.importcpp: "#NativeWindowHandle::make_subprocess(#)", header: "nativeWindowHandle.h".} ## \
 ## Constructs a new WindowHandle that references a SubprocessWindowBuffer read
 ## in another process, with the named pipe filename that it uses for
 ## communication.
@@ -37332,9 +37926,9 @@ converter getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "P
 
 converter upcastToTypedReferenceCount*(this: Thread): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(Thread *)(#))".}
 
-proc bindThread*(_: typedesc[Thread], name: string, sync_name: string): Thread {.importcpp: "Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: "thread.h".} ## \
+proc bindThread*(_: typedesc[Thread], name: string, sync_name: string): Thread {.importcpp: "#Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: "thread.h".} ## \
 ## Returns a new Panda Thread object associated with the current thread (which
 ## has been created externally). This can be used to bind a unique Panda
 ## Thread object with an external thread, such as a new Python thread.
@@ -37431,7 +38025,7 @@ proc isSimpleThreads*(_: typedesc[Thread]): bool {.importcpp: "Thread::is_simple
 ## "true threads", since one possible implementation of simple threads is via
 ## true threads with mutex protection to ensure only one runs at a time.
 
-proc sleep*(_: typedesc[Thread], seconds: float64) {.importcpp: "Thread::sleep(#)", header: "thread.h".} ## \
+proc sleep*(_: typedesc[Thread], seconds: float64) {.importcpp: "#Thread::sleep(#)", header: "thread.h".} ## \
 ## Suspends the current thread for at least the indicated amount of time.  It
 ## might be suspended for longer.
 
@@ -37450,7 +38044,7 @@ proc outputBlocker*(this: Thread, `out`: ostream) {.importcpp: "#->output_blocke
 ## blocked on.  Writes nothing if there is no blocker, or if we are not in
 ## DEBUG_THREADS mode.
 
-proc writeStatus*(_: typedesc[Thread], `out`: ostream) {.importcpp: "Thread::write_status(#)", header: "thread.h".}
+proc writeStatus*(_: typedesc[Thread], `out`: ostream) {.importcpp: "#Thread::write_status(#)", header: "thread.h".}
 
 proc isStarted*(this: Thread): bool {.importcpp: "#->is_started()".} ## \
 ## Returns true if the thread has been started, false if it has not, or if
@@ -37865,7 +38459,7 @@ proc initEventParameter*(): EventParameter {.importcpp: "EventParameter()".}
 
 proc initEventParameter*(copy: EventParameter): EventParameter {.importcpp: "EventParameter(#)".}
 
-proc initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a pointer to a TypedReferenceCount
 ## object.  Note that a TypedReferenceCount is not the same kind of pointer as
 ## a TypedWritableReferenceCount, hence we require both constructors.
@@ -37875,7 +38469,7 @@ proc initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp
 ## const and non-const pointers to be stored, but it does lose the constness.
 ## Be careful.
 
-proc initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a pointer to any kind of
 ## TypedWritableReferenceCount object.  This is the most general constructor.
 ##
@@ -37884,15 +38478,15 @@ proc initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.i
 ## const and non-const pointers to be stored, but it does lose the constness.
 ## Be careful.
 
-proc initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores a floating-point value.
 
-proc initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".} ## \
+converter initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".} ## \
 ## Defines an EventParameter that stores an integer value.
 
-proc initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
+converter initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
 
-proc initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Defines an EventParameter that stores a string value.
 
 proc isEmpty*(this: EventParameter): bool {.importcpp: "#.is_empty()".} ## \
@@ -37989,7 +38583,7 @@ converter getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "Asyn
 
 converter upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(AsyncFuture)(#))".}
 
-converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(AsyncTask *)(#))".}
 
 proc isAlive*(this: AsyncTask): bool {.importcpp: "#->is_alive()".} ## \
 ## Returns true if the task is currently active or sleeping on some task
@@ -38152,7 +38746,7 @@ proc output*(this: AsyncTask, `out`: ostream) {.importcpp: "#->output(#)".}
 
 converter upcastToTypedReferenceCount*(this: AsyncTaskManager): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(AsyncTaskManager *)(#))".}
 
 proc newAsyncTaskManager*(name: string): AsyncTaskManager {.importcpp: "new AsyncTaskManager(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -38304,7 +38898,7 @@ proc size*(this: AsyncTaskCollection): clonglong {.importcpp: "#.size()".} ## \
 ## Returns the number of tasks in the collection.  This is the same thing as
 ## get_num_tasks().
 
-proc `+=`*(this: AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +(#)".}
 
@@ -38348,7 +38942,7 @@ proc newAsyncTask*(param0: AsyncTask): AsyncTask {.importcpp: "new AsyncTask(#)"
 
 converter upcastToTypedReferenceCount*(this: AsyncTaskChain): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(AsyncTaskChain *)(#))".}
 
 proc setTickClock*(this: AsyncTaskChain, tick_clock: bool) {.importcpp: "#->set_tick_clock(#)".} ## \
 ## Sets the tick_clock flag.  When this is true, get_clock()->tick() will be
@@ -38495,7 +39089,7 @@ converter getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "A
 
 converter upcastToAsyncTask*(this: AsyncTaskSequence): AsyncTask {.importcpp: "(PT(AsyncTask)(#))".}
 
-converter upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(#.p()))".}
+converter upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(AsyncTaskSequence *)(#))".}
 
 proc newAsyncTaskSequence*(param0: AsyncTaskSequence): AsyncTaskSequence {.importcpp: "new AsyncTaskSequence(#)".}
 
@@ -38598,7 +39192,7 @@ proc dispatchEvent*(this: EventHandler, event: Event) {.importcpp: "#.dispatch_e
 
 proc write*(this: EventHandler, `out`: ostream) {.importcpp: "#.write(#)".}
 
-proc getGlobalEventHandler*(_: typedesc[EventHandler], queue: EventQueue): EventHandler {.importcpp: "EventHandler::get_global_event_handler(#)", header: "eventHandler.h".} ## \
+proc getGlobalEventHandler*(_: typedesc[EventHandler], queue: EventQueue): EventHandler {.importcpp: "#EventHandler::get_global_event_handler(#)", header: "eventHandler.h".} ## \
 ## Returns a pointer to the one global EventHandler object.  If the global
 ## object has not yet been created, this will create it.
 
@@ -38620,8 +39214,7 @@ proc isQueueEmpty*(this: EventQueue): bool {.importcpp: "#->is_queue_empty()".}
 proc isQueueFull*(this: EventQueue): bool {.importcpp: "#->is_queue_full()".} ## \
 ## @deprecated Always returns false; the queue can never be full.
 
-proc dequeueEvent*(this: EventQueue): Event {.noinit.} =
-  {.emit: [this, "->dequeue_event().swap(result);"]}
+proc dequeueEvent*(this: EventQueue): Event {.importcpp: "deconstify(#->dequeue_event())", header: deconstifyCode.}
 
 proc getGlobalEventQueue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "EventQueue::get_global_event_queue()", header: "eventQueue.h".} ## \
 ## Returns a pointer to the one global EventQueue object.  If the global
@@ -38857,7 +39450,7 @@ proc setHardware*(this: GeomVertexAnimationSpec, num_transforms: int, indexed_tr
 
 proc output*(this: GeomVertexAnimationSpec, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc make*(_: typedesc[InternalName], name: string, index: int): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#), #)", header: "internalName.h".} ## \
+proc make*(_: typedesc[InternalName], name: string, index: int): InternalName {.importcpp: "#InternalName::make(nimStringToStdString(#), #)", header: "internalName.h".} ## \
 ## Make using a string and an integer.  Concatenates the two.
 
 proc append*(this: InternalName, basename: string): InternalName {.importcpp: "#->append(nimStringToStdString(#))", header: stringConversionCode.} ## \
@@ -38887,12 +39480,12 @@ proc findAncestor*(this: InternalName, basename: string): int {.importcpp: "#->f
 ## This index value may be passed to get_ancestor() or get_net_basename() to
 ## retrieve more information about the indicated name.
 
-proc getAncestor*(this: InternalName, n: int): InternalName {.importcpp: "#->get_ancestor(#)".} ## \
+proc getAncestor*(this: InternalName, n: int): InternalName {.importcpp: "deconstify(#->get_ancestor(#))", header: deconstifyCode.} ## \
 ## Returns the ancestor with the indicated index number.  0 is this name
 ## itself, 1 is the name's parent, 2 is the parent's parent, and so on.  If
 ## there are not enough ancestors, returns the root InternalName.
 
-proc getTop*(this: InternalName): InternalName {.importcpp: "#->get_top()".} ## \
+proc getTop*(this: InternalName): InternalName {.importcpp: "deconstify(#->get_top())", header: deconstifyCode.} ## \
 ## Returns the oldest ancestor in the InternalName's chain, not counting the
 ## root.  This will be the first name in the string, e.g.  "texcoord.foo.bar"
 ## will return the InternalName "texcoord".
@@ -38926,7 +39519,7 @@ proc getTangent*(_: typedesc[InternalName]): InternalName {.importcpp: "Internal
 ## usually perpendicular to the normal and in the direction of the U texture
 ## coordinate change.  It is used for deriving bump maps.
 
-proc getTangentName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_tangent_name(nimStringToStdString(#))", header: "internalName.h".} ## \
+proc getTangentName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "#InternalName::get_tangent_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "tangent.name", where name is the supplied string.
 ## This is the column header for the tangent associated with the named texture
 ## coordinate set.
@@ -38938,7 +39531,7 @@ proc getBinormal*(_: typedesc[InternalName]): InternalName {.importcpp: "Interna
 ## direction of the V texture coordinate change.  It is used for deriving bump
 ## maps.
 
-proc getBinormalName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_binormal_name(nimStringToStdString(#))", header: "internalName.h".} ## \
+proc getBinormalName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "#InternalName::get_binormal_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "binormal.name", where name is the supplied
 ## string.  This is the column header for the binormal associated with the
 ## named texture coordinate set.
@@ -38948,7 +39541,7 @@ proc getTexcoord*(_: typedesc[InternalName]): InternalName {.importcpp: "Interna
 ## for the default texture coordinate set for each vertex.  It is also used
 ## for identifying the default texture coordinate set in a TextureStage.
 
-proc getTexcoordName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "InternalName::get_texcoord_name(nimStringToStdString(#))", header: "internalName.h".} ## \
+proc getTexcoordName*(_: typedesc[InternalName], name: string): InternalName {.importcpp: "#InternalName::get_texcoord_name(nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns the InternalName "texcoord.name", where name is the supplied
 ## string.  This is the column header for the named texture coordinate set for
 ## each vertex.  It is also used for identifying the named texture coordinate
@@ -38997,7 +39590,7 @@ proc getTransformIndex*(_: typedesc[InternalName]): InternalName {.importcpp: "I
 ## lookup in the TransformTable.  The transform_index column may be omitted,
 ## in which case the nth transform is the nth entry in the table.
 
-proc getMorph*(_: typedesc[InternalName], column: InternalName, slider: string): InternalName {.importcpp: "InternalName::get_morph(#, nimStringToStdString(#))", header: "internalName.h".} ## \
+proc getMorph*(_: typedesc[InternalName], column: InternalName, slider: string): InternalName {.importcpp: "#InternalName::get_morph(#, nimStringToStdString(#))", header: "internalName.h".} ## \
 ## Returns an InternalName derived from the given base column name and the
 ## given slider name, which is the column header for the offset vector that
 ## should be applied to the base column name when the named morph slider is
@@ -39110,7 +39703,7 @@ proc output*(this: GeomVertexColumn, `out`: ostream) {.importcpp: "#.output(#)".
 
 converter upcastToTypedWritableReferenceCount*(this: GeomVertexArrayFormat): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayFormat *)(#))".}
 
 proc newGeomVertexArrayFormat*(): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat()".}
 
@@ -39125,7 +39718,7 @@ proc isRegistered*(this: GeomVertexArrayFormat): bool {.importcpp: "#->is_regist
 ## may not be used for a Geom until it has been registered, but once
 ## registered, it may no longer be modified.
 
-proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "GeomVertexArrayFormat::register_format(#)", header: "geomVertexArrayFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "geomVertexArrayFormat.h".} ## \
 ## Adds the indicated format to the registry, if there is not an equivalent
 ## format already there; in either case, returns the pointer to the equivalent
 ## format now in the registry.
@@ -39249,7 +39842,7 @@ converter getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.import
 
 converter upcastToTypedWritableReferenceCount*(this: GeomVertexFormat): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexFormat *)(#))".}
 
 proc newGeomVertexFormat*(): GeomVertexFormat {.importcpp: "new GeomVertexFormat()".}
 
@@ -39266,11 +39859,11 @@ proc isRegistered*(this: GeomVertexFormat): bool {.importcpp: "#->is_registered(
 ## may not be used for a Geom until it has been registered, but once
 ## registered, it may no longer be modified.
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "GeomVertexFormat::register_format(#)", header: "geomVertexFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".} ## \
 ## This flavor of register_format() implicitly creates a one-array vertex
 ## format from the array definition.
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "GeomVertexFormat::register_format(#)", header: "geomVertexFormat.h".} ## \
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".} ## \
 ## Adds the indicated format to the registry, if there is not an equivalent
 ## format already there; in either case, returns the pointer to the equivalent
 ## format now in the registry.
@@ -39291,7 +39884,7 @@ proc setAnimation*(this: GeomVertexFormat, animation: GeomVertexAnimationSpec) {
 ##
 ## This may not be called once the format has been registered.
 
-proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcpp: "#->get_post_animated_format()".} ## \
+proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#->get_post_animated_format())", header: deconstifyCode.} ## \
 ## Returns a suitable vertex format for sending the animated vertices to the
 ## graphics backend.  This is the same format as the source format, with the
 ## CPU-animation data elements removed.
@@ -39299,7 +39892,7 @@ proc getPostAnimatedFormat*(this: GeomVertexFormat): GeomVertexFormat {.importcp
 ## This may only be called after the format has been registered.  The return
 ## value will have been already registered.
 
-proc getUnionFormat*(this: GeomVertexFormat, other: GeomVertexFormat): GeomVertexFormat {.importcpp: "#->get_union_format(#)".} ## \
+proc getUnionFormat*(this: GeomVertexFormat, other: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#->get_union_format(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexFormat that includes all of the columns defined in
 ## either this GeomVertexFormat or the other one.  If any column is defined in
 ## both formats with different sizes (for instance, texcoord2 vs.  texcoord3),
@@ -39313,7 +39906,7 @@ proc getNumArrays*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_a
 ## array data is completely interleaved, this will be 1; if it is completely
 ## parallel, this will be the same as the number of data types.
 
-proc getArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "#->get_array(#)".} ## \
+proc getArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array(#))", header: deconstifyCode.} ## \
 ## Returns the description of the nth array used by the format.
 
 proc modifyArray*(this: GeomVertexFormat, array: clonglong): GeomVertexArrayFormat {.importcpp: "#->modify_array(#)".} ## \
@@ -39388,7 +39981,7 @@ proc getColumn*(this: GeomVertexFormat, i: clonglong): GeomVertexColumn {.import
 proc hasColumn*(this: GeomVertexFormat, name: InternalName): bool {.importcpp: "#->has_column(#)".} ## \
 ## Returns true if the format has the named column, false otherwise.
 
-proc getColumnName*(this: GeomVertexFormat, i: clonglong): InternalName {.importcpp: "#->get_column_name(#)".} ## \
+proc getColumnName*(this: GeomVertexFormat, i: clonglong): InternalName {.importcpp: "deconstify(#->get_column_name(#))", header: deconstifyCode.} ## \
 ## Returns the name of the ith column, across all arrays.
 
 proc removeColumn*(this: GeomVertexFormat, name: InternalName, keep_empty_array: bool) {.importcpp: "#->remove_column(#, #)".} ## \
@@ -39428,7 +40021,7 @@ proc getNumPoints*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_p
 ##
 ## This may only be called after the format has been registered.
 
-proc getPoint*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_point(#)".} ## \
+proc getPoint*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_point(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth point column.  This represents a point in
 ## space, which should be transformed by any spatial transform matrix.
 ##
@@ -39440,7 +40033,7 @@ proc getNumVectors*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_
 ##
 ## This may only be called after the format has been registered.
 
-proc getVector*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_vector(#)".} ## \
+proc getVector*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_vector(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth vector column.  This represents a directional
 ## vector, which should be transformed by any spatial transform matrix as a
 ## vector.
@@ -39453,7 +40046,7 @@ proc getNumTexcoords*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_nu
 ##
 ## This may only be called after the format has been registered.
 
-proc getTexcoord*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_texcoord(#)".} ## \
+proc getTexcoord*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_texcoord(#))", header: deconstifyCode.} ## \
 ## Returns the name of the nth texcoord column.  This represents a texture
 ## coordinate.
 ##
@@ -39465,21 +40058,21 @@ proc getNumMorphs*(this: GeomVertexFormat): clonglong {.importcpp: "#->get_num_m
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphSlider*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_slider(#)".} ## \
+proc getMorphSlider*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_slider(#))", header: deconstifyCode.} ## \
 ## Returns the slider name associated with the nth morph column.  This is the
 ## name of the slider that will control the morph, and should be defined
 ## within the SliderTable associated with the GeomVertexData.
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphBase*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_base(#)".} ## \
+proc getMorphBase*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_base(#))", header: deconstifyCode.} ## \
 ## Returns the name of the base column that the nth morph modifies.  This
 ## column will also be defined within the format, and can be retrieved via
 ## get_array_with() and/or get_column().
 ##
 ## This may only be called after the format has been registered.
 
-proc getMorphDelta*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "#->get_morph_delta(#)".} ## \
+proc getMorphDelta*(this: GeomVertexFormat, n: clonglong): InternalName {.importcpp: "deconstify(#->get_morph_delta(#))", header: deconstifyCode.} ## \
 ## Returns the name of the column that defines the nth morph.  This contains
 ## the delta offsets that are to be applied to the column defined by
 ## get_morph_base().  This column will be defined within the format, and can
@@ -39495,62 +40088,62 @@ proc write*(this: GeomVertexFormat, `out`: ostream) {.importcpp: "#->write(#)".}
 
 proc writeWithData*(this: GeomVertexFormat, `out`: ostream, indent_level: int, data: GeomVertexData) {.importcpp: "#->write_with_data(#, #, #)".}
 
-proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_empty()", header: "geomVertexFormat.h".} ## \
+proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format containing no arrays at all, useful for
 ## pull-style vertex rendering.
 
-proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3()", header: "geomVertexFormat.h".} ## \
+proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "geomVertexFormat.h".} ## \
 ## Some standard vertex formats.  No particular requirement to use one of
 ## these, but the DirectX renderers can use these formats directly, whereas
 ## any other format will have to be converted first.
 
-proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3()", header: "geomVertexFormat.h".} ## \
+proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 3-component normal and a
 ## 3-component vertex position.
 
-proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3t2()", header: "geomVertexFormat.h".} ## \
+proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate pair
 ## and a 3-component vertex position.
 
-proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3t2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 3-component normal, and a 3-component vertex position.
 
-proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3cp()", header: "geomVertexFormat.h".} ## \
+proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "geomVertexFormat.h".} ## \
 ## These formats, with the DirectX-style packed color, may not be supported
 ## directly by OpenGL.  If you use them and the driver does not support
 ## them, the GLGraphicsStateGuardian will automatically convert to native
 ## OpenGL form (with a small runtime overhead).
 
-proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3cpt2()", header: "geomVertexFormat.h".} ## \
+proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a packed color, and a 3-component vertex position.
 
-proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3cp()", header: "geomVertexFormat.h".} ## \
+proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a packed color, a 3-component normal,
 ## and a 3-component vertex position.
 
-proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3cpt2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a packed color, a 3-component normal, and a 3-component vertex
 ## position.
 
-proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3c4()", header: "geomVertexFormat.h".} ## \
+proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "geomVertexFormat.h".} ## \
 ## These formats, with an OpenGL-style four-byte color, are not supported
 ## directly by DirectX.  If you use them, the DXGraphicsStateGuardian will
 ## automatically convert to DirectX form (with a larger runtime overhead,
 ## since DirectX8, and old DirectX9 drivers, require everything to be
 ## interleaved together).
 
-proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3c4t2()", header: "geomVertexFormat.h".} ## \
+proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 4-component color, and a 3-component vertex position.
 
-proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3c4()", header: "geomVertexFormat.h".} ## \
+proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 4-component color, a 3-component
 ## normal, and a 3-component vertex position.
 
-proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "GeomVertexFormat::get_v3n3c4t2()", header: "geomVertexFormat.h".} ## \
+proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "geomVertexFormat.h".} ## \
 ## Returns a standard vertex format with a 2-component texture coordinate
 ## pair, a 4-component color, a 3-component normal, and a 3-component vertex
 ## position.
@@ -39685,37 +40278,37 @@ proc output*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->output(#)".
 
 proc write*(this: SimpleAllocator, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc free*(this: SimpleAllocatorBlock) {.importcpp: "#.free()".} ## \
+proc free*(this: SimpleAllocatorBlock) {.importcpp: "#->free()".} ## \
 ## Releases the allocated space.
 
-proc getAllocator*(this: SimpleAllocatorBlock): SimpleAllocator {.importcpp: "#.get_allocator()".} ## \
+proc getAllocator*(this: SimpleAllocatorBlock): SimpleAllocator {.importcpp: "#->get_allocator()".} ## \
 ## Returns the SimpleAllocator object that owns this block.  Returns NULL if
 ## the block has been freed.
 
-proc getStart*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_start()".} ## \
+proc getStart*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_start()".} ## \
 ## Returns the starting point of this block.  It is an error to call this if
 ## the block has been freed.
 
-proc getSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_size()".} ## \
+proc getSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_size()".} ## \
 ## Returns the size of this block.  It is an error to call this if the block
 ## has been freed.
 
-proc isFree*(this: SimpleAllocatorBlock): bool {.importcpp: "#.is_free()".} ## \
+proc isFree*(this: SimpleAllocatorBlock): bool {.importcpp: "#->is_free()".} ## \
 ## Returns true if the block has been freed, false if it is still valid.
 
-proc getMaxSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#.get_max_size()".} ## \
+proc getMaxSize*(this: SimpleAllocatorBlock): clonglong {.importcpp: "#->get_max_size()".} ## \
 ## Returns the maximum size this block can be reallocated to, as limited by
 ## the following block.
 
-proc realloc*(this: SimpleAllocatorBlock, size: clonglong): bool {.importcpp: "#.realloc(#)".} ## \
+proc realloc*(this: SimpleAllocatorBlock, size: clonglong): bool {.importcpp: "#->realloc(#)".} ## \
 ## Changes the size of this block to the specified size.  Returns true if the
 ## change is accepted, false if there was not enough room.
 
-proc getNextBlock*(this: SimpleAllocatorBlock): SimpleAllocatorBlock {.importcpp: "#.get_next_block()".} ## \
+proc getNextBlock*(this: SimpleAllocatorBlock): SimpleAllocatorBlock {.importcpp: "#->get_next_block()".} ## \
 ## Returns a pointer to the next allocated block in the chain, or NULL if
 ## there are no more allocated blocks.
 
-proc output*(this: SimpleAllocatorBlock, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: SimpleAllocatorBlock, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc isValid*(this: VertexDataSaveFile): bool {.importcpp: "#->is_valid()".} ## \
 ## Returns true if the save file was successfully created and is ready for
@@ -39810,7 +40403,7 @@ proc saveToDisk*(this: VertexDataBook) {.importcpp: "#.save_to_disk()".} ## \
 ## It makes sense to make this call just before taking down a loading screen,
 ## to minimize chugs from saving pages inadvertently later.
 
-converter upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(#.p()))".}
+converter upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(VertexDataBlock *)(#))".}
 
 converter upcastToReferenceCount*(this: VertexDataBlock): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -39823,9 +40416,9 @@ proc getNextBlock*(this: VertexDataBlock): VertexDataBlock {.importcpp: "#->get_
 
 converter upcastToCopyOnWriteObject*(this: GeomVertexArrayData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(#.p()))".}
+converter upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(GeomVertexArrayData *)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayData *)(#))".}
 
 proc newGeomVertexArrayData*(copy: GeomVertexArrayData): GeomVertexArrayData {.importcpp: "new GeomVertexArrayData(#)".}
 
@@ -39833,7 +40426,7 @@ proc compareTo*(this: GeomVertexArrayData, other: GeomVertexArrayData): int {.im
 ## Returns 0 if the two arrays are equivalent, even if they are not the same
 ## pointer.
 
-proc getArrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".} ## \
+proc getArrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
 
 proc hasColumn*(this: GeomVertexArrayData, name: InternalName): bool {.importcpp: "#->has_column(#)".} ## \
@@ -39906,13 +40499,13 @@ proc requestResident*(this: GeomVertexArrayData): bool {.importcpp: "#->request_
 ## probably not block.  If this returns false, the vertex data will be brought
 ## back into memory shortly; try again later.
 
-proc getHandle*(this: GeomVertexArrayData, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "#->get_handle(#)".} ## \
+proc getHandle*(this: GeomVertexArrayData, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_handle(#))", header: deconstifyCode.} ## \
 ## Returns an object that can be used to read the actual data bytes stored in
 ## the array.  Calling this method locks the data, and will block any other
 ## threads attempting to read or write the data, until the returned object
 ## destructs.
 
-proc getHandle*(this: GeomVertexArrayData): GeomVertexArrayDataHandle {.importcpp: "#->get_handle()".} ## \
+proc getHandle*(this: GeomVertexArrayData): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_handle())", header: deconstifyCode.} ## \
 ## Returns an object that can be used to read the actual data bytes stored in
 ## the array.  Calling this method locks the data, and will block any other
 ## threads attempting to read or write the data, until the returned object
@@ -39981,11 +40574,11 @@ converter getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcp
 
 converter upcastToReferenceCount*(this: GeomVertexArrayDataHandle): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayDataHandle *)(#))".}
 
 proc getObject*(this: GeomVertexArrayDataHandle): GeomVertexArrayData {.importcpp: "#->get_object()".}
 
-proc getArrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "#->get_array_format()".}
+proc getArrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
 
 proc getNumRows*(this: GeomVertexArrayDataHandle): int {.importcpp: "#->get_num_rows()".}
 
@@ -40079,7 +40672,7 @@ proc output*(this: VertexTransform, `out`: ostream) {.importcpp: "#->output(#)".
 
 proc write*(this: VertexTransform, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getNextModified*(_: typedesc[VertexTransform], current_thread: Thread): UpdateSeq {.importcpp: "VertexTransform::get_next_modified(#)", header: "vertexTransform.h".} ## \
+proc getNextModified*(_: typedesc[VertexTransform], current_thread: Thread): UpdateSeq {.importcpp: "#VertexTransform::get_next_modified(#)", header: "vertexTransform.h".} ## \
 ## Returns a monotonically increasing sequence.  Each time this is called, a
 ## new sequence number is returned, higher than the previous value.
 ##
@@ -40088,7 +40681,7 @@ proc getNextModified*(_: typedesc[VertexTransform], current_thread: Thread): Upd
 ## TransformBlend::get_modified() is easy to determine.  It is similar to
 ## Geom::get_modified(), but it is in a different space.
 
-proc getGlobalModified*(_: typedesc[VertexTransform], current_thread: Thread): UpdateSeq {.importcpp: "VertexTransform::get_global_modified(#)", header: "vertexTransform.h".} ## \
+proc getGlobalModified*(_: typedesc[VertexTransform], current_thread: Thread): UpdateSeq {.importcpp: "#VertexTransform::get_global_modified(#)", header: "vertexTransform.h".} ## \
 ## Returns the currently highest VertexTransform::get_modified() value in the
 ## world.  This can be used as a quick way to determine if any
 ## VertexTransforms have changed value recently.
@@ -40104,7 +40697,7 @@ proc isRegistered*(this: TransformTable): bool {.importcpp: "#->is_registered()"
 ## registered, the set of transforms in a TransformTable may not be further
 ## modified; but it must be registered before it can be assigned to a Geom.
 
-proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "TransformTable::register_table(#)", header: "transformTable.h".} ## \
+proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "transformTable.h".} ## \
 ## Registers a TransformTable for use.  This is similar to
 ## GeomVertexFormat::register_format().  Once registered, a TransformTable may
 ## no longer be modified (although the individual VertexTransform objects may
@@ -40118,7 +40711,7 @@ proc registerTable*(_: typedesc[TransformTable], table: TransformTable): Transfo
 proc getNumTransforms*(this: TransformTable): clonglong {.importcpp: "#->get_num_transforms()".} ## \
 ## Returns the number of transforms in the table.
 
-proc getTransform*(this: TransformTable, n: clonglong): VertexTransform {.importcpp: "#->get_transform(#)".} ## \
+proc getTransform*(this: TransformTable, n: clonglong): VertexTransform {.importcpp: "deconstify(#->get_transform(#))", header: deconstifyCode.} ## \
 ## Returns the nth transform in the table.
 
 proc getModified*(this: TransformTable, current_thread: Thread): UpdateSeq {.importcpp: "#->get_modified(#)".} ## \
@@ -40329,7 +40922,7 @@ proc write*(this: TransformBlendTable, `out`: ostream, indent_level: int) {.impo
 
 converter getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
 
-proc getName*(this: VertexSlider): InternalName {.importcpp: "#->get_name()".} ## \
+proc getName*(this: VertexSlider): InternalName {.importcpp: "deconstify(#->get_name())", header: deconstifyCode.} ## \
 ## Returns the name of this particular slider.  Every unique blend shape
 ## within a particular Geom must be identified with a different name, which is
 ## shared by the slider that controls it.
@@ -40359,7 +40952,7 @@ proc isRegistered*(this: SliderTable): bool {.importcpp: "#->is_registered()".} 
 ## registered, the set of sliders in a SliderTable may not be further
 ## modified; but it must be registered before it can be assigned to a Geom.
 
-proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "SliderTable::register_table(#)", header: "sliderTable.h".} ## \
+proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "sliderTable.h".} ## \
 ## Registers a SliderTable for use.  This is similar to
 ## GeomVertexFormat::register_format().  Once registered, a SliderTable may no
 ## longer be modified (although the individual VertexSlider objects may modify
@@ -40373,7 +40966,7 @@ proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {
 proc getNumSliders*(this: SliderTable): clonglong {.importcpp: "#->get_num_sliders()".} ## \
 ## Returns the number of sliders in the table.
 
-proc getSlider*(this: SliderTable, n: clonglong): VertexSlider {.importcpp: "#->get_slider(#)".} ## \
+proc getSlider*(this: SliderTable, n: clonglong): VertexSlider {.importcpp: "deconstify(#->get_slider(#))", header: deconstifyCode.} ## \
 ## Returns the nth slider in the table.
 
 proc getSliderRows*(this: SliderTable, n: clonglong): SparseArray {.importcpp: "#->get_slider_rows(#)".} ## \
@@ -40423,7 +41016,7 @@ converter getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "Slid
 
 converter upcastToCopyOnWriteObject*(this: GeomVertexData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexData *)(#))".}
 
 proc newGeomVertexData*(copy: GeomVertexData): GeomVertexData {.importcpp: "new GeomVertexData(#)".}
 
@@ -40444,7 +41037,7 @@ proc setName*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimS
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
 
-proc getFormat*(this: GeomVertexData): GeomVertexFormat {.importcpp: "#->get_format()".} ## \
+proc getFormat*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
 
 proc setFormat*(this: GeomVertexData, format: GeomVertexFormat) {.importcpp: "#->set_format(#)".} ## \
@@ -40520,12 +41113,12 @@ proc getNumArrays*(this: GeomVertexData): clonglong {.importcpp: "#->get_num_arr
 ## Returns the number of individual arrays stored within the data.  This must
 ## match get_format()->get_num_arrays().
 
-proc getArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "#->get_array(#)".} ## \
+proc getArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "deconstify(#->get_array(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the vertex data for the indicated array, for
 ## application code to directly examine (but not modify) the underlying vertex
 ## data.
 
-proc getArrayHandle*(this: GeomVertexData, i: clonglong): GeomVertexArrayDataHandle {.importcpp: "#->get_array_handle(#)".} ## \
+proc getArrayHandle*(this: GeomVertexData, i: clonglong): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_array_handle(#))", header: deconstifyCode.} ## \
 ## Equivalent to get_array(i).get_handle().
 
 proc modifyArray*(this: GeomVertexData, i: clonglong): GeomVertexArrayData {.importcpp: "#->modify_array(#)".} ## \
@@ -40548,7 +41141,7 @@ proc setArray*(this: GeomVertexData, i: clonglong, array: GeomVertexArrayData) {
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc getTransformTable*(this: GeomVertexData): TransformTable {.importcpp: "#->get_transform_table()".} ## \
+proc getTransformTable*(this: GeomVertexData): TransformTable {.importcpp: "deconstify(#->get_transform_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -40571,7 +41164,7 @@ proc clearTransformTable*(this: GeomVertexData) {.importcpp: "#->clear_transform
 ## Sets the TransformTable pointer to NULL, removing the table from the vertex
 ## data.  This disables hardware-driven vertex animation.
 
-proc getTransformBlendTable*(this: GeomVertexData): TransformBlendTable {.importcpp: "#->get_transform_blend_table()".} ## \
+proc getTransformBlendTable*(this: GeomVertexData): TransformBlendTable {.importcpp: "deconstify(#->get_transform_blend_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the TransformBlendTable assigned to this data.
 ## Vertices within the table will index into this table to indicate their
 ## dynamic skinning information; this table is used when the vertex animation
@@ -40601,7 +41194,7 @@ proc clearTransformBlendTable*(this: GeomVertexData) {.importcpp: "#->clear_tran
 ## Sets the TransformBlendTable pointer to NULL, removing the table from the
 ## vertex data.  This disables CPU-driven vertex animation.
 
-proc getSliderTable*(this: GeomVertexData): SliderTable {.importcpp: "#->get_slider_table()".} ## \
+proc getSliderTable*(this: GeomVertexData): SliderTable {.importcpp: "deconstify(#->get_slider_table())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the SliderTable assigned to this data.  Vertices
 ## within the vertex data will look up their morph offsets, if any, within
 ## this table.
@@ -40677,32 +41270,32 @@ proc copyRowFrom*(this: GeomVertexData, dest_row: int, source: GeomVertexData, s
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc convertTo*(this: GeomVertexData, new_format: GeomVertexFormat): GeomVertexData {.importcpp: "#->convert_to(#)".} ## \
+proc convertTo*(this: GeomVertexData, new_format: GeomVertexFormat): GeomVertexData {.importcpp: "deconstify(#->convert_to(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData that represents the same contents as this one,
 ## with all data types matched up name-by-name to the indicated new format.
 
-proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4): GeomVertexData {.importcpp: "#->scale_color(#)".} ## \
+proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4): GeomVertexData {.importcpp: "deconstify(#->scale_color(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the color table modified in-place
 ## to apply the indicated scale.
 ##
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
 
-proc setColor*(this: GeomVertexData, color: LColor): GeomVertexData {.importcpp: "#->set_color(#)".} ## \
+proc setColor*(this: GeomVertexData, color: LColor): GeomVertexData {.importcpp: "deconstify(#->set_color(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the color data modified in-place
 ## with the new value.
 ##
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
 
-proc reverseNormals*(this: GeomVertexData): GeomVertexData {.importcpp: "#->reverse_normals()".} ## \
+proc reverseNormals*(this: GeomVertexData): GeomVertexData {.importcpp: "deconstify(#->reverse_normals())", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the normal data modified in-place,
 ## so that each lighting normal is now facing in the opposite direction.
 ##
 ## If the vertex data does not include a normal column, this returns the
 ## original GeomVertexData object, unchanged.
 
-proc animateVertices*(this: GeomVertexData, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "#->animate_vertices(#, #)".} ## \
+proc animateVertices*(this: GeomVertexData, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->animate_vertices(#, #))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this GeomVertexData.
 ##
@@ -40804,7 +41397,7 @@ converter getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "Bu
 
 converter upcastToCopyOnWriteObject*(this: GeomPrimitive): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(GeomPrimitive *)(#))".}
 
 proc makeCopy*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_copy()".}
 
@@ -40988,7 +41581,7 @@ proc getPrimitiveMaxVertex*(this: GeomPrimitive, n: int): int {.importcpp: "#->g
 ## Returns the maximum vertex index number used by the nth primitive in this
 ## object.
 
-proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->decompose()".} ## \
+proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->decompose())", header: deconstifyCode.} ## \
 ## Decomposes a complex primitive type into a simpler primitive type, for
 ## instance triangle strips to triangles, and returns a pointer to the new
 ## primitive definition.  If the decomposition cannot be performed, this might
@@ -40998,7 +41591,7 @@ proc decompose*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->decompose()
 ## the set of triangles on the primitive without having to write handlers for
 ## each possible kind of primitive type.
 
-proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->rotate()".} ## \
+proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->rotate())", header: deconstifyCode.} ## \
 ## Returns a new primitive with the shade_model reversed (if it is flat
 ## shaded), if possible.  If the primitive type cannot be rotated, returns the
 ## original primitive, unrotated.
@@ -41007,7 +41600,7 @@ proc rotate*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->rotate()".} ##
 ## the last vertex to the first position; if it indicates flat_vertex_first,
 ## this should bring the first vertex to the last position.
 
-proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->doubleside()".} ## \
+proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->doubleside())", header: deconstifyCode.} ## \
 ## Duplicates triangles in the primitive so that each triangle is back-to-back
 ## with another triangle facing in the opposite direction.  Note that this
 ## doesn't affect vertex normals, so this operation alone won't work in the
@@ -41017,7 +41610,7 @@ proc doubleside*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->doubleside
 ## triangle without having to duplicate it (but which doesn't necessarily work
 ## in the presence of lighting).
 
-proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->reverse()".} ## \
+proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->reverse())", header: deconstifyCode.} ## \
 ## Reverses the winding order in the primitive so that each triangle is facing
 ## in the opposite direction it was originally.  Note that this doesn't affect
 ## vertex normals, so this operation alone won't work in the presence of
@@ -41027,18 +41620,18 @@ proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->reverse()".} 
 ## triangle without having to duplicate it (but which doesn't necessarily work
 ## in the presence of lighting).
 
-proc makePoints*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_points()".} ## \
+proc makePoints*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_points())", header: deconstifyCode.} ## \
 ## Returns a new GeomPoints primitive that represents each of the vertices in
 ## the original primitive, rendered exactly once.  If the original primitive
 ## is already a GeomPoints primitive, returns the original primitive
 ## unchanged.
 
-proc makeLines*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_lines()".} ## \
+proc makeLines*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_lines())", header: deconstifyCode.} ## \
 ## Returns a new GeomLines primitive that represents each of the edges in the
 ## original primitive rendered as a line.  If the original primitive is
 ## already a GeomLines primitive, returns the original primitive unchanged.
 
-proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_patches()".} ## \
+proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_patches())", header: deconstifyCode.} ## \
 ## Decomposes a complex primitive type into a simpler primitive type, for
 ## instance triangle strips to triangles, puts these in a new GeomPatches
 ## object and returns a pointer to the new primitive definition.  If the
@@ -41047,7 +41640,7 @@ proc makePatches*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_patc
 ## This method is useful for application code that wants to use tesselation
 ## shaders on arbitrary geometry.
 
-proc makeAdjacency*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_adjacency()".} ## \
+proc makeAdjacency*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_adjacency())", header: deconstifyCode.} ## \
 ## Adds adjacency information to this primitive.  May return null if this type
 ## of geometry does not support adjacency information.
 ##
@@ -41083,7 +41676,7 @@ proc output*(this: GeomPrimitive, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: GeomPrimitive, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
 
-proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_vertices()".} ## \
+proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_vertices())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the vertex index array so application code can
 ## read it directly.  This might return NULL if the primitive is nonindexed.
 ## Do not attempt to modify the returned array; use modify_vertices() or
@@ -41093,7 +41686,7 @@ proc getVertices*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-proc getVerticesHandle*(this: GeomPrimitive, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "#->get_vertices_handle(#)".} ## \
+proc getVerticesHandle*(this: GeomPrimitive, current_thread: Thread): GeomVertexArrayDataHandle {.importcpp: "deconstify(#->get_vertices_handle(#))", header: deconstifyCode.} ## \
 ## Equivalent to get_vertices().get_handle().
 
 proc modifyVertices*(this: GeomPrimitive, num_vertices: int): GeomVertexArrayData {.importcpp: "#->modify_vertices(#)".} ## \
@@ -41193,7 +41786,7 @@ proc getStripCutIndex*(this: GeomPrimitive): int {.importcpp: "#->get_strip_cut_
 ## signify the end of a primitive.  This is typically the highest value that
 ## the numeric type can store.
 
-proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_mins()".} ## \
+proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_mins())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive mins array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax() for this.
@@ -41204,7 +41797,7 @@ proc getMins*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_min
 ## methods for more common usage.  We recommend you do not use this method
 ## directly.  If you do, be sure you know what you are doing!
 
-proc getMaxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "#->get_maxs()".} ## \
+proc getMaxs*(this: GeomPrimitive): GeomVertexArrayData {.importcpp: "deconstify(#->get_maxs())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the primitive maxs array so application code can
 ## read it directly.  Do not attempt to modify the returned array; use
 ## set_minmax().
@@ -41438,7 +42031,7 @@ converter getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "Tex
 
 converter upcastToCopyOnWriteObject*(this: Geom): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(Geom *)(#))".}
 
 proc newGeom*(data: GeomVertexData): Geom {.importcpp: "new Geom(#)".}
 
@@ -41451,11 +42044,11 @@ proc getGeomRendering*(this: Geom): int {.importcpp: "#->get_geom_rendering()".}
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this Geom.
 
-proc getVertexData*(this: Geom, current_thread: Thread): GeomVertexData {.importcpp: "#->get_vertex_data(#)".} ## \
+proc getVertexData*(this: Geom, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->get_vertex_data(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the GeomVertexData, for application code to
 ## directly examine (but not modify) the geom's underlying data.
 
-proc getVertexData*(this: Geom): GeomVertexData {.importcpp: "#->get_vertex_data()".} ## \
+proc getVertexData*(this: Geom): GeomVertexData {.importcpp: "deconstify(#->get_vertex_data())", header: deconstifyCode.} ## \
 ## Returns a const pointer to the GeomVertexData, for application code to
 ## directly examine (but not modify) the geom's underlying data.
 
@@ -41492,7 +42085,7 @@ proc makeNonindexed*(this: Geom, composite_only: bool): int {.importcpp: "#->mak
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
 
-proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "#->get_animated_vertex_data(#, #)".} ## \
+proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->get_animated_vertex_data(#, #))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this Geom's vertex data.
 ##
@@ -41509,7 +42102,7 @@ proc getAnimatedVertexData*(this: Geom, force: bool, current_thread: Thread): Ge
 ## the vertex data is not completely resident.  If force is true, this method
 ## will never return stale data, but may block until the data is available.
 
-proc getAnimatedVertexData*(this: Geom, force: bool): GeomVertexData {.importcpp: "#->get_animated_vertex_data(#)".} ## \
+proc getAnimatedVertexData*(this: Geom, force: bool): GeomVertexData {.importcpp: "deconstify(#->get_animated_vertex_data(#))", header: deconstifyCode.} ## \
 ## Returns a GeomVertexData that represents the results of computing the
 ## vertex animation on the CPU for this Geom's vertex data.
 ##
@@ -41534,7 +42127,7 @@ proc getNumPrimitives*(this: Geom): clonglong {.importcpp: "#->get_num_primitive
 ## Returns the number of GeomPrimitive objects stored within the Geom, each of
 ## which represents a number of primitives of a particular type.
 
-proc getPrimitive*(this: Geom, i: clonglong): GeomPrimitive {.importcpp: "#->get_primitive(#)".} ## \
+proc getPrimitive*(this: Geom, i: clonglong): GeomPrimitive {.importcpp: "deconstify(#->get_primitive(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the ith GeomPrimitive object stored within the
 ## Geom.  Use this call only to inspect the ith object; use modify_primitive()
 ## or set_primitive() if you want to modify it.
@@ -41755,10 +42348,10 @@ proc checkValid*(this: Geom, vertex_data: GeomVertexData): bool {.importcpp: "#-
 ## that actually exist within the indicated GeomVertexData.  Returns true if
 ## the geom appears to be valid, false otherwise.
 
-proc getBounds*(this: Geom, current_thread: Thread): BoundingVolume {.importcpp: "#->get_bounds(#)".} ## \
+proc getBounds*(this: Geom, current_thread: Thread): BoundingVolume {.importcpp: "deconstify(#->get_bounds(#))", header: deconstifyCode.} ## \
 ## Returns the bounding volume for the Geom.
 
-proc getBounds*(this: Geom): BoundingVolume {.importcpp: "#->get_bounds()".} ## \
+proc getBounds*(this: Geom): BoundingVolume {.importcpp: "deconstify(#->get_bounds())", header: deconstifyCode.} ## \
 ## Returns the bounding volume for the Geom.
 
 proc getNestedVertices*(this: Geom, current_thread: Thread): int {.importcpp: "#->get_nested_vertices(#)".} ## \
@@ -41894,7 +42487,7 @@ proc initGeomVertexReader*(array_data: GeomVertexArrayData, current_thread: Thre
 ## Constructs a new reader to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexReader*(array_data: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(array_data: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs a new reader to process the vertices of the indicated array
 ## only.
 
@@ -41920,13 +42513,13 @@ proc initGeomVertexReader*(vertex_data: GeomVertexData, current_thread: Thread):
 ## Constructs a new reader to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexReader*(vertex_data: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(vertex_data: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs a new reader to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexReader*(copy: GeomVertexReader): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
-proc initGeomVertexReader*(current_thread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
+converter initGeomVertexReader*(current_thread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".} ## \
 ## Constructs an invalid GeomVertexReader.  You must use the assignment
 ## operator to assign a valid GeomVertexReader to this object before you can
 ## use it.
@@ -42141,7 +42734,7 @@ proc initGeomVertexWriter*(array_data: GeomVertexArrayData, current_thread: Thre
 ## Constructs a new writer to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexWriter*(array_data: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(array_data: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs a new writer to process the vertices of the indicated array
 ## only.
 
@@ -42167,13 +42760,13 @@ proc initGeomVertexWriter*(vertex_data: GeomVertexData, current_thread: Thread):
 ## Constructs a new writer to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexWriter*(vertex_data: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(vertex_data: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs a new writer to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexWriter*(copy: GeomVertexWriter): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
-proc initGeomVertexWriter*(current_thread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
+converter initGeomVertexWriter*(current_thread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".} ## \
 ## Constructs an invalid GeomVertexWriter.  You must use the assignment
 ## operator to assign a valid GeomVertexWriter to this object before you can
 ## use it.
@@ -42731,7 +43324,7 @@ proc initGeomVertexRewriter*(array_data: GeomVertexArrayData, current_thread: Th
 ## Constructs a new rewriter to process the vertices of the indicated array
 ## only.
 
-proc initGeomVertexRewriter*(array_data: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(array_data: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs a new rewriter to process the vertices of the indicated array
 ## only.
 
@@ -42757,13 +43350,13 @@ proc initGeomVertexRewriter*(vertex_data: GeomVertexData, current_thread: Thread
 ## Constructs a new rewriter to process the vertices of the indicated data
 ## object.
 
-proc initGeomVertexRewriter*(vertex_data: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(vertex_data: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs a new rewriter to process the vertices of the indicated data
 ## object.
 
 proc initGeomVertexRewriter*(copy: GeomVertexRewriter): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
-proc initGeomVertexRewriter*(current_thread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
+converter initGeomVertexRewriter*(current_thread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".} ## \
 ## Constructs an invalid GeomVertexRewriter.  You must use the assignment
 ## operator to assign a valid GeomVertexRewriter to this object before you can
 ## use it.
@@ -42950,7 +43543,7 @@ converter getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "Sam
 
 converter upcastToTypedWritableReferenceCount*(this: Texture): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(Texture *)(#))".}
 
 proc newTexture*(name: string): Texture {.importcpp: "new Texture(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Constructs an empty texture.  The default is to set up the texture as an
@@ -43316,14 +43909,14 @@ proc readTxo*(this: Texture, `in`: istream): bool {.importcpp: "#->read_txo(#)".
 ##
 ## Pass a real filename if it is available, or empty string if it is not.
 
-proc makeFromTxo*(_: typedesc[Texture], `in`: istream, filename: string): Texture {.importcpp: "Texture::make_from_txo(#, nimStringToStdString(#))", header: "texture.h".} ## \
+proc makeFromTxo*(_: typedesc[Texture], `in`: istream, filename: string): Texture {.importcpp: "#Texture::make_from_txo(#, nimStringToStdString(#))", header: "texture.h".} ## \
 ## Constructs a new Texture object from the txo file.  This is similar to
 ## Texture::read_txo(), but it constructs and returns a new object, which
 ## allows it to return a subclass of Texture (for instance, a movie texture).
 ##
 ## Pass a real filename if it is available, or empty string if it is not.
 
-proc makeFromTxo*(_: typedesc[Texture], `in`: istream): Texture {.importcpp: "Texture::make_from_txo(#)", header: "texture.h".} ## \
+proc makeFromTxo*(_: typedesc[Texture], `in`: istream): Texture {.importcpp: "#Texture::make_from_txo(#)", header: "texture.h".} ## \
 ## Constructs a new Texture object from the txo file.  This is similar to
 ## Texture::read_txo(), but it constructs and returns a new object, which
 ## allows it to return a subclass of Texture (for instance, a movie texture).
@@ -44050,7 +44643,7 @@ proc getAuxData*(this: Texture, key: string): TypedReferenceCount {.importcpp: "
 ## Returns a record previously recorded via set_aux_data().  Returns NULL if
 ## there was no record associated with the indicated key.
 
-proc setTexturesPower2*(_: typedesc[Texture], scale: AutoTextureScale) {.importcpp: "Texture::set_textures_power_2(#)", header: "texture.h".} ## \
+proc setTexturesPower2*(_: typedesc[Texture], scale: AutoTextureScale) {.importcpp: "#Texture::set_textures_power_2(#)", header: "texture.h".} ## \
 ## Set this flag to ATS_none, ATS_up, ATS_down, or ATS_pad to control the
 ## scaling of textures in general, if a particular texture does not override
 ## this.  See also set_auto_texture_scale() for the per-texture override.
@@ -44238,10 +44831,10 @@ proc prepareNow*(this: Texture, view: int, prepared_objects: PreparedGraphicsObj
 ## a texture does not need to be explicitly prepared by the user before it may
 ## be rendered.
 
-proc upToPower2*(_: typedesc[Texture], value: int): int {.importcpp: "Texture::up_to_power_2(#)", header: "texture.h".} ## \
+proc upToPower2*(_: typedesc[Texture], value: int): int {.importcpp: "#Texture::up_to_power_2(#)", header: "texture.h".} ## \
 ## Returns the smallest power of 2 greater than or equal to value.
 
-proc downToPower2*(_: typedesc[Texture], value: int): int {.importcpp: "Texture::down_to_power_2(#)", header: "texture.h".} ## \
+proc downToPower2*(_: typedesc[Texture], value: int): int {.importcpp: "#Texture::down_to_power_2(#)", header: "texture.h".} ## \
 ## Returns the largest power of 2 less than or equal to value.
 
 proc considerRescale*(this: Texture, pnmimage: PNMImage) {.importcpp: "#->consider_rescale(#)".} ## \
@@ -44254,7 +44847,7 @@ proc considerRescale*(this: Texture, pnmimage: PNMImage) {.importcpp: "#->consid
 ## already loaded; in this case it will rescale the image on the spot.  Also
 ## see rescale_texture().
 
-proc considerRescale*(_: typedesc[Texture], pnmimage: PNMImage, name: string, auto_texture_scale: AutoTextureScale) {.importcpp: "Texture::consider_rescale(#, nimStringToStdString(#), #)", header: "texture.h".} ## \
+proc considerRescale*(_: typedesc[Texture], pnmimage: PNMImage, name: string, auto_texture_scale: AutoTextureScale) {.importcpp: "#Texture::consider_rescale(#, nimStringToStdString(#), #)", header: "texture.h".} ## \
 ## Asks the PNMImage to change its scale when it reads the image, according to
 ## the whims of the Config.prc file.
 ##
@@ -44264,7 +44857,7 @@ proc considerRescale*(_: typedesc[Texture], pnmimage: PNMImage, name: string, au
 ## already loaded; in this case it will rescale the image on the spot.  Also
 ## see rescale_texture().
 
-proc considerRescale*(_: typedesc[Texture], pnmimage: PNMImage, name: string) {.importcpp: "Texture::consider_rescale(#, nimStringToStdString(#))", header: "texture.h".} ## \
+proc considerRescale*(_: typedesc[Texture], pnmimage: PNMImage, name: string) {.importcpp: "#Texture::consider_rescale(#, nimStringToStdString(#))", header: "texture.h".} ## \
 ## Asks the PNMImage to change its scale when it reads the image, according to
 ## the whims of the Config.prc file.
 ##
@@ -44283,10 +44876,10 @@ proc rescaleTexture*(this: Texture): bool {.importcpp: "#->rescale_texture()".} 
 
 converter getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
 
-proc load*(_: typedesc[Shader], file: Filename): Shader {.importcpp: "Shader::load(#)", header: "shader.h".} ## \
+proc load*(_: typedesc[Shader], file: Filename): Shader {.importcpp: "#Shader::load(#)", header: "shader.h".} ## \
 ## Loads the shader with the given filename.
 
-proc make*(_: typedesc[Shader], body: string): Shader {.importcpp: "Shader::make(nimStringToStdString(#))", header: "shader.h".} ## \
+proc make*(_: typedesc[Shader], body: string): Shader {.importcpp: "#Shader::make(nimStringToStdString(#))", header: "shader.h".} ## \
 ## Loads the shader, using the string as shader body.
 
 proc getFilename*(this: Shader): Filename {.importcpp: "#->get_filename()".} ## \
@@ -44358,9 +44951,9 @@ proc newShader*(param0: Shader): Shader {.importcpp: "new Shader(#)".}
 
 converter upcastToTypedWritableReferenceCount*(this: ShaderBuffer): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(ShaderBuffer *)(#))".}
 
-converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(#.p()))".}
+converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(ShaderBuffer *)(#))".}
 
 proc newShaderBuffer*(param0: ShaderBuffer): ShaderBuffer {.importcpp: "new ShaderBuffer(#)".}
 
@@ -45319,7 +45912,7 @@ converter getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_c
 
 converter upcastToTypedWritableReferenceCount*(this: Material): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(Material *)(#))".}
 
 proc newMaterial*(copy: Material): Material {.importcpp: "new Material(#)".}
 
@@ -45542,7 +46135,7 @@ proc setAttribLock*(this: Material) {.importcpp: "#->set_attrib_lock()".} ## \
 
 converter getClassType*(_: typedesc[Material]): TypeHandle {.importcpp: "Material::get_class_type()", header: "material.h".}
 
-proc getMaterial*(_: typedesc[MaterialPool], temp: Material): Material {.importcpp: "MaterialPool::get_material(#)", header: "materialPool.h".} ## \
+proc getMaterial*(_: typedesc[MaterialPool], temp: Material): Material {.importcpp: "#MaterialPool::get_material(#)", header: "materialPool.h".} ## \
 ## Returns a Material pointer that represents the same material described by
 ## temp, except that it is a shared pointer.
 ##
@@ -45558,7 +46151,7 @@ proc getMaterial*(_: typedesc[MaterialPool], temp: Material): Material {.importc
 ## other PointerTo, it will be freed when the last reference count is
 ## removed).
 
-proc releaseMaterial*(_: typedesc[MaterialPool], temp: Material) {.importcpp: "MaterialPool::release_material(#)", header: "materialPool.h".} ## \
+proc releaseMaterial*(_: typedesc[MaterialPool], temp: Material) {.importcpp: "#MaterialPool::release_material(#)", header: "materialPool.h".} ## \
 ## Removes the indicated material from the pool.
 
 proc releaseAllMaterials*(_: typedesc[MaterialPool]) {.importcpp: "MaterialPool::release_all_materials()", header: "materialPool.h".} ## \
@@ -45570,10 +46163,10 @@ proc garbageCollect*(_: typedesc[MaterialPool]): int {.importcpp: "MaterialPool:
 ## exactly 1; i.e.  only those materials that are not being used outside of
 ## the pool.  Returns the number of materials released.
 
-proc listContents*(_: typedesc[MaterialPool], `out`: ostream) {.importcpp: "MaterialPool::list_contents(#)", header: "materialPool.h".} ## \
+proc listContents*(_: typedesc[MaterialPool], `out`: ostream) {.importcpp: "#MaterialPool::list_contents(#)", header: "materialPool.h".} ## \
 ## Lists the contents of the material pool to the indicated output stream.
 
-proc write*(_: typedesc[MaterialPool], `out`: ostream) {.importcpp: "MaterialPool::write(#)", header: "materialPool.h".} ## \
+proc write*(_: typedesc[MaterialPool], `out`: ostream) {.importcpp: "#MaterialPool::write(#)", header: "materialPool.h".} ## \
 ## Lists the contents of the material pool to the indicated output stream.
 
 proc newMatrixLens*(): MatrixLens {.importcpp: "new MatrixLens()".}
@@ -45796,7 +46389,7 @@ converter getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcp
 
 converter upcastToTexture*(this: VideoTexture): Texture {.importcpp: "(PT(Texture)(#))".}
 
-converter upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(#.p()))".}
+converter upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(VideoTexture *)(#))".}
 
 proc getKeepRamImage*(this: VideoTexture): bool {.importcpp: "#->get_keep_ram_image()".} ## \
 ## Returns the flag that indicates whether this Texture is eligible to have
@@ -45890,7 +46483,7 @@ proc size*(this: TextureCollection): int {.importcpp: "#.size()".} ## \
 ## Returns the number of textures in the collection.  This is the same thing
 ## as get_num_textures().
 
-proc `+=`*(this: TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +=(#)".}
 
 proc `+`*(this: TextureCollection, other: TextureCollection): TextureCollection {.importcpp: "#.operator +(#)".}
 
@@ -45914,45 +46507,45 @@ proc write*(this: TextureCollection, `out`: ostream) {.importcpp: "#.write(#)".}
 ## Writes a complete multi-line description of the TextureCollection to the
 ## indicated output stream.
 
-proc hasTexture*(_: typedesc[TexturePool], filename: Filename): bool {.importcpp: "TexturePool::has_texture(#)", header: "texturePool.h".} ## \
+proc hasTexture*(_: typedesc[TexturePool], filename: Filename): bool {.importcpp: "#TexturePool::has_texture(#)", header: "texturePool.h".} ## \
 ## Returns true if the texture has ever been loaded, false otherwise.
 
-proc verifyTexture*(_: typedesc[TexturePool], filename: Filename): bool {.importcpp: "TexturePool::verify_texture(#)", header: "texturePool.h".} ## \
+proc verifyTexture*(_: typedesc[TexturePool], filename: Filename): bool {.importcpp: "#TexturePool::verify_texture(#)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns true to indicate success, or false to indicate failure.
 ## If this returns true, it is guaranteed that a subsequent call to
 ## load_texture() with the same texture name will return a valid Texture
 ## pointer.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool): Texture {.importcpp: "TexturePool::get_texture(#, #, #, #, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::get_texture(#, #, #, #, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int): Texture {.importcpp: "TexturePool::get_texture(#, #, #, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int): Texture {.importcpp: "#TexturePool::get_texture(#, #, #, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "TexturePool::get_texture(#, #, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "#TexturePool::get_texture(#, #, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename): Texture {.importcpp: "TexturePool::get_texture(#, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename): Texture {.importcpp: "#TexturePool::get_texture(#, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool): Texture {.importcpp: "TexturePool::get_texture(#, #, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::get_texture(#, #, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "TexturePool::get_texture(#, #)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "#TexturePool::get_texture(#, #)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc getTexture*(_: typedesc[TexturePool], filename: Filename): Texture {.importcpp: "TexturePool::get_texture(#)", header: "texturePool.h".} ## \
+proc getTexture*(_: typedesc[TexturePool], filename: Filename): Texture {.importcpp: "#TexturePool::get_texture(#)", header: "texturePool.h".} ## \
 ## Returns the texture that has already been previously loaded, or NULL
 ## otherwise.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "TexturePool::load_texture(#, #, #, #, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "#TexturePool::load_texture(#, #, #, #, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -45962,7 +46555,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: 
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, two for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool): Texture {.importcpp: "TexturePool::load_texture(#, #, #, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::load_texture(#, #, #, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -45972,7 +46565,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: 
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, two for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int): Texture {.importcpp: "TexturePool::load_texture(#, #, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int, alpha_file_channel: int): Texture {.importcpp: "#TexturePool::load_texture(#, #, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -45982,7 +46575,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: 
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, two for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "TexturePool::load_texture(#, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "#TexturePool::load_texture(#, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -45992,7 +46585,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: 
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, two for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename): Texture {.importcpp: "TexturePool::load_texture(#, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: Filename): Texture {.importcpp: "#TexturePool::load_texture(#, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -46002,7 +46595,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, alpha_filename: 
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, two for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "TexturePool::load_texture(#, #, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "#TexturePool::load_texture(#, #, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -46012,7 +46605,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, one for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool): Texture {.importcpp: "TexturePool::load_texture(#, #, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::load_texture(#, #, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -46022,7 +46615,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, one for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "TexturePool::load_texture(#, #)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num_channels: int): Texture {.importcpp: "#TexturePool::load_texture(#, #)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -46032,7 +46625,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename, primary_file_num
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, one for each mipmap level.
 
-proc loadTexture*(_: typedesc[TexturePool], filename: Filename): Texture {.importcpp: "TexturePool::load_texture(#)", header: "texturePool.h".} ## \
+proc loadTexture*(_: typedesc[TexturePool], filename: Filename): Texture {.importcpp: "#TexturePool::load_texture(#)", header: "texturePool.h".} ## \
 ## Loads the given filename up into a texture, if it has not already been
 ## loaded, and returns the new texture.  If a texture with the same filename
 ## was previously loaded, returns that one instead.  If the texture file
@@ -46042,7 +46635,7 @@ proc loadTexture*(_: typedesc[TexturePool], filename: Filename): Texture {.impor
 ## which will be filled in with the mipmap level number; and the texture will
 ## be defined with a series of images, one for each mipmap level.
 
-proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "TexturePool::load_3d_texture(#, #, #)", header: "texturePool.h".} ## \
+proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "#TexturePool::load_3d_texture(#, #, #)", header: "texturePool.h".} ## \
 ## Loads a 3-D texture that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46052,7 +46645,7 @@ proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_m
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 3-d level.
 
-proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "TexturePool::load_3d_texture(#, #)", header: "texturePool.h".} ## \
+proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::load_3d_texture(#, #)", header: "texturePool.h".} ## \
 ## Loads a 3-D texture that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46062,7 +46655,7 @@ proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename, read_m
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 3-d level.
 
-proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "TexturePool::load_3d_texture(#)", header: "texturePool.h".} ## \
+proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "#TexturePool::load_3d_texture(#)", header: "texturePool.h".} ## \
 ## Loads a 3-D texture that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46072,7 +46665,7 @@ proc load3dTexture*(_: typedesc[TexturePool], filename_pattern: Filename): Textu
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 3-d level.
 
-proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "TexturePool::load_2d_texture_array(#, #, #)", header: "texturePool.h".} ## \
+proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "#TexturePool::load_2d_texture_array(#, #, #)", header: "texturePool.h".} ## \
 ## Loads a 2-D texture array that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46082,7 +46675,7 @@ proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, r
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 2-d level.
 
-proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "TexturePool::load_2d_texture_array(#, #)", header: "texturePool.h".} ## \
+proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::load_2d_texture_array(#, #)", header: "texturePool.h".} ## \
 ## Loads a 2-D texture array that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46092,7 +46685,7 @@ proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename, r
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 2-d level.
 
-proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "TexturePool::load_2d_texture_array(#)", header: "texturePool.h".} ## \
+proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "#TexturePool::load_2d_texture_array(#)", header: "texturePool.h".} ## \
 ## Loads a 2-D texture array that is specified with a series of n pages, all
 ## numbered in sequence, and beginning with index 0.  The filename should
 ## include a sequence of one or more hash characters ("#") which will be
@@ -46102,7 +46695,7 @@ proc load2dTextureArray*(_: typedesc[TexturePool], filename_pattern: Filename): 
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the index number of each 2-d level.
 
-proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "TexturePool::load_cube_map(#, #, #)", header: "texturePool.h".} ## \
+proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool, options: LoaderOptions): Texture {.importcpp: "#TexturePool::load_cube_map(#, #, #)", header: "texturePool.h".} ## \
 ## Loads a cube map texture that is specified with a series of 6 pages,
 ## numbered 0 through 5.  The filename should include a sequence of one or
 ## more hash characters ("#") which will be filled in with the index number of
@@ -46112,7 +46705,7 @@ proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mip
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the face number, 0 through 5.
 
-proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "TexturePool::load_cube_map(#, #)", header: "texturePool.h".} ## \
+proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mipmaps: bool): Texture {.importcpp: "#TexturePool::load_cube_map(#, #)", header: "texturePool.h".} ## \
 ## Loads a cube map texture that is specified with a series of 6 pages,
 ## numbered 0 through 5.  The filename should include a sequence of one or
 ## more hash characters ("#") which will be filled in with the index number of
@@ -46122,7 +46715,7 @@ proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename, read_mip
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the face number, 0 through 5.
 
-proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "TexturePool::load_cube_map(#)", header: "texturePool.h".} ## \
+proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename): Texture {.importcpp: "#TexturePool::load_cube_map(#)", header: "texturePool.h".} ## \
 ## Loads a cube map texture that is specified with a series of 6 pages,
 ## numbered 0 through 5.  The filename should include a sequence of one or
 ## more hash characters ("#") which will be filled in with the index number of
@@ -46132,7 +46725,7 @@ proc loadCubeMap*(_: typedesc[TexturePool], filename_pattern: Filename): Texture
 ## mark.  The first hash mark will be filled in with the mipmap level number,
 ## and the second with the face number, 0 through 5.
 
-proc getNormalizationCubeMap*(_: typedesc[TexturePool], size: int): Texture {.importcpp: "TexturePool::get_normalization_cube_map(#)", header: "texturePool.h".} ## \
+proc getNormalizationCubeMap*(_: typedesc[TexturePool], size: int): Texture {.importcpp: "#TexturePool::get_normalization_cube_map(#)", header: "texturePool.h".} ## \
 ## Returns a standard Texture object that has been created with
 ## Texture::generate_normalization_cube_map().  This Texture may be shared by
 ## any application code requiring a normalization cube map.  It will be at
@@ -46146,12 +46739,12 @@ proc getAlphaScaleMap*(_: typedesc[TexturePool]): Texture {.importcpp: "TextureP
 ## an object (instead of munging its vertices) when
 ## gsg->get_alpha_scale_via_texture() returns true.
 
-proc addTexture*(_: typedesc[TexturePool], texture: Texture) {.importcpp: "TexturePool::add_texture(#)", header: "texturePool.h".} ## \
+proc addTexture*(_: typedesc[TexturePool], texture: Texture) {.importcpp: "#TexturePool::add_texture(#)", header: "texturePool.h".} ## \
 ## Adds the indicated already-loaded texture to the pool.  The texture must
 ## have a filename set for its name.  The texture will always replace any
 ## previously-loaded texture in the pool that had the same filename.
 
-proc releaseTexture*(_: typedesc[TexturePool], texture: Texture) {.importcpp: "TexturePool::release_texture(#)", header: "texturePool.h".} ## \
+proc releaseTexture*(_: typedesc[TexturePool], texture: Texture) {.importcpp: "#TexturePool::release_texture(#)", header: "texturePool.h".} ## \
 ## Removes the indicated texture from the pool, indicating it will never be
 ## loaded again; the texture may then be freed.  If this function is never
 ## called, a reference count will be maintained on every texture every loaded,
@@ -46175,15 +46768,15 @@ proc garbageCollect*(_: typedesc[TexturePool]): int {.importcpp: "TexturePool::g
 proc listContents*(_: typedesc[TexturePool]) {.importcpp: "TexturePool::list_contents()", header: "texturePool.h".} ## \
 ## Lists the contents of the texture pool to cout
 
-proc listContents*(_: typedesc[TexturePool], `out`: ostream) {.importcpp: "TexturePool::list_contents(#)", header: "texturePool.h".} ## \
+proc listContents*(_: typedesc[TexturePool], `out`: ostream) {.importcpp: "#TexturePool::list_contents(#)", header: "texturePool.h".} ## \
 ## Lists the contents of the texture pool to the indicated output stream.
 
-proc findTexture*(_: typedesc[TexturePool], name: string): Texture {.importcpp: "TexturePool::find_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
+proc findTexture*(_: typedesc[TexturePool], name: string): Texture {.importcpp: "#TexturePool::find_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Returns the first texture found in the pool that matches the indicated name
 ## (which may contain wildcards).  Returns the texture if it is found, or NULL
 ## if it is not.
 
-proc findAllTextures*(_: typedesc[TexturePool], name: string): TextureCollection {.importcpp: "TexturePool::find_all_textures(nimStringToStdString(#))", header: "texturePool.h".} ## \
+proc findAllTextures*(_: typedesc[TexturePool], name: string): TextureCollection {.importcpp: "#TexturePool::find_all_textures(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Returns the set of all textures found in the pool that match the indicated
 ## name (which may contain wildcards).
 
@@ -46191,7 +46784,7 @@ proc findAllTextures*(_: typedesc[TexturePool]): TextureCollection {.importcpp: 
 ## Returns the set of all textures found in the pool that match the indicated
 ## name (which may contain wildcards).
 
-proc setFakeTextureImage*(_: typedesc[TexturePool], filename: Filename) {.importcpp: "TexturePool::set_fake_texture_image(#)", header: "texturePool.h".} ## \
+proc setFakeTextureImage*(_: typedesc[TexturePool], filename: Filename) {.importcpp: "#TexturePool::set_fake_texture_image(#)", header: "texturePool.h".} ## \
 ## Sets a bogus filename that will be loaded in lieu of any textures requested
 ## from this point on.
 
@@ -46206,12 +46799,12 @@ proc getFakeTextureImage*(_: typedesc[TexturePool]): Filename {.importcpp: "Text
 ## Returns the filename that was specified with a previous call to
 ## set_fake_texture_image().
 
-proc makeTexture*(_: typedesc[TexturePool], extension: string): Texture {.importcpp: "TexturePool::make_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
+proc makeTexture*(_: typedesc[TexturePool], extension: string): Texture {.importcpp: "#TexturePool::make_texture(nimStringToStdString(#))", header: "texturePool.h".} ## \
 ## Creates a new Texture object of the appropriate type for the indicated
 ## filename extension, according to the types that have been registered via
 ## register_texture_type().
 
-proc write*(_: typedesc[TexturePool], `out`: ostream) {.importcpp: "TexturePool::write(#)", header: "texturePool.h".} ## \
+proc write*(_: typedesc[TexturePool], `out`: ostream) {.importcpp: "#TexturePool::write(#)", header: "texturePool.h".} ## \
 ## Lists the contents of the texture pool to the indicated output stream.  For
 ## debugging.
 
@@ -46282,7 +46875,7 @@ proc filterRect*(this: TexturePeeker, color: LColor, min_u: float32, min_v: floa
 
 proc newTexturePeeker*(param0: TexturePeeker): TexturePeeker {.importcpp: "new TexturePeeker(#)".}
 
-proc getStage*(_: typedesc[TextureStagePool], temp: TextureStage): TextureStage {.importcpp: "TextureStagePool::get_stage(#)", header: "textureStagePool.h".} ## \
+proc getStage*(_: typedesc[TextureStagePool], temp: TextureStage): TextureStage {.importcpp: "#TextureStagePool::get_stage(#)", header: "textureStagePool.h".} ## \
 ## Returns a TextureStage pointer that represents the same TextureStage
 ## described by temp, except that it is a shared pointer.
 ##
@@ -46298,7 +46891,7 @@ proc getStage*(_: typedesc[TextureStagePool], temp: TextureStage): TextureStage 
 ## other PointerTo, it will be freed when the last reference count is
 ## removed).
 
-proc releaseStage*(_: typedesc[TextureStagePool], temp: TextureStage) {.importcpp: "TextureStagePool::release_stage(#)", header: "textureStagePool.h".} ## \
+proc releaseStage*(_: typedesc[TextureStagePool], temp: TextureStage) {.importcpp: "#TextureStagePool::release_stage(#)", header: "textureStagePool.h".} ## \
 ## Removes the indicated TextureStage from the pool.
 
 proc releaseAllStages*(_: typedesc[TextureStagePool]) {.importcpp: "TextureStagePool::release_all_stages()", header: "textureStagePool.h".} ## \
@@ -46310,10 +46903,10 @@ proc garbageCollect*(_: typedesc[TextureStagePool]): int {.importcpp: "TextureSt
 ## of exactly 1; i.e.  only those TextureStages that are not being used
 ## outside of the pool.  Returns the number of TextureStages released.
 
-proc listContents*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "TextureStagePool::list_contents(#)", header: "textureStagePool.h".} ## \
+proc listContents*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "#TextureStagePool::list_contents(#)", header: "textureStagePool.h".} ## \
 ## Lists the contents of the TextureStage pool to the indicated output stream.
 
-proc write*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "TextureStagePool::write(#)", header: "textureStagePool.h".} ## \
+proc write*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "#TextureStagePool::write(#)", header: "textureStagePool.h".} ## \
 ## Lists the contents of the TextureStage pool to the indicated output stream.
 
 proc setSort*(this: GraphicsOutputBase, sort: int) {.importcpp: "#->set_sort(#)".}
@@ -46356,14 +46949,14 @@ proc getDefaultGsg*(_: typedesc[GraphicsStateGuardianBase]): GraphicsStateGuardi
 ##
 ## The return value may be NULL if a GSG has not been created.
 
-proc setDefaultGsg*(_: typedesc[GraphicsStateGuardianBase], default_gsg: GraphicsStateGuardianBase) {.importcpp: "GraphicsStateGuardianBase::set_default_gsg(#)", header: "graphicsStateGuardianBase.h".} ## \
+proc setDefaultGsg*(_: typedesc[GraphicsStateGuardianBase], default_gsg: GraphicsStateGuardianBase) {.importcpp: "#GraphicsStateGuardianBase::set_default_gsg(#)", header: "graphicsStateGuardianBase.h".} ## \
 ## Specifies a particular GSG to use as the "default" GSG.  See
 ## get_default_gsg().
 
 proc getNumGsgs*(_: typedesc[GraphicsStateGuardianBase]): clonglong {.importcpp: "GraphicsStateGuardianBase::get_num_gsgs()", header: "graphicsStateGuardianBase.h".} ## \
 ## Returns the total number of GSG's in the universe.
 
-proc getGsg*(_: typedesc[GraphicsStateGuardianBase], n: clonglong): GraphicsStateGuardianBase {.importcpp: "GraphicsStateGuardianBase::get_gsg(#)", header: "graphicsStateGuardianBase.h".} ## \
+proc getGsg*(_: typedesc[GraphicsStateGuardianBase], n: clonglong): GraphicsStateGuardianBase {.importcpp: "#GraphicsStateGuardianBase::get_gsg(#)", header: "graphicsStateGuardianBase.h".} ## \
 ## Returns the nth GSG in the universe.  GSG's automatically add themselves
 ## and remove themselves from this list as they are created and destroyed.
 
@@ -46380,14 +46973,6 @@ proc deg2Rad*(f: float32): float32 {.importcpp: "deg_2_rad(#)".}
 proc rad2Deg*(f: float64): float64 {.importcpp: "rad_2_deg(#)".}
 
 proc rad2Deg*(f: float32): float32 {.importcpp: "rad_2_deg(#)".}
-
-proc initLVecBase2f*(): LVecBase2f {.importcpp: "LVecBase2f()".}
-
-proc initLVecBase2f*(param0: LVecBase2f): LVecBase2f {.importcpp: "LVecBase2f(#)".}
-
-proc initLVecBase2f*(fill_value: float32): LVecBase2f {.importcpp: "LVecBase2f(#)".}
-
-proc initLVecBase2f*(x: float32, y: float32): LVecBase2f {.importcpp: "LVecBase2f(#, #)".}
 
 proc zero*(_: typedesc[LVecBase2f]): LVecBase2f {.importcpp: "LVecBase2f::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
@@ -46496,13 +47081,13 @@ proc `*`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2f, other: LVecBase2f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -46540,14 +47125,6 @@ proc readDatagram*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
-
-proc initLVecBase2d*(): LVecBase2d {.importcpp: "LVecBase2d()".}
-
-proc initLVecBase2d*(param0: LVecBase2d): LVecBase2d {.importcpp: "LVecBase2d(#)".}
-
-proc initLVecBase2d*(fill_value: float64): LVecBase2d {.importcpp: "LVecBase2d(#)".}
-
-proc initLVecBase2d*(x: float64, y: float64): LVecBase2d {.importcpp: "LVecBase2d(#, #)".}
 
 proc zero*(_: typedesc[LVecBase2d]): LVecBase2d {.importcpp: "LVecBase2d::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
@@ -46656,13 +47233,13 @@ proc `*`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2d, other: LVecBase2d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -46700,14 +47277,6 @@ proc readDatagram*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
-
-proc initLVecBase2i*(): LVecBase2i {.importcpp: "LVecBase2i()".}
-
-proc initLVecBase2i*(param0: LVecBase2i): LVecBase2i {.importcpp: "LVecBase2i(#)".}
-
-proc initLVecBase2i*(fill_value: int): LVecBase2i {.importcpp: "LVecBase2i(#)".}
-
-proc initLVecBase2i*(x: int, y: int): LVecBase2i {.importcpp: "LVecBase2i(#, #)".}
 
 proc zero*(_: typedesc[LVecBase2i]): LVecBase2i {.importcpp: "LVecBase2i::zero()", header: "lvecBase2.h".} ## \
 ## Returns a zero-length vector.
@@ -46790,13 +47359,13 @@ proc `*`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase2i, other: LVecBase2i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -46837,7 +47406,7 @@ converter getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecB
 
 proc initLVector2f*(): LVector2f {.importcpp: "LVector2f()".}
 
-proc initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f(#)".} ## \
+converter initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2f*(param0: LVector2f): LVector2f {.importcpp: "LVector2f(#)".}
@@ -46890,7 +47459,7 @@ converter getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVecto
 
 proc initLVector2d*(): LVector2d {.importcpp: "LVector2d()".}
 
-proc initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d(#)".} ## \
+converter initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2d*(param0: LVector2d): LVector2d {.importcpp: "LVector2d(#)".}
@@ -46943,7 +47512,7 @@ converter getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVecto
 
 proc initLVector2i*(): LVector2i {.importcpp: "LVector2i()".}
 
-proc initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i(#)".} ## \
+converter initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i(#)".} ## \
 ## Constructs a new LVector2 from a LVecBase2
 
 proc initLVector2i*(param0: LVector2i): LVector2i {.importcpp: "LVector2i(#)".}
@@ -46982,7 +47551,7 @@ proc initLPoint2f*(): LPoint2f {.importcpp: "LPoint2f()".}
 
 proc initLPoint2f*(param0: LPoint2f): LPoint2f {.importcpp: "LPoint2f(#)".}
 
-proc initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
+converter initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2f*(fill_value: float32): LPoint2f {.importcpp: "LPoint2f(#)".} ## \
@@ -47030,7 +47599,7 @@ proc initLPoint2d*(): LPoint2d {.importcpp: "LPoint2d()".}
 
 proc initLPoint2d*(param0: LPoint2d): LPoint2d {.importcpp: "LPoint2d(#)".}
 
-proc initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
+converter initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2d*(fill_value: float64): LPoint2d {.importcpp: "LPoint2d(#)".} ## \
@@ -47078,7 +47647,7 @@ proc initLPoint2i*(): LPoint2i {.importcpp: "LPoint2i()".}
 
 proc initLPoint2i*(param0: LPoint2i): LPoint2i {.importcpp: "LPoint2i(#)".}
 
-proc initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
+converter initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
 ## Constructs a new LPoint2 from a LVecBase2
 
 proc initLPoint2i*(fill_value: int): LPoint2i {.importcpp: "LPoint2i(#)".} ## \
@@ -47113,16 +47682,6 @@ proc `*`*(this: LPoint2i, scalar: int): LPoint2i {.importcpp: "#.operator *(#)".
 proc `/`*(this: LPoint2i, scalar: int): LPoint2i {.importcpp: "#.operator /(#)".}
 
 converter getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
-
-proc initLVecBase3f*(): LVecBase3f {.importcpp: "LVecBase3f()".}
-
-proc initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f {.importcpp: "LVecBase3f(#, #)".}
-
-proc initLVecBase3f*(param0: LVecBase3f): LVecBase3f {.importcpp: "LVecBase3f(#)".}
-
-proc initLVecBase3f*(fill_value: float32): LVecBase3f {.importcpp: "LVecBase3f(#)".}
-
-proc initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f {.importcpp: "LVecBase3f(#, #, #)".}
 
 proc zero*(_: typedesc[LVecBase3f]): LVecBase3f {.importcpp: "LVecBase3f::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
@@ -47266,13 +47825,13 @@ proc `*`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47312,16 +47871,6 @@ proc readDatagram*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
-
-proc initLVecBase3d*(): LVecBase3d {.importcpp: "LVecBase3d()".}
-
-proc initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d {.importcpp: "LVecBase3d(#, #)".}
-
-proc initLVecBase3d*(param0: LVecBase3d): LVecBase3d {.importcpp: "LVecBase3d(#)".}
-
-proc initLVecBase3d*(fill_value: float64): LVecBase3d {.importcpp: "LVecBase3d(#)".}
-
-proc initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d {.importcpp: "LVecBase3d(#, #, #)".}
 
 proc zero*(_: typedesc[LVecBase3d]): LVecBase3d {.importcpp: "LVecBase3d::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
@@ -47465,13 +48014,13 @@ proc `*`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47511,16 +48060,6 @@ proc readDatagram*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "#.r
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
-
-proc initLVecBase3i*(): LVecBase3i {.importcpp: "LVecBase3i()".}
-
-proc initLVecBase3i*(copy: LVecBase2i, z: int): LVecBase3i {.importcpp: "LVecBase3i(#, #)".}
-
-proc initLVecBase3i*(param0: LVecBase3i): LVecBase3i {.importcpp: "LVecBase3i(#)".}
-
-proc initLVecBase3i*(fill_value: int): LVecBase3i {.importcpp: "LVecBase3i(#)".}
-
-proc initLVecBase3i*(x: int, y: int, z: int): LVecBase3i {.importcpp: "LVecBase3i(#, #, #)".}
 
 proc zero*(_: typedesc[LVecBase3i]): LVecBase3i {.importcpp: "LVecBase3i::zero()", header: "lvecBase3.h".} ## \
 ## Returns a zero-length vector.
@@ -47626,13 +48165,13 @@ proc `*`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -47687,7 +48226,7 @@ proc initLVector3f*(): LVector3f {.importcpp: "LVector3f()".}
 
 proc initLVector3f*(copy: LVecBase2f, z: float32): LVector3f {.importcpp: "LVector3f(#, #)".}
 
-proc initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f(#)".}
+converter initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f(#)".}
 
 proc initLVector3f*(param0: LVector3f): LVector3f {.importcpp: "LVector3f(#)".}
 
@@ -47771,47 +48310,47 @@ proc `*`*(this: LVector3f, scalar: float32): LVector3f {.importcpp: "#.operator 
 
 proc `/`*(this: LVector3f, scalar: float32): LVector3f {.importcpp: "#.operator /(#)".}
 
-proc up*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::up(#)", header: "lvector3.h".} ## \
+proc up*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::up(#)", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
 proc up*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::up()", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
-proc right*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::right(#)", header: "lvector3.h".} ## \
+proc right*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::right(#)", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
 proc right*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::right()", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
-proc forward*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::forward(#)", header: "lvector3.h".} ## \
+proc forward*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::forward(#)", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
 proc forward*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::forward()", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
-proc down*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::down(#)", header: "lvector3.h".} ## \
+proc down*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::down(#)", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
 proc down*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::down()", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
-proc left*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::left(#)", header: "lvector3.h".} ## \
+proc left*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::left(#)", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
 proc left*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::left()", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
-proc back*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::back(#)", header: "lvector3.h".} ## \
+proc back*(_: typedesc[LVector3f], cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::back(#)", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
 proc back*(_: typedesc[LVector3f]): LVector3f {.importcpp: "LVector3f::back()", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
-proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32, cs: CoordinateSystem): LVector3f {.importcpp: "LVector3f::rfu(#, #, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32, cs: CoordinateSystem): LVector3f {.importcpp: "#LVector3f::rfu(#, #, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32): LVector3f {.importcpp: "LVector3f::rfu(#, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32): LVector3f {.importcpp: "#LVector3f::rfu(#, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
@@ -47821,7 +48360,7 @@ proc initLVector3d*(): LVector3d {.importcpp: "LVector3d()".}
 
 proc initLVector3d*(copy: LVecBase2d, z: float64): LVector3d {.importcpp: "LVector3d(#, #)".}
 
-proc initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d(#)".}
+converter initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d(#)".}
 
 proc initLVector3d*(param0: LVector3d): LVector3d {.importcpp: "LVector3d(#)".}
 
@@ -47905,47 +48444,47 @@ proc `*`*(this: LVector3d, scalar: float64): LVector3d {.importcpp: "#.operator 
 
 proc `/`*(this: LVector3d, scalar: float64): LVector3d {.importcpp: "#.operator /(#)".}
 
-proc up*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::up(#)", header: "lvector3.h".} ## \
+proc up*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::up(#)", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
 proc up*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::up()", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
-proc right*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::right(#)", header: "lvector3.h".} ## \
+proc right*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::right(#)", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
 proc right*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::right()", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
-proc forward*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::forward(#)", header: "lvector3.h".} ## \
+proc forward*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::forward(#)", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
 proc forward*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::forward()", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
-proc down*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::down(#)", header: "lvector3.h".} ## \
+proc down*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::down(#)", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
 proc down*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::down()", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
-proc left*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::left(#)", header: "lvector3.h".} ## \
+proc left*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::left(#)", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
 proc left*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::left()", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
-proc back*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::back(#)", header: "lvector3.h".} ## \
+proc back*(_: typedesc[LVector3d], cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::back(#)", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
 proc back*(_: typedesc[LVector3d]): LVector3d {.importcpp: "LVector3d::back()", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
-proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64, cs: CoordinateSystem): LVector3d {.importcpp: "LVector3d::rfu(#, #, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64, cs: CoordinateSystem): LVector3d {.importcpp: "#LVector3d::rfu(#, #, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64): LVector3d {.importcpp: "LVector3d::rfu(#, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64): LVector3d {.importcpp: "#LVector3d::rfu(#, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
@@ -47955,7 +48494,7 @@ proc initLVector3i*(): LVector3i {.importcpp: "LVector3i()".}
 
 proc initLVector3i*(copy: LVecBase2i, z: int): LVector3i {.importcpp: "LVector3i(#, #)".}
 
-proc initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i(#)".}
+converter initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i(#)".}
 
 proc initLVector3i*(param0: LVector3i): LVector3i {.importcpp: "LVector3i(#)".}
 
@@ -48003,47 +48542,47 @@ proc `*`*(this: LVector3i, scalar: int): LVector3i {.importcpp: "#.operator *(#)
 
 proc `/`*(this: LVector3i, scalar: int): LVector3i {.importcpp: "#.operator /(#)".}
 
-proc up*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::up(#)", header: "lvector3.h".} ## \
+proc up*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::up(#)", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
 proc up*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::up()", header: "lvector3.h".} ## \
 ## Returns the up vector for the given coordinate system.
 
-proc right*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::right(#)", header: "lvector3.h".} ## \
+proc right*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::right(#)", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
 proc right*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::right()", header: "lvector3.h".} ## \
 ## Returns the right vector for the given coordinate system.
 
-proc forward*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::forward(#)", header: "lvector3.h".} ## \
+proc forward*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::forward(#)", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
 proc forward*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::forward()", header: "lvector3.h".} ## \
 ## Returns the forward vector for the given coordinate system.
 
-proc down*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::down(#)", header: "lvector3.h".} ## \
+proc down*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::down(#)", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
 proc down*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::down()", header: "lvector3.h".} ## \
 ## Returns the down vector for the given coordinate system.
 
-proc left*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::left(#)", header: "lvector3.h".} ## \
+proc left*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::left(#)", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
 proc left*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::left()", header: "lvector3.h".} ## \
 ## Returns the left vector for the given coordinate system.
 
-proc back*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::back(#)", header: "lvector3.h".} ## \
+proc back*(_: typedesc[LVector3i], cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::back(#)", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
 proc back*(_: typedesc[LVector3i]): LVector3i {.importcpp: "LVector3i::back()", header: "lvector3.h".} ## \
 ## Returns the back vector for the given coordinate system.
 
-proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int, cs: CoordinateSystem): LVector3i {.importcpp: "LVector3i::rfu(#, #, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int, cs: CoordinateSystem): LVector3i {.importcpp: "#LVector3i::rfu(#, #, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
-proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int): LVector3i {.importcpp: "LVector3i::rfu(#, #, #)", header: "lvector3.h".} ## \
+proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int): LVector3i {.importcpp: "#LVector3i::rfu(#, #, #)", header: "lvector3.h".} ## \
 ## Returns a vector that is described by its right, forward, and up
 ## components, in whatever way the coordinate system represents that vector.
 
@@ -48055,7 +48594,7 @@ proc initLPoint3f*(param0: LPoint3f): LPoint3f {.importcpp: "LPoint3f(#)".}
 
 proc initLPoint3f*(copy: LVecBase2f, z: float32): LPoint3f {.importcpp: "LPoint3f(#, #)".}
 
-proc initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f(#)".}
+converter initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f(#)".}
 
 proc initLPoint3f*(fill_value: float32): LPoint3f {.importcpp: "LPoint3f(#)".}
 
@@ -48111,7 +48650,7 @@ proc `*`*(this: LPoint3f, scalar: float32): LPoint3f {.importcpp: "#.operator *(
 
 proc `/`*(this: LPoint3f, scalar: float32): LPoint3f {.importcpp: "#.operator /(#)".}
 
-proc origin*(_: typedesc[LPoint3f], cs: CoordinateSystem): LPoint3f {.importcpp: "LPoint3f::origin(#)", header: "lpoint3.h".} ## \
+proc origin*(_: typedesc[LPoint3f], cs: CoordinateSystem): LPoint3f {.importcpp: "#LPoint3f::origin(#)", header: "lpoint3.h".} ## \
 ## Returns the origin of the indicated coordinate system.  This is always 0,
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
@@ -48121,11 +48660,11 @@ proc origin*(_: typedesc[LPoint3f]): LPoint3f {.importcpp: "LPoint3f::origin()",
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
 
-proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32, cs: CoordinateSystem): LPoint3f {.importcpp: "LPoint3f::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32, cs: CoordinateSystem): LPoint3f {.importcpp: "#LPoint3f::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32): LPoint3f {.importcpp: "LPoint3f::rfu(#, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32): LPoint3f {.importcpp: "#LPoint3f::rfu(#, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
@@ -48137,7 +48676,7 @@ proc initLPoint3d*(param0: LPoint3d): LPoint3d {.importcpp: "LPoint3d(#)".}
 
 proc initLPoint3d*(copy: LVecBase2d, z: float64): LPoint3d {.importcpp: "LPoint3d(#, #)".}
 
-proc initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d(#)".}
+converter initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d(#)".}
 
 proc initLPoint3d*(fill_value: float64): LPoint3d {.importcpp: "LPoint3d(#)".}
 
@@ -48193,7 +48732,7 @@ proc `*`*(this: LPoint3d, scalar: float64): LPoint3d {.importcpp: "#.operator *(
 
 proc `/`*(this: LPoint3d, scalar: float64): LPoint3d {.importcpp: "#.operator /(#)".}
 
-proc origin*(_: typedesc[LPoint3d], cs: CoordinateSystem): LPoint3d {.importcpp: "LPoint3d::origin(#)", header: "lpoint3.h".} ## \
+proc origin*(_: typedesc[LPoint3d], cs: CoordinateSystem): LPoint3d {.importcpp: "#LPoint3d::origin(#)", header: "lpoint3.h".} ## \
 ## Returns the origin of the indicated coordinate system.  This is always 0,
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
@@ -48203,11 +48742,11 @@ proc origin*(_: typedesc[LPoint3d]): LPoint3d {.importcpp: "LPoint3d::origin()",
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
 
-proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64, cs: CoordinateSystem): LPoint3d {.importcpp: "LPoint3d::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64, cs: CoordinateSystem): LPoint3d {.importcpp: "#LPoint3d::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64): LPoint3d {.importcpp: "LPoint3d::rfu(#, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64): LPoint3d {.importcpp: "#LPoint3d::rfu(#, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
@@ -48219,7 +48758,7 @@ proc initLPoint3i*(param0: LPoint3i): LPoint3i {.importcpp: "LPoint3i(#)".}
 
 proc initLPoint3i*(copy: LVecBase2i, z: int): LPoint3i {.importcpp: "LPoint3i(#, #)".}
 
-proc initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i(#)".}
+converter initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i(#)".}
 
 proc initLPoint3i*(fill_value: int): LPoint3i {.importcpp: "LPoint3i(#)".}
 
@@ -48267,7 +48806,7 @@ proc `*`*(this: LPoint3i, scalar: int): LPoint3i {.importcpp: "#.operator *(#)".
 
 proc `/`*(this: LPoint3i, scalar: int): LPoint3i {.importcpp: "#.operator /(#)".}
 
-proc origin*(_: typedesc[LPoint3i], cs: CoordinateSystem): LPoint3i {.importcpp: "LPoint3i::origin(#)", header: "lpoint3.h".} ## \
+proc origin*(_: typedesc[LPoint3i], cs: CoordinateSystem): LPoint3i {.importcpp: "#LPoint3i::origin(#)", header: "lpoint3.h".} ## \
 ## Returns the origin of the indicated coordinate system.  This is always 0,
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
@@ -48277,33 +48816,15 @@ proc origin*(_: typedesc[LPoint3i]): LPoint3i {.importcpp: "LPoint3i::origin()",
 ## 0, 0 with all of our existing coordinate systems; it's hard to imagine it
 ## ever being different.
 
-proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int, cs: CoordinateSystem): LPoint3i {.importcpp: "LPoint3i::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int, cs: CoordinateSystem): LPoint3i {.importcpp: "#LPoint3i::rfu(#, #, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
-proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int): LPoint3i {.importcpp: "LPoint3i::rfu(#, #, #)", header: "lpoint3.h".} ## \
+proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int): LPoint3i {.importcpp: "#LPoint3i::rfu(#, #, #)", header: "lpoint3.h".} ## \
 ## Returns a point described by right, forward, up displacements from the
 ## origin, wherever that maps to in the given coordinate system.
 
 converter getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
-
-proc initLVecBase4f*(): LVecBase4f {.importcpp: "LVecBase4f()".}
-
-proc initLVecBase4f*(point: LPoint3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f {.importcpp: "LVecBase4f(#, #)".}
-
-proc initLVecBase4f*(param0: LVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-proc initLVecBase4f*(vector: LVector3f): LVecBase4f {.importcpp: "LVecBase4f(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-proc initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-proc initLVecBase4f*(fill_value: float32): LVecBase4f {.importcpp: "LVecBase4f(#)".}
-
-proc initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f {.importcpp: "LVecBase4f(#, #, #, #)".}
 
 proc zero*(_: typedesc[LVecBase4f]): LVecBase4f {.importcpp: "LVecBase4f::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
@@ -48436,13 +48957,13 @@ proc `*`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4f, other: LVecBase4f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48481,16 +49002,6 @@ proc readDatagram*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
-proc initUnalignedLVecBase4f*(): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f()".}
-
-proc initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(param0: UnalignedLVecBase4f): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(fill_value: float32): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#)".}
-
-proc initUnalignedLVecBase4f*(x: float32, y: float32, z: float32, w: float32): UnalignedLVecBase4f {.importcpp: "UnalignedLVecBase4f(#, #, #, #)".}
-
 proc fill*(this: UnalignedLVecBase4f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
@@ -48512,24 +49023,6 @@ proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.import
 proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
-
-proc initLVecBase4d*(): LVecBase4d {.importcpp: "LVecBase4d()".}
-
-proc initLVecBase4d*(point: LPoint3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d {.importcpp: "LVecBase4d(#, #)".}
-
-proc initLVecBase4d*(param0: LVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-proc initLVecBase4d*(vector: LVector3d): LVecBase4d {.importcpp: "LVecBase4d(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-proc initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-proc initLVecBase4d*(fill_value: float64): LVecBase4d {.importcpp: "LVecBase4d(#)".}
-
-proc initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d {.importcpp: "LVecBase4d(#, #, #, #)".}
 
 proc zero*(_: typedesc[LVecBase4d]): LVecBase4d {.importcpp: "LVecBase4d::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
@@ -48662,13 +49155,13 @@ proc `*`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operato
 
 proc `/`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4d, other: LVecBase4d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48707,16 +49200,6 @@ proc readDatagram*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
-proc initUnalignedLVecBase4d*(): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d()".}
-
-proc initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(param0: UnalignedLVecBase4d): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(fill_value: float64): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#)".}
-
-proc initUnalignedLVecBase4d*(x: float64, y: float64, z: float64, w: float64): UnalignedLVecBase4d {.importcpp: "UnalignedLVecBase4d(#, #, #, #)".}
-
 proc fill*(this: UnalignedLVecBase4d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
@@ -48738,24 +49221,6 @@ proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.import
 proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
-
-proc initLVecBase4i*(): LVecBase4i {.importcpp: "LVecBase4i()".}
-
-proc initLVecBase4i*(point: LPoint3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
-## Constructs an LVecBase4 from an LPoint3.  The w coordinate is set to 1.0.
-
-proc initLVecBase4i*(copy: LVecBase3i, w: int): LVecBase4i {.importcpp: "LVecBase4i(#, #)".}
-
-proc initLVecBase4i*(param0: LVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-proc initLVecBase4i*(vector: LVector3i): LVecBase4i {.importcpp: "LVecBase4i(#)".} ## \
-## Constructs an LVecBase4 from an LVector3.  The w coordinate is set to 0.0.
-
-proc initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-proc initLVecBase4i*(fill_value: int): LVecBase4i {.importcpp: "LVecBase4i(#)".}
-
-proc initLVecBase4i*(x: int, y: int, z: int, w: int): LVecBase4i {.importcpp: "LVecBase4i(#, #, #, #)".}
 
 proc zero*(_: typedesc[LVecBase4i]): LVecBase4i {.importcpp: "LVecBase4i::zero()", header: "lvecBase4.h".} ## \
 ## Returns a zero-length vector.
@@ -48862,13 +49327,13 @@ proc `*`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *(
 
 proc `/`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LVecBase4i, other: LVecBase4i) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -48907,16 +49372,6 @@ proc readDatagram*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "#.r
 
 converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
-proc initUnalignedLVecBase4i*(): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i()".}
-
-proc initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(param0: UnalignedLVecBase4i): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(fill_value: int): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#)".}
-
-proc initUnalignedLVecBase4i*(x: int, y: int, z: int, w: int): UnalignedLVecBase4i {.importcpp: "UnalignedLVecBase4i(#, #, #, #)".}
-
 proc fill*(this: UnalignedLVecBase4i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
@@ -48943,7 +49398,7 @@ proc initLVector4f*(): LVector4f {.importcpp: "LVector4f()".}
 
 proc initLVector4f*(copy: LVecBase3f, w: float32): LVector4f {.importcpp: "LVector4f(#, #)".}
 
-proc initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f(#)".}
+converter initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f(#)".}
 
 proc initLVector4f*(param0: LVector4f): LVector4f {.importcpp: "LVector4f(#)".}
 
@@ -49000,7 +49455,7 @@ proc initLVector4d*(): LVector4d {.importcpp: "LVector4d()".}
 
 proc initLVector4d*(copy: LVecBase3d, w: float64): LVector4d {.importcpp: "LVector4d(#, #)".}
 
-proc initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d(#)".}
+converter initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d(#)".}
 
 proc initLVector4d*(param0: LVector4d): LVector4d {.importcpp: "LVector4d(#)".}
 
@@ -49057,7 +49512,7 @@ proc initLVector4i*(): LVector4i {.importcpp: "LVector4i()".}
 
 proc initLVector4i*(copy: LVecBase3i, w: int): LVector4i {.importcpp: "LVector4i(#, #)".}
 
-proc initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i(#)".}
+converter initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i(#)".}
 
 proc initLVector4i*(param0: LVector4i): LVector4i {.importcpp: "LVector4i(#)".}
 
@@ -49108,7 +49563,7 @@ proc initLPoint4f*(param0: LPoint4f): LPoint4f {.importcpp: "LPoint4f(#)".}
 
 proc initLPoint4f*(copy: LVecBase3f, w: float32): LPoint4f {.importcpp: "LPoint4f(#, #)".}
 
-proc initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f(#)".}
+converter initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f(#)".}
 
 proc initLPoint4f*(fill_value: float32): LPoint4f {.importcpp: "LPoint4f(#)".}
 
@@ -49167,7 +49622,7 @@ proc initLPoint4d*(param0: LPoint4d): LPoint4d {.importcpp: "LPoint4d(#)".}
 
 proc initLPoint4d*(copy: LVecBase3d, w: float64): LPoint4d {.importcpp: "LPoint4d(#, #)".}
 
-proc initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d(#)".}
+converter initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d(#)".}
 
 proc initLPoint4d*(fill_value: float64): LPoint4d {.importcpp: "LPoint4d(#)".}
 
@@ -49226,7 +49681,7 @@ proc initLPoint4i*(param0: LPoint4i): LPoint4i {.importcpp: "LPoint4i(#)".}
 
 proc initLPoint4i*(copy: LVecBase3i, w: int): LPoint4i {.importcpp: "LPoint4i(#, #)".}
 
-proc initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i(#)".}
+converter initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i(#)".}
 
 proc initLPoint4i*(fill_value: int): LPoint4i {.importcpp: "LPoint4i(#)".}
 
@@ -49419,18 +49874,18 @@ proc `*`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix3f, other: LMatrix3f): LMatrix3f {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator *=(#)".} ## \
+proc `*=`*(this: var LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator *=(#)".} ## \
 ## Performs a memberwise scale.
 
-proc `/=`*(this: LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /=(#)".} ## \
+proc `/=`*(this: var LMatrix3f, scalar: float32): LMatrix3f {.importcpp: "#.operator /=(#)".} ## \
 ## Performs a memberwise scale.
 
 proc componentwiseMult*(this: LMatrix3f, other: LMatrix3f) {.importcpp: "#.componentwise_mult(#)".}
@@ -49494,35 +49949,35 @@ proc setScaleMat*(this: LMatrix3f, scale: LVecBase3f) {.importcpp: "#.set_scale_
 ## Fills mat with a matrix that applies the indicated scale in each of the
 ## three axes.
 
-proc translateMat*(_: typedesc[LMatrix3f], trans: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3f], trans: LVecBase2f): LMatrix3f {.importcpp: "#LMatrix3f::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix3f], tx: float32, ty: float32): LMatrix3f {.importcpp: "LMatrix3f::translate_mat(#, #)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3f], tx: float32, ty: float32): LMatrix3f {.importcpp: "#LMatrix3f::translate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32): LMatrix3f {.importcpp: "#LMatrix3f::rotate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "#LMatrix3f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase2f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase2f): LMatrix3f {.importcpp: "#LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], scale: LVecBase3f): LMatrix3f {.importcpp: "#LMatrix3f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32): LMatrix3f {.importcpp: "#LMatrix3f::scale_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32): LMatrix3f {.importcpp: "#LMatrix3f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
@@ -49536,12 +49991,12 @@ proc setRotateMatNormaxis*(this: LMatrix3f, angle: float32, axis: LVecBase3f) {.
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3f], angle: float32, axis: LVecBase3f): LMatrix3f {.importcpp: "#LMatrix3f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
@@ -49554,19 +50009,19 @@ proc setShearMat*(this: LMatrix3f, shear: LVecBase3f) {.importcpp: "#.set_shear_
 ## Fills mat with a matrix that applies the indicated shear in each of the
 ## three planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shear: LVecBase3f): LMatrix3f {.importcpp: "#LMatrix3f::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3f], shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "#LMatrix3f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
@@ -49576,19 +50031,19 @@ proc setScaleShearMat*(this: LMatrix3f, scale: LVecBase3f, shear: LVecBase3f, cs
 proc setScaleShearMat*(this: LMatrix3f, scale: LVecBase3f, shear: LVecBase3f) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], scale: LVecBase3f, shear: LVecBase3f): LMatrix3f {.importcpp: "#LMatrix3f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "LMatrix3f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix3f {.importcpp: "#LMatrix3f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc convertMat*(_: typedesc[LMatrix3f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3f {.importcpp: "LMatrix3f::convert_mat(#, #)", header: "lmatrix.h".} ## \
+proc convertMat*(_: typedesc[LMatrix3f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -49649,7 +50104,7 @@ proc invert*(a: LQuaternionf): LQuaternionf {.importcpp: "invert(#)".}
 
 proc initLMatrix4f*(): LMatrix4f {.importcpp: "LMatrix4f()".}
 
-proc initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".} ## \
+converter initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".} ## \
 ## Construct a 4x4 matrix given a 3x3 rotation matrix and an optional
 ## translation component.
 
@@ -49660,7 +50115,7 @@ proc initLMatrix4f*(other: LMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 proc initLMatrix4f*(param0: LVecBase4f, param1: LVecBase4f, param2: LVecBase4f, param3: LVecBase4f): LMatrix4f {.importcpp: "LMatrix4f(#, #, #, #)".} ## \
 ## Constructs the matrix from four individual rows.
 
-proc initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
+converter initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 
 proc initLMatrix4f*(param0: float32, param1: float32, param2: float32, param3: float32, param4: float32, param5: float32, param6: float32, param7: float32, param8: float32, param9: float32, param10: float32, param11: float32, param12: float32, param13: float32, param14: float32, param15: float32): LMatrix4f {.importcpp: "LMatrix4f(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -49816,17 +50271,17 @@ proc `*`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4f, other: LMatrix4f): LMatrix4f {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LMatrix4f, scalar: float32): LMatrix4f {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LMatrix4f, other: LMatrix4f) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -49907,67 +50362,67 @@ proc setScaleShearMat*(this: LMatrix4f, scale: LVecBase3f, shear: LVecBase3f, cs
 proc setScaleShearMat*(this: LMatrix4f, scale: LVecBase3f, shear: LVecBase3f) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc translateMat*(_: typedesc[LMatrix4f], trans: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4f], trans: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix4f], tx: float32, ty: float32, tz: float32): LMatrix4f {.importcpp: "LMatrix4f::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4f], tx: float32, ty: float32, tz: float32): LMatrix4f {.importcpp: "#LMatrix4f::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4f], angle: float32, axis: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc scaleMat*(_: typedesc[LMatrix4f], scale: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], scale: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix4f], scale: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], scale: float32): LMatrix4f {.importcpp: "#LMatrix4f::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated uniform scale.
 
-proc scaleMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32): LMatrix4f {.importcpp: "#LMatrix4f::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shear: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4f], shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "#LMatrix4f::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], scale: LVecBase3f, shear: LVecBase3f): LMatrix4f {.importcpp: "#LMatrix4f::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32, cs: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "LMatrix4f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4f], sx: float32, sy: float32, sz: float32, shxy: float32, shxz: float32, shyz: float32): LMatrix4f {.importcpp: "#LMatrix4f::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
 proc yToZUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::y_to_z_up_mat()", header: "lmatrix.h".} ## \
@@ -49978,7 +50433,7 @@ proc zToYUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::z_to
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc convertMat*(_: typedesc[LMatrix4f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4f {.importcpp: "LMatrix4f::convert_mat(#, #)", header: "lmatrix.h".} ## \
+proc convertMat*(_: typedesc[LMatrix4f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -50020,7 +50475,7 @@ converter getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatri
 
 proc initUnalignedLMatrix4f*(): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f()".}
 
-proc initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
+converter initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
 proc initUnalignedLMatrix4f*(copy: UnalignedLMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
@@ -50189,18 +50644,18 @@ proc `*`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix3d, other: LMatrix3d): LMatrix3d {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator *=(#)".} ## \
+proc `*=`*(this: var LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator *=(#)".} ## \
 ## Performs a memberwise scale.
 
-proc `/=`*(this: LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /=(#)".} ## \
+proc `/=`*(this: var LMatrix3d, scalar: float64): LMatrix3d {.importcpp: "#.operator /=(#)".} ## \
 ## Performs a memberwise scale.
 
 proc componentwiseMult*(this: LMatrix3d, other: LMatrix3d) {.importcpp: "#.componentwise_mult(#)".}
@@ -50264,35 +50719,35 @@ proc setScaleMat*(this: LMatrix3d, scale: LVecBase3d) {.importcpp: "#.set_scale_
 ## Fills mat with a matrix that applies the indicated scale in each of the
 ## three axes.
 
-proc translateMat*(_: typedesc[LMatrix3d], trans: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3d], trans: LVecBase2d): LMatrix3d {.importcpp: "#LMatrix3d::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix3d], tx: float64, ty: float64): LMatrix3d {.importcpp: "LMatrix3d::translate_mat(#, #)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix3d], tx: float64, ty: float64): LMatrix3d {.importcpp: "#LMatrix3d::translate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64): LMatrix3d {.importcpp: "#LMatrix3d::rotate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "#LMatrix3d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase2d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase2d): LMatrix3d {.importcpp: "#LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], scale: LVecBase3d): LMatrix3d {.importcpp: "#LMatrix3d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64): LMatrix3d {.importcpp: "#LMatrix3d::scale_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the two axes.
 
-proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64): LMatrix3d {.importcpp: "#LMatrix3d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
@@ -50306,12 +50761,12 @@ proc setRotateMatNormaxis*(this: LMatrix3d, angle: float64, axis: LVecBase3d) {.
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix3d], angle: float64, axis: LVecBase3d): LMatrix3d {.importcpp: "#LMatrix3d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## normalized.
@@ -50324,19 +50779,19 @@ proc setShearMat*(this: LMatrix3d, shear: LVecBase3d) {.importcpp: "#.set_shear_
 ## Fills mat with a matrix that applies the indicated shear in each of the
 ## three planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shear: LVecBase3d): LMatrix3d {.importcpp: "#LMatrix3d::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix3d], shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "#LMatrix3d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
@@ -50346,19 +50801,19 @@ proc setScaleShearMat*(this: LMatrix3d, scale: LVecBase3d, shear: LVecBase3d, cs
 proc setScaleShearMat*(this: LMatrix3d, scale: LVecBase3d, shear: LVecBase3d) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], scale: LVecBase3d, shear: LVecBase3d): LMatrix3d {.importcpp: "#LMatrix3d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "LMatrix3d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix3d {.importcpp: "#LMatrix3d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc convertMat*(_: typedesc[LMatrix3d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3d {.importcpp: "LMatrix3d::convert_mat(#, #)", header: "lmatrix.h".} ## \
+proc convertMat*(_: typedesc[LMatrix3d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -50399,7 +50854,7 @@ converter getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatri
 
 proc initLMatrix4d*(): LMatrix4d {.importcpp: "LMatrix4d()".}
 
-proc initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".} ## \
+converter initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".} ## \
 ## Construct a 4x4 matrix given a 3x3 rotation matrix and an optional
 ## translation component.
 
@@ -50410,7 +50865,7 @@ proc initLMatrix4d*(other: LMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 proc initLMatrix4d*(param0: LVecBase4d, param1: LVecBase4d, param2: LVecBase4d, param3: LVecBase4d): LMatrix4d {.importcpp: "LMatrix4d(#, #, #, #)".} ## \
 ## Constructs the matrix from four individual rows.
 
-proc initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
+converter initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 
 proc initLMatrix4d*(param0: float64, param1: float64, param2: float64, param3: float64, param4: float64, param5: float64, param6: float64, param7: float64, param8: float64, param9: float64, param10: float64, param11: float64, param12: float64, param13: float64, param14: float64, param15: float64): LMatrix4d {.importcpp: "LMatrix4d(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -50566,17 +51021,17 @@ proc `*`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator 
 
 proc `/`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /(#)".}
 
-proc `+=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator +=(#)".} ## \
+proc `+=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator +=(#)".} ## \
 ## Performs a memberwise addition between two matrices.
 
-proc `-=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator -=(#)".} ## \
+proc `-=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator -=(#)".} ## \
 ## Performs a memberwise subtraction between two matrices.
 
-proc `*=`*(this: LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4d, other: LMatrix4d): LMatrix4d {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator *=(#)".}
 
-proc `/=`*(this: LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LMatrix4d, scalar: float64): LMatrix4d {.importcpp: "#.operator /=(#)".}
 
 proc componentwiseMult*(this: LMatrix4d, other: LMatrix4d) {.importcpp: "#.componentwise_mult(#)".}
 
@@ -50657,67 +51112,67 @@ proc setScaleShearMat*(this: LMatrix4d, scale: LVecBase3d, shear: LVecBase3d, cs
 proc setScaleShearMat*(this: LMatrix4d, scale: LVecBase3d, shear: LVecBase3d) {.importcpp: "#.set_scale_shear_mat(#, #)".} ## \
 ## Fills mat with a matrix that applies the indicated scale and shear.
 
-proc translateMat*(_: typedesc[LMatrix4d], trans: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4d], trans: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::translate_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc translateMat*(_: typedesc[LMatrix4d], tx: float64, ty: float64, tz: float64): LMatrix4d {.importcpp: "LMatrix4d::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc translateMat*(_: typedesc[LMatrix4d], tx: float64, ty: float64, tz: float64): LMatrix4d {.importcpp: "#LMatrix4d::translate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated translation.
 
-proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::rotate_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
+proc rotateMat*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::rotate_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::rotate_mat_normaxis(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
+proc rotateMatNormaxis*(_: typedesc[LMatrix4d], angle: float64, axis: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::rotate_mat_normaxis(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that rotates by the given angle in degrees
 ## counterclockwise about the indicated vector.  Assumes axis has been
 ## prenormalized.
 
-proc scaleMat*(_: typedesc[LMatrix4d], scale: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], scale: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc scaleMat*(_: typedesc[LMatrix4d], scale: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], scale: float64): LMatrix4d {.importcpp: "#LMatrix4d::scale_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated uniform scale.
 
-proc scaleMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64): LMatrix4d {.importcpp: "#LMatrix4d::scale_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale in each of the three
 ## axes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shear: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::shear_mat(#)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::shear_mat(#, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc shearMat*(_: typedesc[LMatrix4d], shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "#LMatrix4d::shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated shear in each of the three
 ## planes.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::scale_shear_mat(#, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], scale: LVecBase3d, shear: LVecBase3d): LMatrix4d {.importcpp: "#LMatrix4d::scale_shear_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64, cs: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::scale_shear_mat(#, #, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
-proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "LMatrix4d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
+proc scaleShearMat*(_: typedesc[LMatrix4d], sx: float64, sy: float64, sz: float64, shxy: float64, shxz: float64, shyz: float64): LMatrix4d {.importcpp: "#LMatrix4d::scale_shear_mat(#, #, #, #, #, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that applies the indicated scale and shear.
 
 proc yToZUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::y_to_z_up_mat()", header: "lmatrix.h".} ## \
@@ -50728,7 +51183,7 @@ proc zToYUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::z_to
 ## Returns a matrix that transforms from the Y-up coordinate system to the
 ## Z-up coordinate system.
 
-proc convertMat*(_: typedesc[LMatrix4d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4d {.importcpp: "LMatrix4d::convert_mat(#, #)", header: "lmatrix.h".} ## \
+proc convertMat*(_: typedesc[LMatrix4d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::convert_mat(#, #)", header: "lmatrix.h".} ## \
 ## Returns a matrix that transforms from the indicated coordinate system to
 ## the indicated coordinate system.
 
@@ -50770,7 +51225,7 @@ converter getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatri
 
 proc initUnalignedLMatrix4d*(): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d()".}
 
-proc initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
+converter initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
 proc initUnalignedLMatrix4d*(copy: UnalignedLMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
@@ -50967,13 +51422,13 @@ proc initLQuaternionf*(): LQuaternionf {.importcpp: "LQuaternionf()".}
 
 proc initLQuaternionf*(param0: LQuaternionf): LQuaternionf {.importcpp: "LQuaternionf(#)".}
 
-proc initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf(#)".}
+converter initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf(#)".}
 
 proc initLQuaternionf*(r: float32, copy: LVecBase3f): LQuaternionf {.importcpp: "LQuaternionf(#, #)".}
 
 proc initLQuaternionf*(r: float32, i: float32, j: float32, k: float32): LQuaternionf {.importcpp: "LQuaternionf(#, #, #, #)".}
 
-proc pureImaginary*(_: typedesc[LQuaternionf], v: LVector3f): LQuaternionf {.importcpp: "LQuaternionf::pure_imaginary(#)", header: "lquaternion.h".}
+proc pureImaginary*(_: typedesc[LQuaternionf], v: LVector3f): LQuaternionf {.importcpp: "#LQuaternionf::pure_imaginary(#)", header: "lquaternion.h".}
 
 proc conjugate*(this: LQuaternionf): LQuaternionf {.importcpp: "#.conjugate()".} ## \
 ## Returns the complex conjugate of this quat.
@@ -51007,7 +51462,7 @@ proc `*`*(this: LQuaternionf, param0: LMatrix4f): LMatrix4f {.importcpp: "#.oper
 
 proc `/`*(this: LQuaternionf, scalar: float32): LQuaternionf {.importcpp: "#.operator /(#)".}
 
-proc `*=`*(this: LQuaternionf, param0: LQuaternionf): LQuaternionf {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LQuaternionf, param0: LQuaternionf): LQuaternionf {.importcpp: "#.operator *=(#)".}
 
 proc almostEqual*(this: LQuaternionf, other: LQuaternionf): bool {.importcpp: "#.almost_equal(#)".} ## \
 ## Returns true if two quaternions are memberwise equal within a default
@@ -51175,13 +51630,13 @@ proc initLQuaterniond*(): LQuaterniond {.importcpp: "LQuaterniond()".}
 
 proc initLQuaterniond*(param0: LQuaterniond): LQuaterniond {.importcpp: "LQuaterniond(#)".}
 
-proc initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond(#)".}
+converter initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond(#)".}
 
 proc initLQuaterniond*(r: float64, copy: LVecBase3d): LQuaterniond {.importcpp: "LQuaterniond(#, #)".}
 
 proc initLQuaterniond*(r: float64, i: float64, j: float64, k: float64): LQuaterniond {.importcpp: "LQuaterniond(#, #, #, #)".}
 
-proc pureImaginary*(_: typedesc[LQuaterniond], v: LVector3d): LQuaterniond {.importcpp: "LQuaterniond::pure_imaginary(#)", header: "lquaternion.h".}
+proc pureImaginary*(_: typedesc[LQuaterniond], v: LVector3d): LQuaterniond {.importcpp: "#LQuaterniond::pure_imaginary(#)", header: "lquaternion.h".}
 
 proc conjugate*(this: LQuaterniond): LQuaterniond {.importcpp: "#.conjugate()".} ## \
 ## Returns the complex conjugate of this quat.
@@ -51215,7 +51670,7 @@ proc `*`*(this: LQuaterniond, param0: LMatrix4d): LMatrix4d {.importcpp: "#.oper
 
 proc `/`*(this: LQuaterniond, scalar: float64): LQuaterniond {.importcpp: "#.operator /(#)".}
 
-proc `*=`*(this: LQuaterniond, param0: LQuaterniond): LQuaterniond {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LQuaterniond, param0: LQuaterniond): LQuaterniond {.importcpp: "#.operator *=(#)".}
 
 proc almostEqual*(this: LQuaterniond, other: LQuaterniond): bool {.importcpp: "#.almost_equal(#)".} ## \
 ## Returns true if two quaternions are memberwise equal within a default
@@ -51381,17 +51836,17 @@ converter getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQu
 
 proc initLRotationf*(): LRotationf {.importcpp: "LRotationf()".}
 
-proc initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".} ## \
+converter initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".} ## \
 ## lmatrix3
 
-proc initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".} ## \
+converter initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".} ## \
 ## lmatrix4
 
-proc initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
+converter initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
 
 proc initLRotationf*(param0: LRotationf): LRotationf {.importcpp: "LRotationf(#)".}
 
-proc initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf(#)".}
+converter initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf(#)".}
 
 proc initLRotationf*(axis: LVector3f, angle: float32): LRotationf {.importcpp: "LRotationf(#, #)".} ## \
 ## axis + angle (in degrees)
@@ -51413,17 +51868,17 @@ converter getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRota
 
 proc initLRotationd*(): LRotationd {.importcpp: "LRotationd()".}
 
-proc initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".} ## \
+converter initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".} ## \
 ## lmatrix3
 
-proc initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".} ## \
+converter initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".} ## \
 ## lmatrix4
 
-proc initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
+converter initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
 
 proc initLRotationd*(param0: LRotationd): LRotationd {.importcpp: "LRotationd(#)".}
 
-proc initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd(#)".}
+converter initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd(#)".}
 
 proc initLRotationd*(axis: LVector3d, angle: float64): LRotationd {.importcpp: "LRotationd(#, #)".} ## \
 ## axis + angle (in degrees)
@@ -51445,15 +51900,15 @@ converter getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRota
 
 proc initLOrientationf*(): LOrientationf {.importcpp: "LOrientationf()".}
 
-proc initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
+converter initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
 ## matrix3
 
-proc initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
+converter initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".} ## \
 ## matrix4
 
 proc initLOrientationf*(param0: LOrientationf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
-proc initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
+converter initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
 proc initLOrientationf*(point_at: LVector3f, twist: float32): LOrientationf {.importcpp: "LOrientationf(#, #)".} ## \
 ## vector + twist
@@ -51468,15 +51923,15 @@ converter getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LO
 
 proc initLOrientationd*(): LOrientationd {.importcpp: "LOrientationd()".}
 
-proc initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
+converter initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
 ## matrix3
 
-proc initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
+converter initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".} ## \
 ## matrix4
 
 proc initLOrientationd*(param0: LOrientationd): LOrientationd {.importcpp: "LOrientationd(#)".}
 
-proc initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
+converter initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
 
 proc initLOrientationd*(point_at: LVector3d, twist: float64): LOrientationd {.importcpp: "LOrientationd(#, #)".} ## \
 ## vector + twist
@@ -51702,7 +52157,7 @@ proc initLPlanef*(a: LPoint3f, b: LPoint3f, c: LPoint3f): LPlanef {.importcpp: "
 ## front of the plane (that is, viewed from the end of the normal vector,
 ## looking down).
 
-proc initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef(#)".}
+converter initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef(#)".}
 
 proc initLPlanef*(normal: LVector3f, point: LPoint3f): LPlanef {.importcpp: "LPlanef(#, #)".} ## \
 ## Constructs a plane given a surface normal vector and a point within the
@@ -51715,7 +52170,7 @@ proc `*`*(this: LPlanef, mat: LMatrix3f): LPlanef {.importcpp: "#.operator *(#)"
 
 proc `*`*(this: LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *(#)".}
 
-proc `*=`*(this: LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LPlanef, mat: LMatrix4f): LPlanef {.importcpp: "#.operator *=(#)".}
 
 proc xform*(this: LPlanef, mat: LMatrix4f) {.importcpp: "#.xform(#)".} ## \
 ## Transforms the plane by the indicated matrix.
@@ -51785,7 +52240,7 @@ proc initLPlaned*(a: LPoint3d, b: LPoint3d, c: LPoint3d): LPlaned {.importcpp: "
 ## front of the plane (that is, viewed from the end of the normal vector,
 ## looking down).
 
-proc initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned(#)".}
+converter initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned(#)".}
 
 proc initLPlaned*(normal: LVector3d, point: LPoint3d): LPlaned {.importcpp: "LPlaned(#, #)".} ## \
 ## Constructs a plane given a surface normal vector and a point within the
@@ -51798,7 +52253,7 @@ proc `*`*(this: LPlaned, mat: LMatrix3d): LPlaned {.importcpp: "#.operator *(#)"
 
 proc `*`*(this: LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *(#)".}
 
-proc `*=`*(this: LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LPlaned, mat: LMatrix4d): LPlaned {.importcpp: "#.operator *=(#)".}
 
 proc xform*(this: LPlaned, mat: LMatrix4d) {.importcpp: "#.xform(#)".} ## \
 ## Transforms the plane by the indicated matrix.
@@ -51987,7 +52442,7 @@ proc newIntersectionBoundingVolume*(): IntersectionBoundingVolume {.importcpp: "
 proc getNumComponents*(this: IntersectionBoundingVolume): int {.importcpp: "#->get_num_components()".} ## \
 ## Returns the number of components in the intersection.
 
-proc getComponent*(this: IntersectionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "#->get_component(#)".} ## \
+proc getComponent*(this: IntersectionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "deconstify(#->get_component(#))", header: deconstifyCode.} ## \
 ## Returns the nth component in the intersection.
 
 proc clearComponents*(this: IntersectionBoundingVolume) {.importcpp: "#->clear_components()".} ## \
@@ -52116,7 +52571,7 @@ proc newUnionBoundingVolume*(): UnionBoundingVolume {.importcpp: "new UnionBound
 proc getNumComponents*(this: UnionBoundingVolume): int {.importcpp: "#->get_num_components()".} ## \
 ## Returns the number of components in the union.
 
-proc getComponent*(this: UnionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "#->get_component(#)".} ## \
+proc getComponent*(this: UnionBoundingVolume, n: int): GeometricBoundingVolume {.importcpp: "deconstify(#->get_component(#))", header: deconstifyCode.} ## \
 ## Returns the nth component in the union.
 
 proc clearComponents*(this: UnionBoundingVolume) {.importcpp: "#->clear_components()".} ## \
@@ -53025,7 +53480,7 @@ converter getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcp
 
 converter upcastToPiecewiseCurve*(this: NurbsCurve): PiecewiseCurve {.importcpp: "(PT(PiecewiseCurve)(#))".}
 
-converter upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(#.p()))".}
+converter upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(NurbsCurve *)(#))".}
 
 proc newNurbsCurve*(): NurbsCurve {.importcpp: "new NurbsCurve()".}
 
@@ -53643,11 +54098,11 @@ proc `-`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator -(#)".}
 
 proc `*`*(this: pixel, mult: float64): pixel {.importcpp: "#.operator *(#)".}
 
-proc `+=`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var pixel, other: pixel): pixel {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var pixel, other: pixel): pixel {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: pixel, mult: float64): pixel {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var pixel, mult: float64): pixel {.importcpp: "#.operator *=(#)".}
 
 proc `==`*(this: pixel, other: pixel): bool {.importcpp: "#.operator ==(#)".}
 
@@ -53689,7 +54144,7 @@ proc getSuggestedExtension*(this: PNMFileType): string {.importcpp: "nimStringFr
 ## Returns a suitable filename extension (without a leading dot) to suggest
 ## for files of this type, or empty string if no suggestions are available.
 
-converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pNMFileType.h".}
+converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pnmFileType.h".}
 
 proc getNumTypes*(this: PNMFileTypeRegistry): int {.importcpp: "#.get_num_types()".} ## \
 ## Returns the total number of types registered.
@@ -53721,7 +54176,7 @@ proc write*(this: PNMFileTypeRegistry, `out`: ostream) {.importcpp: "#.write(#)"
 ## Writes a list of supported image file types to the indicated output stream,
 ## one per line.
 
-proc getGlobalPtr*(_: typedesc[PNMFileTypeRegistry]): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry::get_global_ptr()", header: "pNMFileTypeRegistry.h".} ## \
+proc getGlobalPtr*(_: typedesc[PNMFileTypeRegistry]): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry::get_global_ptr()", header: "pnmFileTypeRegistry.h".} ## \
 ## Returns a pointer to the global PNMFileTypeRegistry object.
 
 proc initPNMFileTypeRegistry*(param0: PNMFileTypeRegistry): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry(#)".}
@@ -54431,7 +54886,7 @@ proc divideSubImage*(this: PfmFile, copy: PfmFile, xto: int, yto: int) {.importc
 ## pixels of the destination, after scaling by the specified pixel_scale.
 ## dest(x, y) = dest(x, y) / (copy(x, y) \* pixel_scale).
 
-proc `*=`*(this: PfmFile, multiplier: float32): PfmFile {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PfmFile, multiplier: float32): PfmFile {.importcpp: "#.operator *=(#)".}
 
 proc indirect1dLookup*(this: PfmFile, index_image: PfmFile, channel: int, pixel_values: PfmFile) {.importcpp: "#.indirect_1d_lookup(#, #, #)".} ## \
 ## index_image is a WxH 1-channel image, while pixel_values is an Nx1
@@ -54478,19 +54933,19 @@ proc applyExponent*(this: PfmFile, c0_exponent: float32, c1_exponent: float32, c
 
 proc output*(this: PfmFile, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc makeTransparent*(_: typedesc[PNMBrush]): PNMBrush {.importcpp: "PNMBrush::make_transparent()", header: "pNMBrush.h".} ## \
+proc makeTransparent*(_: typedesc[PNMBrush]): PNMBrush {.importcpp: "PNMBrush::make_transparent()", header: "pnmBrush.h".} ## \
 ## Returns a new brush that does not paint anything.  Can be used as either a
 ## pen or a fill brush to make borderless or unfilled shapes, respectively.
 
-proc makePixel*(_: typedesc[PNMBrush], color: LColorf): PNMBrush {.importcpp: "PNMBrush::make_pixel(#)", header: "pNMBrush.h".} ## \
+proc makePixel*(_: typedesc[PNMBrush], color: LColorf): PNMBrush {.importcpp: "#PNMBrush::make_pixel(#)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a single pixel of the indicated color on a
 ## border, or paints a solid color in an interior.
 
-proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool): PNMBrush {.importcpp: "PNMBrush::make_spot(#, #, #)", header: "pNMBrush.h".} ## \
+proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool): PNMBrush {.importcpp: "#PNMBrush::make_spot(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a spot of the indicated color and radius.
 ## If fuzzy is true, the spot is fuzzy; otherwise, it is hard-edged.
 
-proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32): PNMBrush {.importcpp: "PNMBrush::make_image(#, #, #)", header: "pNMBrush.h".} ## \
+proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32): PNMBrush {.importcpp: "#PNMBrush::make_image(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints with the indicated image.  xc and yc
 ## indicate the pixel in the center of the brush.
 ##
@@ -55556,19 +56011,19 @@ proc `*`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *(
 
 proc `*`*(this: PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *(#)".}
 
-proc `+=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator +=(#)".}
 
-proc `+=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator +=(#)".}
 
-proc `-=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator -=(#)".}
 
-proc `-=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator -=(#)".}
 
-proc `*=`*(this: PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, other: LColorf): PNMImage {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, other: PNMImage): PNMImage {.importcpp: "#.operator *=(#)".}
 
-proc `*=`*(this: PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var PNMImage, multiplier: float32): PNMImage {.importcpp: "#.operator *=(#)".}
 
 proc initPNMPainter*(image: PNMImage, xo: int, yo: int): PNMPainter {.importcpp: "PNMPainter(#, #, #)".} ## \
 ## The constructor stores a pointer to the PNMImage you pass it, but it does
@@ -55656,7 +56111,7 @@ proc getQuad*(this: TextGlyph, dimensions: LVecBase4, texcoords: LVecBase4): boo
 ##
 ## The order of the components is left, bottom, right, top.
 
-proc getState*(this: TextGlyph): RenderState {.importcpp: "#->get_state()".} ## \
+proc getState*(this: TextGlyph): RenderState {.importcpp: "deconstify(#->get_state())", header: deconstifyCode.} ## \
 ## Returns the state in which the glyph should be rendered.
 
 proc getAdvance*(this: TextGlyph): float32 {.importcpp: "#->get_advance()".} ## \
@@ -55672,7 +56127,7 @@ converter getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGl
 
 converter upcastToTypedReferenceCount*(this: TextFont): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(TextFont *)(#))".}
 
 proc makeCopy*(this: TextFont): TextFont {.importcpp: "#->make_copy()".}
 
@@ -55693,7 +56148,7 @@ proc getSpaceAdvance*(this: TextFont): float32 {.importcpp: "#->get_space_advanc
 proc setSpaceAdvance*(this: TextFont, space_advance: float32) {.importcpp: "#->set_space_advance(#)".} ## \
 ## Changes the number of units wide a space is.
 
-proc getGlyph*(this: TextFont, character: int): TextGlyph {.importcpp: "#->get_glyph(#)".} ## \
+proc getGlyph*(this: TextFont, character: int): TextGlyph {.importcpp: "deconstify(#->get_glyph(#))", header: deconstifyCode.} ## \
 ## Gets the glyph associated with the given character code, as well as an
 ## optional scaling parameter that should be applied to the glyph's geometry
 ## and advance parameters.  Returns the glyph on success.  On failure, it may
@@ -55768,7 +56223,7 @@ converter getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: 
 
 converter upcastToTextFont*(this: DynamicTextFont): TextFont {.importcpp: "(PT(TextFont)(#))".}
 
-converter upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(#.p()))".}
+converter upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(DynamicTextFont *)(#))".}
 
 proc newDynamicTextFont*(copy: DynamicTextFont): DynamicTextFont {.importcpp: "new DynamicTextFont(#)".}
 
@@ -55997,26 +56452,26 @@ proc write*(this: DynamicTextFont, `out`: ostream, indent_level: int) {.importcp
 
 converter getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
 
-proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::has_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
+proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "#FontPool::has_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Returns true if the font has ever been loaded, false otherwise.
 
-proc verifyFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "FontPool::verify_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
+proc verifyFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "#FontPool::verify_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Loads the given filename up into a font, if it has not already been loaded,
 ## and returns true to indicate success, or false to indicate failure.  If
 ## this returns true, it is guaranteed that a subsequent call to load_font()
 ## with the same font name will return a valid Font pointer.
 
-proc loadFont*(_: typedesc[FontPool], filename: string): TextFont {.importcpp: "FontPool::load_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
+proc loadFont*(_: typedesc[FontPool], filename: string): TextFont {.importcpp: "#FontPool::load_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Loads the given filename up into a font, if it has not already been loaded,
 ## and returns the new font.  If a font with the same filename was previously
 ## loaded, returns that one instead.  If the font file cannot be found,
 ## returns NULL.
 
-proc addFont*(_: typedesc[FontPool], filename: string, font: TextFont) {.importcpp: "FontPool::add_font(nimStringToStdString(#), #)", header: "fontPool.h".} ## \
+proc addFont*(_: typedesc[FontPool], filename: string, font: TextFont) {.importcpp: "#FontPool::add_font(nimStringToStdString(#), #)", header: "fontPool.h".} ## \
 ## Adds the indicated already-loaded font to the pool.  The font will always
 ## replace any previously-loaded font in the pool that had the same filename.
 
-proc releaseFont*(_: typedesc[FontPool], filename: string) {.importcpp: "FontPool::release_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
+proc releaseFont*(_: typedesc[FontPool], filename: string) {.importcpp: "#FontPool::release_font(nimStringToStdString(#))", header: "fontPool.h".} ## \
 ## Removes the indicated font from the pool, indicating it will never be
 ## loaded again; the font may then be freed.  If this function is never
 ## called, a reference count will be maintained on every font every loaded,
@@ -56030,10 +56485,10 @@ proc garbageCollect*(_: typedesc[FontPool]): int {.importcpp: "FontPool::garbage
 ## exactly 1; i.e.  only those fonts that are not being used outside of the
 ## pool.  Returns the number of fonts released.
 
-proc listContents*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "FontPool::list_contents(#)", header: "fontPool.h".} ## \
+proc listContents*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "#FontPool::list_contents(#)", header: "fontPool.h".} ## \
 ## Lists the contents of the font pool to the indicated output stream.
 
-proc write*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "FontPool::write(#)", header: "fontPool.h".} ## \
+proc write*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "#FontPool::write(#)", header: "fontPool.h".} ## \
 ## Lists the contents of the font pool to the indicated output stream.
 
 converter getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
@@ -56071,7 +56526,7 @@ proc clear*(this: TextProperties) {.importcpp: "#.clear()".} ## \
 proc isAnySpecified*(this: TextProperties): bool {.importcpp: "#.is_any_specified()".} ## \
 ## Returns true if any properties have been specified, false otherwise.
 
-proc setDefaultFont*(_: typedesc[TextProperties], param0: TextFont) {.importcpp: "TextProperties::set_default_font(#)", header: "textProperties.h".} ## \
+proc setDefaultFont*(_: typedesc[TextProperties], param0: TextFont) {.importcpp: "#TextProperties::set_default_font(#)", header: "textProperties.h".} ## \
 ## Specifies the default font to be used for any TextNode whose font is
 ## uninitialized or NULL.  See set_font().
 
@@ -56668,17 +57123,17 @@ proc getLr*(this: TextAssembler): LVector2 {.importcpp: "#.get_lr()".} ## \
 ## Returns the lower-right corner of the assembled text, in 2-d text
 ## coordinates.
 
-proc calcWidth*(_: typedesc[TextAssembler], graphic: TextGraphic, properties: TextProperties): float32 {.importcpp: "TextAssembler::calc_width(#, #)", header: "textAssembler.h".} ## \
+proc calcWidth*(_: typedesc[TextAssembler], graphic: TextGraphic, properties: TextProperties): float32 {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".} ## \
 ## Returns the width of a single TextGraphic image.
 
-proc calcWidth*(_: typedesc[TextAssembler], character: int, properties: TextProperties): float32 {.importcpp: "TextAssembler::calc_width(#, #)", header: "textAssembler.h".} ## \
+proc calcWidth*(_: typedesc[TextAssembler], character: int, properties: TextProperties): float32 {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".} ## \
 ## Returns the width of a single character, according to its associated font.
 ## This also correctly calculates the width of cheesy ligatures and accented
 ## characters, which may not exist in the font as such.
 ##
 ## This does not take kerning into account, however.
 
-proc hasExactCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "TextAssembler::has_exact_character(#, #)", header: "textAssembler.h".} ## \
+proc hasExactCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "#TextAssembler::has_exact_character(#, #)", header: "textAssembler.h".} ## \
 ## Returns true if the named character exists in the font exactly as named,
 ## false otherwise.  Note that because Panda can assemble glyphs together
 ## automatically using cheesy accent marks, this is not a reliable indicator
@@ -56690,7 +57145,7 @@ proc hasExactCharacter*(_: typedesc[TextAssembler], character: int, properties: 
 ## the "invalid glyph".  It also returns false for characters that would be
 ## synthesized within Panda, but see has_character().
 
-proc hasCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "TextAssembler::has_character(#, #)", header: "textAssembler.h".} ## \
+proc hasCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "#TextAssembler::has_character(#, #)", header: "textAssembler.h".} ## \
 ## Returns true if the named character exists in the font or can be
 ## synthesized by Panda, false otherwise.  (Panda can synthesize some accented
 ## characters by combining similar-looking glyphs from the font.)
@@ -56699,7 +57154,7 @@ proc hasCharacter*(_: typedesc[TextAssembler], character: int, properties: TextP
 ## exist in the font), but returns false for characters that would render with
 ## the "invalid glyph".
 
-proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "TextAssembler::is_whitespace(#, #)", header: "textAssembler.h".} ## \
+proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextProperties): bool {.importcpp: "#TextAssembler::is_whitespace(#, #)", header: "textAssembler.h".} ## \
 ## Returns true if the indicated character represents whitespace in the font,
 ## or false if anything visible will be rendered for it.
 ##
@@ -56715,9 +57170,9 @@ proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextP
 
 converter upcastToPandaNode*(this: TextNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
-converter upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(#.p()))".}
+converter upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(TextNode *)(#))".}
 
-converter upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(#.p()))".}
+converter upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(TextNode *)(#))".}
 
 proc newTextNode*(name: string): TextNode {.importcpp: "new TextNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -57685,7 +58140,7 @@ converter getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "M
 
 converter upcastToTypedWritableReferenceCount*(this: MouseWatcherRegion): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(#.p()))".}
+converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
 
 proc newMouseWatcherRegion*(param0: MouseWatcherRegion): MouseWatcherRegion {.importcpp: "new MouseWatcherRegion(#)".}
 
@@ -57808,7 +58263,7 @@ proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#->update_regions()".}
 
 converter getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(#.p()))".}
+converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcherGroup *)(#))".}
 
 converter upcastToReferenceCount*(this: MouseWatcherGroup): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -57816,7 +58271,7 @@ converter getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp:
 
 converter upcastToDataNode*(this: MouseWatcher): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(#.p()))".}
+converter upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcher *)(#))".}
 
 proc newMouseWatcher*(name: string): MouseWatcher {.importcpp: "new MouseWatcher(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -58098,7 +58553,7 @@ proc getInactivityTimeoutEvent*(this: MouseWatcher): string {.importcpp: "nimStr
 ## Returns the event string that will be generated when the inactivity timeout
 ## counter expires.  See set_inactivity_timeout().
 
-proc getTrailLog*(this: MouseWatcher): PointerEventList {.importcpp: "#->get_trail_log()".} ## \
+proc getTrailLog*(this: MouseWatcher): PointerEventList {.importcpp: "deconstify(#->get_trail_log())", header: deconstifyCode.} ## \
 ## Obtain the mouse trail log.  This is a PointerEventList.  Does not make a
 ## copy, therefore, this PointerEventList will be updated each time
 ## process_events gets called.
@@ -58327,7 +58782,7 @@ proc getNode*(this: Transform2SG): PandaNode {.importcpp: "#->get_node()".} ## \
 ## Returns the node that this object will adjust, or NULL if the node has not
 ## yet been set.
 
-converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2SG.h".}
+converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2sg.h".}
 
 proc play*(this: AnimInterface) {.importcpp: "#->play()".} ## \
 ## Runs the entire animation from beginning to end and stops.
@@ -58486,26 +58941,26 @@ proc getSeq*(this: UpdateSeq): int {.importcpp: "#.get_seq()".} ## \
 
 proc output*(this: UpdateSeq, `out`: ostream) {.importcpp: "#.output(#)".}
 
-proc fillin*(this: TypedWritable, scan: DatagramIterator, manager: BamReader) {.importcpp: "#.fillin(#, #)".} ## \
+proc fillin*(this: TypedWritable, scan: DatagramIterator, manager: BamReader) {.importcpp: "#->fillin(#, #)".} ## \
 ## This internal function is intended to be called by each class's
 ## make_from_bam() method to read in all of the relevant data from the BamFile
 ## for the new object.  It is also called directly by the BamReader to re-read
 ## the data for an object that has been placed on the stream for an update.
 
-proc markBamModified*(this: TypedWritable) {.importcpp: "#.mark_bam_modified()".} ## \
+proc markBamModified*(this: TypedWritable) {.importcpp: "#->mark_bam_modified()".} ## \
 ## Increments the bam_modified counter, so that this object will be
 ## invalidated and retransmitted on any open bam streams.  This should
 ## normally not need to be called by user code; it should be called internally
 ## when the object has been changed in a way that legitimately requires its
 ## retransmission to any connected clients.
 
-proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#.get_bam_modified()".} ## \
+proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#->get_bam_modified()".} ## \
 ## Returns the current bam_modified counter.  This counter is normally
 ## incremented automatically whenever the object is modified.
 
 converter getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
 
-converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(#.p()))".}
+converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(TypedWritableReferenceCount *)(#))".}
 
 converter upcastToReferenceCount*(this: TypedWritableReferenceCount): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
@@ -58530,12 +58985,12 @@ proc getCacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cach
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-proc getSourceTimestamp*(this: BamCacheRecord): int {.importcpp: "#->get_source_timestamp()".} ## \
+proc getSourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-proc getRecordedTime*(this: BamCacheRecord): int {.importcpp: "#->get_recorded_time()".} ## \
+proc getRecordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 proc getNumDependentFiles*(this: BamCacheRecord): int {.importcpp: "#->get_num_dependent_files()".} ## \
@@ -58977,13 +59432,433 @@ proc setRootNode*(this: BamWriter, root_node: TypedWritable) {.importcpp: "#.set
 ## Sets the root node of the part of the scene graph we are currently writing
 ## out.  NodePaths written to this bam file will be relative to this node.
 
+proc initBitMask16*(): BitMask16 {.importcpp: "BitMask16()".}
+
+proc initBitMask16*(param0: BitMask[uint16, 16]): BitMask16 {.importcpp: "BitMask16(#)".}
+
+converter initBitMask16*(init_value: int): BitMask16 {.importcpp: "BitMask16(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint16, 16]], on_bits: int): BitMask16 {.importcpp: "#BitMask< uint16_t, 16 >::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint16, 16]], index: int): BitMask16 {.importcpp: "#BitMask< uint16_t, 16 >::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint16, 16]], low_bit: int, size: int): BitMask16 {.importcpp: "#BitMask< uint16_t, 16 >::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): bool {.importcpp: "BitMask< uint16_t, 16 >::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): int {.importcpp: "BitMask< uint16_t, 16 >::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint16, 16], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint16, 16], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint16, 16], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint16, 16], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint16, 16]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint16, 16]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint16, 16], low_bit: int, size: int): int {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint16, 16], value: int, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint16, 16], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint16, 16], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint16, 16], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint16, 16], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint16, 16], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint16, 16], value: int) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint16, 16], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint16, 16]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint16, 16], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint16, 16], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint16, 16], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint16, 16], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: var BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: var BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: var BitMask[uint16, 16], shift: int): BitMask16 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint16, 16]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint16, 16], index: int): BitMask16 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): BitMask16 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint16, 16], index: int): BitMask16 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask< uint16_t, 16 >::get_class_type()", header: "bitMask.h".}
+
+proc initBitMask32*(): BitMask32 {.importcpp: "BitMask32()".}
+
+proc initBitMask32*(param0: BitMask[uint32, 32]): BitMask32 {.importcpp: "BitMask32(#)".}
+
+converter initBitMask32*(init_value: int): BitMask32 {.importcpp: "BitMask32(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint32, 32]], on_bits: int): BitMask32 {.importcpp: "#BitMask< uint32_t, 32 >::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint32, 32]], index: int): BitMask32 {.importcpp: "#BitMask< uint32_t, 32 >::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint32, 32]], low_bit: int, size: int): BitMask32 {.importcpp: "#BitMask< uint32_t, 32 >::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): bool {.importcpp: "BitMask< uint32_t, 32 >::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): int {.importcpp: "BitMask< uint32_t, 32 >::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint32, 32], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint32, 32], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint32, 32], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint32, 32], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint32, 32]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint32, 32]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint32, 32], low_bit: int, size: int): int {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint32, 32], value: int, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint32, 32], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint32, 32], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint32, 32], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint32, 32], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint32, 32], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint32, 32], value: int) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint32, 32], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint32, 32]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint32, 32], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint32, 32], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint32, 32], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint32, 32], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: var BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: var BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: var BitMask[uint32, 32], shift: int): BitMask32 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint32, 32]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint32, 32], index: int): BitMask32 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32], other: BitMask[uint32, 32]): BitMask32 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint32, 32], index: int): BitMask32 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask< uint32_t, 32 >::get_class_type()", header: "bitMask.h".}
+
+proc initBitMask64*(): BitMask64 {.importcpp: "BitMask64()".}
+
+proc initBitMask64*(param0: BitMask[uint64, 64]): BitMask64 {.importcpp: "BitMask64(#)".}
+
+converter initBitMask64*(init_value: clonglong): BitMask64 {.importcpp: "BitMask64(#)".}
+
+proc allOn*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::all_on()", header: "bitMask.h".}
+
+proc allOff*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::all_off()", header: "bitMask.h".}
+
+proc lowerOn*(_: typedesc[BitMask[uint64, 64]], on_bits: int): BitMask64 {.importcpp: "#BitMask< uint64_t, 64 >::lower_on(#)", header: "bitMask.h".}
+
+proc bit*(_: typedesc[BitMask[uint64, 64]], index: int): BitMask64 {.importcpp: "#BitMask< uint64_t, 64 >::bit(#)", header: "bitMask.h".}
+
+proc range*(_: typedesc[BitMask[uint64, 64]], low_bit: int, size: int): BitMask64 {.importcpp: "#BitMask< uint64_t, 64 >::range(#, #)", header: "bitMask.h".}
+
+proc hasMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): bool {.importcpp: "BitMask< uint64_t, 64 >::has_max_num_bits()", header: "bitMask.h".}
+
+proc getMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): int {.importcpp: "BitMask< uint64_t, 64 >::get_max_num_bits()", header: "bitMask.h".}
+
+proc getNumBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_bits()".}
+
+proc getBit*(this: BitMask[uint64, 64], index: int): bool {.importcpp: "#.get_bit(#)".}
+
+proc setBit*(this: BitMask[uint64, 64], index: int) {.importcpp: "#.set_bit(#)".}
+
+proc clearBit*(this: BitMask[uint64, 64], index: int) {.importcpp: "#.clear_bit(#)".}
+
+proc setBitTo*(this: BitMask[uint64, 64], index: int, value: bool) {.importcpp: "#.set_bit_to(#, #)".}
+
+proc isZero*(this: BitMask[uint64, 64]): bool {.importcpp: "#.is_zero()".}
+
+proc isAllOn*(this: BitMask[uint64, 64]): bool {.importcpp: "#.is_all_on()".}
+
+proc extract*(this: BitMask[uint64, 64], low_bit: int, size: int): clonglong {.importcpp: "#.extract(#, #)".}
+
+proc store*(this: BitMask[uint64, 64], value: clonglong, low_bit: int, size: int) {.importcpp: "#.store(#, #, #)".}
+
+proc hasAnyOf*(this: BitMask[uint64, 64], low_bit: int, size: int): bool {.importcpp: "#.has_any_of(#, #)".}
+
+proc hasAllOf*(this: BitMask[uint64, 64], low_bit: int, size: int): bool {.importcpp: "#.has_all_of(#, #)".}
+
+proc setRange*(this: BitMask[uint64, 64], low_bit: int, size: int) {.importcpp: "#.set_range(#, #)".}
+
+proc clearRange*(this: BitMask[uint64, 64], low_bit: int, size: int) {.importcpp: "#.clear_range(#, #)".}
+
+proc setRangeTo*(this: BitMask[uint64, 64], value: bool, low_bit: int, size: int) {.importcpp: "#.set_range_to(#, #, #)".}
+
+proc getWord*(this: BitMask[uint64, 64]): clonglong {.importcpp: "#.get_word()".}
+
+proc setWord*(this: BitMask[uint64, 64], value: clonglong) {.importcpp: "#.set_word(#)".}
+
+proc getNumOnBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_on_bits()".}
+
+proc getNumOffBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_off_bits()".}
+
+proc getLowestOnBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_lowest_on_bit()".}
+
+proc getLowestOffBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_lowest_off_bit()".}
+
+proc getHighestOnBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_highest_on_bit()".}
+
+proc getHighestOffBit*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_highest_off_bit()".}
+
+proc getNextHigherDifferentBit*(this: BitMask[uint64, 64], low_bit: int): int {.importcpp: "#.get_next_higher_different_bit(#)".}
+
+proc invertInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.invert_in_place()".}
+
+proc hasBitsInCommon*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.has_bits_in_common(#)".}
+
+proc clear*(this: BitMask[uint64, 64]) {.importcpp: "#.clear()".}
+
+proc output*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc outputBinary*(this: BitMask[uint64, 64], `out`: ostream, spaces_every: int) {.importcpp: "#.output_binary(#, #)".}
+
+proc outputBinary*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output_binary(#)".}
+
+proc outputHex*(this: BitMask[uint64, 64], `out`: ostream, spaces_every: int) {.importcpp: "#.output_hex(#, #)".}
+
+proc outputHex*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.output_hex(#)".}
+
+proc write*(this: BitMask[uint64, 64], `out`: ostream, indent_level: int) {.importcpp: "#.write(#, #)".}
+
+proc write*(this: BitMask[uint64, 64], `out`: ostream) {.importcpp: "#.write(#)".}
+
+proc `==`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator ==(#)".}
+
+proc `!=`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator !=(#)".}
+
+proc `<`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): bool {.importcpp: "#.operator <(#)".}
+
+proc compareTo*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): int {.importcpp: "#.compare_to(#)".}
+
+proc `&`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &(#)".}
+
+proc `|`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |(#)".}
+
+proc `^`*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^(#)".}
+
+proc `~`*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ~()".}
+
+proc `<<`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<(#)".}
+
+proc `>>`*(this: BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>(#)".}
+
+proc `&=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator &=(#)".}
+
+proc `|=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator |=(#)".}
+
+proc `^=`*(this: var BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.operator ^=(#)".}
+
+proc `<<=`*(this: var BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator <<=(#)".}
+
+proc `>>=`*(this: var BitMask[uint64, 64], shift: int): BitMask64 {.importcpp: "#.operator >>=(#)".}
+
+proc floodDownInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.flood_down_in_place()".}
+
+proc floodUpInPlace*(this: BitMask[uint64, 64]) {.importcpp: "#.flood_up_in_place()".}
+
+proc floodBitsDown*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.flood_bits_down()".}
+
+proc floodBitsUp*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.flood_bits_up()".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_highest_bit()".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextHighestBit*(this: BitMask[uint64, 64], index: int): BitMask64 {.importcpp: "#.keep_next_highest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_lowest_bit()".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64], other: BitMask[uint64, 64]): BitMask64 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc keepNextLowestBit*(this: BitMask[uint64, 64], index: int): BitMask64 {.importcpp: "#.keep_next_lowest_bit(#)".}
+
+proc getKey*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_key()".}
+
+converter getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask< uint64_t, 64 >::get_class_type()", header: "bitMask.h".}
+
 proc initBitArray*(): BitArray {.importcpp: "BitArray()".}
 
 proc initBitArray*(param0: BitArray): BitArray {.importcpp: "BitArray(#)".}
 
-proc initBitArray*(init_value: clonglong): BitArray {.importcpp: "BitArray(#)".}
+converter initBitArray*(init_value: clonglong): BitArray {.importcpp: "BitArray(#)".}
 
-proc initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
+converter initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
 
 proc allOn*(_: typedesc[BitArray]): BitArray {.importcpp: "BitArray::all_on()", header: "bitArray.h".} ## \
 ## Returns a BitArray with an infinite array of bits, all on.
@@ -58991,13 +59866,13 @@ proc allOn*(_: typedesc[BitArray]): BitArray {.importcpp: "BitArray::all_on()", 
 proc allOff*(_: typedesc[BitArray]): BitArray {.importcpp: "BitArray::all_off()", header: "bitArray.h".} ## \
 ## Returns a BitArray whose bits are all off.
 
-proc lowerOn*(_: typedesc[BitArray], on_bits: int): BitArray {.importcpp: "BitArray::lower_on(#)", header: "bitArray.h".} ## \
+proc lowerOn*(_: typedesc[BitArray], on_bits: int): BitArray {.importcpp: "#BitArray::lower_on(#)", header: "bitArray.h".} ## \
 ## Returns a BitArray whose lower on_bits bits are on.
 
-proc bit*(_: typedesc[BitArray], index: int): BitArray {.importcpp: "BitArray::bit(#)", header: "bitArray.h".} ## \
+proc bit*(_: typedesc[BitArray], index: int): BitArray {.importcpp: "#BitArray::bit(#)", header: "bitArray.h".} ## \
 ## Returns a BitArray with only the indicated bit on.
 
-proc range*(_: typedesc[BitArray], low_bit: int, size: int): BitArray {.importcpp: "BitArray::range(#, #)", header: "bitArray.h".} ## \
+proc range*(_: typedesc[BitArray], low_bit: int, size: int): BitArray {.importcpp: "#BitArray::range(#, #)", header: "bitArray.h".} ## \
 ## Returns a BitArray whose size bits, beginning at low_bit, are on.
 
 proc hasMaxNumBits*(_: typedesc[BitArray]): bool {.importcpp: "BitArray::has_max_num_bits()", header: "bitArray.h".}
@@ -59169,15 +60044,15 @@ proc `<<`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator <<(#)"
 
 proc `>>`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: BitArray, other: BitArray): BitArray {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var BitArray, other: BitArray): BitArray {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var BitArray, shift: int): BitArray {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: BitArray, shift: int): BitArray {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var BitArray, shift: int): BitArray {.importcpp: "#.operator >>=(#)".}
 
 converter getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
 
@@ -59193,7 +60068,7 @@ proc initButtonHandle*(index: int): ButtonHandle {.importcpp: "ButtonHandle(#)".
 ## Constructs a ButtonHandle with the corresponding index number, which may
 ## have been returned by an earlier call to ButtonHandle::get_index().
 
-proc initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.} ## \
+converter initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Constructs a ButtonHandle with the corresponding name, which is looked up
 ## in the ButtonRegistry.  This exists for the purpose of being able to
 ## automatically coerce a string into a ButtonHandle; for most purposes, you
@@ -59752,7 +60627,7 @@ proc face2*(_: typedesc[GamepadButton]): ButtonHandle {.importcpp: "GamepadButto
 proc trigger*(_: typedesc[GamepadButton]): ButtonHandle {.importcpp: "GamepadButton::trigger()", header: "gamepadButton.h".} ## \
 ## Flight stick buttons, takes zero-based index.  First is always trigger.
 
-proc joystick*(_: typedesc[GamepadButton], button_number: int): ButtonHandle {.importcpp: "GamepadButton::joystick(#)", header: "gamepadButton.h".} ## \
+proc joystick*(_: typedesc[GamepadButton], button_number: int): ButtonHandle {.importcpp: "#GamepadButton::joystick(#)", header: "gamepadButton.h".} ## \
 ## Returns the ButtonHandle associated with the particular numbered joystick
 ## button (zero-based), if there is one, or ButtonHandle::none() if there is
 ## not.
@@ -59769,7 +60644,7 @@ proc initGamepadButton*(): GamepadButton {.importcpp: "GamepadButton()".}
 
 proc initGamepadButton*(param0: GamepadButton): GamepadButton {.importcpp: "GamepadButton(#)".}
 
-proc asciiKey*(_: typedesc[KeyboardButton], ascii_equivalent: char): ButtonHandle {.importcpp: "KeyboardButton::ascii_key(#)", header: "keyboardButton.h".} ## \
+proc asciiKey*(_: typedesc[KeyboardButton], ascii_equivalent: char): ButtonHandle {.importcpp: "#KeyboardButton::ascii_key(#)", header: "keyboardButton.h".} ## \
 ## Returns the ButtonHandle associated with the particular ASCII character, if
 ## there is one, or ButtonHandle::none() if there is not.
 
@@ -59920,9 +60795,9 @@ proc `&`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.impo
 
 proc `|`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |(#)".}
 
-proc `&=`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var ModifierButtons, other: ModifierButtons): ModifierButtons {.importcpp: "#.operator |=(#)".}
 
 proc setButtonList*(this: ModifierButtons, other: ModifierButtons) {.importcpp: "#.set_button_list(#)".} ## \
 ## Sets the list of buttons to watch to be the same as that of the other
@@ -60004,7 +60879,7 @@ proc write*(this: ModifierButtons, `out`: ostream) {.importcpp: "#.write(#)".} #
 ## Writes a multi-line summary including all of the buttons being monitored
 ## and which ones are known to be down.
 
-proc button*(_: typedesc[MouseButton], button_number: int): ButtonHandle {.importcpp: "MouseButton::button(#)", header: "mouseButton.h".} ## \
+proc button*(_: typedesc[MouseButton], button_number: int): ButtonHandle {.importcpp: "#MouseButton::button(#)", header: "mouseButton.h".} ## \
 ## Returns the ButtonHandle associated with the particular numbered mouse
 ## button (zero-based), if there is one, or ButtonHandle::none() if there is
 ## not.
@@ -60040,7 +60915,7 @@ proc wheelRight*(_: typedesc[MouseButton]): ButtonHandle {.importcpp: "MouseButt
 ## Returns the ButtonHandle generated when the mouse is scrolled to the right.
 ## Usually, you'll only find the horizontal scroll on laptops.
 
-proc isMouseButton*(_: typedesc[MouseButton], button: ButtonHandle): bool {.importcpp: "MouseButton::is_mouse_button(#)", header: "mouseButton.h".} ## \
+proc isMouseButton*(_: typedesc[MouseButton], button: ButtonHandle): bool {.importcpp: "#MouseButton::is_mouse_button(#)", header: "mouseButton.h".} ## \
 ## Returns true if the indicated ButtonHandle is a mouse button, false if it
 ## is some other kind of button.
 
@@ -60094,7 +60969,7 @@ converter getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.imp
 
 proc initSparseArray*(): SparseArray {.importcpp: "SparseArray()".}
 
-proc initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
+converter initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
 
 proc initSparseArray*(param0: SparseArray): SparseArray {.importcpp: "SparseArray(#)".}
 
@@ -60104,13 +60979,13 @@ proc allOn*(_: typedesc[SparseArray]): SparseArray {.importcpp: "SparseArray::al
 proc allOff*(_: typedesc[SparseArray]): SparseArray {.importcpp: "SparseArray::all_off()", header: "sparseArray.h".} ## \
 ## Returns a SparseArray whose bits are all off.
 
-proc lowerOn*(_: typedesc[SparseArray], on_bits: int): SparseArray {.importcpp: "SparseArray::lower_on(#)", header: "sparseArray.h".} ## \
+proc lowerOn*(_: typedesc[SparseArray], on_bits: int): SparseArray {.importcpp: "#SparseArray::lower_on(#)", header: "sparseArray.h".} ## \
 ## Returns a SparseArray whose lower on_bits bits are on.
 
-proc bit*(_: typedesc[SparseArray], index: int): SparseArray {.importcpp: "SparseArray::bit(#)", header: "sparseArray.h".} ## \
+proc bit*(_: typedesc[SparseArray], index: int): SparseArray {.importcpp: "#SparseArray::bit(#)", header: "sparseArray.h".} ## \
 ## Returns a SparseArray with only the indicated bit on.
 
-proc range*(_: typedesc[SparseArray], low_bit: int, size: int): SparseArray {.importcpp: "SparseArray::range(#, #)", header: "sparseArray.h".} ## \
+proc range*(_: typedesc[SparseArray], low_bit: int, size: int): SparseArray {.importcpp: "#SparseArray::range(#, #)", header: "sparseArray.h".} ## \
 ## Returns a SparseArray whose size bits, beginning at low_bit, are on.
 
 proc hasMaxNumBits*(_: typedesc[SparseArray]): bool {.importcpp: "SparseArray::has_max_num_bits()", header: "sparseArray.h".} ## \
@@ -60249,15 +61124,15 @@ proc `<<`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator 
 
 proc `>>`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>(#)".}
 
-proc `&=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator &=(#)".}
+proc `&=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator &=(#)".}
 
-proc `|=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator |=(#)".}
+proc `|=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator |=(#)".}
 
-proc `^=`*(this: SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator ^=(#)".}
+proc `^=`*(this: var SparseArray, other: SparseArray): SparseArray {.importcpp: "#.operator ^=(#)".}
 
-proc `<<=`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator <<=(#)".}
+proc `<<=`*(this: var SparseArray, shift: int): SparseArray {.importcpp: "#.operator <<=(#)".}
 
-proc `>>=`*(this: SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>=(#)".}
+proc `>>=`*(this: var SparseArray, shift: int): SparseArray {.importcpp: "#.operator >>=(#)".}
 
 proc isInverse*(this: SparseArray): bool {.importcpp: "#.is_inverse()".} ## \
 ## If this is true, the SparseArray is actually defined as a list of subranges
@@ -61099,7 +61974,7 @@ proc getTextNode*(_: typedesc[PGItem]): TextNode {.importcpp: "PGItem::get_text_
 ## default labels given a string.  This can be loaded with the default font,
 ## etc.
 
-proc setTextNode*(_: typedesc[PGItem], node: TextNode) {.importcpp: "PGItem::set_text_node(#)", header: "pgItem.h".} ## \
+proc setTextNode*(_: typedesc[PGItem], node: TextNode) {.importcpp: "#PGItem::set_text_node(#)", header: "pgItem.h".} ## \
 ## Changes the TextNode object that will be used by all PGItems to generate
 ## default labels given a string.  This can be loaded with the default font,
 ## etc.
@@ -61467,7 +62342,7 @@ converter getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry:
 
 converter upcastToTypedWritableReferenceCount*(this: PGMouseWatcherParameter): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(#.p()))".}
+converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(PGMouseWatcherParameter *)(#))".}
 
 proc output*(this: PGMouseWatcherParameter, `out`: ostream) {.importcpp: "#->output(#)".}
 
@@ -61515,7 +62390,7 @@ proc setCanvasTransform*(this: PGVirtualFrame, transform: TransformState) {.impo
 ## Changes the transform of the virtual canvas.  This transform is applied to
 ## all child nodes of the canvas_node.
 
-proc getCanvasTransform*(this: PGVirtualFrame): TransformState {.importcpp: "#->get_canvas_transform()".} ## \
+proc getCanvasTransform*(this: PGVirtualFrame): TransformState {.importcpp: "deconstify(#->get_canvas_transform())", header: deconstifyCode.} ## \
 ## Returns the transform of the virtual canvas.  This transform is applied to
 ## all child nodes of the canvas_node.
 
@@ -61828,7 +62703,7 @@ proc initNetAddress*(): NetAddress {.importcpp: "NetAddress()".} ## \
 
 proc initNetAddress*(param0: NetAddress): NetAddress {.importcpp: "NetAddress(#)".}
 
-proc initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".} ## \
+converter initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".} ## \
 ## Constructs an address from a given Socket_Address.  Normally, this
 ## constructor should not be used by user code; instead, create a default
 ## NetAddress and use one of the set_\*() functions to set up an address.
@@ -62040,7 +62915,7 @@ proc shutdown*(this: ConnectionReader) {.importcpp: "#->shutdown()".} ## \
 proc initNetDatagram*(): NetDatagram {.importcpp: "NetDatagram()".} ## \
 ## Constructs an empty datagram.
 
-proc initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
+converter initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
 proc initNetDatagram*(copy: NetDatagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
@@ -62496,13 +63371,13 @@ proc isMcastRange*(this: Socket_Address): bool {.importcpp: "#->is_mcast_range()
 proc initSocketIP*(): Socket_IP {.importcpp: "Socket_IP()".} ## \
 ## Def Constructor
 
-proc initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".} ## \
+converter initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".} ## \
 ## Assigns an existing socket to this class
 
 proc Close*(this: Socket_IP) {.importcpp: "#.Close()".} ## \
 ## Closes a socket if it is open (allocated).
 
-proc GetLastError*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::GetLastError()", header: "socket_IP.h".} ## \
+proc GetLastError*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::GetLastError()", header: "socket_ip.h".} ## \
 ## Gets the last errcode from a socket operation.
 
 proc SetNonBlocking*(this: Socket_IP): int {.importcpp: "#.SetNonBlocking()".} ## \
@@ -62537,13 +63412,13 @@ proc GetSocket*(this: Socket_IP): int {.importcpp: "#.GetSocket()".} ## \
 proc GetPeerName*(this: Socket_IP): Socket_Address {.importcpp: "#.GetPeerName()".} ## \
 ## Wrapper on berkly getpeername...
 
-proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_IP.h".}
+proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_ip.h".}
 
-converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_IP.h".}
+converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_ip.h".}
 
 proc initSocketTCP*(): Socket_TCP {.importcpp: "Socket_TCP()".}
 
-proc initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
+converter initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
 
 proc SetNoDelay*(this: Socket_TCP, flag: bool): int {.importcpp: "#.SetNoDelay(#)".} ## \
 ## Disable Nagle algorithm.  Don't delay send to coalesce packets
@@ -62584,7 +63459,7 @@ proc RecvData*(this: Socket_TCP, max_len: int): string {.importcpp: "nimStringFr
 ## Read the data from the connection - if error 0 if socket closed for read or
 ## length is 0 + bytes read (May be smaller than requested)
 
-converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_TCP.h".}
+converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_tcp.h".}
 
 proc initSocketTCPListen*(): Socket_TCP_Listen {.importcpp: "Socket_TCP_Listen()".}
 
@@ -62602,7 +63477,7 @@ proc OpenForListen*(this: Socket_TCP_Listen, port: int): bool {.importcpp: "#.Op
 
 proc GetIncomingConnection*(this: Socket_TCP_Listen, newsession: Socket_TCP, address: Socket_Address): bool {.importcpp: "#.GetIncomingConnection(#, #)".}
 
-converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_TCP_Listen.h".}
+converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_tcp_listen.h".}
 
 proc initSocketUDPIncoming*(): Socket_UDP_Incoming {.importcpp: "Socket_UDP_Incoming()".}
 
@@ -62624,7 +63499,7 @@ proc InitNoAddress*(this: Socket_UDP_Incoming): bool {.importcpp: "#.InitNoAddre
 proc SetToBroadCast*(this: Socket_UDP_Incoming): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Flips the OS bits that allow for brodcast packets to come in on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_UDP_Incoming.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_udp_incoming.h".}
 
 proc initSocketUDPOutgoing*(): Socket_UDP_Outgoing {.importcpp: "Socket_UDP_Outgoing()".}
 
@@ -62643,7 +63518,7 @@ proc SendTo*(this: Socket_UDP_Outgoing, data: string, address: Socket_Address): 
 proc SetToBroadCast*(this: Socket_UDP_Outgoing): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_UDP_Outgoing.h".}
+converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_udp_outgoing.h".}
 
 proc initSocketFdset*(): Socket_fdset {.importcpp: "Socket_fdset()".} ## \
 ## The constructor
@@ -62708,7 +63583,7 @@ proc AddAddress*(this: Buffered_DatagramConnection, inadr: Socket_Address) {.imp
 
 proc ClearAddresses*(this: Buffered_DatagramConnection) {.importcpp: "#.ClearAddresses()".}
 
-converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_DatagramConnection.h".}
+converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_datagramconnection.h".}
 
 proc initSocketUDP*(): Socket_UDP {.importcpp: "Socket_UDP()".}
 
@@ -62724,9 +63599,9 @@ proc SendTo*(this: Socket_UDP, data: string, address: Socket_Address): bool {.im
 proc SetToBroadCast*(this: Socket_UDP): bool {.importcpp: "#.SetToBroadCast()".} ## \
 ## Ask the OS to let us receive broadcast packets on this port.
 
-converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_UDP.h".}
+converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_udp.h".}
 
-proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "TiXmlBase::SetCondenseWhiteSpace(#)", header: "tinyxml.h".} ## \
+proc SetCondenseWhiteSpace*(_: typedesc[TiXmlBase], condense: bool) {.importcpp: "#TiXmlBase::SetCondenseWhiteSpace(#)", header: "tinyxml.h".} ## \
 ## The world does not agree on whether white space should be kept or
 ## not. In order to make everyone happy, these global, static functions
 ## are provided to set whether or not TinyXml will condense all white space
@@ -63408,3 +64283,1553 @@ proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
+
+proc initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
+proc initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
+proc initLVecBase2f*(fill_value: float32): LVecBase2f = LVecBase2f(x: fill_value, y: fill_value)
+proc initLVecBase2f*(x: float32, y: float32): LVecBase2f = LVecBase2f(x: x, y: y)
+converter initLVecBase2f*(args: tuple[x: float32, y: float32]): LVecBase2f = LVecBase2f(x: args.x, y: args.y)
+converter initLVecBase2f*(args: tuple[x: float64, y: float64]): LVecBase2f = LVecBase2f(x: args.x, y: args.y)
+
+proc initLVecBase2d*(): LVecBase2d = LVecBase2d(x: 0, y: 0)
+proc initLVecBase2d*(copy: LVecBase2d): LVecBase2d = LVecBase2d(x: copy.x, y: copy.y)
+proc initLVecBase2d*(fill_value: float64): LVecBase2d = LVecBase2d(x: fill_value, y: fill_value)
+converter initLVecBase2d*(args: tuple[x: float64, y: float64]): LVecBase2d = LVecBase2d(x: args.x, y: args.y)
+proc initLVecBase2d*(x: float32, y: float32): LVecBase2d = LVecBase2d(x: x, y: y)
+proc initLVecBase2d*(x: float64, y: float64): LVecBase2d = LVecBase2d(x: x, y: y)
+
+proc initLVecBase2i*(): LVecBase2i = LVecBase2i(x: 0, y: 0)
+proc initLVecBase2i*(copy: LVecBase2i): LVecBase2i = LVecBase2i(x: copy.x, y: copy.y)
+proc initLVecBase2i*(fill_value: int32): LVecBase2i = LVecBase2i(x: fill_value, y: fill_value)
+proc initLVecBase2i*(x: int32, y: int32): LVecBase2i = LVecBase2i(x: x, y: y)
+converter initLVecBase2i*(args: tuple[x: int32, y: int32]): LVecBase2i = LVecBase2i(x: args.x, y: args.y)
+
+proc initLVecBase3f*(): LVecBase3f = LVecBase3f(x: 0, y: 0, z: 0)
+proc initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3f*(copy: LVecBase3f): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: copy.z)
+proc initLVecBase3f*(fill_value: float32): LVecBase3f = LVecBase3f(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f = LVecBase3f(x: x, y: y, z: z)
+converter initLVecBase3f*(args: tuple[x: float32, y: float32, z: float32]): LVecBase3f = LVecBase3f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase3f*(args: tuple[x: float64, y: float64, z: float64]): LVecBase3f = LVecBase3f(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase3d*(): LVecBase3d = LVecBase3d(x: 0, y: 0, z: 0)
+proc initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3d*(copy: LVecBase3d): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: copy.z)
+proc initLVecBase3d*(fill_value: float64): LVecBase3d = LVecBase3d(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d = LVecBase3d(x: x, y: y, z: z)
+converter initLVecBase3d*(args: tuple[x: float32, y: float32, z: float32]): LVecBase3d = LVecBase3d(x: args.x, y: args.y, z: args.z)
+converter initLVecBase3d*(args: tuple[x: float64, y: float64, z: float64]): LVecBase3d = LVecBase3d(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase3i*(): LVecBase3i = LVecBase3i(x: 0, y: 0, z: 0)
+proc initLVecBase3i*(copy: LVecBase2i, z: int32): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: z)
+proc initLVecBase3i*(copy: LVecBase3i): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: copy.z)
+proc initLVecBase3i*(fill_value: int32): LVecBase3i = LVecBase3i(x: fill_value, y: fill_value, z: fill_value)
+proc initLVecBase3i*(x: int32, y: int32, z: int32): LVecBase3i = LVecBase3i(x: x, y: y, z: z)
+converter initLVecBase3i*(args: tuple[x: int32, y: int32, z: int32]): LVecBase3i = LVecBase3i(x: args.x, y: args.y, z: args.z)
+
+proc initLVecBase4f*(): LVecBase4f = LVecBase4f(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4f*(copy: LVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4f*(fill_value: float32): LVecBase4f = LVecBase4f(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f = LVecBase4f(x: x, y: y, z: z, w: w)
+converter initLVecBase4f*(args: tuple[x: float32, y: float32, z: float32, w: float32]): LVecBase4f = LVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase4f*(args: tuple[x: float64, y: float64, z: float64, w: float64]): LVecBase4f = LVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4f*(point: LPoint3f): LVecBase4f = LVecBase4f(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4f*(vector: LVector3f): LVecBase4f = LVecBase4f(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+proc initLVecBase4d*(): LVecBase4d = LVecBase4d(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4d*(copy: LVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4d*(fill_value: float64): LVecBase4d = LVecBase4d(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d = LVecBase4d(x: x, y: y, z: z, w: w)
+converter initLVecBase4d*(args: tuple[x: float32, y: float32, z: float32, w: float32]): LVecBase4d = LVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4d*(args: tuple[x: float64, y: float64, z: float64, w: float64]): LVecBase4d = LVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4d*(point: LPoint3d): LVecBase4d = LVecBase4d(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4d*(vector: LVector3d): LVecBase4d = LVecBase4d(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+proc initLVecBase4i*(): LVecBase4i = LVecBase4i(x: 0, y: 0, z: 0, w: 0)
+proc initLVecBase4i*(copy: LVecBase3i, w: int32): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: w)
+proc initLVecBase4i*(copy: LVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4i*(fill_value: int32): LVecBase4i = LVecBase4i(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initLVecBase4i*(x: int32, y: int32, z: int32, w: int32): LVecBase4i = LVecBase4i(x: x, y: y, z: z, w: w)
+converter initLVecBase4i*(args: tuple[x: int32, y: int32, z: int32, w: int32]): LVecBase4i = LVecBase4i(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+converter initLVecBase4i*(point: LPoint3i): LVecBase4i = LVecBase4i(x: point.x, y: point.y, z: point.z, w: 1)
+converter initLVecBase4i*(vector: LVector3i): LVecBase4i = LVecBase4i(x: vector.x, y: vector.y, z: vector.z, w: 0)
+
+proc initUnalignedLVecBase4f*(): UnalignedLVecBase4f = UnalignedLVecBase4f(x: 0, y: 0, z: 0, w: 0)
+proc initUnalignedLVecBase4f*(copy: UnalignedLVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4f*(fill_value: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initUnalignedLVecBase4f*(x: float32, y: float32, z: float32, w: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: x, y: y, z: z, w: w)
+converter initUnalignedLVecBase4f*(args: tuple[x: float32, y: float32, z: float32, w: float32]): UnalignedLVecBase4f = UnalignedLVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initUnalignedLVecBase4f*(args: tuple[x: float64, y: float64, z: float64, w: float64]): UnalignedLVecBase4f = UnalignedLVecBase4f(x: args.x, y: args.y, z: args.z)
+converter initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+
+proc initUnalignedLVecBase4d*(): UnalignedLVecBase4d = UnalignedLVecBase4d(x: 0, y: 0, z: 0, w: 0)
+proc initUnalignedLVecBase4d*(copy: UnalignedLVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4d*(fill_value: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initUnalignedLVecBase4d*(x: float64, y: float64, z: float64, w: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: x, y: y, z: z, w: w)
+converter initUnalignedLVecBase4d*(args: tuple[x: float32, y: float32, z: float32, w: float32]): UnalignedLVecBase4d = UnalignedLVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initUnalignedLVecBase4d*(args: tuple[x: float64, y: float64, z: float64, w: float64]): UnalignedLVecBase4d = UnalignedLVecBase4d(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+
+proc initUnalignedLVecBase4i*(): UnalignedLVecBase4i = UnalignedLVecBase4i(x: 0, y: 0, z: 0, w: 0)
+proc initUnalignedLVecBase4i*(copy: UnalignedLVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4i*(fill_value: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+proc initUnalignedLVecBase4i*(x: int32, y: int32, z: int32, w: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: x, y: y, z: z, w: w)
+converter initUnalignedLVecBase4i*(args: tuple[x: int32, y: int32, z: int32, w: int32]): UnalignedLVecBase4i = UnalignedLVecBase4i(x: args.x, y: args.y, z: args.z, w: args.w)
+converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+
+func xx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func xzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func yzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func zxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func zyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
+func zzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
+func xxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func xyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func xzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.w)
+func xwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func yxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
+func yyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func yzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.w)
+func ywx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func zxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func zyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
+func zzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.w)
+func zwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.x)
+func wxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.y)
+func wyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.z)
+func wzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.w)
+func wwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.w, z: this.w, w: this.w)
+
+func xx*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func xzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func yzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func zxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func zyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
+func zzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.x)
+func xxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func xyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func xzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.w)
+func xwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func yxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
+func yyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func yzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.w)
+func ywx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func zxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func zyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
+func zzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.w)
+func zwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.x)
+func wxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.y)
+func wyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.z)
+func wzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.w)
+func wwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.w, z: this.w, w: this.w)
+
+func xx*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func yx*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+
+func xx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.z)
+func xy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
+func xz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func xzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
+func yx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
+func yy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.z)
+func yz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func yzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
+func zx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func zxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
+func zy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func zyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
+func zz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
+func zzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.z)
+
+func xx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.x)
+func xxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.x)
+func xxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.x)
+func xxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.y)
+func xxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.z)
+func xxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.x, w: this.w)
+func xxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.y)
+func xxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
+func xxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
+func xxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.z)
+func xxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.w)
+func xxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.z)
+func xxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.x)
+func xxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.y)
+func xxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.z)
+func xxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.w)
+func xxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: this.w)
+func xxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.x)
+func xxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.y)
+func xxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.z)
+func xxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.w)
+func xy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func xyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func xyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
+func xyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func xyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func xyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.w)
+func xyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
+func xyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
+func xyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
+func xyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
+func xyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.w)
+func xyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func xyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func xyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func xyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
+func xyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.w)
+func xyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.w)
+func xywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.x)
+func xywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.y)
+func xywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.z)
+func xyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.w)
+func xz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func xzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func xzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
+func xzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func xzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func xzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.w)
+func xzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func xzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func xzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
+func xzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func xzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.w)
+func xzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
+func xzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
+func xzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
+func xzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
+func xzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.w)
+func xzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.w)
+func xzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.x)
+func xzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.y)
+func xzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.z)
+func xzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.w)
+func xw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.w)
+func xwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.x)
+func xwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.x)
+func xwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.y)
+func xwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.z)
+func xwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.w)
+func xwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.y)
+func xwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.x)
+func xwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.y)
+func xwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.z)
+func xwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.w)
+func xwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.z)
+func xwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.x)
+func xwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.y)
+func xwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.z)
+func xwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.w)
+func xww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.w)
+func xwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.x)
+func xwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.y)
+func xwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.z)
+func xwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.w)
+func yx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func yxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
+func yxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
+func yxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
+func yxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
+func yxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.w)
+func yxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func yxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func yxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
+func yxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func yxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.w)
+func yxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func yxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func yxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func yxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
+func yxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.w)
+func yxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.w)
+func yxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.x)
+func yxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.y)
+func yxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.z)
+func yxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.w)
+func yy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
+func yyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
+func yyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.x)
+func yyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.y)
+func yyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.z)
+func yyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.x, w: this.w)
+func yyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.y)
+func yyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.x)
+func yyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.y)
+func yyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.z)
+func yyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.y, w: this.w)
+func yyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.z)
+func yyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.x)
+func yyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.y)
+func yyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.z)
+func yyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.w)
+func yyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.w)
+func yywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.x)
+func yywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.y)
+func yywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.z)
+func yyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.w)
+func yz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func yzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func yzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
+func yzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func yzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func yzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.w)
+func yzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func yzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func yzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
+func yzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func yzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.w)
+func yzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
+func yzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
+func yzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
+func yzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
+func yzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.w)
+func yzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.w)
+func yzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.x)
+func yzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.y)
+func yzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.z)
+func yzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.w)
+func yw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.w)
+func ywx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.x)
+func ywxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.x)
+func ywxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.y)
+func ywxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.z)
+func ywxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.w)
+func ywy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.y)
+func ywyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.x)
+func ywyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.y)
+func ywyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.z)
+func ywyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.w)
+func ywz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.z)
+func ywzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.x)
+func ywzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.y)
+func ywzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.z)
+func ywzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.w)
+func yww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.w)
+func ywwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.x)
+func ywwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.y)
+func ywwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.z)
+func ywww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.w)
+func zx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func zxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
+func zxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
+func zxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
+func zxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
+func zxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.w)
+func zxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func zxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func zxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
+func zxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func zxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.w)
+func zxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func zxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func zxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func zxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
+func zxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.w)
+func zxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.w)
+func zxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.x)
+func zxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.y)
+func zxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.z)
+func zxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.w)
+func zy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func zyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func zyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
+func zyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func zyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func zyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.w)
+func zyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
+func zyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
+func zyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
+func zyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
+func zyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.w)
+func zyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func zyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func zyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func zyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
+func zyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.w)
+func zyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.w)
+func zywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.x)
+func zywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.y)
+func zywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.z)
+func zyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.w)
+func zz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
+func zzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
+func zzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.x)
+func zzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.y)
+func zzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.z)
+func zzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.x, w: this.w)
+func zzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.y)
+func zzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.x)
+func zzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.y)
+func zzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.z)
+func zzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.y, w: this.w)
+func zzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.z)
+func zzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.x)
+func zzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.y)
+func zzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.z)
+func zzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.z, w: this.w)
+func zzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.w)
+func zzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.x)
+func zzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.y)
+func zzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.z)
+func zzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.w)
+func zw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.w)
+func zwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.x)
+func zwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.x)
+func zwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.y)
+func zwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.z)
+func zwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.w)
+func zwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.y)
+func zwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.x)
+func zwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.y)
+func zwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.z)
+func zwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.w)
+func zwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.z)
+func zwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.x)
+func zwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.y)
+func zwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.z)
+func zwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.w)
+func zww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.w)
+func zwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.x)
+func zwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.y)
+func zwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.z)
+func zwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.w)
+func wx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.x)
+func wxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.x)
+func wxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.x)
+func wxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.y)
+func wxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.z)
+func wxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.w)
+func wxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.y)
+func wxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.x)
+func wxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.y)
+func wxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.z)
+func wxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.w)
+func wxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.z)
+func wxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.x)
+func wxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.y)
+func wxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.z)
+func wxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.w)
+func wxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.w)
+func wxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.x)
+func wxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.y)
+func wxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.z)
+func wxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.w)
+func wy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.y)
+func wyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.x)
+func wyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.x)
+func wyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.y)
+func wyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.z)
+func wyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.w)
+func wyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.y)
+func wyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.x)
+func wyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.y)
+func wyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.z)
+func wyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.w)
+func wyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.z)
+func wyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.x)
+func wyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.y)
+func wyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.z)
+func wyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.w)
+func wyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.w)
+func wywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.x)
+func wywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.y)
+func wywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.z)
+func wyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.w)
+func wz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.z)
+func wzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.x)
+func wzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.x)
+func wzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.y)
+func wzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.z)
+func wzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.w)
+func wzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.y)
+func wzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.x)
+func wzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.y)
+func wzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.z)
+func wzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.w)
+func wzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.z)
+func wzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.x)
+func wzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.y)
+func wzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.z)
+func wzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.w)
+func wzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.w)
+func wzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.x)
+func wzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.y)
+func wzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.z)
+func wzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.w)
+func ww*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.w)
+func wwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.x)
+func wwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.x)
+func wwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.y)
+func wwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.z)
+func wwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.x, w: this.w)
+func wwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.y)
+func wwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.x)
+func wwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.y)
+func wwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.z)
+func wwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.y, w: this.w)
+func wwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.z)
+func wwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.x)
+func wwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.y)
+func wwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.z)
+func wwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.z, w: this.w)
+func www*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.w)
+func wwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.x)
+func wwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.y)
+func wwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.z)
+func wwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.w, z: this.w, w: this.w)

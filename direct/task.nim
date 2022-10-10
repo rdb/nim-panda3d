@@ -22,7 +22,7 @@ private:
 };
 """.}
 
-proc unrefEnv(envp: pointer): string {.noinit, exportcpp: "unrefEnv".} =
+proc unrefEnv(envp: pointer) {.noinit, exportcpp: "unrefEnv".} =
   GC_unref(cast[RootRef](envp))
 
 {.emit: """

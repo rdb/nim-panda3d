@@ -59494,19 +59494,19 @@ proc initBitMask16*(param0: BitMask[uint16, 16]): BitMask16 {.importcpp: "BitMas
 
 converter initBitMask16*(init_value: int): BitMask16 {.importcpp: "BitMask16(#)".}
 
-proc allOn*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask[uint16, 16]::all_on()", header: "bitMask.h".}
+proc allOn*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::all_on()", header: "bitMask.h".}
 
-proc allOff*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask[uint16, 16]::all_off()", header: "bitMask.h".}
+proc allOff*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::all_off()", header: "bitMask.h".}
 
-proc lowerOn*(_: typedesc[BitMask[uint16, 16]], on_bits: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::lower_on(#)", header: "bitMask.h".}
+proc lowerOn*(_: typedesc[BitMask[uint16, 16]], on_bits: int): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::lower_on(#)", header: "bitMask.h".}
 
-proc bit*(_: typedesc[BitMask[uint16, 16]], index: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::bit(#)", header: "bitMask.h".}
+proc bit*(_: typedesc[BitMask[uint16, 16]], index: int): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::bit(#)", header: "bitMask.h".}
 
-proc range*(_: typedesc[BitMask[uint16, 16]], low_bit: int, size: int): BitMask16 {.importcpp: "BitMask[uint16, 16]::range(#, #)", header: "bitMask.h".}
+proc range*(_: typedesc[BitMask[uint16, 16]], low_bit: int, size: int): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::range(#, #)", header: "bitMask.h".}
 
-proc hasMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): bool {.importcpp: "BitMask[uint16, 16]::has_max_num_bits()", header: "bitMask.h".}
+proc hasMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): bool {.importcpp: "BitMask< uint16_t, 16 >::has_max_num_bits()", header: "bitMask.h".}
 
-proc getMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): int {.importcpp: "BitMask[uint16, 16]::get_max_num_bits()", header: "bitMask.h".}
+proc getMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): int {.importcpp: "BitMask< uint16_t, 16 >::get_max_num_bits()", header: "bitMask.h".}
 
 proc getNumBits*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_num_bits()".}
 
@@ -59626,7 +59626,7 @@ proc keepNextLowestBit*(this: BitMask[uint16, 16], index: int): BitMask16 {.impo
 
 proc getKey*(this: BitMask[uint16, 16]): int {.importcpp: "#.get_key()".}
 
-converter getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask[uint16, 16]::get_class_type()", header: "bitMask.h".}
+converter getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask< uint16_t, 16 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitMask32*(): BitMask32 {.importcpp: "BitMask32()".}
 
@@ -59634,19 +59634,19 @@ proc initBitMask32*(param0: BitMask[uint32, 32]): BitMask32 {.importcpp: "BitMas
 
 converter initBitMask32*(init_value: int): BitMask32 {.importcpp: "BitMask32(#)".}
 
-proc allOn*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask[uint32, 32]::all_on()", header: "bitMask.h".}
+proc allOn*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::all_on()", header: "bitMask.h".}
 
-proc allOff*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask[uint32, 32]::all_off()", header: "bitMask.h".}
+proc allOff*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::all_off()", header: "bitMask.h".}
 
-proc lowerOn*(_: typedesc[BitMask[uint32, 32]], on_bits: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::lower_on(#)", header: "bitMask.h".}
+proc lowerOn*(_: typedesc[BitMask[uint32, 32]], on_bits: int): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::lower_on(#)", header: "bitMask.h".}
 
-proc bit*(_: typedesc[BitMask[uint32, 32]], index: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::bit(#)", header: "bitMask.h".}
+proc bit*(_: typedesc[BitMask[uint32, 32]], index: int): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::bit(#)", header: "bitMask.h".}
 
-proc range*(_: typedesc[BitMask[uint32, 32]], low_bit: int, size: int): BitMask32 {.importcpp: "BitMask[uint32, 32]::range(#, #)", header: "bitMask.h".}
+proc range*(_: typedesc[BitMask[uint32, 32]], low_bit: int, size: int): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::range(#, #)", header: "bitMask.h".}
 
-proc hasMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): bool {.importcpp: "BitMask[uint32, 32]::has_max_num_bits()", header: "bitMask.h".}
+proc hasMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): bool {.importcpp: "BitMask< uint32_t, 32 >::has_max_num_bits()", header: "bitMask.h".}
 
-proc getMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): int {.importcpp: "BitMask[uint32, 32]::get_max_num_bits()", header: "bitMask.h".}
+proc getMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): int {.importcpp: "BitMask< uint32_t, 32 >::get_max_num_bits()", header: "bitMask.h".}
 
 proc getNumBits*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_num_bits()".}
 
@@ -59766,7 +59766,7 @@ proc keepNextLowestBit*(this: BitMask[uint32, 32], index: int): BitMask32 {.impo
 
 proc getKey*(this: BitMask[uint32, 32]): int {.importcpp: "#.get_key()".}
 
-converter getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask[uint32, 32]::get_class_type()", header: "bitMask.h".}
+converter getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask< uint32_t, 32 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitMask64*(): BitMask64 {.importcpp: "BitMask64()".}
 
@@ -59774,19 +59774,19 @@ proc initBitMask64*(param0: BitMask[uint64, 64]): BitMask64 {.importcpp: "BitMas
 
 converter initBitMask64*(init_value: clonglong): BitMask64 {.importcpp: "BitMask64(#)".}
 
-proc allOn*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask[uint64, 64]::all_on()", header: "bitMask.h".}
+proc allOn*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::all_on()", header: "bitMask.h".}
 
-proc allOff*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask[uint64, 64]::all_off()", header: "bitMask.h".}
+proc allOff*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::all_off()", header: "bitMask.h".}
 
-proc lowerOn*(_: typedesc[BitMask[uint64, 64]], on_bits: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::lower_on(#)", header: "bitMask.h".}
+proc lowerOn*(_: typedesc[BitMask[uint64, 64]], on_bits: int): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::lower_on(#)", header: "bitMask.h".}
 
-proc bit*(_: typedesc[BitMask[uint64, 64]], index: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::bit(#)", header: "bitMask.h".}
+proc bit*(_: typedesc[BitMask[uint64, 64]], index: int): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::bit(#)", header: "bitMask.h".}
 
-proc range*(_: typedesc[BitMask[uint64, 64]], low_bit: int, size: int): BitMask64 {.importcpp: "BitMask[uint64, 64]::range(#, #)", header: "bitMask.h".}
+proc range*(_: typedesc[BitMask[uint64, 64]], low_bit: int, size: int): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::range(#, #)", header: "bitMask.h".}
 
-proc hasMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): bool {.importcpp: "BitMask[uint64, 64]::has_max_num_bits()", header: "bitMask.h".}
+proc hasMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): bool {.importcpp: "BitMask< uint64_t, 64 >::has_max_num_bits()", header: "bitMask.h".}
 
-proc getMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): int {.importcpp: "BitMask[uint64, 64]::get_max_num_bits()", header: "bitMask.h".}
+proc getMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): int {.importcpp: "BitMask< uint64_t, 64 >::get_max_num_bits()", header: "bitMask.h".}
 
 proc getNumBits*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_num_bits()".}
 
@@ -59906,7 +59906,7 @@ proc keepNextLowestBit*(this: BitMask[uint64, 64], index: int): BitMask64 {.impo
 
 proc getKey*(this: BitMask[uint64, 64]): int {.importcpp: "#.get_key()".}
 
-converter getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask[uint64, 64]::get_class_type()", header: "bitMask.h".}
+converter getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask< uint64_t, 64 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitArray*(): BitArray {.importcpp: "BitArray()".}
 

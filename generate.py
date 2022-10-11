@@ -1120,7 +1120,7 @@ def bind_type(out, type, bound_templates={}):
                 if value_name in NIM_KEYWORDS:
                     value_name = '`' + value_name + '`'
                 value = interrogate_type_enum_value(type, i_value)
-                out.write(f"func {value_name}*(_: typedesc[{parent_type_name}]): {type_name} = {type_name}.{value_name}\n")
+                out.write(f"template {value_name}*(_: typedesc[{parent_type_name}]): {type_name} = {type_name}.{value_name}\n")
 
             out.write("\n")
 

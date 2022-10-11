@@ -188,11 +188,11 @@ type TypeHandle_MemoryClass {.importcpp: "TypeHandle::MemoryClass", pure, header
   MC_deleted_chain_inactive = 3
   MC_limit = 4
 
-func MC_singleton*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_singleton
-func MC_array*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_array
-func MC_deleted_chain_active*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_active
-func MC_deleted_chain_inactive*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_inactive
-func MC_limit*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_limit
+template MC_singleton*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_singleton
+template MC_array*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_array
+template MC_deleted_chain_active*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_active
+template MC_deleted_chain_inactive*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_inactive
+template MC_limit*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_limit
 
 type TypeRegistry* {.importcpp: "TypeRegistry", pure, inheritable, header: "typeRegistry.h".} = object
   ## The TypeRegistry class maintains all the assigned TypeHandles in a given
@@ -279,9 +279,9 @@ type ios_base_seekdir {.importcpp: "std::ios_base::seekdir", pure, header: "<ios
   cur = 1
   `end` = 2
 
-func beg*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.beg
-func cur*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.cur
-func `end`*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.`end`
+template beg*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.beg
+template cur*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.cur
+template `end`*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.`end`
 
 type istream* {.importcpp: "istream", pure, inheritable, header: "<istream>".} = object
 
@@ -338,10 +338,10 @@ type TextEncoder_Encoding {.importcpp: "TextEncoder::Encoding", pure, header: "t
   E_utf8 = 1
   E_unicode = 2
 
-func E_iso8859*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_iso8859
-func E_utf8*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf8
-func E_utf16be*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf16be
-func E_unicode*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_unicode
+template E_iso8859*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_iso8859
+template E_utf8*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf8
+template E_utf16be*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf16be
+template E_unicode*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_unicode
 
 type Filename* {.importcpp: "Filename", pure, inheritable, header: "filename.h".} = object
   ## The name of a file, such as a texture file or an Egg file.  Stores the full
@@ -359,9 +359,9 @@ type Filename_Type {.importcpp: "Filename::Type", pure, header: "filename.h".} =
   T_dso = 1
   T_executable = 2
 
-func T_general*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_general
-func T_dso*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_dso
-func T_executable*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_executable
+template T_general*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_general
+template T_dso*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_dso
+template T_executable*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_executable
 
 type PandaSystem* {.importcpp: "PandaSystem", pure, inheritable, header: "pandaSystem.h".} = object
   ## This class is used as a namespace to group several global properties of
@@ -418,17 +418,17 @@ type ConfigFlags_ValueType {.importcpp: "ConfigFlags::ValueType", pure, header: 
   VT_int64 = 9
   VT_color = 10
 
-func VT_undefined*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_undefined
-func VT_list*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_list
-func VT_string*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_string
-func VT_filename*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_filename
-func VT_bool*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_bool
-func VT_int*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int
-func VT_double*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_double
-func VT_enum*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_enum
-func VT_search_path*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_search_path
-func VT_int64*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int64
-func VT_color*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_color
+template VT_undefined*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_undefined
+template VT_list*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_list
+template VT_string*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_string
+template VT_filename*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_filename
+template VT_bool*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_bool
+template VT_int*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int
+template VT_double*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_double
+template VT_enum*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_enum
+template VT_search_path*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_search_path
+template VT_int64*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int64
+template VT_color*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_color
 
 type ConfigFlags_VariableFlags {.importcpp: "ConfigFlags::VariableFlags", pure, header: "configFlags.h".} = enum
   F_trust_level_mask = 4095
@@ -437,11 +437,11 @@ type ConfigFlags_VariableFlags {.importcpp: "ConfigFlags::VariableFlags", pure, 
   F_dynamic = 16384
   F_dconfig = 32768
 
-func F_trust_level_mask*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_trust_level_mask
-func F_open*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_open
-func F_closed*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_closed
-func F_dynamic*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dynamic
-func F_dconfig*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dconfig
+template F_trust_level_mask*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_trust_level_mask
+template F_open*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_open
+template F_closed*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_closed
+template F_dynamic*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dynamic
+template F_dconfig*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dconfig
 
 type ConfigPage* {.importcpp: "ConfigPage", pure, inheritable, header: "configPage.h".} = object
   ## A page of ConfigDeclarations that may be loaded or unloaded.  Typically
@@ -648,10 +648,10 @@ type ISocketStream_ReadState {.importcpp: "ISocketStream::ReadState", pure, head
   RS_complete = 2
   RS_error = 3
 
-func RS_initial*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_initial
-func RS_reading*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_reading
-func RS_complete*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_complete
-func RS_error*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_error
+template RS_initial*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_initial
+template RS_reading*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_reading
+template RS_complete*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_complete
+template RS_error*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_error
 
 type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "socketStream.h".} = object of ostream
   ## A base class for ostreams that write to a (possibly non-blocking) socket.
@@ -679,10 +679,10 @@ type HTTPEnum_HTTPVersion {.importcpp: "HTTPEnum::HTTPVersion", pure, header: "h
   HV_11 = 2
   HV_other = 3
 
-func HV_09*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_09
-func HV_10*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_10
-func HV_11*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_11
-func HV_other*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_other
+template HV_09*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_09
+template HV_10*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_10
+template HV_11*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_11
+template HV_other*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_other
 
 type HTTPEnum_Method {.importcpp: "HTTPEnum::Method", pure, header: "httpEnum.h".} = enum
   M_options = 0
@@ -694,14 +694,14 @@ type HTTPEnum_Method {.importcpp: "HTTPEnum::Method", pure, header: "httpEnum.h"
   M_trace = 6
   M_connect = 7
 
-func M_options*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_options
-func M_get*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_get
-func M_head*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_head
-func M_post*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_post
-func M_put*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_put
-func M_delete*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_delete
-func M_trace*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_trace
-func M_connect*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_connect
+template M_options*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_options
+template M_get*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_get
+template M_head*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_head
+template M_post*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_post
+template M_put*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_put
+template M_delete*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_delete
+template M_trace*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_trace
+template M_connect*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_connect
 
 type HTTPDate* {.importcpp: "HTTPDate", pure, inheritable, header: "httpDate.h".} = object
   ## A container for an HTTP-legal time/date indication.  This can accept a
@@ -744,9 +744,9 @@ type HTTPClient_VerifySSL {.importcpp: "HTTPClient::VerifySSL", pure, header: "h
   VS_no_date_check = 1
   VS_normal = 2
 
-func VS_no_verify*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_verify
-func VS_no_date_check*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_date_check
-func VS_normal*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_normal
+template VS_no_verify*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_verify
+template VS_no_date_check*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_date_check
+template VS_normal*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_normal
 
 type HTTPEntityTag* {.importcpp: "HTTPEntityTag", pure, inheritable, header: "httpEntityTag.h".} = object
   ## A container for an "entity tag" from an HTTP server.  This is used to
@@ -767,19 +767,19 @@ type DocumentSpec_RequestMode {.importcpp: "DocumentSpec::RequestMode", pure, he
   RM_newer = 2
   RM_equal_or_newer = 3
 
-func RM_any*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_any
-func RM_equal*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal
-func RM_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_newer
-func RM_equal_or_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal_or_newer
+template RM_any*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_any
+template RM_equal*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal
+template RM_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_newer
+template RM_equal_or_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal_or_newer
 
 type DocumentSpec_CacheControl {.importcpp: "DocumentSpec::CacheControl", pure, header: "documentSpec.h".} = enum
   CC_allow_cache = 0
   CC_revalidate = 1
   CC_no_cache = 2
 
-func CC_allow_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_allow_cache
-func CC_revalidate*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_revalidate
-func CC_no_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_no_cache
+template CC_allow_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_allow_cache
+template CC_revalidate*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_revalidate
+template CC_no_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_no_cache
 
 type TypedReferenceCount* {.importcpp: "PT(TypedReferenceCount)", bycopy, pure, inheritable, header: "typedReferenceCount.h".} = object of TypedObject
   ## A base class for things which need to inherit from both TypedObject and
@@ -836,26 +836,26 @@ type HTTPChannel_StatusCode {.importcpp: "HTTPChannel::StatusCode", pure, header
   SC_download_write_error = 18
   SC_download_invalid_range = 19
 
-func SC_incomplete*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_incomplete
-func SC_internal_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_internal_error
-func SC_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_no_connection
-func SC_timeout*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_timeout
-func SC_lost_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_lost_connection
-func SC_non_http_response*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_non_http_response
-func SC_invalid_http*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_invalid_http
-func SC_socks_invalid_version*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_invalid_version
-func SC_socks_no_acceptable_login_method*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_acceptable_login_method
-func SC_socks_refused*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_refused
-func SC_socks_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_connection
-func SC_ssl_internal_failure*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_internal_failure
-func SC_ssl_no_handshake*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_no_handshake
-func SC_http_error_watermark*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_http_error_watermark
-func SC_ssl_invalid_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_invalid_server_certificate
-func SC_ssl_self_signed_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_self_signed_server_certificate
-func SC_ssl_unexpected_server*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_unexpected_server
-func SC_download_open_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_open_error
-func SC_download_write_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_write_error
-func SC_download_invalid_range*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_invalid_range
+template SC_incomplete*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_incomplete
+template SC_internal_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_internal_error
+template SC_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_no_connection
+template SC_timeout*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_timeout
+template SC_lost_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_lost_connection
+template SC_non_http_response*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_non_http_response
+template SC_invalid_http*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_invalid_http
+template SC_socks_invalid_version*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_invalid_version
+template SC_socks_no_acceptable_login_method*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_acceptable_login_method
+template SC_socks_refused*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_refused
+template SC_socks_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_connection
+template SC_ssl_internal_failure*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_internal_failure
+template SC_ssl_no_handshake*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_no_handshake
+template SC_http_error_watermark*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_http_error_watermark
+template SC_ssl_invalid_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_invalid_server_certificate
+template SC_ssl_self_signed_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_self_signed_server_certificate
+template SC_ssl_unexpected_server*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_unexpected_server
+template SC_download_open_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_open_error
+template SC_download_write_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_write_error
+template SC_download_invalid_range*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_invalid_range
 
 type Decompressor* {.importcpp: "Decompressor", pure, inheritable, header: "decompressor.h".} = object
   ## This manages run-time decompression of a zlib-compressed stream, as a
@@ -878,10 +878,10 @@ type DownloadDb_Status {.importcpp: "DownloadDb::Status", pure, header: "downloa
   Status_decompressed = 2
   Status_extracted = 3
 
-func Status_incomplete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_incomplete
-func Status_complete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_complete
-func Status_decompressed*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_decompressed
-func Status_extracted*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_extracted
+template Status_incomplete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_incomplete
+template Status_complete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_complete
+template Status_decompressed*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_decompressed
+template Status_extracted*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_extracted
 
 type Extractor* {.importcpp: "Extractor", pure, inheritable, header: "extractor.h".} = object
   ## This class automatically extracts the contents of a Multifile to the
@@ -1254,7 +1254,7 @@ type VirtualFileSystem* {.importcpp: "VirtualFileSystem", pure, inheritable, hea
 type VirtualFileSystem_MountFlags {.importcpp: "VirtualFileSystem::MountFlags", pure, header: "virtualFileSystem.h".} = enum
   MF_read_only = 2
 
-func MF_read_only*(_: typedesc[VirtualFileSystem]): VirtualFileSystem_MountFlags = VirtualFileSystem_MountFlags.MF_read_only
+template MF_read_only*(_: typedesc[VirtualFileSystem]): VirtualFileSystem_MountFlags = VirtualFileSystem_MountFlags.MF_read_only
 
 type TrueClock* {.importcpp: "TrueClock", pure, inheritable, header: "trueClock.h".} = object
   ## An interface to whatever real-time clock we might have available in the
@@ -1303,17 +1303,17 @@ type WindowsRegistry_RegLevel {.importcpp: "WindowsRegistry::RegLevel", pure, he
   rl_machine = 0
   rl_user = 1
 
-func rl_machine*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_machine
-func rl_user*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_user
+template rl_machine*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_machine
+template rl_user*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_user
 
 type WindowsRegistry_Type {.importcpp: "WindowsRegistry::Type", pure, header: "windowsRegistry.h".} = enum
   T_none = 0
   T_int = 1
   T_string = 2
 
-func T_none*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_none
-func T_int*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_int
-func T_string*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_string
+template T_none*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_none
+template T_int*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_int
+template T_string*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_string
 
 type RecorderBase* {.importcpp: "RecorderBase*", bycopy, pure, inheritable, header: "recorderBase.h".} = object
   ## This is the base class to a number of objects that record particular kinds
@@ -1379,11 +1379,11 @@ type PandaNode_UnexpectedChange {.importcpp: "PandaNode::UnexpectedChange", pure
   UC_state = 8
   UC_draw_mask = 16
 
-func UC_parents*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_parents
-func UC_children*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_children
-func UC_transform*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_transform
-func UC_state*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_state
-func UC_draw_mask*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_draw_mask
+template UC_parents*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_parents
+template UC_children*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_children
+template UC_transform*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_transform
+template UC_state*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_state
+template UC_draw_mask*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_draw_mask
 
 type PandaNode_FancyBits {.importcpp: "PandaNode::FancyBits", pure, header: "pandaNode.h".} = enum
   FB_transform = 1
@@ -1393,12 +1393,12 @@ type PandaNode_FancyBits {.importcpp: "PandaNode::FancyBits", pure, header: "pan
   FB_draw_mask = 32
   FB_cull_callback = 64
 
-func FB_transform*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_transform
-func FB_state*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_state
-func FB_effects*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_effects
-func FB_tag*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_tag
-func FB_draw_mask*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_draw_mask
-func FB_cull_callback*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_cull_callback
+template FB_transform*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_transform
+template FB_state*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_state
+template FB_effects*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_effects
+template FB_tag*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_tag
+template FB_draw_mask*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_draw_mask
+template FB_cull_callback*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_cull_callback
 
 type DataNode* {.importcpp: "PT(DataNode)", bycopy, pure, inheritable, header: "dataNode.h".} = object of PandaNode
   ## The fundamental type of node for the data graph.  The DataNode class is
@@ -1695,10 +1695,10 @@ type SceneGraphAnalyzer_LodMode {.importcpp: "SceneGraphAnalyzer::LodMode", pure
   LM_all = 2
   LM_none = 3
 
-func LM_lowest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_lowest
-func LM_highest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_highest
-func LM_all*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_all
-func LM_none*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_none
+template LM_lowest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_lowest
+template LM_highest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_highest
+template LM_all*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_all
+template LM_none*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_none
 
 type CachedTypedWritableReferenceCount* {.importcpp: "PT(CachedTypedWritableReferenceCount)", bycopy, pure, inheritable, header: "cachedTypedWritableReferenceCount.h".} = object of TypedWritableReferenceCount
   ## This is a special extension to ReferenceCount that includes dual reference
@@ -1754,8 +1754,8 @@ type NodeCachedReferenceCount_Referenced {.importcpp: "NodeCachedReferenceCount:
   R_node = 1
   R_cache = 2
 
-func R_node*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_node
-func R_cache*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_cache
+template R_node*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_node
+template R_cache*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_cache
 
 type TransformState* {.importcpp: "PT(TransformState)", bycopy, pure, header: "transformState.h".} = object of NodeCachedReferenceCount
   ## Indicates a coordinate-system transform on vertices.  TransformStates are
@@ -1818,15 +1818,15 @@ type RenderAttrib_PandaCompareFunc {.importcpp: "RenderAttrib::PandaCompareFunc"
   M_greater_equal = 7
   M_always = 8
 
-func M_none*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_none
-func M_never*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_never
-func M_less*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less
-func M_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_equal
-func M_less_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less_equal
-func M_greater*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater
-func M_not_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_not_equal
-func M_greater_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater_equal
-func M_always*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_always
+template M_none*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_none
+template M_never*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_never
+template M_less*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less
+template M_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_equal
+template M_less_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less_equal
+template M_greater*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater
+template M_not_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_not_equal
+template M_greater_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater_equal
+template M_always*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_always
 
 type RenderAttrib_TexGenMode {.importcpp: "RenderAttrib::TexGenMode", pure, header: "renderAttrib.h".} = enum
   ## This is the enumerated type for TexGenAttrib.  It is inherited into
@@ -1845,18 +1845,18 @@ type RenderAttrib_TexGenMode {.importcpp: "RenderAttrib::TexGenMode", pure, head
   M_unused2 = 10
   M_constant = 11
 
-func M_off*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_off
-func M_eye_sphere_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_sphere_map
-func M_world_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_cube_map
-func M_eye_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_cube_map
-func M_world_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_normal
-func M_eye_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_normal
-func M_world_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_position
-func M_unused*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused
-func M_eye_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_position
-func M_point_sprite*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_point_sprite
-func M_unused2*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused2
-func M_constant*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_constant
+template M_off*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_off
+template M_eye_sphere_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_sphere_map
+template M_world_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_cube_map
+template M_eye_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_cube_map
+template M_world_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_normal
+template M_eye_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_normal
+template M_world_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_position
+template M_unused*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused
+template M_eye_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_position
+template M_point_sprite*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_point_sprite
+template M_unused2*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused2
+template M_constant*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_constant
 
 type RenderModeAttrib* {.importcpp: "PT(RenderModeAttrib)", bycopy, pure, inheritable, header: "renderModeAttrib.h".} = object of RenderAttrib
   ## Specifies how polygons are to be drawn.
@@ -1874,12 +1874,12 @@ type RenderModeAttrib_Mode {.importcpp: "RenderModeAttrib::Mode", pure, header: 
   M_filled_flat = 4
   M_filled_wireframe = 5
 
-func M_unchanged*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_unchanged
-func M_filled*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled
-func M_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_wireframe
-func M_point*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_point
-func M_filled_flat*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_flat
-func M_filled_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_wireframe
+template M_unchanged*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_unchanged
+template M_filled*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled
+template M_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_wireframe
+template M_point*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_point
+template M_filled_flat*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_flat
+template M_filled_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_wireframe
 
 type TexMatrixAttrib* {.importcpp: "PT(TexMatrixAttrib)", bycopy, pure, inheritable, header: "texMatrixAttrib.h".} = object of RenderAttrib
   ## Applies a transform matrix to UV's before they are rendered.
@@ -1931,16 +1931,16 @@ type AntialiasAttrib_Mode {.importcpp: "AntialiasAttrib::Mode", pure, header: "a
   M_better = 64
   M_dont_care = 96
 
-func M_none*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_none
-func M_point*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_point
-func M_line*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_line
-func M_polygon*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_polygon
-func M_multisample*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_multisample
-func M_auto*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_auto
-func M_type_mask*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_type_mask
-func M_faster*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_faster
-func M_better*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_better
-func M_dont_care*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_dont_care
+template M_none*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_none
+template M_point*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_point
+template M_line*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_line
+template M_polygon*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_polygon
+template M_multisample*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_multisample
+template M_auto*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_auto
+template M_type_mask*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_type_mask
+template M_faster*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_faster
+template M_better*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_better
+template M_dont_care*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_dont_care
 
 type RenderEffect* {.importcpp: "PT(RenderEffect)", bycopy, pure, inheritable, header: "renderEffect.h".} = object of TypedWritableReferenceCount
   ## This is the base class for a number of special render effects that may be
@@ -1999,13 +1999,13 @@ type TransparencyAttrib_Mode {.importcpp: "TransparencyAttrib::Mode", pure, head
   M_binary = 5
   M_dual = 6
 
-func M_none*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_none
-func M_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_alpha
-func M_premultiplied_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_premultiplied_alpha
-func M_multisample*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample
-func M_multisample_mask*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample_mask
-func M_binary*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_binary
-func M_dual*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_dual
+template M_none*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_none
+template M_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_alpha
+template M_premultiplied_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_premultiplied_alpha
+template M_multisample*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample
+template M_multisample_mask*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample_mask
+template M_binary*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_binary
+template M_dual*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_dual
 
 type LogicOpAttrib* {.importcpp: "PT(LogicOpAttrib)", bycopy, pure, inheritable, header: "logicOpAttrib.h".} = object of RenderAttrib
   ## If enabled, specifies that a custom logical operation be performed instead
@@ -2038,23 +2038,23 @@ type LogicOpAttrib_Operation {.importcpp: "LogicOpAttrib::Operation", pure, head
   O_nand = 15
   O_set = 16
 
-func O_none*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_none
-func O_clear*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_clear
-func O_and*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and
-func O_and_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_reverse
-func O_copy*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy
-func O_and_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_inverted
-func O_noop*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_noop
-func O_xor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_xor
-func O_or*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or
-func O_nor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nor
-func O_equivalent*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_equivalent
-func O_invert*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_invert
-func O_or_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_reverse
-func O_copy_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy_inverted
-func O_or_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_inverted
-func O_nand*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nand
-func O_set*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_set
+template O_none*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_none
+template O_clear*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_clear
+template O_and*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and
+template O_and_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_reverse
+template O_copy*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy
+template O_and_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_inverted
+template O_noop*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_noop
+template O_xor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_xor
+template O_or*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or
+template O_nor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nor
+template O_equivalent*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_equivalent
+template O_invert*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_invert
+template O_or_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_reverse
+template O_copy_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy_inverted
+template O_or_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_inverted
+template O_nand*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nand
+template O_set*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_set
 
 type ShaderInput* {.importcpp: "ShaderInput", pure, inheritable, header: "shaderInput.h".} = object
   ## This is a small container class that can hold any one of the value types
@@ -2066,9 +2066,9 @@ type ShaderInput_AccessFlags {.importcpp: "ShaderInput::AccessFlags", pure, head
   A_write = 2
   A_layered = 4
 
-func A_read*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_read
-func A_write*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_write
-func A_layered*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_layered
+template A_read*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_read
+template A_write*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_write
+template A_layered*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_layered
 
 type ShaderInput_ShaderInputType {.importcpp: "ShaderInput::ShaderInputType", pure, header: "shaderInput.h".} = enum
   M_invalid = 0
@@ -2081,15 +2081,15 @@ type ShaderInput_ShaderInputType {.importcpp: "ShaderInput::ShaderInputType", pu
   M_texture_image = 7
   M_buffer = 8
 
-func M_invalid*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_invalid
-func M_texture*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture
-func M_nodepath*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_nodepath
-func M_vector*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_vector
-func M_numeric*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_numeric
-func M_texture_sampler*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_sampler
-func M_param*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_param
-func M_texture_image*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_image
-func M_buffer*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_buffer
+template M_invalid*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_invalid
+template M_texture*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture
+template M_nodepath*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_nodepath
+template M_vector*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_vector
+template M_numeric*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_numeric
+template M_texture_sampler*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_sampler
+template M_param*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_param
+template M_texture_image*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_image
+template M_buffer*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_buffer
 
 type InternalNameCollection* {.importcpp: "InternalNameCollection", pure, inheritable, header: "internalNameCollection.h".} = object
 
@@ -2120,10 +2120,10 @@ type NodePath_ErrorType {.importcpp: "NodePath::ErrorType", pure, header: "nodeP
   ET_removed = 2
   ET_fail = 3
 
-func ET_ok*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_ok
-func ET_not_found*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_not_found
-func ET_removed*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_removed
-func ET_fail*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_fail
+template ET_ok*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_ok
+template ET_not_found*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_not_found
+template ET_removed*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_removed
+template ET_fail*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_fail
 
 type NodePathCollection* {.importcpp: "NodePathCollection", pure, inheritable, header: "nodePathCollection.h".} = object
   ## This is a set of zero or more NodePaths.  It's handy for returning from
@@ -2185,9 +2185,9 @@ type AuxBitplaneAttrib_AuxBitplaneOutput {.importcpp: "AuxBitplaneAttrib::AuxBit
   ABO_aux_normal = 2
   ABO_aux_glow = 4
 
-func ABO_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_glow
-func ABO_aux_normal*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_normal
-func ABO_aux_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_glow
+template ABO_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_glow
+template ABO_aux_normal*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_normal
+template ABO_aux_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_glow
 
 type AuxSceneData* {.importcpp: "PT(AuxSceneData)", bycopy, pure, inheritable, header: "auxSceneData.h".} = object of TypedReferenceCount
   ## This is a base class for a generic data structure that can be attached per-
@@ -2216,9 +2216,9 @@ type BamEnums_BamEndian {.importcpp: "BamEnums::BamEndian", pure, header: "bamEn
   BE_bigendian = 0
   BE_native = 1
 
-func BE_bigendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_bigendian
-func BE_littleendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_littleendian
-func BE_native*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_native
+template BE_bigendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_bigendian
+template BE_littleendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_littleendian
+template BE_native*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_native
 
 type BamEnums_BamObjectCode {.importcpp: "BamEnums::BamObjectCode", pure, header: "bamEnums.h".} = enum
   ## This is the code written along with each object.  It is used to control
@@ -2229,11 +2229,11 @@ type BamEnums_BamObjectCode {.importcpp: "BamEnums::BamObjectCode", pure, header
   BOC_remove = 3
   BOC_file_data = 4
 
-func BOC_push*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_push
-func BOC_pop*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_pop
-func BOC_adjunct*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_adjunct
-func BOC_remove*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_remove
-func BOC_file_data*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_file_data
+template BOC_push*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_push
+template BOC_pop*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_pop
+template BOC_adjunct*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_adjunct
+template BOC_remove*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_remove
+template BOC_file_data*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_file_data
 
 type BamEnums_BamTextureMode {.importcpp: "BamEnums::BamTextureMode", pure, header: "bamEnums.h".} = enum
   ## This enum is used to control how textures are written to a bam stream.
@@ -2243,11 +2243,11 @@ type BamEnums_BamTextureMode {.importcpp: "BamEnums::BamTextureMode", pure, head
   BTM_basename = 3
   BTM_rawdata = 4
 
-func BTM_unchanged*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_unchanged
-func BTM_fullpath*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_fullpath
-func BTM_relative*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_relative
-func BTM_basename*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_basename
-func BTM_rawdata*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_rawdata
+template BTM_unchanged*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_unchanged
+template BTM_fullpath*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_fullpath
+template BTM_relative*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_relative
+template BTM_basename*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_basename
+template BTM_rawdata*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_rawdata
 
 type BamFile* {.importcpp: "BamFile", pure, inheritable, header: "bamFile.h".} = object of BamEnums
   ## The principle public interface to reading and writing Bam disk files.  See
@@ -2293,8 +2293,8 @@ type PlaneNode_ClipEffect {.importcpp: "PlaneNode::ClipEffect", pure, header: "p
   CE_visible = 1
   CE_collision = 2
 
-func CE_visible*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_visible
-func CE_collision*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_collision
+template CE_visible*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_visible
+template CE_collision*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_collision
 
 type ClipPlaneAttrib* {.importcpp: "PT(ClipPlaneAttrib)", bycopy, pure, inheritable, header: "clipPlaneAttrib.h".} = object of RenderAttrib
   ## This functions similarly to a LightAttrib.  It indicates the set of
@@ -2314,9 +2314,9 @@ type ClipPlaneAttrib_Operation {.importcpp: "ClipPlaneAttrib::Operation", pure, 
   O_add = 1
   O_remove = 2
 
-func O_set*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_set
-func O_add*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_add
-func O_remove*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_remove
+template O_set*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_set
+template O_add*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_add
+template O_remove*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_remove
 
 type ColorAttrib* {.importcpp: "PT(ColorAttrib)", bycopy, pure, inheritable, header: "colorAttrib.h".} = object of RenderAttrib
   ## Indicates what color should be applied to renderable geometry.
@@ -2331,9 +2331,9 @@ type ColorAttrib_Type {.importcpp: "ColorAttrib::Type", pure, header: "colorAttr
   T_flat = 1
   T_off = 2
 
-func T_vertex*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_vertex
-func T_flat*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_flat
-func T_off*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_off
+template T_vertex*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_vertex
+template T_flat*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_flat
+template T_off*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_off
 
 type ColorBlendAttrib* {.importcpp: "PT(ColorBlendAttrib)", bycopy, pure, inheritable, header: "colorBlendAttrib.h".} = object of RenderAttrib
   ## This specifies how colors are blended into the frame buffer, for special
@@ -2352,12 +2352,12 @@ type ColorBlendAttrib_Mode {.importcpp: "ColorBlendAttrib::Mode", pure, header: 
   M_min = 4
   M_max = 5
 
-func M_none*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_none
-func M_add*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_add
-func M_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_subtract
-func M_inv_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_inv_subtract
-func M_min*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_min
-func M_max*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_max
+template M_none*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_none
+template M_add*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_add
+template M_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_subtract
+template M_inv_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_inv_subtract
+template M_min*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_min
+template M_max*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_max
 
 type ColorBlendAttrib_Operand {.importcpp: "ColorBlendAttrib::Operand", pure, header: "colorBlendAttrib.h".} = enum
   O_zero = 0
@@ -2384,29 +2384,29 @@ type ColorBlendAttrib_Operand {.importcpp: "ColorBlendAttrib::Operand", pure, he
   O_alpha_scale = 21
   O_one_minus_alpha_scale = 22
 
-func O_zero*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_zero
-func O_one*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one
-func O_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color
-func O_one_minus_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_color
-func O_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_color
-func O_one_minus_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_color
-func O_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_alpha
-func O_one_minus_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_alpha
-func O_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_alpha
-func O_one_minus_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_alpha
-func O_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_color
-func O_one_minus_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_color
-func O_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_alpha
-func O_one_minus_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_alpha
-func O_incoming_color_saturate*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color_saturate
-func O_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_color
-func O_one_minus_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_color
-func O_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_alpha
-func O_one_minus_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_alpha
-func O_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_color_scale
-func O_one_minus_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_color_scale
-func O_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_alpha_scale
-func O_one_minus_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_alpha_scale
+template O_zero*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_zero
+template O_one*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one
+template O_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color
+template O_one_minus_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_color
+template O_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_color
+template O_one_minus_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_color
+template O_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_alpha
+template O_one_minus_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_alpha
+template O_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_alpha
+template O_one_minus_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_alpha
+template O_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_color
+template O_one_minus_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_color
+template O_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_alpha
+template O_one_minus_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_alpha
+template O_incoming_color_saturate*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color_saturate
+template O_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_color
+template O_one_minus_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_color
+template O_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_alpha
+template O_one_minus_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_alpha
+template O_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_color_scale
+template O_one_minus_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_color_scale
+template O_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_alpha_scale
+template O_one_minus_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_alpha_scale
 
 type ColorScaleAttrib* {.importcpp: "PT(ColorScaleAttrib)", bycopy, pure, inheritable, header: "colorScaleAttrib.h".} = object of RenderAttrib
   ## Applies a scale to colors in the scene graph and on vertices.
@@ -2435,13 +2435,13 @@ type ColorWriteAttrib_Channels {.importcpp: "ColorWriteAttrib::Channels", pure, 
   C_alpha = 8
   C_all = 15
 
-func C_off*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_off
-func C_red*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_red
-func C_green*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_green
-func C_blue*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_blue
-func C_rgb*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_rgb
-func C_alpha*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_alpha
-func C_all*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_all
+template C_off*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_off
+template C_red*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_red
+template C_green*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_green
+template C_blue*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_blue
+template C_rgb*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_rgb
+template C_alpha*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_alpha
+template C_all*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_all
 
 type CompassEffect* {.importcpp: "PT(CompassEffect)", bycopy, pure, inheritable, header: "compassEffect.h".} = object of RenderEffect
   ## A CompassEffect causes a node to inherit its rotation (or pos or scale, if
@@ -2483,16 +2483,16 @@ type CompassEffect_Properties {.importcpp: "CompassEffect::Properties", pure, he
   P_scale = 112
   P_all = 127
 
-func P_x*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_x
-func P_y*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_y
-func P_z*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_z
-func P_pos*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_pos
-func P_rot*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_rot
-func P_sx*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sx
-func P_sy*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sy
-func P_sz*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sz
-func P_scale*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_scale
-func P_all*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_all
+template P_x*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_x
+template P_y*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_y
+template P_z*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_z
+template P_pos*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_pos
+template P_rot*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_rot
+template P_sx*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sx
+template P_sy*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sy
+template P_sz*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sz
+template P_scale*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_scale
+template P_all*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_all
 
 type CullBinEnums* {.importcpp: "CullBinEnums", pure, inheritable, header: "cullBinEnums.h".} = object
   ## Provides scoping for the enumerated type shared by CullBin and
@@ -2506,12 +2506,12 @@ type CullBinEnums_BinType {.importcpp: "CullBinEnums::BinType", pure, header: "c
   BT_front_to_back = 4
   BT_fixed = 5
 
-func BT_invalid*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_invalid
-func BT_unsorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_unsorted
-func BT_state_sorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_state_sorted
-func BT_back_to_front*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_back_to_front
-func BT_front_to_back*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_front_to_back
-func BT_fixed*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_fixed
+template BT_invalid*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_invalid
+template BT_unsorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_unsorted
+template BT_state_sorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_state_sorted
+template BT_back_to_front*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_back_to_front
+template BT_front_to_back*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_front_to_back
+template BT_fixed*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_fixed
 
 type GeomNode* {.importcpp: "PT(GeomNode)", bycopy, pure, inheritable, header: "geomNode.h".} = object of PandaNode
   ## A node that holds Geom objects, renderable pieces of geometry.  This is the
@@ -2550,10 +2550,10 @@ type CullFaceAttrib_Mode {.importcpp: "CullFaceAttrib::Mode", pure, header: "cul
   M_cull_counter_clockwise = 2
   M_cull_unchanged = 3
 
-func M_cull_none*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_none
-func M_cull_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_clockwise
-func M_cull_counter_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_counter_clockwise
-func M_cull_unchanged*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_unchanged
+template M_cull_none*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_none
+template M_cull_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_clockwise
+template M_cull_counter_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_counter_clockwise
+template M_cull_unchanged*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_unchanged
 
 type WorkingNodePath* {.importcpp: "WorkingNodePath", pure, inheritable, header: "workingNodePath.h".} = object
   ## This is a class designed to support low-overhead traversals of the complete
@@ -2616,9 +2616,9 @@ type Fog_Mode {.importcpp: "Fog::Mode", pure, header: "fog.h".} = enum
   M_exponential = 1
   M_exponential_squared = 2
 
-func M_linear*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_linear
-func M_exponential*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential
-func M_exponential_squared*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential_squared
+template M_linear*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_linear
+template M_exponential*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential
+template M_exponential_squared*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential_squared
 
 type FogAttrib* {.importcpp: "PT(FogAttrib)", bycopy, pure, inheritable, header: "fogAttrib.h".} = object of RenderAttrib
   ## Applies a Fog to the geometry at and below this node.
@@ -2657,10 +2657,10 @@ type RescaleNormalAttrib_Mode {.importcpp: "RescaleNormalAttrib::Mode", pure, he
   M_normalize = 2
   M_auto = 3
 
-func M_none*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_none
-func M_rescale*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_rescale
-func M_normalize*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_normalize
-func M_auto*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_auto
+template M_none*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_none
+template M_rescale*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_rescale
+template M_normalize*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_normalize
+template M_auto*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_auto
 
 type CullResult* {.importcpp: "PT(CullResult)", bycopy, pure, inheritable, header: "cullResult.h".} = object of ReferenceCount
   ## This stores the result of a BinCullHandler traversal: an ordered collection
@@ -2735,8 +2735,8 @@ type DepthWriteAttrib_Mode {.importcpp: "DepthWriteAttrib::Mode", pure, header: 
   M_off = 0
   M_on = 1
 
-func M_off*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_off
-func M_on*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_on
+template M_off*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_off
+template M_on*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_on
 
 type LightAttrib* {.importcpp: "PT(LightAttrib)", bycopy, pure, inheritable, header: "lightAttrib.h".} = object of RenderAttrib
   ## Indicates which set of lights should be considered "on" to illuminate
@@ -2755,9 +2755,9 @@ type LightAttrib_Operation {.importcpp: "LightAttrib::Operation", pure, header: 
   O_add = 1
   O_remove = 2
 
-func O_set*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_set
-func O_add*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_add
-func O_remove*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_remove
+template O_set*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_set
+template O_add*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_add
+template O_remove*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_remove
 
 type LightRampAttrib* {.importcpp: "PT(LightRampAttrib)", bycopy, pure, inheritable, header: "lightRampAttrib.h".} = object of RenderAttrib
   ## A Light Ramp is any unary operator that takes a rendered pixel as input,
@@ -2779,13 +2779,13 @@ type LightRampAttrib_LightRampMode {.importcpp: "LightRampAttrib::LightRampMode"
   LRT_hdr1 = 5
   LRT_hdr2 = 6
 
-func LRT_default*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_default
-func LRT_identity*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_identity
-func LRT_single_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_single_threshold
-func LRT_double_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_double_threshold
-func LRT_hdr0*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr0
-func LRT_hdr1*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr1
-func LRT_hdr2*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr2
+template LRT_default*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_default
+template LRT_identity*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_identity
+template LRT_single_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_single_threshold
+template LRT_double_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_double_threshold
+template LRT_hdr0*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr0
+template LRT_hdr1*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr1
+template LRT_hdr2*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr2
 
 type Loader* {.importcpp: "PT(Loader)", bycopy, pure, inheritable, header: "loader.h".} = object of TypedReferenceCount
   ## A convenient class for loading models from disk, in bam or egg format (or
@@ -2880,14 +2880,14 @@ type AsyncTask_DoneStatus {.importcpp: "AsyncTask::DoneStatus", pure, header: "a
   DS_interrupt = 6
   DS_await = 7
 
-func DS_done*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_done
-func DS_cont*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_cont
-func DS_again*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_again
-func DS_pickup*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pickup
-func DS_exit*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_exit
-func DS_pause*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pause
-func DS_interrupt*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_interrupt
-func DS_await*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_await
+template DS_done*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_done
+template DS_cont*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_cont
+template DS_again*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_again
+template DS_pickup*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pickup
+template DS_exit*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_exit
+template DS_pause*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pause
+template DS_interrupt*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_interrupt
+template DS_await*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_await
 
 type AsyncTask_State {.importcpp: "AsyncTask::State", pure, header: "asyncTask.h".} = enum
   S_inactive = 0
@@ -2898,13 +2898,13 @@ type AsyncTask_State {.importcpp: "AsyncTask::State", pure, header: "asyncTask.h
   S_active_nested = 5
   S_awaiting = 6
 
-func S_inactive*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_inactive
-func S_active*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active
-func S_servicing*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing
-func S_servicing_removed*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing_removed
-func S_sleeping*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_sleeping
-func S_active_nested*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active_nested
-func S_awaiting*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_awaiting
+template S_inactive*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_inactive
+template S_active*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active
+template S_servicing*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing
+template S_servicing_removed*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing_removed
+template S_sleeping*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_sleeping
+template S_active_nested*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active_nested
+template S_awaiting*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_awaiting
 
 type ModelFlattenRequest* {.importcpp: "PT(ModelFlattenRequest)", bycopy, pure, inheritable, header: "modelFlattenRequest.h".} = object of AsyncTask
   ## This class object manages a single asynchronous request to flatten a model.
@@ -2949,11 +2949,11 @@ type ModelNode_PreserveTransform {.importcpp: "ModelNode::PreserveTransform", pu
   PT_drop_node = 3
   PT_no_touch = 4
 
-func PT_none*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_none
-func PT_local*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_local
-func PT_net*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_net
-func PT_drop_node*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_drop_node
-func PT_no_touch*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_no_touch
+template PT_none*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_none
+template PT_local*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_local
+template PT_net*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_net
+template PT_drop_node*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_drop_node
+template PT_no_touch*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_no_touch
 
 type ModelRoot* {.importcpp: "PT(ModelRoot)", bycopy, pure, inheritable, header: "modelRoot.h".} = object of ModelNode
   ## A node of this type is created automatically at the root of each model file
@@ -3048,16 +3048,16 @@ type PolylightNode_Flicker_Type {.importcpp: "PolylightNode::Flicker_Type", pure
   FSIN = 1
   FCUSTOM = 2
 
-func FRANDOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FRANDOM
-func FSIN*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FSIN
-func FCUSTOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FCUSTOM
+template FRANDOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FRANDOM
+template FSIN*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FSIN
+template FCUSTOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FCUSTOM
 
 type PolylightNode_Attenuation_Type {.importcpp: "PolylightNode::Attenuation_Type", pure, header: "polylightNode.h".} = enum
   ALINEAR = 0
   AQUADRATIC = 1
 
-func ALINEAR*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.ALINEAR
-func AQUADRATIC*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.AQUADRATIC
+template ALINEAR*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.ALINEAR
+template AQUADRATIC*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.AQUADRATIC
 
 type PolylightEffect* {.importcpp: "PT(PolylightEffect)", bycopy, pure, inheritable, header: "polylightEffect.h".} = object of RenderEffect
   ## A PolylightEffect can be used on a node to define a LightGroup  for that
@@ -3074,8 +3074,8 @@ type PolylightEffect_ContribType {.importcpp: "PolylightEffect::ContribType", pu
   CT_proximal = 0
   CT_all = 1
 
-func CT_proximal*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_proximal
-func CT_all*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_all
+template CT_proximal*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_proximal
+template CT_all*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_all
 
 type ShaderAttrib* {.importcpp: "PT(ShaderAttrib)", bycopy, pure, inheritable, header: "shaderAttrib.h".} = object of RenderAttrib
 
@@ -3151,14 +3151,14 @@ type SceneGraphReducer_AttribTypes {.importcpp: "SceneGraphReducer::AttribTypes"
   TT_apply_texture_color = 64
   TT_other = 128
 
-func TT_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_transform
-func TT_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color
-func TT_color_scale*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color_scale
-func TT_tex_matrix*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_tex_matrix
-func TT_clip_plane*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_clip_plane
-func TT_cull_face*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_cull_face
-func TT_apply_texture_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_apply_texture_color
-func TT_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_other
+template TT_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_transform
+template TT_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color
+template TT_color_scale*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color_scale
+template TT_tex_matrix*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_tex_matrix
+template TT_clip_plane*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_clip_plane
+template TT_cull_face*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_cull_face
+template TT_apply_texture_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_apply_texture_color
+template TT_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_other
 
 type SceneGraphReducer_CombineSiblings {.importcpp: "SceneGraphReducer::CombineSiblings", pure, header: "sceneGraphReducer.h".} = enum
   CS_geom_node = 1
@@ -3166,10 +3166,10 @@ type SceneGraphReducer_CombineSiblings {.importcpp: "SceneGraphReducer::CombineS
   CS_other = 4
   CS_recurse = 8
 
-func CS_geom_node*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_geom_node
-func CS_within_radius*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_within_radius
-func CS_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_other
-func CS_recurse*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_recurse
+template CS_geom_node*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_geom_node
+template CS_within_radius*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_within_radius
+template CS_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_other
+template CS_recurse*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_recurse
 
 type SceneGraphReducer_CollectVertexData {.importcpp: "SceneGraphReducer::CollectVertexData", pure, header: "sceneGraphReducer.h".} = enum
   CVD_name = 1
@@ -3181,23 +3181,23 @@ type SceneGraphReducer_CollectVertexData {.importcpp: "SceneGraphReducer::Collec
   CVD_usage_hint = 64
   CVD_animation_type = 128
 
-func CVD_name*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_name
-func CVD_model*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_model
-func CVD_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_transform
-func CVD_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_avoid_dynamic
-func CVD_one_node_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_one_node_only
-func CVD_format*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_format
-func CVD_usage_hint*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_usage_hint
-func CVD_animation_type*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_animation_type
+template CVD_name*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_name
+template CVD_model*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_model
+template CVD_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_transform
+template CVD_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_avoid_dynamic
+template CVD_one_node_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_one_node_only
+template CVD_format*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_format
+template CVD_usage_hint*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_usage_hint
+template CVD_animation_type*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_animation_type
 
 type SceneGraphReducer_MakeNonindexed {.importcpp: "SceneGraphReducer::MakeNonindexed", pure, header: "sceneGraphReducer.h".} = enum
   MN_composite_only = 1
   MN_avoid_animated = 2
   MN_avoid_dynamic = 4
 
-func MN_composite_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_composite_only
-func MN_avoid_animated*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_animated
-func MN_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_dynamic
+template MN_composite_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_composite_only
+template MN_avoid_animated*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_animated
+template MN_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_dynamic
 
 type PortalNode* {.importcpp: "PT(PortalNode)", bycopy, pure, inheritable, header: "portalNode.h".} = object of PandaNode
   ## A node in the scene graph that can hold a Portal Polygon, which is a
@@ -3239,8 +3239,8 @@ type ShadeModelAttrib_Mode {.importcpp: "ShadeModelAttrib::Mode", pure, header: 
   M_flat = 0
   M_smooth = 1
 
-func M_flat*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_flat
-func M_smooth*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_smooth
+template M_flat*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_flat
+template M_smooth*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_smooth
 
 type StencilAttrib* {.importcpp: "PT(StencilAttrib)", bycopy, pure, inheritable, header: "stencilAttrib.h".} = object of RenderAttrib
   ## A StencilAttrib is a collection of all stencil render states.  The render
@@ -3271,20 +3271,20 @@ type StencilAttrib_StencilRenderState {.importcpp: "StencilAttrib::StencilRender
   SRS_clear_value = 12
   SRS_total = 13
 
-func SRS_front_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_comparison_function
-func SRS_front_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_fail_operation
-func SRS_front_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_fail_operation
-func SRS_front_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_pass_operation
-func SRS_reference*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_reference
-func SRS_read_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_read_mask
-func SRS_write_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_write_mask
-func SRS_back_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_comparison_function
-func SRS_back_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_fail_operation
-func SRS_back_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_fail_operation
-func SRS_back_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_pass_operation
-func SRS_clear*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear
-func SRS_clear_value*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear_value
-func SRS_total*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_total
+template SRS_front_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_comparison_function
+template SRS_front_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_fail_operation
+template SRS_front_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_fail_operation
+template SRS_front_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_pass_operation
+template SRS_reference*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_reference
+template SRS_read_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_read_mask
+template SRS_write_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_write_mask
+template SRS_back_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_comparison_function
+template SRS_back_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_fail_operation
+template SRS_back_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_fail_operation
+template SRS_back_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_pass_operation
+template SRS_clear*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear
+template SRS_clear_value*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear_value
+template SRS_total*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_total
 
 type StencilAttrib_StencilComparisonFunction {.importcpp: "StencilAttrib::StencilComparisonFunction", pure, header: "stencilAttrib.h".} = enum
   ## Exists purely for backward compatibility.
@@ -3297,14 +3297,14 @@ type StencilAttrib_StencilComparisonFunction {.importcpp: "StencilAttrib::Stenci
   SCF_greater_than_or_equal = 7
   SCF_always = 8
 
-func SCF_never*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_never
-func SCF_less_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than
-func SCF_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_equal
-func SCF_less_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than_or_equal
-func SCF_greater_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than
-func SCF_not_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_not_equal
-func SCF_greater_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than_or_equal
-func SCF_always*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_always
+template SCF_never*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_never
+template SCF_less_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than
+template SCF_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_equal
+template SCF_less_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than_or_equal
+template SCF_greater_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than
+template SCF_not_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_not_equal
+template SCF_greater_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than_or_equal
+template SCF_always*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_always
 
 type StencilAttrib_StencilOperation {.importcpp: "StencilAttrib::StencilOperation", pure, header: "stencilAttrib.h".} = enum
   SO_keep = 0
@@ -3316,14 +3316,14 @@ type StencilAttrib_StencilOperation {.importcpp: "StencilAttrib::StencilOperatio
   SO_increment_saturate = 6
   SO_decrement_saturate = 7
 
-func SO_keep*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_keep
-func SO_zero*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_zero
-func SO_replace*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_replace
-func SO_increment*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment
-func SO_decrement*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement
-func SO_invert*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_invert
-func SO_increment_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment_saturate
-func SO_decrement_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement_saturate
+template SO_keep*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_keep
+template SO_zero*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_zero
+template SO_replace*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_replace
+template SO_increment*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment
+template SO_decrement*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement
+template SO_invert*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_invert
+template SO_increment_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment_saturate
+template SO_decrement_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement_saturate
 
 type ShaderPool* {.importcpp: "ShaderPool", pure, inheritable, header: "shaderPool.h".} = object
   ## This is the preferred interface for loading shaders for the TextNode
@@ -3553,19 +3553,19 @@ type TextProperties_Alignment {.importcpp: "TextProperties::Alignment", pure, he
   A_boxed_right = 4
   A_boxed_center = 5
 
-func A_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_left
-func A_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_right
-func A_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_center
-func A_boxed_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_left
-func A_boxed_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_right
-func A_boxed_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_center
+template A_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_left
+template A_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_right
+template A_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_center
+template A_boxed_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_left
+template A_boxed_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_right
+template A_boxed_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_center
 
 type TextProperties_Direction {.importcpp: "TextProperties::Direction", pure, header: "textProperties.h".} = enum
   D_ltr = 0
   D_rtl = 1
 
-func D_ltr*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_ltr
-func D_rtl*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_rtl
+template D_ltr*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_ltr
+template D_rtl*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_rtl
 
 type TextNode* {.importcpp: "PT(TextNode)", bycopy, pure, inheritable, header: "textNode.h".} = object of PandaNode
   ## The primary interface to this module.  This class does basic text assembly;
@@ -3597,11 +3597,11 @@ type TextNode_FlattenFlags {.importcpp: "TextNode::FlattenFlags", pure, header: 
   FF_strong = 4
   FF_dynamic_merge = 8
 
-func FF_none*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_none
-func FF_light*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_light
-func FF_medium*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_medium
-func FF_strong*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_strong
-func FF_dynamic_merge*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_dynamic_merge
+template FF_none*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_none
+template FF_light*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_light
+template FF_medium*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_medium
+template FF_strong*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_strong
+template FF_dynamic_merge*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_dynamic_merge
 
 type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritable, header: "frameRateMeter.h".} = object of TextNode
   ## This is a special TextNode that automatically updates itself with the
@@ -3633,10 +3633,10 @@ type GeoMipTerrain_AutoFlattenMode {.importcpp: "GeoMipTerrain::AutoFlattenMode"
   AFM_medium = 2
   AFM_strong = 3
 
-func AFM_off*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_off
-func AFM_light*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_light
-func AFM_medium*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_medium
-func AFM_strong*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_strong
+template AFM_off*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_off
+template AFM_light*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_light
+template AFM_medium*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_medium
+template AFM_strong*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_strong
 
 type HeightfieldTesselator* {.importcpp: "HeightfieldTesselator", pure, inheritable, header: "heightfieldTesselator.h".} = object of Namable
 
@@ -3689,14 +3689,14 @@ type Texture_TextureType {.importcpp: "Texture::TextureType", pure, header: "tex
   TT_cube_map_array = 6
   TT_1d_texture_array = 7
 
-func TT_1d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture
-func TT_2d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture
-func TT_3d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_3d_texture
-func TT_2d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture_array
-func TT_cube_map*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map
-func TT_buffer_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_buffer_texture
-func TT_cube_map_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map_array
-func TT_1d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture_array
+template TT_1d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture
+template TT_2d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture
+template TT_3d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_3d_texture
+template TT_2d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture_array
+template TT_cube_map*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map
+template TT_buffer_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_buffer_texture
+template TT_cube_map_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map_array
+template TT_1d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture_array
 
 type Texture_ComponentType {.importcpp: "Texture::ComponentType", pure, header: "texture.h".} = enum
   T_unsigned_byte = 0
@@ -3709,15 +3709,15 @@ type Texture_ComponentType {.importcpp: "Texture::ComponentType", pure, header: 
   T_half_float = 7
   T_unsigned_int = 8
 
-func T_unsigned_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_byte
-func T_unsigned_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_short
-func T_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_float
-func T_unsigned_int_24_8*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int_24_8
-func T_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_int
-func T_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_byte
-func T_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_short
-func T_half_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_half_float
-func T_unsigned_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int
+template T_unsigned_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_byte
+template T_unsigned_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_short
+template T_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_float
+template T_unsigned_int_24_8*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int_24_8
+template T_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_int
+template T_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_byte
+template T_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_short
+template T_half_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_half_float
+template T_unsigned_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int
 
 type Texture_Format {.importcpp: "Texture::Format", pure, header: "texture.h".} = enum
   F_depth_stencil = 1
@@ -3773,58 +3773,58 @@ type Texture_Format {.importcpp: "Texture::Format", pure, header: "texture.h".} 
   F_rgb32i = 51
   F_rgba32i = 52
 
-func F_depth_stencil*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_stencil
-func F_color_index*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_color_index
-func F_red*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_red
-func F_green*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_green
-func F_blue*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_blue
-func F_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_alpha
-func F_rgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb
-func F_rgb5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb5
-func F_rgb8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8
-func F_rgb12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb12
-func F_rgb332*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb332
-func F_rgba*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba
-func F_rgbm*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgbm
-func F_rgba4*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba4
-func F_rgba5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba5
-func F_rgba8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8
-func F_rgba12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba12
-func F_luminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance
-func F_luminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alpha
-func F_luminance_alphamask*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alphamask
-func F_rgba16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16
-func F_rgba32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32
-func F_depth_component*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component
-func F_depth_component16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component16
-func F_depth_component24*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component24
-func F_depth_component32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component32
-func F_r16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16
-func F_rg16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16
-func F_rgb16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16
-func F_srgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb
-func F_srgb_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb_alpha
-func F_sluminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance
-func F_sluminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance_alpha
-func F_r32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32i
-func F_r32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32
-func F_rg32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32
-func F_rgb32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32
-func F_r8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r8i
-func F_rg8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg8i
-func F_rgb8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8i
-func F_rgba8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8i
-func F_r11_g11_b10*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r11_g11_b10
-func F_rgb9_e5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb9_e5
-func F_rgb10_a2*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb10_a2
-func F_rg*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg
-func F_r16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16i
-func F_rg16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16i
-func F_rgb16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16i
-func F_rgba16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16i
-func F_rg32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32i
-func F_rgb32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32i
-func F_rgba32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32i
+template F_depth_stencil*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_stencil
+template F_color_index*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_color_index
+template F_red*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_red
+template F_green*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_green
+template F_blue*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_blue
+template F_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_alpha
+template F_rgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb
+template F_rgb5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb5
+template F_rgb8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8
+template F_rgb12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb12
+template F_rgb332*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb332
+template F_rgba*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba
+template F_rgbm*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgbm
+template F_rgba4*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba4
+template F_rgba5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba5
+template F_rgba8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8
+template F_rgba12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba12
+template F_luminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance
+template F_luminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alpha
+template F_luminance_alphamask*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alphamask
+template F_rgba16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16
+template F_rgba32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32
+template F_depth_component*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component
+template F_depth_component16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component16
+template F_depth_component24*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component24
+template F_depth_component32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component32
+template F_r16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16
+template F_rg16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16
+template F_rgb16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16
+template F_srgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb
+template F_srgb_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb_alpha
+template F_sluminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance
+template F_sluminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance_alpha
+template F_r32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32i
+template F_r32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32
+template F_rg32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32
+template F_rgb32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32
+template F_r8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r8i
+template F_rg8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg8i
+template F_rgb8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8i
+template F_rgba8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8i
+template F_r11_g11_b10*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r11_g11_b10
+template F_rgb9_e5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb9_e5
+template F_rgb10_a2*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb10_a2
+template F_rg*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg
+template F_r16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16i
+template F_rg16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16i
+template F_rgb16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16i
+template F_rgba16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16i
+template F_rg32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32i
+template F_rgb32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32i
+template F_rgba32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32i
 
 type Texture_DeprecatedFilterType {.importcpp: "Texture::DeprecatedFilterType", pure, header: "texture.h".} = enum
   ## Deprecated.  See SamplerState.FilterType.
@@ -3838,15 +3838,15 @@ type Texture_DeprecatedFilterType {.importcpp: "Texture::DeprecatedFilterType", 
   FT_default = 7
   FT_invalid = 8
 
-func FT_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest
-func FT_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear
-func FT_nearest_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_nearest
-func FT_linear_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_nearest
-func FT_nearest_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_linear
-func FT_linear_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_linear
-func FT_shadow*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_shadow
-func FT_default*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_default
-func FT_invalid*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_invalid
+template FT_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest
+template FT_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear
+template FT_nearest_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_nearest
+template FT_linear_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_nearest
+template FT_nearest_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_linear
+template FT_linear_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_linear
+template FT_shadow*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_shadow
+template FT_default*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_default
+template FT_invalid*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_invalid
 
 type Texture_DeprecatedWrapMode {.importcpp: "Texture::DeprecatedWrapMode", pure, header: "texture.h".} = enum
   ## Deprecated.  See SamplerState.WrapMode.
@@ -3857,12 +3857,12 @@ type Texture_DeprecatedWrapMode {.importcpp: "Texture::DeprecatedWrapMode", pure
   WM_border_color = 4
   WM_invalid = 5
 
-func WM_clamp*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_clamp
-func WM_repeat*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_repeat
-func WM_mirror*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror
-func WM_mirror_once*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror_once
-func WM_border_color*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_border_color
-func WM_invalid*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_invalid
+template WM_clamp*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_clamp
+template WM_repeat*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_repeat
+template WM_mirror*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror
+template WM_mirror_once*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror_once
+template WM_border_color*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_border_color
+template WM_invalid*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_invalid
 
 type Texture_CompressionMode {.importcpp: "Texture::CompressionMode", pure, header: "texture.h".} = enum
   CM_default = 0
@@ -3881,21 +3881,21 @@ type Texture_CompressionMode {.importcpp: "Texture::CompressionMode", pure, head
   CM_etc2 = 13
   CM_eac = 14
 
-func CM_default*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_default
-func CM_off*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_off
-func CM_on*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_on
-func CM_fxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_fxt1
-func CM_dxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt1
-func CM_dxt2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt2
-func CM_dxt3*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt3
-func CM_dxt4*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt4
-func CM_dxt5*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt5
-func CM_pvr1_2bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_2bpp
-func CM_pvr1_4bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_4bpp
-func CM_rgtc*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_rgtc
-func CM_etc1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc1
-func CM_etc2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc2
-func CM_eac*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_eac
+template CM_default*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_default
+template CM_off*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_off
+template CM_on*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_on
+template CM_fxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_fxt1
+template CM_dxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt1
+template CM_dxt2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt2
+template CM_dxt3*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt3
+template CM_dxt4*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt4
+template CM_dxt5*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt5
+template CM_pvr1_2bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_2bpp
+template CM_pvr1_4bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_4bpp
+template CM_rgtc*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_rgtc
+template CM_etc1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc1
+template CM_etc2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc2
+template CM_eac*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_eac
 
 type Texture_QualityLevel {.importcpp: "Texture::QualityLevel", pure, header: "texture.h".} = enum
   QL_default = 0
@@ -3903,10 +3903,10 @@ type Texture_QualityLevel {.importcpp: "Texture::QualityLevel", pure, header: "t
   QL_normal = 2
   QL_best = 3
 
-func QL_default*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_default
-func QL_fastest*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_fastest
-func QL_normal*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_normal
-func QL_best*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_best
+template QL_default*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_default
+template QL_fastest*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_fastest
+template QL_normal*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_normal
+template QL_best*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_best
 
 type MovieTexture* {.importcpp: "PT(MovieTexture)", bycopy, pure, inheritable, header: "movieTexture.h".} = object of Texture
   ## A texture that fetches video frames from an underlying object of class
@@ -4041,25 +4041,25 @@ type PfmVizzer_ColumnType {.importcpp: "PfmVizzer::ColumnType", pure, header: "p
   CT_aux_vertex2 = 8
   CT_aux_vertex3 = 9
 
-func CT_texcoord2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord2
-func CT_texcoord3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord3
-func CT_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex1
-func CT_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex2
-func CT_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex3
-func CT_normal3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_normal3
-func CT_blend1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_blend1
-func CT_aux_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex1
-func CT_aux_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex2
-func CT_aux_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex3
+template CT_texcoord2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord2
+template CT_texcoord3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord3
+template CT_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex1
+template CT_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex2
+template CT_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex3
+template CT_normal3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_normal3
+template CT_blend1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_blend1
+template CT_aux_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex1
+template CT_aux_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex2
+template CT_aux_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex3
 
 type PfmVizzer_MeshFace {.importcpp: "PfmVizzer::MeshFace", pure, header: "pfmVizzer.h".} = enum
   MF_front = 1
   MF_back = 2
   MF_both = 3
 
-func MF_front*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_front
-func MF_back*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_back
-func MF_both*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_both
+template MF_front*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_front
+template MF_back*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_back
+template MF_both*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_both
 
 type AnimGroup* {.importcpp: "PT(AnimGroup)", bycopy, pure, inheritable, header: "animGroup.h".} = object of TypedWritableReferenceCount
   ## This is the base class for AnimChannel and AnimBundle.  It implements a
@@ -4108,9 +4108,9 @@ type PartGroup_HierarchyMatchFlags {.importcpp: "PartGroup::HierarchyMatchFlags"
   HMF_ok_anim_extra = 2
   HMF_ok_wrong_root_name = 4
 
-func HMF_ok_part_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_part_extra
-func HMF_ok_anim_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_anim_extra
-func HMF_ok_wrong_root_name*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_wrong_root_name
+template HMF_ok_part_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_part_extra
+template HMF_ok_anim_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_anim_extra
+template HMF_ok_wrong_root_name*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_wrong_root_name
 
 type AnimControl* {.importcpp: "PT(AnimControl)", bycopy, pure, inheritable, header: "animControl.h".} = object of TypedReferenceCount
   ## Controls the timing of a character animation.  An AnimControl object is
@@ -4244,10 +4244,10 @@ type PartBundle_BlendType {.importcpp: "PartBundle::BlendType", pure, header: "p
   BT_componentwise = 2
   BT_componentwise_quat = 3
 
-func BT_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_linear
-func BT_normalized_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_normalized_linear
-func BT_componentwise*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise
-func BT_componentwise_quat*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise_quat
+template BT_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_linear
+template BT_normalized_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_normalized_linear
+template BT_componentwise*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise
+template BT_componentwise_quat*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise_quat
 
 type PartBundleNode* {.importcpp: "PT(PartBundleNode)", bycopy, pure, inheritable, header: "partBundleNode.h".} = object of PandaNode
   ## This is a node that contains a pointer to an PartBundle.  Like
@@ -4735,9 +4735,9 @@ type InputDevice_State {.importcpp: "InputDevice::State", pure, header: "inputDe
   S_up = 1
   S_down = 2
 
-func S_unknown*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_unknown
-func S_up*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_up
-func S_down*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_down
+template S_unknown*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_unknown
+template S_up*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_up
+template S_down*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_down
 
 type ClientBase* {.importcpp: "PT(ClientBase)", bycopy, pure, inheritable, header: "clientBase.h".} = object of TypedReferenceCount
   ## An abstract base class for a family of client device interfaces--including
@@ -4889,10 +4889,10 @@ type GraphicsPipe_OutputTypes {.importcpp: "GraphicsPipe::OutputTypes", pure, he
   OT_buffer = 4
   OT_texture_buffer = 8
 
-func OT_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_window
-func OT_fullscreen_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_fullscreen_window
-func OT_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_buffer
-func OT_texture_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_texture_buffer
+template OT_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_window
+template OT_fullscreen_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_fullscreen_window
+template OT_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_buffer
+template OT_texture_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_texture_buffer
 
 type GraphicsPipe_BufferCreationFlags {.importcpp: "GraphicsPipe::BufferCreationFlags", pure, header: "graphicsPipe.h".} = enum
   BF_refuse_parasite = 1
@@ -4910,20 +4910,20 @@ type GraphicsPipe_BufferCreationFlags {.importcpp: "GraphicsPipe::BufferCreation
   BF_size_power_2 = 8192
   BF_can_bind_layered = 16384
 
-func BF_refuse_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_parasite
-func BF_require_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_parasite
-func BF_refuse_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_window
-func BF_require_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_window
-func BF_require_callback_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_callback_window
-func BF_can_bind_color*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_color
-func BF_can_bind_every*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_every
-func BF_resizeable*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_resizeable
-func BF_size_track_host*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_track_host
-func BF_rtt_cumulative*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_rtt_cumulative
-func BF_fb_props_optional*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_fb_props_optional
-func BF_size_square*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_square
-func BF_size_power_2*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_power_2
-func BF_can_bind_layered*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_layered
+template BF_refuse_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_parasite
+template BF_require_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_parasite
+template BF_refuse_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_window
+template BF_require_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_window
+template BF_require_callback_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_callback_window
+template BF_can_bind_color*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_color
+template BF_can_bind_every*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_every
+template BF_resizeable*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_resizeable
+template BF_size_track_host*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_track_host
+template BF_rtt_cumulative*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_rtt_cumulative
+template BF_fb_props_optional*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_fb_props_optional
+template BF_size_square*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_square
+template BF_size_power_2*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_power_2
+template BF_can_bind_layered*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_layered
 
 type DisplayInformation* {.importcpp: "DisplayInformation", pure, inheritable, header: "displayInformation.h".} = object
   ## This class contains various display information.
@@ -4935,11 +4935,11 @@ type DisplayInformation_DetectionState {.importcpp: "DisplayInformation::Detecti
   DS_create_window_error = 3
   DS_create_device_error = 4
 
-func DS_unknown*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_unknown
-func DS_success*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_success
-func DS_direct_3d_create_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_direct_3d_create_error
-func DS_create_window_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_window_error
-func DS_create_device_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_device_error
+template DS_unknown*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_unknown
+template DS_success*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_success
+template DS_direct_3d_create_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_direct_3d_create_error
+template DS_create_window_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_window_error
+template DS_create_device_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_device_error
 
 type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, header: "drawableRegion.h".} = object
   ## This is a base class for GraphicsWindow (actually, GraphicsOutput) and
@@ -4974,23 +4974,23 @@ type DrawableRegion_RenderTexturePlane {.importcpp: "DrawableRegion::RenderTextu
   RTP_depth = 15
   RTP_COUNT = 16
 
-func RTP_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_stencil
-func RTP_depth_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth_stencil
-func RTP_color*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_color
-func RTP_aux_rgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_0
-func RTP_aux_rgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_1
-func RTP_aux_rgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_2
-func RTP_aux_rgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_3
-func RTP_aux_hrgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_0
-func RTP_aux_hrgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_1
-func RTP_aux_hrgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_2
-func RTP_aux_hrgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_3
-func RTP_aux_float_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_0
-func RTP_aux_float_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_1
-func RTP_aux_float_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_2
-func RTP_aux_float_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_3
-func RTP_depth*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth
-func RTP_COUNT*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_COUNT
+template RTP_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_stencil
+template RTP_depth_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth_stencil
+template RTP_color*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_color
+template RTP_aux_rgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_0
+template RTP_aux_rgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_1
+template RTP_aux_rgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_2
+template RTP_aux_rgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_3
+template RTP_aux_hrgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_0
+template RTP_aux_hrgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_1
+template RTP_aux_hrgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_2
+template RTP_aux_hrgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_3
+template RTP_aux_float_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_0
+template RTP_aux_float_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_1
+template RTP_aux_float_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_2
+template RTP_aux_float_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_3
+template RTP_depth*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth
+template RTP_COUNT*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_COUNT
 
 type WindowHandle* {.importcpp: "PT(WindowHandle)", bycopy, pure, inheritable, header: "windowHandle.h".} = object of TypedReferenceCount
   ## This object represents a window on the desktop, not necessarily a Panda
@@ -5019,18 +5019,18 @@ type WindowProperties_ZOrder {.importcpp: "WindowProperties::ZOrder", pure, head
   Z_normal = 1
   Z_top = 2
 
-func Z_bottom*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_bottom
-func Z_normal*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_normal
-func Z_top*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_top
+template Z_bottom*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_bottom
+template Z_normal*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_normal
+template Z_top*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_top
 
 type WindowProperties_MouseMode {.importcpp: "WindowProperties::MouseMode", pure, header: "windowProperties.h".} = enum
   M_absolute = 0
   M_relative = 1
   M_confined = 2
 
-func M_absolute*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_absolute
-func M_relative*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_relative
-func M_confined*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_confined
+template M_absolute*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_absolute
+template M_relative*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_relative
+template M_confined*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_confined
 
 type DisplayRegion* {.importcpp: "PT(DisplayRegion)", bycopy, pure, inheritable, header: "displayRegion.h".} = object of TypedReferenceCount
   ## A rectangular subregion within a window for rendering into.  Typically,
@@ -5082,13 +5082,13 @@ type GraphicsOutput_RenderTextureMode {.importcpp: "GraphicsOutput::RenderTextur
   RTM_triggered_copy_ram = 5
   RTM_bind_layered = 6
 
-func RTM_none*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_none
-func RTM_bind_or_copy*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_or_copy
-func RTM_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_texture
-func RTM_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_ram
-func RTM_triggered_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_texture
-func RTM_triggered_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_ram
-func RTM_bind_layered*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_layered
+template RTM_none*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_none
+template RTM_bind_or_copy*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_or_copy
+template RTM_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_texture
+template RTM_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_ram
+template RTM_triggered_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_texture
+template RTM_triggered_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_ram
+template RTM_bind_layered*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_layered
 
 type GraphicsOutput_FrameMode {.importcpp: "GraphicsOutput::FrameMode", pure, header: "graphicsOutput.h".} = enum
   ## There are many reasons to call begin_frameend_frame.
@@ -5096,9 +5096,9 @@ type GraphicsOutput_FrameMode {.importcpp: "GraphicsOutput::FrameMode", pure, he
   FM_parasite = 1
   FM_refresh = 2
 
-func FM_render*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_render
-func FM_parasite*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_parasite
-func FM_refresh*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_refresh
+template FM_render*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_render
+template FM_parasite*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_parasite
+template FM_refresh*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_refresh
 
 type GraphicsStateGuardianBase* {.importcpp: "PT(GraphicsStateGuardianBase)", bycopy, pure, inheritable, header: "graphicsStateGuardianBase.h".} = object of TypedWritableReferenceCount
   ## This is a base class for the GraphicsStateGuardian class, which is itself a
@@ -5140,14 +5140,14 @@ type GraphicsStateGuardian_ShaderModel {.importcpp: "GraphicsStateGuardian::Shad
   SM_50 = 6
   SM_51 = 7
 
-func SM_00*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_00
-func SM_11*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_11
-func SM_20*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_20
-func SM_2X*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_2X
-func SM_30*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_30
-func SM_40*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_40
-func SM_50*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_50
-func SM_51*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_51
+template SM_00*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_00
+template SM_11*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_11
+template SM_20*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_20
+template SM_2X*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_2X
+template SM_30*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_30
+template SM_40*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_40
+template SM_50*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_50
+template SM_51*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_51
 
 type GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", bycopy, pure, inheritable, header: "graphicsEngine.h".} = object of ReferenceCount
   ## This class is the main interface to controlling the render process.  There
@@ -5207,9 +5207,9 @@ type TouchInfo_TouchInfoFlags {.importcpp: "TouchInfo::TouchInfoFlags", pure, he
   TIF_down = 2
   TIF_up = 4
 
-func TIF_move*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_move
-func TIF_down*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_down
-func TIF_up*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_up
+template TIF_move*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_move
+template TIF_down*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_down
+template TIF_up*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_up
 
 type GraphicsWindowProcCallbackData* {.importcpp: "GraphicsWindowProcCallbackData", pure, inheritable, header: "graphicsWindowProcCallbackData.h".} = object of CallbackData
   ## This specialization on CallbackData is passed when the callback is
@@ -5242,10 +5242,10 @@ type CallbackGraphicsWindow_RenderCallbackType {.importcpp: "CallbackGraphicsWin
   RCT_begin_flip = 2
   RCT_end_flip = 3
 
-func RCT_begin_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_frame
-func RCT_end_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_frame
-func RCT_begin_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_flip
-func RCT_end_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_flip
+template RCT_begin_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_frame
+template RCT_end_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_frame
+template RCT_begin_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_flip
+template RCT_end_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_flip
 
 type DisplayMode* {.importcpp: "DisplayMode", pure, inheritable, header: "displayInformation.h".} = object
 
@@ -5558,15 +5558,15 @@ type ButtonEvent_Type {.importcpp: "ButtonEvent::Type", pure, header: "buttonEve
   T_raw_down = 7
   T_raw_up = 8
 
-func T_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_down
-func T_resume_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_resume_down
-func T_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_up
-func T_repeat*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_repeat
-func T_keystroke*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_keystroke
-func T_candidate*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_candidate
-func T_move*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_move
-func T_raw_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_down
-func T_raw_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_up
+template T_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_down
+template T_resume_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_resume_down
+template T_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_up
+template T_repeat*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_repeat
+template T_keystroke*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_keystroke
+template T_candidate*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_candidate
+template T_move*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_move
+template T_raw_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_down
+template T_raw_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_up
 
 type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValue.h".} = object of TypedWritableReferenceCount
   ## A non-template base class of ParamValue (below), which serves mainly to
@@ -5673,11 +5673,11 @@ type GeomEnums_UsageHint {.importcpp: "GeomEnums::UsageHint", pure, header: "geo
   UH_static = 3
   UH_unspecified = 4
 
-func UH_client*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_client
-func UH_stream*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_stream
-func UH_dynamic*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_dynamic
-func UH_static*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_static
-func UH_unspecified*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_unspecified
+template UH_client*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_client
+template UH_stream*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_stream
+template UH_dynamic*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_dynamic
+template UH_static*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_static
+template UH_unspecified*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_unspecified
 
 type GeomEnums_GeomRendering {.importcpp: "GeomEnums::GeomRendering", pure, header: "geomEnums.h".} = enum
   ## This type specifies a number of bits that are used to represent the
@@ -5709,30 +5709,30 @@ type GeomEnums_GeomRendering {.importcpp: "GeomEnums::GeomRendering", pure, head
   GR_render_mode_point = 524288
   GR_adjacency = 1048576
 
-func GR_indexed_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_point
-func GR_indexed_other*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_other
-func GR_indexed_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_bits
-func GR_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point
-func GR_point_uniform_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_uniform_size
-func GR_per_point_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_per_point_size
-func GR_point_perspective*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_perspective
-func GR_point_aspect_ratio*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_aspect_ratio
-func GR_point_scale*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_scale
-func GR_point_rotate*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_rotate
-func GR_point_sprite*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite
-func GR_point_sprite_tex_matrix*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite_tex_matrix
-func GR_point_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_bits
-func GR_triangle_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_strip
-func GR_triangle_fan*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_fan
-func GR_line_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_line_strip
-func GR_composite_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_composite_bits
-func GR_strip_cut_index*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_strip_cut_index
-func GR_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_first_vertex
-func GR_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_last_vertex
-func GR_shade_model_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_shade_model_bits
-func GR_render_mode_wireframe*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_wireframe
-func GR_render_mode_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_point
-func GR_adjacency*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_adjacency
+template GR_indexed_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_point
+template GR_indexed_other*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_other
+template GR_indexed_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_bits
+template GR_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point
+template GR_point_uniform_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_uniform_size
+template GR_per_point_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_per_point_size
+template GR_point_perspective*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_perspective
+template GR_point_aspect_ratio*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_aspect_ratio
+template GR_point_scale*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_scale
+template GR_point_rotate*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_rotate
+template GR_point_sprite*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite
+template GR_point_sprite_tex_matrix*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite_tex_matrix
+template GR_point_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_bits
+template GR_triangle_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_strip
+template GR_triangle_fan*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_fan
+template GR_line_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_line_strip
+template GR_composite_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_composite_bits
+template GR_strip_cut_index*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_strip_cut_index
+template GR_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_first_vertex
+template GR_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_last_vertex
+template GR_shade_model_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_shade_model_bits
+template GR_render_mode_wireframe*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_wireframe
+template GR_render_mode_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_point
+template GR_adjacency*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_adjacency
 
 type GeomEnums_ShadeModel {.importcpp: "GeomEnums::ShadeModel", pure, header: "geomEnums.h".} = enum
   ## The shade model specifies whether the per-vertex colors and normals
@@ -5744,10 +5744,10 @@ type GeomEnums_ShadeModel {.importcpp: "GeomEnums::ShadeModel", pure, header: "g
   SM_flat_first_vertex = 2
   SM_flat_last_vertex = 3
 
-func SM_uniform*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_uniform
-func SM_smooth*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_smooth
-func SM_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_first_vertex
-func SM_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_last_vertex
+template SM_uniform*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_uniform
+template SM_smooth*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_smooth
+template SM_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_first_vertex
+template SM_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_last_vertex
 
 type GeomEnums_PrimitiveType {.importcpp: "GeomEnums::PrimitiveType", pure, header: "geomEnums.h".} = enum
   ## The primitive type represents the core primitive type of a particular
@@ -5759,11 +5759,11 @@ type GeomEnums_PrimitiveType {.importcpp: "GeomEnums::PrimitiveType", pure, head
   PT_points = 3
   PT_patches = 4
 
-func PT_none*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_none
-func PT_polygons*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_polygons
-func PT_lines*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_lines
-func PT_points*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_points
-func PT_patches*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_patches
+template PT_none*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_none
+template PT_polygons*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_polygons
+template PT_lines*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_lines
+template PT_points*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_points
+template PT_patches*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_patches
 
 type GeomEnums_NumericType {.importcpp: "GeomEnums::NumericType", pure, header: "geomEnums.h".} = enum
   ## The numeric type determines what physical representation is used to
@@ -5781,18 +5781,18 @@ type GeomEnums_NumericType {.importcpp: "GeomEnums::NumericType", pure, header: 
   NT_int32 = 10
   NT_packed_ufloat = 11
 
-func NT_uint8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint8
-func NT_uint16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint16
-func NT_uint32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint32
-func NT_packed_dcba*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dcba
-func NT_packed_dabc*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dabc
-func NT_float32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float32
-func NT_float64*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float64
-func NT_stdfloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_stdfloat
-func NT_int8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int8
-func NT_int16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int16
-func NT_int32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int32
-func NT_packed_ufloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_ufloat
+template NT_uint8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint8
+template NT_uint16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint16
+template NT_uint32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint32
+template NT_packed_dcba*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dcba
+template NT_packed_dabc*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dabc
+template NT_float32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float32
+template NT_float64*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float64
+template NT_stdfloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_stdfloat
+template NT_int8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int8
+template NT_int16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int16
+template NT_int32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int32
+template NT_packed_ufloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_ufloat
 
 type GeomEnums_Contents {.importcpp: "GeomEnums::Contents", pure, header: "geomEnums.h".} = enum
   ## The contents determine the semantic meaning of a numeric value within the
@@ -5809,16 +5809,16 @@ type GeomEnums_Contents {.importcpp: "GeomEnums::Contents", pure, header: "geomE
   C_matrix = 8
   C_normal = 9
 
-func C_other*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_other
-func C_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_point
-func C_clip_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_clip_point
-func C_vector*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_vector
-func C_texcoord*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_texcoord
-func C_color*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_color
-func C_index*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_index
-func C_morph_delta*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_morph_delta
-func C_matrix*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_matrix
-func C_normal*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_normal
+template C_other*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_other
+template C_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_point
+template C_clip_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_clip_point
+template C_vector*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_vector
+template C_texcoord*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_texcoord
+template C_color*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_color
+template C_index*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_index
+template C_morph_delta*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_morph_delta
+template C_matrix*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_matrix
+template C_normal*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_normal
 
 type GeomEnums_AnimationType {.importcpp: "GeomEnums::AnimationType", pure, header: "geomEnums.h".} = enum
   ## The type of animation data that is represented by a particular
@@ -5827,9 +5827,9 @@ type GeomEnums_AnimationType {.importcpp: "GeomEnums::AnimationType", pure, head
   AT_panda = 1
   AT_hardware = 2
 
-func AT_none*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_none
-func AT_panda*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_panda
-func AT_hardware*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_hardware
+template AT_none*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_none
+template AT_panda*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_panda
+template AT_hardware*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_hardware
 
 type GeomVertexAnimationSpec* {.importcpp: "GeomVertexAnimationSpec", pure, inheritable, header: "geomVertexAnimationSpec.h".} = object of GeomEnums
   ## This object describes how the vertex animation, if any, represented in a
@@ -5958,10 +5958,10 @@ type VertexDataPage_RamClass {.importcpp: "VertexDataPage::RamClass", pure, head
   RC_disk = 2
   RC_end_of_list = 3
 
-func RC_resident*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_resident
-func RC_compressed*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_compressed
-func RC_disk*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_disk
-func RC_end_of_list*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_end_of_list
+template RC_resident*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_resident
+template RC_compressed*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_compressed
+template RC_disk*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_disk
+template RC_end_of_list*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_end_of_list
 
 type VertexDataBook* {.importcpp: "VertexDataBook", pure, inheritable, header: "vertexDataBook.h".} = object
   ## A collection of VertexDataPages, which can be used to allocate new
@@ -6189,23 +6189,23 @@ type TextureStage_Mode {.importcpp: "TextureStage::Mode", pure, header: "texture
   M_normal_gloss = 15
   M_emission = 16
 
-func M_modulate*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate
-func M_decal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_decal
-func M_blend*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend
-func M_replace*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_replace
-func M_add*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_add
-func M_combine*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_combine
-func M_blend_color_scale*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend_color_scale
-func M_modulate_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_glow
-func M_modulate_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_gloss
-func M_normal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal
-func M_normal_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_height
-func M_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_glow
-func M_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_gloss
-func M_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_height
-func M_selector*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_selector
-func M_normal_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_gloss
-func M_emission*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_emission
+template M_modulate*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate
+template M_decal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_decal
+template M_blend*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend
+template M_replace*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_replace
+template M_add*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_add
+template M_combine*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_combine
+template M_blend_color_scale*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend_color_scale
+template M_modulate_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_glow
+template M_modulate_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_gloss
+template M_normal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal
+template M_normal_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_height
+template M_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_glow
+template M_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_gloss
+template M_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_height
+template M_selector*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_selector
+template M_normal_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_gloss
+template M_emission*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_emission
 
 type TextureStage_CombineMode {.importcpp: "TextureStage::CombineMode", pure, header: "textureStage.h".} = enum
   CM_undefined = 0
@@ -6218,15 +6218,15 @@ type TextureStage_CombineMode {.importcpp: "TextureStage::CombineMode", pure, he
   CM_dot3_rgb = 7
   CM_dot3_rgba = 8
 
-func CM_undefined*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_undefined
-func CM_replace*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_replace
-func CM_modulate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_modulate
-func CM_add*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add
-func CM_add_signed*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add_signed
-func CM_interpolate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_interpolate
-func CM_subtract*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_subtract
-func CM_dot3_rgb*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgb
-func CM_dot3_rgba*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgba
+template CM_undefined*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_undefined
+template CM_replace*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_replace
+template CM_modulate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_modulate
+template CM_add*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add
+template CM_add_signed*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add_signed
+template CM_interpolate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_interpolate
+template CM_subtract*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_subtract
+template CM_dot3_rgb*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgb
+template CM_dot3_rgba*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgba
 
 type TextureStage_CombineSource {.importcpp: "TextureStage::CombineSource", pure, header: "textureStage.h".} = enum
   CS_undefined = 0
@@ -6237,13 +6237,13 @@ type TextureStage_CombineSource {.importcpp: "TextureStage::CombineSource", pure
   CS_constant_color_scale = 5
   CS_last_saved_result = 6
 
-func CS_undefined*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_undefined
-func CS_texture*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_texture
-func CS_constant*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant
-func CS_primary_color*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_primary_color
-func CS_previous*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_previous
-func CS_constant_color_scale*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant_color_scale
-func CS_last_saved_result*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_last_saved_result
+template CS_undefined*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_undefined
+template CS_texture*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_texture
+template CS_constant*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant
+template CS_primary_color*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_primary_color
+template CS_previous*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_previous
+template CS_constant_color_scale*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant_color_scale
+template CS_last_saved_result*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_last_saved_result
 
 type TextureStage_CombineOperand {.importcpp: "TextureStage::CombineOperand", pure, header: "textureStage.h".} = enum
   CO_undefined = 0
@@ -6252,11 +6252,11 @@ type TextureStage_CombineOperand {.importcpp: "TextureStage::CombineOperand", pu
   CO_src_alpha = 3
   CO_one_minus_src_alpha = 4
 
-func CO_undefined*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_undefined
-func CO_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_color
-func CO_one_minus_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_color
-func CO_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_alpha
-func CO_one_minus_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_alpha
+template CO_undefined*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_undefined
+template CO_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_color
+template CO_one_minus_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_color
+template CO_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_alpha
+template CO_one_minus_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_alpha
 
 type Geom* {.importcpp: "PT(Geom)", bycopy, pure, inheritable, header: "geom.h".} = object of CopyOnWriteObject
   ## A container for geometry primitives.  This class associates one or more
@@ -6463,15 +6463,15 @@ type SamplerState_FilterType {.importcpp: "SamplerState::FilterType", pure, head
   FT_default = 7
   FT_invalid = 8
 
-func FT_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest
-func FT_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear
-func FT_nearest_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_nearest
-func FT_linear_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_nearest
-func FT_nearest_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_linear
-func FT_linear_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_linear
-func FT_shadow*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_shadow
-func FT_default*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_default
-func FT_invalid*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_invalid
+template FT_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest
+template FT_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear
+template FT_nearest_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_nearest
+template FT_linear_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_nearest
+template FT_nearest_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_linear
+template FT_linear_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_linear
+template FT_shadow*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_shadow
+template FT_default*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_default
+template FT_invalid*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_invalid
 
 type SamplerState_WrapMode {.importcpp: "SamplerState::WrapMode", pure, header: "samplerState.h".} = enum
   WM_clamp = 0
@@ -6481,12 +6481,12 @@ type SamplerState_WrapMode {.importcpp: "SamplerState::WrapMode", pure, header: 
   WM_border_color = 4
   WM_invalid = 5
 
-func WM_clamp*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_clamp
-func WM_repeat*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_repeat
-func WM_mirror*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror
-func WM_mirror_once*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror_once
-func WM_border_color*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_border_color
-func WM_invalid*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_invalid
+template WM_clamp*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_clamp
+template WM_repeat*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_repeat
+template WM_mirror*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror
+template WM_mirror_once*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror_once
+template WM_border_color*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_border_color
+template WM_invalid*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_invalid
 
 type Shader* {.importcpp: "PT(Shader)", bycopy, pure, inheritable, header: "shader.h".} = object of TypedWritableReferenceCount
 
@@ -6502,11 +6502,11 @@ type Shader_ShaderLanguage {.importcpp: "Shader::ShaderLanguage", pure, header: 
   SL_HLSL = 3
   SL_SPIR_V = 4
 
-func SL_none*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_none
-func SL_Cg*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_Cg
-func SL_GLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_GLSL
-func SL_HLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_HLSL
-func SL_SPIR_V*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_SPIR_V
+template SL_none*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_none
+template SL_Cg*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_Cg
+template SL_GLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_GLSL
+template SL_HLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_HLSL
+template SL_SPIR_V*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_SPIR_V
 
 type Shader_ShaderType {.importcpp: "Shader::ShaderType", pure, header: "shader.h".} = enum
   ST_none = 0
@@ -6518,14 +6518,14 @@ type Shader_ShaderType {.importcpp: "Shader::ShaderType", pure, header: "shader.
   ST_compute = 6
   ST_COUNT = 7
 
-func ST_none*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_none
-func ST_vertex*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_vertex
-func ST_fragment*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_fragment
-func ST_geometry*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_geometry
-func ST_tess_control*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_control
-func ST_tess_evaluation*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_evaluation
-func ST_compute*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_compute
-func ST_COUNT*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_COUNT
+template ST_none*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_none
+template ST_vertex*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_vertex
+template ST_fragment*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_fragment
+template ST_geometry*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_geometry
+template ST_tess_control*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_control
+template ST_tess_evaluation*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_evaluation
+template ST_compute*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_compute
+template ST_COUNT*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_COUNT
 
 type Shader_AutoShaderSwitch {.importcpp: "Shader::AutoShaderSwitch", pure, header: "shader.h".} = enum
   AS_normal = 1
@@ -6534,11 +6534,11 @@ type Shader_AutoShaderSwitch {.importcpp: "Shader::AutoShaderSwitch", pure, head
   AS_ramp = 8
   AS_shadow = 16
 
-func AS_normal*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_normal
-func AS_glow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_glow
-func AS_gloss*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_gloss
-func AS_ramp*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_ramp
-func AS_shadow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_shadow
+template AS_normal*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_normal
+template AS_glow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_glow
+template AS_gloss*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_gloss
+template AS_ramp*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_ramp
+template AS_shadow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_shadow
 
 type Shader_AutoShaderBit {.importcpp: "Shader::AutoShaderBit", pure, header: "shader.h".} = enum
   bit_AutoShaderNormal = 0
@@ -6547,11 +6547,11 @@ type Shader_AutoShaderBit {.importcpp: "Shader::AutoShaderBit", pure, header: "s
   bit_AutoShaderRamp = 3
   bit_AutoShaderShadow = 4
 
-func bit_AutoShaderNormal*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderNormal
-func bit_AutoShaderGlow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGlow
-func bit_AutoShaderGloss*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGloss
-func bit_AutoShaderRamp*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderRamp
-func bit_AutoShaderShadow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderShadow
+template bit_AutoShaderNormal*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderNormal
+template bit_AutoShaderGlow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGlow
+template bit_AutoShaderGloss*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGloss
+template bit_AutoShaderRamp*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderRamp
+template bit_AutoShaderShadow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderShadow
 
 type ShaderBuffer* {.importcpp: "PT(ShaderBuffer)", bycopy, pure, inheritable, header: "shaderBuffer.h".} = object of TypedWritableReferenceCount
   ## This is a generic buffer object that lives in graphics memory.
@@ -6611,10 +6611,10 @@ type Lens_StereoChannel {.importcpp: "Lens::StereoChannel", pure, header: "lens.
   SC_right = 2
   SC_stereo = 3
 
-func SC_mono*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_mono
-func SC_left*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_left
-func SC_right*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_right
-func SC_stereo*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_stereo
+template SC_mono*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_mono
+template SC_left*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_left
+template SC_right*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_right
+template SC_stereo*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_stereo
 
 type Lens_FromCorners {.importcpp: "Lens::FromCorners", pure, header: "lens.h".} = enum
   ## These flags are passed in as the last parameter to control the behavior
@@ -6627,12 +6627,12 @@ type Lens_FromCorners {.importcpp: "Lens::FromCorners", pure, header: "lens.h".}
   FC_shear = 16
   FC_keystone = 32
 
-func FC_roll*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_roll
-func FC_camera_plane*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_camera_plane
-func FC_off_axis*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_off_axis
-func FC_aspect_ratio*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_aspect_ratio
-func FC_shear*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_shear
-func FC_keystone*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_keystone
+template FC_roll*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_roll
+template FC_camera_plane*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_camera_plane
+template FC_off_axis*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_off_axis
+template FC_aspect_ratio*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_aspect_ratio
+template FC_shear*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_shear
+template FC_keystone*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_keystone
 
 type Material* {.importcpp: "PT(Material)", bycopy, pure, inheritable, header: "material.h".} = object of TypedWritableReferenceCount
   ## Defines the way an object appears in the presence of lighting.  A material
@@ -6815,9 +6815,9 @@ type TextureStagePool_Mode {.importcpp: "TextureStagePool::Mode", pure, header: 
   M_name = 1
   M_unique = 2
 
-func M_none*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_none
-func M_name*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_name
-func M_unique*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_unique
+template M_none*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_none
+template M_name*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_name
+template M_unique*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_unique
 
 type MathNumbers* {.importcpp: "MathNumbers", pure, inheritable, header: "mathNumbers.h".} = object
 
@@ -7222,11 +7222,11 @@ type BoundingVolume_IntersectionFlags {.importcpp: "BoundingVolume::Intersection
   IF_all = 4
   IF_dont_understand = 8
 
-func IF_no_intersection*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_no_intersection
-func IF_possible*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_possible
-func IF_some*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_some
-func IF_all*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_all
-func IF_dont_understand*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_dont_understand
+template IF_no_intersection*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_no_intersection
+template IF_possible*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_possible
+template IF_some*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_some
+template IF_all*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_all
+template IF_dont_understand*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_dont_understand
 
 type BoundingVolume_BoundsType {.importcpp: "BoundingVolume::BoundsType", pure, header: "boundingVolume.h".} = enum
   ## This enum is used to control the automatic generation of bounding
@@ -7237,11 +7237,11 @@ type BoundingVolume_BoundsType {.importcpp: "BoundingVolume::BoundsType", pure, 
   BT_box = 3
   BT_fastest = 4
 
-func BT_default*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_default
-func BT_best*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_best
-func BT_sphere*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_sphere
-func BT_box*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_box
-func BT_fastest*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_fastest
+template BT_default*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_default
+template BT_best*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_best
+template BT_sphere*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_sphere
+template BT_box*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_box
+template BT_fastest*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_fastest
 
 type GeometricBoundingVolume* {.importcpp: "PT(GeometricBoundingVolume)", bycopy, pure, inheritable, header: "geometricBoundingVolume.h".} = object of BoundingVolume
   ## This is another abstract class, for a general class of bounding volumes
@@ -7609,10 +7609,10 @@ type RopeNode_RenderMode {.importcpp: "RopeNode::RenderMode", pure, header: "rop
   RM_billboard = 2
   RM_tube = 3
 
-func RM_thread*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_thread
-func RM_tape*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tape
-func RM_billboard*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_billboard
-func RM_tube*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tube
+template RM_thread*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_thread
+template RM_tape*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tape
+template RM_billboard*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_billboard
+template RM_tube*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tube
 
 type RopeNode_UVMode {.importcpp: "RopeNode::UVMode", pure, header: "ropeNode.h".} = enum
   UV_none = 0
@@ -7620,17 +7620,17 @@ type RopeNode_UVMode {.importcpp: "RopeNode::UVMode", pure, header: "ropeNode.h"
   UV_distance = 2
   UV_distance2 = 3
 
-func UV_none*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_none
-func UV_parametric*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_parametric
-func UV_distance*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance
-func UV_distance2*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance2
+template UV_none*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_none
+template UV_parametric*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_parametric
+template UV_distance*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance
+template UV_distance2*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance2
 
 type RopeNode_NormalMode {.importcpp: "RopeNode::NormalMode", pure, header: "ropeNode.h".} = enum
   NM_none = 0
   NM_vertex = 1
 
-func NM_none*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_none
-func NM_vertex*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_vertex
+template NM_none*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_none
+template NM_vertex*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_vertex
 
 type SheetNode* {.importcpp: "PT(SheetNode)", bycopy, pure, inheritable, header: "sheetNode.h".} = object of PandaNode
   ## This class draws a visible representation of the NURBS surface stored in
@@ -7675,11 +7675,11 @@ type PNMImageHeader_ColorType {.importcpp: "PNMImageHeader::ColorType", pure, he
   CT_color = 3
   CT_four_channel = 4
 
-func CT_invalid*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_invalid
-func CT_grayscale*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_grayscale
-func CT_two_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_two_channel
-func CT_color*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_color
-func CT_four_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_four_channel
+template CT_invalid*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_invalid
+template CT_grayscale*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_grayscale
+template CT_two_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_two_channel
+template CT_color*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_color
+template CT_four_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_four_channel
 
 type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} = object of PNMImageHeader
   ## Defines a pfm file, a 2-d table of floating-point numbers, either
@@ -7708,10 +7708,10 @@ type PNMBrush_BrushEffect {.importcpp: "PNMBrush::BrushEffect", pure, header: "p
   BE_darken = 2
   BE_lighten = 3
 
-func BE_set*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_set
-func BE_blend*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_blend
-func BE_darken*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_darken
-func BE_lighten*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_lighten
+template BE_set*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_set
+template BE_blend*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_blend
+template BE_darken*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_darken
+template BE_lighten*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_lighten
 
 type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pnmImage.h".} = object of PNMImageHeader
   ## The name of this class derives from the fact that we originally implemented
@@ -7780,13 +7780,13 @@ type TextFont_RenderMode {.importcpp: "TextFont::RenderMode", pure, header: "tex
   RM_distance_field = 5
   RM_invalid = 6
 
-func RM_texture*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_texture
-func RM_wireframe*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_wireframe
-func RM_polygon*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_polygon
-func RM_extruded*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_extruded
-func RM_solid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_solid
-func RM_distance_field*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_distance_field
-func RM_invalid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_invalid
+template RM_texture*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_texture
+template RM_wireframe*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_wireframe
+template RM_polygon*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_polygon
+template RM_extruded*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_extruded
+template RM_solid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_solid
+template RM_distance_field*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_distance_field
+template RM_invalid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_invalid
 
 type DynamicTextGlyph* {.importcpp: "PT(DynamicTextGlyph)", bycopy, pure, inheritable, header: "dynamicTextGlyph.h".} = object of TextGlyph
   ## A specialization on TextGlyph that is generated and stored by a
@@ -7820,10 +7820,10 @@ type FreetypeFont_WindingOrder {.importcpp: "FreetypeFont::WindingOrder", pure, 
   WO_right = 2
   WO_invalid = 3
 
-func WO_default*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_default
-func WO_left*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_left
-func WO_right*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_right
-func WO_invalid*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_invalid
+template WO_default*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_default
+template WO_left*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_left
+template WO_right*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_right
+template WO_invalid*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_invalid
 
 type DynamicTextFont* {.importcpp: "PT(DynamicTextFont)", bycopy, pure, inheritable, header: "dynamicTextFont.h".} = object of TextFont
   ## A DynamicTextFont is a special TextFont object that rasterizes its glyphs
@@ -7968,10 +7968,10 @@ type MouseWatcherRegion_SuppressFlags {.importcpp: "MouseWatcherRegion::Suppress
   SF_any_button = 3
   SF_mouse_position = 4
 
-func SF_mouse_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_button
-func SF_other_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_other_button
-func SF_any_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_any_button
-func SF_mouse_position*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_position
+template SF_mouse_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_button
+template SF_other_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_other_button
+template SF_any_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_any_button
+template SF_mouse_position*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_position
 
 type MouseWatcherBase* {.importcpp: "MouseWatcherBase*", bycopy, pure, inheritable, header: "mouseWatcherBase.h".} = object
   ## This represents a collection of MouseWatcherRegions that may be managed as
@@ -8045,11 +8045,11 @@ type Trackball_ControlMode {.importcpp: "Trackball::ControlMode", pure, header: 
   CM_dolly = 3
   CM_roll = 4
 
-func CM_default*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_default
-func CM_truck*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_truck
-func CM_pan*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_pan
-func CM_dolly*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_dolly
-func CM_roll*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_roll
+template CM_default*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_default
+template CM_truck*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_truck
+template CM_pan*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_pan
+template CM_dolly*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_dolly
+template CM_roll*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_roll
 
 type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2sg.h".} = object of DataNode
   ## input: Transform (matrix)
@@ -8121,16 +8121,16 @@ type LoaderOptions_LoaderFlags {.importcpp: "LoaderOptions::LoaderFlags", pure, 
   LF_cache_only = 64
   LF_allow_instance = 128
 
-func LF_search*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_search
-func LF_report_errors*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_report_errors
-func LF_convert_skeleton*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_skeleton
-func LF_convert_channels*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_channels
-func LF_convert_anim*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_anim
-func LF_no_disk_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_disk_cache
-func LF_no_ram_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_ram_cache
-func LF_no_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_cache
-func LF_cache_only*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_cache_only
-func LF_allow_instance*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_allow_instance
+template LF_search*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_search
+template LF_report_errors*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_report_errors
+template LF_convert_skeleton*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_skeleton
+template LF_convert_channels*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_channels
+template LF_convert_anim*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_anim
+template LF_no_disk_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_disk_cache
+template LF_no_ram_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_ram_cache
+template LF_no_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_cache
+template LF_cache_only*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_cache_only
+template LF_allow_instance*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_allow_instance
 
 type LoaderOptions_TextureFlags {.importcpp: "LoaderOptions::TextureFlags", pure, header: "loaderOptions.h".} = enum
   ## Flags for loading texture files.
@@ -8143,14 +8143,14 @@ type LoaderOptions_TextureFlags {.importcpp: "LoaderOptions::TextureFlags", pure
   TF_float = 256
   TF_allow_compression = 512
 
-func TF_preload*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload
-func TF_preload_simple*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload_simple
-func TF_allow_1d*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_1d
-func TF_generate_mipmaps*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_generate_mipmaps
-func TF_multiview*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_multiview
-func TF_integer*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_integer
-func TF_float*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_float
-func TF_allow_compression*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_compression
+template TF_preload*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload
+template TF_preload_simple*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload_simple
+template TF_allow_1d*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_1d
+template TF_generate_mipmaps*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_generate_mipmaps
+template TF_multiview*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_multiview
+template TF_integer*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_integer
+template TF_float*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_float
+template TF_allow_compression*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_compression
 
 type BamReader* {.importcpp: "BamReader", pure, inheritable, header: "bamReader.h".} = object of BamEnums
   ## This is the fundamental interface for extracting binary objects from a Bam
@@ -8297,14 +8297,14 @@ type ClockObject_Mode {.importcpp: "ClockObject::Mode", pure, header: "clockObje
   M_integer = 6
   M_integer_limited = 7
 
-func M_normal*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_normal
-func M_non_real_time*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_non_real_time
-func M_forced*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_forced
-func M_degrade*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_degrade
-func M_slave*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_slave
-func M_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_limited
-func M_integer*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer
-func M_integer_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer_limited
+template M_normal*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_normal
+template M_non_real_time*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_non_real_time
+template M_forced*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_forced
+template M_degrade*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_degrade
+template M_slave*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_slave
+template M_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_limited
+template M_integer*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer
+template M_integer_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer_limited
 
 type CollideMask* = BitMask32
 
@@ -8435,9 +8435,9 @@ type AudioSound_SoundStatus {.importcpp: "AudioSound::SoundStatus", pure, header
   READY = 1
   PLAYING = 2
 
-func BAD*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.BAD
-func READY*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.READY
-func PLAYING*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.PLAYING
+template BAD*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.BAD
+template READY*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.READY
+template PLAYING*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.PLAYING
 
 type AudioManager* {.importcpp: "PT(AudioManager)", bycopy, pure, inheritable, header: "audioManager.h".} = object of TypedReferenceCount
 
@@ -8457,15 +8457,15 @@ type AudioManager_SpeakerModeCategory {.importcpp: "AudioManager::SpeakerModeCat
   SPEAKERMODE_max = 7
   SPEAKERMODE_COUNT = 8
 
-func SPEAKERMODE_raw*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_raw
-func SPEAKERMODE_mono*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_mono
-func SPEAKERMODE_stereo*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_stereo
-func SPEAKERMODE_quad*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_quad
-func SPEAKERMODE_surround*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_surround
-func SPEAKERMODE_5point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_5point1
-func SPEAKERMODE_7point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_7point1
-func SPEAKERMODE_max*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_max
-func SPEAKERMODE_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_COUNT
+template SPEAKERMODE_raw*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_raw
+template SPEAKERMODE_mono*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_mono
+template SPEAKERMODE_stereo*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_stereo
+template SPEAKERMODE_quad*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_quad
+template SPEAKERMODE_surround*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_surround
+template SPEAKERMODE_5point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_5point1
+template SPEAKERMODE_7point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_7point1
+template SPEAKERMODE_max*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_max
+template SPEAKERMODE_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_COUNT
 
 type AudioManager_SpeakerId {.importcpp: "AudioManager::SpeakerId", pure, header: "audioManager.h".} = enum
   SPK_none = 0
@@ -8479,25 +8479,25 @@ type AudioManager_SpeakerId {.importcpp: "AudioManager::SpeakerId", pure, header
   SPK_sideright = 8
   SPK_COUNT = 9
 
-func SPK_none*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_none
-func SPK_frontleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontleft
-func SPK_frontright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontright
-func SPK_center*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_center
-func SPK_sub*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sub
-func SPK_backleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backleft
-func SPK_backright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backright
-func SPK_sideleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideleft
-func SPK_sideright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideright
-func SPK_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_COUNT
+template SPK_none*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_none
+template SPK_frontleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontleft
+template SPK_frontright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontright
+template SPK_center*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_center
+template SPK_sub*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sub
+template SPK_backleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backleft
+template SPK_backright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backright
+template SPK_sideleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideleft
+template SPK_sideright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideright
+template SPK_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_COUNT
 
 type AudioManager_StreamMode {.importcpp: "AudioManager::StreamMode", pure, header: "audioManager.h".} = enum
   SM_heuristic = 0
   SM_sample = 1
   SM_stream = 2
 
-func SM_heuristic*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_heuristic
-func SM_sample*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_sample
-func SM_stream*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_stream
+template SM_heuristic*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_heuristic
+template SM_sample*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_sample
+template SM_stream*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_stream
 
 type AudioLoadRequest* {.importcpp: "PT(AudioLoadRequest)", bycopy, pure, inheritable, header: "audioLoadRequest.h".} = object of AsyncTask
   ## A class object that manages a single asynchronous audio load request.  This
@@ -8521,13 +8521,13 @@ type PGFrameStyle_Type {.importcpp: "PGFrameStyle::Type", pure, header: "pgFrame
   T_ridge = 5
   T_texture_border = 6
 
-func T_none*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_none
-func T_flat*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_flat
-func T_bevel_out*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_out
-func T_bevel_in*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_in
-func T_groove*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_groove
-func T_ridge*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_ridge
-func T_texture_border*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_texture_border
+template T_none*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_none
+template T_flat*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_flat
+template T_bevel_out*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_out
+template T_bevel_in*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_in
+template T_groove*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_groove
+template T_ridge*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_ridge
+template T_texture_border*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_texture_border
 
 type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pgItem.h".} = object of PandaNode
   ## This is the base class for all the various kinds of gui widget objects.
@@ -8560,10 +8560,10 @@ type PGButton_State {.importcpp: "PGButton::State", pure, header: "pgButton.h".}
   S_rollover = 2
   S_inactive = 3
 
-func S_ready*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_ready
-func S_depressed*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_depressed
-func S_rollover*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_rollover
-func S_inactive*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_inactive
+template S_ready*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_ready
+template S_depressed*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_depressed
+template S_rollover*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_rollover
+template S_inactive*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_inactive
 
 type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pgTop.h".} = object of PandaNode
   ## The "top" node of the new Panda GUI system.  This node must be parented to
@@ -8600,9 +8600,9 @@ type PGEntry_State {.importcpp: "PGEntry::State", pure, header: "pgEntry.h".} = 
   S_no_focus = 1
   S_inactive = 2
 
-func S_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_focus
-func S_no_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_no_focus
-func S_inactive*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_inactive
+template S_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_focus
+template S_no_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_no_focus
+template S_inactive*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_inactive
 
 type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy, pure, inheritable, header: "pgMouseWatcherParameter.h".} = object of TypedWritableReferenceCount
   ## This specialization on MouseWatcherParameter allows us to tag on additional
@@ -8909,13 +8909,13 @@ type TiXmlNode_NodeType {.importcpp: "TiXmlNode::NodeType", pure, header: "tinyx
   TINYXML_DECLARATION = 5
   TINYXML_TYPECOUNT = 6
 
-func TINYXML_DOCUMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DOCUMENT
-func TINYXML_ELEMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_ELEMENT
-func TINYXML_COMMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_COMMENT
-func TINYXML_UNKNOWN*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_UNKNOWN
-func TINYXML_TEXT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TEXT
-func TINYXML_DECLARATION*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DECLARATION
-func TINYXML_TYPECOUNT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TYPECOUNT
+template TINYXML_DOCUMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DOCUMENT
+template TINYXML_ELEMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_ELEMENT
+template TINYXML_COMMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_COMMENT
+template TINYXML_UNKNOWN*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_UNKNOWN
+template TINYXML_TEXT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TEXT
+template TINYXML_DECLARATION*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DECLARATION
+template TINYXML_TYPECOUNT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TYPECOUNT
 
 type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## In correct XML the declaration is the first entry in the file.
@@ -9154,9 +9154,9 @@ type PNMTextMaker_Alignment {.importcpp: "PNMTextMaker::Alignment", pure, header
   A_right = 1
   A_center = 2
 
-func A_left*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_left
-func A_right*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_right
-func A_center*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_center
+template A_left*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_left
+template A_right*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_right
+template A_center*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_center
 
 func index*(this: TypeHandle): int {.importcpp: "#.get_index()".} ## \
 ## Returns the integer index associated with this TypeHandle.  Each different

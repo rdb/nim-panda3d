@@ -198,15 +198,15 @@ type SmoothMover_SmoothMode {.importcpp: "SmoothMover::SmoothMode", pure, header
   SM_off = 0
   SM_on = 1
 
-func SM_off*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_off
-func SM_on*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_on
+template SM_off*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_off
+template SM_on*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_on
 
 type SmoothMover_PredictionMode {.importcpp: "SmoothMover::PredictionMode", pure, header: "smoothMover.h".} = enum
   PM_off = 0
   PM_on = 1
 
-func PM_off*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_off
-func PM_on*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_on
+template PM_off*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_off
+template PM_on*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_on
 
 type CInterval* {.importcpp: "PT(CInterval)", bycopy, pure, inheritable, header: "cInterval.h".} = object of TypedReferenceCount
   ## The base class for timeline components.  A CInterval represents a single
@@ -233,14 +233,14 @@ type CInterval_EventType {.importcpp: "CInterval::EventType", pure, header: "cIn
   ET_reverse_finalize = 6
   ET_interrupt = 7
 
-func ET_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_initialize
-func ET_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_instant
-func ET_step*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_step
-func ET_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_finalize
-func ET_reverse_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_initialize
-func ET_reverse_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_instant
-func ET_reverse_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_finalize
-func ET_interrupt*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_interrupt
+template ET_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_initialize
+template ET_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_instant
+template ET_step*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_step
+template ET_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_finalize
+template ET_reverse_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_initialize
+template ET_reverse_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_instant
+template ET_reverse_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_finalize
+template ET_interrupt*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_interrupt
 
 type CInterval_State {.importcpp: "CInterval::State", pure, header: "cInterval.h".} = enum
   S_initial = 0
@@ -248,10 +248,10 @@ type CInterval_State {.importcpp: "CInterval::State", pure, header: "cInterval.h
   S_paused = 2
   S_final = 3
 
-func S_initial*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_initial
-func S_started*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_started
-func S_paused*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_paused
-func S_final*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_final
+template S_initial*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_initial
+template S_started*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_started
+template S_paused*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_paused
+template S_final*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_final
 
 type CIntervalManager* {.importcpp: "CIntervalManager*", bycopy, pure, inheritable, header: "cIntervalManager.h".} = object
   ## This object holds a number of currently-playing intervals and is
@@ -330,11 +330,11 @@ type CLerpInterval_BlendType {.importcpp: "CLerpInterval::BlendType", pure, head
   BT_ease_in_out = 3
   BT_invalid = 4
 
-func BT_no_blend*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_no_blend
-func BT_ease_in*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in
-func BT_ease_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_out
-func BT_ease_in_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in_out
-func BT_invalid*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_invalid
+template BT_no_blend*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_no_blend
+template BT_ease_in*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in
+template BT_ease_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_out
+template BT_ease_in_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in_out
+template BT_invalid*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_invalid
 
 type CLerpAnimEffectInterval* {.importcpp: "PT(CLerpAnimEffectInterval)", bycopy, pure, inheritable, header: "cLerpAnimEffectInterval.h".} = object of CLerpInterval
   ## This interval lerps between different amounts of control effects for
@@ -374,9 +374,9 @@ type CMetaInterval_RelativeStart {.importcpp: "CMetaInterval::RelativeStart", pu
   RS_previous_begin = 1
   RS_level_begin = 2
 
-func RS_previous_end*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_end
-func RS_previous_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_begin
-func RS_level_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_level_begin
+template RS_previous_end*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_end
+template RS_previous_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_begin
+template RS_level_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_level_begin
 
 type CMetaInterval_DefType {.importcpp: "CMetaInterval::DefType", pure, header: "cMetaInterval.h".} = enum
   DT_c_interval = 0
@@ -384,10 +384,10 @@ type CMetaInterval_DefType {.importcpp: "CMetaInterval::DefType", pure, header: 
   DT_push_level = 2
   DT_pop_level = 3
 
-func DT_c_interval*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_c_interval
-func DT_ext_index*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_ext_index
-func DT_push_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_push_level
-func DT_pop_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_pop_level
+template DT_c_interval*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_c_interval
+template DT_ext_index*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_ext_index
+template DT_push_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_push_level
+template DT_pop_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_pop_level
 
 type HideInterval* {.importcpp: "PT(HideInterval)", bycopy, pure, inheritable, header: "hideInterval.h".} = object of CInterval
   ## An interval that calls NodePath::hide().

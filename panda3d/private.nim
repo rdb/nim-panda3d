@@ -34,6 +34,11 @@ N_LIB_PRIVATE N_NIMCALL(std::string, nimStringToStdString)(struct NimStringDesc 
 N_LIB_PRIVATE N_NIMCALL(struct NimStringDesc*, nimStringFromStdString)(const std::string &s);
 """;
 
+# For memcpy
+{.emit: """
+#include <cstring>
+""".}
+
 type
   std_string* {.importcpp: "std::string", header: "string".} = object
 
@@ -42,9 +47,9 @@ type
 
 func size(this: std_string_const_ref): int {.importcpp: "size".}
 
-func nimStringFromStdString*(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString"} =
+func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString".} =
   result = newString(s.size())
   {.emit: "memcpy(result->data, s.data(), s.size());"}
 
-func nimStringToStdString*(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString"} =
+func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
   {.emit: "result = std::string(desc->data, desc->len);"}

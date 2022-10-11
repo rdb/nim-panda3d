@@ -36,7 +36,7 @@ type DCSubatomicType* {.importcpp: "DCSubatomicType", header: "dCSubatomicType.h
   ST_char = 19
   ST_invalid = 20
 
-type DCPackType* {.importcpp: "DCPackType", header: "dCPackType.h".} = enum
+type DCPackType* {.importcpp: "DCPackType", header: "dcPackerInterface.h".} = enum
   ## This enumerated type is returned by get_pack_type() and represents the best
   ## choice for a subsequent call to pack_\*() or unpack_\*().
   PT_invalid = 0

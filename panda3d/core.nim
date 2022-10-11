@@ -1049,7 +1049,7 @@ converter toBool*(this: FileReference): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: FileReference, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FileReference], obj: TypedObject): FileReference {.importcpp: "DCAST(FileReference, @)".}
 
-type ErrorUtilCode* {.importcpp: "ErrorUtilCode", header: "errorUtilCode.h".} = enum
+type ErrorUtilCode* {.importcpp: "ErrorUtilCode", header: "error_utils.h".} = enum
   EU_error_zlib = -80
   EU_error_http_proxy_authentication = -73
   EU_error_http_service_unavailable = -72
@@ -8348,7 +8348,7 @@ type MouseButton* {.importcpp: "MouseButton", pure, inheritable, header: "mouseB
   ## This class is just used as a convenient namespace for grouping all of these
   ## handy functions that return buttons which map to standard mouse buttons.
 
-type PointerType* {.importcpp: "PointerType", pure, header: "pointerType.h".} = enum
+type PointerType* {.importcpp: "PointerType", pure, header: "pointerData.h".} = enum
   ## Contains the types of pointer device.
   unknown = 0
   mouse = 1
@@ -8984,7 +8984,7 @@ const TIXML_SUCCESS*: int = 0
 const TIXML_NO_ATTRIBUTE*: int = 1
 const TIXML_WRONG_TYPE*: int = 2
 
-type TiXmlEncoding* {.importcpp: "TiXmlEncoding", header: "tiXmlEncoding.h".} = enum
+type TiXmlEncoding* {.importcpp: "TiXmlEncoding", header: "tinyxml.h".} = enum
   ## Used by the parsing routines.
   TIXML_ENCODING_UNKNOWN = 0
   TIXML_ENCODING_UTF8 = 1

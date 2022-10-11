@@ -50,6 +50,7 @@ type
     timeButtonThrower*: NodePath
     trackball*: NodePath
     win*: GraphicsOutput
+    windowType*: string
 
 proc makeDefaultPipe*(this: ShowBase) =
   var selection = GraphicsPipeSelection.getGlobalPtr()
@@ -165,17 +166,17 @@ proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
 
   mwn.addRegion(newPGMouseWatcherBackground())
 
-proc getAspectRatio*(this: ShowBase, win: GraphicsWindow): float =
+proc getAspectRatio*(this: ShowBase, win: GraphicsOutput): float =
   var aspectRatio: float = 1
 
   if win != nil and win.hasSize() and win.getSbsLeftYSize() != 0:
     aspectRatio = float(win.getSbsLeftXSize()) / float(win.getSbsLeftYSize())
   else:
     var props: WindowProperties
-    if win == nil:
+    if win == nil or not win.isOfType(GraphicsWindow.getClassType()):
       props = WindowProperties.getDefault()
     else:
-      props = win.getRequestedProperties()
+      props = dcast(GraphicsWindow, win).getRequestedProperties()
       if not props.hasSize():
         props = WindowProperties.getDefault()
 
@@ -187,7 +188,7 @@ proc getAspectRatio*(this: ShowBase, win: GraphicsWindow): float =
 
   return aspectRatio
 
-proc makeCamera2d*(this: ShowBase, win: GraphicsWindow, sort: int = 10,
+proc makeCamera2d*(this: ShowBase, win: GraphicsOutput, sort: int = 10,
                    displayRegion: tuple[left: float32, right: float32, bottom: float32, top: float32] = (0f32, 1f32, 0f32, 1f32),
                    coords: tuple[left: float32, right: float32, bottom: float32, top: float32] = (-1f32, 1f32, -1f32, 1f32)): NodePath =
 
@@ -274,8 +275,19 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   eventMgr.restart()
   this.accept("window-event", proc (win: GraphicsWindow) = this.windowEvent(win))
 
+  if this.windowType == "":
+    this.windowType = "onscreen"
+
+  var flags: int
+  if this.windowType == "onscreen":
+    flags = 0x0808
+  elif this.windowType == "offscreen":
+    flags = 0x0804
+  else:
+    flags = 0x0800
+
   var fbprops: FrameBufferProperties = FrameBufferProperties.getDefault()
-  this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, 0x0008)
+  this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, flags)
 
   this.taskMgr = taskMgr
   this.loader = Loader.loader
@@ -295,7 +307,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
 
   this.setupRender2d()
 
-  discard this.makeCamera2d(dcast(GraphicsWindow, this.win))
+  discard this.makeCamera2d(this.win)
 
   taskMgr.add(proc (task: Task): auto = this.dataLoop(), "dataLoop", -50)
   taskMgr.add(proc (task: Task): auto = this.ivalLoop(), "ivalLoop", 20)
@@ -303,7 +315,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
 
   this.graphicsEngine.openWindows()
 
-  if this.win.isOfType(GraphicsWindow):
+  if this.win.isOfType(GraphicsWindow.getClassType()):
     this.setupMouse(dcast(GraphicsWindow, this.win))
 
 proc openDefaultWindow*(this: ShowBase, props: WindowProperties = WindowProperties.getDefault()): bool {.discardable.} =

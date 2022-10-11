@@ -1,6 +1,7 @@
 import direct/showbase
 import direct/task
 import direct/actor
+import direct/interval
 import panda3d/core
 import std/math
 
@@ -18,6 +19,27 @@ pandaActor.loadAnims({"walk": "models/panda-walk4"})
 pandaActor.setScale(0.005, 0.005, 0.005)
 pandaActor.reparentTo(render)
 pandaActor.loop("walk")
+
+# Create the four lerp intervals needed for the panda to
+# walk back and forth.
+var posInterval1 = pandaActor.posInterval(13,
+                                          (0f32, -10f32, 0f32),
+                                          startPos=(0f32, 10f32, 0f32))
+var posInterval2 = pandaActor.posInterval(13,
+                                          (0f32, 10f32, 0f32),
+                                          startPos=(0f32, -10f32, 0f32))
+var hprInterval1 = pandaActor.hprInterval(3,
+                                          (180f32, 0f32, 0f32),
+                                          startHpr=(0f32, 0f32, 0f32))
+var hprInterval2 = pandaActor.hprInterval(3,
+                                          (0f32, 0f32, 0f32),
+                                          startHpr=(180f32, 0f32, 0f32))
+
+# Create and play the sequence that coordinates the intervals.
+var pandaPace = Sequence(posInterval1, hprInterval1,
+                         posInterval2, hprInterval2,
+                         name="pandaPace")
+pandaPace.loop()
 
 proc spinCameraTask(task: Task): auto =
   var angleDegrees = task.time * 6.0

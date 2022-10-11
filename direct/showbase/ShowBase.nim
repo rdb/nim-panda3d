@@ -1,4 +1,5 @@
 import ../../panda3d/core
+import ../../panda3d/direct
 import ../task
 import ./DirectObject
 import ./EventManagerGlobal
@@ -62,6 +63,11 @@ proc makeAllPipes*(this: ShowBase) =
 proc dataLoop(this: ShowBase): auto =
   var dgTrav = initDataGraphTraverser()
   dgTrav.traverse(this.dataRootNode)
+  return Task.cont
+
+proc ivalLoop(this: ShowBase): auto =
+  var ivalMgr = CIntervalManager.getGlobalPtr()
+  ivalMgr.step()
   return Task.cont
 
 proc igLoop(this: ShowBase): auto =
@@ -292,6 +298,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   discard this.makeCamera2d(dcast(GraphicsWindow, this.win))
 
   taskMgr.add(proc (task: Task): auto = this.dataLoop(), "dataLoop", -50)
+  taskMgr.add(proc (task: Task): auto = this.ivalLoop(), "ivalLoop", 20)
   taskMgr.add(proc (task: Task): auto = this.igLoop(), "igLoop", 50)
 
   this.graphicsEngine.openWindows()

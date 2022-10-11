@@ -226,6 +226,19 @@ type TypeHandle* {.importcpp: "TypeHandle", pure, header: "typeHandle.h".} = obj
   ## that ancestry of a particular type may be queried, and the type name may be
   ## retrieved for run-time display.
 
+type TypeHandle_MemoryClass {.importcpp: "TypeHandle::MemoryClass", pure, header: "typeHandle.h".} = enum
+  MC_singleton = 0
+  MC_array = 1
+  MC_deleted_chain_active = 2
+  MC_deleted_chain_inactive = 3
+  MC_limit = 4
+
+func MC_singleton*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_singleton
+func MC_array*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_array
+func MC_deleted_chain_active*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_active
+func MC_deleted_chain_inactive*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_deleted_chain_inactive
+func MC_limit*(_: typedesc[TypeHandle]): TypeHandle_MemoryClass = TypeHandle_MemoryClass.MC_limit
+
 type TypeRegistry* {.importcpp: "TypeRegistry", pure, inheritable, header: "typeRegistry.h".} = object
   ## The TypeRegistry class maintains all the assigned TypeHandles in a given
   ## system.  There should be only one TypeRegistry class during the lifetime of
@@ -306,6 +319,15 @@ type ios_base* {.importcpp: "ios_base", pure, inheritable, header: "<ios>".} = o
   ## But we'd like to expose some of these methods anyway, so no
   ## problem.
 
+type ios_base_seekdir {.importcpp: "std::ios_base::seekdir", pure, header: "<ios>".} = enum
+  beg = 0
+  cur = 1
+  `end` = 2
+
+func beg*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.beg
+func cur*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.cur
+func `end`*(_: typedesc[ios_base]): ios_base_seekdir = ios_base_seekdir.`end`
+
 type istream* {.importcpp: "istream", pure, inheritable, header: "<istream>".} = object
 
 type ostream* {.importcpp: "ostream", pure, inheritable, header: "<ostream>".} = object
@@ -356,6 +378,16 @@ converter toTextEncoder*(_: type(nil)): TextEncoder {.importcpp: "(nullptr)".}
 converter toBool*(this: TextEncoder): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TextEncoder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
+type TextEncoder_Encoding {.importcpp: "TextEncoder::Encoding", pure, header: "textEncoder.h".} = enum
+  E_iso8859 = 0
+  E_utf8 = 1
+  E_unicode = 2
+
+func E_iso8859*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_iso8859
+func E_utf8*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf8
+func E_utf16be*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_utf16be
+func E_unicode*(_: typedesc[TextEncoder]): TextEncoder_Encoding = TextEncoder_Encoding.E_unicode
+
 type Filename* {.importcpp: "Filename", pure, inheritable, header: "filename.h".} = object
   ## The name of a file, such as a texture file or an Egg file.  Stores the full
   ## pathname, and includes functions for extracting out the directory prefix
@@ -366,6 +398,15 @@ type Filename* {.importcpp: "Filename", pure, inheritable, header: "filename.h".
   ## convention, and it knows how to perform basic OS-specific I/O, like testing
   ## for file existence and searching a searchpath, as well as the best way to
   ## open an fstream for reading or writing.
+
+type Filename_Type {.importcpp: "Filename::Type", pure, header: "filename.h".} = enum
+  T_general = 0
+  T_dso = 1
+  T_executable = 2
+
+func T_general*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_general
+func T_dso*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_dso
+func T_executable*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_executable
 
 type PandaSystem* {.importcpp: "PandaSystem", pure, inheritable, header: "pandaSystem.h".} = object
   ## This class is used as a namespace to group several global properties of
@@ -409,6 +450,44 @@ type ConfigFlags* {.importcpp: "ConfigFlags", pure, inheritable, header: "config
   ## It exists only to provide a convenient name scoping for some enumerated
   ## values common to both classes.
 
+type ConfigFlags_ValueType {.importcpp: "ConfigFlags::ValueType", pure, header: "configFlags.h".} = enum
+  VT_undefined = 0
+  VT_list = 1
+  VT_string = 2
+  VT_filename = 3
+  VT_bool = 4
+  VT_int = 5
+  VT_double = 6
+  VT_enum = 7
+  VT_search_path = 8
+  VT_int64 = 9
+  VT_color = 10
+
+func VT_undefined*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_undefined
+func VT_list*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_list
+func VT_string*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_string
+func VT_filename*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_filename
+func VT_bool*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_bool
+func VT_int*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int
+func VT_double*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_double
+func VT_enum*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_enum
+func VT_search_path*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_search_path
+func VT_int64*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_int64
+func VT_color*(_: typedesc[ConfigFlags]): ConfigFlags_ValueType = ConfigFlags_ValueType.VT_color
+
+type ConfigFlags_VariableFlags {.importcpp: "ConfigFlags::VariableFlags", pure, header: "configFlags.h".} = enum
+  F_trust_level_mask = 4095
+  F_open = 4096
+  F_closed = 8192
+  F_dynamic = 16384
+  F_dconfig = 32768
+
+func F_trust_level_mask*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_trust_level_mask
+func F_open*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_open
+func F_closed*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_closed
+func F_dynamic*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dynamic
+func F_dconfig*(_: typedesc[ConfigFlags]): ConfigFlags_VariableFlags = ConfigFlags_VariableFlags.F_dconfig
+
 type ConfigPage* {.importcpp: "ConfigPage", pure, inheritable, header: "configPage.h".} = object
   ## A page of ConfigDeclarations that may be loaded or unloaded.  Typically
   ## this represents a single .prc file that is read from disk at runtime, but
@@ -429,7 +508,7 @@ type ConfigVariableCore* {.importcpp: "ConfigVariableCore", pure, inheritable, h
   ## make() method, which may return a shared instance.  Once created, these
   ## objects are never destructed.
 
-type NotifySeverity* = enum
+type NotifySeverity* {.importcpp: "NotifySeverity", header: "notifySeverity.h".} = enum
   NS_unspecified = 0
   NS_spam = 1
   NS_debug = 2
@@ -608,6 +687,17 @@ converter toISocketStream*(_: type(nil)): ISocketStream {.importcpp: "(nullptr)"
 converter toBool*(this: ISocketStream): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ISocketStream, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
+type ISocketStream_ReadState {.importcpp: "ISocketStream::ReadState", pure, header: "socketStream.h".} = enum
+  RS_initial = 0
+  RS_reading = 1
+  RS_complete = 2
+  RS_error = 3
+
+func RS_initial*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_initial
+func RS_reading*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_reading
+func RS_complete*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_complete
+func RS_error*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocketStream_ReadState.RS_error
+
 type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "socketStream.h".} = object of ostream
   ## A base class for ostreams that write to a (possibly non-blocking) socket.
   ## It adds is_closed(), which can be called after any write operation fails to
@@ -627,6 +717,36 @@ type URLSpec* {.importcpp: "URLSpec", pure, inheritable, header: "urlSpec.h".} =
 type HTTPEnum* {.importcpp: "HTTPEnum", pure, inheritable, header: "httpEnum.h".} = object
   ## This class is just used as a namespace wrapper for some of the enumerated
   ## types used by various classes within the HTTPClient family.
+
+type HTTPEnum_HTTPVersion {.importcpp: "HTTPEnum::HTTPVersion", pure, header: "httpEnum.h".} = enum
+  HV_09 = 0
+  HV_10 = 1
+  HV_11 = 2
+  HV_other = 3
+
+func HV_09*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_09
+func HV_10*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_10
+func HV_11*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_11
+func HV_other*(_: typedesc[HTTPEnum]): HTTPEnum_HTTPVersion = HTTPEnum_HTTPVersion.HV_other
+
+type HTTPEnum_Method {.importcpp: "HTTPEnum::Method", pure, header: "httpEnum.h".} = enum
+  M_options = 0
+  M_get = 1
+  M_head = 2
+  M_post = 3
+  M_put = 4
+  M_delete = 5
+  M_trace = 6
+  M_connect = 7
+
+func M_options*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_options
+func M_get*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_get
+func M_head*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_head
+func M_post*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_post
+func M_put*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_put
+func M_delete*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_delete
+func M_trace*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_trace
+func M_connect*(_: typedesc[HTTPEnum]): HTTPEnum_Method = HTTPEnum_Method.M_connect
 
 type HTTPDate* {.importcpp: "HTTPDate", pure, inheritable, header: "httpDate.h".} = object
   ## A container for an HTTP-legal time/date indication.  This can accept a
@@ -664,6 +784,15 @@ converter toBool*(this: HTTPClient): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: HTTPClient, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HTTPClient], obj: TypedObject): HTTPClient {.importcpp: "DCAST(HTTPClient, @)".}
 
+type HTTPClient_VerifySSL {.importcpp: "HTTPClient::VerifySSL", pure, header: "httpClient.h".} = enum
+  VS_no_verify = 0
+  VS_no_date_check = 1
+  VS_normal = 2
+
+func VS_no_verify*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_verify
+func VS_no_date_check*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_no_date_check
+func VS_normal*(_: typedesc[HTTPClient]): HTTPClient_VerifySSL = HTTPClient_VerifySSL.VS_normal
+
 type HTTPEntityTag* {.importcpp: "HTTPEntityTag", pure, inheritable, header: "httpEntityTag.h".} = object
   ## A container for an "entity tag" from an HTTP server.  This is used to
   ## identify a particular version of a document or resource, particularly
@@ -676,6 +805,26 @@ type DocumentSpec* {.importcpp: "DocumentSpec", pure, inheritable, header: "docu
   ##
   ## The DocumentSpec may also be used to request a newer document than a
   ## particular one if available, for instance to refresh a cached document.
+
+type DocumentSpec_RequestMode {.importcpp: "DocumentSpec::RequestMode", pure, header: "documentSpec.h".} = enum
+  RM_any = 0
+  RM_equal = 1
+  RM_newer = 2
+  RM_equal_or_newer = 3
+
+func RM_any*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_any
+func RM_equal*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal
+func RM_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_newer
+func RM_equal_or_newer*(_: typedesc[DocumentSpec]): DocumentSpec_RequestMode = DocumentSpec_RequestMode.RM_equal_or_newer
+
+type DocumentSpec_CacheControl {.importcpp: "DocumentSpec::CacheControl", pure, header: "documentSpec.h".} = enum
+  CC_allow_cache = 0
+  CC_revalidate = 1
+  CC_no_cache = 2
+
+func CC_allow_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_allow_cache
+func CC_revalidate*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_revalidate
+func CC_no_cache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = DocumentSpec_CacheControl.CC_no_cache
 
 type TypedReferenceCount* {.importcpp: "PT(TypedReferenceCount)", bycopy, pure, inheritable, header: "typedReferenceCount.h".} = object of TypedObject
   ## A base class for things which need to inherit from both TypedObject and
@@ -707,6 +856,52 @@ converter toBool*(this: HTTPChannel): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: HTTPChannel, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HTTPChannel], obj: TypedObject): HTTPChannel {.importcpp: "DCAST(HTTPChannel, @)".}
 
+type HTTPChannel_StatusCode {.importcpp: "HTTPChannel::StatusCode", pure, header: "httpChannel.h".} = enum
+  ## get_status_code() will either return an HTTP-style status code >= 100
+  ## (e.g.  404), or one of the following values.  In general, these are
+  ## ordered from less-successful to more-successful.
+  SC_incomplete = 0
+  SC_internal_error = 1
+  SC_no_connection = 2
+  SC_timeout = 3
+  SC_lost_connection = 4
+  SC_non_http_response = 5
+  SC_invalid_http = 6
+  SC_socks_invalid_version = 7
+  SC_socks_no_acceptable_login_method = 8
+  SC_socks_refused = 9
+  SC_socks_no_connection = 10
+  SC_ssl_internal_failure = 11
+  SC_ssl_no_handshake = 12
+  SC_http_error_watermark = 13
+  SC_ssl_invalid_server_certificate = 14
+  SC_ssl_self_signed_server_certificate = 15
+  SC_ssl_unexpected_server = 16
+  SC_download_open_error = 17
+  SC_download_write_error = 18
+  SC_download_invalid_range = 19
+
+func SC_incomplete*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_incomplete
+func SC_internal_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_internal_error
+func SC_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_no_connection
+func SC_timeout*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_timeout
+func SC_lost_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_lost_connection
+func SC_non_http_response*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_non_http_response
+func SC_invalid_http*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_invalid_http
+func SC_socks_invalid_version*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_invalid_version
+func SC_socks_no_acceptable_login_method*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_acceptable_login_method
+func SC_socks_refused*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_refused
+func SC_socks_no_connection*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_socks_no_connection
+func SC_ssl_internal_failure*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_internal_failure
+func SC_ssl_no_handshake*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_no_handshake
+func SC_http_error_watermark*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_http_error_watermark
+func SC_ssl_invalid_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_invalid_server_certificate
+func SC_ssl_self_signed_server_certificate*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_self_signed_server_certificate
+func SC_ssl_unexpected_server*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_ssl_unexpected_server
+func SC_download_open_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_open_error
+func SC_download_write_error*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_write_error
+func SC_download_invalid_range*(_: typedesc[HTTPChannel]): HTTPChannel_StatusCode = HTTPChannel_StatusCode.SC_download_invalid_range
+
 type Decompressor* {.importcpp: "Decompressor", pure, inheritable, header: "decompressor.h".} = object
   ## This manages run-time decompression of a zlib-compressed stream, as a
   ## background or foreground task.
@@ -718,6 +913,20 @@ type DownloadDb* {.importcpp: "DownloadDb", pure, inheritable, header: "download
   ## This class manages one copy of the database for the client, representing
   ## the files on the client system, and another copy for the server,
   ## representing the files the server has available.
+
+type DownloadDb_Status {.importcpp: "DownloadDb::Status", pure, header: "downloadDb.h".} = enum
+  ## Status of a multifile is stored in this enum Note these values are in
+  ## increasing order of "doneness" So if you are decompressed, you are
+  ## complete If you are extracted, you are decompressed and complete
+  Status_incomplete = 0
+  Status_complete = 1
+  Status_decompressed = 2
+  Status_extracted = 3
+
+func Status_incomplete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_incomplete
+func Status_complete*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_complete
+func Status_decompressed*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_decompressed
+func Status_extracted*(_: typedesc[DownloadDb]): DownloadDb_Status = DownloadDb_Status.Status_extracted
 
 type Extractor* {.importcpp: "Extractor", pure, inheritable, header: "extractor.h".} = object
   ## This class automatically extracts the contents of a Multifile to the
@@ -885,7 +1094,7 @@ converter toBool*(this: FileReference): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: FileReference, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FileReference], obj: TypedObject): FileReference {.importcpp: "DCAST(FileReference, @)".}
 
-type ErrorUtilCode* = enum
+type ErrorUtilCode* {.importcpp: "ErrorUtilCode", header: "errorUtilCode.h".} = enum
   EU_error_zlib = -80
   EU_error_http_proxy_authentication = -73
   EU_error_http_service_unavailable = -72
@@ -1087,6 +1296,11 @@ type VirtualFileSystem* {.importcpp: "VirtualFileSystem", pure, inheritable, hea
   ## For instance, a VirtualFileSystem can transparently mount one or more
   ## Multifiles as their own subdirectory hierarchies.
 
+type VirtualFileSystem_MountFlags {.importcpp: "VirtualFileSystem::MountFlags", pure, header: "virtualFileSystem.h".} = enum
+  MF_read_only = 2
+
+func MF_read_only*(_: typedesc[VirtualFileSystem]): VirtualFileSystem_MountFlags = VirtualFileSystem_MountFlags.MF_read_only
+
 type TrueClock* {.importcpp: "TrueClock", pure, inheritable, header: "trueClock.h".} = object
   ## An interface to whatever real-time clock we might have available in the
   ## current environment.  There is only one TrueClock in existence, and it
@@ -1129,6 +1343,22 @@ type WindowsRegistry* {.importcpp: "WindowsRegistry", pure, inheritable, header:
   ## to the windows registry.  It automatically converts strings from utf-8
   ## encoding and stores them in Unicode (and conversely reconverts them on
   ## retrieval).
+
+type WindowsRegistry_RegLevel {.importcpp: "WindowsRegistry::RegLevel", pure, header: "windowsRegistry.h".} = enum
+  rl_machine = 0
+  rl_user = 1
+
+func rl_machine*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_machine
+func rl_user*(_: typedesc[WindowsRegistry]): WindowsRegistry_RegLevel = WindowsRegistry_RegLevel.rl_user
+
+type WindowsRegistry_Type {.importcpp: "WindowsRegistry::Type", pure, header: "windowsRegistry.h".} = enum
+  T_none = 0
+  T_int = 1
+  T_string = 2
+
+func T_none*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_none
+func T_int*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_int
+func T_string*(_: typedesc[WindowsRegistry]): WindowsRegistry_Type = WindowsRegistry_Type.T_string
 
 type RecorderBase* {.importcpp: "RecorderBase*", bycopy, pure, inheritable, header: "recorderBase.h".} = object
   ## This is the base class to a number of objects that record particular kinds
@@ -1186,6 +1416,34 @@ converter toPandaNode*(_: type(nil)): PandaNode {.importcpp: "(nullptr)".}
 converter toBool*(this: PandaNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PandaNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PandaNode], obj: TypedObject): PandaNode {.importcpp: "DCAST(PandaNode, @)".}
+
+type PandaNode_UnexpectedChange {.importcpp: "PandaNode::UnexpectedChange", pure, header: "pandaNode.h".} = enum
+  UC_parents = 1
+  UC_children = 2
+  UC_transform = 4
+  UC_state = 8
+  UC_draw_mask = 16
+
+func UC_parents*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_parents
+func UC_children*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_children
+func UC_transform*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_transform
+func UC_state*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_state
+func UC_draw_mask*(_: typedesc[PandaNode]): PandaNode_UnexpectedChange = PandaNode_UnexpectedChange.UC_draw_mask
+
+type PandaNode_FancyBits {.importcpp: "PandaNode::FancyBits", pure, header: "pandaNode.h".} = enum
+  FB_transform = 1
+  FB_state = 2
+  FB_effects = 4
+  FB_tag = 16
+  FB_draw_mask = 32
+  FB_cull_callback = 64
+
+func FB_transform*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_transform
+func FB_state*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_state
+func FB_effects*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_effects
+func FB_tag*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_tag
+func FB_draw_mask*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_draw_mask
+func FB_cull_callback*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNode_FancyBits.FB_cull_callback
 
 type DataNode* {.importcpp: "PT(DataNode)", bycopy, pure, inheritable, header: "dataNode.h".} = object of PandaNode
   ## The fundamental type of node for the data graph.  The DataNode class is
@@ -1282,7 +1540,7 @@ converter toBool*(this: ComputeNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ComputeNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ComputeNode], obj: TypedObject): ComputeNode {.importcpp: "DCAST(ComputeNode, @)".}
 
-type LODNodeType* = enum
+type LODNodeType* {.importcpp: "LODNodeType", header: "lODNodeType.h".} = enum
   LNT_pop = 0
   LNT_fade = 1
 
@@ -1476,6 +1734,17 @@ type SceneGraphAnalyzer* {.importcpp: "SceneGraphAnalyzer", pure, inheritable, h
   ## A handy class that can scrub over a scene graph and collect interesting
   ## statistics on it.
 
+type SceneGraphAnalyzer_LodMode {.importcpp: "SceneGraphAnalyzer::LodMode", pure, header: "sceneGraphAnalyzer.h".} = enum
+  LM_lowest = 0
+  LM_highest = 1
+  LM_all = 2
+  LM_none = 3
+
+func LM_lowest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_lowest
+func LM_highest*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_highest
+func LM_all*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_all
+func LM_none*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode = SceneGraphAnalyzer_LodMode.LM_none
+
 type CachedTypedWritableReferenceCount* {.importcpp: "PT(CachedTypedWritableReferenceCount)", bycopy, pure, inheritable, header: "cachedTypedWritableReferenceCount.h".} = object of TypedWritableReferenceCount
   ## This is a special extension to ReferenceCount that includes dual reference
   ## counts: the standard reference count number, which includes all references
@@ -1526,6 +1795,13 @@ converter toBool*(this: NodeCachedReferenceCount): bool {.importcpp: "(# != null
 func `==`*(x: NodeCachedReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NodeCachedReferenceCount], obj: TypedObject): NodeCachedReferenceCount {.importcpp: "DCAST(NodeCachedReferenceCount, @)".}
 
+type NodeCachedReferenceCount_Referenced {.importcpp: "NodeCachedReferenceCount::Referenced", pure, header: "nodeCachedReferenceCount.h".} = enum
+  R_node = 1
+  R_cache = 2
+
+func R_node*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_node
+func R_cache*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCount_Referenced = NodeCachedReferenceCount_Referenced.R_cache
+
 type TransformState* {.importcpp: "PT(TransformState)", bycopy, pure, header: "transformState.h".} = object of NodeCachedReferenceCount
   ## Indicates a coordinate-system transform on vertices.  TransformStates are
   ## the primary means for storing transformations on the scene graph.
@@ -1575,6 +1851,58 @@ converter toBool*(this: RenderAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RenderAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderAttrib], obj: TypedObject): RenderAttrib {.importcpp: "DCAST(RenderAttrib, @)".}
 
+type RenderAttrib_PandaCompareFunc {.importcpp: "RenderAttrib::PandaCompareFunc", pure, header: "renderAttrib.h".} = enum
+  ## intentionally defined to match D3DCMPFUNC
+  M_none = 0
+  M_never = 1
+  M_less = 2
+  M_equal = 3
+  M_less_equal = 4
+  M_greater = 5
+  M_not_equal = 6
+  M_greater_equal = 7
+  M_always = 8
+
+func M_none*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_none
+func M_never*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_never
+func M_less*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less
+func M_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_equal
+func M_less_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_less_equal
+func M_greater*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater
+func M_not_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_not_equal
+func M_greater_equal*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_greater_equal
+func M_always*(_: typedesc[RenderAttrib]): RenderAttrib_PandaCompareFunc = RenderAttrib_PandaCompareFunc.M_always
+
+type RenderAttrib_TexGenMode {.importcpp: "RenderAttrib::TexGenMode", pure, header: "renderAttrib.h".} = enum
+  ## This is the enumerated type for TexGenAttrib.  It is inherited into
+  ## TexGenAttrib.  It is defined up at this level only to avoid circular
+  ## dependencies in the header files.
+  M_off = 0
+  M_eye_sphere_map = 1
+  M_world_cube_map = 2
+  M_eye_cube_map = 3
+  M_world_normal = 4
+  M_eye_normal = 5
+  M_world_position = 6
+  M_unused = 7
+  M_eye_position = 8
+  M_point_sprite = 9
+  M_unused2 = 10
+  M_constant = 11
+
+func M_off*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_off
+func M_eye_sphere_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_sphere_map
+func M_world_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_cube_map
+func M_eye_cube_map*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_cube_map
+func M_world_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_normal
+func M_eye_normal*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_normal
+func M_world_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_world_position
+func M_unused*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused
+func M_eye_position*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_eye_position
+func M_point_sprite*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_point_sprite
+func M_unused2*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_unused2
+func M_constant*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = RenderAttrib_TexGenMode.M_constant
+
 type RenderModeAttrib* {.importcpp: "PT(RenderModeAttrib)", bycopy, pure, inheritable, header: "renderModeAttrib.h".} = object of RenderAttrib
   ## Specifies how polygons are to be drawn.
 
@@ -1582,6 +1910,21 @@ converter toRenderModeAttrib*(_: type(nil)): RenderModeAttrib {.importcpp: "(nul
 converter toBool*(this: RenderModeAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RenderModeAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderModeAttrib], obj: TypedObject): RenderModeAttrib {.importcpp: "DCAST(RenderModeAttrib, @)".}
+
+type RenderModeAttrib_Mode {.importcpp: "RenderModeAttrib::Mode", pure, header: "renderModeAttrib.h".} = enum
+  M_unchanged = 0
+  M_filled = 1
+  M_wireframe = 2
+  M_point = 3
+  M_filled_flat = 4
+  M_filled_wireframe = 5
+
+func M_unchanged*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_unchanged
+func M_filled*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled
+func M_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_wireframe
+func M_point*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_point
+func M_filled_flat*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_flat
+func M_filled_wireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mode = RenderModeAttrib_Mode.M_filled_wireframe
 
 type TexMatrixAttrib* {.importcpp: "PT(TexMatrixAttrib)", bycopy, pure, inheritable, header: "texMatrixAttrib.h".} = object of RenderAttrib
   ## Applies a transform matrix to UV's before they are rendered.
@@ -1621,6 +1964,28 @@ converter toAntialiasAttrib*(_: type(nil)): AntialiasAttrib {.importcpp: "(nullp
 converter toBool*(this: AntialiasAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AntialiasAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AntialiasAttrib], obj: TypedObject): AntialiasAttrib {.importcpp: "DCAST(AntialiasAttrib, @)".}
+
+type AntialiasAttrib_Mode {.importcpp: "AntialiasAttrib::Mode", pure, header: "antialiasAttrib.h".} = enum
+  M_none = 0
+  M_point = 1
+  M_line = 2
+  M_polygon = 4
+  M_multisample = 8
+  M_type_mask = 31
+  M_faster = 32
+  M_better = 64
+  M_dont_care = 96
+
+func M_none*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_none
+func M_point*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_point
+func M_line*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_line
+func M_polygon*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_polygon
+func M_multisample*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_multisample
+func M_auto*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_auto
+func M_type_mask*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_type_mask
+func M_faster*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_faster
+func M_better*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_better
+func M_dont_care*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = AntialiasAttrib_Mode.M_dont_care
 
 type RenderEffect* {.importcpp: "PT(RenderEffect)", bycopy, pure, inheritable, header: "renderEffect.h".} = object of TypedWritableReferenceCount
   ## This is the base class for a number of special render effects that may be
@@ -1670,6 +2035,23 @@ converter toBool*(this: TransparencyAttrib): bool {.importcpp: "(# != nullptr)".
 func `==`*(x: TransparencyAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TransparencyAttrib], obj: TypedObject): TransparencyAttrib {.importcpp: "DCAST(TransparencyAttrib, @)".}
 
+type TransparencyAttrib_Mode {.importcpp: "TransparencyAttrib::Mode", pure, header: "transparencyAttrib.h".} = enum
+  M_none = 0
+  M_alpha = 1
+  M_premultiplied_alpha = 2
+  M_multisample = 3
+  M_multisample_mask = 4
+  M_binary = 5
+  M_dual = 6
+
+func M_none*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_none
+func M_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_alpha
+func M_premultiplied_alpha*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_premultiplied_alpha
+func M_multisample*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample
+func M_multisample_mask*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_multisample_mask
+func M_binary*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_binary
+func M_dual*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = TransparencyAttrib_Mode.M_dual
+
 type LogicOpAttrib* {.importcpp: "PT(LogicOpAttrib)", bycopy, pure, inheritable, header: "logicOpAttrib.h".} = object of RenderAttrib
   ## If enabled, specifies that a custom logical operation be performed instead
   ## of any color blending.  Setting it to a value other than M_none will cause
@@ -1682,9 +2064,77 @@ converter toBool*(this: LogicOpAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: LogicOpAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LogicOpAttrib], obj: TypedObject): LogicOpAttrib {.importcpp: "DCAST(LogicOpAttrib, @)".}
 
+type LogicOpAttrib_Operation {.importcpp: "LogicOpAttrib::Operation", pure, header: "logicOpAttrib.h".} = enum
+  O_none = 0
+  O_clear = 1
+  O_and = 2
+  O_and_reverse = 3
+  O_copy = 4
+  O_and_inverted = 5
+  O_noop = 6
+  O_xor = 7
+  O_or = 8
+  O_nor = 9
+  O_equivalent = 10
+  O_invert = 11
+  O_or_reverse = 12
+  O_copy_inverted = 13
+  O_or_inverted = 14
+  O_nand = 15
+  O_set = 16
+
+func O_none*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_none
+func O_clear*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_clear
+func O_and*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and
+func O_and_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_reverse
+func O_copy*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy
+func O_and_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_and_inverted
+func O_noop*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_noop
+func O_xor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_xor
+func O_or*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or
+func O_nor*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nor
+func O_equivalent*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_equivalent
+func O_invert*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_invert
+func O_or_reverse*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_reverse
+func O_copy_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_copy_inverted
+func O_or_inverted*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_or_inverted
+func O_nand*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_nand
+func O_set*(_: typedesc[LogicOpAttrib]): LogicOpAttrib_Operation = LogicOpAttrib_Operation.O_set
+
 type ShaderInput* {.importcpp: "ShaderInput", pure, inheritable, header: "shaderInput.h".} = object
   ## This is a small container class that can hold any one of the value types
   ## that can be passed as input to a shader.
+
+type ShaderInput_AccessFlags {.importcpp: "ShaderInput::AccessFlags", pure, header: "shaderInput.h".} = enum
+  ## Used when binding texture images.
+  A_read = 1
+  A_write = 2
+  A_layered = 4
+
+func A_read*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_read
+func A_write*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_write
+func A_layered*(_: typedesc[ShaderInput]): ShaderInput_AccessFlags = ShaderInput_AccessFlags.A_layered
+
+type ShaderInput_ShaderInputType {.importcpp: "ShaderInput::ShaderInputType", pure, header: "shaderInput.h".} = enum
+  M_invalid = 0
+  M_texture = 1
+  M_nodepath = 2
+  M_vector = 3
+  M_numeric = 4
+  M_texture_sampler = 5
+  M_param = 6
+  M_texture_image = 7
+  M_buffer = 8
+
+func M_invalid*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_invalid
+func M_texture*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture
+func M_nodepath*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_nodepath
+func M_vector*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_vector
+func M_numeric*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_numeric
+func M_texture_sampler*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_sampler
+func M_param*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_param
+func M_texture_image*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_texture_image
+func M_buffer*(_: typedesc[ShaderInput]): ShaderInput_ShaderInputType = ShaderInput_ShaderInputType.M_buffer
 
 type InternalNameCollection* {.importcpp: "InternalNameCollection", pure, inheritable, header: "internalNameCollection.h".} = object
 
@@ -1706,6 +2156,19 @@ type NodePath* {.importcpp: "NodePath", pure, inheritable, header: "nodePath.h".
   ## count to all the nodes in the path.  However, if any node in the path is
   ## removed or reparented (perhaps through a different NodePath), the NodePath
   ## will automatically be updated to reflect the changes.
+
+type NodePath_ErrorType {.importcpp: "NodePath::ErrorType", pure, header: "nodePath.h".} = enum
+  ## This enumeration is returned by get_error_type() for an empty NodePath to
+  ## report the reason it's empty.
+  ET_ok = 0
+  ET_not_found = 1
+  ET_removed = 2
+  ET_fail = 3
+
+func ET_ok*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_ok
+func ET_not_found*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_not_found
+func ET_removed*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_removed
+func ET_fail*(_: typedesc[NodePath]): NodePath_ErrorType = NodePath_ErrorType.ET_fail
 
 type NodePathCollection* {.importcpp: "NodePathCollection", pure, inheritable, header: "nodePathCollection.h".} = object
   ## This is a set of zero or more NodePaths.  It's handy for returning from
@@ -1762,6 +2225,15 @@ converter toBool*(this: AuxBitplaneAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AuxBitplaneAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AuxBitplaneAttrib], obj: TypedObject): AuxBitplaneAttrib {.importcpp: "DCAST(AuxBitplaneAttrib, @)".}
 
+type AuxBitplaneAttrib_AuxBitplaneOutput {.importcpp: "AuxBitplaneAttrib::AuxBitplaneOutput", pure, header: "auxBitplaneAttrib.h".} = enum
+  ABO_glow = 1
+  ABO_aux_normal = 2
+  ABO_aux_glow = 4
+
+func ABO_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_glow
+func ABO_aux_normal*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_normal
+func ABO_aux_glow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitplaneOutput = AuxBitplaneAttrib_AuxBitplaneOutput.ABO_aux_glow
+
 type AuxSceneData* {.importcpp: "PT(AuxSceneData)", bycopy, pure, inheritable, header: "auxSceneData.h".} = object of TypedReferenceCount
   ## This is a base class for a generic data structure that can be attached per-
   ## instance to the camera, to store per-instance data that must be preserved
@@ -1779,6 +2251,48 @@ func dcast*(_: typedesc[AuxSceneData], obj: TypedObject): AuxSceneData {.importc
 type BamEnums* {.importcpp: "BamEnums", pure, inheritable, header: "bamEnums.h".} = object
   ## This class exists just to provide scoping for the enums shared by BamReader
   ## and BamWriter.
+
+type BamEnums_BamEndian {.importcpp: "BamEnums::BamEndian", pure, header: "bamEnums.h".} = enum
+  ## This defines an enumerated type used to represent the endianness of
+  ## certain numeric values stored in a Bam file.  It really has only two
+  ## possible values, either BE_bigendian or BE_littleendian; but through a
+  ## preprocessor trick we also add BE_native, which is the same numerically
+  ## as whichever value the hardware supports natively.
+  BE_bigendian = 0
+  BE_native = 1
+
+func BE_bigendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_bigendian
+func BE_littleendian*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_littleendian
+func BE_native*(_: typedesc[BamEnums]): BamEnums_BamEndian = BamEnums_BamEndian.BE_native
+
+type BamEnums_BamObjectCode {.importcpp: "BamEnums::BamObjectCode", pure, header: "bamEnums.h".} = enum
+  ## This is the code written along with each object.  It is used to control
+  ## object scoping.
+  BOC_push = 0
+  BOC_pop = 1
+  BOC_adjunct = 2
+  BOC_remove = 3
+  BOC_file_data = 4
+
+func BOC_push*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_push
+func BOC_pop*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_pop
+func BOC_adjunct*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_adjunct
+func BOC_remove*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_remove
+func BOC_file_data*(_: typedesc[BamEnums]): BamEnums_BamObjectCode = BamEnums_BamObjectCode.BOC_file_data
+
+type BamEnums_BamTextureMode {.importcpp: "BamEnums::BamTextureMode", pure, header: "bamEnums.h".} = enum
+  ## This enum is used to control how textures are written to a bam stream.
+  BTM_unchanged = 0
+  BTM_fullpath = 1
+  BTM_relative = 2
+  BTM_basename = 3
+  BTM_rawdata = 4
+
+func BTM_unchanged*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_unchanged
+func BTM_fullpath*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_fullpath
+func BTM_relative*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_relative
+func BTM_basename*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_basename
+func BTM_rawdata*(_: typedesc[BamEnums]): BamEnums_BamTextureMode = BamEnums_BamTextureMode.BTM_rawdata
 
 type BamFile* {.importcpp: "BamFile", pure, inheritable, header: "bamFile.h".} = object of BamEnums
   ## The principle public interface to reading and writing Bam disk files.  See
@@ -1820,6 +2334,13 @@ converter toBool*(this: PlaneNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PlaneNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PlaneNode], obj: TypedObject): PlaneNode {.importcpp: "DCAST(PlaneNode, @)".}
 
+type PlaneNode_ClipEffect {.importcpp: "PlaneNode::ClipEffect", pure, header: "planeNode.h".} = enum
+  CE_visible = 1
+  CE_collision = 2
+
+func CE_visible*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_visible
+func CE_collision*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode_ClipEffect.CE_collision
+
 type ClipPlaneAttrib* {.importcpp: "PT(ClipPlaneAttrib)", bycopy, pure, inheritable, header: "clipPlaneAttrib.h".} = object of RenderAttrib
   ## This functions similarly to a LightAttrib.  It indicates the set of
   ## clipping planes that modify the geometry at this level and below.  A
@@ -1831,6 +2352,17 @@ converter toBool*(this: ClipPlaneAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ClipPlaneAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClipPlaneAttrib], obj: TypedObject): ClipPlaneAttrib {.importcpp: "DCAST(ClipPlaneAttrib, @)".}
 
+type ClipPlaneAttrib_Operation {.importcpp: "ClipPlaneAttrib::Operation", pure, header: "clipPlaneAttrib.h".} = enum
+  ## This is the old, deprecated interface to ClipPlaneAttrib.  Do not use any
+  ## of these methods for new code; these methods will be removed soon.
+  O_set = 0
+  O_add = 1
+  O_remove = 2
+
+func O_set*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_set
+func O_add*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_add
+func O_remove*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = ClipPlaneAttrib_Operation.O_remove
+
 type ColorAttrib* {.importcpp: "PT(ColorAttrib)", bycopy, pure, inheritable, header: "colorAttrib.h".} = object of RenderAttrib
   ## Indicates what color should be applied to renderable geometry.
 
@@ -1838,6 +2370,15 @@ converter toColorAttrib*(_: type(nil)): ColorAttrib {.importcpp: "(nullptr)".}
 converter toBool*(this: ColorAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ColorAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorAttrib], obj: TypedObject): ColorAttrib {.importcpp: "DCAST(ColorAttrib, @)".}
+
+type ColorAttrib_Type {.importcpp: "ColorAttrib::Type", pure, header: "colorAttrib.h".} = enum
+  T_vertex = 0
+  T_flat = 1
+  T_off = 2
+
+func T_vertex*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_vertex
+func T_flat*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_flat
+func T_off*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T_off
 
 type ColorBlendAttrib* {.importcpp: "PT(ColorBlendAttrib)", bycopy, pure, inheritable, header: "colorBlendAttrib.h".} = object of RenderAttrib
   ## This specifies how colors are blended into the frame buffer, for special
@@ -1847,6 +2388,70 @@ converter toColorBlendAttrib*(_: type(nil)): ColorBlendAttrib {.importcpp: "(nul
 converter toBool*(this: ColorBlendAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ColorBlendAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorBlendAttrib], obj: TypedObject): ColorBlendAttrib {.importcpp: "DCAST(ColorBlendAttrib, @)".}
+
+type ColorBlendAttrib_Mode {.importcpp: "ColorBlendAttrib::Mode", pure, header: "colorBlendAttrib.h".} = enum
+  M_none = 0
+  M_add = 1
+  M_subtract = 2
+  M_inv_subtract = 3
+  M_min = 4
+  M_max = 5
+
+func M_none*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_none
+func M_add*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_add
+func M_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_subtract
+func M_inv_subtract*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_inv_subtract
+func M_min*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_min
+func M_max*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Mode = ColorBlendAttrib_Mode.M_max
+
+type ColorBlendAttrib_Operand {.importcpp: "ColorBlendAttrib::Operand", pure, header: "colorBlendAttrib.h".} = enum
+  O_zero = 0
+  O_one = 1
+  O_incoming_color = 2
+  O_one_minus_incoming_color = 3
+  O_fbuffer_color = 4
+  O_one_minus_fbuffer_color = 5
+  O_incoming_alpha = 6
+  O_one_minus_incoming_alpha = 7
+  O_fbuffer_alpha = 8
+  O_one_minus_fbuffer_alpha = 9
+  O_constant_color = 10
+  O_one_minus_constant_color = 11
+  O_constant_alpha = 12
+  O_one_minus_constant_alpha = 13
+  O_incoming_color_saturate = 14
+  O_incoming1_color = 15
+  O_one_minus_incoming1_color = 16
+  O_incoming1_alpha = 17
+  O_one_minus_incoming1_alpha = 18
+  O_color_scale = 19
+  O_one_minus_color_scale = 20
+  O_alpha_scale = 21
+  O_one_minus_alpha_scale = 22
+
+func O_zero*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_zero
+func O_one*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one
+func O_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color
+func O_one_minus_incoming_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_color
+func O_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_color
+func O_one_minus_fbuffer_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_color
+func O_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_alpha
+func O_one_minus_incoming_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming_alpha
+func O_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_fbuffer_alpha
+func O_one_minus_fbuffer_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_fbuffer_alpha
+func O_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_color
+func O_one_minus_constant_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_color
+func O_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_constant_alpha
+func O_one_minus_constant_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_constant_alpha
+func O_incoming_color_saturate*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming_color_saturate
+func O_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_color
+func O_one_minus_incoming1_color*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_color
+func O_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_incoming1_alpha
+func O_one_minus_incoming1_alpha*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_incoming1_alpha
+func O_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_color_scale
+func O_one_minus_color_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_color_scale
+func O_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_alpha_scale
+func O_one_minus_alpha_scale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_Operand = ColorBlendAttrib_Operand.O_one_minus_alpha_scale
 
 type ColorScaleAttrib* {.importcpp: "PT(ColorScaleAttrib)", bycopy, pure, inheritable, header: "colorScaleAttrib.h".} = object of RenderAttrib
   ## Applies a scale to colors in the scene graph and on vertices.
@@ -1865,6 +2470,23 @@ converter toColorWriteAttrib*(_: type(nil)): ColorWriteAttrib {.importcpp: "(nul
 converter toBool*(this: ColorWriteAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ColorWriteAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorWriteAttrib], obj: TypedObject): ColorWriteAttrib {.importcpp: "DCAST(ColorWriteAttrib, @)".}
+
+type ColorWriteAttrib_Channels {.importcpp: "ColorWriteAttrib::Channels", pure, header: "colorWriteAttrib.h".} = enum
+  C_off = 0
+  C_red = 1
+  C_green = 2
+  C_blue = 4
+  C_rgb = 7
+  C_alpha = 8
+  C_all = 15
+
+func C_off*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_off
+func C_red*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_red
+func C_green*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_green
+func C_blue*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_blue
+func C_rgb*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_rgb
+func C_alpha*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_alpha
+func C_all*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = ColorWriteAttrib_Channels.C_all
 
 type CompassEffect* {.importcpp: "PT(CompassEffect)", bycopy, pure, inheritable, header: "compassEffect.h".} = object of RenderEffect
   ## A CompassEffect causes a node to inherit its rotation (or pos or scale, if
@@ -1894,9 +2516,47 @@ converter toBool*(this: CompassEffect): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: CompassEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CompassEffect], obj: TypedObject): CompassEffect {.importcpp: "DCAST(CompassEffect, @)".}
 
+type CompassEffect_Properties {.importcpp: "CompassEffect::Properties", pure, header: "compassEffect.h".} = enum
+  P_x = 1
+  P_y = 2
+  P_z = 4
+  P_pos = 7
+  P_rot = 8
+  P_sx = 16
+  P_sy = 32
+  P_sz = 64
+  P_scale = 112
+  P_all = 127
+
+func P_x*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_x
+func P_y*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_y
+func P_z*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_z
+func P_pos*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_pos
+func P_rot*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_rot
+func P_sx*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sx
+func P_sy*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sy
+func P_sz*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_sz
+func P_scale*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_scale
+func P_all*(_: typedesc[CompassEffect]): CompassEffect_Properties = CompassEffect_Properties.P_all
+
 type CullBinEnums* {.importcpp: "CullBinEnums", pure, inheritable, header: "cullBinEnums.h".} = object
   ## Provides scoping for the enumerated type shared by CullBin and
   ## CullBinManager.
+
+type CullBinEnums_BinType {.importcpp: "CullBinEnums::BinType", pure, header: "cullBinEnums.h".} = enum
+  BT_invalid = 0
+  BT_unsorted = 1
+  BT_state_sorted = 2
+  BT_back_to_front = 3
+  BT_front_to_back = 4
+  BT_fixed = 5
+
+func BT_invalid*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_invalid
+func BT_unsorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_unsorted
+func BT_state_sorted*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_state_sorted
+func BT_back_to_front*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_back_to_front
+func BT_front_to_back*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_front_to_back
+func BT_fixed*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnums_BinType.BT_fixed
 
 type GeomNode* {.importcpp: "PT(GeomNode)", bycopy, pure, inheritable, header: "geomNode.h".} = object of PandaNode
   ## A node that holds Geom objects, renderable pieces of geometry.  This is the
@@ -1928,6 +2588,17 @@ converter toCullFaceAttrib*(_: type(nil)): CullFaceAttrib {.importcpp: "(nullptr
 converter toBool*(this: CullFaceAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: CullFaceAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CullFaceAttrib], obj: TypedObject): CullFaceAttrib {.importcpp: "DCAST(CullFaceAttrib, @)".}
+
+type CullFaceAttrib_Mode {.importcpp: "CullFaceAttrib::Mode", pure, header: "cullFaceAttrib.h".} = enum
+  M_cull_none = 0
+  M_cull_clockwise = 1
+  M_cull_counter_clockwise = 2
+  M_cull_unchanged = 3
+
+func M_cull_none*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_none
+func M_cull_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_clockwise
+func M_cull_counter_clockwise*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_counter_clockwise
+func M_cull_unchanged*(_: typedesc[CullFaceAttrib]): CullFaceAttrib_Mode = CullFaceAttrib_Mode.M_cull_unchanged
 
 type WorkingNodePath* {.importcpp: "WorkingNodePath", pure, inheritable, header: "workingNodePath.h".} = object
   ## This is a class designed to support low-overhead traversals of the complete
@@ -1985,6 +2656,15 @@ converter toBool*(this: Fog): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Fog, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Fog], obj: TypedObject): Fog {.importcpp: "DCAST(Fog, @)".}
 
+type Fog_Mode {.importcpp: "Fog::Mode", pure, header: "fog.h".} = enum
+  M_linear = 0
+  M_exponential = 1
+  M_exponential_squared = 2
+
+func M_linear*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_linear
+func M_exponential*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential
+func M_exponential_squared*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponential_squared
+
 type FogAttrib* {.importcpp: "PT(FogAttrib)", bycopy, pure, inheritable, header: "fogAttrib.h".} = object of RenderAttrib
   ## Applies a Fog to the geometry at and below this node.
 
@@ -2015,6 +2695,17 @@ converter toRescaleNormalAttrib*(_: type(nil)): RescaleNormalAttrib {.importcpp:
 converter toBool*(this: RescaleNormalAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RescaleNormalAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RescaleNormalAttrib], obj: TypedObject): RescaleNormalAttrib {.importcpp: "DCAST(RescaleNormalAttrib, @)".}
+
+type RescaleNormalAttrib_Mode {.importcpp: "RescaleNormalAttrib::Mode", pure, header: "rescaleNormalAttrib.h".} = enum
+  M_none = 0
+  M_rescale = 1
+  M_normalize = 2
+  M_auto = 3
+
+func M_none*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_none
+func M_rescale*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_rescale
+func M_normalize*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_normalize
+func M_auto*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = RescaleNormalAttrib_Mode.M_auto
 
 type CullResult* {.importcpp: "PT(CullResult)", bycopy, pure, inheritable, header: "cullResult.h".} = object of ReferenceCount
   ## This stores the result of a BinCullHandler traversal: an ordered collection
@@ -2085,6 +2776,13 @@ converter toBool*(this: DepthWriteAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DepthWriteAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DepthWriteAttrib], obj: TypedObject): DepthWriteAttrib {.importcpp: "DCAST(DepthWriteAttrib, @)".}
 
+type DepthWriteAttrib_Mode {.importcpp: "DepthWriteAttrib::Mode", pure, header: "depthWriteAttrib.h".} = enum
+  M_off = 0
+  M_on = 1
+
+func M_off*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_off
+func M_on*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWriteAttrib_Mode.M_on
+
 type LightAttrib* {.importcpp: "PT(LightAttrib)", bycopy, pure, inheritable, header: "lightAttrib.h".} = object of RenderAttrib
   ## Indicates which set of lights should be considered "on" to illuminate
   ## geometry at this level and below.  A LightAttrib can either add lights or
@@ -2094,6 +2792,17 @@ converter toLightAttrib*(_: type(nil)): LightAttrib {.importcpp: "(nullptr)".}
 converter toBool*(this: LightAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: LightAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightAttrib], obj: TypedObject): LightAttrib {.importcpp: "DCAST(LightAttrib, @)".}
+
+type LightAttrib_Operation {.importcpp: "LightAttrib::Operation", pure, header: "lightAttrib.h".} = enum
+  ## This is the old, deprecated interface to LightAttrib.  Do not use any of
+  ## these methods for new code; these methods will be removed soon.
+  O_set = 0
+  O_add = 1
+  O_remove = 2
+
+func O_set*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_set
+func O_add*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_add
+func O_remove*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttrib_Operation.O_remove
 
 type LightRampAttrib* {.importcpp: "PT(LightRampAttrib)", bycopy, pure, inheritable, header: "lightRampAttrib.h".} = object of RenderAttrib
   ## A Light Ramp is any unary operator that takes a rendered pixel as input,
@@ -2105,6 +2814,23 @@ converter toLightRampAttrib*(_: type(nil)): LightRampAttrib {.importcpp: "(nullp
 converter toBool*(this: LightRampAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: LightRampAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightRampAttrib], obj: TypedObject): LightRampAttrib {.importcpp: "DCAST(LightRampAttrib, @)".}
+
+type LightRampAttrib_LightRampMode {.importcpp: "LightRampAttrib::LightRampMode", pure, header: "lightRampAttrib.h".} = enum
+  LRT_default = 0
+  LRT_identity = 1
+  LRT_single_threshold = 2
+  LRT_double_threshold = 3
+  LRT_hdr0 = 4
+  LRT_hdr1 = 5
+  LRT_hdr2 = 6
+
+func LRT_default*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_default
+func LRT_identity*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_identity
+func LRT_single_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_single_threshold
+func LRT_double_threshold*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_double_threshold
+func LRT_hdr0*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr0
+func LRT_hdr1*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr1
+func LRT_hdr2*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode = LightRampAttrib_LightRampMode.LRT_hdr2
 
 type Loader* {.importcpp: "PT(Loader)", bycopy, pure, inheritable, header: "loader.h".} = object of TypedReferenceCount
   ## A convenient class for loading models from disk, in bam or egg format (or
@@ -2189,6 +2915,42 @@ converter toBool*(this: AsyncTask): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AsyncTask, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTask], obj: TypedObject): AsyncTask {.importcpp: "DCAST(AsyncTask, @)".}
 
+type AsyncTask_DoneStatus {.importcpp: "AsyncTask::DoneStatus", pure, header: "asyncTask.h".} = enum
+  DS_done = 0
+  DS_cont = 1
+  DS_again = 2
+  DS_pickup = 3
+  DS_exit = 4
+  DS_pause = 5
+  DS_interrupt = 6
+  DS_await = 7
+
+func DS_done*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_done
+func DS_cont*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_cont
+func DS_again*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_again
+func DS_pickup*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pickup
+func DS_exit*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_exit
+func DS_pause*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_pause
+func DS_interrupt*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_interrupt
+func DS_await*(_: typedesc[AsyncTask]): AsyncTask_DoneStatus = AsyncTask_DoneStatus.DS_await
+
+type AsyncTask_State {.importcpp: "AsyncTask::State", pure, header: "asyncTask.h".} = enum
+  S_inactive = 0
+  S_active = 1
+  S_servicing = 2
+  S_servicing_removed = 3
+  S_sleeping = 4
+  S_active_nested = 5
+  S_awaiting = 6
+
+func S_inactive*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_inactive
+func S_active*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active
+func S_servicing*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing
+func S_servicing_removed*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_servicing_removed
+func S_sleeping*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_sleeping
+func S_active_nested*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_active_nested
+func S_awaiting*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.S_awaiting
+
 type ModelFlattenRequest* {.importcpp: "PT(ModelFlattenRequest)", bycopy, pure, inheritable, header: "modelFlattenRequest.h".} = object of AsyncTask
   ## This class object manages a single asynchronous request to flatten a model.
   ## The model will be duplicated and flattened in a sub-thread (if threading is
@@ -2224,6 +2986,19 @@ converter toModelNode*(_: type(nil)): ModelNode {.importcpp: "(nullptr)".}
 converter toBool*(this: ModelNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ModelNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelNode], obj: TypedObject): ModelNode {.importcpp: "DCAST(ModelNode, @)".}
+
+type ModelNode_PreserveTransform {.importcpp: "ModelNode::PreserveTransform", pure, header: "modelNode.h".} = enum
+  PT_none = 0
+  PT_local = 1
+  PT_net = 2
+  PT_drop_node = 3
+  PT_no_touch = 4
+
+func PT_none*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_none
+func PT_local*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_local
+func PT_net*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_net
+func PT_drop_node*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_drop_node
+func PT_no_touch*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = ModelNode_PreserveTransform.PT_no_touch
 
 type ModelRoot* {.importcpp: "PT(ModelRoot)", bycopy, pure, inheritable, header: "modelRoot.h".} = object of ModelNode
   ## A node of this type is created automatically at the root of each model file
@@ -2313,6 +3088,22 @@ converter toBool*(this: PolylightNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PolylightNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PolylightNode], obj: TypedObject): PolylightNode {.importcpp: "DCAST(PolylightNode, @)".}
 
+type PolylightNode_Flicker_Type {.importcpp: "PolylightNode::Flicker_Type", pure, header: "polylightNode.h".} = enum
+  FRANDOM = 0
+  FSIN = 1
+  FCUSTOM = 2
+
+func FRANDOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FRANDOM
+func FSIN*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FSIN
+func FCUSTOM*(_: typedesc[PolylightNode]): PolylightNode_Flicker_Type = PolylightNode_Flicker_Type.FCUSTOM
+
+type PolylightNode_Attenuation_Type {.importcpp: "PolylightNode::Attenuation_Type", pure, header: "polylightNode.h".} = enum
+  ALINEAR = 0
+  AQUADRATIC = 1
+
+func ALINEAR*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.ALINEAR
+func AQUADRATIC*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type = PolylightNode_Attenuation_Type.AQUADRATIC
+
 type PolylightEffect* {.importcpp: "PT(PolylightEffect)", bycopy, pure, inheritable, header: "polylightEffect.h".} = object of RenderEffect
   ## A PolylightEffect can be used on a node to define a LightGroup  for that
   ## node.  A LightGroup contains PolylightNodes which are essentially nodes
@@ -2323,6 +3114,13 @@ converter toPolylightEffect*(_: type(nil)): PolylightEffect {.importcpp: "(nullp
 converter toBool*(this: PolylightEffect): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PolylightEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PolylightEffect], obj: TypedObject): PolylightEffect {.importcpp: "DCAST(PolylightEffect, @)".}
+
+type PolylightEffect_ContribType {.importcpp: "PolylightEffect::ContribType", pure, header: "polylightEffect.h".} = enum
+  CT_proximal = 0
+  CT_all = 1
+
+func CT_proximal*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_proximal
+func CT_all*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = PolylightEffect_ContribType.CT_all
 
 type ShaderAttrib* {.importcpp: "PT(ShaderAttrib)", bycopy, pure, inheritable, header: "shaderAttrib.h".} = object of RenderAttrib
 
@@ -2388,6 +3186,64 @@ type SceneGraphReducer* {.importcpp: "SceneGraphReducer", pure, inheritable, hea
   ## needed, to fine-tune the flattening behavior, but normally the default
   ## behavior is sufficient.
 
+type SceneGraphReducer_AttribTypes {.importcpp: "SceneGraphReducer::AttribTypes", pure, header: "sceneGraphReducer.h".} = enum
+  TT_transform = 1
+  TT_color = 2
+  TT_color_scale = 4
+  TT_tex_matrix = 8
+  TT_clip_plane = 16
+  TT_cull_face = 32
+  TT_apply_texture_color = 64
+  TT_other = 128
+
+func TT_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_transform
+func TT_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color
+func TT_color_scale*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_color_scale
+func TT_tex_matrix*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_tex_matrix
+func TT_clip_plane*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_clip_plane
+func TT_cull_face*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_cull_face
+func TT_apply_texture_color*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_apply_texture_color
+func TT_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_AttribTypes = SceneGraphReducer_AttribTypes.TT_other
+
+type SceneGraphReducer_CombineSiblings {.importcpp: "SceneGraphReducer::CombineSiblings", pure, header: "sceneGraphReducer.h".} = enum
+  CS_geom_node = 1
+  CS_within_radius = 2
+  CS_other = 4
+  CS_recurse = 8
+
+func CS_geom_node*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_geom_node
+func CS_within_radius*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_within_radius
+func CS_other*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_other
+func CS_recurse*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CombineSiblings = SceneGraphReducer_CombineSiblings.CS_recurse
+
+type SceneGraphReducer_CollectVertexData {.importcpp: "SceneGraphReducer::CollectVertexData", pure, header: "sceneGraphReducer.h".} = enum
+  CVD_name = 1
+  CVD_model = 2
+  CVD_transform = 4
+  CVD_avoid_dynamic = 8
+  CVD_one_node_only = 16
+  CVD_format = 32
+  CVD_usage_hint = 64
+  CVD_animation_type = 128
+
+func CVD_name*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_name
+func CVD_model*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_model
+func CVD_transform*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_transform
+func CVD_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_avoid_dynamic
+func CVD_one_node_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_one_node_only
+func CVD_format*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_format
+func CVD_usage_hint*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_usage_hint
+func CVD_animation_type*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_CollectVertexData = SceneGraphReducer_CollectVertexData.CVD_animation_type
+
+type SceneGraphReducer_MakeNonindexed {.importcpp: "SceneGraphReducer::MakeNonindexed", pure, header: "sceneGraphReducer.h".} = enum
+  MN_composite_only = 1
+  MN_avoid_animated = 2
+  MN_avoid_dynamic = 4
+
+func MN_composite_only*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_composite_only
+func MN_avoid_animated*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_animated
+func MN_avoid_dynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_MakeNonindexed = SceneGraphReducer_MakeNonindexed.MN_avoid_dynamic
+
 type PortalNode* {.importcpp: "PT(PortalNode)", bycopy, pure, inheritable, header: "portalNode.h".} = object of PandaNode
   ## A node in the scene graph that can hold a Portal Polygon, which is a
   ## rectangle.  Other types of polygons are not supported for now.  It also
@@ -2424,6 +3280,13 @@ converter toBool*(this: ShadeModelAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ShadeModelAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShadeModelAttrib], obj: TypedObject): ShadeModelAttrib {.importcpp: "DCAST(ShadeModelAttrib, @)".}
 
+type ShadeModelAttrib_Mode {.importcpp: "ShadeModelAttrib::Mode", pure, header: "shadeModelAttrib.h".} = enum
+  M_flat = 0
+  M_smooth = 1
+
+func M_flat*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_flat
+func M_smooth*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = ShadeModelAttrib_Mode.M_smooth
+
 type StencilAttrib* {.importcpp: "PT(StencilAttrib)", bycopy, pure, inheritable, header: "stencilAttrib.h".} = object of RenderAttrib
   ## A StencilAttrib is a collection of all stencil render states.  The render
   ## states in a StencilAttrib are read-only.  A StencilAttrib is created with
@@ -2434,6 +3297,78 @@ converter toStencilAttrib*(_: type(nil)): StencilAttrib {.importcpp: "(nullptr)"
 converter toBool*(this: StencilAttrib): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: StencilAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[StencilAttrib], obj: TypedObject): StencilAttrib {.importcpp: "DCAST(StencilAttrib, @)".}
+
+type StencilAttrib_StencilRenderState {.importcpp: "StencilAttrib::StencilRenderState", pure, header: "stencilAttrib.h".} = enum
+  ## enums are duplicated here from class StencilRenderStates for use in
+  ## Python
+  SRS_front_comparison_function = 0
+  SRS_front_stencil_fail_operation = 1
+  SRS_front_stencil_pass_z_fail_operation = 2
+  SRS_front_stencil_pass_z_pass_operation = 3
+  SRS_reference = 4
+  SRS_read_mask = 5
+  SRS_write_mask = 6
+  SRS_back_comparison_function = 7
+  SRS_back_stencil_fail_operation = 8
+  SRS_back_stencil_pass_z_fail_operation = 9
+  SRS_back_stencil_pass_z_pass_operation = 10
+  SRS_clear = 11
+  SRS_clear_value = 12
+  SRS_total = 13
+
+func SRS_front_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_comparison_function
+func SRS_front_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_fail_operation
+func SRS_front_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_fail_operation
+func SRS_front_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_front_stencil_pass_z_pass_operation
+func SRS_reference*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_reference
+func SRS_read_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_read_mask
+func SRS_write_mask*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_write_mask
+func SRS_back_comparison_function*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_comparison_function
+func SRS_back_stencil_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_fail_operation
+func SRS_back_stencil_pass_z_fail_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_fail_operation
+func SRS_back_stencil_pass_z_pass_operation*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_back_stencil_pass_z_pass_operation
+func SRS_clear*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear
+func SRS_clear_value*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_clear_value
+func SRS_total*(_: typedesc[StencilAttrib]): StencilAttrib_StencilRenderState = StencilAttrib_StencilRenderState.SRS_total
+
+type StencilAttrib_StencilComparisonFunction {.importcpp: "StencilAttrib::StencilComparisonFunction", pure, header: "stencilAttrib.h".} = enum
+  ## Exists purely for backward compatibility.
+  SCF_never = 1
+  SCF_less_than = 2
+  SCF_equal = 3
+  SCF_less_than_or_equal = 4
+  SCF_greater_than = 5
+  SCF_not_equal = 6
+  SCF_greater_than_or_equal = 7
+  SCF_always = 8
+
+func SCF_never*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_never
+func SCF_less_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than
+func SCF_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_equal
+func SCF_less_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_less_than_or_equal
+func SCF_greater_than*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than
+func SCF_not_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_not_equal
+func SCF_greater_than_or_equal*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_greater_than_or_equal
+func SCF_always*(_: typedesc[StencilAttrib]): StencilAttrib_StencilComparisonFunction = StencilAttrib_StencilComparisonFunction.SCF_always
+
+type StencilAttrib_StencilOperation {.importcpp: "StencilAttrib::StencilOperation", pure, header: "stencilAttrib.h".} = enum
+  SO_keep = 0
+  SO_zero = 1
+  SO_replace = 2
+  SO_increment = 3
+  SO_decrement = 4
+  SO_invert = 5
+  SO_increment_saturate = 6
+  SO_decrement_saturate = 7
+
+func SO_keep*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_keep
+func SO_zero*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_zero
+func SO_replace*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_replace
+func SO_increment*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment
+func SO_decrement*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement
+func SO_invert*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_invert
+func SO_increment_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_increment_saturate
+func SO_decrement_saturate*(_: typedesc[StencilAttrib]): StencilAttrib_StencilOperation = StencilAttrib_StencilOperation.SO_decrement_saturate
 
 type ShaderPool* {.importcpp: "ShaderPool", pure, inheritable, header: "shaderPool.h".} = object
   ## This is the preferred interface for loading shaders for the TextNode
@@ -2655,6 +3590,28 @@ type TextProperties* {.importcpp: "TextProperties", pure, inheritable, header: "
   ## the string; each nested TextProperties structure modifies the appearance of
   ## subsequent text within the block.
 
+type TextProperties_Alignment {.importcpp: "TextProperties::Alignment", pure, header: "textProperties.h".} = enum
+  A_left = 0
+  A_right = 1
+  A_center = 2
+  A_boxed_left = 3
+  A_boxed_right = 4
+  A_boxed_center = 5
+
+func A_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_left
+func A_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_right
+func A_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_center
+func A_boxed_left*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_left
+func A_boxed_right*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_right
+func A_boxed_center*(_: typedesc[TextProperties]): TextProperties_Alignment = TextProperties_Alignment.A_boxed_center
+
+type TextProperties_Direction {.importcpp: "TextProperties::Direction", pure, header: "textProperties.h".} = enum
+  D_ltr = 0
+  D_rtl = 1
+
+func D_ltr*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_ltr
+func D_rtl*(_: typedesc[TextProperties]): TextProperties_Direction = TextProperties_Direction.D_rtl
+
 type TextNode* {.importcpp: "PT(TextNode)", bycopy, pure, inheritable, header: "textNode.h".} = object of PandaNode
   ## The primary interface to this module.  This class does basic text assembly;
   ## given a string of text and a TextFont object, it creates a piece of
@@ -2678,6 +3635,19 @@ converter toBool*(this: TextNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TextNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextNode], obj: TypedObject): TextNode {.importcpp: "DCAST(TextNode, @)".}
 
+type TextNode_FlattenFlags {.importcpp: "TextNode::FlattenFlags", pure, header: "textNode.h".} = enum
+  FF_none = 0
+  FF_light = 1
+  FF_medium = 2
+  FF_strong = 4
+  FF_dynamic_merge = 8
+
+func FF_none*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_none
+func FF_light*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_light
+func FF_medium*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_medium
+func FF_strong*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_strong
+func FF_dynamic_merge*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNode_FlattenFlags.FF_dynamic_merge
+
 type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritable, header: "frameRateMeter.h".} = object of TextNode
   ## This is a special TextNode that automatically updates itself with the
   ## current frame rate.  It can be placed anywhere in the world where you'd
@@ -2699,6 +3669,19 @@ type GeoMipTerrain* {.importcpp: "GeoMipTerrain", pure, inheritable, header: "ge
   ## of Detail) algorithm.  For more information about the GeoMipMapping
   ## algoritm, see this paper, written by Willem H. de Boer:
   ## https://flipcode.com/articles/article_geomipmaps.pdf
+
+type GeoMipTerrain_AutoFlattenMode {.importcpp: "GeoMipTerrain::AutoFlattenMode", pure, header: "geoMipTerrain.h".} = enum
+  ## The flatten mode specifies whether the terrain nodes are flattened
+  ## together after each terrain update.
+  AFM_off = 0
+  AFM_light = 1
+  AFM_medium = 2
+  AFM_strong = 3
+
+func AFM_off*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_off
+func AFM_light*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_light
+func AFM_medium*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_medium
+func AFM_strong*(_: typedesc[GeoMipTerrain]): GeoMipTerrain_AutoFlattenMode = GeoMipTerrain_AutoFlattenMode.AFM_strong
 
 type HeightfieldTesselator* {.importcpp: "HeightfieldTesselator", pure, inheritable, header: "heightfieldTesselator.h".} = object of Namable
 
@@ -2740,6 +3723,235 @@ converter toTexture*(_: type(nil)): Texture {.importcpp: "(nullptr)".}
 converter toBool*(this: Texture): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Texture, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Texture], obj: TypedObject): Texture {.importcpp: "DCAST(Texture, @)".}
+
+type Texture_TextureType {.importcpp: "Texture::TextureType", pure, header: "texture.h".} = enum
+  TT_1d_texture = 0
+  TT_2d_texture = 1
+  TT_3d_texture = 2
+  TT_2d_texture_array = 3
+  TT_cube_map = 4
+  TT_buffer_texture = 5
+  TT_cube_map_array = 6
+  TT_1d_texture_array = 7
+
+func TT_1d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture
+func TT_2d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture
+func TT_3d_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_3d_texture
+func TT_2d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_2d_texture_array
+func TT_cube_map*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map
+func TT_buffer_texture*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_buffer_texture
+func TT_cube_map_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_cube_map_array
+func TT_1d_texture_array*(_: typedesc[Texture]): Texture_TextureType = Texture_TextureType.TT_1d_texture_array
+
+type Texture_ComponentType {.importcpp: "Texture::ComponentType", pure, header: "texture.h".} = enum
+  T_unsigned_byte = 0
+  T_unsigned_short = 1
+  T_float = 2
+  T_unsigned_int_24_8 = 3
+  T_int = 4
+  T_byte = 5
+  T_short = 6
+  T_half_float = 7
+  T_unsigned_int = 8
+
+func T_unsigned_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_byte
+func T_unsigned_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_short
+func T_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_float
+func T_unsigned_int_24_8*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int_24_8
+func T_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_int
+func T_byte*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_byte
+func T_short*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_short
+func T_half_float*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_half_float
+func T_unsigned_int*(_: typedesc[Texture]): Texture_ComponentType = Texture_ComponentType.T_unsigned_int
+
+type Texture_Format {.importcpp: "Texture::Format", pure, header: "texture.h".} = enum
+  F_depth_stencil = 1
+  F_color_index = 2
+  F_red = 3
+  F_green = 4
+  F_blue = 5
+  F_alpha = 6
+  F_rgb = 7
+  F_rgb5 = 8
+  F_rgb8 = 9
+  F_rgb12 = 10
+  F_rgb332 = 11
+  F_rgba = 12
+  F_rgbm = 13
+  F_rgba4 = 14
+  F_rgba5 = 15
+  F_rgba8 = 16
+  F_rgba12 = 17
+  F_luminance = 18
+  F_luminance_alpha = 19
+  F_luminance_alphamask = 20
+  F_rgba16 = 21
+  F_rgba32 = 22
+  F_depth_component = 23
+  F_depth_component16 = 24
+  F_depth_component24 = 25
+  F_depth_component32 = 26
+  F_r16 = 27
+  F_rg16 = 28
+  F_rgb16 = 29
+  F_srgb = 30
+  F_srgb_alpha = 31
+  F_sluminance = 32
+  F_sluminance_alpha = 33
+  F_r32i = 34
+  F_r32 = 35
+  F_rg32 = 36
+  F_rgb32 = 37
+  F_r8i = 38
+  F_rg8i = 39
+  F_rgb8i = 40
+  F_rgba8i = 41
+  F_r11_g11_b10 = 42
+  F_rgb9_e5 = 43
+  F_rgb10_a2 = 44
+  F_rg = 45
+  F_r16i = 46
+  F_rg16i = 47
+  F_rgb16i = 48
+  F_rgba16i = 49
+  F_rg32i = 50
+  F_rgb32i = 51
+  F_rgba32i = 52
+
+func F_depth_stencil*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_stencil
+func F_color_index*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_color_index
+func F_red*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_red
+func F_green*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_green
+func F_blue*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_blue
+func F_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_alpha
+func F_rgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb
+func F_rgb5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb5
+func F_rgb8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8
+func F_rgb12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb12
+func F_rgb332*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb332
+func F_rgba*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba
+func F_rgbm*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgbm
+func F_rgba4*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba4
+func F_rgba5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba5
+func F_rgba8*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8
+func F_rgba12*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba12
+func F_luminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance
+func F_luminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alpha
+func F_luminance_alphamask*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_luminance_alphamask
+func F_rgba16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16
+func F_rgba32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32
+func F_depth_component*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component
+func F_depth_component16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component16
+func F_depth_component24*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component24
+func F_depth_component32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_depth_component32
+func F_r16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16
+func F_rg16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16
+func F_rgb16*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16
+func F_srgb*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb
+func F_srgb_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_srgb_alpha
+func F_sluminance*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance
+func F_sluminance_alpha*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_sluminance_alpha
+func F_r32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32i
+func F_r32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r32
+func F_rg32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32
+func F_rgb32*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32
+func F_r8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r8i
+func F_rg8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg8i
+func F_rgb8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb8i
+func F_rgba8i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba8i
+func F_r11_g11_b10*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r11_g11_b10
+func F_rgb9_e5*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb9_e5
+func F_rgb10_a2*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb10_a2
+func F_rg*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg
+func F_r16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_r16i
+func F_rg16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg16i
+func F_rgb16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb16i
+func F_rgba16i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba16i
+func F_rg32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rg32i
+func F_rgb32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgb32i
+func F_rgba32i*(_: typedesc[Texture]): Texture_Format = Texture_Format.F_rgba32i
+
+type Texture_DeprecatedFilterType {.importcpp: "Texture::DeprecatedFilterType", pure, header: "texture.h".} = enum
+  ## Deprecated.  See SamplerState.FilterType.
+  FT_nearest = 0
+  FT_linear = 1
+  FT_nearest_mipmap_nearest = 2
+  FT_linear_mipmap_nearest = 3
+  FT_nearest_mipmap_linear = 4
+  FT_linear_mipmap_linear = 5
+  FT_shadow = 6
+  FT_default = 7
+  FT_invalid = 8
+
+func FT_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest
+func FT_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear
+func FT_nearest_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_nearest
+func FT_linear_mipmap_nearest*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_nearest
+func FT_nearest_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_nearest_mipmap_linear
+func FT_linear_mipmap_linear*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_linear_mipmap_linear
+func FT_shadow*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_shadow
+func FT_default*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_default
+func FT_invalid*(_: typedesc[Texture]): Texture_DeprecatedFilterType = Texture_DeprecatedFilterType.FT_invalid
+
+type Texture_DeprecatedWrapMode {.importcpp: "Texture::DeprecatedWrapMode", pure, header: "texture.h".} = enum
+  ## Deprecated.  See SamplerState.WrapMode.
+  WM_clamp = 0
+  WM_repeat = 1
+  WM_mirror = 2
+  WM_mirror_once = 3
+  WM_border_color = 4
+  WM_invalid = 5
+
+func WM_clamp*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_clamp
+func WM_repeat*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_repeat
+func WM_mirror*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror
+func WM_mirror_once*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_mirror_once
+func WM_border_color*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_border_color
+func WM_invalid*(_: typedesc[Texture]): Texture_DeprecatedWrapMode = Texture_DeprecatedWrapMode.WM_invalid
+
+type Texture_CompressionMode {.importcpp: "Texture::CompressionMode", pure, header: "texture.h".} = enum
+  CM_default = 0
+  CM_off = 1
+  CM_on = 2
+  CM_fxt1 = 3
+  CM_dxt1 = 4
+  CM_dxt2 = 5
+  CM_dxt3 = 6
+  CM_dxt4 = 7
+  CM_dxt5 = 8
+  CM_pvr1_2bpp = 9
+  CM_pvr1_4bpp = 10
+  CM_rgtc = 11
+  CM_etc1 = 12
+  CM_etc2 = 13
+  CM_eac = 14
+
+func CM_default*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_default
+func CM_off*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_off
+func CM_on*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_on
+func CM_fxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_fxt1
+func CM_dxt1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt1
+func CM_dxt2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt2
+func CM_dxt3*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt3
+func CM_dxt4*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt4
+func CM_dxt5*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_dxt5
+func CM_pvr1_2bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_2bpp
+func CM_pvr1_4bpp*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_pvr1_4bpp
+func CM_rgtc*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_rgtc
+func CM_etc1*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc1
+func CM_etc2*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_etc2
+func CM_eac*(_: typedesc[Texture]): Texture_CompressionMode = Texture_CompressionMode.CM_eac
+
+type Texture_QualityLevel {.importcpp: "Texture::QualityLevel", pure, header: "texture.h".} = enum
+  QL_default = 0
+  QL_fastest = 1
+  QL_normal = 2
+  QL_best = 3
+
+func QL_default*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_default
+func QL_fastest*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_fastest
+func QL_normal*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_normal
+func QL_best*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityLevel.QL_best
 
 type MovieTexture* {.importcpp: "PT(MovieTexture)", bycopy, pure, inheritable, header: "movieTexture.h".} = object of Texture
   ## A texture that fetches video frames from an underlying object of class
@@ -2862,6 +4074,38 @@ func dcast*(_: typedesc[PipeOcclusionCullTraverser], obj: TypedObject): PipeOccl
 type PfmVizzer* {.importcpp: "PfmVizzer", pure, inheritable, header: "pfmVizzer.h".} = object
   ## This class aids in the visualization and manipulation of PfmFile objects.
 
+type PfmVizzer_ColumnType {.importcpp: "PfmVizzer::ColumnType", pure, header: "pfmVizzer.h".} = enum
+  CT_texcoord2 = 0
+  CT_texcoord3 = 1
+  CT_vertex1 = 2
+  CT_vertex2 = 3
+  CT_vertex3 = 4
+  CT_normal3 = 5
+  CT_blend1 = 6
+  CT_aux_vertex1 = 7
+  CT_aux_vertex2 = 8
+  CT_aux_vertex3 = 9
+
+func CT_texcoord2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord2
+func CT_texcoord3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_texcoord3
+func CT_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex1
+func CT_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex2
+func CT_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_vertex3
+func CT_normal3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_normal3
+func CT_blend1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_blend1
+func CT_aux_vertex1*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex1
+func CT_aux_vertex2*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex2
+func CT_aux_vertex3*(_: typedesc[PfmVizzer]): PfmVizzer_ColumnType = PfmVizzer_ColumnType.CT_aux_vertex3
+
+type PfmVizzer_MeshFace {.importcpp: "PfmVizzer::MeshFace", pure, header: "pfmVizzer.h".} = enum
+  MF_front = 1
+  MF_back = 2
+  MF_both = 3
+
+func MF_front*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_front
+func MF_back*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_back
+func MF_both*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFace.MF_both
+
 type AnimGroup* {.importcpp: "PT(AnimGroup)", bycopy, pure, inheritable, header: "animGroup.h".} = object of TypedWritableReferenceCount
   ## This is the base class for AnimChannel and AnimBundle.  It implements a
   ## hierarchy of AnimChannels.  The root of the hierarchy must be an
@@ -2900,6 +4144,18 @@ converter toPartGroup*(_: type(nil)): PartGroup {.importcpp: "(nullptr)".}
 converter toBool*(this: PartGroup): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PartGroup, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartGroup], obj: TypedObject): PartGroup {.importcpp: "DCAST(PartGroup, @)".}
+
+type PartGroup_HierarchyMatchFlags {.importcpp: "PartGroup::HierarchyMatchFlags", pure, header: "partGroup.h".} = enum
+  ## This enum defines bits which may be passed into check_hierarchy() and
+  ## PartBundle::bind_anim() to allow an inexact match of channel hierarchies.
+  ## This specifies conditions that we don't care about enforcing.
+  HMF_ok_part_extra = 1
+  HMF_ok_anim_extra = 2
+  HMF_ok_wrong_root_name = 4
+
+func HMF_ok_part_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_part_extra
+func HMF_ok_anim_extra*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_anim_extra
+func HMF_ok_wrong_root_name*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchFlags = PartGroup_HierarchyMatchFlags.HMF_ok_wrong_root_name
 
 type AnimControl* {.importcpp: "PT(AnimControl)", bycopy, pure, inheritable, header: "animControl.h".} = object of TypedReferenceCount
   ## Controls the timing of a character animation.  An AnimControl object is
@@ -3022,6 +4278,21 @@ converter toPartBundle*(_: type(nil)): PartBundle {.importcpp: "(nullptr)".}
 converter toBool*(this: PartBundle): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PartBundle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartBundle], obj: TypedObject): PartBundle {.importcpp: "DCAST(PartBundle, @)".}
+
+type PartBundle_BlendType {.importcpp: "PartBundle::BlendType", pure, header: "partBundle.h".} = enum
+  ## This is the parameter to set_blend_type() and specifies the kind of
+  ## blending operation to be performed when multiple controls are in effect
+  ## simultaneously (see set_control_effect()) or between sequential frames of
+  ## the animation.
+  BT_linear = 0
+  BT_normalized_linear = 1
+  BT_componentwise = 2
+  BT_componentwise_quat = 3
+
+func BT_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_linear
+func BT_normalized_linear*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_normalized_linear
+func BT_componentwise*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise
+func BT_componentwise_quat*(_: typedesc[PartBundle]): PartBundle_BlendType = PartBundle_BlendType.BT_componentwise_quat
 
 type PartBundleNode* {.importcpp: "PT(PartBundleNode)", bycopy, pure, inheritable, header: "partBundleNode.h".} = object of PandaNode
   ## This is a node that contains a pointer to an PartBundle.  Like
@@ -3504,6 +4775,15 @@ converter toBool*(this: InputDevice): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: InputDevice, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InputDevice], obj: TypedObject): InputDevice {.importcpp: "DCAST(InputDevice, @)".}
 
+type InputDevice_State {.importcpp: "InputDevice::State", pure, header: "inputDevice.h".} = enum
+  S_unknown = 0
+  S_up = 1
+  S_down = 2
+
+func S_unknown*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_unknown
+func S_up*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_up
+func S_down*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_State.S_down
+
 type ClientBase* {.importcpp: "PT(ClientBase)", bycopy, pure, inheritable, header: "clientBase.h".} = object of TypedReferenceCount
   ## An abstract base class for a family of client device interfaces--including
   ## trackers, buttons, dials, and other analog inputs.
@@ -3648,8 +4928,63 @@ converter toBool*(this: GraphicsPipe): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: GraphicsPipe, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsPipe], obj: TypedObject): GraphicsPipe {.importcpp: "DCAST(GraphicsPipe, @)".}
 
+type GraphicsPipe_OutputTypes {.importcpp: "GraphicsPipe::OutputTypes", pure, header: "graphicsPipe.h".} = enum
+  OT_window = 1
+  OT_fullscreen_window = 2
+  OT_buffer = 4
+  OT_texture_buffer = 8
+
+func OT_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_window
+func OT_fullscreen_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_fullscreen_window
+func OT_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_buffer
+func OT_texture_buffer*(_: typedesc[GraphicsPipe]): GraphicsPipe_OutputTypes = GraphicsPipe_OutputTypes.OT_texture_buffer
+
+type GraphicsPipe_BufferCreationFlags {.importcpp: "GraphicsPipe::BufferCreationFlags", pure, header: "graphicsPipe.h".} = enum
+  BF_refuse_parasite = 1
+  BF_require_parasite = 2
+  BF_refuse_window = 4
+  BF_require_window = 8
+  BF_require_callback_window = 16
+  BF_can_bind_color = 64
+  BF_can_bind_every = 128
+  BF_resizeable = 256
+  BF_size_track_host = 512
+  BF_rtt_cumulative = 1024
+  BF_fb_props_optional = 2048
+  BF_size_square = 4096
+  BF_size_power_2 = 8192
+  BF_can_bind_layered = 16384
+
+func BF_refuse_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_parasite
+func BF_require_parasite*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_parasite
+func BF_refuse_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_refuse_window
+func BF_require_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_window
+func BF_require_callback_window*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_require_callback_window
+func BF_can_bind_color*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_color
+func BF_can_bind_every*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_every
+func BF_resizeable*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_resizeable
+func BF_size_track_host*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_track_host
+func BF_rtt_cumulative*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_rtt_cumulative
+func BF_fb_props_optional*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_fb_props_optional
+func BF_size_square*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_square
+func BF_size_power_2*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_size_power_2
+func BF_can_bind_layered*(_: typedesc[GraphicsPipe]): GraphicsPipe_BufferCreationFlags = GraphicsPipe_BufferCreationFlags.BF_can_bind_layered
+
 type DisplayInformation* {.importcpp: "DisplayInformation", pure, inheritable, header: "displayInformation.h".} = object
   ## This class contains various display information.
+
+type DisplayInformation_DetectionState {.importcpp: "DisplayInformation::DetectionState", pure, header: "displayInformation.h".} = enum
+  DS_unknown = 0
+  DS_success = 1
+  DS_direct_3d_create_error = 2
+  DS_create_window_error = 3
+  DS_create_device_error = 4
+
+func DS_unknown*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_unknown
+func DS_success*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_success
+func DS_direct_3d_create_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_direct_3d_create_error
+func DS_create_window_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_window_error
+func DS_create_device_error*(_: typedesc[DisplayInformation]): DisplayInformation_DetectionState = DisplayInformation_DetectionState.DS_create_device_error
 
 type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, header: "drawableRegion.h".} = object
   ## This is a base class for GraphicsWindow (actually, GraphicsOutput) and
@@ -3661,6 +4996,46 @@ type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, 
 converter toDrawableRegion*(_: type(nil)): DrawableRegion {.importcpp: "(nullptr)".}
 converter toBool*(this: DrawableRegion): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DrawableRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+
+type DrawableRegion_RenderTexturePlane {.importcpp: "DrawableRegion::RenderTexturePlane", pure, header: "drawableRegion.h".} = enum
+  ## It seems awkward to have this type, and also RenderBuffer::Type.
+  ## However, the fact that RenderBuffer::Type is a bitmask makes it awfully
+  ## awkward to work with.
+  RTP_stencil = 0
+  RTP_depth_stencil = 1
+  RTP_color = 2
+  RTP_aux_rgba_0 = 3
+  RTP_aux_rgba_1 = 4
+  RTP_aux_rgba_2 = 5
+  RTP_aux_rgba_3 = 6
+  RTP_aux_hrgba_0 = 7
+  RTP_aux_hrgba_1 = 8
+  RTP_aux_hrgba_2 = 9
+  RTP_aux_hrgba_3 = 10
+  RTP_aux_float_0 = 11
+  RTP_aux_float_1 = 12
+  RTP_aux_float_2 = 13
+  RTP_aux_float_3 = 14
+  RTP_depth = 15
+  RTP_COUNT = 16
+
+func RTP_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_stencil
+func RTP_depth_stencil*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth_stencil
+func RTP_color*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_color
+func RTP_aux_rgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_0
+func RTP_aux_rgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_1
+func RTP_aux_rgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_2
+func RTP_aux_rgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_rgba_3
+func RTP_aux_hrgba_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_0
+func RTP_aux_hrgba_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_1
+func RTP_aux_hrgba_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_2
+func RTP_aux_hrgba_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_hrgba_3
+func RTP_aux_float_0*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_0
+func RTP_aux_float_1*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_1
+func RTP_aux_float_2*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_2
+func RTP_aux_float_3*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_aux_float_3
+func RTP_depth*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_depth
+func RTP_COUNT*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePlane = DrawableRegion_RenderTexturePlane.RTP_COUNT
 
 type WindowHandle* {.importcpp: "PT(WindowHandle)", bycopy, pure, inheritable, header: "windowHandle.h".} = object of TypedReferenceCount
   ## This object represents a window on the desktop, not necessarily a Panda
@@ -3683,6 +5058,24 @@ type WindowProperties* {.importcpp: "WindowProperties", pure, inheritable, heade
   ## A container for the various kinds of properties we might ask to have on a
   ## graphics window before we open it.  This also serves to hold the current
   ## properties for a window after it has been opened.
+
+type WindowProperties_ZOrder {.importcpp: "WindowProperties::ZOrder", pure, header: "windowProperties.h".} = enum
+  Z_bottom = 0
+  Z_normal = 1
+  Z_top = 2
+
+func Z_bottom*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_bottom
+func Z_normal*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_normal
+func Z_top*(_: typedesc[WindowProperties]): WindowProperties_ZOrder = WindowProperties_ZOrder.Z_top
+
+type WindowProperties_MouseMode {.importcpp: "WindowProperties::MouseMode", pure, header: "windowProperties.h".} = enum
+  M_absolute = 0
+  M_relative = 1
+  M_confined = 2
+
+func M_absolute*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_absolute
+func M_relative*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_relative
+func M_confined*(_: typedesc[WindowProperties]): WindowProperties_MouseMode = WindowProperties_MouseMode.M_confined
 
 type DisplayRegion* {.importcpp: "PT(DisplayRegion)", bycopy, pure, inheritable, header: "displayRegion.h".} = object of TypedReferenceCount
   ## A rectangular subregion within a window for rendering into.  Typically,
@@ -3725,6 +5118,33 @@ converter toBool*(this: GraphicsOutput): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: GraphicsOutput, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsOutput], obj: TypedObject): GraphicsOutput {.importcpp: "DCAST(GraphicsOutput, @)".}
 
+type GraphicsOutput_RenderTextureMode {.importcpp: "GraphicsOutput::RenderTextureMode", pure, header: "graphicsOutput.h".} = enum
+  RTM_none = 0
+  RTM_bind_or_copy = 1
+  RTM_copy_texture = 2
+  RTM_copy_ram = 3
+  RTM_triggered_copy_texture = 4
+  RTM_triggered_copy_ram = 5
+  RTM_bind_layered = 6
+
+func RTM_none*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_none
+func RTM_bind_or_copy*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_or_copy
+func RTM_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_texture
+func RTM_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_copy_ram
+func RTM_triggered_copy_texture*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_texture
+func RTM_triggered_copy_ram*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_triggered_copy_ram
+func RTM_bind_layered*(_: typedesc[GraphicsOutput]): GraphicsOutput_RenderTextureMode = GraphicsOutput_RenderTextureMode.RTM_bind_layered
+
+type GraphicsOutput_FrameMode {.importcpp: "GraphicsOutput::FrameMode", pure, header: "graphicsOutput.h".} = enum
+  ## There are many reasons to call begin_frameend_frame.
+  FM_render = 0
+  FM_parasite = 1
+  FM_refresh = 2
+
+func FM_render*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_render
+func FM_parasite*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_parasite
+func FM_refresh*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = GraphicsOutput_FrameMode.FM_refresh
+
 type GraphicsStateGuardianBase* {.importcpp: "PT(GraphicsStateGuardianBase)", bycopy, pure, inheritable, header: "graphicsStateGuardianBase.h".} = object of TypedWritableReferenceCount
   ## This is a base class for the GraphicsStateGuardian class, which is itself a
   ## base class for the various GSG's for different platforms.  This class
@@ -3754,6 +5174,25 @@ converter toGraphicsStateGuardian*(_: type(nil)): GraphicsStateGuardian {.import
 converter toBool*(this: GraphicsStateGuardian): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: GraphicsStateGuardian, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsStateGuardian], obj: TypedObject): GraphicsStateGuardian {.importcpp: "DCAST(GraphicsStateGuardian, @)".}
+
+type GraphicsStateGuardian_ShaderModel {.importcpp: "GraphicsStateGuardian::ShaderModel", pure, header: "graphicsStateGuardian.h".} = enum
+  SM_00 = 0
+  SM_11 = 1
+  SM_20 = 2
+  SM_2X = 3
+  SM_30 = 4
+  SM_40 = 5
+  SM_50 = 6
+  SM_51 = 7
+
+func SM_00*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_00
+func SM_11*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_11
+func SM_20*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_20
+func SM_2X*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_2X
+func SM_30*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_30
+func SM_40*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_40
+func SM_50*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_50
+func SM_51*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_ShaderModel = GraphicsStateGuardian_ShaderModel.SM_51
 
 type GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", bycopy, pure, inheritable, header: "graphicsEngine.h".} = object of ReferenceCount
   ## This class is the main interface to controlling the render process.  There
@@ -3808,6 +5247,15 @@ func dcast*(_: typedesc[GraphicsWindowInputDevice], obj: TypedObject): GraphicsW
 type TouchInfo* {.importcpp: "TouchInfo", pure, inheritable, header: "touchInfo.h".} = object
   ## Stores information for a single touch event.
 
+type TouchInfo_TouchInfoFlags {.importcpp: "TouchInfo::TouchInfoFlags", pure, header: "touchInfo.h".} = enum
+  TIF_move = 1
+  TIF_down = 2
+  TIF_up = 4
+
+func TIF_move*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_move
+func TIF_down*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_down
+func TIF_up*(_: typedesc[TouchInfo]): TouchInfo_TouchInfoFlags = TouchInfo_TouchInfoFlags.TIF_up
+
 type GraphicsWindowProcCallbackData* {.importcpp: "GraphicsWindowProcCallbackData", pure, inheritable, header: "graphicsWindowProcCallbackData.h".} = object of CallbackData
   ## This specialization on CallbackData is passed when the callback is
   ## initiated from from an implementation of the GraphicsWindowProc class, such
@@ -3832,6 +5280,17 @@ converter toCallbackGraphicsWindow*(_: type(nil)): CallbackGraphicsWindow {.impo
 converter toBool*(this: CallbackGraphicsWindow): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: CallbackGraphicsWindow, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CallbackGraphicsWindow], obj: TypedObject): CallbackGraphicsWindow {.importcpp: "DCAST(CallbackGraphicsWindow, @)".}
+
+type CallbackGraphicsWindow_RenderCallbackType {.importcpp: "CallbackGraphicsWindow::RenderCallbackType", pure, header: "callbackGraphicsWindow.h".} = enum
+  RCT_begin_frame = 0
+  RCT_end_frame = 1
+  RCT_begin_flip = 2
+  RCT_end_flip = 3
+
+func RCT_begin_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_frame
+func RCT_end_frame*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_frame
+func RCT_begin_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_begin_flip
+func RCT_end_flip*(_: typedesc[CallbackGraphicsWindow]): CallbackGraphicsWindow_RenderCallbackType = CallbackGraphicsWindow_RenderCallbackType.RCT_end_flip
 
 type DisplayMode* {.importcpp: "DisplayMode", pure, inheritable, header: "displayInformation.h".} = object
 
@@ -3921,7 +5380,7 @@ converter toBool*(this: ParasiteBuffer): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ParasiteBuffer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParasiteBuffer], obj: TypedObject): ParasiteBuffer {.importcpp: "DCAST(ParasiteBuffer, @)".}
 
-type ThreadPriority* = enum
+type ThreadPriority* {.importcpp: "ThreadPriority", header: "threadPriority.h".} = enum
   ## An enumerated type used by Thread to specify a suggested relative priority
   ## for a particular thread.
   TP_low = 0
@@ -4133,6 +5592,27 @@ type ButtonEvent* {.importcpp: "ButtonEvent", pure, inheritable, header: "button
   ## This API should not be considered stable and may change in a future version
   ## of Panda3D.
 
+type ButtonEvent_Type {.importcpp: "ButtonEvent::Type", pure, header: "buttonEvent.h".} = enum
+  T_down = 0
+  T_resume_down = 1
+  T_up = 2
+  T_repeat = 3
+  T_keystroke = 4
+  T_candidate = 5
+  T_move = 6
+  T_raw_down = 7
+  T_raw_up = 8
+
+func T_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_down
+func T_resume_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_resume_down
+func T_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_up
+func T_repeat*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_repeat
+func T_keystroke*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_keystroke
+func T_candidate*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_candidate
+func T_move*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_move
+func T_raw_down*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_down
+func T_raw_up*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type.T_raw_up
+
 type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValue.h".} = object of TypedWritableReferenceCount
   ## A non-template base class of ParamValue (below), which serves mainly to
   ## define the placeholder for the virtual output function.
@@ -4230,6 +5710,171 @@ type GeomEnums* {.importcpp: "GeomEnums", pure, inheritable, header: "geomEnums.
   ## This class exists just to provide scoping for the various enumerated types
   ## used by Geom, GeomVertexData, GeomVertexArrayData, GeomPrimitive, and other
   ## related classes.
+
+type GeomEnums_UsageHint {.importcpp: "GeomEnums::UsageHint", pure, header: "geomEnums.h".} = enum
+  UH_client = 0
+  UH_stream = 1
+  UH_dynamic = 2
+  UH_static = 3
+  UH_unspecified = 4
+
+func UH_client*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_client
+func UH_stream*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_stream
+func UH_dynamic*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_dynamic
+func UH_static*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_static
+func UH_unspecified*(_: typedesc[GeomEnums]): GeomEnums_UsageHint = GeomEnums_UsageHint.UH_unspecified
+
+type GeomEnums_GeomRendering {.importcpp: "GeomEnums::GeomRendering", pure, header: "geomEnums.h".} = enum
+  ## This type specifies a number of bits that are used to represent the
+  ## rendering requirements of a particular Geom, as well as the rendering
+  ## capabilities of the GSG.  The difference between the two indicates
+  ## whether the Geom needs to be munged for the GSG.
+  GR_indexed_point = 1
+  GR_point = 2
+  GR_point_uniform_size = 4
+  GR_per_point_size = 8
+  GR_point_perspective = 16
+  GR_point_aspect_ratio = 32
+  GR_point_scale = 64
+  GR_point_rotate = 128
+  GR_point_sprite = 256
+  GR_point_sprite_tex_matrix = 512
+  GR_point_bits = 1022
+  GR_triangle_strip = 1024
+  GR_triangle_fan = 2048
+  GR_line_strip = 4096
+  GR_composite_bits = 7168
+  GR_flat_first_vertex = 8192
+  GR_flat_last_vertex = 16384
+  GR_shade_model_bits = 24576
+  GR_indexed_other = 65536
+  GR_indexed_bits = 65537
+  GR_strip_cut_index = 131072
+  GR_render_mode_wireframe = 262144
+  GR_render_mode_point = 524288
+  GR_adjacency = 1048576
+
+func GR_indexed_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_point
+func GR_indexed_other*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_other
+func GR_indexed_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_indexed_bits
+func GR_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point
+func GR_point_uniform_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_uniform_size
+func GR_per_point_size*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_per_point_size
+func GR_point_perspective*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_perspective
+func GR_point_aspect_ratio*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_aspect_ratio
+func GR_point_scale*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_scale
+func GR_point_rotate*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_rotate
+func GR_point_sprite*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite
+func GR_point_sprite_tex_matrix*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_sprite_tex_matrix
+func GR_point_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_point_bits
+func GR_triangle_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_strip
+func GR_triangle_fan*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_triangle_fan
+func GR_line_strip*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_line_strip
+func GR_composite_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_composite_bits
+func GR_strip_cut_index*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_strip_cut_index
+func GR_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_first_vertex
+func GR_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_flat_last_vertex
+func GR_shade_model_bits*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_shade_model_bits
+func GR_render_mode_wireframe*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_wireframe
+func GR_render_mode_point*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_render_mode_point
+func GR_adjacency*(_: typedesc[GeomEnums]): GeomEnums_GeomRendering = GeomEnums_GeomRendering.GR_adjacency
+
+type GeomEnums_ShadeModel {.importcpp: "GeomEnums::ShadeModel", pure, header: "geomEnums.h".} = enum
+  ## The shade model specifies whether the per-vertex colors and normals
+  ## indexed by a given primitive truly represent per-vertex colors and
+  ## normals, or whether they actually represent per-triangle flat-shaded
+  ## colors and normals.
+  SM_uniform = 0
+  SM_smooth = 1
+  SM_flat_first_vertex = 2
+  SM_flat_last_vertex = 3
+
+func SM_uniform*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_uniform
+func SM_smooth*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_smooth
+func SM_flat_first_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_first_vertex
+func SM_flat_last_vertex*(_: typedesc[GeomEnums]): GeomEnums_ShadeModel = GeomEnums_ShadeModel.SM_flat_last_vertex
+
+type GeomEnums_PrimitiveType {.importcpp: "GeomEnums::PrimitiveType", pure, header: "geomEnums.h".} = enum
+  ## The primitive type represents the core primitive type of a particular
+  ## GeomPrimitive.  It's used for determining what kind of antialiasing
+  ## should be enabled.
+  PT_none = 0
+  PT_polygons = 1
+  PT_lines = 2
+  PT_points = 3
+  PT_patches = 4
+
+func PT_none*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_none
+func PT_polygons*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_polygons
+func PT_lines*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_lines
+func PT_points*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_points
+func PT_patches*(_: typedesc[GeomEnums]): GeomEnums_PrimitiveType = GeomEnums_PrimitiveType.PT_patches
+
+type GeomEnums_NumericType {.importcpp: "GeomEnums::NumericType", pure, header: "geomEnums.h".} = enum
+  ## The numeric type determines what physical representation is used to
+  ## encode a numeric value within the vertex data.
+  NT_uint8 = 0
+  NT_uint16 = 1
+  NT_uint32 = 2
+  NT_packed_dcba = 3
+  NT_packed_dabc = 4
+  NT_float32 = 5
+  NT_float64 = 6
+  NT_stdfloat = 7
+  NT_int8 = 8
+  NT_int16 = 9
+  NT_int32 = 10
+  NT_packed_ufloat = 11
+
+func NT_uint8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint8
+func NT_uint16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint16
+func NT_uint32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_uint32
+func NT_packed_dcba*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dcba
+func NT_packed_dabc*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_dabc
+func NT_float32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float32
+func NT_float64*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_float64
+func NT_stdfloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_stdfloat
+func NT_int8*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int8
+func NT_int16*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int16
+func NT_int32*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_int32
+func NT_packed_ufloat*(_: typedesc[GeomEnums]): GeomEnums_NumericType = GeomEnums_NumericType.NT_packed_ufloat
+
+type GeomEnums_Contents {.importcpp: "GeomEnums::Contents", pure, header: "geomEnums.h".} = enum
+  ## The contents determine the semantic meaning of a numeric value within the
+  ## vertex data.  This is also used to determine what automatic transforms
+  ## might be applied to the various columns.
+  C_other = 0
+  C_point = 1
+  C_clip_point = 2
+  C_vector = 3
+  C_texcoord = 4
+  C_color = 5
+  C_index = 6
+  C_morph_delta = 7
+  C_matrix = 8
+  C_normal = 9
+
+func C_other*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_other
+func C_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_point
+func C_clip_point*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_clip_point
+func C_vector*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_vector
+func C_texcoord*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_texcoord
+func C_color*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_color
+func C_index*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_index
+func C_morph_delta*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_morph_delta
+func C_matrix*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_matrix
+func C_normal*(_: typedesc[GeomEnums]): GeomEnums_Contents = GeomEnums_Contents.C_normal
+
+type GeomEnums_AnimationType {.importcpp: "GeomEnums::AnimationType", pure, header: "geomEnums.h".} = enum
+  ## The type of animation data that is represented by a particular
+  ## GeomVertexFormat.
+  AT_none = 0
+  AT_panda = 1
+  AT_hardware = 2
+
+func AT_none*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_none
+func AT_panda*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_panda
+func AT_hardware*(_: typedesc[GeomEnums]): GeomEnums_AnimationType = GeomEnums_AnimationType.AT_hardware
 
 type GeomVertexAnimationSpec* {.importcpp: "GeomVertexAnimationSpec", pure, inheritable, header: "geomVertexAnimationSpec.h".} = object of GeomEnums
   ## This object describes how the vertex animation, if any, represented in a
@@ -4348,6 +5993,20 @@ type VertexDataPage* {.importcpp: "VertexDataPage", pure, inheritable, header: "
   ## A block of bytes that holds one or more VertexDataBlocks.  The entire page
   ## may be paged out, in the form of in-memory compression or to an on-disk
   ## cache file, if necessary.
+
+type VertexDataPage_RamClass {.importcpp: "VertexDataPage::RamClass", pure, header: "vertexDataPage.h".} = enum
+  ## These are used to indicate the current residency state of the page, which
+  ## may or may not have been temporarily evicted to satisfy memory
+  ## requirements.
+  RC_resident = 0
+  RC_compressed = 1
+  RC_disk = 2
+  RC_end_of_list = 3
+
+func RC_resident*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_resident
+func RC_compressed*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_compressed
+func RC_disk*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_disk
+func RC_end_of_list*(_: typedesc[VertexDataPage]): VertexDataPage_RamClass = VertexDataPage_RamClass.RC_end_of_list
 
 type VertexDataBook* {.importcpp: "VertexDataBook", pure, inheritable, header: "vertexDataBook.h".} = object
   ## A collection of VertexDataPages, which can be used to allocate new
@@ -4556,6 +6215,94 @@ converter toBool*(this: TextureStage): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TextureStage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextureStage], obj: TypedObject): TextureStage {.importcpp: "DCAST(TextureStage, @)".}
 
+type TextureStage_Mode {.importcpp: "TextureStage::Mode", pure, header: "textureStage.h".} = enum
+  M_modulate = 0
+  M_decal = 1
+  M_blend = 2
+  M_replace = 3
+  M_add = 4
+  M_combine = 5
+  M_blend_color_scale = 6
+  M_modulate_glow = 7
+  M_modulate_gloss = 8
+  M_normal = 9
+  M_normal_height = 10
+  M_glow = 11
+  M_gloss = 12
+  M_height = 13
+  M_selector = 14
+  M_normal_gloss = 15
+  M_emission = 16
+
+func M_modulate*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate
+func M_decal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_decal
+func M_blend*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend
+func M_replace*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_replace
+func M_add*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_add
+func M_combine*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_combine
+func M_blend_color_scale*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_blend_color_scale
+func M_modulate_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_glow
+func M_modulate_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_modulate_gloss
+func M_normal*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal
+func M_normal_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_height
+func M_glow*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_glow
+func M_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_gloss
+func M_height*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_height
+func M_selector*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_selector
+func M_normal_gloss*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_normal_gloss
+func M_emission*(_: typedesc[TextureStage]): TextureStage_Mode = TextureStage_Mode.M_emission
+
+type TextureStage_CombineMode {.importcpp: "TextureStage::CombineMode", pure, header: "textureStage.h".} = enum
+  CM_undefined = 0
+  CM_replace = 1
+  CM_modulate = 2
+  CM_add = 3
+  CM_add_signed = 4
+  CM_interpolate = 5
+  CM_subtract = 6
+  CM_dot3_rgb = 7
+  CM_dot3_rgba = 8
+
+func CM_undefined*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_undefined
+func CM_replace*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_replace
+func CM_modulate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_modulate
+func CM_add*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add
+func CM_add_signed*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_add_signed
+func CM_interpolate*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_interpolate
+func CM_subtract*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_subtract
+func CM_dot3_rgb*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgb
+func CM_dot3_rgba*(_: typedesc[TextureStage]): TextureStage_CombineMode = TextureStage_CombineMode.CM_dot3_rgba
+
+type TextureStage_CombineSource {.importcpp: "TextureStage::CombineSource", pure, header: "textureStage.h".} = enum
+  CS_undefined = 0
+  CS_texture = 1
+  CS_constant = 2
+  CS_primary_color = 3
+  CS_previous = 4
+  CS_constant_color_scale = 5
+  CS_last_saved_result = 6
+
+func CS_undefined*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_undefined
+func CS_texture*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_texture
+func CS_constant*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant
+func CS_primary_color*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_primary_color
+func CS_previous*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_previous
+func CS_constant_color_scale*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_constant_color_scale
+func CS_last_saved_result*(_: typedesc[TextureStage]): TextureStage_CombineSource = TextureStage_CombineSource.CS_last_saved_result
+
+type TextureStage_CombineOperand {.importcpp: "TextureStage::CombineOperand", pure, header: "textureStage.h".} = enum
+  CO_undefined = 0
+  CO_src_color = 1
+  CO_one_minus_src_color = 2
+  CO_src_alpha = 3
+  CO_one_minus_src_alpha = 4
+
+func CO_undefined*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_undefined
+func CO_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_color
+func CO_one_minus_src_color*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_color
+func CO_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_src_alpha
+func CO_one_minus_src_alpha*(_: typedesc[TextureStage]): TextureStage_CombineOperand = TextureStage_CombineOperand.CO_one_minus_src_alpha
+
 type Geom* {.importcpp: "PT(Geom)", bycopy, pure, inheritable, header: "geom.h".} = object of CopyOnWriteObject
   ## A container for geometry primitives.  This class associates one or more
   ## GeomPrimitive objects with a table of vertices defined by a GeomVertexData
@@ -4750,12 +6497,106 @@ type SamplerState* {.importcpp: "SamplerState", pure, inheritable, header: "samp
   ## can be used to sample the same texture using different settings in
   ## different places.
 
+type SamplerState_FilterType {.importcpp: "SamplerState::FilterType", pure, header: "samplerState.h".} = enum
+  FT_nearest = 0
+  FT_linear = 1
+  FT_nearest_mipmap_nearest = 2
+  FT_linear_mipmap_nearest = 3
+  FT_nearest_mipmap_linear = 4
+  FT_linear_mipmap_linear = 5
+  FT_shadow = 6
+  FT_default = 7
+  FT_invalid = 8
+
+func FT_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest
+func FT_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear
+func FT_nearest_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_nearest
+func FT_linear_mipmap_nearest*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_nearest
+func FT_nearest_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_nearest_mipmap_linear
+func FT_linear_mipmap_linear*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_linear_mipmap_linear
+func FT_shadow*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_shadow
+func FT_default*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_default
+func FT_invalid*(_: typedesc[SamplerState]): SamplerState_FilterType = SamplerState_FilterType.FT_invalid
+
+type SamplerState_WrapMode {.importcpp: "SamplerState::WrapMode", pure, header: "samplerState.h".} = enum
+  WM_clamp = 0
+  WM_repeat = 1
+  WM_mirror = 2
+  WM_mirror_once = 3
+  WM_border_color = 4
+  WM_invalid = 5
+
+func WM_clamp*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_clamp
+func WM_repeat*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_repeat
+func WM_mirror*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror
+func WM_mirror_once*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_mirror_once
+func WM_border_color*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_border_color
+func WM_invalid*(_: typedesc[SamplerState]): SamplerState_WrapMode = SamplerState_WrapMode.WM_invalid
+
 type Shader* {.importcpp: "PT(Shader)", bycopy, pure, inheritable, header: "shader.h".} = object of TypedWritableReferenceCount
 
 converter toShader*(_: type(nil)): Shader {.importcpp: "(nullptr)".}
 converter toBool*(this: Shader): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Shader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Shader], obj: TypedObject): Shader {.importcpp: "DCAST(Shader, @)".}
+
+type Shader_ShaderLanguage {.importcpp: "Shader::ShaderLanguage", pure, header: "shader.h".} = enum
+  SL_none = 0
+  SL_Cg = 1
+  SL_GLSL = 2
+  SL_HLSL = 3
+  SL_SPIR_V = 4
+
+func SL_none*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_none
+func SL_Cg*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_Cg
+func SL_GLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_GLSL
+func SL_HLSL*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_HLSL
+func SL_SPIR_V*(_: typedesc[Shader]): Shader_ShaderLanguage = Shader_ShaderLanguage.SL_SPIR_V
+
+type Shader_ShaderType {.importcpp: "Shader::ShaderType", pure, header: "shader.h".} = enum
+  ST_none = 0
+  ST_vertex = 1
+  ST_fragment = 2
+  ST_geometry = 3
+  ST_tess_control = 4
+  ST_tess_evaluation = 5
+  ST_compute = 6
+  ST_COUNT = 7
+
+func ST_none*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_none
+func ST_vertex*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_vertex
+func ST_fragment*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_fragment
+func ST_geometry*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_geometry
+func ST_tess_control*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_control
+func ST_tess_evaluation*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_tess_evaluation
+func ST_compute*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_compute
+func ST_COUNT*(_: typedesc[Shader]): Shader_ShaderType = Shader_ShaderType.ST_COUNT
+
+type Shader_AutoShaderSwitch {.importcpp: "Shader::AutoShaderSwitch", pure, header: "shader.h".} = enum
+  AS_normal = 1
+  AS_glow = 2
+  AS_gloss = 4
+  AS_ramp = 8
+  AS_shadow = 16
+
+func AS_normal*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_normal
+func AS_glow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_glow
+func AS_gloss*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_gloss
+func AS_ramp*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_ramp
+func AS_shadow*(_: typedesc[Shader]): Shader_AutoShaderSwitch = Shader_AutoShaderSwitch.AS_shadow
+
+type Shader_AutoShaderBit {.importcpp: "Shader::AutoShaderBit", pure, header: "shader.h".} = enum
+  bit_AutoShaderNormal = 0
+  bit_AutoShaderGlow = 1
+  bit_AutoShaderGloss = 2
+  bit_AutoShaderRamp = 3
+  bit_AutoShaderShadow = 4
+
+func bit_AutoShaderNormal*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderNormal
+func bit_AutoShaderGlow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGlow
+func bit_AutoShaderGloss*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderGloss
+func bit_AutoShaderRamp*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderRamp
+func bit_AutoShaderShadow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shader_AutoShaderBit.bit_AutoShaderShadow
 
 type ShaderBuffer* {.importcpp: "PT(ShaderBuffer)", bycopy, pure, inheritable, header: "shaderBuffer.h".} = object of TypedWritableReferenceCount
   ## This is a generic buffer object that lives in graphics memory.
@@ -4808,6 +6649,35 @@ converter toLens*(_: type(nil)): Lens {.importcpp: "(nullptr)".}
 converter toBool*(this: Lens): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Lens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Lens], obj: TypedObject): Lens {.importcpp: "DCAST(Lens, @)".}
+
+type Lens_StereoChannel {.importcpp: "Lens::StereoChannel", pure, header: "lens.h".} = enum
+  SC_mono = 0
+  SC_left = 1
+  SC_right = 2
+  SC_stereo = 3
+
+func SC_mono*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_mono
+func SC_left*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_left
+func SC_right*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_right
+func SC_stereo*(_: typedesc[Lens]): Lens_StereoChannel = Lens_StereoChannel.SC_stereo
+
+type Lens_FromCorners {.importcpp: "Lens::FromCorners", pure, header: "lens.h".} = enum
+  ## These flags are passed in as the last parameter to control the behavior
+  ## of set_frustum_from_corners().  See the documentation for that method for
+  ## an explanation of each flag.
+  FC_roll = 1
+  FC_camera_plane = 2
+  FC_off_axis = 4
+  FC_aspect_ratio = 8
+  FC_shear = 16
+  FC_keystone = 32
+
+func FC_roll*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_roll
+func FC_camera_plane*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_camera_plane
+func FC_off_axis*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_off_axis
+func FC_aspect_ratio*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_aspect_ratio
+func FC_shear*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_shear
+func FC_keystone*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC_keystone
 
 type Material* {.importcpp: "PT(Material)", bycopy, pure, inheritable, header: "material.h".} = object of TypedWritableReferenceCount
   ## Defines the way an object appears in the presence of lighting.  A material
@@ -4985,6 +6855,15 @@ type TextureStagePool* {.importcpp: "TextureStagePool", pure, inheritable, heade
   ## It runs in one of three different modes, according to set_mode().  See that
   ## method for more information.
 
+type TextureStagePool_Mode {.importcpp: "TextureStagePool::Mode", pure, header: "textureStagePool.h".} = enum
+  M_none = 0
+  M_name = 1
+  M_unique = 2
+
+func M_none*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_none
+func M_name*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_name
+func M_unique*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = TextureStagePool_Mode.M_unique
+
 type MathNumbers* {.importcpp: "MathNumbers", pure, inheritable, header: "mathNumbers.h".} = object
 
 type LVecBase2f* {.importcpp: "WrappedLVecBase2f", header: wrappedLVecBase2fCode, pure, inheritable.} = object
@@ -5038,7 +6917,7 @@ type LVecBase3i* {.importcpp: "WrappedLVecBase3i", header: wrappedLVecBase3iCode
   y*: int32
   z*: int32
 
-type CoordinateSystem* = enum
+type CoordinateSystem* {.importcpp: "CoordinateSystem", header: "coordinateSystem.h".} = enum
   CS_default = 0
   CS_zup_right = 1
   CS_yup_right = 2
@@ -5379,6 +7258,35 @@ converter toBoundingVolume*(_: type(nil)): BoundingVolume {.importcpp: "(nullptr
 converter toBool*(this: BoundingVolume): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: BoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingVolume], obj: TypedObject): BoundingVolume {.importcpp: "DCAST(BoundingVolume, @)".}
+
+type BoundingVolume_IntersectionFlags {.importcpp: "BoundingVolume::IntersectionFlags", pure, header: "boundingVolume.h".} = enum
+  ## The contains() functions return the union of one or more of these bits.
+  IF_no_intersection = 0
+  IF_possible = 1
+  IF_some = 2
+  IF_all = 4
+  IF_dont_understand = 8
+
+func IF_no_intersection*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_no_intersection
+func IF_possible*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_possible
+func IF_some*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_some
+func IF_all*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_all
+func IF_dont_understand*(_: typedesc[BoundingVolume]): BoundingVolume_IntersectionFlags = BoundingVolume_IntersectionFlags.IF_dont_understand
+
+type BoundingVolume_BoundsType {.importcpp: "BoundingVolume::BoundsType", pure, header: "boundingVolume.h".} = enum
+  ## This enum is used to control the automatic generation of bounding
+  ## volumes.
+  BT_default = 0
+  BT_best = 1
+  BT_sphere = 2
+  BT_box = 3
+  BT_fastest = 4
+
+func BT_default*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_default
+func BT_best*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_best
+func BT_sphere*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_sphere
+func BT_box*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_box
+func BT_fastest*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = BoundingVolume_BoundsType.BT_fastest
 
 type GeometricBoundingVolume* {.importcpp: "PT(GeometricBoundingVolume)", bycopy, pure, inheritable, header: "geometricBoundingVolume.h".} = object of BoundingVolume
   ## This is another abstract class, for a general class of bounding volumes
@@ -5740,6 +7648,35 @@ converter toBool*(this: RopeNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: RopeNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RopeNode], obj: TypedObject): RopeNode {.importcpp: "DCAST(RopeNode, @)".}
 
+type RopeNode_RenderMode {.importcpp: "RopeNode::RenderMode", pure, header: "ropeNode.h".} = enum
+  RM_thread = 0
+  RM_tape = 1
+  RM_billboard = 2
+  RM_tube = 3
+
+func RM_thread*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_thread
+func RM_tape*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tape
+func RM_billboard*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_billboard
+func RM_tube*(_: typedesc[RopeNode]): RopeNode_RenderMode = RopeNode_RenderMode.RM_tube
+
+type RopeNode_UVMode {.importcpp: "RopeNode::UVMode", pure, header: "ropeNode.h".} = enum
+  UV_none = 0
+  UV_parametric = 1
+  UV_distance = 2
+  UV_distance2 = 3
+
+func UV_none*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_none
+func UV_parametric*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_parametric
+func UV_distance*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance
+func UV_distance2*(_: typedesc[RopeNode]): RopeNode_UVMode = RopeNode_UVMode.UV_distance2
+
+type RopeNode_NormalMode {.importcpp: "RopeNode::NormalMode", pure, header: "ropeNode.h".} = enum
+  NM_none = 0
+  NM_vertex = 1
+
+func NM_none*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_none
+func NM_vertex*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_NormalMode.NM_vertex
+
 type SheetNode* {.importcpp: "PT(SheetNode)", bycopy, pure, inheritable, header: "sheetNode.h".} = object of PandaNode
   ## This class draws a visible representation of the NURBS surface stored in
   ## its NurbsSurfaceEvaluator.  It automatically recomputes the surface every
@@ -5773,6 +7710,22 @@ type PNMImageHeader* {.importcpp: "PNMImageHeader", pure, inheritable, header: "
   ## image except the image data itself.  It's the sort of information you
   ## typically read from the image file's header.
 
+type PNMImageHeader_ColorType {.importcpp: "PNMImageHeader::ColorType", pure, header: "pnmImageHeader.h".} = enum
+  ## This enumerated type indicates the number of channels in the image, and
+  ## also implies an image type.  You can treat it either as an integer number
+  ## of channels or as an enumerated image type.
+  CT_invalid = 0
+  CT_grayscale = 1
+  CT_two_channel = 2
+  CT_color = 3
+  CT_four_channel = 4
+
+func CT_invalid*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_invalid
+func CT_grayscale*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_grayscale
+func CT_two_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_two_channel
+func CT_color*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_color
+func CT_four_channel*(_: typedesc[PNMImageHeader]): PNMImageHeader_ColorType = PNMImageHeader_ColorType.CT_four_channel
+
 type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} = object of PNMImageHeader
   ## Defines a pfm file, a 2-d table of floating-point numbers, either
   ## 3-component or 1-component, or with a special extension, 2- or 4-component.
@@ -5793,6 +7746,17 @@ converter toPNMBrush*(_: type(nil)): PNMBrush {.importcpp: "(nullptr)".}
 converter toBool*(this: PNMBrush): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PNMBrush, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PNMBrush], obj: TypedObject): PNMBrush {.importcpp: "DCAST(PNMBrush, @)".}
+
+type PNMBrush_BrushEffect {.importcpp: "PNMBrush::BrushEffect", pure, header: "pnmBrush.h".} = enum
+  BE_set = 0
+  BE_blend = 1
+  BE_darken = 2
+  BE_lighten = 3
+
+func BE_set*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_set
+func BE_blend*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_blend
+func BE_darken*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_darken
+func BE_lighten*(_: typedesc[PNMBrush]): PNMBrush_BrushEffect = PNMBrush_BrushEffect.BE_lighten
 
 type PNMImage* {.importcpp: "PNMImage", pure, inheritable, header: "pnmImage.h".} = object of PNMImageHeader
   ## The name of this class derives from the fact that we originally implemented
@@ -5852,6 +7816,23 @@ converter toBool*(this: TextFont): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TextFont, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextFont], obj: TypedObject): TextFont {.importcpp: "DCAST(TextFont, @)".}
 
+type TextFont_RenderMode {.importcpp: "TextFont::RenderMode", pure, header: "textFont.h".} = enum
+  RM_texture = 0
+  RM_wireframe = 1
+  RM_polygon = 2
+  RM_extruded = 3
+  RM_solid = 4
+  RM_distance_field = 5
+  RM_invalid = 6
+
+func RM_texture*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_texture
+func RM_wireframe*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_wireframe
+func RM_polygon*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_polygon
+func RM_extruded*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_extruded
+func RM_solid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_solid
+func RM_distance_field*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_distance_field
+func RM_invalid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_RenderMode.RM_invalid
+
 type DynamicTextGlyph* {.importcpp: "PT(DynamicTextGlyph)", bycopy, pure, inheritable, header: "dynamicTextGlyph.h".} = object of TextGlyph
   ## A specialization on TextGlyph that is generated and stored by a
   ## DynamicTextFont.  This keeps some additional information, such as where the
@@ -5877,6 +7858,17 @@ type FreetypeFont* {.importcpp: "FreetypeFont", pure, inheritable, header: "free
   ## Both of these are utility classes that use the FreeType library to generate
   ## glyphs from fonts; this class abstracts out that common wrapper around
   ## FreeType.
+
+type FreetypeFont_WindingOrder {.importcpp: "FreetypeFont::WindingOrder", pure, header: "freetypeFont.h".} = enum
+  WO_default = 0
+  WO_left = 1
+  WO_right = 2
+  WO_invalid = 3
+
+func WO_default*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_default
+func WO_left*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_left
+func WO_right*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_right
+func WO_invalid*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = FreetypeFont_WindingOrder.WO_invalid
 
 type DynamicTextFont* {.importcpp: "PT(DynamicTextFont)", bycopy, pure, inheritable, header: "dynamicTextFont.h".} = object of TextFont
   ## A DynamicTextFont is a special TextFont object that rasterizes its glyphs
@@ -6015,6 +8007,17 @@ converter toBool*(this: MouseWatcherRegion): bool {.importcpp: "(# != nullptr)".
 func `==`*(x: MouseWatcherRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseWatcherRegion], obj: TypedObject): MouseWatcherRegion {.importcpp: "DCAST(MouseWatcherRegion, @)".}
 
+type MouseWatcherRegion_SuppressFlags {.importcpp: "MouseWatcherRegion::SuppressFlags", pure, header: "mouseWatcherRegion.h".} = enum
+  SF_mouse_button = 1
+  SF_other_button = 2
+  SF_any_button = 3
+  SF_mouse_position = 4
+
+func SF_mouse_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_button
+func SF_other_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_other_button
+func SF_any_button*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_any_button
+func SF_mouse_position*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_SuppressFlags = MouseWatcherRegion_SuppressFlags.SF_mouse_position
+
 type MouseWatcherBase* {.importcpp: "MouseWatcherBase*", bycopy, pure, inheritable, header: "mouseWatcherBase.h".} = object
   ## This represents a collection of MouseWatcherRegions that may be managed as
   ## a group.  This is the base class for both MouseWatcherGroup and
@@ -6080,6 +8083,19 @@ converter toBool*(this: Trackball): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Trackball, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Trackball], obj: TypedObject): Trackball {.importcpp: "DCAST(Trackball, @)".}
 
+type Trackball_ControlMode {.importcpp: "Trackball::ControlMode", pure, header: "trackball.h".} = enum
+  CM_default = 0
+  CM_truck = 1
+  CM_pan = 2
+  CM_dolly = 3
+  CM_roll = 4
+
+func CM_default*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_default
+func CM_truck*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_truck
+func CM_pan*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_pan
+func CM_dolly*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_dolly
+func CM_roll*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_ControlMode.CM_roll
+
 type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2sg.h".} = object of DataNode
   ## input: Transform (matrix)
   ##
@@ -6091,7 +8107,7 @@ converter toBool*(this: Transform2SG): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: Transform2SG, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Transform2SG], obj: TypedObject): Transform2SG {.importcpp: "DCAST(Transform2SG, @)".}
 
-type AutoTextureScale* = enum
+type AutoTextureScale* {.importcpp: "AutoTextureScale", header: "autoTextureScale.h".} = enum
   ATS_none = 0
   ATS_down = 1
   ATS_up = 2
@@ -6136,6 +8152,50 @@ type BamCache* {.importcpp: "BamCache", pure, inheritable, header: "bamCache.h".
 
 type LoaderOptions* {.importcpp: "LoaderOptions", pure, inheritable, header: "loaderOptions.h".} = object
   ## Specifies parameters that may be passed to the loader.
+
+type LoaderOptions_LoaderFlags {.importcpp: "LoaderOptions::LoaderFlags", pure, header: "loaderOptions.h".} = enum
+  ## Flags for loading model files.
+  LF_search = 1
+  LF_report_errors = 2
+  LF_convert_skeleton = 4
+  LF_convert_channels = 8
+  LF_convert_anim = 12
+  LF_no_disk_cache = 16
+  LF_no_ram_cache = 32
+  LF_no_cache = 48
+  LF_cache_only = 64
+  LF_allow_instance = 128
+
+func LF_search*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_search
+func LF_report_errors*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_report_errors
+func LF_convert_skeleton*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_skeleton
+func LF_convert_channels*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_channels
+func LF_convert_anim*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_convert_anim
+func LF_no_disk_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_disk_cache
+func LF_no_ram_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_ram_cache
+func LF_no_cache*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_no_cache
+func LF_cache_only*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_cache_only
+func LF_allow_instance*(_: typedesc[LoaderOptions]): LoaderOptions_LoaderFlags = LoaderOptions_LoaderFlags.LF_allow_instance
+
+type LoaderOptions_TextureFlags {.importcpp: "LoaderOptions::TextureFlags", pure, header: "loaderOptions.h".} = enum
+  ## Flags for loading texture files.
+  TF_preload = 4
+  TF_preload_simple = 8
+  TF_allow_1d = 16
+  TF_generate_mipmaps = 32
+  TF_multiview = 64
+  TF_integer = 128
+  TF_float = 256
+  TF_allow_compression = 512
+
+func TF_preload*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload
+func TF_preload_simple*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_preload_simple
+func TF_allow_1d*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_1d
+func TF_generate_mipmaps*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_generate_mipmaps
+func TF_multiview*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_multiview
+func TF_integer*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_integer
+func TF_float*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_float
+func TF_allow_compression*(_: typedesc[LoaderOptions]): LoaderOptions_TextureFlags = LoaderOptions_TextureFlags.TF_allow_compression
 
 type BamReader* {.importcpp: "BamReader", pure, inheritable, header: "bamReader.h".} = object of BamEnums
   ## This is the fundamental interface for extracting binary objects from a Bam
@@ -6272,9 +8332,28 @@ converter toBool*(this: ClockObject): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: ClockObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClockObject], obj: TypedObject): ClockObject {.importcpp: "DCAST(ClockObject, @)".}
 
+type ClockObject_Mode {.importcpp: "ClockObject::Mode", pure, header: "clockObject.h".} = enum
+  M_normal = 0
+  M_non_real_time = 1
+  M_forced = 2
+  M_degrade = 3
+  M_slave = 4
+  M_limited = 5
+  M_integer = 6
+  M_integer_limited = 7
+
+func M_normal*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_normal
+func M_non_real_time*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_non_real_time
+func M_forced*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_forced
+func M_degrade*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_degrade
+func M_slave*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_slave
+func M_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_limited
+func M_integer*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer
+func M_integer_limited*(_: typedesc[ClockObject]): ClockObject_Mode = ClockObject_Mode.M_integer_limited
+
 type CollideMask* = BitMask32
 
-type ColorSpace* = enum
+type ColorSpace* {.importcpp: "ColorSpace", header: "colorSpace.h".} = enum
   CS_unspecified = 0
   CS_linear = 1
   CS_sRGB = 2
@@ -6314,7 +8393,7 @@ type MouseButton* {.importcpp: "MouseButton", pure, inheritable, header: "mouseB
   ## This class is just used as a convenient namespace for grouping all of these
   ## handy functions that return buttons which map to standard mouse buttons.
 
-type PointerType* {.pure.} = enum
+type PointerType* {.importcpp: "PointerType", pure, header: "pointerType.h".} = enum
   ## Contains the types of pointer device.
   unknown = 0
   mouse = 1
@@ -6396,12 +8475,74 @@ converter toBool*(this: AudioSound): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AudioSound, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioSound], obj: TypedObject): AudioSound {.importcpp: "DCAST(AudioSound, @)".}
 
+type AudioSound_SoundStatus {.importcpp: "AudioSound::SoundStatus", pure, header: "audioSound.h".} = enum
+  BAD = 0
+  READY = 1
+  PLAYING = 2
+
+func BAD*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.BAD
+func READY*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.READY
+func PLAYING*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_SoundStatus.PLAYING
+
 type AudioManager* {.importcpp: "PT(AudioManager)", bycopy, pure, inheritable, header: "audioManager.h".} = object of TypedReferenceCount
 
 converter toAudioManager*(_: type(nil)): AudioManager {.importcpp: "(nullptr)".}
 converter toBool*(this: AudioManager): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: AudioManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioManager], obj: TypedObject): AudioManager {.importcpp: "DCAST(AudioManager, @)".}
+
+type AudioManager_SpeakerModeCategory {.importcpp: "AudioManager::SpeakerModeCategory", pure, header: "audioManager.h".} = enum
+  SPEAKERMODE_raw = 0
+  SPEAKERMODE_mono = 1
+  SPEAKERMODE_stereo = 2
+  SPEAKERMODE_quad = 3
+  SPEAKERMODE_surround = 4
+  SPEAKERMODE_5point1 = 5
+  SPEAKERMODE_7point1 = 6
+  SPEAKERMODE_max = 7
+  SPEAKERMODE_COUNT = 8
+
+func SPEAKERMODE_raw*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_raw
+func SPEAKERMODE_mono*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_mono
+func SPEAKERMODE_stereo*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_stereo
+func SPEAKERMODE_quad*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_quad
+func SPEAKERMODE_surround*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_surround
+func SPEAKERMODE_5point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_5point1
+func SPEAKERMODE_7point1*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_7point1
+func SPEAKERMODE_max*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_max
+func SPEAKERMODE_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerModeCategory = AudioManager_SpeakerModeCategory.SPEAKERMODE_COUNT
+
+type AudioManager_SpeakerId {.importcpp: "AudioManager::SpeakerId", pure, header: "audioManager.h".} = enum
+  SPK_none = 0
+  SPK_frontleft = 1
+  SPK_frontright = 2
+  SPK_center = 3
+  SPK_sub = 4
+  SPK_backleft = 5
+  SPK_backright = 6
+  SPK_sideleft = 7
+  SPK_sideright = 8
+  SPK_COUNT = 9
+
+func SPK_none*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_none
+func SPK_frontleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontleft
+func SPK_frontright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_frontright
+func SPK_center*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_center
+func SPK_sub*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sub
+func SPK_backleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backleft
+func SPK_backright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_backright
+func SPK_sideleft*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideleft
+func SPK_sideright*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_sideright
+func SPK_COUNT*(_: typedesc[AudioManager]): AudioManager_SpeakerId = AudioManager_SpeakerId.SPK_COUNT
+
+type AudioManager_StreamMode {.importcpp: "AudioManager::StreamMode", pure, header: "audioManager.h".} = enum
+  SM_heuristic = 0
+  SM_sample = 1
+  SM_stream = 2
+
+func SM_heuristic*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_heuristic
+func SM_sample*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_sample
+func SM_stream*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioManager_StreamMode.SM_stream
 
 type AudioLoadRequest* {.importcpp: "PT(AudioLoadRequest)", bycopy, pure, inheritable, header: "audioLoadRequest.h".} = object of AsyncTask
   ## A class object that manages a single asynchronous audio load request.  This
@@ -6415,6 +8556,23 @@ func `==`*(x: AudioLoadRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)
 func dcast*(_: typedesc[AudioLoadRequest], obj: TypedObject): AudioLoadRequest {.importcpp: "DCAST(AudioLoadRequest, @)".}
 
 type PGFrameStyle* {.importcpp: "PGFrameStyle", pure, inheritable, header: "pgFrameStyle.h".} = object
+
+type PGFrameStyle_Type {.importcpp: "PGFrameStyle::Type", pure, header: "pgFrameStyle.h".} = enum
+  T_none = 0
+  T_flat = 1
+  T_bevel_out = 2
+  T_bevel_in = 3
+  T_groove = 4
+  T_ridge = 5
+  T_texture_border = 6
+
+func T_none*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_none
+func T_flat*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_flat
+func T_bevel_out*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_out
+func T_bevel_in*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_bevel_in
+func T_groove*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_groove
+func T_ridge*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_ridge
+func T_texture_border*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFrameStyle_Type.T_texture_border
 
 type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pgItem.h".} = object of PandaNode
   ## This is the base class for all the various kinds of gui widget objects.
@@ -6440,6 +8598,17 @@ converter toPGButton*(_: type(nil)): PGButton {.importcpp: "(nullptr)".}
 converter toBool*(this: PGButton): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGButton, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGButton], obj: TypedObject): PGButton {.importcpp: "DCAST(PGButton, @)".}
+
+type PGButton_State {.importcpp: "PGButton::State", pure, header: "pgButton.h".} = enum
+  S_ready = 0
+  S_depressed = 1
+  S_rollover = 2
+  S_inactive = 3
+
+func S_ready*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_ready
+func S_depressed*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_depressed
+func S_rollover*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_rollover
+func S_inactive*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_inactive
 
 type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pgTop.h".} = object of PandaNode
   ## The "top" node of the new Panda GUI system.  This node must be parented to
@@ -6470,6 +8639,15 @@ converter toPGEntry*(_: type(nil)): PGEntry {.importcpp: "(nullptr)".}
 converter toBool*(this: PGEntry): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: PGEntry, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGEntry], obj: TypedObject): PGEntry {.importcpp: "DCAST(PGEntry, @)".}
+
+type PGEntry_State {.importcpp: "PGEntry::State", pure, header: "pgEntry.h".} = enum
+  S_focus = 0
+  S_no_focus = 1
+  S_inactive = 2
+
+func S_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_focus
+func S_no_focus*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_no_focus
+func S_inactive*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_inactive
 
 type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy, pure, inheritable, header: "pgMouseWatcherParameter.h".} = object of TypedWritableReferenceCount
   ## This specialization on MouseWatcherParameter allows us to tag on additional
@@ -6765,6 +8943,25 @@ converter toTiXmlNode*(_: type(nil)): TiXmlNode {.importcpp: "(nullptr)".}
 converter toBool*(this: TiXmlNode): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: TiXmlNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
+type TiXmlNode_NodeType {.importcpp: "TiXmlNode::NodeType", pure, header: "tinyxml.h".} = enum
+  ## The types of XML nodes supported by TinyXml. (All the
+  ## unsupported types are picked up by UNKNOWN.)
+  TINYXML_DOCUMENT = 0
+  TINYXML_ELEMENT = 1
+  TINYXML_COMMENT = 2
+  TINYXML_UNKNOWN = 3
+  TINYXML_TEXT = 4
+  TINYXML_DECLARATION = 5
+  TINYXML_TYPECOUNT = 6
+
+func TINYXML_DOCUMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DOCUMENT
+func TINYXML_ELEMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_ELEMENT
+func TINYXML_COMMENT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_COMMENT
+func TINYXML_UNKNOWN*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_UNKNOWN
+func TINYXML_TEXT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TEXT
+func TINYXML_DECLARATION*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_DECLARATION
+func TINYXML_TYPECOUNT*(_: typedesc[TiXmlNode]): TiXmlNode_NodeType = TiXmlNode_NodeType.TINYXML_TYPECOUNT
+
 type TiXmlDeclaration* {.importcpp: "TiXmlDeclaration*", bycopy, pure, inheritable, header: "tinyxml.h".} = object of TiXmlNode
   ## In correct XML the declaration is the first entry in the file.
   ## @verbatim
@@ -6832,7 +9029,7 @@ const TIXML_SUCCESS*: int = 0
 const TIXML_NO_ATTRIBUTE*: int = 1
 const TIXML_WRONG_TYPE*: int = 2
 
-type TiXmlEncoding* = enum
+type TiXmlEncoding* {.importcpp: "TiXmlEncoding", header: "tiXmlEncoding.h".} = enum
   ## Used by the parsing routines.
   TIXML_ENCODING_UNKNOWN = 0
   TIXML_ENCODING_UTF8 = 1
@@ -6997,6 +9194,15 @@ type PNMTextMaker* {.importcpp: "PNMTextMaker", pure, inheritable, header: "pnmT
   ## use the Freetype library to generate text in the scene graph, to be
   ## rendered onscreen via the Panda render traversal.
 
+type PNMTextMaker_Alignment {.importcpp: "PNMTextMaker::Alignment", pure, header: "pnmTextMaker.h".} = enum
+  A_left = 0
+  A_right = 1
+  A_center = 2
+
+func A_left*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_left
+func A_right*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_right
+func A_center*(_: typedesc[PNMTextMaker]): PNMTextMaker_Alignment = PNMTextMaker_Alignment.A_center
+
 func index*(this: TypeHandle): int {.importcpp: "#.get_index()".} ## \
 ## Returns the integer index associated with this TypeHandle.  Each different
 ## TypeHandle will have a different index.  However, you probably shouldn't be
@@ -7017,6 +9223,14 @@ func name*(this: TypeHandle): string {.importcpp: "nimStringFromStdString(#.get_
 ## The "object" pointer is an optional pointer to the TypedObject class that
 ## owns this TypeHandle.  It is only used in case the TypeHandle is
 ## inadvertantly undefined.
+
+func defaultEncoding*(_: typedesc[TextEncoder]): TextEncoder_Encoding {.importcpp: "TextEncoder::get_default_encoding()", header: "textEncoder.h".} ## \
+## Specifies the default encoding to be used for all subsequently created
+## TextEncoder objects.  See set_encoding().
+
+proc `defaultEncoding=`*(_: typedesc[TextEncoder], encoding: TextEncoder_Encoding) {.importcpp: "#TextEncoder::set_default_encoding(#)", header: "textEncoder.h".} ## \
+## Specifies the default encoding to be used for all subsequently created
+## TextEncoder objects.  See set_encoding().
 
 func versionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: "pandaSystem.h".} ## \
 ## Returns the current version of Panda, expressed as a string, e.g.  "1.0.0".
@@ -7199,6 +9413,15 @@ func dynamic*(this: ConfigVariableCore): bool {.importcpp: "#.is_dynamic()".} ##
 ## indicating that its name was dynamically generated, possibly from a large
 ## pool, and it should not be listed along with the other variables.
 
+func valueType*(this: ConfigVariableCore): ConfigFlags_ValueType {.importcpp: "#.get_value_type()".} ## \
+## Returns the stated type of this variable.  If the variable has not yet been
+## defined, this will be VT_undefined.
+
+proc `valueType=`*(this: ConfigVariableCore, value_type: ConfigFlags_ValueType) {.importcpp: "#.set_value_type(#)".} ## \
+## Specifies the type of this variable.  See get_value_type().  It is not an
+## error to call this multiple times, but if the value changes once
+## get_declaration() has been called, a warning is printed.
+
 func description*(this: ConfigVariableCore): string {.importcpp: "nimStringFromStdString(#.get_description())", header: stringConversionCode.} ## \
 ## Returns the brief description of this variable, if it has been defined.
 
@@ -7224,6 +9447,10 @@ func searchPath*(this: ConfigPageManager): DSearchPath {.importcpp: "#.get_searc
 
 func name*(this: ConfigVariableBase): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.} ## \
 ## Returns the name of the variable.
+
+func valueType*(this: ConfigVariableBase): ConfigFlags_ValueType {.importcpp: "#.get_value_type()".} ## \
+## Returns the stated type of this variable.  This should be VT_list, unless a
+## later variable declaration has changed it.
 
 func description*(this: ConfigVariableBase): string {.importcpp: "nimStringFromStdString(#.get_description())", header: stringConversionCode.} ## \
 ## Returns the brief description of this variable, if it has been defined.
@@ -7492,6 +9719,59 @@ func date*(this: DocumentSpec): HTTPDate {.importcpp: "#.get_date()".} ## \
 proc `date=`*(this: DocumentSpec, date: HTTPDate) {.importcpp: "#.set_date(#)".} ## \
 ## Changes the last-modified date associated with the DocumentSpec.
 
+func requestMode*(this: DocumentSpec): DocumentSpec_RequestMode {.importcpp: "#.get_request_mode()".} ## \
+## Returns the request mode of this DocumentSpec.  See set_request_mode().
+
+proc `requestMode=`*(this: DocumentSpec, request_mode: DocumentSpec_RequestMode) {.importcpp: "#.set_request_mode(#)".} ## \
+## Sets the request mode of this DocumentSpec.  This is only relevant when
+## using the DocumentSpec to generate a request (for instance, in
+## HTTPChannel).  This specifies whether the document request will ask the
+## server for a newer version than the indicated version, or the exact
+## version, neither, or either.
+##
+## The possible values are:
+##
+## RM_any: ignore date and tag (if specified), and retrieve any document that
+## matches the URL.  For a subrange request, if the document matches the
+## version indicated exactly, retrieve the subrange only; otherwise, retrieve
+## the entire document.
+##
+## RM_equal: request only the precise version of the document that matches the
+## particular date and/or tag exactly, if specified; fail if this version is
+## not available.
+##
+## RM_newer: request any document that is newer than the version indicated by
+## the particular date and/or tag; fail if only that version (or older
+## versions) are available.
+##
+## RM_newer_or_equal: request any document that matches the version indicated
+## by the particular date and/or tag, or is a newer version; fail if only
+## older versions are available.
+##
+## In any of the above, you may specify either or both of the last-modified
+## date and the identity tag, whichever is known to the client.
+##
+## The default mode is RM_any.
+
+func cacheControl*(this: DocumentSpec): DocumentSpec_CacheControl {.importcpp: "#.get_cache_control()".} ## \
+## Returns the request mode of this DocumentSpec.  See set_cache_control().
+
+proc `cacheControl=`*(this: DocumentSpec, cache_control: DocumentSpec_CacheControl) {.importcpp: "#.set_cache_control(#)".} ## \
+## Specifies what kind of cached value is acceptable for this document.
+## Warning: some HTTP proxies may not respect this setting and may return a
+## cached result anyway.
+##
+## CC_allow_cache: the normal HTTP behavior; the server may return a cached
+## value if it believes it is valid.
+##
+## CC_revalidate: a proxy is forced to contact the origin server and verify
+## that is cached value is in fact still valid before it returns it.
+##
+## CC_no_cache: a proxy must not return its cached value at all, but is forced
+## to go all the way back to the origin server for the official document.
+##
+## The default mode is CC_allow_cache.
+
 func progress*(this: Decompressor): float32 {.importcpp: "#.get_progress()".} ## \
 ## Returns the ratio through the decompression step in the background.
 
@@ -7738,6 +10018,9 @@ func legalCollideMask*(this: PandaNode): CollideMask {.importcpp: "#->get_legal_
 ##
 ## For nodes that can be collided with, such as GeomNode and CollisionNode,
 ## this returns all bits on.
+
+func boundsType*(this: PandaNode): BoundingVolume_BoundsType {.importcpp: "#->get_bounds_type()".} ## \
+## Returns the bounding volume type set with set_bounds_type().
 
 func nestedVertices*(this: PandaNode, current_thread: Thread): int {.importcpp: "#->get_nested_vertices(#)".} ## \
 ## Returns the total number of vertices that will be rendered by this node and
@@ -8261,6 +10544,9 @@ func mat*(this: TransformState): LMatrix4 {.importcpp: "#->get_mat()".} ## \
 
 func slot*(this: RenderAttrib): int {.importcpp: "#->get_slot()".}
 
+func mode*(this: RenderModeAttrib): RenderModeAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the render mode.
+
 func thickness*(this: RenderModeAttrib): float32 {.importcpp: "#->get_thickness()".} ## \
 ## Returns the line width or point thickness.  This is only relevant when
 ## rendering points or lines, such as when the mode is M_wireframe or M_point
@@ -8284,6 +10570,9 @@ func classSlot*(_: typedesc[TexMatrixAttrib]): int {.importcpp: "TexMatrixAttrib
 func referenceAlpha*(this: AlphaTestAttrib): float32 {.importcpp: "#->get_reference_alpha()".} ## \
 ## Returns the alpha reference value.
 
+func mode*(this: AlphaTestAttrib): RenderAttrib_PandaCompareFunc {.importcpp: "#->get_mode()".} ## \
+## Returns the alpha write mode.
+
 func classSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
 func mode*(this: AntialiasAttrib): int {.importcpp: "#->get_mode()".} ## \
@@ -8301,9 +10590,19 @@ func modeQuality*(this: AntialiasAttrib): int {.importcpp: "#->get_mode_quality(
 
 func classSlot*(_: typedesc[AntialiasAttrib]): int {.importcpp: "AntialiasAttrib::get_class_slot()", header: "antialiasAttrib.h".}
 
+func mode*(this: TransparencyAttrib): TransparencyAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the transparency mode.
+
 func classSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
+func operation*(this: LogicOpAttrib): LogicOpAttrib_Operation {.importcpp: "#->get_operation()".} ## \
+## Returns the logic operation specified by this attribute.
+
 func classSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
+
+func errorType*(this: NodePath): NodePath_ErrorType {.importcpp: "#.get_error_type()".} ## \
+## If is_empty() is true, this returns a code that represents the reason why
+## the NodePath is empty.
 
 func children*(this: NodePath, current_thread: Thread): NodePathCollection {.importcpp: "#.get_children(#)".} ## \
 ## Returns the set of all child nodes of the referenced node.
@@ -8359,6 +10658,10 @@ func outputs*(this: AuxBitplaneAttrib): int {.importcpp: "#->get_outputs()".} ##
 
 func classSlot*(_: typedesc[AuxBitplaneAttrib]): int {.importcpp: "AuxBitplaneAttrib::get_class_slot()", header: "auxBitplaneAttrib.h".}
 
+func fileEndian*(this: BamFile): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## read or written.
+
 func fileStdfloatDouble*(this: BamFile): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file stores all "standard" floats as 64-bit doubles, or
 ## false if they are 32-bit floats.
@@ -8412,11 +10715,39 @@ proc `clipEffect=`*(this: PlaneNode, clip_effect: int) {.importcpp: "#->set_clip
 
 func classSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAttrib::get_class_slot()", header: "clipPlaneAttrib.h".}
 
+func colorType*(this: ColorAttrib): ColorAttrib_Type {.importcpp: "#->get_color_type()".} ## \
+## Returns the type of color specified by this ColorAttrib.  The options are:
+##
+## T_vertex - use the vertex color specified in the geometry itself.
+##
+## T_flat - use the color specified in this ColorAttrib for all geometry.  You
+## can get this color via get_color().
+##
+## T_off - use the color white.
+
 func color*(this: ColorAttrib): LColor {.importcpp: "#->get_color()".} ## \
 ## If the type is T_flat or T_off, this returns the color that will be applied
 ## to geometry.  If the type is T_vertex, this is meaningless.
 
 func classSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get_class_slot()", header: "colorAttrib.h".}
+
+func rgbMode*(this: ColorBlendAttrib): ColorBlendAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the blending mode for the RGB channels.
+
+func rgbOperandA*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_operand_a()".} ## \
+## Returns the RGB multiplier for the first component.
+
+func rgbOperandB*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_operand_b()".} ## \
+## Returns the RGB multiplier for the second component.
+
+func alphaMode*(this: ColorBlendAttrib): ColorBlendAttrib_Mode {.importcpp: "#->get_alpha_mode()".} ## \
+## Returns the blending mode for the alpha channel.
+
+func alphaOperandA*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_alpha_operand_a()".} ## \
+## Returns the alpha multiplier for the first component.
+
+func alphaOperandB*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_alpha_operand_b()".} ## \
+## Returns the alpha multiplier for the second component.
 
 func color*(this: ColorBlendAttrib): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the constant color associated with the attrib.
@@ -8447,13 +10778,36 @@ func drawOrder*(this: CullBinAttrib): int {.importcpp: "#->get_draw_order()".} #
 
 func classSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib::get_class_slot()", header: "cullBinAttrib.h".}
 
+func mode*(this: CullFaceAttrib): CullFaceAttrib_Mode {.importcpp: "#->get_actual_mode()".} ## \
+## Returns the actual culling mode, without considering the effects of the
+## reverse flag.  See also get_effective_mode().
+
 func reverse*(this: CullFaceAttrib): bool {.importcpp: "#->get_reverse()".} ## \
 ## Returns the 'reverse' flag.  If this is true, the actual cull direction
 ## (clockwise vs.  counterclockwise) is the reverse of what is specified here.
 ## This allows support for make_reverse(), which defines a CullFaceAttrib that
 ## reverses whatever the sense of culling would have been.
 
+func effectiveMode*(this: CullFaceAttrib): CullFaceAttrib_Mode {.importcpp: "#->get_effective_mode()".} ## \
+## Returns the effective culling mode.  This is the same as the actual culling
+## mode, unless the reverse flag is set, which swaps CW for CCW and vice-
+## versa.  Also, M_cull_unchanged is mapped to M_cull_none.
+
 func classSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
+
+func mode*(this: Fog): Fog_Mode {.importcpp: "#->get_mode()".}
+
+proc `mode=`*(this: Fog, mode: Fog_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Specifies the computation that is used to determine the fog effect.  If
+## this is M_linear, then the fog will range from linearly from the onset
+## point to the opaque point (or for the distances specified in
+## set_linear_range), and the fog object should be parented into the scene
+## graph, or to the camera.
+##
+## If this is anything else, the onset point and opaque point are not used,
+## and the fog effect is based on the value specified to set_exp_density(),
+## and it doesn't matter to which node the fog object is parented, or if it is
+## parented anywhere at all.
 
 func color*(this: Fog): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the color of the fog.
@@ -8505,6 +10859,9 @@ func fog*(this: FogAttrib): Fog {.importcpp: "#->get_fog()".} ## \
 
 func classSlot*(_: typedesc[FogAttrib]): int {.importcpp: "FogAttrib::get_class_slot()", header: "fogAttrib.h".}
 
+func mode*(this: RescaleNormalAttrib): RescaleNormalAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the render mode.
+
 func classSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
 func offset*(this: DepthOffsetAttrib): int {.importcpp: "#->get_offset()".} ## \
@@ -8520,11 +10877,20 @@ func maxValue*(this: DepthOffsetAttrib): float32 {.importcpp: "#->get_max_value(
 
 func classSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffsetAttrib::get_class_slot()", header: "depthOffsetAttrib.h".}
 
+func mode*(this: DepthTestAttrib): RenderAttrib_PandaCompareFunc {.importcpp: "#->get_mode()".} ## \
+## Returns the depth write mode.
+
 func classSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
+
+func mode*(this: DepthWriteAttrib): DepthWriteAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the depth write mode.
 
 func classSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
 func classSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
+
+func mode*(this: LightRampAttrib): LightRampAttrib_LightRampMode {.importcpp: "#->get_mode()".} ## \
+## Returns the LightRampAttrib mode.
 
 func classSlot*(_: typedesc[LightRampAttrib]): int {.importcpp: "LightRampAttrib::get_class_slot()", header: "lightRampAttrib.h".}
 
@@ -8542,6 +10908,9 @@ proc `doneEvent=`*(this: AsyncFuture, done_event: string) {.importcpp: "#->set_d
 ## Sets the event name that will be triggered when the future finishes.  Will
 ## not be triggered if the future is cancelled, but it will be triggered for
 ## a coroutine task that exits with an exception.
+
+func state*(this: AsyncTask): AsyncTask_State {.importcpp: "#->get_state()".} ## \
+## Returns the current state of the task.
 
 func alive*(this: AsyncTask): bool {.importcpp: "#->is_alive()".} ## \
 ## Returns true if the task is currently active or sleeping on some task
@@ -8656,14 +11025,14 @@ proc `fullpath=`*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-func timestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
+func timestamp*(this: ModelRoot): Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc `timestamp=`*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
+proc `timestamp=`*(this: ModelRoot, timestamp: Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
@@ -8787,6 +11156,9 @@ func frame*(this: ScissorAttrib): LVecBase4 {.importcpp: "#->get_frame()".} ## \
 
 func classSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib::get_class_slot()", header: "scissorAttrib.h".}
 
+func mode*(this: ShadeModelAttrib): ShadeModelAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the shade mode.
+
 func classSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
 func classSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
@@ -8865,6 +11237,11 @@ proc `underscoreHeight=`*(this: TextProperties, underscore_height: float32) {.im
 ## Specifies the vertical height of the underscore, relative to the text
 ## baseline.  This only has meaning if the underscore mode is enabled with
 ## set_underscore().
+
+func align*(this: TextProperties): TextProperties_Alignment {.importcpp: "#.get_align()".}
+
+proc `align=`*(this: TextProperties, align_type: TextProperties_Alignment) {.importcpp: "#.set_align(#)".} ## \
+## Specifies the alignment of the text within its margins.
 
 func indent*(this: TextProperties): float32 {.importcpp: "#.get_indent()".}
 
@@ -8980,6 +11357,17 @@ proc `textScale=`*(this: TextProperties, text_scale: float32) {.importcpp: "#.se
 ## The text scale is not cumulative when applied to nested TextProperties.
 ## See also set_glyph_scale(), which is cumulative.
 
+func direction*(this: TextProperties): TextProperties_Direction {.importcpp: "#.get_direction()".} ## \
+## Returns the direction of the text as specified by set_direction().
+##
+## @since 1.10.0
+
+proc `direction=`*(this: TextProperties, direction: TextProperties_Direction) {.importcpp: "#.set_direction(#)".} ## \
+## Specifies the text direction.  If none is specified, it will be guessed
+## based on the contents of the string.
+##
+## @since 1.10.0
+
 func maxRows*(this: TextNode): int {.importcpp: "#->get_max_rows()".} ## \
 ## Returns the limit on the height of the TextNode specified by
 ## set_max_rows().
@@ -9027,6 +11415,16 @@ func coordinateSystem*(this: TextNode): CoordinateSystem {.importcpp: "#->get_co
 
 proc `coordinateSystem=`*(this: TextNode, cs: CoordinateSystem) {.importcpp: "#->set_coordinate_system(#)".} ## \
 ## Specifies the coordinate system in which the text will be generated.
+
+func usageHint*(this: TextNode): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the UsageHint that will be applied to generated geometry.  See
+## set_usage_hint().
+
+proc `usageHint=`*(this: TextNode, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Specifies the UsageHint that will be applied to generated geometry.  The
+## default is UH_static, which is probably the right setting, but if you know
+## the TextNode's geometry will have a short lifespan, it may be better to set
+## it to UH_stream.  See geomEnums.h.
 
 func flattenFlags*(this: TextNode): int {.importcpp: "#->get_flatten_flags()".} ## \
 ## Returns the flatten flags.  See set_flatten_flags().
@@ -9090,6 +11488,8 @@ proc `smallCapsScale=`*(this: TextNode, small_caps_scale: float32) {.importcpp: 
 ## Normally, this will be a number less than one.
 
 proc `slant=`*(this: TextNode, slant: float32) {.importcpp: "#->set_slant(#)".}
+
+proc `align=`*(this: TextNode, align_type: TextProperties_Alignment) {.importcpp: "#->set_align(#)".}
 
 proc `indent=`*(this: TextNode, indent: float32) {.importcpp: "#->set_indent(#)".} ## \
 ## Specifies the amount of extra space that is inserted before the first
@@ -9267,6 +11667,89 @@ func componentWidth*(this: Texture): int {.importcpp: "#->get_component_width()"
 ## Returns the number of bytes stored for each color component of a texel.
 ## Typically this is 1, but it may be 2 for 16-bit texels.
 
+func textureType*(this: Texture): Texture_TextureType {.importcpp: "#->get_texture_type()".} ## \
+## Returns the overall interpretation of the texture.
+
+func usageHint*(this: Texture): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint specified for buffer textures, or UH_unspecified for
+## all other texture types.
+
+func format*(this: Texture): Texture_Format {.importcpp: "#->get_format()".} ## \
+## Returns the format of the texture, which represents both the semantic
+## meaning of the texels and, to some extent, their storage information.
+
+proc `format=`*(this: Texture, format: Texture_Format) {.importcpp: "#->set_format(#)".} ## \
+## Changes the format value for the texture components.  This implicitly sets
+## num_components as well.
+
+func componentType*(this: Texture): Texture_ComponentType {.importcpp: "#->get_component_type()".} ## \
+## Returns the numeric interpretation of each component of the texture.
+
+proc `componentType=`*(this: Texture, component_type: Texture_ComponentType) {.importcpp: "#->set_component_type(#)".} ## \
+## Changes the data value for the texture components.  This implicitly sets
+## component_width as well.
+
+func wrapU*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_u()".} ## \
+## Returns the wrap mode of the texture in the U direction.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc `wrapU=`*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_u(#)".}
+
+func wrapV*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_v()".} ## \
+## Returns the wrap mode of the texture in the V direction.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc `wrapV=`*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_v(#)".}
+
+func wrapW*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_w()".} ## \
+## Returns the wrap mode of the texture in the W direction.  This is the depth
+## direction of 3-d textures.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc `wrapW=`*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_w(#)".}
+
+func minfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_minfilter()".} ## \
+## Returns the filter mode of the texture for minification.  If this is one of
+## the mipmap constants, then the texture requires mipmaps.  This may return
+## FT_default; see also get_effective_minfilter().
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc `minfilter=`*(this: Texture, filter: SamplerState_FilterType) {.importcpp: "#->set_minfilter(#)".}
+
+func effectiveMinfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_effective_minfilter()".} ## \
+## Returns the filter mode of the texture for minification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+func magfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification.  The mipmap
+## constants are invalid here.  This may return FT_default; see also
+## get_effective_minfilter().
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc `magfilter=`*(this: Texture, filter: SamplerState_FilterType) {.importcpp: "#->set_magfilter(#)".}
+
+func effectiveMagfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_effective_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
 func anisotropicDegree*(this: Texture): int {.importcpp: "#->get_anisotropic_degree()".} ## \
 ## Returns the degree of anisotropic filtering that should be applied to the
 ## texture.  This value may return 0, indicating the default value; see also
@@ -9311,6 +11794,29 @@ proc `borderColor=`*(this: Texture, color: LColor) {.importcpp: "#->set_border_c
 ## This sets the default sampler state for this texture; it may still be
 ## overridden by a sampler state specified at a higher level.
 
+func compression*(this: Texture): Texture_CompressionMode {.importcpp: "#->get_compression()".} ## \
+## Returns the compression mode requested for this particular texture, or
+## CM_off if the texture is not to be compressed.
+##
+## If a value other than CM_off is returned, this is not a guarantee that the
+## texture is actually successfully compressed on the GSG.  It may be that the
+## GSG does not support the requested compression mode, in which case the
+## texture may actually be stored uncompressed in texture memory.
+
+proc `compression=`*(this: Texture, compression: Texture_CompressionMode) {.importcpp: "#->set_compression(#)".} ## \
+## Requests that this particular Texture be compressed when it is loaded into
+## texture memory.
+##
+## This refers to the internal compression of the texture image within texture
+## memory; it is not related to jpeg or png compression, which are disk file
+## compression formats.  The actual disk file that generated this texture may
+## be stored in a compressed or uncompressed format supported by Panda; it
+## will be decompressed on load, and then recompressed by the graphics API if
+## this parameter is not CM_off.
+##
+## If the GSG does not support this texture compression mode, the texture will
+## silently be loaded uncompressed.
+
 func renderToTexture*(this: Texture): bool {.importcpp: "#->get_render_to_texture()".} ## \
 ## Returns a flag on the texture that indicates whether the texture is
 ## intended to be used as a direct-render target, by binding a framebuffer to
@@ -9349,6 +11855,21 @@ proc `defaultSampler=`*(this: Texture, sampler: SamplerState) {.importcpp: "#->s
 ## the same SamplerState will have no effect on this texture unless you call
 ## set_default_sampler again.
 
+func qualityLevel*(this: Texture): Texture_QualityLevel {.importcpp: "#->get_quality_level()".} ## \
+## Returns the current quality_level hint.  See set_quality_level().  This
+## value may return QL_default; see get_effective_quality_level().
+
+proc `qualityLevel=`*(this: Texture, quality_level: Texture_QualityLevel) {.importcpp: "#->set_quality_level(#)".} ## \
+## Sets a hint to the renderer about the desired performance / quality
+## tradeoff for this particular texture.  This is most useful for the
+## tinydisplay software renderer; for normal, hardware-accelerated renderers,
+## this may have little or no effect.
+
+func effectiveQualityLevel*(this: Texture): Texture_QualityLevel {.importcpp: "#->get_effective_quality_level()".} ## \
+## Returns the current quality_level hint, or the global default quality_level
+## if this texture doesn't specify a quality level.  This value will not
+## normally return QL_default (unless there is an error in the config file)
+
 func expectedNumMipmapLevels*(this: Texture): int {.importcpp: "#->get_expected_num_mipmap_levels()".} ## \
 ## Returns the number of mipmap levels that should be defined for this
 ## texture, given the texture's size.
@@ -9382,6 +11903,13 @@ func expectedRamPageSize*(this: Texture): clonglong {.importcpp: "#->get_expecte
 ## Returns the number of bytes that should be used per each Z page of the 3-d
 ## texture.  For a 2-d or 1-d texture, this is the same as
 ## get_expected_ram_image_size().
+
+func ramImageCompression*(this: Texture): Texture_CompressionMode {.importcpp: "#->get_ram_image_compression()".} ## \
+## Returns the compression mode in which the ram image is already stored pre-
+## compressed.  If this is other than CM_off, you cannot rely on the contents
+## of the ram image to be anything predicatable (it will not be an array of x
+## by y pixels, and it probably won't have the same length as
+## get_expected_ram_image_size()).
 
 func keepRamImage*(this: Texture): bool {.importcpp: "#->get_keep_ram_image()".} ## \
 ## Returns the flag that indicates whether this Texture is eligible to have
@@ -9711,6 +12239,19 @@ proc `valueNode=`*(this: AnimChannelScalarDynamic, node: PandaNode) {.importcpp:
 ## Specifies a node whose transform will be queried each frame to implicitly
 ## specify the transform of this joint.  This will override the values set by
 ## set_value().
+
+func blendType*(this: PartBundle): PartBundle_BlendType {.importcpp: "#->get_blend_type()".} ## \
+## Returns the algorithm that is used when blending multiple frames or
+## multiple animations together, when either anim_blend_flag or
+## frame_blend_flag is set to true.
+
+proc `blendType=`*(this: PartBundle, bt: PartBundle_BlendType) {.importcpp: "#->set_blend_type(#)".} ## \
+## Defines the algorithm that is used when blending multiple frames or
+## multiple animations together, when either anim_blend_flag or
+## frame_blend_flag is set to true.
+##
+## See partBundle.h for a description of the meaning of each of the BlendType
+## values.
 
 func animBlendFlag*(this: PartBundle): bool {.importcpp: "#->get_anim_blend_flag()".} ## \
 ## Returns whether the character allows multiple different animations to be
@@ -10306,6 +12847,29 @@ proc `size=`*(this: WindowProperties, x_size: int, y_size: int) {.importcpp: "#.
 ## Specifies the requested size of the window, in pixels.  This is the size of
 ## the useful part of the window, not including decorations.
 
+func mouseMode*(this: WindowProperties): WindowProperties_MouseMode {.importcpp: "#.get_mouse_mode()".} ## \
+## See set_mouse_mode().
+
+proc `mouseMode=`*(this: WindowProperties, mode: WindowProperties_MouseMode) {.importcpp: "#.set_mouse_mode(#)".} ## \
+## Specifies the mode in which the window is to operate its mouse pointer.
+##
+## M_absolute: the normal mode in which a mouse pointer operates, where the
+## mouse can move outside the window and the mouse coordinates are relative to
+## its position in the window.
+##
+## M_relative (OSX or Unix/X11 only): a mode where only relative movements are
+## reported; particularly useful for FPS-style mouse movements where you have
+## hidden the mouse pointer and are are more interested in how fast the mouse
+## is moving, rather than precisely where the pointer is hovering.
+##
+## This has no effect on Windows.  On Unix/X11, this requires the Xxf86dga
+## extension to be available.
+##
+## M_confined: this mode reports absolute mouse positions, but confines the
+## mouse pointer to the window boundary.  It can portably replace M_relative
+## for an FPS, but you need to periodically move the pointer to the center of
+## the window and track movement deltas.
+
 func title*(this: WindowProperties): string {.importcpp: "nimStringFromStdString(#.get_title())", header: stringConversionCode.} ## \
 ## Returns the window's title.
 
@@ -10373,6 +12937,16 @@ func cursorFilename*(this: WindowProperties): Filename {.importcpp: "#.get_curso
 proc `cursorFilename=`*(this: WindowProperties, cursor_filename: Filename) {.importcpp: "#.set_cursor_filename(#)".} ## \
 ## Specifies the file that contains the icon to associate with the mouse
 ## cursor when it is within the window (and visible).
+
+func zOrder*(this: WindowProperties): WindowProperties_ZOrder {.importcpp: "#.get_z_order()".} ## \
+## Returns the window's z_order.
+
+proc `zOrder=`*(this: WindowProperties, z_order: WindowProperties_ZOrder) {.importcpp: "#.set_z_order(#)".} ## \
+## Specifies the relative ordering of the window with respect to other
+## windows.  If the z_order is Z_top, the window will always be on top of
+## other windows; if it is Z_bottom, it will always be below other windows.
+## Most windows will want to be Z_normal, which allows the user to control the
+## order.
 
 func parentWindow*(this: WindowProperties): WindowHandle {.importcpp: "#.get_parent_window()".} ## \
 ## Returns the parent window specification, or NULL if there is no parent
@@ -10497,6 +13071,37 @@ proc `sort=`*(this: DisplayRegion, sort: int) {.importcpp: "#->set_sort(#)".} ##
 ##
 ## Don't call this in a downstream thread unless you don't mind it blowing
 ## away other changes you might have recently made in an upstream thread.
+
+func stereoChannel*(this: DisplayRegion): Lens_StereoChannel {.importcpp: "#->get_stereo_channel()".} ## \
+## Returns whether the DisplayRegion is specified as the left or right channel
+## of a stereo pair, or whether it is a normal, monocular image.  See
+## set_stereo_channel().
+
+proc `stereoChannel=`*(this: DisplayRegion, stereo_channel: Lens_StereoChannel) {.importcpp: "#->set_stereo_channel(#)".} ## \
+## Specifies whether the DisplayRegion represents the left or right channel of
+## a stereo pair, or whether it is a normal, monocular image.  This
+## automatically adjusts the lens that is used to render to this DisplayRegion
+## to its left or right eye, according to the lens's stereo properties.
+##
+## When the DisplayRegion is attached to a stereo window (one for which
+## is_stereo() returns true), this also specifies which physical channel the
+## DisplayRegion renders to.
+##
+## Normally you would create at least two DisplayRegions for a stereo window,
+## one for each of the left and right channels.  The two DisplayRegions may
+## share the same camera (and thus the same lens); this parameter is used to
+## control the exact properties of the lens when it is used to render into
+## this DisplayRegion.
+##
+## Also see the StereoDisplayRegion, which automates managing a pair of
+## left/right DisplayRegions.
+##
+## An ordinary DisplayRegion may be set to SC_mono, SC_left, or SC_right.  You
+## may set SC_stereo only on a StereoDisplayRegion.
+##
+## This call also resets tex_view_offset to its default value, which is 0 for
+## the left eye or 1 for the right eye of a stereo display region, or 0 for a
+## mono display region.
 
 func texViewOffset*(this: DisplayRegion): int {.importcpp: "#->get_tex_view_offset()".} ## \
 ## Returns the current texture view offset for this DisplayRegion.  This is
@@ -11043,6 +13648,13 @@ func supportsDualSourceBlending*(this: GraphicsStateGuardian): bool {.importcpp:
 ## Returns true if dual source (incoming1_color and incoming1_alpha) blend
 ## operands are supported by this GSG.
 
+func shaderModel*(this: GraphicsStateGuardian): GraphicsStateGuardian_ShaderModel {.importcpp: "#->get_shader_model()".} ## \
+## Returns the ShaderModel
+
+proc `shaderModel=`*(this: GraphicsStateGuardian, shader_model: GraphicsStateGuardian_ShaderModel) {.importcpp: "#->set_shader_model(#)".} ## \
+## Sets the ShaderModel.  This will override the auto- detected shader model
+## during GSG reset.  Useful for testing lower-end shaders.
+
 func coordinateSystem*(this: GraphicsStateGuardian): CoordinateSystem {.importcpp: "#->get_coordinate_system()".} ## \
 ## Returns the coordinate system in effect on this particular gsg.  Normally,
 ## this will be the default coordinate system, but it might be set differently
@@ -11055,6 +13667,22 @@ func preparedObjects*(this: GraphicsStateGuardian): PreparedGraphicsObjects {.im
 func gamma*(this: GraphicsStateGuardian): float32 {.importcpp: "#->get_gamma()".}
 
 proc `gamma=`*(this: GraphicsStateGuardian, gamma: float32): bool {.importcpp: "#->set_gamma(#)".}
+
+func textureQualityOverride*(this: GraphicsStateGuardian): Texture_QualityLevel {.importcpp: "#->get_texture_quality_override()".} ## \
+## Returns the global quality_level override specified by
+## set_texture_quality_override.
+##
+## This is mainly useful for the tinydisplay software renderer.  See
+## Texture::set_quality_level().
+
+proc `textureQualityOverride=`*(this: GraphicsStateGuardian, quality_level: Texture_QualityLevel) {.importcpp: "#->set_texture_quality_override(#)".} ## \
+## Specifies the global quality_level to be imposed for all Textures rendered
+## by this GSG.  This overrides the value set on individual textures via
+## Texture::set_quality_level().  Set this to Texture::QL_default in order to
+## allow the individual texture quality levels to be respected.
+##
+## This is mainly useful for the tinydisplay software renderer.  See
+## Texture::set_quality_level().
 
 func flashTexture*(this: GraphicsStateGuardian): Texture {.importcpp: "#->get_flash_texture()".}
 
@@ -11422,6 +14050,9 @@ func name*(this: Event): string {.importcpp: "nimStringFromStdString(#->get_name
 
 proc `name=`*(this: Event, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.}
 
+func animationType*(this: GeomVertexAnimationSpec): GeomEnums_AnimationType {.importcpp: "#.get_animation_type()".} ## \
+## Returns the type of animation represented by this spec.
+
 func numTransforms*(this: GeomVertexAnimationSpec): int {.importcpp: "#.get_num_transforms()".} ## \
 ## This is only meaningful for animation_type AT_hardware.  It specifies the
 ## maximum number of transforms that might be simultaneously applied to any
@@ -11508,6 +14139,16 @@ func saveFile*(_: typedesc[VertexDataPage]): VertexDataSaveFile {.importcpp: "Ve
 func arrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
 
+func usageHint*(this: GeomVertexArrayData): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint that describes to the rendering backend how often
+## the vertex data will be modified and/or rendered.  See geomEnums.h.
+
+proc `usageHint=`*(this: GeomVertexArrayData, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for this array.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
+
 func dataSizeBytes*(this: GeomVertexArrayData): clonglong {.importcpp: "#->get_data_size_bytes()".} ## \
 ## Returns the number of bytes stored in the array.
 
@@ -11516,6 +14157,8 @@ func modified*(this: GeomVertexArrayData): UpdateSeq {.importcpp: "#->get_modifi
 ## the array vertex data is modified.
 
 func arrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
+
+func usageHint*(this: GeomVertexArrayDataHandle): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".}
 
 func dataSizeBytes*(this: GeomVertexArrayDataHandle): clonglong {.importcpp: "#->get_data_size_bytes()".}
 
@@ -11592,6 +14235,22 @@ func name*(this: GeomVertexData): string {.importcpp: "nimStringFromStdString(#-
 proc `name=`*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
+
+func usageHint*(this: GeomVertexData): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint that was passed to the constructor, and which will
+## be passed to each array data object created initially, and arrays created
+## as the result of a convert_to() operation.  See geomEnums.h.
+##
+## However, each individual array may be replaced with a different array
+## object with an independent usage hint specified, so there is no guarantee
+## that the individual arrays all have the same usage_hint.
+
+proc `usageHint=`*(this: GeomVertexData, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for this vertex data, and for all of the arrays
+## that share this data.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
 
 func format*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
@@ -11671,9 +14330,31 @@ func resident*(this: BufferContext): bool {.importcpp: "#->get_resident()".} ## 
 ## Returns the resident flag associated with this object.  An object is
 ## considered "resident" if it appears to be resident in texture memory.
 
+func primitiveType*(this: GeomPrimitive): GeomEnums_PrimitiveType {.importcpp: "#->get_primitive_type()".}
+
 func geomRendering*(this: GeomPrimitive): int {.importcpp: "#->get_geom_rendering()".} ## \
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this primitive.
+
+func shadeModel*(this: GeomPrimitive): GeomEnums_ShadeModel {.importcpp: "#->get_shade_model()".} ## \
+## Returns the ShadeModel hint for this primitive.  This is intended as a hint
+## to the renderer to tell it how the per-vertex colors and normals are
+## applied.
+
+func usageHint*(this: GeomPrimitive): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint for this primitive.  See geomEnums.h.  This has
+## nothing to do with the usage hint associated with the primitive's vertices;
+## this only specifies how often the vertex indices that define the primitive
+## will be modified.
+##
+## It is perfectly legal (and, in fact, common) for a GeomPrimitive to have
+## UH_static on itself, while referencing vertex data with UH_dynamic.  This
+## means that the vertices themselves will be animated, but the primitive will
+## always reference the same set of vertices from the pool.
+
+func indexType*(this: GeomPrimitive): GeomEnums_NumericType {.importcpp: "#->get_index_type()".} ## \
+## Returns the numeric type of the index column.  Normally, this will be
+## either NT_uint16 or NT_uint32.
 
 func numBytes*(this: GeomPrimitive): int {.importcpp: "#->get_num_bytes()".} ## \
 ## Returns the number of bytes consumed by the primitive and its index
@@ -11805,6 +14486,12 @@ func binormalName*(this: TextureStage): InternalName {.importcpp: "#->get_binorm
 ## Returns the set of binormals this texture stage will use.  This is the same
 ## as get_binormal_name(), except that the first part is "binormal".
 
+func mode*(this: TextureStage): TextureStage_Mode {.importcpp: "#->get_mode()".} ## \
+## Return the mode of this stage
+
+proc `mode=`*(this: TextureStage, mode: TextureStage_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Set the mode of this texture stage
+
 func color*(this: TextureStage): LColor {.importcpp: "#->get_color()".} ## \
 ## return the color for this stage
 
@@ -11862,6 +14549,17 @@ func default*(_: typedesc[TextureStage]): TextureStage {.importcpp: "TextureStag
 ## does not name a particular stage.  This generally handles the normal
 ## single-texture case.
 
+func primitiveType*(this: Geom): GeomEnums_PrimitiveType {.importcpp: "#->get_primitive_type()".} ## \
+## Returns the fundamental primitive type that is common to all GeomPrimitives
+## added within the Geom.  All nested primitives within a particular Geom must
+## be the same type (that is, you can mix triangles and tristrips, because
+## they are both the same fundamental type PT_polygons, but you cannot mix
+## triangles and points withn the same Geom).
+
+func shadeModel*(this: Geom): GeomEnums_ShadeModel {.importcpp: "#->get_shade_model()".} ## \
+## Returns the shade model common to all of the individual GeomPrimitives that
+## have been added to the geom.
+
 func geomRendering*(this: Geom): int {.importcpp: "#->get_geom_rendering()".} ## \
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this Geom.
@@ -11882,7 +14580,73 @@ func modified*(this: Geom): UpdateSeq {.importcpp: "#->get_modified()".} ## \
 ## modified.  However, this does not include modifications to the vertex data,
 ## which should be tested separately.
 
+func boundsType*(this: Geom): BoundingVolume_BoundsType {.importcpp: "#->get_bounds_type()".} ## \
+## Returns the bounding volume type set with set_bounds_type().
+
+proc `boundsType=`*(this: Geom, bounds_type: BoundingVolume_BoundsType) {.importcpp: "#->set_bounds_type(#)".} ## \
+## Specifies the desired type of bounding volume that will be created for this
+## Geom.  This is normally BoundingVolume::BT_default, which means to set the
+## type according to the config variable "bounds-type".
+##
+## If this is BT_sphere or BT_box, a BoundingSphere or BoundingBox is
+## explicitly created.  If it is BT_best, a BoundingBox is created.
+##
+## This affects the implicit bounding volume only.  If an explicit bounding
+## volume is set on the Geom with set_bounds(), that bounding volume type is
+## used.  (This is different behavior from the similar method on PandaNode.)
+
 func geom*(this: GeomContext): Geom {.importcpp: "#.get_geom()".}
+
+func wrapU*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_u()".} ## \
+## Returns the wrap mode of the texture in the U direction.
+
+proc `wrapU=`*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_u(#)".} ## \
+## This setting determines what happens when the SamplerState is sampled with
+## a U value outside the range 0.0-1.0.  The default is WM_repeat, which
+## indicates that the SamplerState should repeat indefinitely.
+
+func wrapV*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_v()".} ## \
+## Returns the wrap mode of the texture in the V direction.
+
+proc `wrapV=`*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_v(#)".} ## \
+## This setting determines what happens when the SamplerState is sampled with
+## a V value outside the range 0.0-1.0.  The default is WM_repeat, which
+## indicates that the SamplerState should repeat indefinitely.
+
+func wrapW*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_w()".} ## \
+## Returns the wrap mode of the texture in the W direction.  This is the depth
+## direction of 3-d textures.
+
+proc `wrapW=`*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_w(#)".} ## \
+## The W wrap direction is only used for 3-d SamplerStates.
+
+func minfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_minfilter()".} ## \
+## Returns the filter mode of the texture for minification.  If this is one of
+## the mipmap constants, then the texture requires mipmaps.  This may return
+## FT_default; see also get_effective_minfilter().
+
+proc `minfilter=`*(this: SamplerState, filter: SamplerState_FilterType) {.importcpp: "#.set_minfilter(#)".} ## \
+## Sets the filtering method that should be used when viewing the SamplerState
+## from a distance.
+
+func magfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification.  The mipmap
+## constants are invalid here.  This may return FT_default; see also
+## get_effective_minfilter().
+
+proc `magfilter=`*(this: SamplerState, filter: SamplerState_FilterType) {.importcpp: "#.set_magfilter(#)".} ## \
+## Sets the filtering method that should be used when viewing the SamplerState
+## up close.
+
+func effectiveMinfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_effective_minfilter()".} ## \
+## Returns the filter mode of the texture for minification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+
+func effectiveMagfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_effective_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
 
 func anisotropicDegree*(this: SamplerState): int {.importcpp: "#.get_anisotropic_degree()".} ## \
 ## Returns the degree of anisotropic filtering that should be applied to the
@@ -12371,6 +15135,20 @@ func videoHeight*(this: VideoTexture): int {.importcpp: "#->get_video_height()".
 ## necessarily the height of the actual texture, since the texture may have
 ## been expanded to raise it to a power of 2.
 
+func mode*(_: typedesc[TextureStagePool]): TextureStagePool_Mode {.importcpp: "TextureStagePool::get_mode()", header: "textureStagePool.h".} ## \
+## Returns the fundamental operating mode of the TextureStagePool.  See
+## set_mode().
+
+proc `mode=`*(_: typedesc[TextureStagePool], mode: TextureStagePool_Mode) {.importcpp: "#TextureStagePool::set_mode(#)", header: "textureStagePool.h".} ## \
+## Specifies the fundamental operating mode of the TextureStagePool.
+##
+## If this is M_none, each call to get_stage() returns the same TextureStage
+## pointer that was passed in (the pool is effectively disabled).  If this is
+## M_name, each call to get_stage() returns the last TextureStage passed in
+## with the same name, whether it has different properties or not.  If this is
+## M_unique, then each call to get_stage() returns only TextureStages with
+## identical properties.
+
 proc `x=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_x(#)".}
 
 proc `y=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_y(#)".}
@@ -12595,6 +15373,19 @@ func curve*(this: RopeNode): NurbsCurveEvaluator {.importcpp: "#->get_curve()".}
 proc `curve=`*(this: RopeNode, curve: NurbsCurveEvaluator) {.importcpp: "#->set_curve(#)".} ## \
 ## Sets the particular curve represented by the RopeNode.
 
+func renderMode*(this: RopeNode): RopeNode_RenderMode {.importcpp: "#->get_render_mode()".} ## \
+## Returns the method used to render the rope.  See set_render_mode().
+
+proc `renderMode=`*(this: RopeNode, render_mode: RopeNode_RenderMode) {.importcpp: "#->set_render_mode(#)".} ## \
+## Specifies the method used to render the rope.  The simplest is RM_thread,
+## which just draws a one-pixel line segment.
+
+func uvMode*(this: RopeNode): RopeNode_UVMode {.importcpp: "#->get_uv_mode()".} ## \
+## Returns the algorithm to use to generate UV's for the rope.
+
+proc `uvMode=`*(this: RopeNode, uv_mode: RopeNode_UVMode) {.importcpp: "#->set_uv_mode(#)".} ## \
+## Specifies the algorithm to use to generate UV's for the rope.
+
 func uvDirection*(this: RopeNode): bool {.importcpp: "#->get_uv_direction()".} ## \
 ## Returns true if the rope runs down the U coordinate of the texture, or
 ## false if it runs down the V coordinate.
@@ -12610,6 +15401,15 @@ proc `uvScale=`*(this: RopeNode, scale: float32) {.importcpp: "#->set_uv_scale(#
 ## Specifies an additional scaling factor to apply to generated UV's along the
 ## rope.  This scale factor is applied in whichever direction is along the
 ## rope, as specified by set_uv_direction().
+
+func normalMode*(this: RopeNode): RopeNode_NormalMode {.importcpp: "#->get_normal_mode()".} ## \
+## Returns the kind of normals to generate for the rope.  This is only
+## applicable when the RenderMode is set to RM_tube.
+
+proc `normalMode=`*(this: RopeNode, normal_mode: RopeNode_NormalMode) {.importcpp: "#->set_normal_mode(#)".} ## \
+## Specifies the kind of normals to generate for the rope.  This is only
+## applicable when the RenderMode is set to RM_tube; in the other render
+## modes, normals are never generated.
 
 func tubeUp*(this: RopeNode): LVector3 {.importcpp: "#->get_tube_up()".} ## \
 ## Returns the normal vector used to control the "top" of the curve, when
@@ -12786,6 +15586,15 @@ proc `spaceAdvance=`*(this: TextFont, space_advance: float32) {.importcpp: "#->s
 func page*(this: DynamicTextGlyph): DynamicTextPage {.importcpp: "#->get_page()".} ## \
 ## Returns the DynamicTextPage that this glyph is on.
 
+func windingOrder*(this: FreetypeFont): FreetypeFont_WindingOrder {.importcpp: "#.get_winding_order()".} ## \
+## Returns the winding order set via set_winding_order().
+
+proc `windingOrder=`*(this: FreetypeFont, winding_order: FreetypeFont_WindingOrder) {.importcpp: "#.set_winding_order(#)".} ## \
+## Specifies an explicitly winding order on this particular font.  This is
+## only necessary if the render_mode is RM_polygon or RM_solid, and only if
+## FreeType appears to guess wrong on this font.  Normally, you should leave
+## this at WO_default.
+
 func pointSize*(this: DynamicTextFont): float32 {.importcpp: "#->get_point_size()".} ## \
 ## Returns the point size of the font.
 
@@ -12880,6 +15689,22 @@ proc `pageSize=`*(this: DynamicTextFont, x_size: int, y_size: int) {.importcpp: 
 ## Sets the x, y size of the textures that are created for the
 ## DynamicTextFont.
 
+func minfilter*(this: DynamicTextFont): SamplerState_FilterType {.importcpp: "#->get_minfilter()".} ## \
+## Returns the filter type used when minimizing the textures created for this
+## font.
+
+proc `minfilter=`*(this: DynamicTextFont, filter: SamplerState_FilterType) {.importcpp: "#->set_minfilter(#)".} ## \
+## Sets the filter type used when minimizing the textures created for this
+## font.
+
+func magfilter*(this: DynamicTextFont): SamplerState_FilterType {.importcpp: "#->get_magfilter()".} ## \
+## Returns the filter type used when enlarging the textures created for this
+## font.
+
+proc `magfilter=`*(this: DynamicTextFont, filter: SamplerState_FilterType) {.importcpp: "#->set_magfilter(#)".} ## \
+## Sets the filter type used when enlarging the textures created for this
+## font.
+
 func anisotropicDegree*(this: DynamicTextFont): int {.importcpp: "#->get_anisotropic_degree()".} ## \
 ## Returns the current anisotropic degree for textures created for this font.
 ## See set_anisotropic_degree().
@@ -12888,6 +15713,15 @@ proc `anisotropicDegree=`*(this: DynamicTextFont, anisotropic_degree: int) {.imp
 ## Enables or disables anisotropic filtering on the textures created for this
 ## font.  The default value is specified by the text-anisotropic-degree
 ## variable.  See Texture::set_anisotropic_degree().
+
+func renderMode*(this: DynamicTextFont): TextFont_RenderMode {.importcpp: "#->get_render_mode()".} ## \
+## Returns the way the glyphs on this particular font are generated.  See
+## set_render_mode().
+
+proc `renderMode=`*(this: DynamicTextFont, render_mode: TextFont_RenderMode) {.importcpp: "#->set_render_mode(#)".} ## \
+## Specifies the way the glyphs on this particular font are generated.  The
+## default is RM_texture, which is the only mode supported for bitmap fonts.
+## Other modes are possible for most modern fonts.
 
 func fg*(this: DynamicTextFont): LColor {.importcpp: "#->get_fg()".} ## \
 ## Returns the color of the foreground pixels of the font as they are rendered
@@ -12920,6 +15754,10 @@ proc `bg=`*(this: DynamicTextFont, bg: LColor) {.importcpp: "#->set_bg(#)".} ## 
 ##
 ## This should only be called before any characters have been requested out of
 ## the font, or immediately after calling clear().
+
+func texFormat*(this: DynamicTextFont): Texture_Format {.importcpp: "#->get_tex_format()".} ## \
+## Returns the texture format used to render the individual pages.  This is
+## set automatically according to the colors selected.
 
 func model*(this: TextGraphic): NodePath {.importcpp: "#.get_model()".} ## \
 ## Returns the NodePath associated with the graphic, that renders the desired
@@ -12956,6 +15794,16 @@ proc `instanceFlag=`*(this: TextGraphic, instance_flag: bool) {.importcpp: "#.se
 ## graphic is copied.  The default is false, which is best for most
 ## applications.  You might need to set it true for special kinds of
 ## "graphics" like interactive elements, for instance a PGEntry.
+
+func usageHint*(this: TextAssembler): GeomEnums_UsageHint {.importcpp: "#.get_usage_hint()".} ## \
+## Returns the UsageHint that will be applied to generated geometry.  See
+## set_usage_hint().
+
+proc `usageHint=`*(this: TextAssembler, usage_hint: GeomEnums_UsageHint) {.importcpp: "#.set_usage_hint(#)".} ## \
+## Specifies the UsageHint that will be applied to generated geometry.  The
+## default is UH_static, which is probably the right setting, but if you know
+## the TextNode's geometry will have a short lifespan, it may be better to set
+## it to UH_stream.  See geomEnums.h.
 
 func maxRows*(this: TextAssembler): int {.importcpp: "#.get_max_rows()".} ## \
 ## If max_rows is greater than zero, no more than max_rows will be accepted.
@@ -13233,12 +16081,12 @@ func cacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cache_f
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-func sourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
+func sourceTimestamp*(this: BamCacheRecord): Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-func recordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
+func recordedTime*(this: BamCacheRecord): Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 func data*(this: BamCacheRecord): TypedWritable {.importcpp: "#->get_data()".} ## \
@@ -13425,6 +16273,12 @@ func loaderOptions*(this: BamReader): LoaderOptions {.importcpp: "#.get_loader_o
 proc `loaderOptions=`*(this: BamReader, options: LoaderOptions) {.importcpp: "#.set_loader_options(#)".} ## \
 ## Specifies the LoaderOptions for this BamReader.
 
+func fileEndian*(this: BamReader): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## read.  This does not imply that every number is stored using the indicated
+## convention, but individual objects may choose to respect this flag when
+## recording data.
+
 func fileStdfloatDouble*(this: BamReader): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file stores all "standard" floats as 64-bit doubles, or
 ## false if they are 32-bit floats.  This is determined by the compilation
@@ -13443,11 +16297,22 @@ func filename*(this: BamWriter): Filename {.importcpp: "#.get_filename()".} ## \
 ## This enables the writer to convert pathnames in the BAM to relative to the
 ## directory containing the BAM.
 
+func fileEndian*(this: BamWriter): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## written.  This does not imply that every number is stored using the
+## indicated convention, but individual objects may choose to respect this
+## flag when recording data.
+
 func fileStdfloatDouble*(this: BamWriter): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file will store all "standard" floats as 64-bit
 ## doubles, or false if they are 32-bit floats.  This isn't runtime settable;
 ## it's based on the compilation flags of the version of Panda that generated
 ## this file.
+
+func fileTextureMode*(this: BamWriter): BamEnums_BamTextureMode {.importcpp: "#.get_file_texture_mode()".} ## \
+## Returns the BamTextureMode preference indicated by the Bam file currently
+## being written.  Texture objects written to this Bam file will be encoded
+## according to the specified mode.
 
 func rootNode*(this: BamWriter): TypedWritable {.importcpp: "#.get_root_node()".} ## \
 ## Returns the root node of the part of the scene graph we are currently
@@ -13479,6 +16344,48 @@ func alias*(this: ButtonHandle): ButtonHandle {.importcpp: "#.get_alias()".} ## 
 ## Each button is allowed to have one alias, and multiple different buttons
 ## can refer to the same alias.  The alias should be the more general name for
 ## the button, for instance, shift is an alias for lshift, but not vice-versa.
+
+func mode*(this: ClockObject): ClockObject_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the current mode of the clock.  See set_mode().
+
+proc `mode=`*(this: ClockObject, mode: ClockObject_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Changes the mode of the clock.  Normally, the clock is in mode M_normal.
+## In this mode, each call to tick() will set the value returned by
+## get_frame_time() to the current real time; thus, the clock simply reports
+## time advancing.
+##
+## Other possible modes:
+##
+## M_non_real_time - the clock ignores real time completely; at each call to
+## tick(), it pretends that exactly dt seconds have elapsed since the last
+## call to tick().  You may set the value of dt with set_dt() or
+## set_frame_rate().
+##
+## M_limited - the clock will run as fast as it can, as in M_normal, but will
+## not run faster than the rate specified by set_frame_rate().  If the
+## application would run faster than this rate, the clock will slow down the
+## application.
+##
+## M_integer - the clock will run as fast as it can, but the rate will be
+## constrained to be an integer multiple or divisor of the rate specified by
+## set_frame_rate().  The clock will slow down the application a bit to
+## guarantee this.
+##
+## M_integer_limited - a combination of M_limited and M_integer; the clock
+## will not run faster than set_frame_rate(), and if it runs slower, it will
+## run at a integer divisor of that rate.
+##
+## M_forced - the clock forces the application to run at the rate specified by
+## set_frame_rate().  If the application would run faster than this rate, the
+## clock will slow down the application; if the application would run slower
+## than this rate, the clock slows down time so that the application believes
+## it is running at the given rate.
+##
+## M_degrade - the clock runs at real time, but the application is slowed down
+## by a set factor of its frame rate, specified by set_degrade_factor().
+##
+## M_slave - the clock does not advance, but relies on the user to call
+## set_frame_time() and/or set_frame_count() each frame.
 
 func frameTime*(this: ClockObject, current_thread: Thread): float64 {.importcpp: "#->get_frame_time(#)".} ## \
 ## Returns the time in seconds as of the last time tick() was called
@@ -13788,6 +16695,19 @@ proc getParentTowards*(this: TypeHandle, ancestor: TypeHandle): TypeHandle {.imp
 ## owns this TypeHandle.  It is only used in case the TypeHandle is
 ## inadvertantly undefined.
 
+proc getMemoryUsage*(this: TypeHandle, memory_class: TypeHandle_MemoryClass): clonglong {.importcpp: "#.get_memory_usage(#)".} ## \
+## Returns the total allocated memory used by objects of this type, for the
+## indicated memory class.  This is only updated if track-memory-usage is set
+## true in your Config.prc file.
+
+proc incMemoryUsage*(this: TypeHandle, memory_class: TypeHandle_MemoryClass, size: clonglong) {.importcpp: "#.inc_memory_usage(#, #)".} ## \
+## Adds the indicated amount to the record for the total allocated memory for
+## objects of this type.
+
+proc decMemoryUsage*(this: TypeHandle, memory_class: TypeHandle_MemoryClass, size: clonglong) {.importcpp: "#.dec_memory_usage(#, #)".} ## \
+## Subtracts the indicated amount from the record for the total allocated
+## memory for objects of this type.
+
 proc getIndex*(this: TypeHandle): int {.importcpp: "#.get_index()".} ## \
 ## Returns the integer index associated with this TypeHandle.  Each different
 ## TypeHandle will have a different index.  However, you probably shouldn't be
@@ -13931,6 +16851,8 @@ proc tellg*(this: istream): clonglong {.importcpp: "#.tellg()".}
 
 proc seekg*(this: istream, pos: clonglong) {.importcpp: "#.seekg(#)".}
 
+proc seekg*(this: istream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekg(#, #)".}
+
 converter upcastToIstream*(this: iostream): istream {.importcpp: "#.upcast_to_istream()".}
 
 proc put*(this: ostream, c: char) {.importcpp: "#.put(#)".}
@@ -13940,6 +16862,8 @@ proc flush*(this: ostream) {.importcpp: "#.flush()".}
 proc tellp*(this: ostream): clonglong {.importcpp: "#.tellp()".}
 
 proc seekp*(this: ostream, pos: clonglong) {.importcpp: "#.seekp(#)".}
+
+proc seekp*(this: ostream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekp(#, #)".}
 
 converter upcastToOstream*(this: iostream): ostream {.importcpp: "#.upcast_to_ostream()".}
 
@@ -13985,6 +16909,27 @@ proc newTextEncoder*(): TextEncoder {.importcpp: "new TextEncoder()".}
 
 proc newTextEncoder*(copy: TextEncoder): TextEncoder {.importcpp: "new TextEncoder(#)".}
 
+proc setEncoding*(this: TextEncoder, encoding: TextEncoder_Encoding) {.importcpp: "#->set_encoding(#)".} ## \
+## Specifies how the string set via set_text() is to be interpreted.  The
+## default, E_iso8859, means a standard string with one-byte characters (i.e.
+## ASCII).  Other encodings are possible to take advantage of character sets
+## with more than 256 characters.
+##
+## This affects only future calls to set_text(); it does not change text that
+## was set previously.
+
+proc getEncoding*(this: TextEncoder): TextEncoder_Encoding {.importcpp: "#->get_encoding()".} ## \
+## Returns the encoding by which the string set via set_text() is to be
+## interpreted.  See set_encoding().
+
+proc setDefaultEncoding*(_: typedesc[TextEncoder], encoding: TextEncoder_Encoding) {.importcpp: "#TextEncoder::set_default_encoding(#)", header: "textEncoder.h".} ## \
+## Specifies the default encoding to be used for all subsequently created
+## TextEncoder objects.  See set_encoding().
+
+proc getDefaultEncoding*(_: typedesc[TextEncoder]): TextEncoder_Encoding {.importcpp: "TextEncoder::get_default_encoding()", header: "textEncoder.h".} ## \
+## Specifies the default encoding to be used for all subsequently created
+## TextEncoder objects.  See set_encoding().
+
 proc clearText*(this: TextEncoder) {.importcpp: "#->clear_text()".} ## \
 ## Removes the text from the TextEncoder.
 
@@ -14021,6 +16966,10 @@ proc getEncodedChar*(this: TextEncoder, index: clonglong): string {.importcpp: "
 ## Returns the nth char of the stored text, as a one-, two-, or three-byte
 ## encoded string.
 
+proc getEncodedChar*(this: TextEncoder, index: clonglong, encoding: TextEncoder_Encoding): string {.importcpp: "nimStringFromStdString(#->get_encoded_char(#, #))", header: stringConversionCode.} ## \
+## Returns the nth char of the stored text, as a one-, two-, or three-byte
+## encoded string.
+
 proc getTextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdString(#->get_text_as_ascii())", header: stringConversionCode.} ## \
 ## Returns the text associated with the node, converted as nearly as possible
 ## to a fully-ASCII representation.  This means replacing accented letters
@@ -14033,6 +16982,12 @@ proc getTextAsAscii*(this: TextEncoder): string {.importcpp: "nimStringFromStdSt
 ## the ASCII character set.)  In this case, as much of the string as possible
 ## will be converted to ASCII, and the nonconvertible characters will remain
 ## encoded in the encoding specified by set_encoding().
+
+proc reencodeText*(_: typedesc[TextEncoder], text: string, `from`: TextEncoder_Encoding, to: TextEncoder_Encoding): string {.importcpp: "nimStringFromStdString(#TextEncoder::reencode_text(nimStringToStdString(#), #, #))", header: "textEncoder.h".} ## \
+## Given the indicated text string, which is assumed to be encoded via the
+## encoding "from", decodes it and then reencodes it into the encoding "to",
+## and returns the newly encoded string.  This does not change or affect any
+## properties on the TextEncoder itself.
 
 proc unicodeIsalpha*(_: typedesc[TextEncoder], character: int): bool {.importcpp: "#TextEncoder::unicode_isalpha(#)", header: "textEncoder.h".} ## \
 ## Returns true if the indicated character is an alphabetic letter, false
@@ -14070,9 +17025,17 @@ proc upper*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimS
 ## Converts the string to uppercase, assuming the string is encoded in the
 ## default encoding.
 
+proc upper*(_: typedesc[TextEncoder], source: string, encoding: TextEncoder_Encoding): string {.importcpp: "nimStringFromStdString(#TextEncoder::upper(nimStringToStdString(#), #))", header: "textEncoder.h".} ## \
+## Converts the string to uppercase, assuming the string is encoded in the
+## indicated encoding.
+
 proc lower*(_: typedesc[TextEncoder], source: string): string {.importcpp: "nimStringFromStdString(#TextEncoder::lower(nimStringToStdString(#)))", header: "textEncoder.h".} ## \
 ## Converts the string to lowercase, assuming the string is encoded in the
 ## default encoding.
+
+proc lower*(_: typedesc[TextEncoder], source: string, encoding: TextEncoder_Encoding): string {.importcpp: "nimStringFromStdString(#TextEncoder::lower(nimStringToStdString(#), #))", header: "textEncoder.h".} ## \
+## Converts the string to lowercase, assuming the string is encoded in the
+## indicated encoding.
 
 proc setWtext*(this: TextEncoder, wtext: string) {.importcpp: "#->set_wtext(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Changes the text that is stored in the encoder.  Subsequent calls to
@@ -14130,6 +17093,20 @@ proc patternFilename*(_: typedesc[Filename], filename: string): Filename {.impor
 ## Constructs a filename that represents a sequence of numbered files.  See
 ## set_pattern().
 
+proc fromOsSpecific*(_: typedesc[Filename], os_specific: string, `type`: Filename_Type): Filename {.importcpp: "#Filename::from_os_specific(nimStringToStdString(#), #)", header: "filename.h".} ## \
+## This named constructor returns a Panda-style filename (that is, using
+## forward slashes, and no drive letter) based on the supplied filename string
+## that describes a filename in the local system conventions (for instance, on
+## Windows, it may use backslashes or begin with a drive letter and a colon).
+##
+## Use this function to create a Filename from an externally-given filename
+## string.  Use to_os_specific() again later to reconvert it back to the local
+## operating system's conventions.
+##
+## This function will do the right thing even if the filename is partially
+## local conventions and partially Panda conventions; e.g.  some backslashes
+## and some forward slashes.
+
 proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "#Filename::from_os_specific(nimStringToStdString(#))", header: "filename.h".} ## \
 ## This named constructor returns a Panda-style filename (that is, using
 ## forward slashes, and no drive letter) based on the supplied filename string
@@ -14144,14 +17121,32 @@ proc fromOsSpecific*(_: typedesc[Filename], os_specific: string): Filename {.imp
 ## local conventions and partially Panda conventions; e.g.  some backslashes
 ## and some forward slashes.
 
+proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string, `type`: Filename_Type): Filename {.importcpp: "#Filename::from_os_specific_w(nimStringToStdString(#), #)", header: "filename.h".} ## \
+## The wide-string variant of from_os_specific(). Returns a new Filename,
+## converted from an os-specific wide-character string.
+
 proc fromOsSpecificW*(_: typedesc[Filename], os_specific: string): Filename {.importcpp: "#Filename::from_os_specific_w(nimStringToStdString(#))", header: "filename.h".} ## \
 ## The wide-string variant of from_os_specific(). Returns a new Filename,
 ## converted from an os-specific wide-character string.
+
+proc expandFrom*(_: typedesc[Filename], user_string: string, `type`: Filename_Type): Filename {.importcpp: "#Filename::expand_from(nimStringToStdString(#), #)", header: "filename.h".} ## \
+## Returns the same thing as from_os_specific(), but embedded environment
+## variable references (e.g.  "$DMODELS/foo.txt") are expanded out.  It also
+## automatically elevates the file to its true case if needed.
 
 proc expandFrom*(_: typedesc[Filename], user_string: string): Filename {.importcpp: "#Filename::expand_from(nimStringToStdString(#))", header: "filename.h".} ## \
 ## Returns the same thing as from_os_specific(), but embedded environment
 ## variable references (e.g.  "$DMODELS/foo.txt") are expanded out.  It also
 ## automatically elevates the file to its true case if needed.
+
+proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string, `type`: Filename_Type): Filename {.importcpp: "#Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), #)", header: "filename.h".} ## \
+## Generates a temporary filename within the indicated directory, using the
+## indicated prefix.  If the directory is empty, a system-defined directory is
+## chosen instead.
+##
+## The generated filename did not exist when the Filename checked, but since
+## it does not specifically create the file, it is possible that another
+## process could simultaneously create a file by the same name.
 
 proc temporary*(_: typedesc[Filename], dirname: string, prefix: string, suffix: string): Filename {.importcpp: "#Filename::temporary(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "filename.h".} ## \
 ## Generates a temporary filename within the indicated directory, using the
@@ -14285,6 +17280,17 @@ proc isBinaryOrText*(this: Filename): bool {.importcpp: "#.is_binary_or_text()".
 ## Returns true either is_binary() or is_text() is true; that is, that the
 ## filename has been specified as either binary or text.  If this is false,
 ## the filename has not been specified.
+
+proc setType*(this: Filename, `type`: Filename_Type) {.importcpp: "#.set_type(#)".} ## \
+## Sets the type of the file represented by the filename.  This is useful for
+## to_os_specific(), resolve_filename(), test_existence(), and all such real-
+## world access functions.  It helps the Filename know how to map the internal
+## filename to the OS-specific filename (for instance, maybe executables
+## should have an .exe extension).
+
+proc getType*(this: Filename): Filename_Type {.importcpp: "#.get_type()".} ## \
+## Returns the type of the file represented by the filename, as previously set
+## by set_type().
 
 proc setPattern*(this: Filename, pattern: bool) {.importcpp: "#.set_pattern(#)".} ## \
 ## Sets the flag indicating whether this is a filename pattern.  When this is
@@ -14477,7 +17483,7 @@ proc compareTimestamps*(this: Filename, other: Filename): int {.importcpp: "#.co
 ## will be treated as if it were newer than any other file.  Similarly for
 ## other_missing_is_old.
 
-proc getTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_timestamp()".} ## \
+proc getTimestamp*(this: Filename): Time {.importcpp: "#.get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -14487,7 +17493,7 @@ proc getTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_timestamp()"
 ## by the operating system or because there is some error (such as file not
 ## found), returns 0.
 
-proc getAccessTimestamp*(this: Filename): time_t.Time {.importcpp: "#.get_access_timestamp()".} ## \
+proc getAccessTimestamp*(this: Filename): Time {.importcpp: "#.get_access_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last accessed,
 ## if this information is available.  See also get_timestamp(), which returns
 ## the last modification time.
@@ -14716,6 +17722,16 @@ proc getHash*(this: Filename): int {.importcpp: "#.get_hash()".} ## \
 ## Filenames.
 
 proc output*(this: Filename, `out`: ostream) {.importcpp: "#.output(#)".}
+
+proc setFilesystemEncoding*(_: typedesc[Filename], encoding: TextEncoder_Encoding) {.importcpp: "#Filename::set_filesystem_encoding(#)", header: "filename.h".} ## \
+## Specifies the default encoding to be used for all subsequent Filenames.
+## This is used to represent wide-character (Unicode) filenames internally.
+## On non-Windows-based systems, the encoded filename is also passed to the
+## underlying operating system.
+
+proc getFilesystemEncoding*(_: typedesc[Filename]): TextEncoder_Encoding {.importcpp: "Filename::get_filesystem_encoding()", header: "filename.h".} ## \
+## Specifies the default encoding to be used for all subsequent Filenames
+## objects.  See set_filesystem_encoding().
 
 converter getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
 
@@ -15184,6 +18200,10 @@ proc isUsed*(this: ConfigVariableCore): bool {.importcpp: "#.is_used()".} ## \
 ## Returns true if the variable has been referenced by a ConfigVariable
 ## somewhere in code, false otherwise.
 
+proc getValueType*(this: ConfigVariableCore): ConfigFlags_ValueType {.importcpp: "#.get_value_type()".} ## \
+## Returns the stated type of this variable.  If the variable has not yet been
+## defined, this will be VT_undefined.
+
 proc getDescription*(this: ConfigVariableCore): string {.importcpp: "nimStringFromStdString(#.get_description())", header: stringConversionCode.} ## \
 ## Returns the brief description of this variable, if it has been defined.
 
@@ -15220,6 +18240,11 @@ proc isDynamic*(this: ConfigVariableCore): bool {.importcpp: "#.is_dynamic()".} 
 proc getDefaultValue*(this: ConfigVariableCore): ConfigDeclaration {.importcpp: "#.get_default_value()".} ## \
 ## Returns the default variable specified for this variable.  If the variable
 ## has not yet been defined, this will return NULL.
+
+proc setValueType*(this: ConfigVariableCore, value_type: ConfigFlags_ValueType) {.importcpp: "#.set_value_type(#)".} ## \
+## Specifies the type of this variable.  See get_value_type().  It is not an
+## error to call this multiple times, but if the value changes once
+## get_declaration() has been called, a warning is printed.
 
 proc setFlags*(this: ConfigVariableCore, flags: int) {.importcpp: "#.set_flags(#)".} ## \
 ## Specifies the trust level of this variable.  See get_flags().  It is not an
@@ -15573,6 +18598,63 @@ proc makeVariable*(this: ConfigVariableManager, name: string): ConfigVariableCor
 ## name; or if a variable with this name has already been created, returns
 ## that one instead.
 
+proc makeVariableTemplate*(this: ConfigVariableManager, pattern: string, `type`: ConfigFlags_ValueType, default_value: string, description: string, flags: int): ConfigVariableCore {.importcpp: "#.make_variable_template(nimStringToStdString(#), #, nimStringToStdString(#), nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+## Defines a variable "template" to match against dynamically-defined
+## variables that may or may not be created in the future.
+##
+## The template consists of a glob pattern, e.g.  `notify-level-\*`, which will
+## be tested against any config variable passed to a future call to
+## make_variable().  If the pattern matches, the returned ConfigVariableCore
+## is copied to define the new variable, instead of creating a default, empty
+## one.
+##
+## This is useful to pre-specify default values for a family of variables that
+## all have similar properties, and all may not be created at the same time.
+## It is especially useful to avoid cluttering up the list of available
+## variables with user-declared variables that have not been defined yet by
+## the application (e.g. `egg-object-type-\*`).
+##
+## This method basically pre-defines all variables that match the specified
+## glob pattern.
+
+proc makeVariableTemplate*(this: ConfigVariableManager, pattern: string, `type`: ConfigFlags_ValueType, default_value: string, description: string): ConfigVariableCore {.importcpp: "#.make_variable_template(nimStringToStdString(#), #, nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.} ## \
+## Defines a variable "template" to match against dynamically-defined
+## variables that may or may not be created in the future.
+##
+## The template consists of a glob pattern, e.g.  `notify-level-\*`, which will
+## be tested against any config variable passed to a future call to
+## make_variable().  If the pattern matches, the returned ConfigVariableCore
+## is copied to define the new variable, instead of creating a default, empty
+## one.
+##
+## This is useful to pre-specify default values for a family of variables that
+## all have similar properties, and all may not be created at the same time.
+## It is especially useful to avoid cluttering up the list of available
+## variables with user-declared variables that have not been defined yet by
+## the application (e.g. `egg-object-type-\*`).
+##
+## This method basically pre-defines all variables that match the specified
+## glob pattern.
+
+proc makeVariableTemplate*(this: ConfigVariableManager, pattern: string, `type`: ConfigFlags_ValueType, default_value: string): ConfigVariableCore {.importcpp: "#.make_variable_template(nimStringToStdString(#), #, nimStringToStdString(#))", header: stringConversionCode.} ## \
+## Defines a variable "template" to match against dynamically-defined
+## variables that may or may not be created in the future.
+##
+## The template consists of a glob pattern, e.g.  `notify-level-\*`, which will
+## be tested against any config variable passed to a future call to
+## make_variable().  If the pattern matches, the returned ConfigVariableCore
+## is copied to define the new variable, instead of creating a default, empty
+## one.
+##
+## This is useful to pre-specify default values for a family of variables that
+## all have similar properties, and all may not be created at the same time.
+## It is especially useful to avoid cluttering up the list of available
+## variables with user-declared variables that have not been defined yet by
+## the application (e.g. `egg-object-type-\*`).
+##
+## This method basically pre-defines all variables that match the specified
+## glob pattern.
+
 proc getNumVariables*(this: ConfigVariableManager): clonglong {.importcpp: "#.get_num_variables()".} ## \
 ## Returns the current number of active ConfigVariableCores in the world.
 
@@ -15617,6 +18699,10 @@ proc getGlobalPtr*(_: typedesc[ConfigVariableManager]): ConfigVariableManager {.
 
 proc getName*(this: ConfigVariableBase): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.} ## \
 ## Returns the name of the variable.
+
+proc getValueType*(this: ConfigVariableBase): ConfigFlags_ValueType {.importcpp: "#.get_value_type()".} ## \
+## Returns the stated type of this variable.  This should be VT_list, unless a
+## later variable declaration has changed it.
 
 proc getDescription*(this: ConfigVariableBase): string {.importcpp: "nimStringFromStdString(#.get_description())", header: stringConversionCode.} ## \
 ## Returns the brief description of this variable, if it has been defined.
@@ -16504,6 +19590,8 @@ proc isClosed*(this: ISocketStream): bool {.importcpp: "#->is_closed()".}
 
 proc close*(this: ISocketStream) {.importcpp: "#->close()".}
 
+proc getReadState*(this: ISocketStream): ISocketStream_ReadState {.importcpp: "#->get_read_state()".}
+
 converter upcastToOstream*(this: OSocketStream): ostream {.importcpp: "#.upcast_to_ostream()".}
 
 converter upcastToSSWriter*(this: OSocketStream): SSWriter {.importcpp: "#.upcast_to_SSWriter()".}
@@ -16752,7 +19840,7 @@ converter initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStri
 ## Decodes the string into a sensible date.  Returns 0 (!is_valid()) if the
 ## string cannot be correctly decoded.
 
-converter initHTTPDate*(time: time_t.Time): HTTPDate {.importcpp: "HTTPDate(#)".}
+converter initHTTPDate*(time: Time): HTTPDate {.importcpp: "HTTPDate(#)".}
 
 proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "httpDate.h".} ## \
 ## Returns an HTTPDate that represents the current time and date.
@@ -16763,7 +19851,7 @@ proc isValid*(this: HTTPDate): bool {.importcpp: "#.is_valid()".} ## \
 
 proc getString*(this: HTTPDate): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
 
-proc getTime*(this: HTTPDate): time_t.Time {.importcpp: "#.get_time()".} ## \
+proc getTime*(this: HTTPDate): Time {.importcpp: "#.get_time()".} ## \
 ## Returns the date as a C time_t value.
 
 proc `==`*(this: HTTPDate, other: HTTPDate): bool {.importcpp: "#.operator ==(#)".}
@@ -17074,15 +20162,40 @@ proc clearPreapprovedServerCertificates*(this: HTTPClient, url: URLSpec) {.impor
 proc clearAllPreapprovedServerCertificates*(this: HTTPClient) {.importcpp: "#->clear_all_preapproved_server_certificates()".} ## \
 ## Removes all preapproved server certificates for all servers.
 
+proc setHttpVersion*(this: HTTPClient, version: HTTPEnum_HTTPVersion) {.importcpp: "#->set_http_version(#)".} ## \
+## Specifies the version of HTTP that the client uses to identify itself to
+## the server.  The default is HV_11, or HTTP 1.0; you can set this to HV_10
+## (HTTP 1.0) to request the server use the older interface.
+
+proc getHttpVersion*(this: HTTPClient): HTTPEnum_HTTPVersion {.importcpp: "#->get_http_version()".} ## \
+## Returns the client's current setting for HTTP version.  See
+## set_http_version().
+
 proc getHttpVersionString*(this: HTTPClient): string {.importcpp: "nimStringFromStdString(#->get_http_version_string())", header: stringConversionCode.} ## \
 ## Returns the current HTTP version setting as a string, e.g.  "HTTP/1.0" or
 ## "HTTP/1.1".
+
+proc parseHttpVersionString*(_: typedesc[HTTPClient], version: string): HTTPEnum_HTTPVersion {.importcpp: "#HTTPClient::parse_http_version_string(nimStringToStdString(#))", header: "httpClient.h".} ## \
+## Matches the string representing a particular HTTP version against any of
+## the known versions and returns the appropriate enumerated value, or
+## HV_other if the version is unknown.
 
 proc loadCertificates*(this: HTTPClient, filename: Filename): bool {.importcpp: "#->load_certificates(#)".} ## \
 ## Reads the certificate(s) (delimited by -----BEGIN CERTIFICATE----- and
 ## -----END CERTIFICATE-----) from the indicated file and makes them known as
 ## trusted public keys for validating future connections.  Returns true on
 ## success, false otherwise.
+
+proc setVerifySsl*(this: HTTPClient, verify_ssl: HTTPClient_VerifySSL) {.importcpp: "#->set_verify_ssl(#)".} ## \
+## Specifies whether the client will insist on verifying the identity of the
+## servers it connects to via SSL (that is, https).
+##
+## The parameter value is an enumerated type which indicates the level of
+## security to which the client will insist upon.
+
+proc getVerifySsl*(this: HTTPClient): HTTPClient_VerifySSL {.importcpp: "#->get_verify_ssl()".} ## \
+## Returns whether the client will insist on verifying the identity of the
+## servers it connects to via SSL (that is, https).  See set_verify_ssl().
 
 proc setCipherList*(this: HTTPClient, cipher_list: string) {.importcpp: "#->set_cipher_list(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Specifies the set of ciphers that are to be made available for SSL
@@ -17242,6 +20355,59 @@ proc clearDate*(this: DocumentSpec) {.importcpp: "#.clear_date()".} ## \
 ## Removes the last-modified date associated with the DocumentSpec, if there
 ## is one.
 
+proc setRequestMode*(this: DocumentSpec, request_mode: DocumentSpec_RequestMode) {.importcpp: "#.set_request_mode(#)".} ## \
+## Sets the request mode of this DocumentSpec.  This is only relevant when
+## using the DocumentSpec to generate a request (for instance, in
+## HTTPChannel).  This specifies whether the document request will ask the
+## server for a newer version than the indicated version, or the exact
+## version, neither, or either.
+##
+## The possible values are:
+##
+## RM_any: ignore date and tag (if specified), and retrieve any document that
+## matches the URL.  For a subrange request, if the document matches the
+## version indicated exactly, retrieve the subrange only; otherwise, retrieve
+## the entire document.
+##
+## RM_equal: request only the precise version of the document that matches the
+## particular date and/or tag exactly, if specified; fail if this version is
+## not available.
+##
+## RM_newer: request any document that is newer than the version indicated by
+## the particular date and/or tag; fail if only that version (or older
+## versions) are available.
+##
+## RM_newer_or_equal: request any document that matches the version indicated
+## by the particular date and/or tag, or is a newer version; fail if only
+## older versions are available.
+##
+## In any of the above, you may specify either or both of the last-modified
+## date and the identity tag, whichever is known to the client.
+##
+## The default mode is RM_any.
+
+proc getRequestMode*(this: DocumentSpec): DocumentSpec_RequestMode {.importcpp: "#.get_request_mode()".} ## \
+## Returns the request mode of this DocumentSpec.  See set_request_mode().
+
+proc setCacheControl*(this: DocumentSpec, cache_control: DocumentSpec_CacheControl) {.importcpp: "#.set_cache_control(#)".} ## \
+## Specifies what kind of cached value is acceptable for this document.
+## Warning: some HTTP proxies may not respect this setting and may return a
+## cached result anyway.
+##
+## CC_allow_cache: the normal HTTP behavior; the server may return a cached
+## value if it believes it is valid.
+##
+## CC_revalidate: a proxy is forced to contact the origin server and verify
+## that is cached value is in fact still valid before it returns it.
+##
+## CC_no_cache: a proxy must not return its cached value at all, but is forced
+## to go all the way back to the origin server for the official document.
+##
+## The default mode is CC_allow_cache.
+
+proc getCacheControl*(this: DocumentSpec): DocumentSpec_CacheControl {.importcpp: "#.get_cache_control()".} ## \
+## Returns the request mode of this DocumentSpec.  See set_cache_control().
+
 proc input*(this: DocumentSpec, `in`: istream): bool {.importcpp: "#.input(#)".} ## \
 ## Can be used to read in the DocumentSpec from a stream generated either by
 ## output() or write().  Returns true on success, false on failure.
@@ -17277,6 +20443,10 @@ proc getDocumentSpec*(this: HTTPChannel): DocumentSpec {.importcpp: "#->get_docu
 ## This structure may be saved and used to retrieve the same version of the
 ## document later, or to conditionally retrieve a newer version if it is
 ## available.
+
+proc getHttpVersion*(this: HTTPChannel): HTTPEnum_HTTPVersion {.importcpp: "#->get_http_version()".} ## \
+## Returns the HTTP version number returned by the server, as one of the
+## HTTPClient enumerated types, e.g.  HTTPClient::HV_11.
 
 proc getHttpVersionString*(this: HTTPChannel): string {.importcpp: "nimStringFromStdString(#->get_http_version_string())", header: stringConversionCode.} ## \
 ## Returns the HTTP version number returned by the server, formatted as a
@@ -18498,7 +21668,7 @@ proc getFilename*(this: DatagramGenerator): Filename {.importcpp: "#->get_filena
 ## Returns the filename that provides the source for these datagrams, if any,
 ## or empty string if the datagrams do not originate from a file on disk.
 
-proc getTimestamp*(this: DatagramGenerator): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: DatagramGenerator): Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the on-disk timestamp of the file that was read, at the time it was
 ## opened, if that is available, or 0 if it is not.
 
@@ -19043,13 +22213,13 @@ proc needsRepack*(this: Multifile): bool {.importcpp: "#->needs_repack()".} ## \
 ## Returns true if the Multifile index is suboptimal and should be repacked.
 ## Call repack() to achieve this.
 
-proc getTimestamp*(this: Multifile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: Multifile): Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the modification timestamp of the overall Multifile.  This
 ## indicates the most recent date at which subfiles were added or removed from
 ## the Multifile.  Note that it is logically possible for an individual
 ## subfile to have a more recent timestamp than the overall timestamp.
 
-proc setTimestamp*(this: Multifile, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: Multifile, timestamp: Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Changes the overall mudification timestamp of the multifile.  Note that this
 ## will be reset to the current time every time you modify a subfile.
 ## Only set this if you know what you are doing!
@@ -19401,7 +22571,7 @@ proc getSubfileLength*(this: Multifile, index: int): clonglong {.importcpp: "#->
 ## 0 if the subfile has recently been added and flush() has not yet been
 ## called.
 
-proc getSubfileTimestamp*(this: Multifile, index: int): time_t.Time {.importcpp: "#->get_subfile_timestamp(#)".} ## \
+proc getSubfileTimestamp*(this: Multifile, index: int): Time {.importcpp: "#->get_subfile_timestamp(#)".} ## \
 ## Returns the modification time of the nth subfile.  If this is called on an
 ## older .mf file, which did not store individual timestamps in the file (or
 ## if get_record_timestamp() is false), this will return the modification time
@@ -19750,7 +22920,7 @@ proc getFileSize*(this: VirtualFile, stream: istream): clonglong {.importcpp: "#
 ## file.  Pass in the stream that was returned by open_read_file(); some
 ## implementations may require this stream to determine the size.
 
-proc getTimestamp*(this: VirtualFile): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: VirtualFile): Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns a time_t value that represents the time the file was last modified,
 ## to within whatever precision the operating system records this information
 ## (on a Windows95 system, for instance, this may only be accurate to within 2
@@ -20298,21 +23468,50 @@ proc isValidPointer*(this: WeakPointerToVoid): bool {.importcpp: "#.is_valid_poi
 ## Returns true if the pointer is not null and the object has not been
 ## deleted.  See was_deleted() for caveats.
 
+proc setStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: string, rl: WindowsRegistry_RegLevel): bool {.importcpp: "#WindowsRegistry::set_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
+## Sets the registry key to the indicated value as a string.  The supplied
+## string value is automatically converted from whatever encoding is set by
+## TextEncoder::set_default_encoding() and written as a Unicode string.  The
+## registry key must already exist prior to calling this function.
+
 proc setStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: string): bool {.importcpp: "#WindowsRegistry::set_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "windowsRegistry.h".} ## \
 ## Sets the registry key to the indicated value as a string.  The supplied
 ## string value is automatically converted from whatever encoding is set by
 ## TextEncoder::set_default_encoding() and written as a Unicode string.  The
 ## registry key must already exist prior to calling this function.
 
+proc setIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: int, rl: WindowsRegistry_RegLevel): bool {.importcpp: "#WindowsRegistry::set_int_value(nimStringToStdString(#), nimStringToStdString(#), #, #)", header: "windowsRegistry.h".} ## \
+## Sets the registry key to the indicated value as an integer.  The registry
+## key must already exist prior to calling this function.
+
 proc setIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, value: int): bool {.importcpp: "#WindowsRegistry::set_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
 ## Sets the registry key to the indicated value as an integer.  The registry
 ## key must already exist prior to calling this function.
+
+proc getKeyType*(_: typedesc[WindowsRegistry], key: string, name: string, rl: WindowsRegistry_RegLevel): WindowsRegistry_Type {.importcpp: "#WindowsRegistry::get_key_type(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
+## Returns the type of the indicated key, or T_none if the key is not known or
+## is some unsupported type.
+
+proc getKeyType*(_: typedesc[WindowsRegistry], key: string, name: string): WindowsRegistry_Type {.importcpp: "#WindowsRegistry::get_key_type(nimStringToStdString(#), nimStringToStdString(#))", header: "windowsRegistry.h".} ## \
+## Returns the type of the indicated key, or T_none if the key is not known or
+## is some unsupported type.
+
+proc getStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: string, rl: WindowsRegistry_RegLevel): string {.importcpp: "nimStringFromStdString(#WindowsRegistry::get_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), #))", header: "windowsRegistry.h".} ## \
+## Returns the value associated with the indicated registry key, assuming it
+## is a string value.  The string value is automatically encoded using
+## TextEncoder::get_default_encoding().  If the key is not defined or is not a
+## string type value, default_value is returned instead.
 
 proc getStringValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: string): string {.importcpp: "nimStringFromStdString(#WindowsRegistry::get_string_value(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#)))", header: "windowsRegistry.h".} ## \
 ## Returns the value associated with the indicated registry key, assuming it
 ## is a string value.  The string value is automatically encoded using
 ## TextEncoder::get_default_encoding().  If the key is not defined or is not a
 ## string type value, default_value is returned instead.
+
+proc getIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: int, rl: WindowsRegistry_RegLevel): int {.importcpp: "#WindowsRegistry::get_int_value(nimStringToStdString(#), nimStringToStdString(#), #, #)", header: "windowsRegistry.h".} ## \
+## Returns the value associated with the indicated registry key, assuming it
+## is an integer value.  If the key is not defined or is not an integer type
+## value, default_value is returned instead.
 
 proc getIntValue*(_: typedesc[WindowsRegistry], key: string, name: string, default_value: int): int {.importcpp: "#WindowsRegistry::get_int_value(nimStringToStdString(#), nimStringToStdString(#), #)", header: "windowsRegistry.h".} ## \
 ## Returns the value associated with the indicated registry key, assuming it
@@ -20359,7 +23558,7 @@ proc beginPlayback*(this: RecorderController, filename: Filename): bool {.import
 proc close*(this: RecorderController) {.importcpp: "#->close()".} ## \
 ## Finishes recording data to the indicated filename.
 
-proc getStartTime*(this: RecorderController): time_t.Time {.importcpp: "#->get_start_time()".} ## \
+proc getStartTime*(this: RecorderController): Time {.importcpp: "#->get_start_time()".} ## \
 ## Returns the time (and date) at which the current session was originally
 ## recorded (or, in recording mode, the time at which the current session
 ## began).
@@ -21067,6 +24266,12 @@ proc initSceneGraphAnalyzer*(): SceneGraphAnalyzer {.importcpp: "SceneGraphAnaly
 
 proc initSceneGraphAnalyzer*(param0: SceneGraphAnalyzer): SceneGraphAnalyzer {.importcpp: "SceneGraphAnalyzer(#)".}
 
+proc setLodMode*(this: SceneGraphAnalyzer, lod_mode: SceneGraphAnalyzer_LodMode) {.importcpp: "#.set_lod_mode(#)".} ## \
+## Specifies the mode in which LODNodes are analyzed.
+
+proc getLodMode*(this: SceneGraphAnalyzer, lod_mode: SceneGraphAnalyzer_LodMode): SceneGraphAnalyzer_LodMode {.importcpp: "#.get_lod_mode(#)".} ## \
+## Returns the mode in which LODNodes are analyzed.
+
 proc clear*(this: SceneGraphAnalyzer) {.importcpp: "#.clear()".} ## \
 ## Resets all of the data in the analyzer in preparation for a new run.
 
@@ -21730,9 +24935,84 @@ proc getSlot*(this: RenderAttrib): int {.importcpp: "#->get_slot()".}
 
 converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float32, perspective: bool, wireframe_color: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "renderModeAttrib.h".} ## \
+## Constructs a new RenderModeAttrib object that specifies whether to draw
+## polygons in the normal, filled mode, or wireframe mode, or in some other
+## yet-to-be-defined mode.
+##
+## The thickness parameter specifies the thickness to be used for wireframe
+## lines, as well as for ordinary linestrip lines; it also specifies the
+## diameter of points.  (Thick lines are presently only supported in OpenGL;
+## but thick points are supported on either platform.)
+##
+## If perspective is true, the point thickness represented is actually a width
+## in 3-d units, and the points should scale according to perspective.  When
+## it is false, the point thickness is actually a width in pixels, and points
+## are a uniform screen size regardless of distance from the camera.
+##
+## In M_filled_wireframe mode, you should also specify the wireframe_color,
+## indicating the flat color to assign to the overlayed wireframe.
+
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float32, perspective: bool): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #))", header: "renderModeAttrib.h".} ## \
+## Constructs a new RenderModeAttrib object that specifies whether to draw
+## polygons in the normal, filled mode, or wireframe mode, or in some other
+## yet-to-be-defined mode.
+##
+## The thickness parameter specifies the thickness to be used for wireframe
+## lines, as well as for ordinary linestrip lines; it also specifies the
+## diameter of points.  (Thick lines are presently only supported in OpenGL;
+## but thick points are supported on either platform.)
+##
+## If perspective is true, the point thickness represented is actually a width
+## in 3-d units, and the points should scale according to perspective.  When
+## it is false, the point thickness is actually a width in pixels, and points
+## are a uniform screen size regardless of distance from the camera.
+##
+## In M_filled_wireframe mode, you should also specify the wireframe_color,
+## indicating the flat color to assign to the overlayed wireframe.
+
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float32): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #))", header: "renderModeAttrib.h".} ## \
+## Constructs a new RenderModeAttrib object that specifies whether to draw
+## polygons in the normal, filled mode, or wireframe mode, or in some other
+## yet-to-be-defined mode.
+##
+## The thickness parameter specifies the thickness to be used for wireframe
+## lines, as well as for ordinary linestrip lines; it also specifies the
+## diameter of points.  (Thick lines are presently only supported in OpenGL;
+## but thick points are supported on either platform.)
+##
+## If perspective is true, the point thickness represented is actually a width
+## in 3-d units, and the points should scale according to perspective.  When
+## it is false, the point thickness is actually a width in pixels, and points
+## are a uniform screen size regardless of distance from the camera.
+##
+## In M_filled_wireframe mode, you should also specify the wireframe_color,
+## indicating the flat color to assign to the overlayed wireframe.
+
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#))", header: "renderModeAttrib.h".} ## \
+## Constructs a new RenderModeAttrib object that specifies whether to draw
+## polygons in the normal, filled mode, or wireframe mode, or in some other
+## yet-to-be-defined mode.
+##
+## The thickness parameter specifies the thickness to be used for wireframe
+## lines, as well as for ordinary linestrip lines; it also specifies the
+## diameter of points.  (Thick lines are presently only supported in OpenGL;
+## but thick points are supported on either platform.)
+##
+## If perspective is true, the point thickness represented is actually a width
+## in 3-d units, and the points should scale according to perspective.  When
+## it is false, the point thickness is actually a width in pixels, and points
+## are a uniform screen size regardless of distance from the camera.
+##
+## In M_filled_wireframe mode, you should also specify the wireframe_color,
+## indicating the flat color to assign to the overlayed wireframe.
+
 proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "renderModeAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: RenderModeAttrib): RenderModeAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the render mode.
 
 proc getThickness*(this: RenderModeAttrib): float32 {.importcpp: "#->get_thickness()".} ## \
 ## Returns the line width or point thickness.  This is only relevant when
@@ -22157,12 +25437,18 @@ proc getGeomRendering*(this: RenderState, geom_rendering: int): int {.importcpp:
 
 converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
+proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, reference_alpha: float32): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "alphaTestAttrib.h".} ## \
+## Constructs a new AlphaTestAttrib object.
+
 proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "alphaTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
 proc getReferenceAlpha*(this: AlphaTestAttrib): float32 {.importcpp: "#->get_reference_alpha()".} ## \
 ## Returns the alpha reference value.
+
+proc getMode*(this: AlphaTestAttrib): RenderAttrib_PandaCompareFunc {.importcpp: "#->get_mode()".} ## \
+## Returns the alpha write mode.
 
 proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
@@ -23122,6 +26408,23 @@ proc write*(this: PandaNode, `out`: ostream, indent_level: int) {.importcpp: "#-
 proc ls*(this: PandaNode, `out`: ostream, indent_level: int) {.importcpp: "#->ls(#, #)".} ## \
 ## Lists all the nodes at and below the current path hierarchically.
 
+proc setBoundsType*(this: PandaNode, bounds_type: BoundingVolume_BoundsType) {.importcpp: "#->set_bounds_type(#)".} ## \
+## Specifies the desired type of bounding volume that will be created for this
+## node.  This is normally BoundingVolume::BT_default, which means to set the
+## type according to the config variable "bounds-type".
+##
+## If this is BT_sphere or BT_box, a BoundingSphere or BoundingBox is
+## explicitly created.  If it is BT_best, the appropriate type to best enclose
+## the node's children is created.
+##
+## This affects the bounding volume returned by get_bounds(), which is not
+## exactly the same bounding volume modified by set_bounds(), because a new
+## bounding volume has to be created that includes this node and all of its
+## children.
+
+proc getBoundsType*(this: PandaNode): BoundingVolume_BoundsType {.importcpp: "#->get_bounds_type()".} ## \
+## Returns the bounding volume type set with set_bounds_type().
+
 proc setBounds*(this: PandaNode, volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
 ## Resets the bounding volume so that it is the indicated volume.  When it is
 ## explicitly set, the bounding volume will no longer be automatically
@@ -23333,9 +26636,15 @@ proc getFancyBits*(this: PandaNode): int {.importcpp: "#->get_fancy_bits()".} ##
 
 converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
+proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "transparencyAttrib.h".} ## \
+## Constructs a new TransparencyAttrib object.
+
 proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "transparencyAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: TransparencyAttrib): TransparencyAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the transparency mode.
 
 proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
@@ -23345,9 +26654,15 @@ proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify
 ## Constructs a new LogicOpAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
+proc make*(_: typedesc[LogicOpAttrib], op: LogicOpAttrib_Operation): RenderAttrib {.importcpp: "deconstify(#LogicOpAttrib::make(#))", header: "logicOpAttrib.h".} ## \
+## Constructs a new LogicOpAttrib object with the given logic operation.
+
 proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "logicOpAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getOperation*(this: LogicOpAttrib): LogicOpAttrib_Operation {.importcpp: "#->get_operation()".} ## \
+## Returns the logic operation specified by this attribute.
 
 proc getClassSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
 
@@ -23732,6 +27047,10 @@ proc getAncestor*(this: NodePath, index: int): NodePath {.importcpp: "#.get_ance
 ##
 ## Also see get_node(), which returns the same thing as a PandaNode pointer,
 ## not a NodePath.
+
+proc getErrorType*(this: NodePath): NodePath_ErrorType {.importcpp: "#.get_error_type()".} ## \
+## If is_empty() is true, this returns a code that represents the reason why
+## the NodePath is empty.
 
 proc getTopNode*(this: NodePath, current_thread: Thread): PandaNode {.importcpp: "#.get_top_node(#)".} ## \
 ## Returns the top node of the path, or NULL if the path is empty.  This
@@ -25986,6 +29305,24 @@ proc getTexScale3d*(this: NodePath, stage: TextureStage): LVecBase3 {.importcpp:
 ##
 ## This call is appropriate for 3-d texture coordinates.
 
+proc setTexGen*(this: NodePath, stage: TextureStage, mode: RenderAttrib_TexGenMode, constant_value: LTexCoord3, priority: int) {.importcpp: "#.set_tex_gen(#, #, #, #)".} ## \
+## Enables automatic texture coordinate generation for the indicated texture
+## stage.  This version of this method is useful when setting M_constant,
+## which requires a constant texture coordinate value.
+
+proc setTexGen*(this: NodePath, stage: TextureStage, mode: RenderAttrib_TexGenMode, constant_value: LTexCoord3) {.importcpp: "#.set_tex_gen(#, #, #)".} ## \
+## Enables automatic texture coordinate generation for the indicated texture
+## stage.  This version of this method is useful when setting M_constant,
+## which requires a constant texture coordinate value.
+
+proc setTexGen*(this: NodePath, stage: TextureStage, mode: RenderAttrib_TexGenMode, priority: int) {.importcpp: "#.set_tex_gen(#, #, #)".} ## \
+## Enables automatic texture coordinate generation for the indicated texture
+## stage.
+
+proc setTexGen*(this: NodePath, stage: TextureStage, mode: RenderAttrib_TexGenMode) {.importcpp: "#.set_tex_gen(#, #)".} ## \
+## Enables automatic texture coordinate generation for the indicated texture
+## stage.
+
 proc clearTexGen*(this: NodePath) {.importcpp: "#.clear_tex_gen()".} ## \
 ## Removes the texture coordinate generation mode from all texture stages on
 ## this node.
@@ -25997,6 +29334,10 @@ proc clearTexGen*(this: NodePath, stage: TextureStage) {.importcpp: "#.clear_tex
 proc hasTexGen*(this: NodePath, stage: TextureStage): bool {.importcpp: "#.has_tex_gen(#)".} ## \
 ## Returns true if there is a mode for automatic texture coordinate generation
 ## on the current node for the given stage.
+
+proc getTexGen*(this: NodePath, stage: TextureStage): RenderAttrib_TexGenMode {.importcpp: "#.get_tex_gen(#)".} ## \
+## Returns the texture coordinate generation mode for the given stage, or
+## M_off if there is no explicit mode set for the given stage.
 
 proc setTexProjector*(this: NodePath, stage: TextureStage, `from`: NodePath, to: NodePath, lens_index: int) {.importcpp: "#.set_tex_projector(#, #, #, #)".} ## \
 ## Establishes a TexProjectorEffect on this node, which can be used to
@@ -26286,6 +29627,14 @@ proc setRenderModePerspective*(this: NodePath, perspective: bool) {.importcpp: "
 ## If you want the quads to be individually textured, you should also set a
 ## TexGenAttrib::M_point_sprite on the node.
 
+proc setRenderMode*(this: NodePath, mode: RenderModeAttrib_Mode, thickness: float32, priority: int) {.importcpp: "#.set_render_mode(#, #, #)".} ## \
+## Sets up the geometry at this level and below (unless overridden) to render
+## in the specified mode and with the indicated line and/or point thickness.
+
+proc setRenderMode*(this: NodePath, mode: RenderModeAttrib_Mode, thickness: float32) {.importcpp: "#.set_render_mode(#, #)".} ## \
+## Sets up the geometry at this level and below (unless overridden) to render
+## in the specified mode and with the indicated line and/or point thickness.
+
 proc clearRenderMode*(this: NodePath) {.importcpp: "#.clear_render_mode()".} ## \
 ## Completely removes any render mode adjustment that may have been set on
 ## this node via set_render_mode_wireframe() or set_render_mode_filled().
@@ -26294,6 +29643,10 @@ proc hasRenderMode*(this: NodePath): bool {.importcpp: "#.has_render_mode()".} #
 ## Returns true if a render mode has been explicitly set on this particular
 ## node via set_render_mode() (or set_render_mode_wireframe() or
 ## set_render_mode_filled()), false otherwise.
+
+proc getRenderMode*(this: NodePath): RenderModeAttrib_Mode {.importcpp: "#.get_render_mode()".} ## \
+## Returns the render mode that has been specifically set on this node via
+## set_render_mode(), or M_unchanged if nothing has been set.
 
 proc getRenderModeThickness*(this: NodePath): float32 {.importcpp: "#.get_render_mode_thickness()".} ## \
 ## Returns the render mode thickness that has been specifically set on this
@@ -26502,6 +29855,16 @@ proc clearCompass*(this: NodePath) {.importcpp: "#.clear_compass()".} ## \
 proc hasCompass*(this: NodePath): bool {.importcpp: "#.has_compass()".} ## \
 ## Returns true if there is any compass effect on the node.
 
+proc setTransparency*(this: NodePath, mode: TransparencyAttrib_Mode, priority: int) {.importcpp: "#.set_transparency(#, #)".} ## \
+## Specifically sets or disables transparent rendering mode on this particular
+## node.  If no other nodes override, this will cause items with a non-1 value
+## for alpha color to be rendered partially transparent.
+
+proc setTransparency*(this: NodePath, mode: TransparencyAttrib_Mode) {.importcpp: "#.set_transparency(#)".} ## \
+## Specifically sets or disables transparent rendering mode on this particular
+## node.  If no other nodes override, this will cause items with a non-1 value
+## for alpha color to be rendered partially transparent.
+
 proc clearTransparency*(this: NodePath) {.importcpp: "#.clear_transparency()".} ## \
 ## Completely removes any transparency adjustment that may have been set on
 ## this node via set_transparency(). The geometry at this level and below will
@@ -26513,6 +29876,28 @@ proc hasTransparency*(this: NodePath): bool {.importcpp: "#.has_transparency()".
 ## on this particular node via set_transparency().  If this returns true, then
 ## get_transparency() may be called to determine whether transparency has been
 ## explicitly enabled or explicitly disabled for this node.
+
+proc getTransparency*(this: NodePath): TransparencyAttrib_Mode {.importcpp: "#.get_transparency()".} ## \
+## Returns the transparent rendering that has been specifically set on this
+## node via set_transparency(), or M_none if nontransparent rendering has been
+## specifically set, or if nothing has been specifically set.  See also
+## has_transparency().  This does not necessarily imply that the geometry will
+## or will not be rendered transparent, as there may be other nodes that
+## override.
+
+proc setLogicOp*(this: NodePath, op: LogicOpAttrib_Operation, priority: int) {.importcpp: "#.set_logic_op(#, #)".} ## \
+## Specifically sets or disables a logical operation on this particular node.
+## If no other nodes override, this will cause geometry to be rendered without
+## color blending but instead using the given logical operator.
+##
+## @since 1.10.0
+
+proc setLogicOp*(this: NodePath, op: LogicOpAttrib_Operation) {.importcpp: "#.set_logic_op(#)".} ## \
+## Specifically sets or disables a logical operation on this particular node.
+## If no other nodes override, this will cause geometry to be rendered without
+## color blending but instead using the given logical operator.
+##
+## @since 1.10.0
 
 proc clearLogicOp*(this: NodePath) {.importcpp: "#.clear_logic_op()".} ## \
 ## Completely removes any logical operation that may have been set on this
@@ -26526,6 +29911,16 @@ proc hasLogicOp*(this: NodePath): bool {.importcpp: "#.has_logic_op()".} ## \
 ## particular node via set_logic_op().  If this returns true, then
 ## get_logic_op() may be called to determine whether a logical operation has
 ## been explicitly disabled for this node or set to particular operation.
+##
+## @since 1.10.0
+
+proc getLogicOp*(this: NodePath): LogicOpAttrib_Operation {.importcpp: "#.get_logic_op()".} ## \
+## Returns the logical operation that has been specifically set on this node
+## via set_logic_op(), or O_none if standard color blending has been
+## specifically set, or if nothing has been specifically set.  See also
+## has_logic_op().  This does not necessarily imply that the geometry will
+## or will not be rendered with the given logical operation, as there may be
+## other nodes that override.
 ##
 ## @since 1.10.0
 
@@ -27310,6 +30705,10 @@ proc getFileMinorVer*(this: BamFile): int {.importcpp: "#.get_file_minor_ver()".
 ## system current minor version number if no file is currently open for
 ## reading.
 
+proc getFileEndian*(this: BamFile): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## read or written.
+
 proc getFileStdfloatDouble*(this: BamFile): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file stores all "standard" floats as 64-bit doubles, or
 ## false if they are 32-bit floats.
@@ -27712,9 +31111,44 @@ converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneN
 proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".} ## \
 ## The following is the new, more general interface to the ClipPlaneAttrib.
 
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #))", header: "clipPlaneAttrib.h".} ## \
+## Constructs a new ClipPlaneAttrib object that enables (or disables,
+## according to op) the indicated plane(s).
+##
+## @deprecated Use add_on_plane() or add_off_plane() instead.
+
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #))", header: "clipPlaneAttrib.h".} ## \
+## Constructs a new ClipPlaneAttrib object that turns on (or off, according to
+## op) the indicate plane(s).
+##
+## @deprecated Use add_on_plane() or add_off_plane() instead.
+
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #))", header: "clipPlaneAttrib.h".} ## \
+## Constructs a new ClipPlaneAttrib object that turns on (or off, according to
+## op) the indicate plane(s).
+##
+## @deprecated Use add_on_plane() or add_off_plane() instead.
+
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode, plane4: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #, #))", header: "clipPlaneAttrib.h".} ## \
+## Constructs a new ClipPlaneAttrib object that turns on (or off, according to
+## op) the indicate plane(s).
+##
+## @deprecated Use add_on_plane() or add_off_plane() instead.
+
 proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "clipPlaneAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getOperation*(this: ClipPlaneAttrib): ClipPlaneAttrib_Operation {.importcpp: "#->get_operation()".} ## \
+## Returns the basic operation type of the ClipPlaneAttrib.  If this is O_set,
+## the planes listed here completely replace any planes that were already on.
+## If this is O_add, the planes here are added to the set of planes that
+## were already on, and if O_remove, the planes here are removed from the set
+## of planes that were on.
+##
+## @deprecated ClipPlaneAttribs nowadays have a separate list of on_planes and
+## off_planes, so this method no longer makes sense.  Query the lists
+## independently.
 
 proc getNumPlanes*(this: ClipPlaneAttrib): int {.importcpp: "#->get_num_planes()".} ## \
 ## Returns the number of planes listed in the attribute.
@@ -27824,6 +31258,16 @@ proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconsti
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
+proc getColorType*(this: ColorAttrib): ColorAttrib_Type {.importcpp: "#->get_color_type()".} ## \
+## Returns the type of color specified by this ColorAttrib.  The options are:
+##
+## T_vertex - use the vertex color specified in the geometry itself.
+##
+## T_flat - use the color specified in this ColorAttrib for all geometry.  You
+## can get this color via get_color().
+##
+## T_off - use the color white.
+
 proc getColor*(this: ColorAttrib): LColor {.importcpp: "#->get_color()".} ## \
 ## If the type is T_flat or T_off, this returns the color that will be applied
 ## to geometry.  If the type is T_vertex, this is meaningless.
@@ -27836,9 +31280,52 @@ proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconst
 ## Constructs a new ColorBlendAttrib object that disables special-effect
 ## blending, allowing normal transparency to be used instead.
 
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#))", header: "colorBlendAttrib.h".} ## \
+## Constructs a new ColorBlendAttrib object.
+##
+## @deprecated Use the three- or four-parameter constructor instead.
+
+proc make*(_: typedesc[ColorBlendAttrib], rgb_mode: ColorBlendAttrib_Mode, rgb_a: ColorBlendAttrib_Operand, rgb_b: ColorBlendAttrib_Operand, alpha_mode: ColorBlendAttrib_Mode, alpha_a: ColorBlendAttrib_Operand, alpha_b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #, #))", header: "colorBlendAttrib.h".} ## \
+## Constructs a new ColorBlendAttrib object that enables special-effect
+## blending.  This supercedes transparency.  This form is used to specify
+## separate blending parameters for the RGB and alpha channels.
+
+proc make*(_: typedesc[ColorBlendAttrib], rgb_mode: ColorBlendAttrib_Mode, rgb_a: ColorBlendAttrib_Operand, rgb_b: ColorBlendAttrib_Operand, alpha_mode: ColorBlendAttrib_Mode, alpha_a: ColorBlendAttrib_Operand, alpha_b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #))", header: "colorBlendAttrib.h".} ## \
+## Constructs a new ColorBlendAttrib object that enables special-effect
+## blending.  This supercedes transparency.  This form is used to specify
+## separate blending parameters for the RGB and alpha channels.
+
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #))", header: "colorBlendAttrib.h".} ## \
+## Constructs a new ColorBlendAttrib object that enables special-effect
+## blending.  This supercedes transparency.  The given mode and operands are
+## used for both the RGB and alpha channels.
+
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #))", header: "colorBlendAttrib.h".} ## \
+## Constructs a new ColorBlendAttrib object that enables special-effect
+## blending.  This supercedes transparency.  The given mode and operands are
+## used for both the RGB and alpha channels.
+
 proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "colorBlendAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: ColorBlendAttrib): ColorBlendAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the blending mode for the RGB channels.
+
+proc getOperandA*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_operand_a()".} ## \
+## Returns the RGB multiplier for the first component.
+
+proc getOperandB*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_operand_b()".} ## \
+## Returns the RGB multiplier for the second component.
+
+proc getAlphaMode*(this: ColorBlendAttrib): ColorBlendAttrib_Mode {.importcpp: "#->get_alpha_mode()".} ## \
+## Returns the blending mode for the alpha channel.
+
+proc getAlphaOperandA*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_alpha_operand_a()".} ## \
+## Returns the alpha multiplier for the first component.
+
+proc getAlphaOperandB*(this: ColorBlendAttrib): ColorBlendAttrib_Operand {.importcpp: "#->get_alpha_operand_b()".} ## \
+## Returns the alpha multiplier for the second component.
 
 proc getColor*(this: ColorBlendAttrib): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the constant color associated with the attrib.
@@ -27846,8 +31333,16 @@ proc getColor*(this: ColorBlendAttrib): LColor {.importcpp: "#->get_color()".} #
 proc involvesConstantColor*(this: ColorBlendAttrib): bool {.importcpp: "#->involves_constant_color()".} ## \
 ## Returns true if the this attrib uses the constant color, false otherwise.
 
+proc involvesConstantColor*(_: typedesc[ColorBlendAttrib], operand: ColorBlendAttrib_Operand): bool {.importcpp: "#ColorBlendAttrib::involves_constant_color(#)", header: "colorBlendAttrib.h".} ## \
+## Returns true if the indicated operand uses the constant color, false
+## otherwise.
+
 proc involvesColorScale*(this: ColorBlendAttrib): bool {.importcpp: "#->involves_color_scale()".} ## \
 ## Returns true if the this attrib uses the color scale attrib, false
+## otherwise.
+
+proc involvesColorScale*(_: typedesc[ColorBlendAttrib], operand: ColorBlendAttrib_Operand): bool {.importcpp: "#ColorBlendAttrib::involves_color_scale(#)", header: "colorBlendAttrib.h".} ## \
+## Returns true if the indicated operand uses the color scale attrib, false
 ## otherwise.
 
 proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendAttrib::get_class_slot()", header: "colorBlendAttrib.h".}
@@ -28089,6 +31584,11 @@ proc getClassSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib:
 
 converter getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBinAttrib::get_class_type()", header: "cullBinAttrib.h".}
 
+proc addBin*(this: CullBinManager, name: string, `type`: CullBinEnums_BinType, sort: int): int {.importcpp: "#.add_bin(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+## Defines a new bin with the indicated name, and returns the new bin_index.
+## If there is already a bin with the same name returns its bin_index if it
+## had the same properties; otherwise, reports an error and returns -1.
+
 proc removeBin*(this: CullBinManager, bin_index: int) {.importcpp: "#.remove_bin(#)".} ## \
 ## Permanently removes the indicated bin.  This operation is not protected
 ## from the pipeline and will disturb whatever is currently rendering in draw.
@@ -28113,6 +31613,26 @@ proc getBinName*(this: CullBinManager, bin_index: int): string {.importcpp: "nim
 ## Returns the name of the bin with the indicated bin_index (where bin_index
 ## was retrieved by get_bin() or find_bin()).  The bin's name may not be
 ## changed during the life of the bin.
+
+proc getBinType*(this: CullBinManager, bin_index: int): CullBinEnums_BinType {.importcpp: "#.get_bin_type(#)".} ## \
+## Returns the type of the bin with the indicated bin_index (where bin_index
+## was retrieved by get_bin() or find_bin()).
+
+proc getBinType*(this: CullBinManager, name: string): CullBinEnums_BinType {.importcpp: "#.get_bin_type(nimStringToStdString(#))", header: stringConversionCode.} ## \
+## Returns the type of the bin with the indicated name.
+
+proc setBinType*(this: CullBinManager, bin_index: int, `type`: CullBinEnums_BinType) {.importcpp: "#.set_bin_type(#, #)".} ## \
+## Changes the type of the bin with the indicated bin_index (where bin_index
+## was retrieved by get_bin() or find_bin()).
+##
+## The change might be effective immediately, or it might take place next
+## frame, depending on the bin type.
+
+proc setBinType*(this: CullBinManager, name: string, `type`: CullBinEnums_BinType) {.importcpp: "#.set_bin_type(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+## Changes the type of the bin with the indicated name.
+##
+## The change might be effective immediately, or it might take place next
+## frame, depending on the bin type.
 
 proc getBinSort*(this: CullBinManager, bin_index: int): int {.importcpp: "#.get_bin_sort(#)".} ## \
 ## Returns the sort order of the bin with the indicated bin_index (where
@@ -28192,6 +31712,15 @@ proc write*(this: CullBinManager, `out`: ostream) {.importcpp: "#.write(#)".}
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".} ## \
 ## Returns the pointer to the global CullBinManager object.
 
+proc make*(_: typedesc[CullFaceAttrib], mode: CullFaceAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#CullFaceAttrib::make(#))", header: "cullFaceAttrib.h".} ## \
+## Constructs a new CullFaceAttrib object that specifies how to cull geometry.
+## By Panda convention, vertices are ordered counterclockwise when seen from
+## the front, so the M_cull_clockwise will cull backfacing polygons.
+##
+## M_cull_unchanged is an identity attrib; if this is applied to vertices
+## without any other intervening attrib, it is the same as applying the
+## default attrib.
+
 proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "cullFaceAttrib.h".} ## \
 ## Constructs a new CullFaceAttrib object that specifies how to cull geometry.
 ## By Panda convention, vertices are ordered counterclockwise when seen from
@@ -28211,11 +31740,20 @@ proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "decon
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
 
+proc getActualMode*(this: CullFaceAttrib): CullFaceAttrib_Mode {.importcpp: "#->get_actual_mode()".} ## \
+## Returns the actual culling mode, without considering the effects of the
+## reverse flag.  See also get_effective_mode().
+
 proc getReverse*(this: CullFaceAttrib): bool {.importcpp: "#->get_reverse()".} ## \
 ## Returns the 'reverse' flag.  If this is true, the actual cull direction
 ## (clockwise vs.  counterclockwise) is the reverse of what is specified here.
 ## This allows support for make_reverse(), which defines a CullFaceAttrib that
 ## reverses whatever the sense of culling would have been.
+
+proc getEffectiveMode*(this: CullFaceAttrib): CullFaceAttrib_Mode {.importcpp: "#->get_effective_mode()".} ## \
+## Returns the effective culling mode.  This is the same as the actual culling
+## mode, unless the reverse flag is set, which swaps CW for CCW and vice-
+## versa.  Also, M_cull_unchanged is mapped to M_cull_none.
 
 proc getClassSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
 
@@ -28358,6 +31896,20 @@ converter getClassType*(_: typedesc[SceneSetup]): TypeHandle {.importcpp: "Scene
 proc newSceneSetup*(param0: SceneSetup): SceneSetup {.importcpp: "new SceneSetup(#)".}
 
 proc newFog*(name: string): Fog {.importcpp: "new Fog(nimStringToStdString(#))", header: stringConversionCode.}
+
+proc getMode*(this: Fog): Fog_Mode {.importcpp: "#->get_mode()".}
+
+proc setMode*(this: Fog, mode: Fog_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Specifies the computation that is used to determine the fog effect.  If
+## this is M_linear, then the fog will range from linearly from the onset
+## point to the opaque point (or for the distances specified in
+## set_linear_range), and the fog object should be parented into the scene
+## graph, or to the camera.
+##
+## If this is anything else, the onset point and opaque point are not used,
+## and the fog effect is based on the value specified to set_exp_density(),
+## and it doesn't matter to which node the fog object is parented, or if it is
+## parented anywhere at all.
 
 proc getColor*(this: Fog): LColor {.importcpp: "#->get_color()".} ## \
 ## Returns the color of the fog.
@@ -28590,10 +32142,18 @@ proc getLostState*(this: GeomDrawCallbackData): bool {.importcpp: "#.get_lost_st
 
 converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
+proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "rescaleNormalAttrib.h".} ## \
+## Constructs a new RescaleNormalAttrib object that specifies whether to
+## rescale normals to compensate for transform scales or incorrectly defined
+## normals.
+
 proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "rescaleNormalAttrib.h".} ## \
 ## Constructs a RescaleNormalAttrib object that's suitable for putting at the
 ## top of a scene graph.  This will contain whatever attrib was suggested by
 ## the user's rescale-normals Config variable.
+
+proc getMode*(this: RescaleNormalAttrib): RescaleNormalAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the render mode.
 
 proc getClassSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
@@ -28665,17 +32225,29 @@ proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffse
 
 converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
+proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "depthTestAttrib.h".} ## \
+## Constructs a new DepthTestAttrib object.
+
 proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "depthTestAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: DepthTestAttrib): RenderAttrib_PandaCompareFunc {.importcpp: "#->get_mode()".} ## \
+## Returns the depth write mode.
 
 proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
 
 converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
+proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "depthWriteAttrib.h".} ## \
+## Constructs a new DepthWriteAttrib object.
+
 proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "depthWriteAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: DepthWriteAttrib): DepthWriteAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the depth write mode.
 
 proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
@@ -28748,9 +32320,44 @@ converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get
 proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".} ## \
 ## The following is the new, more general interface to the LightAttrib.
 
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #))", header: "lightAttrib.h".} ## \
+## Constructs a new LightAttrib object that turns on (or off, according to op)
+## the indicated light(s).
+##
+## @deprecated Use add_on_light() or add_off_light() instead.
+
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #))", header: "lightAttrib.h".} ## \
+## Constructs a new LightAttrib object that turns on (or off, according to op)
+## the indicate light(s).
+##
+## @deprecated Use add_on_light() or add_off_light() instead.
+
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #))", header: "lightAttrib.h".} ## \
+## Constructs a new LightAttrib object that turns on (or off, according to op)
+## the indicate light(s).
+##
+## @deprecated Use add_on_light() or add_off_light() instead.
+
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light, light4: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #, #))", header: "lightAttrib.h".} ## \
+## Constructs a new LightAttrib object that turns on (or off, according to op)
+## the indicate light(s).
+##
+## @deprecated Use add_on_light() or add_off_light() instead.
+
 proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "lightAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getOperation*(this: LightAttrib): LightAttrib_Operation {.importcpp: "#->get_operation()".} ## \
+## Returns the basic operation type of the LightAttrib.  If this is O_set, the
+## lights listed here completely replace any lights that were already on.  If
+## this is O_add, the lights here are added to the set of lights that were
+## already on, and if O_remove, the lights here are removed from the set of
+## lights that were on.
+##
+## @deprecated LightAttribs nowadays have a separate list of on_lights and
+## off_lights, so this method no longer makes sense.  Query the lists
+## independently.
 
 proc getNumLights*(this: LightAttrib): int {.importcpp: "#->get_num_lights()".} ## \
 ## Returns the number of lights listed in the attribute.
@@ -28953,6 +32560,9 @@ proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconst
 ## @code
 ## FINAL_RGB = (RGB) / (RGB + 1)
 ## @endcode
+
+proc getMode*(this: LightRampAttrib): LightRampAttrib_LightRampMode {.importcpp: "#->get_mode()".} ## \
+## Returns the LightRampAttrib mode.
 
 proc getLevel*(this: LightRampAttrib, n: int): float32 {.importcpp: "#->get_level(#)".} ## \
 ## Returns the nth lighting level.
@@ -29194,6 +32804,35 @@ converter getClassType*(_: typedesc[ModelLoadRequest]): TypeHandle {.importcpp: 
 
 proc newModelNode*(name: string): ModelNode {.importcpp: "new ModelNode(nimStringToStdString(#))", header: stringConversionCode.}
 
+proc setPreserveTransform*(this: ModelNode, preserve_transform: ModelNode_PreserveTransform) {.importcpp: "#->set_preserve_transform(#)".} ## \
+## Sets the preserve_transform flag.  This restricts the ability of a flatten
+## operation to affect the transform stored on this node, and/or the node
+## itself.  In the order from weakest to strongest restrictions, the possible
+## flags are:
+##
+## PT_drop_node - This node should be removed at the next flatten call.
+##
+## PT_none - The transform may be adjusted at will.  The node itself will not
+## be removed.  This is the default.
+##
+## PT_net - Preserve the net transform from the root, but it's acceptable to
+## modify the local transform stored on this particular node if necessary, so
+## long as the net transform is not changed.  This eliminates the need to drop
+## an extra transform on the node above.
+##
+## PT_local - The local (and net) transform should not be changed in any way.
+## If necessary, an extra transform will be left on the node above to
+## guarantee this.  This is a stronger restriction than PT_net.
+##
+## PT_no_touch - The local transform will not be changed, the node will not be
+## removed, and furthermore any flatten operation will not continue below this
+## node--this node and all descendents are protected from the effects of
+## flatten.
+
+proc getPreserveTransform*(this: ModelNode): ModelNode_PreserveTransform {.importcpp: "#->get_preserve_transform()".} ## \
+## Returns the current setting of the preserve_transform flag.  See
+## set_preserve_transform().
+
 proc setPreserveAttributes*(this: ModelNode, attrib_mask: int) {.importcpp: "#->set_preserve_attributes(#)".} ## \
 ## Sets the preserve_attributes flag.  This restricts the ability of a flatten
 ## operation to affect the render attributes stored on this node.
@@ -29209,7 +32848,7 @@ proc setTransformLimit*(this: ModelNode, limit: float32) {.importcpp: "#->set_tr
 
 converter getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
 
-proc newModelRoot*(fullpath: Filename, timestamp: time_t.Time): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
+proc newModelRoot*(fullpath: Filename, timestamp: Time): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
 
 proc newModelRoot*(name: string): ModelRoot {.importcpp: "new ModelRoot(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -29234,14 +32873,14 @@ proc setFullpath*(this: ModelRoot, fullpath: Filename) {.importcpp: "#->set_full
 ## be set directly by the user.  If you change this on a loaded model, then
 ## ModelPool::release_model() may fail.
 
-proc getTimestamp*(this: ModelRoot): time_t.Time {.importcpp: "#->get_timestamp()".} ## \
+proc getTimestamp*(this: ModelRoot): Time {.importcpp: "#->get_timestamp()".} ## \
 ## Returns the timestamp of the file on disk that was read for this model, at
 ## the time it was read, if it is known.  Returns 0 if the timestamp is not
 ## known or could not be provided.  This can be used as a quick (but fallible)
 ## check to verify whether the file might have changed since the model was
 ## read.
 
-proc setTimestamp*(this: ModelRoot, timestamp: time_t.Time) {.importcpp: "#->set_timestamp(#)".} ## \
+proc setTimestamp*(this: ModelRoot, timestamp: Time) {.importcpp: "#->set_timestamp(#)".} ## \
 ## Sets the timestamp of the file on disk that was read for this model.  This
 ## is normally set automatically when a model is loaded, and should not be set
 ## directly by the user.
@@ -29506,9 +33145,25 @@ converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "Te
 proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".} ## \
 ## Constructs a TexGenAttrib that generates no stages at all.
 
+proc make*(_: typedesc[TexGenAttrib], stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#TexGenAttrib::make(#, #))", header: "texGenAttrib.h".} ## \
+## Constructs a TexGenAttrib that generates just the indicated stage.
+
 proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "texGenAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc addStage*(this: TexGenAttrib, stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #))", header: deconstifyCode.} ## \
+## Returns a new TexGenAttrib just like this one, with the indicated
+## generation mode for the given stage.  If this stage already exists, its
+## mode is replaced.
+
+proc addStage*(this: TexGenAttrib, stage: TextureStage, mode: RenderAttrib_TexGenMode, constant_value: LTexCoord3): RenderAttrib {.importcpp: "deconstify(#->add_stage(#, #, #))", header: deconstifyCode.} ## \
+## Returns a new TexGenAttrib just like this one, with the indicated
+## generation mode for the given stage.  If this stage already exists, its
+## mode is replaced.
+##
+## This variant also accepts constant_value, which is only meaningful if mode
+## is M_constant.
 
 proc removeStage*(this: TexGenAttrib, stage: TextureStage): RenderAttrib {.importcpp: "deconstify(#->remove_stage(#))", header: deconstifyCode.} ## \
 ## Returns a new TexGenAttrib just like this one, with the indicated stage
@@ -29521,6 +33176,10 @@ proc isEmpty*(this: TexGenAttrib): bool {.importcpp: "#->is_empty()".} ## \
 proc hasStage*(this: TexGenAttrib, stage: TextureStage): bool {.importcpp: "#->has_stage(#)".} ## \
 ## Returns true if there is a mode associated with the indicated stage, or
 ## false otherwise (in which case get_transform(stage) will return M_off).
+
+proc getMode*(this: TexGenAttrib, stage: TextureStage): RenderAttrib_TexGenMode {.importcpp: "#->get_mode(#)".} ## \
+## Returns the generation mode associated with the named texture stage, or
+## M_off if nothing is associated with the indicated stage.
 
 proc hasGenTexcoordStage*(this: TexGenAttrib, stage: TextureStage): bool {.importcpp: "#->has_gen_texcoord_stage(#)".} ## \
 ## Returns true if the indicated TextureStage will have texture coordinates
@@ -29644,6 +33303,12 @@ proc setRadius*(this: PolylightNode, r: float32) {.importcpp: "#->set_radius(#)"
 proc getRadius*(this: PolylightNode): float32 {.importcpp: "#->get_radius()".} ## \
 ## Get radius of the spherical light volume
 
+proc setAttenuation*(this: PolylightNode, `type`: PolylightNode_Attenuation_Type): bool {.importcpp: "#->set_attenuation(#)".} ## \
+## Set ALINEAR or AQUADRATIC attenuation
+
+proc getAttenuation*(this: PolylightNode): PolylightNode_Attenuation_Type {.importcpp: "#->get_attenuation()".} ## \
+## Get "linear" or "quadratic" attenuation type
+
 proc setA0*(this: PolylightNode, a0: float32) {.importcpp: "#->set_a0(#)".} ## \
 ## Set the quadratic attenuation factor a0 fd = 1 / ( a0 + a1\*distance +
 ## a2\*distance\*distance)
@@ -29677,6 +33342,14 @@ proc flickerOff*(this: PolylightNode) {.importcpp: "#->flicker_off()".} ## \
 
 proc isFlickering*(this: PolylightNode): bool {.importcpp: "#->is_flickering()".} ## \
 ## Check is this light is flickering
+
+proc setFlickerType*(this: PolylightNode, `type`: PolylightNode_Flicker_Type): bool {.importcpp: "#->set_flicker_type(#)".} ## \
+## Flicker type can be FRANDOM or FSIN At a later point there might be a
+## FCUSTOM Custom flicker will be a set of fix points recorded by animating
+## the light's intensity
+
+proc getFlickerType*(this: PolylightNode): PolylightNode_Flicker_Type {.importcpp: "#->get_flicker_type()".} ## \
+## Returns FRANDOM or FSIN
 
 proc setOffset*(this: PolylightNode, offset: float32) {.importcpp: "#->set_offset(#)".} ## \
 ## Set the offset value for the random and sin flicker variations... used to
@@ -29732,6 +33405,9 @@ converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "Po
 proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".} ## \
 ## Constructs a new PolylightEffect object.
 
+proc make*(_: typedesc[PolylightEffect], weight: float32, contrib: PolylightEffect_ContribType, effect_center: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, #))", header: "polylightEffect.h".} ## \
+## Constructs a new PolylightEffect object.
+
 proc addLight*(this: PolylightEffect, newlight: NodePath): RenderEffect {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.} ## \
 ## Add a PolylightNode object to this effect and return a new effect
 
@@ -29744,6 +33420,12 @@ proc setWeight*(this: PolylightEffect, w: float32): RenderEffect {.importcpp: "d
 ## lightgroup which is static and cant be accessed Here, we just pass that to
 ## the make
 
+proc setContrib*(this: PolylightEffect, c: PolylightEffect_ContribType): RenderEffect {.importcpp: "deconstify(#->set_contrib(#))", header: deconstifyCode.} ## \
+## Set Contrib Type and return a new effect... the reason this couldnt be done
+## through make was because that would return a new effect without the
+## lightgroup which is static and cant be accessed Here, we just pass that to
+## the make
+
 proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.importcpp: "deconstify(#->set_effect_center(#))", header: deconstifyCode.} ## \
 ## Set weight and return a new effect... the reason this couldnt be done
 ## through make was because that would return a new effect without the
@@ -29752,6 +33434,9 @@ proc setEffectCenter*(this: PolylightEffect, ec: LPoint3): RenderEffect {.import
 
 proc getWeight*(this: PolylightEffect): float32 {.importcpp: "#->get_weight()".} ## \
 ## Get the weight value
+
+proc getContrib*(this: PolylightEffect): PolylightEffect_ContribType {.importcpp: "#->get_contrib()".} ## \
+## Returns CT_all or CT_proximal
 
 proc getEffectCenter*(this: PolylightEffect): LPoint3 {.importcpp: "#->get_effect_center()".} ## \
 ## Return the value of the _effect_center
@@ -30379,9 +34064,16 @@ proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib:
 
 converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
+proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "shadeModelAttrib.h".} ## \
+## Constructs a new ShadeModelAttrib object that specifies whether to draw
+## polygons with flat shading or with per-vertex (smooth) shading.
+
 proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "shadeModelAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc getMode*(this: ShadeModelAttrib): ShadeModelAttrib_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the shade mode.
 
 proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
@@ -30393,6 +34085,24 @@ proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify
 proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "stencilAttrib.h".} ## \
 ## Returns a RenderAttrib that corresponds to whatever the standard default
 ## properties for render attributes of this type ought to be.
+
+proc make*(_: typedesc[StencilAttrib], front_enable: bool, front_comparison_function: RenderAttrib_PandaCompareFunc, stencil_fail_operation: StencilAttrib_StencilOperation, stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, front_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, reference: int, read_mask: int, write_mask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #, #))", header: "stencilAttrib.h".} ## \
+## Constructs a front face StencilAttrib.
+
+proc make*(_: typedesc[StencilAttrib], front_enable: bool, front_comparison_function: RenderAttrib_PandaCompareFunc, stencil_fail_operation: StencilAttrib_StencilOperation, stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, front_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, reference: int, read_mask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #))", header: "stencilAttrib.h".} ## \
+## Constructs a front face StencilAttrib.
+
+proc make2Sided*(_: typedesc[StencilAttrib], front_enable: bool, back_enable: bool, front_comparison_function: RenderAttrib_PandaCompareFunc, stencil_fail_operation: StencilAttrib_StencilOperation, stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, front_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, reference: int, read_mask: int, write_mask: int, back_comparison_function: RenderAttrib_PandaCompareFunc, back_stencil_fail_operation: StencilAttrib_StencilOperation, back_stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, back_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided(#, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".} ## \
+## Constructs a two-sided StencilAttrib.
+
+proc makeWithClear*(_: typedesc[StencilAttrib], front_enable: bool, front_comparison_function: RenderAttrib_PandaCompareFunc, stencil_fail_operation: StencilAttrib_StencilOperation, stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, front_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, reference: int, read_mask: int, write_mask: int, clear: bool, clear_value: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_with_clear(#, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".} ## \
+## Constructs a front face StencilAttrib.
+
+proc make2SidedWithClear*(_: typedesc[StencilAttrib], front_enable: bool, back_enable: bool, front_comparison_function: RenderAttrib_PandaCompareFunc, stencil_fail_operation: StencilAttrib_StencilOperation, stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, front_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, reference: int, read_mask: int, write_mask: int, back_comparison_function: RenderAttrib_PandaCompareFunc, back_stencil_fail_operation: StencilAttrib_StencilOperation, back_stencil_pass_z_fail_operation: StencilAttrib_StencilOperation, back_stencil_pass_z_pass_operation: StencilAttrib_StencilOperation, clear: bool, clear_value: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided_with_clear(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".} ## \
+## Constructs a two-sided StencilAttrib.
+
+proc getRenderState*(this: StencilAttrib, render_state_identifier: StencilAttrib_StencilRenderState): int {.importcpp: "#->get_render_state(#)".} ## \
+## Returns render state.
 
 proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
 
@@ -32040,8 +35750,65 @@ proc clearVisColumns*(this: PfmVizzer) {.importcpp: "#.clear_vis_columns()".} ##
 ## Removes all of the previously-added vis columns in preparation for building
 ## a new list.  See add_vis_column().
 
+proc addVisColumn*(this: PfmVizzer, source: PfmVizzer_ColumnType, target: PfmVizzer_ColumnType, name: InternalName, transform: TransformState, lens: Lens, undist_lut: PfmFile) {.importcpp: "#.add_vis_column(#, #, #, #, #, #)".} ## \
+## Adds a new vis column specification to the list of vertex data columns that
+## will be generated at the next call to generate_vis_points() or
+## generate_vis_mesh().  This advanced interface supercedes the higher-level
+## set_vis_inverse(), set_flat_texcoord_name(), and set_vis_2d().
+##
+## If you use this advanced interface, you must specify explicitly the
+## complete list of data columns to be created in the resulting
+## GeomVertexData, by calling add_vis_column() each time.  For each column,
+## you specify the source of the column in the PFMFile, the target column and
+## name in the GeomVertexData, and an optional transform matrix and/or lens to
+## transform and project the point before generating it.
+
+proc addVisColumn*(this: PfmVizzer, source: PfmVizzer_ColumnType, target: PfmVizzer_ColumnType, name: InternalName, transform: TransformState, lens: Lens) {.importcpp: "#.add_vis_column(#, #, #, #, #)".} ## \
+## Adds a new vis column specification to the list of vertex data columns that
+## will be generated at the next call to generate_vis_points() or
+## generate_vis_mesh().  This advanced interface supercedes the higher-level
+## set_vis_inverse(), set_flat_texcoord_name(), and set_vis_2d().
+##
+## If you use this advanced interface, you must specify explicitly the
+## complete list of data columns to be created in the resulting
+## GeomVertexData, by calling add_vis_column() each time.  For each column,
+## you specify the source of the column in the PFMFile, the target column and
+## name in the GeomVertexData, and an optional transform matrix and/or lens to
+## transform and project the point before generating it.
+
+proc addVisColumn*(this: PfmVizzer, source: PfmVizzer_ColumnType, target: PfmVizzer_ColumnType, name: InternalName, transform: TransformState) {.importcpp: "#.add_vis_column(#, #, #, #)".} ## \
+## Adds a new vis column specification to the list of vertex data columns that
+## will be generated at the next call to generate_vis_points() or
+## generate_vis_mesh().  This advanced interface supercedes the higher-level
+## set_vis_inverse(), set_flat_texcoord_name(), and set_vis_2d().
+##
+## If you use this advanced interface, you must specify explicitly the
+## complete list of data columns to be created in the resulting
+## GeomVertexData, by calling add_vis_column() each time.  For each column,
+## you specify the source of the column in the PFMFile, the target column and
+## name in the GeomVertexData, and an optional transform matrix and/or lens to
+## transform and project the point before generating it.
+
+proc addVisColumn*(this: PfmVizzer, source: PfmVizzer_ColumnType, target: PfmVizzer_ColumnType, name: InternalName) {.importcpp: "#.add_vis_column(#, #, #)".} ## \
+## Adds a new vis column specification to the list of vertex data columns that
+## will be generated at the next call to generate_vis_points() or
+## generate_vis_mesh().  This advanced interface supercedes the higher-level
+## set_vis_inverse(), set_flat_texcoord_name(), and set_vis_2d().
+##
+## If you use this advanced interface, you must specify explicitly the
+## complete list of data columns to be created in the resulting
+## GeomVertexData, by calling add_vis_column() each time.  For each column,
+## you specify the source of the column in the PFMFile, the target column and
+## name in the GeomVertexData, and an optional transform matrix and/or lens to
+## transform and project the point before generating it.
+
 proc generateVisPoints*(this: PfmVizzer): NodePath {.importcpp: "#.generate_vis_points()".} ## \
 ## Creates a point cloud with the points of the pfm as 3-d coordinates in
+## space, and texture coordinates ranging from 0 .. 1 based on the position
+## within the pfm grid.
+
+proc generateVisMesh*(this: PfmVizzer, face: PfmVizzer_MeshFace): NodePath {.importcpp: "#.generate_vis_mesh(#)".} ## \
+## Creates a triangle mesh with the points of the pfm as 3-d coordinates in
 ## space, and texture coordinates ranging from 0 .. 1 based on the position
 ## within the pfm grid.
 
@@ -32614,6 +36381,19 @@ proc clearAnimPreload*(this: PartBundle) {.importcpp: "#->clear_anim_preload()".
 
 proc mergeAnimPreloads*(this: PartBundle, other: PartBundle) {.importcpp: "#->merge_anim_preloads(#)".} ## \
 ## Copies the contents of the other PartBundle's preload table into this one.
+
+proc setBlendType*(this: PartBundle, bt: PartBundle_BlendType) {.importcpp: "#->set_blend_type(#)".} ## \
+## Defines the algorithm that is used when blending multiple frames or
+## multiple animations together, when either anim_blend_flag or
+## frame_blend_flag is set to true.
+##
+## See partBundle.h for a description of the meaning of each of the BlendType
+## values.
+
+proc getBlendType*(this: PartBundle): PartBundle_BlendType {.importcpp: "#->get_blend_type()".} ## \
+## Returns the algorithm that is used when blending multiple frames or
+## multiple animations together, when either anim_blend_flag or
+## frame_blend_flag is set to true.
 
 proc setAnimBlendFlag*(this: PartBundle, anim_blend_flag: bool) {.importcpp: "#->set_anim_blend_flag(#)".} ## \
 ## Defines the way the character responds to multiple calls to
@@ -34983,6 +38763,8 @@ proc getDisplayModeRefreshRate*(this: DisplayInformation, display_index: int): i
 
 proc getDisplayModeFullscreenOnly*(this: DisplayInformation, display_index: int): int {.importcpp: "#.get_display_mode_fullscreen_only(#)".}
 
+proc getShaderModel*(this: DisplayInformation): GraphicsStateGuardian_ShaderModel {.importcpp: "#.get_shader_model()".}
+
 proc getVideoMemory*(this: DisplayInformation): int {.importcpp: "#.get_video_memory()".}
 
 proc getTextureMemory*(this: DisplayInformation): int {.importcpp: "#.get_texture_memory()".}
@@ -35315,6 +39097,29 @@ proc clearSize*(this: WindowProperties) {.importcpp: "#.clear_size()".} ## \
 
 proc hasMouseMode*(this: WindowProperties): bool {.importcpp: "#.has_mouse_mode()".}
 
+proc setMouseMode*(this: WindowProperties, mode: WindowProperties_MouseMode) {.importcpp: "#.set_mouse_mode(#)".} ## \
+## Specifies the mode in which the window is to operate its mouse pointer.
+##
+## M_absolute: the normal mode in which a mouse pointer operates, where the
+## mouse can move outside the window and the mouse coordinates are relative to
+## its position in the window.
+##
+## M_relative (OSX or Unix/X11 only): a mode where only relative movements are
+## reported; particularly useful for FPS-style mouse movements where you have
+## hidden the mouse pointer and are are more interested in how fast the mouse
+## is moving, rather than precisely where the pointer is hovering.
+##
+## This has no effect on Windows.  On Unix/X11, this requires the Xxf86dga
+## extension to be available.
+##
+## M_confined: this mode reports absolute mouse positions, but confines the
+## mouse pointer to the window boundary.  It can portably replace M_relative
+## for an FPS, but you need to periodically move the pointer to the center of
+## the window and track movement deltas.
+
+proc getMouseMode*(this: WindowProperties): WindowProperties_MouseMode {.importcpp: "#.get_mouse_mode()".} ## \
+## See set_mouse_mode().
+
 proc clearMouseMode*(this: WindowProperties) {.importcpp: "#.clear_mouse_mode()".} ## \
 ## Removes the mouse_mode specification from the properties.
 
@@ -35457,6 +39262,16 @@ proc hasCursorFilename*(this: WindowProperties): bool {.importcpp: "#.has_cursor
 
 proc clearCursorFilename*(this: WindowProperties) {.importcpp: "#.clear_cursor_filename()".} ## \
 ## Removes the cursor_filename specification from the properties.
+
+proc setZOrder*(this: WindowProperties, z_order: WindowProperties_ZOrder) {.importcpp: "#.set_z_order(#)".} ## \
+## Specifies the relative ordering of the window with respect to other
+## windows.  If the z_order is Z_top, the window will always be on top of
+## other windows; if it is Z_bottom, it will always be below other windows.
+## Most windows will want to be Z_normal, which allows the user to control the
+## order.
+
+proc getZOrder*(this: WindowProperties): WindowProperties_ZOrder {.importcpp: "#.get_z_order()".} ## \
+## Returns the window's z_order.
 
 proc hasZOrder*(this: WindowProperties): bool {.importcpp: "#.has_z_order()".} ## \
 ## Returns true if the window z_order has been specified, false otherwise.
@@ -35929,6 +39744,13 @@ proc getSupportsDualSourceBlending*(this: GraphicsStateGuardian): bool {.importc
 ## Returns true if dual source (incoming1_color and incoming1_alpha) blend
 ## operands are supported by this GSG.
 
+proc getShaderModel*(this: GraphicsStateGuardian): GraphicsStateGuardian_ShaderModel {.importcpp: "#->get_shader_model()".} ## \
+## Returns the ShaderModel
+
+proc setShaderModel*(this: GraphicsStateGuardian, shader_model: GraphicsStateGuardian_ShaderModel) {.importcpp: "#->set_shader_model(#)".} ## \
+## Sets the ShaderModel.  This will override the auto- detected shader model
+## during GSG reset.  Useful for testing lower-end shaders.
+
 proc getSupportsCgProfile*(this: GraphicsStateGuardian, name: string): bool {.importcpp: "#->get_supports_cg_profile(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc getColorScaleViaLighting*(this: GraphicsStateGuardian): bool {.importcpp: "#->get_color_scale_via_lighting()".} ## \
@@ -35973,6 +39795,22 @@ proc setGamma*(this: GraphicsStateGuardian, gamma: float32): bool {.importcpp: "
 proc getGamma*(this: GraphicsStateGuardian): float32 {.importcpp: "#->get_gamma()".}
 
 proc restoreGamma*(this: GraphicsStateGuardian) {.importcpp: "#->restore_gamma()".}
+
+proc setTextureQualityOverride*(this: GraphicsStateGuardian, quality_level: Texture_QualityLevel) {.importcpp: "#->set_texture_quality_override(#)".} ## \
+## Specifies the global quality_level to be imposed for all Textures rendered
+## by this GSG.  This overrides the value set on individual textures via
+## Texture::set_quality_level().  Set this to Texture::QL_default in order to
+## allow the individual texture quality levels to be respected.
+##
+## This is mainly useful for the tinydisplay software renderer.  See
+## Texture::set_quality_level().
+
+proc getTextureQualityOverride*(this: GraphicsStateGuardian): Texture_QualityLevel {.importcpp: "#->get_texture_quality_override()".} ## \
+## Returns the global quality_level override specified by
+## set_texture_quality_override.
+##
+## This is mainly useful for the tinydisplay software renderer.  See
+## Texture::set_quality_level().
 
 proc setFlashTexture*(this: GraphicsStateGuardian, tex: Texture) {.importcpp: "#->set_flash_texture(#)".}
 
@@ -36326,9 +40164,93 @@ proc getTexture*(this: GraphicsOutput): Texture {.importcpp: "#->get_texture()".
 ## GraphicsOutput.  The effect is undefined for windows that share a different
 ## GSG; usually in these cases the texture will be invalid.
 
+proc getTexturePlane*(this: GraphicsOutput, i: int): DrawableRegion_RenderTexturePlane {.importcpp: "#->get_texture_plane(#)".} ## \
+## Returns the RenderTexturePlane associated with the nth render-texture.
+## Returns 0 if there is no such texture.
+
+proc getTexturePlane*(this: GraphicsOutput): DrawableRegion_RenderTexturePlane {.importcpp: "#->get_texture_plane()".} ## \
+## Returns the RenderTexturePlane associated with the nth render-texture.
+## Returns 0 if there is no such texture.
+
+proc getRtmMode*(this: GraphicsOutput, i: int): GraphicsOutput_RenderTextureMode {.importcpp: "#->get_rtm_mode(#)".} ## \
+## Returns the RenderTextureMode associated with the nth render-texture.
+## Returns RTM_none if there is no such texture.
+
+proc getRtmMode*(this: GraphicsOutput): GraphicsOutput_RenderTextureMode {.importcpp: "#->get_rtm_mode()".} ## \
+## Returns the RenderTextureMode associated with the nth render-texture.
+## Returns RTM_none if there is no such texture.
+
 proc clearRenderTextures*(this: GraphicsOutput) {.importcpp: "#->clear_render_textures()".} ## \
 ## If the GraphicsOutput is currently rendering to a texture, then all
 ## textures are dissociated from the GraphicsOuput.
+
+proc addRenderTexture*(this: GraphicsOutput, tex: Texture, mode: GraphicsOutput_RenderTextureMode, bitplane: DrawableRegion_RenderTexturePlane) {.importcpp: "#->add_render_texture(#, #, #)".} ## \
+## Creates a new Texture object, suitable for rendering the contents of this
+## buffer into, and appends it to the list of render textures.
+##
+## If tex is not NULL, it is the texture that will be set up for rendering
+## into; otherwise, a new Texture object will be created, in which case you
+## may call get_texture() to retrieve the new texture pointer.
+##
+## You can specify a bitplane to attach the texture to.  the legal choices
+## are:
+##
+## - RTP_depth
+## - RTP_depth_stencil
+## - RTP_color
+## - RTP_aux_rgba_0
+## - RTP_aux_rgba_1
+## - RTP_aux_rgba_2
+## - RTP_aux_rgba_3
+##
+## If you do not specify a bitplane to attach the texture to, this routine
+## will use a default based on the texture's format:
+##
+## - F_depth_component attaches to RTP_depth
+## - F_depth_stencil attaches to RTP_depth_stencil
+## - all other formats attach to RTP_color.
+##
+## The texture's format will be changed to match the format of the bitplane to
+## which it is attached.  For example, if you pass in an F_rgba texture and
+## order that it be attached to RTP_depth_stencil, it will turn into an
+## F_depth_stencil texture.
+##
+## Also see make_texture_buffer(), which is a higher-level interface for
+## preparing render-to-a-texture mode.
+
+proc addRenderTexture*(this: GraphicsOutput, tex: Texture, mode: GraphicsOutput_RenderTextureMode) {.importcpp: "#->add_render_texture(#, #)".} ## \
+## Creates a new Texture object, suitable for rendering the contents of this
+## buffer into, and appends it to the list of render textures.
+##
+## If tex is not NULL, it is the texture that will be set up for rendering
+## into; otherwise, a new Texture object will be created, in which case you
+## may call get_texture() to retrieve the new texture pointer.
+##
+## You can specify a bitplane to attach the texture to.  the legal choices
+## are:
+##
+## - RTP_depth
+## - RTP_depth_stencil
+## - RTP_color
+## - RTP_aux_rgba_0
+## - RTP_aux_rgba_1
+## - RTP_aux_rgba_2
+## - RTP_aux_rgba_3
+##
+## If you do not specify a bitplane to attach the texture to, this routine
+## will use a default based on the texture's format:
+##
+## - F_depth_component attaches to RTP_depth
+## - F_depth_stencil attaches to RTP_depth_stencil
+## - all other formats attach to RTP_color.
+##
+## The texture's format will be changed to match the format of the bitplane to
+## which it is attached.  For example, if you pass in an F_rgba texture and
+## order that it be attached to RTP_depth_stencil, it will turn into an
+## F_depth_stencil texture.
+##
+## Also see make_texture_buffer(), which is a higher-level interface for
+## preparing render-to-a-texture mode.
 
 proc setupRenderTexture*(this: GraphicsOutput, tex: Texture, allow_bind: bool, to_ram: bool) {.importcpp: "#->setup_render_texture(#, #, #)".} ## \
 ## This is a deprecated interface that made sense back when GraphicsOutputs
@@ -37008,6 +40930,37 @@ proc setSort*(this: DisplayRegion, sort: int) {.importcpp: "#->set_sort(#)".} ##
 
 proc getSort*(this: DisplayRegion): int {.importcpp: "#->get_sort()".} ## \
 ## Returns the sort value associated with the DisplayRegion.
+
+proc setStereoChannel*(this: DisplayRegion, stereo_channel: Lens_StereoChannel) {.importcpp: "#->set_stereo_channel(#)".} ## \
+## Specifies whether the DisplayRegion represents the left or right channel of
+## a stereo pair, or whether it is a normal, monocular image.  This
+## automatically adjusts the lens that is used to render to this DisplayRegion
+## to its left or right eye, according to the lens's stereo properties.
+##
+## When the DisplayRegion is attached to a stereo window (one for which
+## is_stereo() returns true), this also specifies which physical channel the
+## DisplayRegion renders to.
+##
+## Normally you would create at least two DisplayRegions for a stereo window,
+## one for each of the left and right channels.  The two DisplayRegions may
+## share the same camera (and thus the same lens); this parameter is used to
+## control the exact properties of the lens when it is used to render into
+## this DisplayRegion.
+##
+## Also see the StereoDisplayRegion, which automates managing a pair of
+## left/right DisplayRegions.
+##
+## An ordinary DisplayRegion may be set to SC_mono, SC_left, or SC_right.  You
+## may set SC_stereo only on a StereoDisplayRegion.
+##
+## This call also resets tex_view_offset to its default value, which is 0 for
+## the left eye or 1 for the right eye of a stereo display region, or 0 for a
+## mono display region.
+
+proc getStereoChannel*(this: DisplayRegion): Lens_StereoChannel {.importcpp: "#->get_stereo_channel()".} ## \
+## Returns whether the DisplayRegion is specified as the left or right channel
+## of a stereo pair, or whether it is a normal, monocular image.  See
+## set_stereo_channel().
 
 proc setTexViewOffset*(this: DisplayRegion, tex_view_offset: int) {.importcpp: "#->set_tex_view_offset(#)".} ## \
 ## Sets the current texture view offset for this DisplayRegion.  This is
@@ -38585,6 +42538,9 @@ converter upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(A
 
 converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(AsyncTask *)(#))".}
 
+proc getState*(this: AsyncTask): AsyncTask_State {.importcpp: "#->get_state()".} ## \
+## Returns the current state of the task.
+
 proc isAlive*(this: AsyncTask): bool {.importcpp: "#->is_alive()".} ## \
 ## Returns true if the task is currently active or sleeping on some task
 ## chain, meaning that it will be executed in its turn, or false if it is not
@@ -39421,6 +43377,9 @@ proc initGeomVertexAnimationSpec*(): GeomVertexAnimationSpec {.importcpp: "GeomV
 
 proc initGeomVertexAnimationSpec*(other: GeomVertexAnimationSpec): GeomVertexAnimationSpec {.importcpp: "GeomVertexAnimationSpec(#)".}
 
+proc getAnimationType*(this: GeomVertexAnimationSpec): GeomEnums_AnimationType {.importcpp: "#.get_animation_type()".} ## \
+## Returns the type of animation represented by this spec.
+
 proc getNumTransforms*(this: GeomVertexAnimationSpec): int {.importcpp: "#.get_num_transforms()".} ## \
 ## This is only meaningful for animation_type AT_hardware.  It specifies the
 ## maximum number of transforms that might be simultaneously applied to any
@@ -39622,6 +43581,14 @@ proc getView*(_: typedesc[InternalName]): InternalName {.importcpp: "InternalNam
 
 converter getClassType*(_: typedesc[InternalName]): TypeHandle {.importcpp: "InternalName::get_class_type()", header: "internalName.h".}
 
+proc initGeomVertexColumn*(name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int, column_alignment: int, num_elements: int, element_stride: int): GeomVertexColumn {.importcpp: "GeomVertexColumn(#, #, #, #, #, #, #, #)".}
+
+proc initGeomVertexColumn*(name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int, column_alignment: int, num_elements: int): GeomVertexColumn {.importcpp: "GeomVertexColumn(#, #, #, #, #, #, #)".}
+
+proc initGeomVertexColumn*(name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int, column_alignment: int): GeomVertexColumn {.importcpp: "GeomVertexColumn(#, #, #, #, #, #)".}
+
+proc initGeomVertexColumn*(name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int): GeomVertexColumn {.importcpp: "GeomVertexColumn(#, #, #, #, #)".}
+
 proc initGeomVertexColumn*(copy: GeomVertexColumn): GeomVertexColumn {.importcpp: "GeomVertexColumn(#)".}
 
 proc getName*(this: GeomVertexColumn): InternalName {.importcpp: "#.get_name()".} ## \
@@ -39645,6 +43612,12 @@ proc getNumValues*(this: GeomVertexColumn): int {.importcpp: "#.get_num_values()
 proc getNumElements*(this: GeomVertexColumn): int {.importcpp: "#.get_num_elements()".} ## \
 ## Returns the number of times this column is repeated.  This is usually 1,
 ## except for matrices.
+
+proc getNumericType*(this: GeomVertexColumn): GeomEnums_NumericType {.importcpp: "#.get_numeric_type()".} ## \
+## Returns the token representing the numeric type of the data storage.
+
+proc getContents*(this: GeomVertexColumn): GeomEnums_Contents {.importcpp: "#.get_contents()".} ## \
+## Returns the token representing the semantic meaning of the stored value.
 
 proc getStart*(this: GeomVertexColumn): int {.importcpp: "#.get_start()".} ## \
 ## Returns the byte within the array record at which this column starts.  This
@@ -39691,6 +43664,14 @@ proc setNumComponents*(this: GeomVertexColumn, num_components: int) {.importcpp:
 ## Changes the number of components of an existing column.  This is only legal
 ## on an unregistered format (i.e.  when constructing the format initially).
 
+proc setNumericType*(this: GeomVertexColumn, numeric_type: GeomEnums_NumericType) {.importcpp: "#.set_numeric_type(#)".} ## \
+## Changes the numeric type an existing column.  This is only legal on an
+## unregistered format (i.e.  when constructing the format initially).
+
+proc setContents*(this: GeomVertexColumn, contents: GeomEnums_Contents) {.importcpp: "#.set_contents(#)".} ## \
+## Changes the semantic meaning of an existing column.  This is only legal on
+## an unregistered format (i.e.  when constructing the format initially).
+
 proc setStart*(this: GeomVertexColumn, start: int) {.importcpp: "#.set_start(#)".} ## \
 ## Changes the start byte of an existing column.  This is only legal on an
 ## unregistered format (i.e.  when constructing the format initially).
@@ -39706,6 +43687,14 @@ converter upcastToTypedWritableReferenceCount*(this: GeomVertexArrayFormat): Typ
 converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayFormat *)(#))".}
 
 proc newGeomVertexArrayFormat*(): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat()".}
+
+proc newGeomVertexArrayFormat*(name0: InternalName, num_components0: int, numeric_type0: GeomEnums_NumericType, contents0: GeomEnums_Contents): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#, #, #, #)".}
+
+proc newGeomVertexArrayFormat*(name0: InternalName, num_components0: int, numeric_type0: GeomEnums_NumericType, contents0: GeomEnums_Contents, name1: InternalName, num_components1: int, numeric_type1: GeomEnums_NumericType, contents1: GeomEnums_Contents): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#, #, #, #, #, #, #, #)".}
+
+proc newGeomVertexArrayFormat*(name0: InternalName, num_components0: int, numeric_type0: GeomEnums_NumericType, contents0: GeomEnums_Contents, name1: InternalName, num_components1: int, numeric_type1: GeomEnums_NumericType, contents1: GeomEnums_Contents, name2: InternalName, num_components2: int, numeric_type2: GeomEnums_NumericType, contents2: GeomEnums_Contents): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#, #, #, #, #, #, #, #, #, #, #, #)".}
+
+proc newGeomVertexArrayFormat*(name0: InternalName, num_components0: int, numeric_type0: GeomEnums_NumericType, contents0: GeomEnums_Contents, name1: InternalName, num_components1: int, numeric_type1: GeomEnums_NumericType, contents1: GeomEnums_Contents, name2: InternalName, num_components2: int, numeric_type2: GeomEnums_NumericType, contents2: GeomEnums_Contents, name3: InternalName, num_components3: int, numeric_type3: GeomEnums_NumericType, contents3: GeomEnums_Contents): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
 proc newGeomVertexArrayFormat*(copy: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#)".}
 
@@ -39763,6 +43752,30 @@ proc setDivisor*(this: GeomVertexArrayFormat, divisor: int) {.importcpp: "#->set
 proc getTotalBytes*(this: GeomVertexArrayFormat): int {.importcpp: "#->get_total_bytes()".} ## \
 ## Returns the total number of bytes used by the data types within the format,
 ## including gaps between elements.
+
+proc addColumn*(this: GeomVertexArrayFormat, name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int, column_alignment: int): int {.importcpp: "#->add_column(#, #, #, #, #, #)".} ## \
+## Adds a new column to the specification.  This is a table of per-vertex
+## floating-point numbers such as "vertex" or "normal"; you must specify where
+## in each record the table starts, and how many components (dimensions) exist
+## per vertex.
+##
+## The return value is the index number of the new data type.
+
+proc addColumn*(this: GeomVertexArrayFormat, name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int): int {.importcpp: "#->add_column(#, #, #, #, #)".} ## \
+## Adds a new column to the specification.  This is a table of per-vertex
+## floating-point numbers such as "vertex" or "normal"; you must specify where
+## in each record the table starts, and how many components (dimensions) exist
+## per vertex.
+##
+## The return value is the index number of the new data type.
+
+proc addColumn*(this: GeomVertexArrayFormat, name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents): int {.importcpp: "#->add_column(#, #, #, #)".} ## \
+## Adds a new column to the specification.  This is a table of per-vertex
+## floating-point numbers such as "vertex" or "normal"; you must specify where
+## in each record the table starts, and how many components (dimensions) exist
+## per vertex.
+##
+## The return value is the index number of the new data type.
 
 proc addColumn*(this: GeomVertexArrayFormat, column: GeomVertexColumn): int {.importcpp: "#->add_column(#)".} ## \
 ## Adds a new column to the specification.  This is a table of per-vertex
@@ -40325,6 +44338,15 @@ converter upcastToSimpleAllocator*(this: VertexDataPage): SimpleAllocator {.impo
 
 converter upcastToSimpleLruPage*(this: VertexDataPage): SimpleLruPage {.importcpp: "#.upcast_to_SimpleLruPage()".}
 
+proc getRamClass*(this: VertexDataPage): VertexDataPage_RamClass {.importcpp: "#.get_ram_class()".} ## \
+## Returns the current ram class of the array.  If this is other than
+## RC_resident, the array data is not resident in memory.
+
+proc getPendingRamClass*(this: VertexDataPage): VertexDataPage_RamClass {.importcpp: "#.get_pending_ram_class()".} ## \
+## Returns the pending ram class of the array.  If this is different from
+## get_ram_class(), this page has been queued to be processed by the thread.
+## Eventually the page will be set to this ram class.
+
 proc requestResident*(this: VertexDataPage) {.importcpp: "#.request_resident()".} ## \
 ## Ensures that the page will become resident soon.  Future calls to
 ## get_page_data() will eventually return non-NULL.
@@ -40342,6 +44364,10 @@ proc getFirstBlock*(this: VertexDataPage): VertexDataBlock {.importcpp: "#.get_f
 
 proc getBook*(this: VertexDataPage): VertexDataBook {.importcpp: "#.get_book()".} ## \
 ## Returns a pointer to the book that owns this page.
+
+proc getGlobalLru*(_: typedesc[VertexDataPage], rclass: VertexDataPage_RamClass): SimpleLru {.importcpp: "#VertexDataPage::get_global_lru(#)", header: "vertexDataPage.h".} ## \
+## Returns a pointer to the global LRU object that manages the
+## VertexDataPage's with the indicated RamClass.
 
 proc getPendingLru*(_: typedesc[VertexDataPage]): SimpleLru {.importcpp: "VertexDataPage::get_pending_lru()", header: "vertexDataPage.h".} ## \
 ## Returns a pointer to the global LRU object that manages the
@@ -40394,9 +44420,17 @@ proc getNumPages*(this: VertexDataBook): clonglong {.importcpp: "#.get_num_pages
 proc countTotalPageSize*(this: VertexDataBook): clonglong {.importcpp: "#.count_total_page_size()".} ## \
 ## Returns the total size of all bytes owned by all pages owned by this book.
 
+proc countTotalPageSize*(this: VertexDataBook, ram_class: VertexDataPage_RamClass): clonglong {.importcpp: "#.count_total_page_size(#)".} ## \
+## Returns the total size of all bytes owned by all pages owned by this book
+## that have the indicated ram class.
+
 proc countAllocatedSize*(this: VertexDataBook): clonglong {.importcpp: "#.count_allocated_size()".} ## \
 ## Returns the total size of all bytes allocated within pages owned by this
 ## book.
+
+proc countAllocatedSize*(this: VertexDataBook, ram_class: VertexDataPage_RamClass): clonglong {.importcpp: "#.count_allocated_size(#)".} ## \
+## Returns the total size of all bytes allocated within pages owned by this
+## book that have the indicated ram class.
 
 proc saveToDisk*(this: VertexDataBook) {.importcpp: "#.save_to_disk()".} ## \
 ## Writes all pages to disk immediately, just in case they get evicted later.
@@ -40422,12 +44456,24 @@ converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: 
 
 proc newGeomVertexArrayData*(copy: GeomVertexArrayData): GeomVertexArrayData {.importcpp: "new GeomVertexArrayData(#)".}
 
+proc newGeomVertexArrayData*(array_format: GeomVertexArrayFormat, usage_hint: GeomEnums_UsageHint): GeomVertexArrayData {.importcpp: "new GeomVertexArrayData(#, #)".}
+
 proc compareTo*(this: GeomVertexArrayData, other: GeomVertexArrayData): int {.importcpp: "#->compare_to(#)".} ## \
 ## Returns 0 if the two arrays are equivalent, even if they are not the same
 ## pointer.
 
 proc getArrayFormat*(this: GeomVertexArrayData): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.} ## \
 ## Returns the format object that describes this array.
+
+proc getUsageHint*(this: GeomVertexArrayData): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint that describes to the rendering backend how often
+## the vertex data will be modified and/or rendered.  See geomEnums.h.
+
+proc setUsageHint*(this: GeomVertexArrayData, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for this array.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
 
 proc hasColumn*(this: GeomVertexArrayData, name: InternalName): bool {.importcpp: "#->has_column(#)".} ## \
 ## Returns true if the array has the named column, false otherwise.  This is
@@ -40579,6 +44625,8 @@ converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.impor
 proc getObject*(this: GeomVertexArrayDataHandle): GeomVertexArrayData {.importcpp: "#->get_object()".}
 
 proc getArrayFormat*(this: GeomVertexArrayDataHandle): GeomVertexArrayFormat {.importcpp: "deconstify(#->get_array_format())", header: deconstifyCode.}
+
+proc getUsageHint*(this: GeomVertexArrayDataHandle): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".}
 
 proc getNumRows*(this: GeomVertexArrayDataHandle): int {.importcpp: "#->get_num_rows()".}
 
@@ -41025,6 +45073,8 @@ proc newGeomVertexData*(copy: GeomVertexData, format: GeomVertexFormat): GeomVer
 ## VertexData, like usage_hint and animation tables, but does not copy the
 ## actual data, and it allows you to specify a different format.
 
+proc newGeomVertexData*(name: string, format: GeomVertexFormat, usage_hint: GeomEnums_UsageHint): GeomVertexData {.importcpp: "new GeomVertexData(nimStringToStdString(#), #, #)", header: stringConversionCode.}
+
 proc compareTo*(this: GeomVertexData, other: GeomVertexData): int {.importcpp: "#->compare_to(#)".} ## \
 ## Returns 0 if the two objects are equivalent, even if they are not the same
 ## pointer.
@@ -41036,6 +45086,22 @@ proc getName*(this: GeomVertexData): string {.importcpp: "nimStringFromStdString
 proc setName*(this: GeomVertexData, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Changes the name of the vertex data.  This name is reported on the PStats
 ## graph for vertex computations.
+
+proc getUsageHint*(this: GeomVertexData): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint that was passed to the constructor, and which will
+## be passed to each array data object created initially, and arrays created
+## as the result of a convert_to() operation.  See geomEnums.h.
+##
+## However, each individual array may be replaced with a different array
+## object with an independent usage hint specified, so there is no guarantee
+## that the individual arrays all have the same usage_hint.
+
+proc setUsageHint*(this: GeomVertexData, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for this vertex data, and for all of the arrays
+## that share this data.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
 
 proc getFormat*(this: GeomVertexData): GeomVertexFormat {.importcpp: "deconstify(#->get_format())", header: deconstifyCode.} ## \
 ## Returns a pointer to the GeomVertexFormat structure that defines this data.
@@ -41281,12 +45347,24 @@ proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4): GeomVertexData {
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
 
+proc scaleColor*(this: GeomVertexData, color_scale: LVecBase4, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents): GeomVertexData {.importcpp: "deconstify(#->scale_color(#, #, #, #))", header: deconstifyCode.} ## \
+## Returns a new GeomVertexData object with the color table replaced with a
+## new color table that has been scaled by the indicated value.  The new color
+## table will be added as a new array; if the old color table was interleaved
+## with a previous array, the previous array will not be repacked.
+
 proc setColor*(this: GeomVertexData, color: LColor): GeomVertexData {.importcpp: "deconstify(#->set_color(#))", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the color data modified in-place
 ## with the new value.
 ##
 ## If the vertex data does not include a color column, a new one will not be
 ## added.
+
+proc setColor*(this: GeomVertexData, color: LColor, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents): GeomVertexData {.importcpp: "deconstify(#->set_color(#, #, #, #))", header: deconstifyCode.} ## \
+## Returns a new GeomVertexData object with the color table replaced with a
+## new color table for which each vertex has the indicated value.  The new
+## color table will be added as a new array; if the old color table was
+## interleaved with a previous array, the previous array will not be repacked.
 
 proc reverseNormals*(this: GeomVertexData): GeomVertexData {.importcpp: "deconstify(#->reverse_normals())", header: deconstifyCode.} ## \
 ## Returns a new GeomVertexData object with the normal data modified in-place,
@@ -41332,6 +45410,15 @@ proc transformVertices*(this: GeomVertexData, mat: LMatrix4, begin_row: int, end
 ## Applies the indicated transform matrix to all of the vertices from
 ## begin_row up to but not including end_row.  The transform is applied to all
 ## "point" and "vector" type columns described in the format.
+
+proc replaceColumn*(this: GeomVertexData, name: InternalName, num_components: int, numeric_type: GeomEnums_NumericType, contents: GeomEnums_Contents): GeomVertexData {.importcpp: "#->replace_column(#, #, #, #)".} ## \
+## Returns a new GeomVertexData object, suitable for modification, with the
+## indicated data type replaced with a new table filled with undefined values.
+## The new table will be added as a new array; if the old table was
+## interleaved with a previous array, the previous array will not be repacked.
+##
+## If num_components is 0, the indicated name is simply removed from the type,
+## without replacing it with anything else.
 
 proc output*(this: GeomVertexData, `out`: ostream) {.importcpp: "#->output(#)".}
 
@@ -41401,9 +45488,59 @@ converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((Geo
 
 proc makeCopy*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_copy()".}
 
+proc getPrimitiveType*(this: GeomPrimitive): GeomEnums_PrimitiveType {.importcpp: "#->get_primitive_type()".}
+
 proc getGeomRendering*(this: GeomPrimitive): int {.importcpp: "#->get_geom_rendering()".} ## \
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this primitive.
+
+proc getShadeModel*(this: GeomPrimitive): GeomEnums_ShadeModel {.importcpp: "#->get_shade_model()".} ## \
+## Returns the ShadeModel hint for this primitive.  This is intended as a hint
+## to the renderer to tell it how the per-vertex colors and normals are
+## applied.
+
+proc setShadeModel*(this: GeomPrimitive, shade_model: GeomEnums_ShadeModel) {.importcpp: "#->set_shade_model(#)".} ## \
+## Changes the ShadeModel hint for this primitive.  This is different from the
+## ShadeModelAttrib that might also be applied from the scene graph.  This
+## does not affect the shade model that is in effect when rendering, but
+## rather serves as a hint to the renderer to tell it how the per-vertex
+## colors and normals on this primitive are applied.
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
+
+proc getUsageHint*(this: GeomPrimitive): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint for this primitive.  See geomEnums.h.  This has
+## nothing to do with the usage hint associated with the primitive's vertices;
+## this only specifies how often the vertex indices that define the primitive
+## will be modified.
+##
+## It is perfectly legal (and, in fact, common) for a GeomPrimitive to have
+## UH_static on itself, while referencing vertex data with UH_dynamic.  This
+## means that the vertices themselves will be animated, but the primitive will
+## always reference the same set of vertices from the pool.
+
+proc setUsageHint*(this: GeomPrimitive, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for this primitive.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
+
+proc getIndexType*(this: GeomPrimitive): GeomEnums_NumericType {.importcpp: "#->get_index_type()".} ## \
+## Returns the numeric type of the index column.  Normally, this will be
+## either NT_uint16 or NT_uint32.
+
+proc setIndexType*(this: GeomPrimitive, index_type: GeomEnums_NumericType) {.importcpp: "#->set_index_type(#)".} ## \
+## Changes the numeric type of the index column.  Normally, this should be
+## either NT_uint16 or NT_uint32.
+##
+## The index type must be large enough to include all of the index values in
+## the primitive.  It may be automatically elevated, if necessary, to a larger
+## index type, by a subsequent call to add_index() that names an index value
+## that does not fit in the index type you specify.
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
 
 proc isComposite*(this: GeomPrimitive): bool {.importcpp: "#->is_composite()".} ## \
 ## Returns true if the primitive is a composite primitive such as a tristrip
@@ -41619,6 +45756,14 @@ proc reverse*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->re
 ## Also see CullFaceAttrib, which can change the visible direction of a
 ## triangle without having to duplicate it (but which doesn't necessarily work
 ## in the presence of lighting).
+
+proc matchShadeModel*(this: GeomPrimitive, shade_model: GeomEnums_ShadeModel): GeomPrimitive {.importcpp: "deconstify(#->match_shade_model(#))", header: deconstifyCode.} ## \
+## Returns a new primitive that is compatible with the indicated shade model,
+## if possible, or NULL if this is not possible.
+##
+## In most cases, this will return either NULL or the original primitive.  In
+## the case of a SM_flat_first_vertex vs.  a SM_flat_last_vertex (or vice-
+## versa), however, it will return a rotated primitive.
 
 proc makePoints*(this: GeomPrimitive): GeomPrimitive {.importcpp: "deconstify(#->make_points())", header: deconstifyCode.} ## \
 ## Returns a new GeomPoints primitive that represents each of the vertices in
@@ -41923,6 +46068,12 @@ proc getBinormalName*(this: TextureStage): InternalName {.importcpp: "#->get_bin
 ## Returns the set of binormals this texture stage will use.  This is the same
 ## as get_binormal_name(), except that the first part is "binormal".
 
+proc setMode*(this: TextureStage, mode: TextureStage_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Set the mode of this texture stage
+
+proc getMode*(this: TextureStage): TextureStage_Mode {.importcpp: "#->get_mode()".} ## \
+## Return the mode of this stage
+
 proc isFixedFunction*(this: TextureStage): bool {.importcpp: "#->is_fixed_function()".} ## \
 ## Returns true if the TextureStage is relevant to the classic fixed function
 ## pipeline.  This excludes texture stages such as normal mapping and the
@@ -41980,13 +46131,81 @@ proc getTexViewOffset*(this: TextureStage): int {.importcpp: "#->get_tex_view_of
 ## Returns the current setting of the tex_view_offset.  See
 ## set_tex_view_offset().
 
+proc setCombineRgb*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand) {.importcpp: "#->set_combine_rgb(#, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a one-parameter
+## operation.  Specifically, this is CM_replace only.
+
+proc setCombineRgb*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand, source1: TextureStage_CombineSource, operand1: TextureStage_CombineOperand) {.importcpp: "#->set_combine_rgb(#, #, #, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a two-parameter
+## operation.  Specifically, this is everything except for CM_replace and
+## CM_interpolate.
+
+proc setCombineRgb*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand, source1: TextureStage_CombineSource, operand1: TextureStage_CombineOperand, source2: TextureStage_CombineSource, operand2: TextureStage_CombineOperand) {.importcpp: "#->set_combine_rgb(#, #, #, #, #, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a one-parameter
+## operation.  Specifically, this is CM_interpolate only.
+
+proc getCombineRgbMode*(this: TextureStage): TextureStage_CombineMode {.importcpp: "#->get_combine_rgb_mode()".} ## \
+## Get the combine_rgb_mode
+
 proc getNumCombineRgbOperands*(this: TextureStage): int {.importcpp: "#->get_num_combine_rgb_operands()".} ## \
 ## Returns the number of meaningful operands that may be retrieved via
 ## get_combine_rgb_sourceN() and get_combine_rgb_operandN().
 
+proc getCombineRgbSource0*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_rgb_source0()".} ## \
+## Get source0 of combine_rgb_mode
+
+proc getCombineRgbOperand0*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_rgb_operand0()".} ## \
+## Get operand0 of combine_rgb_mode
+
+proc getCombineRgbSource1*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_rgb_source1()".} ## \
+## Get source1 of combine_rgb_mode
+
+proc getCombineRgbOperand1*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_rgb_operand1()".} ## \
+## Get operand1 of combine_rgb_mode
+
+proc getCombineRgbSource2*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_rgb_source2()".} ## \
+## Get source2 of combine_rgb_mode
+
+proc getCombineRgbOperand2*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_rgb_operand2()".} ## \
+## Get operand2 of combine_rgb_mode
+
+proc setCombineAlpha*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand) {.importcpp: "#->set_combine_alpha(#, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a one-parameter
+## operation.  Specifically, this is CM_replace only.
+
+proc setCombineAlpha*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand, source1: TextureStage_CombineSource, operand1: TextureStage_CombineOperand) {.importcpp: "#->set_combine_alpha(#, #, #, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a two-parameter
+## operation.  Specifically, this is everything except for CM_replace and
+## CM_interpolate.
+
+proc setCombineAlpha*(this: TextureStage, mode: TextureStage_CombineMode, source0: TextureStage_CombineSource, operand0: TextureStage_CombineOperand, source1: TextureStage_CombineSource, operand1: TextureStage_CombineOperand, source2: TextureStage_CombineSource, operand2: TextureStage_CombineOperand) {.importcpp: "#->set_combine_alpha(#, #, #, #, #, #, #)".} ## \
+## Specifies any of the CombineMode values that represent a one-parameter
+## operation.  Specifically, this is CM_interpolate only.
+
+proc getCombineAlphaMode*(this: TextureStage): TextureStage_CombineMode {.importcpp: "#->get_combine_alpha_mode()".} ## \
+## Get combine_alpha_mode
+
 proc getNumCombineAlphaOperands*(this: TextureStage): int {.importcpp: "#->get_num_combine_alpha_operands()".} ## \
 ## Returns the number of meaningful operands that may be retrieved via
 ## get_combine_alpha_sourceN() and get_combine_alpha_operandN().
+
+proc getCombineAlphaSource0*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_alpha_source0()".} ## \
+## Get source0 of combine_alpha_mode
+
+proc getCombineAlphaOperand0*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_alpha_operand0()".} ## \
+## Get operand0 of combine_alpha_mode
+
+proc getCombineAlphaSource1*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_alpha_source1()".} ## \
+## Get source1 of combine_alpha_mode
+
+proc getCombineAlphaOperand1*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_alpha_operand1()".} ## \
+## Get operand1 of combine_alpha_mode
+
+proc getCombineAlphaSource2*(this: TextureStage): TextureStage_CombineSource {.importcpp: "#->get_combine_alpha_source2()".} ## \
+## Get source2 of combine_alpha_mode
+
+proc getCombineAlphaOperand2*(this: TextureStage): TextureStage_CombineOperand {.importcpp: "#->get_combine_alpha_operand2()".} ## \
+## Get operand2 of combine_alpha_mode
 
 proc involvesColorScale*(this: TextureStage): bool {.importcpp: "#->involves_color_scale()".} ## \
 ## Returns true if the TextureStage is affected by the setting of the current
@@ -42040,9 +46259,32 @@ proc makeCopy*(this: Geom): Geom {.importcpp: "#->make_copy()".} ## \
 ## be a different Geom pointer, but its internal data may or may not be shared
 ## with that of the original Geom.
 
+proc getPrimitiveType*(this: Geom): GeomEnums_PrimitiveType {.importcpp: "#->get_primitive_type()".} ## \
+## Returns the fundamental primitive type that is common to all GeomPrimitives
+## added within the Geom.  All nested primitives within a particular Geom must
+## be the same type (that is, you can mix triangles and tristrips, because
+## they are both the same fundamental type PT_polygons, but you cannot mix
+## triangles and points withn the same Geom).
+
+proc getShadeModel*(this: Geom): GeomEnums_ShadeModel {.importcpp: "#->get_shade_model()".} ## \
+## Returns the shade model common to all of the individual GeomPrimitives that
+## have been added to the geom.
+
 proc getGeomRendering*(this: Geom): int {.importcpp: "#->get_geom_rendering()".} ## \
 ## Returns the set of GeomRendering bits that represent the rendering
 ## properties required to properly render this Geom.
+
+proc getUsageHint*(this: Geom): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the minimum (i.e.  most dynamic) usage_hint among all of the
+## individual GeomPrimitives that have been added to the geom.
+## @deprecated  This is no longer very useful.
+
+proc setUsageHint*(this: Geom, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Changes the UsageHint hint for all of the primitives on this Geom to the
+## same value.  See get_usage_hint().
+##
+## Don't call this in a downstream thread unless you don't mind it blowing
+## away other changes you might have recently made in an upstream thread.
 
 proc getVertexData*(this: Geom, current_thread: Thread): GeomVertexData {.importcpp: "deconstify(#->get_vertex_data(#))", header: deconstifyCode.} ## \
 ## Returns a const pointer to the GeomVertexData, for application code to
@@ -42364,6 +46606,21 @@ proc markBoundsStale*(this: Geom) {.importcpp: "#->mark_bounds_stale()".} ## \
 ## Marks the bounding volume of the Geom as stale so that it should be
 ## recomputed.  Usually it is not necessary to call this explicitly.
 
+proc setBoundsType*(this: Geom, bounds_type: BoundingVolume_BoundsType) {.importcpp: "#->set_bounds_type(#)".} ## \
+## Specifies the desired type of bounding volume that will be created for this
+## Geom.  This is normally BoundingVolume::BT_default, which means to set the
+## type according to the config variable "bounds-type".
+##
+## If this is BT_sphere or BT_box, a BoundingSphere or BoundingBox is
+## explicitly created.  If it is BT_best, a BoundingBox is created.
+##
+## This affects the implicit bounding volume only.  If an explicit bounding
+## volume is set on the Geom with set_bounds(), that bounding volume type is
+## used.  (This is different behavior from the similar method on PandaNode.)
+
+proc getBoundsType*(this: Geom): BoundingVolume_BoundsType {.importcpp: "#->get_bounds_type()".} ## \
+## Returns the bounding volume type set with set_bounds_type().
+
 proc setBounds*(this: Geom, volume: BoundingVolume) {.importcpp: "#->set_bounds(#)".} ## \
 ## Resets the bounding volume so that it is the indicated volume.  When it is
 ## explicitly set, the bounding volume will no longer be automatically
@@ -42439,17 +46696,25 @@ proc getGeom*(this: GeomContext): Geom {.importcpp: "#.get_geom()".}
 
 converter getClassType*(_: typedesc[GeomContext]): TypeHandle {.importcpp: "GeomContext::get_class_type()", header: "geomContext.h".}
 
+proc newGeomLines*(usage_hint: GeomEnums_UsageHint): GeomLines {.importcpp: "new GeomLines(#)".}
+
 proc newGeomLines*(copy: GeomLines): GeomLines {.importcpp: "new GeomLines(#)".}
 
 converter getClassType*(_: typedesc[GeomLines]): TypeHandle {.importcpp: "GeomLines::get_class_type()", header: "geomLines.h".}
+
+proc newGeomLinesAdjacency*(usage_hint: GeomEnums_UsageHint): GeomLinesAdjacency {.importcpp: "new GeomLinesAdjacency(#)".}
 
 proc newGeomLinesAdjacency*(copy: GeomLinesAdjacency): GeomLinesAdjacency {.importcpp: "new GeomLinesAdjacency(#)".}
 
 converter getClassType*(_: typedesc[GeomLinesAdjacency]): TypeHandle {.importcpp: "GeomLinesAdjacency::get_class_type()", header: "geomLinesAdjacency.h".}
 
+proc newGeomLinestrips*(usage_hint: GeomEnums_UsageHint): GeomLinestrips {.importcpp: "new GeomLinestrips(#)".}
+
 proc newGeomLinestrips*(copy: GeomLinestrips): GeomLinestrips {.importcpp: "new GeomLinestrips(#)".}
 
 converter getClassType*(_: typedesc[GeomLinestrips]): TypeHandle {.importcpp: "GeomLinestrips::get_class_type()", header: "geomLinestrips.h".}
+
+proc newGeomLinestripsAdjacency*(usage_hint: GeomEnums_UsageHint): GeomLinestripsAdjacency {.importcpp: "new GeomLinestripsAdjacency(#)".}
 
 proc newGeomLinestripsAdjacency*(copy: GeomLinestripsAdjacency): GeomLinestripsAdjacency {.importcpp: "new GeomLinestripsAdjacency(#)".}
 
@@ -42457,27 +46722,45 @@ converter getClassType*(_: typedesc[GeomLinestripsAdjacency]): TypeHandle {.impo
 
 proc newGeomPatches*(copy: GeomPatches): GeomPatches {.importcpp: "new GeomPatches(#)".}
 
+proc newGeomPatches*(num_vertices_per_patch: int, usage_hint: GeomEnums_UsageHint): GeomPatches {.importcpp: "new GeomPatches(#, #)".} ## \
+## The number of vertices per patch must be specified to the GeomPatches
+## constructor, and it may not be changed during the lifetime of the
+## GeomPatches object.  Create a new GeomPatches if you need to have a
+## different value.
+
 converter getClassType*(_: typedesc[GeomPatches]): TypeHandle {.importcpp: "GeomPatches::get_class_type()", header: "geomPatches.h".}
+
+proc newGeomPoints*(usage_hint: GeomEnums_UsageHint): GeomPoints {.importcpp: "new GeomPoints(#)".}
 
 proc newGeomPoints*(copy: GeomPoints): GeomPoints {.importcpp: "new GeomPoints(#)".}
 
 converter getClassType*(_: typedesc[GeomPoints]): TypeHandle {.importcpp: "GeomPoints::get_class_type()", header: "geomPoints.h".}
 
+proc newGeomTriangles*(usage_hint: GeomEnums_UsageHint): GeomTriangles {.importcpp: "new GeomTriangles(#)".}
+
 proc newGeomTriangles*(copy: GeomTriangles): GeomTriangles {.importcpp: "new GeomTriangles(#)".}
 
 converter getClassType*(_: typedesc[GeomTriangles]): TypeHandle {.importcpp: "GeomTriangles::get_class_type()", header: "geomTriangles.h".}
+
+proc newGeomTrianglesAdjacency*(usage_hint: GeomEnums_UsageHint): GeomTrianglesAdjacency {.importcpp: "new GeomTrianglesAdjacency(#)".}
 
 proc newGeomTrianglesAdjacency*(copy: GeomTrianglesAdjacency): GeomTrianglesAdjacency {.importcpp: "new GeomTrianglesAdjacency(#)".}
 
 converter getClassType*(_: typedesc[GeomTrianglesAdjacency]): TypeHandle {.importcpp: "GeomTrianglesAdjacency::get_class_type()", header: "geomTrianglesAdjacency.h".}
 
+proc newGeomTrifans*(usage_hint: GeomEnums_UsageHint): GeomTrifans {.importcpp: "new GeomTrifans(#)".}
+
 proc newGeomTrifans*(copy: GeomTrifans): GeomTrifans {.importcpp: "new GeomTrifans(#)".}
 
 converter getClassType*(_: typedesc[GeomTrifans]): TypeHandle {.importcpp: "GeomTrifans::get_class_type()", header: "geomTrifans.h".}
 
+proc newGeomTristrips*(usage_hint: GeomEnums_UsageHint): GeomTristrips {.importcpp: "new GeomTristrips(#)".}
+
 proc newGeomTristrips*(copy: GeomTristrips): GeomTristrips {.importcpp: "new GeomTristrips(#)".}
 
 converter getClassType*(_: typedesc[GeomTristrips]): TypeHandle {.importcpp: "GeomTristrips::get_class_type()", header: "geomTristrips.h".}
+
+proc newGeomTristripsAdjacency*(usage_hint: GeomEnums_UsageHint): GeomTristripsAdjacency {.importcpp: "new GeomTristripsAdjacency(#)".}
 
 proc newGeomTristripsAdjacency*(copy: GeomTristripsAdjacency): GeomTristripsAdjacency {.importcpp: "new GeomTristripsAdjacency(#)".}
 
@@ -43460,6 +47743,27 @@ proc initSamplerState*(param0: SamplerState): SamplerState {.importcpp: "Sampler
 proc getDefault*(_: typedesc[SamplerState]): SamplerState {.importcpp: "SamplerState::get_default()", header: "samplerState.h".} ## \
 ## Returns a reference to the global default immutable SamplerState object.
 
+proc setWrapU*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_u(#)".} ## \
+## This setting determines what happens when the SamplerState is sampled with
+## a U value outside the range 0.0-1.0.  The default is WM_repeat, which
+## indicates that the SamplerState should repeat indefinitely.
+
+proc setWrapV*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_v(#)".} ## \
+## This setting determines what happens when the SamplerState is sampled with
+## a V value outside the range 0.0-1.0.  The default is WM_repeat, which
+## indicates that the SamplerState should repeat indefinitely.
+
+proc setWrapW*(this: SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_w(#)".} ## \
+## The W wrap direction is only used for 3-d SamplerStates.
+
+proc setMinfilter*(this: SamplerState, filter: SamplerState_FilterType) {.importcpp: "#.set_minfilter(#)".} ## \
+## Sets the filtering method that should be used when viewing the SamplerState
+## from a distance.
+
+proc setMagfilter*(this: SamplerState, filter: SamplerState_FilterType) {.importcpp: "#.set_magfilter(#)".} ## \
+## Sets the filtering method that should be used when viewing the SamplerState
+## up close.
+
 proc setAnisotropicDegree*(this: SamplerState, anisotropic_degree: int) {.importcpp: "#.set_anisotropic_degree(#)".} ## \
 ## Specifies the level of anisotropic filtering to apply to the SamplerState.
 ## Set this 0 to indicate the default value, which is specified in the
@@ -43486,6 +47790,36 @@ proc setLodBias*(this: SamplerState, lod_bias: float32) {.importcpp: "#.set_lod_
 ## Sets the value that will be added to the level of detail when sampling the
 ## texture.  This may be a negative value, although some graphics hardware may
 ## not support the use of negative LOD values.
+
+proc getWrapU*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_u()".} ## \
+## Returns the wrap mode of the texture in the U direction.
+
+proc getWrapV*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_v()".} ## \
+## Returns the wrap mode of the texture in the V direction.
+
+proc getWrapW*(this: SamplerState): SamplerState_WrapMode {.importcpp: "#.get_wrap_w()".} ## \
+## Returns the wrap mode of the texture in the W direction.  This is the depth
+## direction of 3-d textures.
+
+proc getMinfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_minfilter()".} ## \
+## Returns the filter mode of the texture for minification.  If this is one of
+## the mipmap constants, then the texture requires mipmaps.  This may return
+## FT_default; see also get_effective_minfilter().
+
+proc getMagfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification.  The mipmap
+## constants are invalid here.  This may return FT_default; see also
+## get_effective_minfilter().
+
+proc getEffectiveMinfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_effective_minfilter()".} ## \
+## Returns the filter mode of the texture for minification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+
+proc getEffectiveMagfilter*(this: SamplerState): SamplerState_FilterType {.importcpp: "#.get_effective_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
 
 proc getAnisotropicDegree*(this: SamplerState): int {.importcpp: "#.get_anisotropic_degree()".} ## \
 ## Returns the degree of anisotropic filtering that should be applied to the
@@ -43517,6 +47851,25 @@ proc getLodBias*(this: SamplerState): float32 {.importcpp: "#.get_lod_bias()".} 
 proc usesMipmaps*(this: SamplerState): bool {.importcpp: "#.uses_mipmaps()".} ## \
 ## Returns true if the minfilter settings on this sampler indicate the use of
 ## mipmapping, false otherwise.
+
+proc isMipmap*(_: typedesc[SamplerState], `type`: SamplerState_FilterType): bool {.importcpp: "#SamplerState::is_mipmap(#)", header: "samplerState.h".} ## \
+## Returns true if the indicated filter type requires the use of mipmaps, or
+## false if it does not.
+
+proc formatFilterType*(_: typedesc[SamplerState], ft: SamplerState_FilterType): string {.importcpp: "nimStringFromStdString(#SamplerState::format_filter_type(#))", header: "samplerState.h".} ## \
+## Returns the indicated FilterType converted to a string word.
+
+proc stringFilterType*(_: typedesc[SamplerState], str: string): SamplerState_FilterType {.importcpp: "#SamplerState::string_filter_type(nimStringToStdString(#))", header: "samplerState.h".} ## \
+## Returns the FilterType value associated with the given string
+## representation, or FT_invalid if the string does not match any known
+## FilterType value.
+
+proc formatWrapMode*(_: typedesc[SamplerState], wm: SamplerState_WrapMode): string {.importcpp: "nimStringFromStdString(#SamplerState::format_wrap_mode(#))", header: "samplerState.h".} ## \
+## Returns the indicated WrapMode converted to a string word.
+
+proc stringWrapMode*(_: typedesc[SamplerState], str: string): SamplerState_WrapMode {.importcpp: "#SamplerState::string_wrap_mode(nimStringToStdString(#))", header: "samplerState.h".} ## \
+## Returns the WrapMode value associated with the given string representation,
+## or WM_invalid if the string does not match any known WrapMode value.
 
 proc `==`*(this: SamplerState, other: SamplerState): bool {.importcpp: "#.operator ==(#)".}
 
@@ -43568,15 +47921,33 @@ proc clear*(this: Texture) {.importcpp: "#->clear()".} ## \
 ## Reinitializes the texture to its default, empty state (except for the
 ## name).
 
+proc setupTexture*(this: Texture, texture_type: Texture_TextureType, x_size: int, y_size: int, z_size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_texture(#, #, #, #, #, #)".} ## \
+## Sets the texture to the indicated type and dimensions, presumably in
+## preparation for calling read() or load(), or set_ram_image() or
+## modify_ram_image(), or use set_clear_color to let the texture be cleared to
+## a solid color.
+
 proc setup1dTexture*(this: Texture) {.importcpp: "#->setup_1d_texture()".} ## \
 ## Sets the texture as an empty 1-d texture with no dimensions.  Follow up
 ## with read() or load() to fill the texture properties and image data, or use
 ## set_clear_color to let the texture be cleared to a solid color.
 
+proc setup1dTexture*(this: Texture, x_size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_1d_texture(#, #, #)".} ## \
+## Sets the texture as an empty 1-d texture with the specified dimensions and
+## properties.  Follow up with set_ram_image() or modify_ram_image() to fill
+## the image data, or use set_clear_color to let the texture be cleared to a
+## solid color.
+
 proc setup2dTexture*(this: Texture) {.importcpp: "#->setup_2d_texture()".} ## \
 ## Sets the texture as an empty 2-d texture with no dimensions.  Follow up
 ## with read() or load() to fill the texture properties and image data, or use
 ## set_clear_color to let the texture be cleared to a solid color.
+
+proc setup2dTexture*(this: Texture, x_size: int, y_size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_2d_texture(#, #, #, #)".} ## \
+## Sets the texture as an empty 2-d texture with the specified dimensions and
+## properties.  Follow up with set_ram_image() or modify_ram_image() to fill
+## the image data, or use set_clear_color to let the texture be cleared to a
+## solid color.
 
 proc setup3dTexture*(this: Texture, z_size: int) {.importcpp: "#->setup_3d_texture(#)".} ## \
 ## Sets the texture as an empty 3-d texture with no dimensions (though if you
@@ -43590,10 +47961,24 @@ proc setup3dTexture*(this: Texture) {.importcpp: "#->setup_3d_texture()".} ## \
 ## up with read() or load() to fill the texture properties and image data, or
 ## use set_clear_color to let the texture be cleared to a solid color.
 
+proc setup3dTexture*(this: Texture, x_size: int, y_size: int, z_size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_3d_texture(#, #, #, #, #)".} ## \
+## Sets the texture as an empty 3-d texture with the specified dimensions and
+## properties.  Follow up with set_ram_image() or modify_ram_image() to fill
+## the image data.
+
 proc setupCubeMap*(this: Texture) {.importcpp: "#->setup_cube_map()".} ## \
 ## Sets the texture as an empty cube map texture with no dimensions.  Follow
 ## up with read() or load() to fill the texture properties and image data, or
 ## use set_clear_color to let the texture be cleared to a solid color.
+
+proc setupCubeMap*(this: Texture, size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_cube_map(#, #, #)".} ## \
+## Sets the texture as an empty cube map texture with the specified dimensions
+## and properties.  Follow up with set_ram_image() or modify_ram_image() to
+## fill the image data, or use set_clear_color to let the texture be cleared
+## to a solid color.
+##
+## Note that a cube map should always consist of six square images, so x_size
+## and y_size will be the same, and z_size is always 6.
 
 proc setup2dTextureArray*(this: Texture, z_size: int) {.importcpp: "#->setup_2d_texture_array(#)".} ## \
 ## Sets the texture as an empty 2-d texture array with no dimensions (though
@@ -43609,6 +47994,12 @@ proc setup2dTextureArray*(this: Texture) {.importcpp: "#->setup_2d_texture_array
 ## data, or use set_clear_color to let the texture be cleared to a solid
 ## color.
 
+proc setup2dTextureArray*(this: Texture, x_size: int, y_size: int, z_size: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_2d_texture_array(#, #, #, #, #)".} ## \
+## Sets the texture as an empty 2-d texture array with the specified
+## dimensions and properties.  Follow up with set_ram_image() or
+## modify_ram_image() to fill the image data, or use set_clear_color to let
+## the texture be cleared to a solid color.
+
 proc setupCubeMapArray*(this: Texture, num_cube_maps: int) {.importcpp: "#->setup_cube_map_array(#)".} ## \
 ## Sets the texture as cube map array with N cube maps.  Note that this number
 ## is not the same as the z_size.  Follow up with read() or load() to fill the
@@ -43616,6 +48007,25 @@ proc setupCubeMapArray*(this: Texture, num_cube_maps: int) {.importcpp: "#->setu
 ## texture be cleared to a solid color.
 ##
 ## @since 1.10.0
+
+proc setupCubeMapArray*(this: Texture, size: int, num_cube_maps: int, component_type: Texture_ComponentType, format: Texture_Format) {.importcpp: "#->setup_cube_map_array(#, #, #, #)".} ## \
+## Sets the texture as cube map array with N cube maps with the specified
+## dimensions and format.  Follow up with set_ram_image() or
+## modify_ram_image() to fill the image data, or use set_clear_color to let
+## the texture be cleared to a solid color.
+##
+## The num_cube_maps given here is multiplied by six to become the z_size of
+## the image.
+##
+## @since 1.10.0
+
+proc setupBufferTexture*(this: Texture, size: int, component_type: Texture_ComponentType, format: Texture_Format, usage: GeomEnums_UsageHint) {.importcpp: "#->setup_buffer_texture(#, #, #, #)".} ## \
+## Sets the texture as an empty buffer texture with the specified size and
+## properties.  Follow up with set_ram_image() or modify_ram_image() to fill
+## the image data, or use set_clear_color to let the texture be cleared to a
+## solid color.
+##
+## Note that a buffer texture's format needs to match the component type.
 
 proc generateNormalizationCubeMap*(this: Texture, size: int) {.importcpp: "#->generate_normalization_cube_map(#)".} ## \
 ## Generates a special cube map image in the texture that can be used to apply
@@ -44196,6 +48606,89 @@ proc getComponentWidth*(this: Texture): int {.importcpp: "#->get_component_width
 ## Returns the number of bytes stored for each color component of a texel.
 ## Typically this is 1, but it may be 2 for 16-bit texels.
 
+proc getTextureType*(this: Texture): Texture_TextureType {.importcpp: "#->get_texture_type()".} ## \
+## Returns the overall interpretation of the texture.
+
+proc getUsageHint*(this: Texture): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the usage hint specified for buffer textures, or UH_unspecified for
+## all other texture types.
+
+proc getFormat*(this: Texture): Texture_Format {.importcpp: "#->get_format()".} ## \
+## Returns the format of the texture, which represents both the semantic
+## meaning of the texels and, to some extent, their storage information.
+
+proc setFormat*(this: Texture, format: Texture_Format) {.importcpp: "#->set_format(#)".} ## \
+## Changes the format value for the texture components.  This implicitly sets
+## num_components as well.
+
+proc getComponentType*(this: Texture): Texture_ComponentType {.importcpp: "#->get_component_type()".} ## \
+## Returns the numeric interpretation of each component of the texture.
+
+proc setComponentType*(this: Texture, component_type: Texture_ComponentType) {.importcpp: "#->set_component_type(#)".} ## \
+## Changes the data value for the texture components.  This implicitly sets
+## component_width as well.
+
+proc getWrapU*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_u()".} ## \
+## Returns the wrap mode of the texture in the U direction.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc setWrapU*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_u(#)".}
+
+proc getWrapV*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_v()".} ## \
+## Returns the wrap mode of the texture in the V direction.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc setWrapV*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_v(#)".}
+
+proc getWrapW*(this: Texture): SamplerState_WrapMode {.importcpp: "#->get_wrap_w()".} ## \
+## Returns the wrap mode of the texture in the W direction.  This is the depth
+## direction of 3-d textures.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc setWrapW*(this: Texture, wrap: SamplerState_WrapMode) {.importcpp: "#->set_wrap_w(#)".}
+
+proc getMinfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_minfilter()".} ## \
+## Returns the filter mode of the texture for minification.  If this is one of
+## the mipmap constants, then the texture requires mipmaps.  This may return
+## FT_default; see also get_effective_minfilter().
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc getEffectiveMinfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_effective_minfilter()".} ## \
+## Returns the filter mode of the texture for minification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc setMinfilter*(this: Texture, filter: SamplerState_FilterType) {.importcpp: "#->set_minfilter(#)".}
+
+proc getMagfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification.  The mipmap
+## constants are invalid here.  This may return FT_default; see also
+## get_effective_minfilter().
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc getEffectiveMagfilter*(this: Texture): SamplerState_FilterType {.importcpp: "#->get_effective_magfilter()".} ## \
+## Returns the filter mode of the texture for magnification, with special
+## treatment for FT_default.  This will normally not return FT_default, unless
+## there is an error in the config file.
+##
+## This returns the default sampler state for this texture; it may still be
+## overridden by a sampler state specified at a higher level.
+
+proc setMagfilter*(this: Texture, filter: SamplerState_FilterType) {.importcpp: "#->set_magfilter(#)".}
+
 proc getAnisotropicDegree*(this: Texture): int {.importcpp: "#->get_anisotropic_degree()".} ## \
 ## Returns the degree of anisotropic filtering that should be applied to the
 ## texture.  This value may return 0, indicating the default value; see also
@@ -44249,6 +48742,29 @@ proc hasCompression*(this: Texture): bool {.importcpp: "#->has_compression()".} 
 ## support the requested compression mode, in which case the texture may
 ## actually be stored uncompressed in texture memory.
 
+proc getCompression*(this: Texture): Texture_CompressionMode {.importcpp: "#->get_compression()".} ## \
+## Returns the compression mode requested for this particular texture, or
+## CM_off if the texture is not to be compressed.
+##
+## If a value other than CM_off is returned, this is not a guarantee that the
+## texture is actually successfully compressed on the GSG.  It may be that the
+## GSG does not support the requested compression mode, in which case the
+## texture may actually be stored uncompressed in texture memory.
+
+proc setCompression*(this: Texture, compression: Texture_CompressionMode) {.importcpp: "#->set_compression(#)".} ## \
+## Requests that this particular Texture be compressed when it is loaded into
+## texture memory.
+##
+## This refers to the internal compression of the texture image within texture
+## memory; it is not related to jpeg or png compression, which are disk file
+## compression formats.  The actual disk file that generated this texture may
+## be stored in a compressed or uncompressed format supported by Panda; it
+## will be decompressed on load, and then recompressed by the graphics API if
+## this parameter is not CM_off.
+##
+## If the GSG does not support this texture compression mode, the texture will
+## silently be loaded uncompressed.
+
 proc getRenderToTexture*(this: Texture): bool {.importcpp: "#->get_render_to_texture()".} ## \
 ## Returns a flag on the texture that indicates whether the texture is
 ## intended to be used as a direct-render target, by binding a framebuffer to
@@ -44290,6 +48806,21 @@ proc setDefaultSampler*(this: Texture, sampler: SamplerState) {.importcpp: "#->s
 proc usesMipmaps*(this: Texture): bool {.importcpp: "#->uses_mipmaps()".} ## \
 ## Returns true if the minfilter settings on this texture indicate the use of
 ## mipmapping, false otherwise.
+
+proc getQualityLevel*(this: Texture): Texture_QualityLevel {.importcpp: "#->get_quality_level()".} ## \
+## Returns the current quality_level hint.  See set_quality_level().  This
+## value may return QL_default; see get_effective_quality_level().
+
+proc getEffectiveQualityLevel*(this: Texture): Texture_QualityLevel {.importcpp: "#->get_effective_quality_level()".} ## \
+## Returns the current quality_level hint, or the global default quality_level
+## if this texture doesn't specify a quality level.  This value will not
+## normally return QL_default (unless there is an error in the config file)
+
+proc setQualityLevel*(this: Texture, quality_level: Texture_QualityLevel) {.importcpp: "#->set_quality_level(#)".} ## \
+## Sets a hint to the renderer about the desired performance / quality
+## tradeoff for this particular texture.  This is most useful for the
+## tinydisplay software renderer; for normal, hardware-accelerated renderers,
+## this may have little or no effect.
 
 proc getExpectedNumMipmapLevels*(this: Texture): int {.importcpp: "#->get_expected_num_mipmap_levels()".} ## \
 ## Returns the number of mipmap levels that should be defined for this
@@ -44372,6 +48903,13 @@ proc getExpectedRamPageSize*(this: Texture): clonglong {.importcpp: "#->get_expe
 ## texture.  For a 2-d or 1-d texture, this is the same as
 ## get_expected_ram_image_size().
 
+proc getRamImageCompression*(this: Texture): Texture_CompressionMode {.importcpp: "#->get_ram_image_compression()".} ## \
+## Returns the compression mode in which the ram image is already stored pre-
+## compressed.  If this is other than CM_off, you cannot rely on the contents
+## of the ram image to be anything predicatable (it will not be an array of x
+## by y pixels, and it probably won't have the same length as
+## get_expected_ram_image_size()).
+
 proc clearRamImage*(this: Texture) {.importcpp: "#->clear_ram_image()".} ## \
 ## Discards the current system-RAM image.
 
@@ -44394,6 +48932,60 @@ proc isCacheable*(this: Texture): bool {.importcpp: "#->is_cacheable()".} ## \
 ## Returns true if there is enough information in this Texture object to write
 ## it to the bam cache successfully, false otherwise.  For most textures, this
 ## is the same as has_ram_image().
+
+proc compressRamImage*(this: Texture, compression: Texture_CompressionMode, quality_level: Texture_QualityLevel, gsg: GraphicsStateGuardianBase): bool {.importcpp: "#->compress_ram_image(#, #, #)".} ## \
+## Attempts to compress the texture's RAM image internally, to a format
+## supported by the indicated GSG.  In order for this to work, the squish
+## library must have been compiled into Panda.
+##
+## If compression is CM_on, then an appropriate compression method that is
+## supported by the indicated GSG is automatically chosen.  If the GSG pointer
+## is NULL, any of the standard DXT1/3/5 compression methods will be used,
+## regardless of whether it is supported.
+##
+## If compression is any specific compression method, that method is used
+## regardless of whether the GSG supports it.
+##
+## quality_level determines the speed/quality tradeoff of the compression.  If
+## it is QL_default, the texture's own quality_level parameter is used.
+##
+## Returns true if successful, false otherwise.
+
+proc compressRamImage*(this: Texture, compression: Texture_CompressionMode, quality_level: Texture_QualityLevel): bool {.importcpp: "#->compress_ram_image(#, #)".} ## \
+## Attempts to compress the texture's RAM image internally, to a format
+## supported by the indicated GSG.  In order for this to work, the squish
+## library must have been compiled into Panda.
+##
+## If compression is CM_on, then an appropriate compression method that is
+## supported by the indicated GSG is automatically chosen.  If the GSG pointer
+## is NULL, any of the standard DXT1/3/5 compression methods will be used,
+## regardless of whether it is supported.
+##
+## If compression is any specific compression method, that method is used
+## regardless of whether the GSG supports it.
+##
+## quality_level determines the speed/quality tradeoff of the compression.  If
+## it is QL_default, the texture's own quality_level parameter is used.
+##
+## Returns true if successful, false otherwise.
+
+proc compressRamImage*(this: Texture, compression: Texture_CompressionMode): bool {.importcpp: "#->compress_ram_image(#)".} ## \
+## Attempts to compress the texture's RAM image internally, to a format
+## supported by the indicated GSG.  In order for this to work, the squish
+## library must have been compiled into Panda.
+##
+## If compression is CM_on, then an appropriate compression method that is
+## supported by the indicated GSG is automatically chosen.  If the GSG pointer
+## is NULL, any of the standard DXT1/3/5 compression methods will be used,
+## regardless of whether it is supported.
+##
+## If compression is any specific compression method, that method is used
+## regardless of whether the GSG supports it.
+##
+## quality_level determines the speed/quality tradeoff of the compression.  If
+## it is QL_default, the texture's own quality_level parameter is used.
+##
+## Returns true if successful, false otherwise.
 
 proc compressRamImage*(this: Texture): bool {.importcpp: "#->compress_ram_image()".} ## \
 ## Attempts to compress the texture's RAM image internally, to a format
@@ -44874,16 +49466,94 @@ proc rescaleTexture*(this: Texture): bool {.importcpp: "#->rescale_texture()".} 
 ## be useful after loading a Texture image by hand, instead of reading it from
 ## a disk file.  Returns true if the texture is changed, false if it was not.
 
+proc formatTextureType*(_: typedesc[Texture], tt: Texture_TextureType): string {.importcpp: "nimStringFromStdString(#Texture::format_texture_type(#))", header: "texture.h".} ## \
+## Returns the indicated TextureType converted to a string word.
+
+proc stringTextureType*(_: typedesc[Texture], str: string): Texture_TextureType {.importcpp: "#Texture::string_texture_type(nimStringToStdString(#))", header: "texture.h".} ## \
+## Returns the TextureType corresponding to the indicated string word.
+
+proc formatComponentType*(_: typedesc[Texture], ct: Texture_ComponentType): string {.importcpp: "nimStringFromStdString(#Texture::format_component_type(#))", header: "texture.h".} ## \
+## Returns the indicated ComponentType converted to a string word.
+
+proc stringComponentType*(_: typedesc[Texture], str: string): Texture_ComponentType {.importcpp: "#Texture::string_component_type(nimStringToStdString(#))", header: "texture.h".} ## \
+## Returns the ComponentType corresponding to the indicated string word.
+
+proc formatFormat*(_: typedesc[Texture], f: Texture_Format): string {.importcpp: "nimStringFromStdString(#Texture::format_format(#))", header: "texture.h".} ## \
+## Returns the indicated Format converted to a string word.
+
+proc stringFormat*(_: typedesc[Texture], str: string): Texture_Format {.importcpp: "#Texture::string_format(nimStringToStdString(#))", header: "texture.h".} ## \
+## Returns the Format corresponding to the indicated string word.
+
+proc formatCompressionMode*(_: typedesc[Texture], cm: Texture_CompressionMode): string {.importcpp: "nimStringFromStdString(#Texture::format_compression_mode(#))", header: "texture.h".} ## \
+## Returns the indicated CompressionMode converted to a string word.
+
+proc stringCompressionMode*(_: typedesc[Texture], str: string): Texture_CompressionMode {.importcpp: "#Texture::string_compression_mode(nimStringToStdString(#))", header: "texture.h".} ## \
+## Returns the CompressionMode value associated with the given string
+## representation.
+
+proc formatQualityLevel*(_: typedesc[Texture], tql: Texture_QualityLevel): string {.importcpp: "nimStringFromStdString(#Texture::format_quality_level(#))", header: "texture.h".} ## \
+## Returns the indicated QualityLevel converted to a string word.
+
+proc stringQualityLevel*(_: typedesc[Texture], str: string): Texture_QualityLevel {.importcpp: "#Texture::string_quality_level(nimStringToStdString(#))", header: "texture.h".} ## \
+## Returns the QualityLevel value associated with the given string
+## representation.
+
 converter getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
+
+proc load*(_: typedesc[Shader], file: Filename, lang: Shader_ShaderLanguage): Shader {.importcpp: "#Shader::load(#, #)", header: "shader.h".} ## \
+## Loads the shader with the given filename.
 
 proc load*(_: typedesc[Shader], file: Filename): Shader {.importcpp: "#Shader::load(#)", header: "shader.h".} ## \
 ## Loads the shader with the given filename.
 
+proc load*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: Filename, fragment: Filename, geometry: Filename, tess_control: Filename, tess_evaluation: Filename): Shader {.importcpp: "#Shader::load(#, #, #, #, #, #)", header: "shader.h".} ## \
+## This variant of Shader::load loads all shader programs separately.
+
+proc load*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: Filename, fragment: Filename, geometry: Filename, tess_control: Filename): Shader {.importcpp: "#Shader::load(#, #, #, #, #)", header: "shader.h".} ## \
+## This variant of Shader::load loads all shader programs separately.
+
+proc load*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: Filename, fragment: Filename, geometry: Filename): Shader {.importcpp: "#Shader::load(#, #, #, #)", header: "shader.h".} ## \
+## This variant of Shader::load loads all shader programs separately.
+
+proc load*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: Filename, fragment: Filename): Shader {.importcpp: "#Shader::load(#, #, #)", header: "shader.h".} ## \
+## This variant of Shader::load loads all shader programs separately.
+
+proc make*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: string, fragment: string, geometry: string, tess_control: string, tess_evaluation: string): Shader {.importcpp: "#Shader::make(#, nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "shader.h".} ## \
+## Loads the shader, using the strings as shader bodies.
+
+proc make*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: string, fragment: string, geometry: string, tess_control: string): Shader {.importcpp: "#Shader::make(#, nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "shader.h".} ## \
+## Loads the shader, using the strings as shader bodies.
+
+proc make*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: string, fragment: string, geometry: string): Shader {.importcpp: "#Shader::make(#, nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#))", header: "shader.h".} ## \
+## Loads the shader, using the strings as shader bodies.
+
+proc make*(_: typedesc[Shader], lang: Shader_ShaderLanguage, vertex: string, fragment: string): Shader {.importcpp: "#Shader::make(#, nimStringToStdString(#), nimStringToStdString(#))", header: "shader.h".} ## \
+## Loads the shader, using the strings as shader bodies.
+
+proc make*(_: typedesc[Shader], body: string, lang: Shader_ShaderLanguage): Shader {.importcpp: "#Shader::make(nimStringToStdString(#), #)", header: "shader.h".} ## \
+## Loads the shader, using the string as shader body.
+
 proc make*(_: typedesc[Shader], body: string): Shader {.importcpp: "#Shader::make(nimStringToStdString(#))", header: "shader.h".} ## \
 ## Loads the shader, using the string as shader body.
 
+proc loadCompute*(_: typedesc[Shader], lang: Shader_ShaderLanguage, fn: Filename): Shader {.importcpp: "#Shader::load_compute(#, #)", header: "shader.h".} ## \
+## Loads a compute shader.
+
+proc makeCompute*(_: typedesc[Shader], lang: Shader_ShaderLanguage, body: string): Shader {.importcpp: "#Shader::make_compute(#, nimStringToStdString(#))", header: "shader.h".} ## \
+## Loads the compute shader from the given string.
+
+proc getFilename*(this: Shader, `type`: Shader_ShaderType): Filename {.importcpp: "#->get_filename(#)".} ## \
+## Return the Shader's filename for the given shader type.
+
 proc getFilename*(this: Shader): Filename {.importcpp: "#->get_filename()".} ## \
 ## Return the Shader's filename for the given shader type.
+
+proc setFilename*(this: Shader, `type`: Shader_ShaderType, filename: Filename) {.importcpp: "#->set_filename(#, #)".} ## \
+## Sets the Shader's filename for the given shader type.  Useful for
+## associating a shader created with Shader.make with a name for diagnostics.
+
+proc getText*(this: Shader, `type`: Shader_ShaderType): string {.importcpp: "nimStringFromStdString(#->get_text(#))", header: stringConversionCode.} ## \
+## Return the Shader's text for the given shader type.
 
 proc getText*(this: Shader): string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.} ## \
 ## Return the Shader's text for the given shader type.
@@ -44891,6 +49561,9 @@ proc getText*(this: Shader): string {.importcpp: "nimStringFromStdString(#->get_
 proc getErrorFlag*(this: Shader): bool {.importcpp: "#->get_error_flag()".} ## \
 ## Returns true if the shader contains a compile-time error.  This doesn't
 ## tell you whether or not the shader is supported on the current video card.
+
+proc getLanguage*(this: Shader): Shader_ShaderLanguage {.importcpp: "#->get_language()".} ## \
+## Returns the shader language in which this shader was written.
 
 proc hasFullpath*(this: Shader): bool {.importcpp: "#->has_fullpath()".} ## \
 ## Returns true if the fullpath has been set and is available.  See
@@ -44956,6 +49629,10 @@ converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable 
 converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(ShaderBuffer *)(#))".}
 
 proc newShaderBuffer*(param0: ShaderBuffer): ShaderBuffer {.importcpp: "new ShaderBuffer(#)".}
+
+proc newShaderBuffer*(name: string, size: clonglong, usage_hint: GeomEnums_UsageHint): ShaderBuffer {.importcpp: "new ShaderBuffer(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+## Creates an uninitialized buffer object with the given size.  For now, these
+## parameters cannot be modified, but this may change in the future.
 
 proc prepare*(this: ShaderBuffer, prepared_objects: PreparedGraphicsObjects) {.importcpp: "#->prepare(#)".} ## \
 ## Indicates that the data should be enqueued to be prepared in the indicated
@@ -45872,10 +50549,19 @@ proc makeBounds*(this: Lens): BoundingVolume {.importcpp: "#->make_bounds()".} #
 ## for this kind of lens, if possible.  If a suitable bounding volume cannot
 ## be created, returns NULL.
 
+proc getProjectionMat*(this: Lens, channel: Lens_StereoChannel): LMatrix4 {.importcpp: "#->get_projection_mat(#)".} ## \
+## Returns the complete transformation matrix from a 3-d point in space to a
+## point on the film, if such a matrix exists, or the identity matrix if the
+## lens is nonlinear.
+
 proc getProjectionMat*(this: Lens): LMatrix4 {.importcpp: "#->get_projection_mat()".} ## \
 ## Returns the complete transformation matrix from a 3-d point in space to a
 ## point on the film, if such a matrix exists, or the identity matrix if the
 ## lens is nonlinear.
+
+proc getProjectionMatInv*(this: Lens, channel: Lens_StereoChannel): LMatrix4 {.importcpp: "#->get_projection_mat_inv(#)".} ## \
+## Returns the matrix that transforms from a 2-d point on the film to a 3-d
+## vector in space, if such a matrix exists.
 
 proc getProjectionMatInv*(this: Lens): LMatrix4 {.importcpp: "#->get_projection_mat_inv()".} ## \
 ## Returns the matrix that transforms from a 2-d point on the film to a 3-d
@@ -46897,6 +51583,20 @@ proc releaseStage*(_: typedesc[TextureStagePool], temp: TextureStage) {.importcp
 proc releaseAllStages*(_: typedesc[TextureStagePool]) {.importcpp: "TextureStagePool::release_all_stages()", header: "textureStagePool.h".} ## \
 ## Releases all TextureStages in the pool and restores the pool to the empty
 ## state.
+
+proc setMode*(_: typedesc[TextureStagePool], mode: TextureStagePool_Mode) {.importcpp: "#TextureStagePool::set_mode(#)", header: "textureStagePool.h".} ## \
+## Specifies the fundamental operating mode of the TextureStagePool.
+##
+## If this is M_none, each call to get_stage() returns the same TextureStage
+## pointer that was passed in (the pool is effectively disabled).  If this is
+## M_name, each call to get_stage() returns the last TextureStage passed in
+## with the same name, whether it has different properties or not.  If this is
+## M_unique, then each call to get_stage() returns only TextureStages with
+## identical properties.
+
+proc getMode*(_: typedesc[TextureStagePool]): TextureStagePool_Mode {.importcpp: "TextureStagePool::get_mode()", header: "textureStagePool.h".} ## \
+## Returns the fundamental operating mode of the TextureStagePool.  See
+## set_mode().
 
 proc garbageCollect*(_: typedesc[TextureStagePool]): int {.importcpp: "TextureStagePool::garbage_collect()", header: "textureStagePool.h".} ## \
 ## Releases only those TextureStages in the pool that have a reference count
@@ -53925,6 +58625,19 @@ proc setCurve*(this: RopeNode, curve: NurbsCurveEvaluator) {.importcpp: "#->set_
 proc getCurve*(this: RopeNode): NurbsCurveEvaluator {.importcpp: "#->get_curve()".} ## \
 ## Returns the curve represented by the RopeNode.
 
+proc setRenderMode*(this: RopeNode, render_mode: RopeNode_RenderMode) {.importcpp: "#->set_render_mode(#)".} ## \
+## Specifies the method used to render the rope.  The simplest is RM_thread,
+## which just draws a one-pixel line segment.
+
+proc getRenderMode*(this: RopeNode): RopeNode_RenderMode {.importcpp: "#->get_render_mode()".} ## \
+## Returns the method used to render the rope.  See set_render_mode().
+
+proc setUvMode*(this: RopeNode, uv_mode: RopeNode_UVMode) {.importcpp: "#->set_uv_mode(#)".} ## \
+## Specifies the algorithm to use to generate UV's for the rope.
+
+proc getUvMode*(this: RopeNode): RopeNode_UVMode {.importcpp: "#->get_uv_mode()".} ## \
+## Returns the algorithm to use to generate UV's for the rope.
+
 proc setUvDirection*(this: RopeNode, u_dominant: bool) {.importcpp: "#->set_uv_direction(#)".} ## \
 ## Specify true to vary the U coordinate down the length of the rope, or false
 ## to vary the V coordinate.
@@ -53940,6 +58653,15 @@ proc setUvScale*(this: RopeNode, scale: float32) {.importcpp: "#->set_uv_scale(#
 
 proc getUvScale*(this: RopeNode): float32 {.importcpp: "#->get_uv_scale()".} ## \
 ## Returns the scaling factor to apply to generated UV's for the rope.
+
+proc setNormalMode*(this: RopeNode, normal_mode: RopeNode_NormalMode) {.importcpp: "#->set_normal_mode(#)".} ## \
+## Specifies the kind of normals to generate for the rope.  This is only
+## applicable when the RenderMode is set to RM_tube; in the other render
+## modes, normals are never generated.
+
+proc getNormalMode*(this: RopeNode): RopeNode_NormalMode {.importcpp: "#->get_normal_mode()".} ## \
+## Returns the kind of normals to generate for the rope.  This is only
+## applicable when the RenderMode is set to RM_tube.
 
 proc setTubeUp*(this: RopeNode, tube_up: LVector3) {.importcpp: "#->set_tube_up(#)".} ## \
 ## Specifies a normal vector, generally perpendicular to the main axis of the
@@ -54185,6 +58907,10 @@ proc initPNMImageHeader*(): PNMImageHeader {.importcpp: "PNMImageHeader()".}
 
 proc initPNMImageHeader*(copy: PNMImageHeader): PNMImageHeader {.importcpp: "PNMImageHeader(#)".}
 
+proc getColorType*(this: PNMImageHeader): PNMImageHeader_ColorType {.importcpp: "#.get_color_type()".} ## \
+## Returns the image type of the image, as an enumerated value.  This is
+## really just the number of channels cast to the enumerated type.
+
 proc getNumChannels*(this: PNMImageHeader): int {.importcpp: "#.get_num_channels()".} ## \
 ## Returns the number of channels in the image.
 
@@ -54194,10 +58920,18 @@ proc isGrayscale*(this: PNMImageHeader): bool {.importcpp: "#.is_grayscale()".} 
 ## component.  (The gray color is actually stored in the blue channel, and the
 ## red and green channels are ignored.)
 
+proc isGrayscale*(_: typedesc[PNMImageHeader], color_type: PNMImageHeader_ColorType): bool {.importcpp: "#PNMImageHeader::is_grayscale(#)", header: "pnmImageHeader.h".} ## \
+## This static variant of is_grayscale() returns true if the indicated image
+## type represents a grayscale image, false otherwise.
+
 proc hasAlpha*(this: PNMImageHeader): bool {.importcpp: "#.has_alpha()".} ## \
 ## Returns true if the image includes an alpha channel, false otherwise.
 ## Unlike is_grayscale(), if this returns false it is an error to call any of
 ## the functions accessing the alpha channel.
+
+proc hasAlpha*(_: typedesc[PNMImageHeader], color_type: PNMImageHeader_ColorType): bool {.importcpp: "#PNMImageHeader::has_alpha(#)", header: "pnmImageHeader.h".} ## \
+## This static variant of has_alpha() returns true if the indicated image type
+## includes an alpha channel, false otherwise.
 
 proc getMaxval*(this: PNMImageHeader): int {.importcpp: "#.get_maxval()".} ## \
 ## Returns the maximum channel value allowable for any pixel in this image;
@@ -54937,13 +59671,28 @@ proc makeTransparent*(_: typedesc[PNMBrush]): PNMBrush {.importcpp: "PNMBrush::m
 ## Returns a new brush that does not paint anything.  Can be used as either a
 ## pen or a fill brush to make borderless or unfilled shapes, respectively.
 
+proc makePixel*(_: typedesc[PNMBrush], color: LColorf, effect: PNMBrush_BrushEffect): PNMBrush {.importcpp: "#PNMBrush::make_pixel(#, #)", header: "pnmBrush.h".} ## \
+## Returns a new brush that paints a single pixel of the indicated color on a
+## border, or paints a solid color in an interior.
+
 proc makePixel*(_: typedesc[PNMBrush], color: LColorf): PNMBrush {.importcpp: "#PNMBrush::make_pixel(#)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a single pixel of the indicated color on a
 ## border, or paints a solid color in an interior.
 
+proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool, effect: PNMBrush_BrushEffect): PNMBrush {.importcpp: "#PNMBrush::make_spot(#, #, #, #)", header: "pnmBrush.h".} ## \
+## Returns a new brush that paints a spot of the indicated color and radius.
+## If fuzzy is true, the spot is fuzzy; otherwise, it is hard-edged.
+
 proc makeSpot*(_: typedesc[PNMBrush], color: LColorf, radius: float32, fuzzy: bool): PNMBrush {.importcpp: "#PNMBrush::make_spot(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints a spot of the indicated color and radius.
 ## If fuzzy is true, the spot is fuzzy; otherwise, it is hard-edged.
+
+proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32, effect: PNMBrush_BrushEffect): PNMBrush {.importcpp: "#PNMBrush::make_image(#, #, #, #)", header: "pnmBrush.h".} ## \
+## Returns a new brush that paints with the indicated image.  xc and yc
+## indicate the pixel in the center of the brush.
+##
+## The brush makes a copy of the image; it is safe to deallocate or modify the
+## image after making this call.
 
 proc makeImage*(_: typedesc[PNMBrush], image: PNMImage, xc: float32, yc: float32): PNMBrush {.importcpp: "#PNMBrush::make_image(#, #, #)", header: "pnmBrush.h".} ## \
 ## Returns a new brush that paints with the indicated image.  xc and yc
@@ -55235,6 +59984,13 @@ proc setNumChannels*(this: PNMImage, num_channels: int) {.importcpp: "#.set_num_
 ## of channels must be an integer in the range 1 through 4, inclusive.  This
 ## will allocate and/or deallocate memory as necessary to accommodate; see
 ## set_color_type().
+
+proc setColorType*(this: PNMImage, color_type: PNMImageHeader_ColorType) {.importcpp: "#.set_color_type(#)".} ## \
+## Translates the image to or from grayscale, color, or four-color mode.
+## Grayscale images are converted to full-color images with R, G, B set to the
+## original gray level; color images are converted to grayscale according to
+## the value of Bright().  The alpha channel, if added, is initialized to
+## zero.
 
 proc setColorSpace*(this: PNMImage, color_space: ColorSpace) {.importcpp: "#.set_color_space(#)".} ## \
 ## Converts the colors in the image to the indicated color space.  This may be
@@ -56123,6 +60879,13 @@ proc isWhitespace*(this: TextGlyph): bool {.importcpp: "#->is_whitespace()".} ##
 ## Returns true if this glyph represents invisible whitespace, or false if it
 ## corresponds to some visible character.
 
+proc getGeom*(this: TextGlyph, usage_hint: GeomEnums_UsageHint): Geom {.importcpp: "#->get_geom(#)".} ## \
+## Returns a Geom that renders the particular glyph.  It will be generated if
+## necessary.
+##
+## This method will always return a copy of the Geom, so the caller is free to
+## modify it.
+
 converter getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGlyph::get_class_type()", header: "textGlyph.h".}
 
 converter upcastToTypedReferenceCount*(this: TextFont): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
@@ -56356,6 +61119,22 @@ proc getPageYSize*(this: DynamicTextFont): int {.importcpp: "#->get_page_y_size(
 ## Returns the y size of the textures that are created for the
 ## DynamicTextFont.  See set_page_size().
 
+proc setMinfilter*(this: DynamicTextFont, filter: SamplerState_FilterType) {.importcpp: "#->set_minfilter(#)".} ## \
+## Sets the filter type used when minimizing the textures created for this
+## font.
+
+proc getMinfilter*(this: DynamicTextFont): SamplerState_FilterType {.importcpp: "#->get_minfilter()".} ## \
+## Returns the filter type used when minimizing the textures created for this
+## font.
+
+proc setMagfilter*(this: DynamicTextFont, filter: SamplerState_FilterType) {.importcpp: "#->set_magfilter(#)".} ## \
+## Sets the filter type used when enlarging the textures created for this
+## font.
+
+proc getMagfilter*(this: DynamicTextFont): SamplerState_FilterType {.importcpp: "#->get_magfilter()".} ## \
+## Returns the filter type used when enlarging the textures created for this
+## font.
+
 proc setAnisotropicDegree*(this: DynamicTextFont, anisotropic_degree: int) {.importcpp: "#->set_anisotropic_degree(#)".} ## \
 ## Enables or disables anisotropic filtering on the textures created for this
 ## font.  The default value is specified by the text-anisotropic-degree
@@ -56364,6 +61143,15 @@ proc setAnisotropicDegree*(this: DynamicTextFont, anisotropic_degree: int) {.imp
 proc getAnisotropicDegree*(this: DynamicTextFont): int {.importcpp: "#->get_anisotropic_degree()".} ## \
 ## Returns the current anisotropic degree for textures created for this font.
 ## See set_anisotropic_degree().
+
+proc setRenderMode*(this: DynamicTextFont, render_mode: TextFont_RenderMode) {.importcpp: "#->set_render_mode(#)".} ## \
+## Specifies the way the glyphs on this particular font are generated.  The
+## default is RM_texture, which is the only mode supported for bitmap fonts.
+## Other modes are possible for most modern fonts.
+
+proc getRenderMode*(this: DynamicTextFont): TextFont_RenderMode {.importcpp: "#->get_render_mode()".} ## \
+## Returns the way the glyphs on this particular font are generated.  See
+## set_render_mode().
 
 proc setFg*(this: DynamicTextFont, fg: LColor) {.importcpp: "#->set_fg(#)".} ## \
 ## Changes the color of the foreground pixels of the font as they are rendered
@@ -56422,6 +61210,10 @@ proc getOutlineWidth*(this: DynamicTextFont): float32 {.importcpp: "#->get_outli
 proc getOutlineFeather*(this: DynamicTextFont): float32 {.importcpp: "#->get_outline_feather()".} ## \
 ## Returns the softness of the outline pixels of the font, as a value in the
 ## range 0.0 to 1.0. See set_outline().
+
+proc getTexFormat*(this: DynamicTextFont): Texture_Format {.importcpp: "#->get_tex_format()".} ## \
+## Returns the texture format used to render the individual pages.  This is
+## set automatically according to the colors selected.
 
 proc getNumPages*(this: DynamicTextFont): int {.importcpp: "#->get_num_pages()".} ## \
 ## Returns the number of pages associated with the font.  Initially, the font
@@ -56616,10 +61408,15 @@ proc hasUnderscoreHeight*(this: TextProperties): bool {.importcpp: "#.has_unders
 proc getUnderscoreHeight*(this: TextProperties): float32 {.importcpp: "#.get_underscore_height()".} ## \
 ## Returns the vertical height of the underscore; see set_underscore_height().
 
+proc setAlign*(this: TextProperties, align_type: TextProperties_Alignment) {.importcpp: "#.set_align(#)".} ## \
+## Specifies the alignment of the text within its margins.
+
 proc clearAlign*(this: TextProperties) {.importcpp: "#.clear_align()".} ## \
 ## Restores the default alignment of the text.
 
 proc hasAlign*(this: TextProperties): bool {.importcpp: "#.has_align()".}
+
+proc getAlign*(this: TextProperties): TextProperties_Alignment {.importcpp: "#.get_align()".}
 
 proc setIndent*(this: TextProperties, indent: float32) {.importcpp: "#.set_indent(#)".} ## \
 ## Specifies the amount of extra space that is inserted before the first
@@ -56793,6 +61590,12 @@ proc hasTextScale*(this: TextProperties): bool {.importcpp: "#.has_text_scale()"
 proc getTextScale*(this: TextProperties): float32 {.importcpp: "#.get_text_scale()".} ## \
 ## Returns the scale factor of the text as specified by set_text_scale().
 
+proc setDirection*(this: TextProperties, direction: TextProperties_Direction) {.importcpp: "#.set_direction(#)".} ## \
+## Specifies the text direction.  If none is specified, it will be guessed
+## based on the contents of the string.
+##
+## @since 1.10.0
+
 proc clearDirection*(this: TextProperties) {.importcpp: "#.clear_direction()".} ## \
 ## Clears the text direction setting.  If no text direction is specified, it
 ## will be guessed based on the contents of the string.
@@ -56800,6 +61603,11 @@ proc clearDirection*(this: TextProperties) {.importcpp: "#.clear_direction()".} 
 ## @since 1.10.0
 
 proc hasDirection*(this: TextProperties): bool {.importcpp: "#.has_direction()".} ## \
+## @since 1.10.0
+
+proc getDirection*(this: TextProperties): TextProperties_Direction {.importcpp: "#.get_direction()".} ## \
+## Returns the direction of the text as specified by set_direction().
+##
 ## @since 1.10.0
 
 proc addProperties*(this: TextProperties, other: TextProperties) {.importcpp: "#.add_properties(#)".} ## \
@@ -56931,6 +61739,16 @@ proc initTextAssembler*(encoder: TextEncoder): TextAssembler {.importcpp: "TextA
 
 proc clear*(this: TextAssembler) {.importcpp: "#.clear()".} ## \
 ## Reinitializes the contents of the TextAssembler.
+
+proc setUsageHint*(this: TextAssembler, usage_hint: GeomEnums_UsageHint) {.importcpp: "#.set_usage_hint(#)".} ## \
+## Specifies the UsageHint that will be applied to generated geometry.  The
+## default is UH_static, which is probably the right setting, but if you know
+## the TextNode's geometry will have a short lifespan, it may be better to set
+## it to UH_stream.  See geomEnums.h.
+
+proc getUsageHint*(this: TextAssembler): GeomEnums_UsageHint {.importcpp: "#.get_usage_hint()".} ## \
+## Returns the UsageHint that will be applied to generated geometry.  See
+## set_usage_hint().
 
 proc setMaxRows*(this: TextAssembler, max_rows: int) {.importcpp: "#.set_max_rows(#)".} ## \
 ## If max_rows is greater than zero, no more than max_rows will be accepted.
@@ -57351,6 +62169,16 @@ proc setCoordinateSystem*(this: TextNode, cs: CoordinateSystem) {.importcpp: "#-
 
 proc getCoordinateSystem*(this: TextNode): CoordinateSystem {.importcpp: "#->get_coordinate_system()".}
 
+proc setUsageHint*(this: TextNode, usage_hint: GeomEnums_UsageHint) {.importcpp: "#->set_usage_hint(#)".} ## \
+## Specifies the UsageHint that will be applied to generated geometry.  The
+## default is UH_static, which is probably the right setting, but if you know
+## the TextNode's geometry will have a short lifespan, it may be better to set
+## it to UH_stream.  See geomEnums.h.
+
+proc getUsageHint*(this: TextNode): GeomEnums_UsageHint {.importcpp: "#->get_usage_hint()".} ## \
+## Returns the UsageHint that will be applied to generated geometry.  See
+## set_usage_hint().
+
 proc setFlattenFlags*(this: TextNode, flatten_flags: int) {.importcpp: "#->set_flatten_flags(#)".} ## \
 ## Sets the flatten flags.  This should be a union of the
 ## TextNode::FlattenFlags options.  This controls the degree of flattening
@@ -57422,6 +62250,8 @@ proc clearSmallCapsScale*(this: TextNode) {.importcpp: "#->clear_small_caps_scal
 proc setSlant*(this: TextNode, slant: float32) {.importcpp: "#->set_slant(#)".}
 
 proc clearSlant*(this: TextNode) {.importcpp: "#->clear_slant()".}
+
+proc setAlign*(this: TextNode, align_type: TextProperties_Alignment) {.importcpp: "#->set_align(#)".}
 
 proc clearAlign*(this: TextNode) {.importcpp: "#->clear_align()".}
 
@@ -58632,6 +63462,10 @@ proc getCandidateStringEncoded*(this: MouseWatcherParameter): string {.importcpp
 ## Returns the candidate string associated with this event.  If
 ## has_candidate(), above, returns false, this returns the empty string.
 
+proc getCandidateStringEncoded*(this: MouseWatcherParameter, encoding: TextEncoder_Encoding): string {.importcpp: "nimStringFromStdString(#.get_candidate_string_encoded(#))", header: stringConversionCode.} ## \
+## Returns the candidate string associated with this event.  If
+## has_candidate(), above, returns false, this returns the empty string.
+
 proc getHighlightStart*(this: MouseWatcherParameter): clonglong {.importcpp: "#.get_highlight_start()".} ## \
 ## Returns the first highlighted character in the candidate string.
 
@@ -58729,6 +63563,16 @@ proc getOrigin*(this: Trackball): LPoint3 {.importcpp: "#->get_origin()".} ## \
 
 proc setOrigin*(this: Trackball, origin: LVecBase3) {.importcpp: "#->set_origin(#)".} ## \
 ## Directly sets the center of rotation.
+
+proc setControlMode*(this: Trackball, control_mode: Trackball_ControlMode) {.importcpp: "#->set_control_mode(#)".} ## \
+## Sets the control mode.  Normally this is CM_default, which means each mouse
+## button serves its normal function.  When it is CM_truck, CM_pan, CM_dolly,
+## or CM_roll, all of the mouse buttons serve the indicated function instead
+## of their normal function.  This can be used in conjunction with some
+## external way of changing modes.
+
+proc getControlMode*(this: Trackball): Trackball_ControlMode {.importcpp: "#->get_control_mode()".} ## \
+## Returns the control mode.  See set_control_mode().
 
 proc setInvert*(this: Trackball, flag: bool) {.importcpp: "#->set_invert(#)".} ## \
 ## Sets the invert flag.  When this is set, the inverse matrix is generated,
@@ -58985,12 +63829,12 @@ proc getCacheFilename*(this: BamCacheRecord): Filename {.importcpp: "#->get_cach
 ## This will be relative to the root of the cache directory, and it will not
 ## include any suffixes that may be appended to resolve hash conflicts.
 
-proc getSourceTimestamp*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_source_timestamp()".} ## \
+proc getSourceTimestamp*(this: BamCacheRecord): Time {.importcpp: "#->get_source_timestamp()".} ## \
 ## Returns the file timestamp of the original source file that generated this
 ## cache record, if available.  In some cases the original file timestamp is
 ## not available, and this will return 0.
 
-proc getRecordedTime*(this: BamCacheRecord): time_t.Time {.importcpp: "#->get_recorded_time()".} ## \
+proc getRecordedTime*(this: BamCacheRecord): Time {.importcpp: "#->get_recorded_time()".} ## \
 ## Returns the time at which this particular record was recorded or updated.
 
 proc getNumDependentFiles*(this: BamCacheRecord): int {.importcpp: "#->get_num_dependent_files()".} ## \
@@ -59340,6 +64184,12 @@ proc getFileMajorVer*(this: BamReader): int {.importcpp: "#.get_file_major_ver()
 proc getFileMinorVer*(this: BamReader): int {.importcpp: "#.get_file_minor_ver()".} ## \
 ## Returns the minor version number of the Bam file currently being read.
 
+proc getFileEndian*(this: BamReader): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## read.  This does not imply that every number is stored using the indicated
+## convention, but individual objects may choose to respect this flag when
+## recording data.
+
 proc getFileStdfloatDouble*(this: BamReader): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file stores all "standard" floats as 64-bit doubles, or
 ## false if they are 32-bit floats.  This is determined by the compilation
@@ -59417,11 +64267,27 @@ proc setFileMinorVer*(this: BamWriter, minor_ver: int) {.importcpp: "#.set_file_
 ## init().  Each Panda version has only a fairly narrow range of versions it
 ## is able to write; consult the .bam documentation for more information.
 
+proc getFileEndian*(this: BamWriter): BamEnums_BamEndian {.importcpp: "#.get_file_endian()".} ## \
+## Returns the endian preference indicated by the Bam file currently being
+## written.  This does not imply that every number is stored using the
+## indicated convention, but individual objects may choose to respect this
+## flag when recording data.
+
 proc getFileStdfloatDouble*(this: BamWriter): bool {.importcpp: "#.get_file_stdfloat_double()".} ## \
 ## Returns true if the file will store all "standard" floats as 64-bit
 ## doubles, or false if they are 32-bit floats.  This isn't runtime settable;
 ## it's based on the compilation flags of the version of Panda that generated
 ## this file.
+
+proc getFileTextureMode*(this: BamWriter): BamEnums_BamTextureMode {.importcpp: "#.get_file_texture_mode()".} ## \
+## Returns the BamTextureMode preference indicated by the Bam file currently
+## being written.  Texture objects written to this Bam file will be encoded
+## according to the specified mode.
+
+proc setFileTextureMode*(this: BamWriter, file_texture_mode: BamEnums_BamTextureMode) {.importcpp: "#.set_file_texture_mode(#)".} ## \
+## Changes the BamTextureMode preference for the Bam file currently being
+## written.  Texture objects written to this Bam file will be encoded
+## according to the specified mode.
 
 proc getRootNode*(this: BamWriter): TypedWritable {.importcpp: "#.get_root_node()".} ## \
 ## Returns the root node of the part of the scene graph we are currently
@@ -60255,7 +65121,51 @@ proc getUsec*(this: TimeVal): int {.importcpp: "#.get_usec()".}
 
 proc newClockObject*(copy: ClockObject): ClockObject {.importcpp: "new ClockObject(#)".}
 
+proc newClockObject*(mode: ClockObject_Mode): ClockObject {.importcpp: "new ClockObject(#)".}
+
 proc newClockObject*(): ClockObject {.importcpp: "new ClockObject()".}
+
+proc setMode*(this: ClockObject, mode: ClockObject_Mode) {.importcpp: "#->set_mode(#)".} ## \
+## Changes the mode of the clock.  Normally, the clock is in mode M_normal.
+## In this mode, each call to tick() will set the value returned by
+## get_frame_time() to the current real time; thus, the clock simply reports
+## time advancing.
+##
+## Other possible modes:
+##
+## M_non_real_time - the clock ignores real time completely; at each call to
+## tick(), it pretends that exactly dt seconds have elapsed since the last
+## call to tick().  You may set the value of dt with set_dt() or
+## set_frame_rate().
+##
+## M_limited - the clock will run as fast as it can, as in M_normal, but will
+## not run faster than the rate specified by set_frame_rate().  If the
+## application would run faster than this rate, the clock will slow down the
+## application.
+##
+## M_integer - the clock will run as fast as it can, but the rate will be
+## constrained to be an integer multiple or divisor of the rate specified by
+## set_frame_rate().  The clock will slow down the application a bit to
+## guarantee this.
+##
+## M_integer_limited - a combination of M_limited and M_integer; the clock
+## will not run faster than set_frame_rate(), and if it runs slower, it will
+## run at a integer divisor of that rate.
+##
+## M_forced - the clock forces the application to run at the rate specified by
+## set_frame_rate().  If the application would run faster than this rate, the
+## clock will slow down the application; if the application would run slower
+## than this rate, the clock slows down time so that the application believes
+## it is running at the given rate.
+##
+## M_degrade - the clock runs at real time, but the application is slowed down
+## by a set factor of its frame rate, specified by set_degrade_factor().
+##
+## M_slave - the clock does not advance, but relies on the user to call
+## set_frame_time() and/or set_frame_count() each frame.
+
+proc getMode*(this: ClockObject): ClockObject_Mode {.importcpp: "#->get_mode()".} ## \
+## Returns the current mode of the clock.  See set_mode().
 
 proc getFrameTime*(this: ClockObject, current_thread: Thread): float64 {.importcpp: "#->get_frame_time(#)".} ## \
 ## Returns the time in seconds as of the last time tick() was called
@@ -61459,6 +66369,8 @@ proc setPriority*(this: AudioSound, priority: int) {.importcpp: "#->set_priority
 
 proc configureFilters*(this: AudioSound, config: FilterProperties): bool {.importcpp: "#->configure_filters(#)".}
 
+proc status*(this: AudioSound): AudioSound_SoundStatus {.importcpp: "#->status()".}
+
 proc output*(this: AudioSound, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: AudioSound, `out`: ostream) {.importcpp: "#->write(#)".}
@@ -61466,6 +66378,8 @@ proc write*(this: AudioSound, `out`: ostream) {.importcpp: "#->write(#)".}
 converter getClassType*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()", header: "audioSound.h".}
 
 proc getSpeakerSetup*(this: AudioManager): int {.importcpp: "#->get_speaker_setup()".}
+
+proc setSpeakerSetup*(this: AudioManager, cat: AudioManager_SpeakerModeCategory) {.importcpp: "#->set_speaker_setup(#)".}
 
 proc configureFilters*(this: AudioManager, config: FilterProperties): bool {.importcpp: "#->configure_filters(#)".}
 
@@ -61656,6 +66570,12 @@ converter getClassType*(_: typedesc[AudioLoadRequest]): TypeHandle {.importcpp: 
 proc initPGFrameStyle*(): PGFrameStyle {.importcpp: "PGFrameStyle()".}
 
 proc initPGFrameStyle*(copy: PGFrameStyle): PGFrameStyle {.importcpp: "PGFrameStyle(#)".}
+
+proc setType*(this: PGFrameStyle, `type`: PGFrameStyle_Type) {.importcpp: "#.set_type(#)".} ## \
+## Sets the basic type of frame.
+
+proc getType*(this: PGFrameStyle): PGFrameStyle_Type {.importcpp: "#.get_type()".} ## \
+## Returns the basic type of frame.
 
 proc setColor*(this: PGFrameStyle, color: LColor) {.importcpp: "#.set_color(#)".} ## \
 ## Sets the dominant color of the frame.
@@ -64169,6 +69089,15 @@ proc getPointsPerInch*(_: typedesc[FreetypeFont]): float32 {.importcpp: "Freetyp
 ## Returns the number of points in one inch.  This is a universal typographic
 ## convention.
 
+proc setWindingOrder*(this: FreetypeFont, winding_order: FreetypeFont_WindingOrder) {.importcpp: "#.set_winding_order(#)".} ## \
+## Specifies an explicitly winding order on this particular font.  This is
+## only necessary if the render_mode is RM_polygon or RM_solid, and only if
+## FreeType appears to guess wrong on this font.  Normally, you should leave
+## this at WO_default.
+
+proc getWindingOrder*(this: FreetypeFont): FreetypeFont_WindingOrder {.importcpp: "#.get_winding_order()".} ## \
+## Returns the winding order set via set_winding_order().
+
 proc initPNMTextGlyph*(param0: PNMTextGlyph): PNMTextGlyph {.importcpp: "PNMTextGlyph(#)".}
 
 proc initPNMTextGlyph*(advance: float64): PNMTextGlyph {.importcpp: "PNMTextGlyph(#)".}
@@ -64230,6 +69159,10 @@ proc initPNMTextMaker*(font_data: string, data_length: int, face_index: int): PN
 proc isValid*(this: PNMTextMaker): bool {.importcpp: "#.is_valid()".} ## \
 ## Returns true if the PNMTextMaker is valid and ready to generate text, false
 ## otherwise.
+
+proc setAlign*(this: PNMTextMaker, align_type: PNMTextMaker_Alignment) {.importcpp: "#.set_align(#)".}
+
+proc getAlign*(this: PNMTextMaker): PNMTextMaker_Alignment {.importcpp: "#.get_align()".}
 
 proc setInteriorFlag*(this: PNMTextMaker, interior_flag: bool) {.importcpp: "#.set_interior_flag(#)".} ## \
 ## Sets the flag that indicates whether the interior of hollow fonts is

@@ -243,51 +243,52 @@ converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = Unal
 """
 
 # Generate vector swizzle operators
-for suffix in 'fdi':
-    CORE_POSTAMBLE += "\n"
-    for x in 'xy':
-        for y in 'xy':
-            CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase2{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
-            if x != y:
-                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase2{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
-            for z in 'xy':
-                CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase2{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
-                if x != y != z:
-                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase2{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
-                for w in 'xy':
-                    CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase2{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
-                    if x != y != z != w:
-                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase2{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
+for base in "LVecBase", "LVector", "LPoint":
+    for suffix in 'fdi':
+        CORE_POSTAMBLE += "\n"
+        for x in 'xy':
+            for y in 'xy':
+                CORE_POSTAMBLE += f"func {x}{y}*(this: {base}2{suffix}): {base}2{suffix} = {base}2{suffix}(x: this.{x}, y: this.{y})\n"
+                if base == "LVecBase" and x != y:
+                    CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var {base}2{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
+                for z in 'xy':
+                    CORE_POSTAMBLE += f"func {x}{y}{z}*(this: {base}2{suffix}): {base}3{suffix} = {base}3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                    if base == "LVecBase" and x != y != z:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var {base}2{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
+                    for w in 'xy':
+                        CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: {base}2{suffix}): {base}4{suffix} = {base}4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                        if base == "LVecBase" and x != y != z != w:
+                            CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var {base}2{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
-    CORE_POSTAMBLE += "\n"
-    for x in 'xyz':
-        for y in 'xyz':
-            CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase3{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
-            if x != y:
-                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase3{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
-            for z in 'xyz':
-                CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase3{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
-                if x != y != z:
-                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase3{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
-                for w in 'xyz':
-                    CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase3{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
-                    if x != y != z != w:
-                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase3{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
+        CORE_POSTAMBLE += "\n"
+        for x in 'xyz':
+            for y in 'xyz':
+                CORE_POSTAMBLE += f"func {x}{y}*(this: {base}3{suffix}): {base}2{suffix} = {base}2{suffix}(x: this.{x}, y: this.{y})\n"
+                if base == "LVecBase" and x != y:
+                    CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var {base}3{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
+                for z in 'xyz':
+                    CORE_POSTAMBLE += f"func {x}{y}{z}*(this: {base}3{suffix}): {base}3{suffix} = {base}3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                    if base == "LVecBase" and x != y != z:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var {base}3{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
+                    for w in 'xyz':
+                        CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: {base}3{suffix}): {base}4{suffix} = {base}4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                        if base == "LVecBase" and x != y != z != w:
+                            CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var {base}3{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
-    CORE_POSTAMBLE += "\n"
-    for x in 'xyzw':
-        for y in 'xyzw':
-            CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase4{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
-            if x != y:
-                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase4{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
-            for z in 'xyzw':
-                CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase4{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
-                if x != y != z:
-                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase4{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
-                for w in 'xyzw':
-                    CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase4{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
-                    if x != y != z != w:
-                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase4{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
+        CORE_POSTAMBLE += "\n"
+        for x in 'xyzw':
+            for y in 'xyzw':
+                CORE_POSTAMBLE += f"func {x}{y}*(this: {base}4{suffix}): {base}2{suffix} = {base}2{suffix}(x: this.{x}, y: this.{y})\n"
+                if base == "LVecBase" and x != y:
+                    CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var {base}4{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
+                for z in 'xyzw':
+                    CORE_POSTAMBLE += f"func {x}{y}{z}*(this: {base}4{suffix}): {base}3{suffix} = {base}3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                    if base == "LVecBase" and x != y != z:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var {base}4{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
+                    for w in 'xyzw':
+                        CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: {base}4{suffix}): {base}4{suffix} = {base}4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                        if base == "LVecBase" and x != y != z != w:
+                            CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var {base}4{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
 OTHER_PREAMBLE = \
 """
@@ -854,7 +855,7 @@ def bind_property(out, element):
 
     if not prop_name.strip('xyzw'):
         scoped_name = interrogate_element_scoped_name(element)
-        if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase"):
+        if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase") or scoped_name.startswith("LVector") or scoped_name.startswith("LPoint"):
             return
 
     #out.write(f"proc {prop_name}*(this: {parent_type_name}): {type_name}")

@@ -7560,6 +7560,9 @@ func `==`*(x: SheetNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SheetNode], obj: TypedObject): SheetNode {.importcpp: "DCAST(SheetNode, @)".}
 
 type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".} = object
+  r*: uint16
+  g*: uint16
+  b*: uint16
 
 type xel* = pixel
 

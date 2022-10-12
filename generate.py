@@ -1186,6 +1186,11 @@ def bind_type(out, type, bound_templates={}):
             if num_components >= 4:
                 out.write("\n  w*: " + float_type)
 
+        elif type_name == "pixel":
+            out.write("\n  r*: uint16")
+            out.write("\n  g*: uint16")
+            out.write("\n  b*: uint16")
+
         out.write("\n\n")
 
         if is_type_pointer(type):

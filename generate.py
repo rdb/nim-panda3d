@@ -772,7 +772,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
            not interrogate_function_is_constructor(function):
             # It's static, add a typedesc parameter.
             type_name = translated_type_name(this_type)
-            args.append(f"_: typedesc[{type_name}]")
+            if func_name == "size" and interrogate_wrapper_number_of_parameters(wrapper) == 0:
+                args.append(f"_: typedesc[{type_name}] or {type_name}")
+            else:
+                args.append(f"_: typedesc[{type_name}]")
             cpp_expr = f"{interrogate_type_name(this_type)}::{cpp_expr}"
 
             # Insert a dummy # (gets expanded to nothing) to cover this param
@@ -1367,6 +1370,17 @@ def bind_module(out, module_name):
 
     for func in iter_module_functions(module_name):
         bind_function(out, func)
+
+    for type in iter_module_types(module_name):
+        if interrogate_type_is_struct(type) or interrogate_type_is_class(type):
+            element_type = get_type_element_type(type)
+            if element_type:
+                type_name = translated_type_name(type)
+                element_type_name = translated_type_name(element_type)
+                out.write(f"iterator items*(collection: {type_name}): {element_type_name} =\n")
+                out.write(f"  for i in 0 ..< collection.size():\n")
+                out.write(f"    yield collection[i]\n")
+                out.write(f"\n")
 
 
 if __name__ == "__main__":

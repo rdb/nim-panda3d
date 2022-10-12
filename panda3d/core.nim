@@ -51602,7 +51602,7 @@ proc `[]=`*(this: LVecBase2f, i: int, assign_val: float32) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase2f, i: int): float32 {.importcpp: "((LVecBase2f &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase2f]): int {.importcpp: "LVecBase2f::size()", header: "lvecBase2.h".}
+proc size*(_: typedesc[LVecBase2f] or LVecBase2f): int {.importcpp: "LVecBase2f::size()", header: "lvecBase2.h".}
 
 proc isNan*(this: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -51756,7 +51756,7 @@ proc `[]=`*(this: LVecBase2d, i: int, assign_val: float64) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase2d, i: int): float64 {.importcpp: "((LVecBase2d &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase2d]): int {.importcpp: "LVecBase2d::size()", header: "lvecBase2.h".}
+proc size*(_: typedesc[LVecBase2d] or LVecBase2d): int {.importcpp: "LVecBase2d::size()", header: "lvecBase2.h".}
 
 proc isNan*(this: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -51910,7 +51910,7 @@ proc `[]=`*(this: LVecBase2i, i: int, assign_val: int) {.importcpp: "((LVecBase2
 
 proc `[]`*(this: LVecBase2i, i: int): int {.importcpp: "((LVecBase2i &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase2i]): int {.importcpp: "LVecBase2i::size()", header: "lvecBase2.h".}
+proc size*(_: typedesc[LVecBase2i] or LVecBase2i): int {.importcpp: "LVecBase2i::size()", header: "lvecBase2.h".}
 
 proc isNan*(this: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -52320,7 +52320,7 @@ proc `[]=`*(this: LVecBase3f, i: int, assign_val: float32) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase3f, i: int): float32 {.importcpp: "((LVecBase3f &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase3f]): int {.importcpp: "LVecBase3f::size()", header: "lvecBase3.h".}
+proc size*(_: typedesc[LVecBase3f] or LVecBase3f): int {.importcpp: "LVecBase3f::size()", header: "lvecBase3.h".}
 
 proc isNan*(this: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -52511,7 +52511,7 @@ proc `[]=`*(this: LVecBase3d, i: int, assign_val: float64) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase3d, i: int): float64 {.importcpp: "((LVecBase3d &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase3d]): int {.importcpp: "LVecBase3d::size()", header: "lvecBase3.h".}
+proc size*(_: typedesc[LVecBase3d] or LVecBase3d): int {.importcpp: "LVecBase3d::size()", header: "lvecBase3.h".}
 
 proc isNan*(this: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -52702,7 +52702,7 @@ proc `[]=`*(this: LVecBase3i, i: int, assign_val: int) {.importcpp: "((LVecBase3
 
 proc `[]`*(this: LVecBase3i, i: int): int {.importcpp: "((LVecBase3i &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase3i]): int {.importcpp: "LVecBase3i::size()", header: "lvecBase3.h".}
+proc size*(_: typedesc[LVecBase3i] or LVecBase3i): int {.importcpp: "LVecBase3i::size()", header: "lvecBase3.h".}
 
 proc isNan*(this: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -53472,7 +53472,7 @@ proc `[]=`*(this: LVecBase4f, i: int, assign_val: float32) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase4f, i: int): float32 {.importcpp: "((LVecBase4f &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase4f]): int {.importcpp: "LVecBase4f::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[LVecBase4f] or LVecBase4f): int {.importcpp: "LVecBase4f::size()", header: "lvecBase4.h".}
 
 proc isNan*(this: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -53641,7 +53641,7 @@ proc `[]=`*(this: UnalignedLVecBase4f, i: int, assign_val: float32) {.importcpp:
 
 proc `[]`*(this: UnalignedLVecBase4f, i: int): float32 {.importcpp: "((UnalignedLVecBase4f &)#).operator [](#)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[UnalignedLVecBase4f] or UnalignedLVecBase4f): int {.importcpp: "UnalignedLVecBase4f::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4f) {.importcpp: "((UnalignedLVecBase4f &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
@@ -53674,7 +53674,7 @@ proc `[]=`*(this: LVecBase4d, i: int, assign_val: float64) {.importcpp: "((LVecB
 
 proc `[]`*(this: LVecBase4d, i: int): float64 {.importcpp: "((LVecBase4d &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase4d]): int {.importcpp: "LVecBase4d::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[LVecBase4d] or LVecBase4d): int {.importcpp: "LVecBase4d::size()", header: "lvecBase4.h".}
 
 proc isNan*(this: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -53843,7 +53843,7 @@ proc `[]=`*(this: UnalignedLVecBase4d, i: int, assign_val: float64) {.importcpp:
 
 proc `[]`*(this: UnalignedLVecBase4d, i: int): float64 {.importcpp: "((UnalignedLVecBase4d &)#).operator [](#)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[UnalignedLVecBase4d] or UnalignedLVecBase4d): int {.importcpp: "UnalignedLVecBase4d::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4d) {.importcpp: "((UnalignedLVecBase4d &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
@@ -53876,7 +53876,7 @@ proc `[]=`*(this: LVecBase4i, i: int, assign_val: int) {.importcpp: "((LVecBase4
 
 proc `[]`*(this: LVecBase4i, i: int): int {.importcpp: "((LVecBase4i &)#).operator [](#)".}
 
-proc size*(_: typedesc[LVecBase4i]): int {.importcpp: "LVecBase4i::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[LVecBase4i] or LVecBase4i): int {.importcpp: "LVecBase4i::size()", header: "lvecBase4.h".}
 
 proc isNan*(this: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
@@ -54019,7 +54019,7 @@ proc `[]=`*(this: UnalignedLVecBase4i, i: int, assign_val: int) {.importcpp: "((
 
 proc `[]`*(this: UnalignedLVecBase4i, i: int): int {.importcpp: "((UnalignedLVecBase4i &)#).operator [](#)".}
 
-proc size*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::size()", header: "lvecBase4.h".}
+proc size*(_: typedesc[UnalignedLVecBase4i] or UnalignedLVecBase4i): int {.importcpp: "UnalignedLVecBase4i::size()", header: "lvecBase4.h".}
 
 proc getData*(this: UnalignedLVecBase4i) {.importcpp: "((UnalignedLVecBase4i &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
@@ -54380,7 +54380,7 @@ proc fill*(this: LMatrix3f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
 
 proc set*(this: LMatrix3f, e00: float32, e01: float32, e02: float32, e10: float32, e11: float32, e12: float32, e20: float32, e21: float32, e22: float32) {.importcpp: "#.set(#, #, #, #, #, #, #, #, #)".}
 
-proc size*(_: typedesc[LMatrix3f]): int {.importcpp: "LMatrix3f::size()", header: "lmatrix.h".} ## \
+proc size*(_: typedesc[LMatrix3f] or LMatrix3f): int {.importcpp: "LMatrix3f::size()", header: "lmatrix.h".} ## \
 ## Returns 3: the number of rows of a LMatrix3.
 
 proc setRow*(this: LMatrix3f, row: int, v: LVecBase2f) {.importcpp: "#.set_row(#, #)".} ## \
@@ -54770,7 +54770,7 @@ proc setUpper3*(this: LMatrix4f, upper3: LMatrix3f) {.importcpp: "#.set_upper_3(
 proc getUpper3*(this: LMatrix4f): LMatrix3f {.importcpp: "#.get_upper_3()".} ## \
 ## Retrieves the upper 3x3 submatrix.
 
-proc size*(_: typedesc[LMatrix4f]): int {.importcpp: "LMatrix4f::size()", header: "lmatrix.h".} ## \
+proc size*(_: typedesc[LMatrix4f] or LMatrix4f): int {.importcpp: "LMatrix4f::size()", header: "lmatrix.h".} ## \
 ## Returns 4: the number of rows of a LMatrix4.
 
 proc setRow*(this: LMatrix4f, row: int, v: LVecBase3f) {.importcpp: "#.set_row(#, #)".} ## \
@@ -55150,7 +55150,7 @@ proc fill*(this: LMatrix3d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
 
 proc set*(this: LMatrix3d, e00: float64, e01: float64, e02: float64, e10: float64, e11: float64, e12: float64, e20: float64, e21: float64, e22: float64) {.importcpp: "#.set(#, #, #, #, #, #, #, #, #)".}
 
-proc size*(_: typedesc[LMatrix3d]): int {.importcpp: "LMatrix3d::size()", header: "lmatrix.h".} ## \
+proc size*(_: typedesc[LMatrix3d] or LMatrix3d): int {.importcpp: "LMatrix3d::size()", header: "lmatrix.h".} ## \
 ## Returns 3: the number of rows of a LMatrix3.
 
 proc setRow*(this: LMatrix3d, row: int, v: LVecBase2d) {.importcpp: "#.set_row(#, #)".} ## \
@@ -55520,7 +55520,7 @@ proc setUpper3*(this: LMatrix4d, upper3: LMatrix3d) {.importcpp: "#.set_upper_3(
 proc getUpper3*(this: LMatrix4d): LMatrix3d {.importcpp: "#.get_upper_3()".} ## \
 ## Retrieves the upper 3x3 submatrix.
 
-proc size*(_: typedesc[LMatrix4d]): int {.importcpp: "LMatrix4d::size()", header: "lmatrix.h".} ## \
+proc size*(_: typedesc[LMatrix4d] or LMatrix4d): int {.importcpp: "LMatrix4d::size()", header: "lmatrix.h".} ## \
 ## Returns 4: the number of rows of a LMatrix4.
 
 proc setRow*(this: LMatrix4d, row: int, v: LVecBase3d) {.importcpp: "#.set_row(#, #)".} ## \
@@ -58773,7 +58773,7 @@ proc `!=`*(this: pixel, other: pixel): bool {.importcpp: "#.operator !=(#)".}
 
 proc `<`*(this: pixel, other: pixel): bool {.importcpp: "#.operator <(#)".}
 
-proc size*(_: typedesc[pixel]): int {.importcpp: "pixel::size()", header: "pnmimage_base.h".}
+proc size*(_: typedesc[pixel] or pixel): int {.importcpp: "pixel::size()", header: "pnmimage_base.h".}
 
 proc output*(this: pixel, `out`: ostream) {.importcpp: "#.output(#)".}
 
@@ -69152,6 +69152,118 @@ proc calcWidth*(this: PNMTextMaker, text: string): int {.importcpp: "#.calc_widt
 proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#.get_glyph(#)".} ## \
 ## Returns the glyph for the indicated index, or NULL if it is not defined in
 ## the font.
+
+iterator items*(collection: ConfigVariableBool): bool =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: ConfigVariableDouble): float64 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: ConfigVariableInt): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: ConfigVariableInt64): clonglong =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: ConfigVariableList): string =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: URLSpec): char =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: VirtualFileList): VirtualFile =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: RenderEffects): RenderEffect =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: InternalNameCollection): InternalName =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: MaterialCollection): Material =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: TextureStageCollection): TextureStage =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: NodePathCollection): NodePath =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: InputDeviceSet): InputDevice =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: AsyncTaskCollection): AsyncTask =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: TextureCollection): Texture =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase2f): float32 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase2d): float64 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase2i): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase3f): float32 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase3d): float64 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase3i): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase4f): float32 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: UnalignedLVecBase4f): float32 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase4d): float64 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: UnalignedLVecBase4d): float64 =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: LVecBase4i): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: UnalignedLVecBase4i): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
+
+iterator items*(collection: pixel): int =
+  for i in 0 ..< collection.size():
+    yield collection[i]
 
 
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}

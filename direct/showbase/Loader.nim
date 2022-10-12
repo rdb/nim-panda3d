@@ -12,6 +12,15 @@ proc loadModel*(this: Loader, modelPath: string, loaderOptions: LoaderOptions = 
   var loader = PandaLoader.getGlobalPtr()
   return initNodePath(loader.loadSync(modelPath, loaderOptions))
 
+proc loadTexture*(this: Loader, texturePath: string): Texture =
+  var texture = TexturePool.loadTexture(texturePath)
+  if texture == nil:
+    var e: ref IOError
+    new(e)
+    e.msg = "Could not load texture: " & texturePath
+    raise e
+  return texture
+
 proc loadSound*(this: Loader, manager: AudioManager, soundPath: string, positional: bool = false): AudioSound =
   return manager.getSound(soundPath, positional, 0)
 

@@ -1023,7 +1023,7 @@ def bind_type(out, type, bound_templates={}):
             if arg.isnumeric():
                 type_args.append(f"{letter}: static[int]")
             else:
-                type_args.append(f"{letter}: typedesc")
+                type_args.append(f"{letter}: static[typedesc]")
 
             if not cpp_name.endswith('<'):
                 cpp_name += ', '

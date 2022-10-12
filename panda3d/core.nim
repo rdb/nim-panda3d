@@ -8118,7 +8118,7 @@ type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.
   ## See also BamFile, which defines a higher-level interface to read and write
   ## Bam files on disk.
 
-type BitMask*[T: typedesc, U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
+type BitMask*[T: static[typedesc], U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
 
 type BitMask16* = BitMask[uint16, 16]
 

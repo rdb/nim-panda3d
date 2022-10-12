@@ -784,6 +784,12 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
             else:
                 cpp_expr = f"(({cpp_name} *)(#))"
 
+        elif func_name.startswith("`typecast "):
+            if this_pointer:
+                cpp_expr = f"({func_name[10:-1]})*(#)"
+            else:
+                cpp_expr = f"({func_name[10:-1]})(#)"
+
         elif this_pointer and interrogate_type_is_pointer(return_type) and interrogate_type_is_const(interrogate_type_wrapped_type(return_type)):
             if is_type_reference_counted(return_type):
                 cpp_expr = f"deconstify({cpp_expr})"
@@ -818,7 +824,7 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
         if func_name.startswith("_"):
             return
 
-        if func_name == "get_class_type" or func_name.startswith("upcast_to_"):
+        if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
             proc_type = "converter"
 
     if func_name in NIM_KEYWORDS:

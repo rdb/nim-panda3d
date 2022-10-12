@@ -21,6 +21,7 @@ struct alignas(LVecBase2f) WrappedLVecBase2f {
   float y = 0;
 
   constexpr WrappedLVecBase2f() = default;
+  WrappedLVecBase2f(float v0, float v1) : x(v0), y(v1) { }
   WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
   operator const LVecBase2f &() const { return *(const LVecBase2f *)this; }
   operator LVecBase2f &() { return *(LVecBase2f *)this; }
@@ -35,6 +36,7 @@ struct alignas(LVecBase2d) WrappedLVecBase2d {
   double y = 0;
 
   constexpr WrappedLVecBase2d() = default;
+  WrappedLVecBase2d(double v0, double v1) : x(v0), y(v1) { }
   WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
   operator const LVecBase2d &() const { return *(const LVecBase2d *)this; }
   operator LVecBase2d &() { return *(LVecBase2d *)this; }
@@ -49,6 +51,7 @@ struct alignas(LVecBase2i) WrappedLVecBase2i {
   int y = 0;
 
   constexpr WrappedLVecBase2i() = default;
+  WrappedLVecBase2i(int v0, int v1) : x(v0), y(v1) { }
   WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
   operator const LVecBase2i &() const { return *(const LVecBase2i *)this; }
   operator LVecBase2i &() { return *(LVecBase2i *)this; }
@@ -80,6 +83,7 @@ struct alignas(LVecBase3d) WrappedLVecBase3d {
   double z = 0;
 
   constexpr WrappedLVecBase3d() = default;
+  WrappedLVecBase3d(double v0, double v1, double v2) : x(v0), y(v1), z(v2) { }
   WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
   operator const LVecBase3d &() const { return *(const LVecBase3d *)this; }
   operator LVecBase3d &() { return *(LVecBase3d *)this; }
@@ -95,6 +99,7 @@ struct alignas(LVecBase3i) WrappedLVecBase3i {
   int z = 0;
 
   constexpr WrappedLVecBase3i() = default;
+  WrappedLVecBase3i(int v0, int v1, int v2) : x(v0), y(v1), z(v2) { }
   WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
   operator const LVecBase3i &() const { return *(const LVecBase3i *)this; }
   operator LVecBase3i &() { return *(LVecBase3i *)this; }
@@ -111,6 +116,7 @@ struct alignas(LVecBase4f) WrappedLVecBase4f {
   float w = 0;
 
   constexpr WrappedLVecBase4f() = default;
+  WrappedLVecBase4f(float v0, float v1, float v2, float v3) : x(v0), y(v1), z(v2), w(v3) { }
   WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   WrappedLVecBase4f(const UnalignedLVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   operator const LVecBase4f &() const { return *(const LVecBase4f *)this; }
@@ -130,6 +136,7 @@ struct alignas(LVecBase4d) WrappedLVecBase4d {
   double w = 0;
 
   constexpr WrappedLVecBase4d() = default;
+  WrappedLVecBase4d(double v0, double v1, double v2, double v3) : x(v0), y(v1), z(v2), w(v3) { }
   WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   WrappedLVecBase4d(const UnalignedLVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   operator const LVecBase4d &() const { return *(const LVecBase4d *)this; }
@@ -149,6 +156,7 @@ struct alignas(LVecBase4i) WrappedLVecBase4i {
   int w = 0;
 
   constexpr WrappedLVecBase4i() = default;
+  WrappedLVecBase4i(int v0, int v1, int v2, int v3) : x(v0), y(v1), z(v2), w(v3) { }
   WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   WrappedLVecBase4i(const UnalignedLVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   operator const LVecBase4i &() const { return *(const LVecBase4i *)this; }

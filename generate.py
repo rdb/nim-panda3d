@@ -769,13 +769,19 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
         out.write(f": {type_name}")
 
-        if this_pointer and func_name.startswith("upcastTo"):
-            if is_type_reference_counted(return_type):
-                cpp_expr = f"(PT({type_name})(#))"
+        if func_name.startswith("upcastTo"):
+            while interrogate_type_is_wrapped(return_type):
+                return_type = interrogate_type_wrapped_type(return_type)
+
+            cpp_name = interrogate_type_scoped_name(return_type)
+            if not this_pointer:
+                cpp_expr = f"({cpp_name} &)(#)"
+            elif is_type_reference_counted(return_type):
+                cpp_expr = f"(PT({cpp_name})(#))"
             elif is_type_reference_counted(this_type):
-                cpp_expr = f"(({type_name} *)({interrogate_type_true_name(this_type)} *)(#))"
+                cpp_expr = f"(({cpp_name} *)({interrogate_type_true_name(this_type)} *)(#))"
             else:
-                cpp_expr = f"(({type_name} *)(#))"
+                cpp_expr = f"(({cpp_name} *)(#))"
 
         elif this_pointer and interrogate_type_is_pointer(return_type) and interrogate_type_is_const(interrogate_type_wrapped_type(return_type)):
             if is_type_reference_counted(return_type):
@@ -1001,6 +1007,17 @@ def get_type_element_type(type):
         return element_type
 
 
+def get_type_output_method(type):
+    while interrogate_type_is_wrapped(type) or interrogate_type_is_typedef(type):
+        type = interrogate_type_wrapped_type(type)
+
+    for i_meth in range(interrogate_type_number_of_methods(type)):
+        meth = interrogate_type_get_method(type, i_meth)
+        meth_name = interrogate_function_name(meth)
+        if meth_name == "output":
+            return meth
+
+
 def bind_type(out, type, bound_templates={}):
     if not is_type_valid(type):
         return
@@ -1214,6 +1231,11 @@ def bind_type(out, type, bound_templates={}):
     #for i_method in range(interrogate_type_number_of_make_seqs(type)):
     #    print("list", translateFunctionName(interrogate_make_seq_seq_name(interrogate_type_get_make_seq(type, i_method))), "();", file=out)
 
+    if type_name == "StringStream":
+        out.write("func data*(this: StringStream): string {.importcpp: \"nimStringFromStdString(#.get_data())\", header: stringConversionCode.}\n")
+        out.write("func `data=`*(this: StringStream, data: string) {.importcpp: \"#.set_data(nimStringToStdString(#))\", header: stringConversionCode.}\n")
+        out.write("\n")
+
 
 def iter_type_tree(type):
     if not is_type_valid(type):
@@ -1289,6 +1311,14 @@ def bind_module(out, module_name):
                 out.write(f"iterator items*(collection: {type_name}): {element_type_name} =\n")
                 out.write(f"  for i in 0 ..< collection.size():\n")
                 out.write(f"    yield collection[i]\n")
+                out.write(f"\n")
+
+            if get_type_output_method(type):
+                type_name = translated_type_name(type)
+                out.write(f"func `$`*(this: {type_name}): string =\n")
+                out.write(f"  var str : StringStream\n")
+                out.write(f"  this.output(str)\n")
+                out.write(f"  str.data\n")
                 out.write(f"\n")
 
 

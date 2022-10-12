@@ -861,6 +861,9 @@ type StringStream* {.importcpp: "StringStream", pure, inheritable, header: "stri
   ## buffer, which can be retrieved and/or set as a string in Python 2 or a
   ## bytes object in Python 3.
 
+func data*(this: StringStream): string {.importcpp: "nimStringFromStdString(#.get_data())", header: stringConversionCode.}
+func `data=`*(this: StringStream, data: string) {.importcpp: "#.set_data(nimStringToStdString(#))", header: stringConversionCode.}
+
 type PointerToVoid* {.importcpp: "PointerToVoid", pure, inheritable, header: "pointerToVoid.h".} = object
   ## This is the non-template part of the base class for PointerTo and
   ## ConstPointerTo.  It is necessary so we can keep a pointer to a non-template
@@ -16675,7 +16678,7 @@ proc seekg*(this: istream, pos: clonglong) {.importcpp: "#.seekg(#)".}
 
 proc seekg*(this: istream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekg(#, #)".}
 
-converter upcastToIstream*(this: iostream): istream {.importcpp: "#.upcast_to_istream()".}
+converter upcastToIstream*(this: iostream): istream {.importcpp: "(std::istream &)(#)".}
 
 proc put*(this: ostream, c: char) {.importcpp: "#.put(#)".}
 
@@ -16687,7 +16690,7 @@ proc seekp*(this: ostream, pos: clonglong) {.importcpp: "#.seekp(#)".}
 
 proc seekp*(this: ostream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekp(#, #)".}
 
-converter upcastToOstream*(this: iostream): ostream {.importcpp: "#.upcast_to_ostream()".}
+converter upcastToOstream*(this: iostream): ostream {.importcpp: "(std::ostream &)(#)".}
 
 proc flush*(this: iostream) {.importcpp: "#.flush()".}
 
@@ -18966,7 +18969,7 @@ proc setWord*(this: ConfigVariableString, n: clonglong, value: string) {.importc
 ## Reassigns the variable's nth value.  This makes a local copy of the
 ## variable's overall value.
 
-converter upcastToConfigFlags*(this: NotifyCategory): ConfigFlags {.importcpp: "#.upcast_to_ConfigFlags()".}
+converter upcastToConfigFlags*(this: NotifyCategory): ConfigFlags {.importcpp: "(ConfigFlags &)(#)".}
 
 proc getFullname*(this: NotifyCategory): string {.importcpp: "nimStringFromStdString(#.get_fullname())", header: stringConversionCode.}
 
@@ -19309,23 +19312,23 @@ proc release*(this: StreamWrapperBase) {.importcpp: "#.release()".} ## \
 ## Releases the internal lock.  Must be called exactly once following a call
 ## to acquire().  See the cautions with acquire().
 
-converter upcastToStreamWrapperBase*(this: IStreamWrapper): StreamWrapperBase {.importcpp: "#.upcast_to_StreamWrapperBase()".}
+converter upcastToStreamWrapperBase*(this: IStreamWrapper): StreamWrapperBase {.importcpp: "(StreamWrapperBase &)(#)".}
 
 proc initIStreamWrapper*(stream: istream): IStreamWrapper {.importcpp: "IStreamWrapper(#)".}
 
 proc getIstream*(this: IStreamWrapper): istream {.importcpp: "#.get_istream()".} ## \
 ## Returns the istream this object is wrapping.
 
-converter upcastToStreamWrapperBase*(this: OStreamWrapper): StreamWrapperBase {.importcpp: "#.upcast_to_StreamWrapperBase()".}
+converter upcastToStreamWrapperBase*(this: OStreamWrapper): StreamWrapperBase {.importcpp: "(StreamWrapperBase &)(#)".}
 
 proc initOStreamWrapper*(stream: ostream): OStreamWrapper {.importcpp: "OStreamWrapper(#)".}
 
 proc getOstream*(this: OStreamWrapper): ostream {.importcpp: "#.get_ostream()".} ## \
 ## Returns the ostream this object is wrapping.
 
-converter upcastToIStreamWrapper*(this: StreamWrapper): IStreamWrapper {.importcpp: "#.upcast_to_IStreamWrapper()".}
+converter upcastToIStreamWrapper*(this: StreamWrapper): IStreamWrapper {.importcpp: "(IStreamWrapper &)(#)".}
 
-converter upcastToOStreamWrapper*(this: StreamWrapper): OStreamWrapper {.importcpp: "#.upcast_to_OStreamWrapper()".}
+converter upcastToOStreamWrapper*(this: StreamWrapper): OStreamWrapper {.importcpp: "(OStreamWrapper &)(#)".}
 
 proc initStreamWrapper*(stream: iostream): StreamWrapper {.importcpp: "StreamWrapper(#)".}
 
@@ -19404,7 +19407,7 @@ proc flush*(this: SSWriter): bool {.importcpp: "#->flush()".} ## \
 ## Sends the most recently queued data now.  This only has meaning if
 ## set_collect_tcp() has been set to true.
 
-converter upcastToIstream*(this: ISocketStream): istream {.importcpp: "((istream *)(#))".}
+converter upcastToIstream*(this: ISocketStream): istream {.importcpp: "((std::istream *)(#))".}
 
 converter upcastToSSReader*(this: ISocketStream): SSReader {.importcpp: "((SSReader *)(#))".}
 
@@ -19414,9 +19417,9 @@ proc close*(this: ISocketStream) {.importcpp: "#->close()".}
 
 proc getReadState*(this: ISocketStream): ISocketStream_ReadState {.importcpp: "#->get_read_state()".}
 
-converter upcastToOstream*(this: OSocketStream): ostream {.importcpp: "#.upcast_to_ostream()".}
+converter upcastToOstream*(this: OSocketStream): ostream {.importcpp: "(std::ostream &)(#)".}
 
-converter upcastToSSWriter*(this: OSocketStream): SSWriter {.importcpp: "#.upcast_to_SSWriter()".}
+converter upcastToSSWriter*(this: OSocketStream): SSWriter {.importcpp: "(SSWriter &)(#)".}
 
 proc isClosed*(this: OSocketStream): bool {.importcpp: "#.is_closed()".}
 
@@ -19426,11 +19429,11 @@ proc flush*(this: OSocketStream): bool {.importcpp: "#.flush()".} ## \
 ## Sends the most recently queued data now.  This only has meaning if
 ## set_collect_tcp() has been set to true.
 
-converter upcastToIostream*(this: SocketStream): iostream {.importcpp: "#.upcast_to_iostream()".}
+converter upcastToIostream*(this: SocketStream): iostream {.importcpp: "(std::iostream &)(#)".}
 
-converter upcastToSSReader*(this: SocketStream): SSReader {.importcpp: "#.upcast_to_SSReader()".}
+converter upcastToSSReader*(this: SocketStream): SSReader {.importcpp: "(SSReader &)(#)".}
 
-converter upcastToSSWriter*(this: SocketStream): SSWriter {.importcpp: "#.upcast_to_SSWriter()".}
+converter upcastToSSWriter*(this: SocketStream): SSWriter {.importcpp: "(SSWriter &)(#)".}
 
 proc isClosed*(this: SocketStream): bool {.importcpp: "#.is_closed()".}
 
@@ -43985,7 +43988,7 @@ proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: 
 
 converter getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
 
-converter upcastToNamable*(this: SimpleLru): Namable {.importcpp: "#.upcast_to_Namable()".}
+converter upcastToNamable*(this: SimpleLru): Namable {.importcpp: "(Namable &)(#)".}
 
 proc initSimpleLru*(name: string, max_size: clonglong): SimpleLru {.importcpp: "SimpleLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -44156,9 +44159,9 @@ proc getTotalFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#->get
 proc getUsedFileSize*(this: VertexDataSaveFile): clonglong {.importcpp: "#->get_used_file_size()".} ## \
 ## Returns the amount of space within the save file that is currently in use.
 
-converter upcastToSimpleAllocator*(this: VertexDataPage): SimpleAllocator {.importcpp: "#.upcast_to_SimpleAllocator()".}
+converter upcastToSimpleAllocator*(this: VertexDataPage): SimpleAllocator {.importcpp: "(SimpleAllocator &)(#)".}
 
-converter upcastToSimpleLruPage*(this: VertexDataPage): SimpleLruPage {.importcpp: "#.upcast_to_SimpleLruPage()".}
+converter upcastToSimpleLruPage*(this: VertexDataPage): SimpleLruPage {.importcpp: "(SimpleLruPage &)(#)".}
 
 proc getRamClass*(this: VertexDataPage): VertexDataPage_RamClass {.importcpp: "#.get_ram_class()".} ## \
 ## Returns the current ram class of the array.  If this is other than
@@ -47421,9 +47424,9 @@ proc addData4i*(this: GeomVertexWriter, a: int, b: int, c: int, d: int) {.import
 
 proc output*(this: GeomVertexWriter, `out`: ostream) {.importcpp: "#.output(#)".}
 
-converter upcastToGeomVertexWriter*(this: GeomVertexRewriter): GeomVertexWriter {.importcpp: "#.upcast_to_GeomVertexWriter()".}
+converter upcastToGeomVertexWriter*(this: GeomVertexRewriter): GeomVertexWriter {.importcpp: "(GeomVertexWriter &)(#)".}
 
-converter upcastToGeomVertexReader*(this: GeomVertexRewriter): GeomVertexReader {.importcpp: "#.upcast_to_GeomVertexReader()".}
+converter upcastToGeomVertexReader*(this: GeomVertexRewriter): GeomVertexReader {.importcpp: "(GeomVertexReader &)(#)".}
 
 proc initGeomVertexRewriter*(array_data: GeomVertexArrayData, current_thread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#, #)".} ## \
 ## Constructs a new rewriter to process the vertices of the indicated array
@@ -49912,9 +49915,9 @@ proc prepareShaderBufferNow*(this: PreparedGraphicsObjects, data: ShaderBuffer, 
 ## When either the Data or the PreparedGraphicsObjects object destructs, the
 ## BufferContext will be deleted.
 
-converter upcastToBufferContext*(this: IndexBufferContext): BufferContext {.importcpp: "#.upcast_to_BufferContext()".}
+converter upcastToBufferContext*(this: IndexBufferContext): BufferContext {.importcpp: "(BufferContext &)(#)".}
 
-converter upcastToAdaptiveLruPage*(this: IndexBufferContext): AdaptiveLruPage {.importcpp: "#.upcast_to_AdaptiveLruPage()".}
+converter upcastToAdaptiveLruPage*(this: IndexBufferContext): AdaptiveLruPage {.importcpp: "(AdaptiveLruPage &)(#)".}
 
 proc getData*(this: IndexBufferContext): GeomPrimitive {.importcpp: "#.get_data()".} ## \
 ## Returns the pointer to the client-side array data object.
@@ -50820,9 +50823,9 @@ proc isReady*(this: TextureReloadRequest): bool {.importcpp: "#->is_ready()".} #
 
 converter getClassType*(_: typedesc[TextureReloadRequest]): TypeHandle {.importcpp: "TextureReloadRequest::get_class_type()", header: "textureReloadRequest.h".}
 
-converter upcastToBufferContext*(this: TextureContext): BufferContext {.importcpp: "#.upcast_to_BufferContext()".}
+converter upcastToBufferContext*(this: TextureContext): BufferContext {.importcpp: "(BufferContext &)(#)".}
 
-converter upcastToAdaptiveLruPage*(this: TextureContext): AdaptiveLruPage {.importcpp: "#.upcast_to_AdaptiveLruPage()".}
+converter upcastToAdaptiveLruPage*(this: TextureContext): AdaptiveLruPage {.importcpp: "(AdaptiveLruPage &)(#)".}
 
 proc getTexture*(this: TextureContext): Texture {.importcpp: "#.get_texture()".} ## \
 ## Returns the pointer to the associated Texture object.
@@ -50916,9 +50919,9 @@ proc getVideoHeight*(this: VideoTexture): int {.importcpp: "#->get_video_height(
 
 converter getClassType*(_: typedesc[VideoTexture]): TypeHandle {.importcpp: "VideoTexture::get_class_type()", header: "videoTexture.h".}
 
-converter upcastToBufferContext*(this: VertexBufferContext): BufferContext {.importcpp: "#.upcast_to_BufferContext()".}
+converter upcastToBufferContext*(this: VertexBufferContext): BufferContext {.importcpp: "(BufferContext &)(#)".}
 
-converter upcastToAdaptiveLruPage*(this: VertexBufferContext): AdaptiveLruPage {.importcpp: "#.upcast_to_AdaptiveLruPage()".}
+converter upcastToAdaptiveLruPage*(this: VertexBufferContext): AdaptiveLruPage {.importcpp: "(AdaptiveLruPage &)(#)".}
 
 proc getData*(this: VertexBufferContext): GeomVertexArrayData {.importcpp: "#.get_data()".} ## \
 ## Returns the pointer to the client-side array data object.
@@ -65265,9 +65268,9 @@ proc cacheUnref*(this: CopyOnWriteObject): bool {.importcpp: "#->cache_unref()".
 
 converter getClassType*(_: typedesc[CopyOnWriteObject]): TypeHandle {.importcpp: "CopyOnWriteObject::get_class_type()", header: "copyOnWriteObject.h".}
 
-converter upcastToDatagramSink*(this: DatagramBuffer): DatagramSink {.importcpp: "#.upcast_to_DatagramSink()".}
+converter upcastToDatagramSink*(this: DatagramBuffer): DatagramSink {.importcpp: "(DatagramSink &)(#)".}
 
-converter upcastToDatagramGenerator*(this: DatagramBuffer): DatagramGenerator {.importcpp: "#.upcast_to_DatagramGenerator()".}
+converter upcastToDatagramGenerator*(this: DatagramBuffer): DatagramGenerator {.importcpp: "(DatagramGenerator &)(#)".}
 
 proc initDatagramBuffer*(): DatagramBuffer {.importcpp: "DatagramBuffer()".} ## \
 ## Initializes an empty datagram buffer.
@@ -67978,9 +67981,9 @@ proc isEof*(this: DatagramGeneratorNet): bool {.importcpp: "#->is_eof()".} ## \
 proc isError*(this: DatagramGeneratorNet): bool {.importcpp: "#->is_error()".} ## \
 ## Returns true if the stream has an error condition.
 
-converter upcastToDatagramSink*(this: DatagramSinkNet): DatagramSink {.importcpp: "#.upcast_to_DatagramSink()".}
+converter upcastToDatagramSink*(this: DatagramSinkNet): DatagramSink {.importcpp: "(DatagramSink &)(#)".}
 
-converter upcastToConnectionWriter*(this: DatagramSinkNet): ConnectionWriter {.importcpp: "#.upcast_to_ConnectionWriter()".}
+converter upcastToConnectionWriter*(this: DatagramSinkNet): ConnectionWriter {.importcpp: "(ConnectionWriter &)(#)".}
 
 proc initDatagramSinkNet*(manager: ConnectionManager, num_threads: int): DatagramSinkNet {.importcpp: "DatagramSinkNet(#, #)".} ## \
 ## Creates a new DatagramSinkNet with the indicated number of threads to
@@ -69060,6 +69063,61 @@ proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#
 ## Returns the glyph for the indicated index, or NULL if it is not defined in
 ## the font.
 
+func `$`*(this: TypeHandle): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Filename): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PandaSystem): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DSearchPath): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GlobPattern): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigPage): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigDeclaration): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigVariableCore): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigPageManager): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigVariableManager): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigVariableBase): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: ConfigVariableBool): bool =
   for i in 0 ..< collection.size():
     yield collection[i]
@@ -69080,73 +69138,603 @@ iterator items*(collection: ConfigVariableList): string =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: ConfigVariableList): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConfigVariableSearchPath): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: URLSpec): char =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: URLSpec): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: HTTPDate): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: HTTPCookie): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: HTTPEntityTag): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DocumentSpec): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DownloadDb): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: VirtualFile): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: VirtualFileMount): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Datagram): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DatagramIterator): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: HashVal): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: MemoryUsagePointers): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Multifile): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Namable): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SubfileInfo): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: VirtualFileList): VirtualFile =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: PandaNode): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LightNode): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LightLensNode): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CallbackData): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AnimInterface): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: TransformState): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: RenderAttrib): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: RenderState): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: RenderEffect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: RenderEffects): RenderEffect =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: RenderEffects): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: InternalNameCollection): InternalName =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: InternalNameCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: MaterialCollection): Material =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: MaterialCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: TextureStageCollection): TextureStage =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: TextureStageCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: NodePath): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: NodePathCollection): NodePath =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: NodePathCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AttribNodeRegistry): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AuxSceneData): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: WeakNodePath): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Loader): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AsyncFuture): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AsyncTask): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: TextNode): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: VertexTransform): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AnimGroup): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AnimControl): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AnimControlCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AnimPreloadTable): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PartSubset): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PartBundle): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PStatCollector): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: VertexSlider): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CollisionSolid): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CollisionTraverser): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CollisionRecorder): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CollisionEntry): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CollisionHandlerQueue): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: InputDevice): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: InputDeviceSet): InputDevice =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: InputDeviceSet): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: WindowHandle): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: WindowProperties): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DisplayRegion): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GraphicsThreadingModel): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: FrameBufferProperties): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: DisplayMode): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Thread): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: MutexDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConditionVarDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ConditionVarFullDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ReMutexDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LightMutexDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LightReMutexDirect): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Semaphore): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: EventParameter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AsyncTaskManager): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: AsyncTaskCollection): AsyncTask =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: AsyncTaskCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AsyncTaskChain): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ParamValueBase): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Event): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AdaptiveLru): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AdaptiveLruPage): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexAnimationSpec): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: InternalName): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexColumn): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexArrayFormat): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexFormat): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SimpleLru): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SimpleLruPage): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SimpleAllocator): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SimpleAllocatorBlock): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: VertexDataPage): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexArrayData): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: TransformBlend): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexData): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomPrimitive): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: TextureStage): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Geom): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexReader): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexWriter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: GeomVertexRewriter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Lens): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: Material): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: TextureCollection): Texture =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: TextureCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: LVecBase2f): float32 =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: LVecBase2f): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: LVecBase2d): float64 =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LVecBase2d): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: LVecBase2i): int =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: LVecBase2i): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: LVecBase3f): float32 =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LVecBase3f): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: LVecBase3d): float64 =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: LVecBase3d): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: LVecBase3i): int =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LVecBase3i): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: LVecBase4f): float32 =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: LVecBase4f): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 iterator items*(collection: UnalignedLVecBase4f): float32 =
   for i in 0 ..< collection.size():
@@ -69156,6 +69744,11 @@ iterator items*(collection: LVecBase4d): float64 =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LVecBase4d): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: UnalignedLVecBase4d): float64 =
   for i in 0 ..< collection.size():
     yield collection[i]
@@ -69164,13 +69757,213 @@ iterator items*(collection: LVecBase4i): int =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LVecBase4i): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: UnalignedLVecBase4i): int =
   for i in 0 ..< collection.size():
     yield collection[i]
 
+func `$`*(this: LMatrix3f): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LMatrix4f): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LMatrix3d): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LMatrix4d): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LQuaternionf): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LQuaterniond): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BoundingVolume): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LParabolaf): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LParabolad): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LPlanef): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LPlaned): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ParametricCurveCollection): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CurveFitter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: NurbsCurveEvaluator): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: NurbsSurfaceEvaluator): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
 iterator items*(collection: pixel): int =
   for i in 0 ..< collection.size():
     yield collection[i]
+
+func `$`*(this: pixel): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PNMImageHeader): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PfmFile): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: MouseWatcherRegion): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: MouseWatcherBase): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: MouseWatcherParameter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: UpdateSeq): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BamCacheRecord): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: LoaderOptions): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BitMask[uint16, 16]): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BitMask[uint32, 32]): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BitMask[uint64, 64]): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: BitArray): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ButtonHandle): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ButtonMap): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: CallbackObject): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: ModifierButtons): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: SparseArray): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: UniqueIdAllocator): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AudioSound): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: AudioManager): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PGFrameStyle): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: PGMouseWatcherParameter): string =
+  var str : StringStream
+  this.output(str)
+  str.data
+
+func `$`*(this: NetAddress): string =
+  var str : StringStream
+  this.output(str)
+  str.data
 
 
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}

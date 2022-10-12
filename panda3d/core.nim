@@ -15112,36 +15112,6 @@ proc `mode=`*(_: typedesc[TextureStagePool], mode: TextureStagePool_Mode) {.impo
 ## M_unique, then each call to get_stage() returns only TextureStages with
 ## identical properties.
 
-proc `x=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase2f, value: float32) {.importcpp: "#.set_y(#)".}
-
-proc `x=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase2d, value: float64) {.importcpp: "#.set_y(#)".}
-
-proc `x=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase2i, value: int) {.importcpp: "#.set_y(#)".}
-
-proc `x=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase3f, value: float32) {.importcpp: "#.set_z(#)".}
-
-proc `x=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase3d, value: float64) {.importcpp: "#.set_z(#)".}
-
-proc `x=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase3i, value: int) {.importcpp: "#.set_z(#)".}
-
 func xy*(this: LVector3f): LVector2f {.importcpp: "#.get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
 ## this vector.
@@ -15213,24 +15183,6 @@ func xz*(this: LPoint3i): LPoint2i {.importcpp: "#.get_xz()".} ## \
 func yz*(this: LPoint3i): LPoint2i {.importcpp: "#.get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
-
-proc `x=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase4f, value: float32) {.importcpp: "#.set_z(#)".}
-
-proc `x=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase4d, value: float64) {.importcpp: "#.set_z(#)".}
-
-proc `x=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_x(#)".}
-
-proc `y=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_y(#)".}
-
-proc `z=`*(this: LVecBase4i, value: int) {.importcpp: "#.set_z(#)".}
 
 func xyz*(this: LVector4f): LVector3f {.importcpp: "#.get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
@@ -51646,145 +51598,147 @@ proc unitX*(_: typedesc[LVecBase2f]): LVecBase2f {.importcpp: "LVecBase2f::unit_
 proc unitY*(_: typedesc[LVecBase2f]): LVecBase2f {.importcpp: "LVecBase2f::unit_y()", header: "lvecBase2.h".} ## \
 ## Returns a unit Y vector.
 
-proc `[]`*(this: LVecBase2f, i: int, assign_val: float32) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase2f, i: int, assign_val: float32) {.importcpp: "((LVecBase2f &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase2f, i: int): float32 {.importcpp: "((LVecBase2f &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase2f]): int {.importcpp: "LVecBase2f::size()", header: "lvecBase2.h".}
 
-proc isNan*(this: LVecBase2f): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase2f, i: int): float32 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase2f, i: int): float32 {.importcpp: "((LVecBase2f &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase2f, i: int, value: float32) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase2f, i: int, value: float32) {.importcpp: "((LVecBase2f &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase2f): float32 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase2f): float32 {.importcpp: "((LVecBase2f &)#).get_x()".}
 
-proc getY*(this: LVecBase2f): float32 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase2f): float32 {.importcpp: "((LVecBase2f &)#).get_y()".}
 
-proc setX*(this: LVecBase2f, value: float32) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase2f, value: float32) {.importcpp: "((LVecBase2f &)#).set_x(#)".}
 
-proc setY*(this: LVecBase2f, value: float32) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase2f, value: float32) {.importcpp: "((LVecBase2f &)#).set_y(#)".}
 
-proc addToCell*(this: LVecBase2f, i: int, value: float32) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase2f, i: int, value: float32) {.importcpp: "((LVecBase2f &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase2f, value: float32) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase2f, value: float32) {.importcpp: "((LVecBase2f &)#).add_x(#)".}
 
-proc addY*(this: LVecBase2f, value: float32) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase2f, value: float32) {.importcpp: "((LVecBase2f &)#).add_y(#)".}
 
-proc getData*(this: LVecBase2f) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase2f) {.importcpp: "((LVecBase2f &)#).get_data()".} ## \
 ## Returns the address of the first of the two data elements in the vector.
 ## The next element occupies the next position consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase2f]): int {.importcpp: "LVecBase2f::get_num_components()", header: "lvecBase2.h".}
 
-proc fill*(this: LVecBase2f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase2f, fill_value: float32) {.importcpp: "((LVecBase2f &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase2f, x: float32, y: float32) {.importcpp: "#.set(#, #)".}
+proc set*(this: LVecBase2f, x: float32, y: float32) {.importcpp: "((LVecBase2f &)#).set(#, #)".}
 
-proc dot*(this: LVecBase2f, other: LVecBase2f): float32 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase2f, other: LVecBase2f): float32 {.importcpp: "((LVecBase2f &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase2f): float32 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase2f): float32 {.importcpp: "((LVecBase2f &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase2f): float32 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase2f): float32 {.importcpp: "((LVecBase2f &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase2f): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase2f): LVecBase2f {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase2f, onto: LVecBase2f): LVecBase2f {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase2f, onto: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc `<`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase2f, other: LVecBase2f): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase2f, other: LVecBase2f): int {.importcpp: "((LVecBase2f &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase2f, other: LVecBase2f, threshold: float32): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase2f, other: LVecBase2f, threshold: float32): int {.importcpp: "((LVecBase2f &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase2f): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase2f): clonglong {.importcpp: "((LVecBase2f &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase2f, threshold: float32): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase2f, threshold: float32): clonglong {.importcpp: "((LVecBase2f &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase2f, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase2f, hash: clonglong): clonglong {.importcpp: "((LVecBase2f &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase2f, hash: clonglong, threshold: float32): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase2f, hash: clonglong, threshold: float32): clonglong {.importcpp: "((LVecBase2f &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase2f): LVecBase2f {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator -()".}
 
-proc `+`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2f, scalar: float32): LVecBase2f {.importcpp: "((LVecBase2f &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase2f, other: LVecBase2f) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase2f, other: LVecBase2f) {.importcpp: "((LVecBase2f &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase2f, other: LVecBase2f): LVecBase2f {.importcpp: "((LVecBase2f &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "((LVecBase2f &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase2f, other: LVecBase2f, threshold: float32): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase2f, other: LVecBase2f, threshold: float32): bool {.importcpp: "((LVecBase2f &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase2f, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase2f, `out`: ostream) {.importcpp: "((LVecBase2f &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase2f, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase2f, destination: Datagram) {.importcpp: "((LVecBase2f &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "((LVecBase2f &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase2f, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase2f, destination: Datagram) {.importcpp: "((LVecBase2f &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase2f, source: DatagramIterator) {.importcpp: "((LVecBase2f &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
@@ -51798,145 +51752,147 @@ proc unitX*(_: typedesc[LVecBase2d]): LVecBase2d {.importcpp: "LVecBase2d::unit_
 proc unitY*(_: typedesc[LVecBase2d]): LVecBase2d {.importcpp: "LVecBase2d::unit_y()", header: "lvecBase2.h".} ## \
 ## Returns a unit Y vector.
 
-proc `[]`*(this: LVecBase2d, i: int, assign_val: float64) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase2d, i: int, assign_val: float64) {.importcpp: "((LVecBase2d &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase2d, i: int): float64 {.importcpp: "((LVecBase2d &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase2d]): int {.importcpp: "LVecBase2d::size()", header: "lvecBase2.h".}
 
-proc isNan*(this: LVecBase2d): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase2d, i: int): float64 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase2d, i: int): float64 {.importcpp: "((LVecBase2d &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase2d, i: int, value: float64) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase2d, i: int, value: float64) {.importcpp: "((LVecBase2d &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase2d): float64 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase2d): float64 {.importcpp: "((LVecBase2d &)#).get_x()".}
 
-proc getY*(this: LVecBase2d): float64 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase2d): float64 {.importcpp: "((LVecBase2d &)#).get_y()".}
 
-proc setX*(this: LVecBase2d, value: float64) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase2d, value: float64) {.importcpp: "((LVecBase2d &)#).set_x(#)".}
 
-proc setY*(this: LVecBase2d, value: float64) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase2d, value: float64) {.importcpp: "((LVecBase2d &)#).set_y(#)".}
 
-proc addToCell*(this: LVecBase2d, i: int, value: float64) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase2d, i: int, value: float64) {.importcpp: "((LVecBase2d &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase2d, value: float64) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase2d, value: float64) {.importcpp: "((LVecBase2d &)#).add_x(#)".}
 
-proc addY*(this: LVecBase2d, value: float64) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase2d, value: float64) {.importcpp: "((LVecBase2d &)#).add_y(#)".}
 
-proc getData*(this: LVecBase2d) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase2d) {.importcpp: "((LVecBase2d &)#).get_data()".} ## \
 ## Returns the address of the first of the two data elements in the vector.
 ## The next element occupies the next position consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase2d]): int {.importcpp: "LVecBase2d::get_num_components()", header: "lvecBase2.h".}
 
-proc fill*(this: LVecBase2d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase2d, fill_value: float64) {.importcpp: "((LVecBase2d &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase2d, x: float64, y: float64) {.importcpp: "#.set(#, #)".}
+proc set*(this: LVecBase2d, x: float64, y: float64) {.importcpp: "((LVecBase2d &)#).set(#, #)".}
 
-proc dot*(this: LVecBase2d, other: LVecBase2d): float64 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase2d, other: LVecBase2d): float64 {.importcpp: "((LVecBase2d &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase2d): float64 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase2d): float64 {.importcpp: "((LVecBase2d &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase2d): float64 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase2d): float64 {.importcpp: "((LVecBase2d &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase2d): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase2d): LVecBase2d {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase2d, onto: LVecBase2d): LVecBase2d {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase2d, onto: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc `<`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase2d, other: LVecBase2d): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase2d, other: LVecBase2d): int {.importcpp: "((LVecBase2d &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase2d, other: LVecBase2d, threshold: float64): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase2d, other: LVecBase2d, threshold: float64): int {.importcpp: "((LVecBase2d &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase2d): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase2d): clonglong {.importcpp: "((LVecBase2d &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase2d, threshold: float64): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase2d, threshold: float64): clonglong {.importcpp: "((LVecBase2d &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase2d, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase2d, hash: clonglong): clonglong {.importcpp: "((LVecBase2d &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase2d, hash: clonglong, threshold: float64): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase2d, hash: clonglong, threshold: float64): clonglong {.importcpp: "((LVecBase2d &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase2d): LVecBase2d {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator -()".}
 
-proc `+`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2d, scalar: float64): LVecBase2d {.importcpp: "((LVecBase2d &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase2d, other: LVecBase2d) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase2d, other: LVecBase2d) {.importcpp: "((LVecBase2d &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase2d, other: LVecBase2d): LVecBase2d {.importcpp: "((LVecBase2d &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "((LVecBase2d &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase2d, other: LVecBase2d, threshold: float64): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase2d, other: LVecBase2d, threshold: float64): bool {.importcpp: "((LVecBase2d &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase2d, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase2d, `out`: ostream) {.importcpp: "((LVecBase2d &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase2d, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase2d, destination: Datagram) {.importcpp: "((LVecBase2d &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "((LVecBase2d &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase2d, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase2d, destination: Datagram) {.importcpp: "((LVecBase2d &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase2d, source: DatagramIterator) {.importcpp: "((LVecBase2d &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
@@ -51950,119 +51906,121 @@ proc unitX*(_: typedesc[LVecBase2i]): LVecBase2i {.importcpp: "LVecBase2i::unit_
 proc unitY*(_: typedesc[LVecBase2i]): LVecBase2i {.importcpp: "LVecBase2i::unit_y()", header: "lvecBase2.h".} ## \
 ## Returns a unit Y vector.
 
-proc `[]`*(this: LVecBase2i, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase2i, i: int, assign_val: int) {.importcpp: "((LVecBase2i &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase2i, i: int): int {.importcpp: "((LVecBase2i &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase2i]): int {.importcpp: "LVecBase2i::size()", header: "lvecBase2.h".}
 
-proc isNan*(this: LVecBase2i): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase2i, i: int): int {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase2i, i: int): int {.importcpp: "((LVecBase2i &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase2i, i: int, value: int) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase2i, i: int, value: int) {.importcpp: "((LVecBase2i &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase2i): int {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase2i): int {.importcpp: "((LVecBase2i &)#).get_x()".}
 
-proc getY*(this: LVecBase2i): int {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase2i): int {.importcpp: "((LVecBase2i &)#).get_y()".}
 
-proc setX*(this: LVecBase2i, value: int) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase2i, value: int) {.importcpp: "((LVecBase2i &)#).set_x(#)".}
 
-proc setY*(this: LVecBase2i, value: int) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase2i, value: int) {.importcpp: "((LVecBase2i &)#).set_y(#)".}
 
-proc addToCell*(this: LVecBase2i, i: int, value: int) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase2i, i: int, value: int) {.importcpp: "((LVecBase2i &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase2i, value: int) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase2i, value: int) {.importcpp: "((LVecBase2i &)#).add_x(#)".}
 
-proc addY*(this: LVecBase2i, value: int) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase2i, value: int) {.importcpp: "((LVecBase2i &)#).add_y(#)".}
 
-proc getData*(this: LVecBase2i) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase2i) {.importcpp: "((LVecBase2i &)#).get_data()".} ## \
 ## Returns the address of the first of the two data elements in the vector.
 ## The next element occupies the next position consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase2i]): int {.importcpp: "LVecBase2i::get_num_components()", header: "lvecBase2.h".}
 
-proc fill*(this: LVecBase2i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase2i, fill_value: int) {.importcpp: "((LVecBase2i &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase2i, x: int, y: int) {.importcpp: "#.set(#, #)".}
+proc set*(this: LVecBase2i, x: int, y: int) {.importcpp: "((LVecBase2i &)#).set(#, #)".}
 
-proc dot*(this: LVecBase2i, other: LVecBase2i): int {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase2i, other: LVecBase2i): int {.importcpp: "((LVecBase2i &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase2i): int {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase2i): int {.importcpp: "((LVecBase2i &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc `<`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase2i, other: LVecBase2i): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase2i, other: LVecBase2i): int {.importcpp: "((LVecBase2i &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc getHash*(this: LVecBase2i): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase2i): clonglong {.importcpp: "((LVecBase2i &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase2i, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase2i, hash: clonglong): clonglong {.importcpp: "((LVecBase2i &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase2i): LVecBase2i {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator -()".}
 
-proc `+`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase2i, scalar: int): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase2i, scalar: int): LVecBase2i {.importcpp: "((LVecBase2i &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase2i, other: LVecBase2i) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase2i, other: LVecBase2i) {.importcpp: "((LVecBase2i &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase2i, other: LVecBase2i): LVecBase2i {.importcpp: "((LVecBase2i &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "((LVecBase2i &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase2i, other: LVecBase2i, threshold: int): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase2i, other: LVecBase2i, threshold: int): bool {.importcpp: "((LVecBase2i &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase2i, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase2i, `out`: ostream) {.importcpp: "((LVecBase2i &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase2i, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase2i, destination: Datagram) {.importcpp: "((LVecBase2i &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase2i, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase2i, source: DatagramIterator) {.importcpp: "((LVecBase2i &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase2i, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase2i, destination: Datagram) {.importcpp: "((LVecBase2i &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase2i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase2i, source: DatagramIterator) {.importcpp: "((LVecBase2i &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecBase2i::get_class_type()", header: "lvecBase2.h".}
@@ -52358,94 +52316,96 @@ proc unitY*(_: typedesc[LVecBase3f]): LVecBase3f {.importcpp: "LVecBase3f::unit_
 proc unitZ*(_: typedesc[LVecBase3f]): LVecBase3f {.importcpp: "LVecBase3f::unit_z()", header: "lvecBase3.h".} ## \
 ## Returns a unit Z vector.
 
-proc `[]`*(this: LVecBase3f, i: int, assign_val: float32) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase3f, i: int, assign_val: float32) {.importcpp: "((LVecBase3f &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase3f, i: int): float32 {.importcpp: "((LVecBase3f &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase3f]): int {.importcpp: "LVecBase3f::size()", header: "lvecBase3.h".}
 
-proc isNan*(this: LVecBase3f): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase3f, i: int): float32 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase3f, i: int): float32 {.importcpp: "((LVecBase3f &)#).get_cell(#)".}
 
-proc getX*(this: LVecBase3f): float32 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).get_x()".}
 
-proc getY*(this: LVecBase3f): float32 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).get_y()".}
 
-proc getZ*(this: LVecBase3f): float32 {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).get_z()".}
 
-proc setCell*(this: LVecBase3f, i: int, value: float32) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase3f, i: int, value: float32) {.importcpp: "((LVecBase3f &)#).set_cell(#, #)".}
 
-proc setX*(this: LVecBase3f, value: float32) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).set_x(#)".}
 
-proc setY*(this: LVecBase3f, value: float32) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase3f, value: float32) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).set_z(#)".}
 
-proc getXy*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase3f): LVecBase2f {.importcpp: "((LVecBase3f &)#).get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
 ## this vector.
 
-proc getXz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_xz()".} ## \
+proc getXz*(this: LVecBase3f): LVecBase2f {.importcpp: "((LVecBase3f &)#).get_xz()".} ## \
 ## Returns a 2-component vector that shares just the first and last components
 ## of this vector.
 
-proc getYz*(this: LVecBase3f): LVecBase2f {.importcpp: "#.get_yz()".} ## \
+proc getYz*(this: LVecBase3f): LVecBase2f {.importcpp: "((LVecBase3f &)#).get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
 
-proc addToCell*(this: LVecBase3f, i: int, value: float32) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase3f, i: int, value: float32) {.importcpp: "((LVecBase3f &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase3f, value: float32) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).add_x(#)".}
 
-proc addY*(this: LVecBase3f, value: float32) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase3f, value: float32) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase3f, value: float32) {.importcpp: "((LVecBase3f &)#).add_z(#)".}
 
-proc getData*(this: LVecBase3f) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase3f) {.importcpp: "((LVecBase3f &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase3f]): int {.importcpp: "LVecBase3f::get_num_components()", header: "lvecBase3.h".}
 
-proc fill*(this: LVecBase3f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase3f, fill_value: float32) {.importcpp: "((LVecBase3f &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase3f, x: float32, y: float32, z: float32) {.importcpp: "#.set(#, #, #)".}
+proc set*(this: LVecBase3f, x: float32, y: float32, z: float32) {.importcpp: "((LVecBase3f &)#).set(#, #, #)".}
 
-proc dot*(this: LVecBase3f, other: LVecBase3f): float32 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase3f, other: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase3f): float32 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase3f): float32 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase3f): float32 {.importcpp: "((LVecBase3f &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase3f): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase3f): LVecBase3f {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase3f, onto: LVecBase3f): LVecBase3f {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase3f, onto: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc cross*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.cross(#)".}
+proc cross*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).cross(#)".}
 
-proc `<`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).operator !=(#)".}
 
-proc getStandardizedHpr*(this: LVecBase3f): LVecBase3f {.importcpp: "#.get_standardized_hpr()".} ## \
+proc getStandardizedHpr*(this: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).get_standardized_hpr()".} ## \
 ## Try to un-spin the hpr to a standard form.  Like all standards, someone
 ## decides between many arbitrary possible standards.  This function assumes
 ## that 0 and 360 are the same, as is 720 and -360.  Also 180 and -180 are the
@@ -52457,80 +52417,80 @@ proc getStandardizedHpr*(this: LVecBase3f): LVecBase3f {.importcpp: "#.get_stand
 ## bar_hpr.  Try using LQuaternionf::is_same_direction() for that.  See Also:
 ## get_standardized_rotation, LQuaternion::is_same_direction
 
-proc compareTo*(this: LVecBase3f, other: LVecBase3f): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase3f, other: LVecBase3f): int {.importcpp: "((LVecBase3f &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase3f, other: LVecBase3f, threshold: float32): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase3f, other: LVecBase3f, threshold: float32): int {.importcpp: "((LVecBase3f &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase3f): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase3f): clonglong {.importcpp: "((LVecBase3f &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase3f, threshold: float32): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase3f, threshold: float32): clonglong {.importcpp: "((LVecBase3f &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase3f, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase3f, hash: clonglong): clonglong {.importcpp: "((LVecBase3f &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase3f, hash: clonglong, threshold: float32): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase3f, hash: clonglong, threshold: float32): clonglong {.importcpp: "((LVecBase3f &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase3f): LVecBase3f {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator -()".}
 
-proc `+`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3f, scalar: float32): LVecBase3f {.importcpp: "((LVecBase3f &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "((LVecBase3f &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase3f, other: LVecBase3f): LVecBase3f {.importcpp: "((LVecBase3f &)#).fmin(#)".}
 
-proc crossInto*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "#.cross_into(#)".}
+proc crossInto*(this: LVecBase3f, other: LVecBase3f) {.importcpp: "((LVecBase3f &)#).cross_into(#)".}
 
-proc almostEqual*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "((LVecBase3f &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase3f, other: LVecBase3f, threshold: float32): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase3f, other: LVecBase3f, threshold: float32): bool {.importcpp: "((LVecBase3f &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase3f, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase3f, `out`: ostream) {.importcpp: "((LVecBase3f &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase3f, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase3f, destination: Datagram) {.importcpp: "((LVecBase3f &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "((LVecBase3f &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase3f, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase3f, destination: Datagram) {.importcpp: "((LVecBase3f &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase3f, source: DatagramIterator) {.importcpp: "((LVecBase3f &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
@@ -52547,94 +52507,96 @@ proc unitY*(_: typedesc[LVecBase3d]): LVecBase3d {.importcpp: "LVecBase3d::unit_
 proc unitZ*(_: typedesc[LVecBase3d]): LVecBase3d {.importcpp: "LVecBase3d::unit_z()", header: "lvecBase3.h".} ## \
 ## Returns a unit Z vector.
 
-proc `[]`*(this: LVecBase3d, i: int, assign_val: float64) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase3d, i: int, assign_val: float64) {.importcpp: "((LVecBase3d &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase3d, i: int): float64 {.importcpp: "((LVecBase3d &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase3d]): int {.importcpp: "LVecBase3d::size()", header: "lvecBase3.h".}
 
-proc isNan*(this: LVecBase3d): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase3d, i: int): float64 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase3d, i: int): float64 {.importcpp: "((LVecBase3d &)#).get_cell(#)".}
 
-proc getX*(this: LVecBase3d): float64 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).get_x()".}
 
-proc getY*(this: LVecBase3d): float64 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).get_y()".}
 
-proc getZ*(this: LVecBase3d): float64 {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).get_z()".}
 
-proc setCell*(this: LVecBase3d, i: int, value: float64) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase3d, i: int, value: float64) {.importcpp: "((LVecBase3d &)#).set_cell(#, #)".}
 
-proc setX*(this: LVecBase3d, value: float64) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).set_x(#)".}
 
-proc setY*(this: LVecBase3d, value: float64) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase3d, value: float64) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).set_z(#)".}
 
-proc getXy*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase3d): LVecBase2d {.importcpp: "((LVecBase3d &)#).get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
 ## this vector.
 
-proc getXz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_xz()".} ## \
+proc getXz*(this: LVecBase3d): LVecBase2d {.importcpp: "((LVecBase3d &)#).get_xz()".} ## \
 ## Returns a 2-component vector that shares just the first and last components
 ## of this vector.
 
-proc getYz*(this: LVecBase3d): LVecBase2d {.importcpp: "#.get_yz()".} ## \
+proc getYz*(this: LVecBase3d): LVecBase2d {.importcpp: "((LVecBase3d &)#).get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
 
-proc addToCell*(this: LVecBase3d, i: int, value: float64) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase3d, i: int, value: float64) {.importcpp: "((LVecBase3d &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase3d, value: float64) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).add_x(#)".}
 
-proc addY*(this: LVecBase3d, value: float64) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase3d, value: float64) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase3d, value: float64) {.importcpp: "((LVecBase3d &)#).add_z(#)".}
 
-proc getData*(this: LVecBase3d) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase3d) {.importcpp: "((LVecBase3d &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase3d]): int {.importcpp: "LVecBase3d::get_num_components()", header: "lvecBase3.h".}
 
-proc fill*(this: LVecBase3d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase3d, fill_value: float64) {.importcpp: "((LVecBase3d &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase3d, x: float64, y: float64, z: float64) {.importcpp: "#.set(#, #, #)".}
+proc set*(this: LVecBase3d, x: float64, y: float64, z: float64) {.importcpp: "((LVecBase3d &)#).set(#, #, #)".}
 
-proc dot*(this: LVecBase3d, other: LVecBase3d): float64 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase3d, other: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase3d): float64 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase3d): float64 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase3d): float64 {.importcpp: "((LVecBase3d &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase3d): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase3d): LVecBase3d {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase3d, onto: LVecBase3d): LVecBase3d {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase3d, onto: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc cross*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.cross(#)".}
+proc cross*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).cross(#)".}
 
-proc `<`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).operator !=(#)".}
 
-proc getStandardizedHpr*(this: LVecBase3d): LVecBase3d {.importcpp: "#.get_standardized_hpr()".} ## \
+proc getStandardizedHpr*(this: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).get_standardized_hpr()".} ## \
 ## Try to un-spin the hpr to a standard form.  Like all standards, someone
 ## decides between many arbitrary possible standards.  This function assumes
 ## that 0 and 360 are the same, as is 720 and -360.  Also 180 and -180 are the
@@ -52646,80 +52608,80 @@ proc getStandardizedHpr*(this: LVecBase3d): LVecBase3d {.importcpp: "#.get_stand
 ## bar_hpr.  Try using LQuaternionf::is_same_direction() for that.  See Also:
 ## get_standardized_rotation, LQuaternion::is_same_direction
 
-proc compareTo*(this: LVecBase3d, other: LVecBase3d): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase3d, other: LVecBase3d): int {.importcpp: "((LVecBase3d &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase3d, other: LVecBase3d, threshold: float64): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase3d, other: LVecBase3d, threshold: float64): int {.importcpp: "((LVecBase3d &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase3d): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase3d): clonglong {.importcpp: "((LVecBase3d &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase3d, threshold: float64): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase3d, threshold: float64): clonglong {.importcpp: "((LVecBase3d &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase3d, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase3d, hash: clonglong): clonglong {.importcpp: "((LVecBase3d &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase3d, hash: clonglong, threshold: float64): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase3d, hash: clonglong, threshold: float64): clonglong {.importcpp: "((LVecBase3d &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase3d): LVecBase3d {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator -()".}
 
-proc `+`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3d, scalar: float64): LVecBase3d {.importcpp: "((LVecBase3d &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "((LVecBase3d &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase3d, other: LVecBase3d): LVecBase3d {.importcpp: "((LVecBase3d &)#).fmin(#)".}
 
-proc crossInto*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "#.cross_into(#)".}
+proc crossInto*(this: LVecBase3d, other: LVecBase3d) {.importcpp: "((LVecBase3d &)#).cross_into(#)".}
 
-proc almostEqual*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "((LVecBase3d &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase3d, other: LVecBase3d, threshold: float64): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase3d, other: LVecBase3d, threshold: float64): bool {.importcpp: "((LVecBase3d &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase3d, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase3d, `out`: ostream) {.importcpp: "((LVecBase3d &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase3d, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase3d, destination: Datagram) {.importcpp: "((LVecBase3d &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "((LVecBase3d &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase3d, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase3d, destination: Datagram) {.importcpp: "((LVecBase3d &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase3d, source: DatagramIterator) {.importcpp: "((LVecBase3d &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
@@ -52736,141 +52698,143 @@ proc unitY*(_: typedesc[LVecBase3i]): LVecBase3i {.importcpp: "LVecBase3i::unit_
 proc unitZ*(_: typedesc[LVecBase3i]): LVecBase3i {.importcpp: "LVecBase3i::unit_z()", header: "lvecBase3.h".} ## \
 ## Returns a unit Z vector.
 
-proc `[]`*(this: LVecBase3i, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase3i, i: int, assign_val: int) {.importcpp: "((LVecBase3i &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase3i, i: int): int {.importcpp: "((LVecBase3i &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase3i]): int {.importcpp: "LVecBase3i::size()", header: "lvecBase3.h".}
 
-proc isNan*(this: LVecBase3i): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase3i, i: int): int {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase3i, i: int): int {.importcpp: "((LVecBase3i &)#).get_cell(#)".}
 
-proc getX*(this: LVecBase3i): int {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).get_x()".}
 
-proc getY*(this: LVecBase3i): int {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).get_y()".}
 
-proc getZ*(this: LVecBase3i): int {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).get_z()".}
 
-proc setCell*(this: LVecBase3i, i: int, value: int) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase3i, i: int, value: int) {.importcpp: "((LVecBase3i &)#).set_cell(#, #)".}
 
-proc setX*(this: LVecBase3i, value: int) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).set_x(#)".}
 
-proc setY*(this: LVecBase3i, value: int) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase3i, value: int) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).set_z(#)".}
 
-proc getXy*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase3i): LVecBase2i {.importcpp: "((LVecBase3i &)#).get_xy()".} ## \
 ## Returns a 2-component vector that shares just the first two components of
 ## this vector.
 
-proc getXz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_xz()".} ## \
+proc getXz*(this: LVecBase3i): LVecBase2i {.importcpp: "((LVecBase3i &)#).get_xz()".} ## \
 ## Returns a 2-component vector that shares just the first and last components
 ## of this vector.
 
-proc getYz*(this: LVecBase3i): LVecBase2i {.importcpp: "#.get_yz()".} ## \
+proc getYz*(this: LVecBase3i): LVecBase2i {.importcpp: "((LVecBase3i &)#).get_yz()".} ## \
 ## Returns a 2-component vector that shares just the last two components of
 ## this vector.
 
-proc addToCell*(this: LVecBase3i, i: int, value: int) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase3i, i: int, value: int) {.importcpp: "((LVecBase3i &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase3i, value: int) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).add_x(#)".}
 
-proc addY*(this: LVecBase3i, value: int) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase3i, value: int) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase3i, value: int) {.importcpp: "((LVecBase3i &)#).add_z(#)".}
 
-proc getData*(this: LVecBase3i) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase3i) {.importcpp: "((LVecBase3i &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase3i]): int {.importcpp: "LVecBase3i::get_num_components()", header: "lvecBase3.h".}
 
-proc fill*(this: LVecBase3i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase3i, fill_value: int) {.importcpp: "((LVecBase3i &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase3i, x: int, y: int, z: int) {.importcpp: "#.set(#, #, #)".}
+proc set*(this: LVecBase3i, x: int, y: int, z: int) {.importcpp: "((LVecBase3i &)#).set(#, #, #)".}
 
-proc dot*(this: LVecBase3i, other: LVecBase3i): int {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase3i, other: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase3i): int {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc cross*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.cross(#)".}
+proc cross*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).cross(#)".}
 
-proc `<`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase3i, other: LVecBase3i): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase3i, other: LVecBase3i): int {.importcpp: "((LVecBase3i &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc getHash*(this: LVecBase3i): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase3i): clonglong {.importcpp: "((LVecBase3i &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase3i, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase3i, hash: clonglong): clonglong {.importcpp: "((LVecBase3i &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase3i): LVecBase3i {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator -()".}
 
-proc `+`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase3i, scalar: int): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase3i, scalar: int): LVecBase3i {.importcpp: "((LVecBase3i &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "((LVecBase3i &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase3i, other: LVecBase3i): LVecBase3i {.importcpp: "((LVecBase3i &)#).fmin(#)".}
 
-proc crossInto*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "#.cross_into(#)".}
+proc crossInto*(this: LVecBase3i, other: LVecBase3i) {.importcpp: "((LVecBase3i &)#).cross_into(#)".}
 
-proc almostEqual*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "((LVecBase3i &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase3i, other: LVecBase3i, threshold: int): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase3i, other: LVecBase3i, threshold: int): bool {.importcpp: "((LVecBase3i &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase3i, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase3i, `out`: ostream) {.importcpp: "((LVecBase3i &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase3i, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase3i, destination: Datagram) {.importcpp: "((LVecBase3i &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase3i, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase3i, source: DatagramIterator) {.importcpp: "((LVecBase3i &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase3i, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase3i, destination: Datagram) {.importcpp: "((LVecBase3i &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase3i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase3i, source: DatagramIterator) {.importcpp: "((LVecBase3i &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase3i]): TypeHandle {.importcpp: "LVecBase3i::get_class_type()", header: "lvecBase3.h".}
@@ -53504,186 +53468,190 @@ proc unitZ*(_: typedesc[LVecBase4f]): LVecBase4f {.importcpp: "LVecBase4f::unit_
 proc unitW*(_: typedesc[LVecBase4f]): LVecBase4f {.importcpp: "LVecBase4f::unit_w()", header: "lvecBase4.h".} ## \
 ## Returns a unit W vector.
 
-proc `[]`*(this: LVecBase4f, i: int, assign_val: float32) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase4f, i: int, assign_val: float32) {.importcpp: "((LVecBase4f &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase4f, i: int): float32 {.importcpp: "((LVecBase4f &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase4f]): int {.importcpp: "LVecBase4f::size()", header: "lvecBase4.h".}
 
-proc isNan*(this: LVecBase4f): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase4f, i: int): float32 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase4f, i: int): float32 {.importcpp: "((LVecBase4f &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase4f, i: int, value: float32) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase4f, i: int, value: float32) {.importcpp: "((LVecBase4f &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase4f): float32 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).get_x()".}
 
-proc getY*(this: LVecBase4f): float32 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).get_y()".}
 
-proc getZ*(this: LVecBase4f): float32 {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).get_z()".}
 
-proc getW*(this: LVecBase4f): float32 {.importcpp: "#.get_w()".}
+proc getW*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).get_w()".}
 
-proc getXyz*(this: LVecBase4f): LVecBase3f {.importcpp: "#.get_xyz()".} ## \
+proc getXyz*(this: LVecBase4f): LVecBase3f {.importcpp: "((LVecBase4f &)#).get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
 
-proc getXy*(this: LVecBase4f): LVecBase2f {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase4f): LVecBase2f {.importcpp: "((LVecBase4f &)#).get_xy()".} ## \
 ## Returns the x and y component of this vector
 
-proc setX*(this: LVecBase4f, value: float32) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).set_x(#)".}
 
-proc setY*(this: LVecBase4f, value: float32) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase4f, value: float32) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).set_z(#)".}
 
-proc setW*(this: LVecBase4f, value: float32) {.importcpp: "#.set_w(#)".}
+proc setW*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).set_w(#)".}
 
-proc addToCell*(this: LVecBase4f, i: int, value: float32) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase4f, i: int, value: float32) {.importcpp: "((LVecBase4f &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase4f, value: float32) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).add_x(#)".}
 
-proc addY*(this: LVecBase4f, value: float32) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase4f, value: float32) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).add_z(#)".}
 
-proc addW*(this: LVecBase4f, value: float32) {.importcpp: "#.add_w(#)".}
+proc addW*(this: LVecBase4f, value: float32) {.importcpp: "((LVecBase4f &)#).add_w(#)".}
 
-proc getData*(this: LVecBase4f) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase4f) {.importcpp: "((LVecBase4f &)#).get_data()".} ## \
 ## Returns the address of the first of the four data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase4f]): int {.importcpp: "LVecBase4f::get_num_components()", header: "lvecBase4.h".}
 
-proc fill*(this: LVecBase4f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase4f, fill_value: float32) {.importcpp: "((LVecBase4f &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase4f, x: float32, y: float32, z: float32, w: float32) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: LVecBase4f, x: float32, y: float32, z: float32, w: float32) {.importcpp: "((LVecBase4f &)#).set(#, #, #, #)".}
 
-proc dot*(this: LVecBase4f, other: LVecBase4f): float32 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase4f, other: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase4f): float32 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase4f): float32 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase4f): float32 {.importcpp: "((LVecBase4f &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase4f): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase4f): LVecBase4f {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase4f, onto: LVecBase4f): LVecBase4f {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase4f, onto: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc `<`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase4f, other: LVecBase4f): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase4f, other: LVecBase4f): int {.importcpp: "((LVecBase4f &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase4f, other: LVecBase4f, threshold: float32): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase4f, other: LVecBase4f, threshold: float32): int {.importcpp: "((LVecBase4f &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase4f): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase4f): clonglong {.importcpp: "((LVecBase4f &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase4f, threshold: float32): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase4f, threshold: float32): clonglong {.importcpp: "((LVecBase4f &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase4f, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase4f, hash: clonglong): clonglong {.importcpp: "((LVecBase4f &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase4f, hash: clonglong, threshold: float32): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase4f, hash: clonglong, threshold: float32): clonglong {.importcpp: "((LVecBase4f &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase4f): LVecBase4f {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator -()".}
 
-proc `+`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4f, scalar: float32): LVecBase4f {.importcpp: "((LVecBase4f &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase4f, other: LVecBase4f) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase4f, other: LVecBase4f) {.importcpp: "((LVecBase4f &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase4f, other: LVecBase4f): LVecBase4f {.importcpp: "((LVecBase4f &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "((LVecBase4f &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase4f, other: LVecBase4f, threshold: float32): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase4f, other: LVecBase4f, threshold: float32): bool {.importcpp: "((LVecBase4f &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase4f, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase4f, `out`: ostream) {.importcpp: "((LVecBase4f &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase4f, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase4f, destination: Datagram) {.importcpp: "((LVecBase4f &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "((LVecBase4f &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase4f, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase4f, destination: Datagram) {.importcpp: "((LVecBase4f &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase4f, source: DatagramIterator) {.importcpp: "((LVecBase4f &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
-proc fill*(this: UnalignedLVecBase4f, fill_value: float32) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: UnalignedLVecBase4f, fill_value: float32) {.importcpp: "((UnalignedLVecBase4f &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: UnalignedLVecBase4f, x: float32, y: float32, z: float32, w: float32) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: UnalignedLVecBase4f, x: float32, y: float32, z: float32, w: float32) {.importcpp: "((UnalignedLVecBase4f &)#).set(#, #, #, #)".}
 
-proc `[]`*(this: UnalignedLVecBase4f, i: int, assign_val: float32) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: UnalignedLVecBase4f, i: int, assign_val: float32) {.importcpp: "((UnalignedLVecBase4f &)#).operator [](#) = #".}
+
+proc `[]`*(this: UnalignedLVecBase4f, i: int): float32 {.importcpp: "((UnalignedLVecBase4f &)#).operator [](#)".}
 
 proc size*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::size()", header: "lvecBase4.h".}
 
-proc getData*(this: UnalignedLVecBase4f) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: UnalignedLVecBase4f) {.importcpp: "((UnalignedLVecBase4f &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::get_num_components()", header: "lvecBase4.h".}
 
-proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "((UnalignedLVecBase4f &)#).operator ==(#)".}
 
-proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: UnalignedLVecBase4f, other: UnalignedLVecBase4f): bool {.importcpp: "((UnalignedLVecBase4f &)#).operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
@@ -53702,186 +53670,190 @@ proc unitZ*(_: typedesc[LVecBase4d]): LVecBase4d {.importcpp: "LVecBase4d::unit_
 proc unitW*(_: typedesc[LVecBase4d]): LVecBase4d {.importcpp: "LVecBase4d::unit_w()", header: "lvecBase4.h".} ## \
 ## Returns a unit W vector.
 
-proc `[]`*(this: LVecBase4d, i: int, assign_val: float64) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase4d, i: int, assign_val: float64) {.importcpp: "((LVecBase4d &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase4d, i: int): float64 {.importcpp: "((LVecBase4d &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase4d]): int {.importcpp: "LVecBase4d::size()", header: "lvecBase4.h".}
 
-proc isNan*(this: LVecBase4d): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase4d, i: int): float64 {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase4d, i: int): float64 {.importcpp: "((LVecBase4d &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase4d, i: int, value: float64) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase4d, i: int, value: float64) {.importcpp: "((LVecBase4d &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase4d): float64 {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).get_x()".}
 
-proc getY*(this: LVecBase4d): float64 {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).get_y()".}
 
-proc getZ*(this: LVecBase4d): float64 {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).get_z()".}
 
-proc getW*(this: LVecBase4d): float64 {.importcpp: "#.get_w()".}
+proc getW*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).get_w()".}
 
-proc getXyz*(this: LVecBase4d): LVecBase3d {.importcpp: "#.get_xyz()".} ## \
+proc getXyz*(this: LVecBase4d): LVecBase3d {.importcpp: "((LVecBase4d &)#).get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
 
-proc getXy*(this: LVecBase4d): LVecBase2d {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase4d): LVecBase2d {.importcpp: "((LVecBase4d &)#).get_xy()".} ## \
 ## Returns the x and y component of this vector
 
-proc setX*(this: LVecBase4d, value: float64) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).set_x(#)".}
 
-proc setY*(this: LVecBase4d, value: float64) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase4d, value: float64) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).set_z(#)".}
 
-proc setW*(this: LVecBase4d, value: float64) {.importcpp: "#.set_w(#)".}
+proc setW*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).set_w(#)".}
 
-proc addToCell*(this: LVecBase4d, i: int, value: float64) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase4d, i: int, value: float64) {.importcpp: "((LVecBase4d &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase4d, value: float64) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).add_x(#)".}
 
-proc addY*(this: LVecBase4d, value: float64) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase4d, value: float64) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).add_z(#)".}
 
-proc addW*(this: LVecBase4d, value: float64) {.importcpp: "#.add_w(#)".}
+proc addW*(this: LVecBase4d, value: float64) {.importcpp: "((LVecBase4d &)#).add_w(#)".}
 
-proc getData*(this: LVecBase4d) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase4d) {.importcpp: "((LVecBase4d &)#).get_data()".} ## \
 ## Returns the address of the first of the four data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase4d]): int {.importcpp: "LVecBase4d::get_num_components()", header: "lvecBase4.h".}
 
-proc fill*(this: LVecBase4d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase4d, fill_value: float64) {.importcpp: "((LVecBase4d &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase4d, x: float64, y: float64, z: float64, w: float64) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: LVecBase4d, x: float64, y: float64, z: float64, w: float64) {.importcpp: "((LVecBase4d &)#).set(#, #, #, #)".}
 
-proc dot*(this: LVecBase4d, other: LVecBase4d): float64 {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase4d, other: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase4d): float64 {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc length*(this: LVecBase4d): float64 {.importcpp: "#.length()".} ## \
+proc length*(this: LVecBase4d): float64 {.importcpp: "((LVecBase4d &)#).length()".} ## \
 ## Returns the length of the vector, by the Pythagorean theorem.
 
-proc normalize*(this: LVecBase4d): bool {.importcpp: "#.normalize()".} ## \
+proc normalize*(this: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).normalize()".} ## \
 ## Normalizes the vector in place.  Returns true if the vector was normalized,
 ## false if it was a zero-length vector.
 
-proc normalized*(this: LVecBase4d): LVecBase4d {.importcpp: "#.normalized()".} ## \
+proc normalized*(this: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).normalized()".} ## \
 ## Normalizes the vector and returns the normalized vector as a copy.  If the
 ## vector was a zero-length vector, a zero length vector will be returned.
 
-proc project*(this: LVecBase4d, onto: LVecBase4d): LVecBase4d {.importcpp: "#.project(#)".} ## \
+proc project*(this: LVecBase4d, onto: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).project(#)".} ## \
 ## Returns a new vector representing the projection of this vector onto
 ## another one.  The resulting vector will be a scalar multiple of onto.
 
-proc `<`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase4d, other: LVecBase4d): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase4d, other: LVecBase4d): int {.importcpp: "((LVecBase4d &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc compareTo*(this: LVecBase4d, other: LVecBase4d, threshold: float64): int {.importcpp: "#.compare_to(#, #)".} ## \
+proc compareTo*(this: LVecBase4d, other: LVecBase4d, threshold: float64): int {.importcpp: "((LVecBase4d &)#).compare_to(#, #)".} ## \
 ## Sorts vectors lexicographically, componentwise.  Returns a number less than
 ## 0 if this vector sorts before the other one, greater than zero if it sorts
 ## after, 0 if they are equivalent (within the indicated tolerance).
 
-proc getHash*(this: LVecBase4d): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase4d): clonglong {.importcpp: "((LVecBase4d &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc getHash*(this: LVecBase4d, threshold: float64): clonglong {.importcpp: "#.get_hash(#)".} ## \
+proc getHash*(this: LVecBase4d, threshold: float64): clonglong {.importcpp: "((LVecBase4d &)#).get_hash(#)".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase4d, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase4d, hash: clonglong): clonglong {.importcpp: "((LVecBase4d &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc addHash*(this: LVecBase4d, hash: clonglong, threshold: float64): clonglong {.importcpp: "#.add_hash(#, #)".} ## \
+proc addHash*(this: LVecBase4d, hash: clonglong, threshold: float64): clonglong {.importcpp: "((LVecBase4d &)#).add_hash(#, #)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase4d): LVecBase4d {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator -()".}
 
-proc `+`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4d, scalar: float64): LVecBase4d {.importcpp: "((LVecBase4d &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase4d, other: LVecBase4d) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase4d, other: LVecBase4d) {.importcpp: "((LVecBase4d &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase4d, other: LVecBase4d): LVecBase4d {.importcpp: "((LVecBase4d &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "((LVecBase4d &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase4d, other: LVecBase4d, threshold: float64): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase4d, other: LVecBase4d, threshold: float64): bool {.importcpp: "((LVecBase4d &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase4d, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase4d, `out`: ostream) {.importcpp: "((LVecBase4d &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase4d, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase4d, destination: Datagram) {.importcpp: "((LVecBase4d &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "((LVecBase4d &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase4d, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase4d, destination: Datagram) {.importcpp: "((LVecBase4d &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase4d, source: DatagramIterator) {.importcpp: "((LVecBase4d &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
-proc fill*(this: UnalignedLVecBase4d, fill_value: float64) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: UnalignedLVecBase4d, fill_value: float64) {.importcpp: "((UnalignedLVecBase4d &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: UnalignedLVecBase4d, x: float64, y: float64, z: float64, w: float64) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: UnalignedLVecBase4d, x: float64, y: float64, z: float64, w: float64) {.importcpp: "((UnalignedLVecBase4d &)#).set(#, #, #, #)".}
 
-proc `[]`*(this: UnalignedLVecBase4d, i: int, assign_val: float64) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: UnalignedLVecBase4d, i: int, assign_val: float64) {.importcpp: "((UnalignedLVecBase4d &)#).operator [](#) = #".}
+
+proc `[]`*(this: UnalignedLVecBase4d, i: int): float64 {.importcpp: "((UnalignedLVecBase4d &)#).operator [](#)".}
 
 proc size*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::size()", header: "lvecBase4.h".}
 
-proc getData*(this: UnalignedLVecBase4d) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: UnalignedLVecBase4d) {.importcpp: "((UnalignedLVecBase4d &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::get_num_components()", header: "lvecBase4.h".}
 
-proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "((UnalignedLVecBase4d &)#).operator ==(#)".}
 
-proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: UnalignedLVecBase4d, other: UnalignedLVecBase4d): bool {.importcpp: "((UnalignedLVecBase4d &)#).operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
@@ -53900,160 +53872,164 @@ proc unitZ*(_: typedesc[LVecBase4i]): LVecBase4i {.importcpp: "LVecBase4i::unit_
 proc unitW*(_: typedesc[LVecBase4i]): LVecBase4i {.importcpp: "LVecBase4i::unit_w()", header: "lvecBase4.h".} ## \
 ## Returns a unit W vector.
 
-proc `[]`*(this: LVecBase4i, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: LVecBase4i, i: int, assign_val: int) {.importcpp: "((LVecBase4i &)#).operator [](#) = #".}
+
+proc `[]`*(this: LVecBase4i, i: int): int {.importcpp: "((LVecBase4i &)#).operator [](#)".}
 
 proc size*(_: typedesc[LVecBase4i]): int {.importcpp: "LVecBase4i::size()", header: "lvecBase4.h".}
 
-proc isNan*(this: LVecBase4i): bool {.importcpp: "#.is_nan()".} ## \
+proc isNan*(this: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).is_nan()".} ## \
 ## Returns true if any component of the vector is not-a-number, false
 ## otherwise.
 
-proc getCell*(this: LVecBase4i, i: int): int {.importcpp: "#.get_cell(#)".}
+proc getCell*(this: LVecBase4i, i: int): int {.importcpp: "((LVecBase4i &)#).get_cell(#)".}
 
-proc setCell*(this: LVecBase4i, i: int, value: int) {.importcpp: "#.set_cell(#, #)".}
+proc setCell*(this: LVecBase4i, i: int, value: int) {.importcpp: "((LVecBase4i &)#).set_cell(#, #)".}
 
-proc getX*(this: LVecBase4i): int {.importcpp: "#.get_x()".}
+proc getX*(this: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).get_x()".}
 
-proc getY*(this: LVecBase4i): int {.importcpp: "#.get_y()".}
+proc getY*(this: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).get_y()".}
 
-proc getZ*(this: LVecBase4i): int {.importcpp: "#.get_z()".}
+proc getZ*(this: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).get_z()".}
 
-proc getW*(this: LVecBase4i): int {.importcpp: "#.get_w()".}
+proc getW*(this: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).get_w()".}
 
-proc getXyz*(this: LVecBase4i): LVecBase3i {.importcpp: "#.get_xyz()".} ## \
+proc getXyz*(this: LVecBase4i): LVecBase3i {.importcpp: "((LVecBase4i &)#).get_xyz()".} ## \
 ## Returns the x, y and z component of this vector
 
-proc getXy*(this: LVecBase4i): LVecBase2i {.importcpp: "#.get_xy()".} ## \
+proc getXy*(this: LVecBase4i): LVecBase2i {.importcpp: "((LVecBase4i &)#).get_xy()".} ## \
 ## Returns the x and y component of this vector
 
-proc setX*(this: LVecBase4i, value: int) {.importcpp: "#.set_x(#)".}
+proc setX*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).set_x(#)".}
 
-proc setY*(this: LVecBase4i, value: int) {.importcpp: "#.set_y(#)".}
+proc setY*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).set_y(#)".}
 
-proc setZ*(this: LVecBase4i, value: int) {.importcpp: "#.set_z(#)".}
+proc setZ*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).set_z(#)".}
 
-proc setW*(this: LVecBase4i, value: int) {.importcpp: "#.set_w(#)".}
+proc setW*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).set_w(#)".}
 
-proc addToCell*(this: LVecBase4i, i: int, value: int) {.importcpp: "#.add_to_cell(#, #)".} ## \
+proc addToCell*(this: LVecBase4i, i: int, value: int) {.importcpp: "((LVecBase4i &)#).add_to_cell(#, #)".} ## \
 ## These next functions add to an existing value.  i.e.
 ## foo.set_x(foo.get_x() + value) These are useful to reduce overhead in
 ## scripting languages:
 
-proc addX*(this: LVecBase4i, value: int) {.importcpp: "#.add_x(#)".}
+proc addX*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).add_x(#)".}
 
-proc addY*(this: LVecBase4i, value: int) {.importcpp: "#.add_y(#)".}
+proc addY*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).add_y(#)".}
 
-proc addZ*(this: LVecBase4i, value: int) {.importcpp: "#.add_z(#)".}
+proc addZ*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).add_z(#)".}
 
-proc addW*(this: LVecBase4i, value: int) {.importcpp: "#.add_w(#)".}
+proc addW*(this: LVecBase4i, value: int) {.importcpp: "((LVecBase4i &)#).add_w(#)".}
 
-proc getData*(this: LVecBase4i) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: LVecBase4i) {.importcpp: "((LVecBase4i &)#).get_data()".} ## \
 ## Returns the address of the first of the four data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[LVecBase4i]): int {.importcpp: "LVecBase4i::get_num_components()", header: "lvecBase4.h".}
 
-proc fill*(this: LVecBase4i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: LVecBase4i, fill_value: int) {.importcpp: "((LVecBase4i &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: LVecBase4i, x: int, y: int, z: int, w: int) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: LVecBase4i, x: int, y: int, z: int, w: int) {.importcpp: "((LVecBase4i &)#).set(#, #, #, #)".}
 
-proc dot*(this: LVecBase4i, other: LVecBase4i): int {.importcpp: "#.dot(#)".}
+proc dot*(this: LVecBase4i, other: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).dot(#)".}
 
-proc lengthSquared*(this: LVecBase4i): int {.importcpp: "#.length_squared()".} ## \
+proc lengthSquared*(this: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).length_squared()".} ## \
 ## Returns the square of the vector's length, cheap and easy.
 
-proc `<`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "#.operator <(#)".}
+proc `<`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).operator <(#)".}
 
-proc `==`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).operator ==(#)".}
 
-proc `!=`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).operator !=(#)".}
 
-proc compareTo*(this: LVecBase4i, other: LVecBase4i): int {.importcpp: "#.compare_to(#)".} ## \
+proc compareTo*(this: LVecBase4i, other: LVecBase4i): int {.importcpp: "((LVecBase4i &)#).compare_to(#)".} ## \
 ## This flavor of compare_to uses a default threshold value based on the
 ## numeric type.
 
-proc getHash*(this: LVecBase4i): clonglong {.importcpp: "#.get_hash()".} ## \
+proc getHash*(this: LVecBase4i): clonglong {.importcpp: "((LVecBase4i &)#).get_hash()".} ## \
 ## Returns a suitable hash for phash_map.
 
-proc addHash*(this: LVecBase4i, hash: clonglong): clonglong {.importcpp: "#.add_hash(#)".} ## \
+proc addHash*(this: LVecBase4i, hash: clonglong): clonglong {.importcpp: "((LVecBase4i &)#).add_hash(#)".} ## \
 ## Adds the vector into the running hash.
 
-proc `-`*(this: LVecBase4i): LVecBase4i {.importcpp: "#.operator -()".}
+proc `-`*(this: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator -()".}
 
-proc `+`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +(#)".}
+proc `+`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator +(#)".}
 
-proc `-`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -(#)".}
+proc `-`*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator -(#)".}
 
-proc `*`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *(#)".}
+proc `*`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator *(#)".}
 
-proc `/`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /(#)".}
+proc `/`*(this: LVecBase4i, scalar: int): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator /(#)".}
 
-proc `+=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator +=(#)".}
 
-proc `-=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.operator -=(#)".}
+proc `-=`*(this: var LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator -=(#)".}
 
-proc `*=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator *=(#)".}
+proc `*=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator *=(#)".}
 
-proc `/=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "#.operator /=(#)".}
+proc `/=`*(this: var LVecBase4i, scalar: int): LVecBase4i {.importcpp: "((LVecBase4i &)#).operator /=(#)".}
 
-proc componentwiseMult*(this: LVecBase4i, other: LVecBase4i) {.importcpp: "#.componentwise_mult(#)".}
+proc componentwiseMult*(this: LVecBase4i, other: LVecBase4i) {.importcpp: "((LVecBase4i &)#).componentwise_mult(#)".}
 
-proc fmax*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.fmax(#)".}
+proc fmax*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).fmax(#)".}
 
-proc fmin*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "#.fmin(#)".}
+proc fmin*(this: LVecBase4i, other: LVecBase4i): LVecBase4i {.importcpp: "((LVecBase4i &)#).fmin(#)".}
 
-proc almostEqual*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "#.almost_equal(#)".} ## \
+proc almostEqual*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "((LVecBase4i &)#).almost_equal(#)".} ## \
 ## Returns true if two vectors are memberwise equal within a default tolerance
 ## based on the numeric type.
 
-proc almostEqual*(this: LVecBase4i, other: LVecBase4i, threshold: int): bool {.importcpp: "#.almost_equal(#, #)".} ## \
+proc almostEqual*(this: LVecBase4i, other: LVecBase4i, threshold: int): bool {.importcpp: "((LVecBase4i &)#).almost_equal(#, #)".} ## \
 ## Returns true if two vectors are memberwise equal within a specified
 ## tolerance.
 
-proc output*(this: LVecBase4i, `out`: ostream) {.importcpp: "#.output(#)".}
+proc output*(this: LVecBase4i, `out`: ostream) {.importcpp: "((LVecBase4i &)#).output(#)".}
 
-proc writeDatagramFixed*(this: LVecBase4i, destination: Datagram) {.importcpp: "#.write_datagram_fixed(#)".} ## \
+proc writeDatagramFixed*(this: LVecBase4i, destination: Datagram) {.importcpp: "((LVecBase4i &)#).write_datagram_fixed(#)".} ## \
 ## Writes the vector to the Datagram using add_float32() or add_float64(),
 ## depending on the type of floats in the vector, regardless of the setting of
 ## Datagram::set_stdfloat_double().  This is appropriate when you want to
 ## write a fixed-width value to the datagram, especially when you are not
 ## writing a bam file.
 
-proc readDatagramFixed*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "#.read_datagram_fixed(#)".} ## \
+proc readDatagramFixed*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "((LVecBase4i &)#).read_datagram_fixed(#)".} ## \
 ## Reads the vector from the Datagram using get_float32() or get_float64().
 ## See write_datagram_fixed().
 
-proc writeDatagram*(this: LVecBase4i, destination: Datagram) {.importcpp: "#.write_datagram(#)".} ## \
+proc writeDatagram*(this: LVecBase4i, destination: Datagram) {.importcpp: "((LVecBase4i &)#).write_datagram(#)".} ## \
 ## Writes the vector to the Datagram using add_stdfloat().  This is
 ## appropriate when you want to write the vector using the standard width
 ## setting, especially when you are writing a bam file.
 
-proc readDatagram*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "#.read_datagram(#)".} ## \
+proc readDatagram*(this: LVecBase4i, source: DatagramIterator) {.importcpp: "((LVecBase4i &)#).read_datagram(#)".} ## \
 ## Reads the vector from the Datagram using get_stdfloat().
 
 converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
-proc fill*(this: UnalignedLVecBase4i, fill_value: int) {.importcpp: "#.fill(#)".} ## \
+proc fill*(this: UnalignedLVecBase4i, fill_value: int) {.importcpp: "((UnalignedLVecBase4i &)#).fill(#)".} ## \
 ## Sets each element of the vector to the indicated fill_value.  This is
 ## particularly useful for initializing to zero.
 
-proc set*(this: UnalignedLVecBase4i, x: int, y: int, z: int, w: int) {.importcpp: "#.set(#, #, #, #)".}
+proc set*(this: UnalignedLVecBase4i, x: int, y: int, z: int, w: int) {.importcpp: "((UnalignedLVecBase4i &)#).set(#, #, #, #)".}
 
-proc `[]`*(this: UnalignedLVecBase4i, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: UnalignedLVecBase4i, i: int, assign_val: int) {.importcpp: "((UnalignedLVecBase4i &)#).operator [](#) = #".}
+
+proc `[]`*(this: UnalignedLVecBase4i, i: int): int {.importcpp: "((UnalignedLVecBase4i &)#).operator [](#)".}
 
 proc size*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::size()", header: "lvecBase4.h".}
 
-proc getData*(this: UnalignedLVecBase4i) {.importcpp: "#.get_data()".} ## \
+proc getData*(this: UnalignedLVecBase4i) {.importcpp: "((UnalignedLVecBase4i &)#).get_data()".} ## \
 ## Returns the address of the first of the three data elements in the vector.
 ## The remaining elements occupy the next positions consecutively in memory.
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::get_num_components()", header: "lvecBase4.h".}
 
-proc `==`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "#.operator ==(#)".}
+proc `==`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "((UnalignedLVecBase4i &)#).operator ==(#)".}
 
-proc `!=`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "#.operator !=(#)".}
+proc `!=`*(this: UnalignedLVecBase4i, other: UnalignedLVecBase4i): bool {.importcpp: "((UnalignedLVecBase4i &)#).operator !=(#)".}
 
 converter getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
@@ -58775,7 +58751,9 @@ proc initpixel*(r: int, g: int, b: int): pixel {.importcpp: "pixel(#, #, #)".}
 
 proc initpixel*(param0: pixel): pixel {.importcpp: "pixel(#)".}
 
-proc `[]`*(this: pixel, i: int, assign_val: int) {.importcpp: "#.operator [](#, #)".}
+proc `[]=`*(this: pixel, i: int, assign_val: int) {.importcpp: "#.operator [](#) = #".}
+
+proc `[]`*(this: pixel, i: int): int {.importcpp: "#.operator [](#)".}
 
 proc `+`*(this: pixel, other: pixel): pixel {.importcpp: "#.operator +(#)".}
 
@@ -69292,18 +69270,42 @@ func xxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: th
 func xxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.x)
 func xxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.y, w: this.y)
 func xy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase2f, other: LVecBase2f) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase2f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase2f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
 func yx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase2f, other: LVecBase2f) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxy*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase2f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase2f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase2f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
 func yy*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
 func yyx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
@@ -69327,43 +69329,136 @@ func xxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: t
 func xxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.y)
 func xxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.z, w: this.z)
 func xy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
 func xz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
 func yx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
 func yy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
 func yyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
@@ -69379,43 +69474,136 @@ func yyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: t
 func yyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.y)
 func yyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.z, w: this.z)
 func yz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
 func zx*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
 func zy*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase3f, other: LVecBase2f) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyy*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyz*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase3f, other: LVecBase3f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase3f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase3f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
 func zz*(this: LVecBase3f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
 func zzx*(this: LVecBase3f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
@@ -69453,88 +69641,328 @@ func xxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: t
 func xxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.z)
 func xxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.x, z: this.w, w: this.w)
 func xy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.x, w: this.w)
+func `xyxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func xyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.y, w: this.w)
 func xyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.z)
 func xyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.z, w: this.w)
+func `xyzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func xyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.y, z: this.w)
+func `xyw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
 func xywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.x)
+func `xywx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func xywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.y)
+func `xywy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func xywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.z)
+func `xywz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func xyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.y, z: this.w, w: this.w)
 func xz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.x, w: this.w)
+func `xzxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func xzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.y, w: this.w)
+func `xzyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func xzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.z)
 func xzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.z, w: this.w)
 func xzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.z, z: this.w)
+func `xzw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
 func xzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.x)
+func `xzwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func xzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.y)
+func `xzwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func xzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.z)
+func `xzwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func xzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.z, z: this.w, w: this.w)
 func xw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.x, y: this.w)
+func `xw=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.x = other.x
+  this.w = other.y
 func xwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.x)
+func `xwx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
 func xwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.x)
 func xwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.y)
+func `xwxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func xwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.z)
+func `xwxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func xwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.x, w: this.w)
+func `xwxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func xwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.y)
+func `xwy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
 func xwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.x)
+func `xwyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func xwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.y)
 func xwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.z)
+func `xwyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func xwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.y, w: this.w)
+func `xwyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func xwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.z)
+func `xwz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
 func xwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.x)
+func `xwzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func xwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.y)
+func `xwzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func xwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.z)
 func xwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.z, w: this.w)
+func `xwzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func xww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.x, y: this.w, z: this.w)
 func xwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.x)
 func xwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.y)
 func xwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.z)
 func xwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.x, y: this.w, z: this.w, w: this.w)
 func yx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.x, w: this.w)
 func yxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.y, w: this.w)
+func `yxyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func yxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.z)
 func yxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.z, w: this.w)
+func `yxzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func yxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.x, z: this.w)
+func `yxw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
 func yxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.x)
+func `yxwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func yxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.y)
+func `yxwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func yxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.z)
+func `yxwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func yxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.x, z: this.w, w: this.w)
 func yy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.y)
 func yyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.y, z: this.x)
@@ -69558,88 +69986,328 @@ func yywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: t
 func yywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.z)
 func yyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.y, z: this.w, w: this.w)
 func yz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.x, w: this.w)
+func `yzxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func yzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.y, w: this.w)
+func `yzyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func yzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.z)
 func yzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.z, w: this.w)
 func yzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.z, z: this.w)
+func `yzw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
 func yzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.x)
+func `yzwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func yzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.y)
+func `yzwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func yzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.z)
+func `yzwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func yzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.z, z: this.w, w: this.w)
 func yw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.y, y: this.w)
+func `yw=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.y = other.x
+  this.w = other.y
 func ywx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.x)
+func `ywx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
 func ywxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.x)
 func ywxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.y)
+func `ywxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func ywxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.z)
+func `ywxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func ywxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.x, w: this.w)
+func `ywxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func ywy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.y)
+func `ywy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
 func ywyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.x)
+func `ywyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func ywyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.y)
 func ywyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.z)
+func `ywyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func ywyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.y, w: this.w)
+func `ywyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func ywz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.z)
+func `ywz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
 func ywzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.x)
+func `ywzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func ywzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.y)
+func `ywzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func ywzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.z)
 func ywzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.z, w: this.w)
+func `ywzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func yww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.y, y: this.w, z: this.w)
 func ywwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.x)
 func ywwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.y)
 func ywwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.z)
 func ywww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.y, y: this.w, z: this.w, w: this.w)
 func zx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.x, w: this.w)
 func zxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.y, w: this.w)
+func `zxyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func zxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.z)
 func zxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.z, w: this.w)
+func `zxzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func zxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.x, z: this.w)
+func `zxw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
 func zxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.x)
+func `zxwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func zxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.y)
+func `zxwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func zxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.z)
+func `zxwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func zxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.x, z: this.w, w: this.w)
 func zy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.x, w: this.w)
+func `zyxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func zyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.y, w: this.w)
 func zyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.z)
 func zyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.z, w: this.w)
+func `zyzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func zyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.y, z: this.w)
+func `zyw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
 func zywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.x)
+func `zywx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func zywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.y)
+func `zywy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func zywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.z)
+func `zywz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func zyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.y, z: this.w, w: this.w)
 func zz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.z)
 func zzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.z, z: this.x)
@@ -69663,88 +70331,328 @@ func zzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: t
 func zzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.z)
 func zzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.z, z: this.w, w: this.w)
 func zw*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.z, y: this.w)
+func `zw=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.z = other.x
+  this.w = other.y
 func zwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.x)
+func `zwx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
 func zwxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.x)
 func zwxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.y)
+func `zwxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func zwxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.z)
+func `zwxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func zwxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.x, w: this.w)
+func `zwxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func zwy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.y)
+func `zwy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
 func zwyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.x)
+func `zwyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func zwyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.y)
 func zwyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.z)
+func `zwyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func zwyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.y, w: this.w)
+func `zwyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func zwz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.z)
+func `zwz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
 func zwzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.x)
+func `zwzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func zwzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.y)
+func `zwzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func zwzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.z)
 func zwzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.z, w: this.w)
+func `zwzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func zww*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.z, y: this.w, z: this.w)
 func zwwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.x)
 func zwwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.y)
 func zwwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.z)
 func zwww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.z, y: this.w, z: this.w, w: this.w)
 func wx*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.x)
+func `wx=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.w = other.x
+  this.x = other.y
 func wxx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.x)
 func wxxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.x)
 func wxxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.y)
 func wxxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.z)
 func wxxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.x, w: this.w)
 func wxy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.y)
+func `wxy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
 func wxyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.x)
+func `wxyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func wxyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.y)
 func wxyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.z)
+func `wxyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func wxyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.y, w: this.w)
+func `wxyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func wxz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.z)
+func `wxz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
 func wxzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.x)
+func `wxzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func wxzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.y)
+func `wxzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func wxzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.z)
 func wxzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.z, w: this.w)
+func `wxzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func wxw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.x, z: this.w)
+func `wxw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
 func wxwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.x)
+func `wxwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func wxwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.y)
+func `wxwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func wxwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.z)
+func `wxwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func wxww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.x, z: this.w, w: this.w)
 func wy*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.y)
+func `wy=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.w = other.x
+  this.y = other.y
 func wyx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.x)
+func `wyx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
 func wyxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.x)
 func wyxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.y)
+func `wyxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func wyxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.z)
+func `wyxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func wyxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.x, w: this.w)
+func `wyxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func wyy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.y)
 func wyyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.x)
 func wyyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.y)
 func wyyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.z)
 func wyyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.y, w: this.w)
 func wyz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.z)
+func `wyz=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
 func wyzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.x)
+func `wyzx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func wyzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.y)
+func `wyzy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func wyzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.z)
 func wyzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.z, w: this.w)
+func `wyzw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func wyw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.y, z: this.w)
+func `wyw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
 func wywx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.x)
+func `wywx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func wywy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.y)
+func `wywy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func wywz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.z)
+func `wywz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func wyww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.y, z: this.w, w: this.w)
 func wz*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.z)
+func `wz=`*(this: var LVecBase4f, other: LVecBase2f) =
+  this.w = other.x
+  this.z = other.y
 func wzx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.x)
+func `wzx=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
 func wzxx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.x)
 func wzxy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.y)
+func `wzxy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func wzxz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.z)
+func `wzxz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func wzxw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.x, w: this.w)
+func `wzxw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func wzy*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.y)
+func `wzy=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
 func wzyx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.x)
+func `wzyx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func wzyy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.y)
 func wzyz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.z)
+func `wzyz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func wzyw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.y, w: this.w)
+func `wzyw=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func wzz*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.z)
 func wzzx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.x)
 func wzzy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.y)
 func wzzz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.z)
 func wzzw*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.z, w: this.w)
 func wzw*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.z, z: this.w)
+func `wzw=`*(this: var LVecBase4f, other: LVecBase3f) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
 func wzwx*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.x)
+func `wzwx=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func wzwy*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.y)
+func `wzwy=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func wzwz*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.z)
+func `wzwz=`*(this: var LVecBase4f, other: LVecBase4f) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func wzww*(this: LVecBase4f): LVecBase4f = LVecBase4f(x: this.w, y: this.z, z: this.w, w: this.w)
 func ww*(this: LVecBase4f): LVecBase2f = LVecBase2f(x: this.w, y: this.w)
 func wwx*(this: LVecBase4f): LVecBase3f = LVecBase3f(x: this.w, y: this.w, z: this.x)
@@ -69776,18 +70684,42 @@ func xxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.x, z: th
 func xxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.x)
 func xxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.y, w: this.y)
 func xy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase2d, other: LVecBase2d) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase2d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase2d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
 func yx*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase2d, other: LVecBase2d) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxy*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase2d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase2d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase2d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
 func yy*(this: LVecBase2d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
 func yyx*(this: LVecBase2d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
@@ -69811,43 +70743,136 @@ func xxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: t
 func xxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.y)
 func xxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.z, w: this.z)
 func xy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
 func xz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
 func yx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
 func yy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
 func yyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
@@ -69863,43 +70888,136 @@ func yyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: t
 func yyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.y)
 func yyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.z, w: this.z)
 func yz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
 func zx*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
 func zy*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase3d, other: LVecBase2d) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyy*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyz*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase3d, other: LVecBase3d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase3d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase3d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
 func zz*(this: LVecBase3d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
 func zzx*(this: LVecBase3d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
@@ -69937,88 +71055,328 @@ func xxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: t
 func xxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.z)
 func xxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.x, z: this.w, w: this.w)
 func xy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.x, w: this.w)
+func `xyxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func xyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.y, w: this.w)
 func xyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.z)
 func xyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.z, w: this.w)
+func `xyzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func xyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.y, z: this.w)
+func `xyw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
 func xywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.x)
+func `xywx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func xywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.y)
+func `xywy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func xywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.z)
+func `xywz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func xyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.y, z: this.w, w: this.w)
 func xz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.x, w: this.w)
+func `xzxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func xzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.y, w: this.w)
+func `xzyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func xzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.z)
 func xzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.z, w: this.w)
 func xzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.z, z: this.w)
+func `xzw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
 func xzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.x)
+func `xzwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func xzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.y)
+func `xzwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func xzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.z)
+func `xzwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func xzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.z, z: this.w, w: this.w)
 func xw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.x, y: this.w)
+func `xw=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.x = other.x
+  this.w = other.y
 func xwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.x)
+func `xwx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
 func xwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.x)
 func xwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.y)
+func `xwxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func xwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.z)
+func `xwxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func xwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.x, w: this.w)
+func `xwxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func xwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.y)
+func `xwy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
 func xwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.x)
+func `xwyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func xwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.y)
 func xwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.z)
+func `xwyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func xwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.y, w: this.w)
+func `xwyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func xwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.z)
+func `xwz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
 func xwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.x)
+func `xwzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func xwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.y)
+func `xwzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func xwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.z)
 func xwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.z, w: this.w)
+func `xwzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func xww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.x, y: this.w, z: this.w)
 func xwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.x)
 func xwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.y)
 func xwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.z)
 func xwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.x, y: this.w, z: this.w, w: this.w)
 func yx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.x, w: this.w)
 func yxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.y, w: this.w)
+func `yxyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func yxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.z)
 func yxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.z, w: this.w)
+func `yxzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func yxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.x, z: this.w)
+func `yxw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
 func yxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.x)
+func `yxwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func yxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.y)
+func `yxwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func yxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.z)
+func `yxwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func yxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.x, z: this.w, w: this.w)
 func yy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.y)
 func yyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.y, z: this.x)
@@ -70042,88 +71400,328 @@ func yywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: t
 func yywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.z)
 func yyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.y, z: this.w, w: this.w)
 func yz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.x, w: this.w)
+func `yzxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func yzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.y, w: this.w)
+func `yzyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func yzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.z)
 func yzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.z, w: this.w)
 func yzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.z, z: this.w)
+func `yzw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
 func yzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.x)
+func `yzwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func yzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.y)
+func `yzwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func yzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.z)
+func `yzwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func yzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.z, z: this.w, w: this.w)
 func yw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.y, y: this.w)
+func `yw=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.y = other.x
+  this.w = other.y
 func ywx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.x)
+func `ywx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
 func ywxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.x)
 func ywxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.y)
+func `ywxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func ywxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.z)
+func `ywxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func ywxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.x, w: this.w)
+func `ywxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func ywy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.y)
+func `ywy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
 func ywyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.x)
+func `ywyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func ywyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.y)
 func ywyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.z)
+func `ywyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func ywyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.y, w: this.w)
+func `ywyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func ywz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.z)
+func `ywz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
 func ywzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.x)
+func `ywzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func ywzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.y)
+func `ywzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func ywzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.z)
 func ywzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.z, w: this.w)
+func `ywzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func yww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.y, y: this.w, z: this.w)
 func ywwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.x)
 func ywwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.y)
 func ywwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.z)
 func ywww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.y, y: this.w, z: this.w, w: this.w)
 func zx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.x, w: this.w)
 func zxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.y, w: this.w)
+func `zxyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func zxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.z)
 func zxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.z, w: this.w)
+func `zxzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func zxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.x, z: this.w)
+func `zxw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
 func zxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.x)
+func `zxwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func zxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.y)
+func `zxwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func zxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.z)
+func `zxwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func zxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.x, z: this.w, w: this.w)
 func zy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.x, w: this.w)
+func `zyxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func zyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.y, w: this.w)
 func zyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.z)
 func zyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.z, w: this.w)
+func `zyzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func zyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.y, z: this.w)
+func `zyw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
 func zywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.x)
+func `zywx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func zywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.y)
+func `zywy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func zywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.z)
+func `zywz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func zyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.y, z: this.w, w: this.w)
 func zz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.z)
 func zzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.z, z: this.x)
@@ -70147,88 +71745,328 @@ func zzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: t
 func zzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.z)
 func zzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.z, z: this.w, w: this.w)
 func zw*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.z, y: this.w)
+func `zw=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.z = other.x
+  this.w = other.y
 func zwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.x)
+func `zwx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
 func zwxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.x)
 func zwxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.y)
+func `zwxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func zwxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.z)
+func `zwxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func zwxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.x, w: this.w)
+func `zwxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func zwy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.y)
+func `zwy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
 func zwyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.x)
+func `zwyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func zwyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.y)
 func zwyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.z)
+func `zwyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func zwyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.y, w: this.w)
+func `zwyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func zwz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.z)
+func `zwz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
 func zwzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.x)
+func `zwzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func zwzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.y)
+func `zwzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func zwzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.z)
 func zwzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.z, w: this.w)
+func `zwzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func zww*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.z, y: this.w, z: this.w)
 func zwwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.x)
 func zwwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.y)
 func zwwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.z)
 func zwww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.z, y: this.w, z: this.w, w: this.w)
 func wx*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.x)
+func `wx=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.w = other.x
+  this.x = other.y
 func wxx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.x)
 func wxxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.x)
 func wxxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.y)
 func wxxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.z)
 func wxxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.x, w: this.w)
 func wxy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.y)
+func `wxy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
 func wxyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.x)
+func `wxyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func wxyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.y)
 func wxyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.z)
+func `wxyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func wxyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.y, w: this.w)
+func `wxyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func wxz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.z)
+func `wxz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
 func wxzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.x)
+func `wxzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func wxzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.y)
+func `wxzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func wxzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.z)
 func wxzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.z, w: this.w)
+func `wxzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func wxw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.x, z: this.w)
+func `wxw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
 func wxwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.x)
+func `wxwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func wxwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.y)
+func `wxwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func wxwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.z)
+func `wxwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func wxww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.x, z: this.w, w: this.w)
 func wy*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.y)
+func `wy=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.w = other.x
+  this.y = other.y
 func wyx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.x)
+func `wyx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
 func wyxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.x)
 func wyxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.y)
+func `wyxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func wyxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.z)
+func `wyxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func wyxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.x, w: this.w)
+func `wyxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func wyy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.y)
 func wyyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.x)
 func wyyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.y)
 func wyyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.z)
 func wyyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.y, w: this.w)
 func wyz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.z)
+func `wyz=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
 func wyzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.x)
+func `wyzx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func wyzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.y)
+func `wyzy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func wyzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.z)
 func wyzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.z, w: this.w)
+func `wyzw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func wyw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.y, z: this.w)
+func `wyw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
 func wywx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.x)
+func `wywx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func wywy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.y)
+func `wywy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func wywz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.z)
+func `wywz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func wyww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.y, z: this.w, w: this.w)
 func wz*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.z)
+func `wz=`*(this: var LVecBase4d, other: LVecBase2d) =
+  this.w = other.x
+  this.z = other.y
 func wzx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.x)
+func `wzx=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
 func wzxx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.x)
 func wzxy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.y)
+func `wzxy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func wzxz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.z)
+func `wzxz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func wzxw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.x, w: this.w)
+func `wzxw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func wzy*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.y)
+func `wzy=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
 func wzyx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.x)
+func `wzyx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func wzyy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.y)
 func wzyz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.z)
+func `wzyz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func wzyw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.y, w: this.w)
+func `wzyw=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func wzz*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.z)
 func wzzx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.x)
 func wzzy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.y)
 func wzzz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.z)
 func wzzw*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.z, w: this.w)
 func wzw*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.z, z: this.w)
+func `wzw=`*(this: var LVecBase4d, other: LVecBase3d) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
 func wzwx*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.x)
+func `wzwx=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func wzwy*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.y)
+func `wzwy=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func wzwz*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.z)
+func `wzwz=`*(this: var LVecBase4d, other: LVecBase4d) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func wzww*(this: LVecBase4d): LVecBase4d = LVecBase4d(x: this.w, y: this.z, z: this.w, w: this.w)
 func ww*(this: LVecBase4d): LVecBase2d = LVecBase2d(x: this.w, y: this.w)
 func wwx*(this: LVecBase4d): LVecBase3d = LVecBase3d(x: this.w, y: this.w, z: this.x)
@@ -70260,18 +72098,42 @@ func xxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.x, z: th
 func xxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.x)
 func xxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.y, w: this.y)
 func xy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase2i, other: LVecBase2i) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase2i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase2i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
 func yx*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase2i, other: LVecBase2i) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxy*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase2i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase2i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase2i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
 func yy*(this: LVecBase2i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
 func yyx*(this: LVecBase2i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
@@ -70295,43 +72157,136 @@ func xxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: t
 func xxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.y)
 func xxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.z, w: this.z)
 func xy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
 func xz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
 func yx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
 func yy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
 func yyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
@@ -70347,43 +72302,136 @@ func yyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: t
 func yyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.y)
 func yyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.z, w: this.z)
 func yz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
 func zx*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
 func zy*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase3i, other: LVecBase2i) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyy*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyz*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase3i, other: LVecBase3i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase3i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase3i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
 func zz*(this: LVecBase3i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
 func zzx*(this: LVecBase3i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
@@ -70421,88 +72469,328 @@ func xxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: t
 func xxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.z)
 func xxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.x, z: this.w, w: this.w)
 func xy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.y)
+func `xy=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.x = other.x
+  this.y = other.y
 func xyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.x)
+func `xyx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
 func xyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.x)
 func xyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.y)
+func `xyxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func xyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.z)
+func `xyxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func xyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.x, w: this.w)
+func `xyxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func xyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.y)
 func xyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.x)
 func xyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.y)
 func xyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.z)
 func xyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.y, w: this.w)
 func xyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.z)
+func `xyz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
 func xyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.x)
+func `xyzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func xyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.y)
+func `xyzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func xyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.z)
 func xyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.z, w: this.w)
+func `xyzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func xyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.y, z: this.w)
+func `xyw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
 func xywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.x)
+func `xywx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func xywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.y)
+func `xywy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func xywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.z)
+func `xywz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func xyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.y, z: this.w, w: this.w)
 func xz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.z)
+func `xz=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.x = other.x
+  this.z = other.y
 func xzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.x)
+func `xzx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
 func xzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.x)
 func xzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.y)
+func `xzxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func xzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.z)
+func `xzxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func xzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.x, w: this.w)
+func `xzxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func xzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.y)
+func `xzy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
 func xzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.x)
+func `xzyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func xzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.y)
 func xzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.z)
+func `xzyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func xzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.y, w: this.w)
+func `xzyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func xzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.z)
 func xzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.x)
 func xzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.y)
 func xzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.z)
 func xzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.z, w: this.w)
 func xzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.z, z: this.w)
+func `xzw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
 func xzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.x)
+func `xzwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func xzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.y)
+func `xzwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func xzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.z)
+func `xzwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func xzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.z, z: this.w, w: this.w)
 func xw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.x, y: this.w)
+func `xw=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.x = other.x
+  this.w = other.y
 func xwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.x)
+func `xwx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
 func xwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.x)
 func xwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.y)
+func `xwxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func xwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.z)
+func `xwxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func xwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.x, w: this.w)
+func `xwxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func xwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.y)
+func `xwy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
 func xwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.x)
+func `xwyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func xwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.y)
 func xwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.z)
+func `xwyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func xwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.y, w: this.w)
+func `xwyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func xwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.z)
+func `xwz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
 func xwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.x)
+func `xwzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func xwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.y)
+func `xwzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func xwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.z)
 func xwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.z, w: this.w)
+func `xwzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.x = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func xww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.x, y: this.w, z: this.w)
 func xwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.x)
 func xwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.y)
 func xwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.z)
 func xwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.x, y: this.w, z: this.w, w: this.w)
 func yx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.x)
+func `yx=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.y = other.x
+  this.x = other.y
 func yxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.x)
 func yxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.x)
 func yxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.y)
 func yxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.z)
 func yxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.x, w: this.w)
 func yxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.y)
+func `yxy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
 func yxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.x)
+func `yxyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func yxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.y)
 func yxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.z)
+func `yxyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func yxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.y, w: this.w)
+func `yxyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func yxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.z)
+func `yxz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
 func yxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.x)
+func `yxzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func yxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.y)
+func `yxzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func yxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.z)
 func yxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.z, w: this.w)
+func `yxzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func yxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.x, z: this.w)
+func `yxw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
 func yxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.x)
+func `yxwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func yxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.y)
+func `yxwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func yxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.z)
+func `yxwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func yxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.x, z: this.w, w: this.w)
 func yy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.y)
 func yyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.y, z: this.x)
@@ -70526,88 +72814,328 @@ func yywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: t
 func yywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.z)
 func yyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.y, z: this.w, w: this.w)
 func yz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.z)
+func `yz=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.y = other.x
+  this.z = other.y
 func yzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.x)
+func `yzx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
 func yzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.x)
 func yzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.y)
+func `yzxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func yzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.z)
+func `yzxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func yzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.x, w: this.w)
+func `yzxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func yzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.y)
+func `yzy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
 func yzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.x)
+func `yzyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func yzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.y)
 func yzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.z)
+func `yzyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func yzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.y, w: this.w)
+func `yzyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func yzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.z)
 func yzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.x)
 func yzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.y)
 func yzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.z)
 func yzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.z, w: this.w)
 func yzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.z, z: this.w)
+func `yzw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
 func yzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.x)
+func `yzwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func yzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.y)
+func `yzwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func yzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.z)
+func `yzwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func yzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.z, z: this.w, w: this.w)
 func yw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.y, y: this.w)
+func `yw=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.y = other.x
+  this.w = other.y
 func ywx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.x)
+func `ywx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
 func ywxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.x)
 func ywxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.y)
+func `ywxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func ywxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.z)
+func `ywxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func ywxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.x, w: this.w)
+func `ywxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func ywy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.y)
+func `ywy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
 func ywyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.x)
+func `ywyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func ywyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.y)
 func ywyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.z)
+func `ywyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func ywyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.y, w: this.w)
+func `ywyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func ywz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.z)
+func `ywz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
 func ywzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.x)
+func `ywzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func ywzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.y)
+func `ywzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func ywzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.z)
 func ywzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.z, w: this.w)
+func `ywzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.y = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func yww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.y, y: this.w, z: this.w)
 func ywwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.x)
 func ywwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.y)
 func ywwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.z)
 func ywww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.y, y: this.w, z: this.w, w: this.w)
 func zx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.x)
+func `zx=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.z = other.x
+  this.x = other.y
 func zxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.x)
 func zxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.x)
 func zxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.y)
 func zxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.z)
 func zxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.x, w: this.w)
 func zxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.y)
+func `zxy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
 func zxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.x)
+func `zxyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func zxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.y)
 func zxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.z)
+func `zxyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func zxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.y, w: this.w)
+func `zxyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func zxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.z)
+func `zxz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
 func zxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.x)
+func `zxzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func zxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.y)
+func `zxzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func zxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.z)
 func zxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.z, w: this.w)
+func `zxzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func zxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.x, z: this.w)
+func `zxw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
 func zxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.x)
+func `zxwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func zxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.y)
+func `zxwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func zxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.z)
+func `zxwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func zxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.x, z: this.w, w: this.w)
 func zy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.y)
+func `zy=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.z = other.x
+  this.y = other.y
 func zyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.x)
+func `zyx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
 func zyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.x)
 func zyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.y)
+func `zyxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func zyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.z)
+func `zyxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func zyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.x, w: this.w)
+func `zyxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func zyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.y)
 func zyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.x)
 func zyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.y)
 func zyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.z)
 func zyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.y, w: this.w)
 func zyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.z)
+func `zyz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
 func zyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.x)
+func `zyzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func zyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.y)
+func `zyzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func zyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.z)
 func zyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.z, w: this.w)
+func `zyzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func zyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.y, z: this.w)
+func `zyw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
 func zywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.x)
+func `zywx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func zywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.y)
+func `zywy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func zywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.z)
+func `zywz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func zyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.y, z: this.w, w: this.w)
 func zz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.z)
 func zzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.z, z: this.x)
@@ -70631,88 +73159,328 @@ func zzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: t
 func zzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.z)
 func zzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.z, z: this.w, w: this.w)
 func zw*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.z, y: this.w)
+func `zw=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.z = other.x
+  this.w = other.y
 func zwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.x)
+func `zwx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
 func zwxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.x)
 func zwxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.y)
+func `zwxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.y = other.w
 func zwxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.z)
+func `zwxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.z = other.w
 func zwxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.x, w: this.w)
+func `zwxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.x = other.z
+  this.w = other.w
 func zwy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.y)
+func `zwy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
 func zwyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.x)
+func `zwyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.x = other.w
 func zwyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.y)
 func zwyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.z)
+func `zwyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.z = other.w
 func zwyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.y, w: this.w)
+func `zwyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.y = other.z
+  this.w = other.w
 func zwz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.z)
+func `zwz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
 func zwzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.x)
+func `zwzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.x = other.w
 func zwzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.y)
+func `zwzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.y = other.w
 func zwzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.z)
 func zwzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.z, w: this.w)
+func `zwzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.z = other.x
+  this.w = other.y
+  this.z = other.z
+  this.w = other.w
 func zww*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.z, y: this.w, z: this.w)
 func zwwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.x)
 func zwwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.y)
 func zwwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.z)
 func zwww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.z, y: this.w, z: this.w, w: this.w)
 func wx*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.x)
+func `wx=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.w = other.x
+  this.x = other.y
 func wxx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.x)
 func wxxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.x)
 func wxxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.y)
 func wxxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.z)
 func wxxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.x, w: this.w)
 func wxy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.y)
+func `wxy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
 func wxyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.x)
+func `wxyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.x = other.w
 func wxyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.y)
 func wxyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.z)
+func `wxyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.z = other.w
 func wxyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.y, w: this.w)
+func `wxyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.y = other.z
+  this.w = other.w
 func wxz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.z)
+func `wxz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
 func wxzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.x)
+func `wxzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.x = other.w
 func wxzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.y)
+func `wxzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.y = other.w
 func wxzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.z)
 func wxzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.z, w: this.w)
+func `wxzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.z = other.z
+  this.w = other.w
 func wxw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.x, z: this.w)
+func `wxw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
 func wxwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.x)
+func `wxwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.x = other.w
 func wxwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.y)
+func `wxwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.y = other.w
 func wxwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.z)
+func `wxwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.x = other.y
+  this.w = other.z
+  this.z = other.w
 func wxww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.x, z: this.w, w: this.w)
 func wy*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.y)
+func `wy=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.w = other.x
+  this.y = other.y
 func wyx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.x)
+func `wyx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
 func wyxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.x)
 func wyxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.y)
+func `wyxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.y = other.w
 func wyxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.z)
+func `wyxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.z = other.w
 func wyxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.x, w: this.w)
+func `wyxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.x = other.z
+  this.w = other.w
 func wyy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.y)
 func wyyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.x)
 func wyyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.y)
 func wyyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.z)
 func wyyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.y, w: this.w)
 func wyz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.z)
+func `wyz=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
 func wyzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.x)
+func `wyzx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.x = other.w
 func wyzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.y)
+func `wyzy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.y = other.w
 func wyzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.z)
 func wyzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.z, w: this.w)
+func `wyzw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.z = other.z
+  this.w = other.w
 func wyw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.y, z: this.w)
+func `wyw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
 func wywx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.x)
+func `wywx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.x = other.w
 func wywy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.y)
+func `wywy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.y = other.w
 func wywz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.z)
+func `wywz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.y = other.y
+  this.w = other.z
+  this.z = other.w
 func wyww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.y, z: this.w, w: this.w)
 func wz*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.z)
+func `wz=`*(this: var LVecBase4i, other: LVecBase2i) =
+  this.w = other.x
+  this.z = other.y
 func wzx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.x)
+func `wzx=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
 func wzxx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.x)
 func wzxy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.y)
+func `wzxy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.y = other.w
 func wzxz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.z)
+func `wzxz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.z = other.w
 func wzxw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.x, w: this.w)
+func `wzxw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.x = other.z
+  this.w = other.w
 func wzy*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.y)
+func `wzy=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
 func wzyx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.x)
+func `wzyx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.x = other.w
 func wzyy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.y)
 func wzyz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.z)
+func `wzyz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.z = other.w
 func wzyw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.y, w: this.w)
+func `wzyw=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.y = other.z
+  this.w = other.w
 func wzz*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.z)
 func wzzx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.x)
 func wzzy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.y)
 func wzzz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.z)
 func wzzw*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.z, w: this.w)
 func wzw*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.z, z: this.w)
+func `wzw=`*(this: var LVecBase4i, other: LVecBase3i) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
 func wzwx*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.x)
+func `wzwx=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.x = other.w
 func wzwy*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.y)
+func `wzwy=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.y = other.w
 func wzwz*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.z)
+func `wzwz=`*(this: var LVecBase4i, other: LVecBase4i) =
+  this.w = other.x
+  this.z = other.y
+  this.w = other.z
+  this.z = other.w
 func wzww*(this: LVecBase4i): LVecBase4i = LVecBase4i(x: this.w, y: this.z, z: this.w, w: this.w)
 func ww*(this: LVecBase4i): LVecBase2i = LVecBase2i(x: this.w, y: this.w)
 func wwx*(this: LVecBase4i): LVecBase3i = LVecBase3i(x: this.w, y: this.w, z: this.x)

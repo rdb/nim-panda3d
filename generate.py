@@ -344,28 +344,46 @@ for suffix in 'fdi':
     for x in 'xy':
         for y in 'xy':
             CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase2{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
+            if x != y:
+                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase2{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
             for z in 'xy':
                 CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase2{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                if x != y != z:
+                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase2{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
                 for w in 'xy':
                     CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase2{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                    if x != y != z != w:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase2{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
     CORE_POSTAMBLE += "\n"
     for x in 'xyz':
         for y in 'xyz':
             CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase3{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
+            if x != y:
+                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase3{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
             for z in 'xyz':
                 CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase3{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                if x != y != z:
+                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase3{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
                 for w in 'xyz':
                     CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase3{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                    if x != y != z != w:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase3{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
     CORE_POSTAMBLE += "\n"
     for x in 'xyzw':
         for y in 'xyzw':
             CORE_POSTAMBLE += f"func {x}{y}*(this: LVecBase4{suffix}): LVecBase2{suffix} = LVecBase2{suffix}(x: this.{x}, y: this.{y})\n"
+            if x != y:
+                CORE_POSTAMBLE += f"func `{x}{y}=`*(this: var LVecBase4{suffix}, other: LVecBase2{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n"
             for z in 'xyzw':
                 CORE_POSTAMBLE += f"func {x}{y}{z}*(this: LVecBase4{suffix}): LVecBase3{suffix} = LVecBase3{suffix}(x: this.{x}, y: this.{y}, z: this.{z})\n"
+                if x != y != z:
+                    CORE_POSTAMBLE += f"func `{x}{y}{z}=`*(this: var LVecBase4{suffix}, other: LVecBase3{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n"
                 for w in 'xyzw':
                     CORE_POSTAMBLE += f"func {x}{y}{z}{w}*(this: LVecBase4{suffix}): LVecBase4{suffix} = LVecBase4{suffix}(x: this.{x}, y: this.{y}, z: this.{z}, w: this.{w})\n"
+                    if x != y != z != w:
+                        CORE_POSTAMBLE += f"func `{x}{y}{z}{w}=`*(this: var LVecBase4{suffix}, other: LVecBase4{suffix}) =\n  this.{x} = other.x\n  this.{y} = other.y\n  this.{z} = other.z\n  this.{w} = other.w\n"
 
 OTHER_PREAMBLE = \
 """
@@ -701,7 +719,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
     if interrogate_wrapper_has_return_value(wrapper) and func_name != "operator =":
         return_type = interrogate_wrapper_return_type(wrapper)
         if not is_type_valid(return_type):
-            return
+            return False
     else:
         return_type = None
 
@@ -710,7 +728,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
     if interrogate_function_is_method(function):
         this_type = interrogate_function_class(function)
         if not is_type_valid(this_type):
-            return
+            return False
 
         if is_type_pointer(this_type):
             this_pointer = True
@@ -779,29 +797,34 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         else:
             cpp_expr = f"#.{cpp_expr}"
 
-    cpp_expr += "("
-
+    cpp_args = []
     for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
         param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
         if param_name.startswith("_"):
-            return
+            return False
         if param_name in NIM_KEYWORDS:
             param_name = '`' + param_name + '`'
 
         param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
         if not is_type_valid(param_type):
-            return
+            return False
         type_name = translated_type_name(param_type)
 
         if interrogate_wrapper_parameter_is_this(wrapper, i_param):
-            if interrogate_type_true_name(param_type).endswith("const *"):
+            if interrogate_type_true_name(param_type).endswith("const *") and \
+               interrogate_function_number_of_python_wrappers(function) > 1 and \
+               func_name != "operator []":
                 # Is there a non-const version?  Then we skip this.
                 for i_wrapper in range(interrogate_function_number_of_python_wrappers(function)):
                     wrapper2 = interrogate_function_python_wrapper(function, i_wrapper)
                     if interrogate_wrapper_number_of_parameters(wrapper2) > 0 and \
                        interrogate_wrapper_parameter_is_this(wrapper2, 0) and \
                        not interrogate_type_true_name(interrogate_wrapper_parameter_type(wrapper2, 0)).endswith("const *"):
-                        return
+                        return False
+
+            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
+                # Awful hack
+                cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
 
             if func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
                 args.append(f"{param_name}: var {type_name}")
@@ -810,21 +833,23 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         else:
             args.append(f"{param_name}: {type_name}")
 
-            if not cpp_expr.endswith("("):
-                cpp_expr += ", "
-
             if type_name == "string":
-                cpp_expr += "nimStringToStdString(#)"
+                cpp_args.append("nimStringToStdString(#)")
                 headers.add("stringConversionCode")
             else:
-                cpp_expr += "#"
+                cpp_args.append("#")
 
-    cpp_expr += ")"
-
-    if func_name.startswith("operator "):
+    if func_name == "operator []" and interrogate_wrapper_number_of_parameters(wrapper) > 2:
+        func_name = "`[]=`"
+        cpp_suffix = cpp_args.pop()
+        cpp_expr += "(" + ", ".join(cpp_args) + ")"
+        cpp_expr += " = " + cpp_suffix
+    elif func_name.startswith("operator "):
         func_name = "`" + func_name[9:] + "`"
+        cpp_expr += "(" + ", ".join(cpp_args) + ")"
     else:
         func_name = translate_function_name(func_name)
+        cpp_expr += "(" + ", ".join(cpp_args) + ")"
 
     args_string = ", ".join(args)
 
@@ -866,6 +891,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
             out.write(" ## \\\n" + comment)
 
     out.write("\n\n")
+    return True
 
 
 def bind_function(out, function, func_name=None, proc_type="proc"):
@@ -901,8 +927,8 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
         for num_default_args in range(num_optional_args + 1):
             sig = tuple(interrogate_wrapper_parameter_type(wrapper, i) for i in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args))
             if sig not in overloads:
-                bind_function_overload(out, function, wrapper, func_name, proc_type, num_default_args)
-                overloads[sig] = wrapper
+                if bind_function_overload(out, function, wrapper, func_name, proc_type, num_default_args):
+                    overloads[sig] = wrapper
 
 
 def bind_property(out, element):
@@ -912,6 +938,11 @@ def bind_property(out, element):
 
     #type_name = translated_type_name(interrogate_element_type(element))
     prop_name = interrogate_element_name(element)
+
+    if not prop_name.strip('xyzw'):
+        scoped_name = interrogate_element_scoped_name(element)
+        if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase"):
+            return
 
     #out.write(f"proc {prop_name}*(this: {parent_type_name}): {type_name}")
 
@@ -1036,6 +1067,31 @@ def get_type_header(type):
         return "pnm" + type_name[3:] + ".h"
 
     return type_name[0].lower() + type_name[1:] + ".h"
+
+
+def get_type_element_type(type):
+    while interrogate_type_is_wrapped(type) or interrogate_type_is_typedef(type):
+        type = interrogate_type_wrapped_type(type)
+
+    got_size = False
+    element_type = None
+
+    for i_meth in range(interrogate_type_number_of_methods(type)):
+        meth = interrogate_type_get_method(type, i_meth)
+        meth_name = interrogate_function_name(meth)
+        if meth_name == "size":
+            got_size = True
+        elif meth_name == "operator []":
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(meth)):
+                wrap = interrogate_function_python_wrapper(meth, i_wrap)
+                element_type = interrogate_wrapper_return_type(wrap)
+                if interrogate_type_atomic_token(element_type) != 6 and is_type_valid(element_type):
+                    break
+                else:
+                    element_type = None
+
+    if got_size:
+        return element_type
 
 
 def bind_type(out, type, bound_templates={}):

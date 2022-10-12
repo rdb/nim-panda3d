@@ -73,156 +73,60 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
-const wrappedLVecBase2fCode = \"\"\"
+const wrappedVec2Code = \"\"\"
 #include "lvecBase2.h"
+#include "lvector2.h"
+#include "lpoint2.h"
 
-struct alignas(LVecBase2f) WrappedLVecBase2f {
-  float x = 0;
-  float y = 0;
+template<class T>
+struct alignas(T) WrappedVec2 {
+  typename T::numeric_type x;
+  typename T::numeric_type y;
 
-  constexpr WrappedLVecBase2f() = default;
-  WrappedLVecBase2f(float v0, float v1) : x(v0), y(v1) { }
-  WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2f &() const { return *(const LVecBase2f *)this; }
-  operator LVecBase2f &() { return *(LVecBase2f *)this; }
+  constexpr WrappedVec2() = default;
+  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : x(v0), y(v1) { }
+  WrappedVec2(const T &v) : x(v[0]), y(v[1]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 \"\"\";
 
-const wrappedLVecBase2dCode = \"\"\"
-#include "lvecBase2.h"
-
-struct alignas(LVecBase2d) WrappedLVecBase2d {
-  double x = 0;
-  double y = 0;
-
-  constexpr WrappedLVecBase2d() = default;
-  WrappedLVecBase2d(double v0, double v1) : x(v0), y(v1) { }
-  WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2d &() const { return *(const LVecBase2d *)this; }
-  operator LVecBase2d &() { return *(LVecBase2d *)this; }
-};
-\"\"\";
-
-const wrappedLVecBase2iCode = \"\"\"
-#include "lvecBase2.h"
-
-struct alignas(LVecBase2i) WrappedLVecBase2i {
-  int x = 0;
-  int y = 0;
-
-  constexpr WrappedLVecBase2i() = default;
-  WrappedLVecBase2i(int v0, int v1) : x(v0), y(v1) { }
-  WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2i &() const { return *(const LVecBase2i *)this; }
-  operator LVecBase2i &() { return *(LVecBase2i *)this; }
-};
-\"\"\";
-
-const wrappedLVecBase3fCode = \"\"\"
+const wrappedVec3Code = \"\"\"
 #include "lvecBase3.h"
+#include "lvector3.h"
+#include "lpoint3.h"
 
-struct alignas(LVecBase3f) WrappedLVecBase3f {
-  float x = 0;
-  float y = 0;
-  float z = 0;
+template<class T>
+struct alignas(T) WrappedVec3 {
+  typename T::numeric_type x = 0;
+  typename T::numeric_type y = 0;
+  typename T::numeric_type z = 0;
 
-  constexpr WrappedLVecBase3f() = default;
-  WrappedLVecBase3f(float v0, float v1, float v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3f(const LVecBase3f &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3f &() const { return *(const LVecBase3f *)this; }
-  operator LVecBase3f &() { return *(LVecBase3f *)this; }
+  constexpr WrappedVec3() = default;
+  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : x(v0), y(v1), z(v2) { }
+  WrappedVec3(const T &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 \"\"\";
 
-const wrappedLVecBase3dCode = \"\"\"
-#include "lvecBase3.h"
-
-struct alignas(LVecBase3d) WrappedLVecBase3d {
-  double x = 0;
-  double y = 0;
-  double z = 0;
-
-  constexpr WrappedLVecBase3d() = default;
-  WrappedLVecBase3d(double v0, double v1, double v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3d &() const { return *(const LVecBase3d *)this; }
-  operator LVecBase3d &() { return *(LVecBase3d *)this; }
-};
-\"\"\";
-
-const wrappedLVecBase3iCode = \"\"\"
-#include "lvecBase3.h"
-
-struct alignas(LVecBase3i) WrappedLVecBase3i {
-  int x = 0;
-  int y = 0;
-  int z = 0;
-
-  constexpr WrappedLVecBase3i() = default;
-  WrappedLVecBase3i(int v0, int v1, int v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3i &() const { return *(const LVecBase3i *)this; }
-  operator LVecBase3i &() { return *(LVecBase3i *)this; }
-};
-\"\"\";
-
-const wrappedLVecBase4fCode = \"\"\"
+const wrappedVec4Code = \"\"\"
 #include "lvecBase4.h"
+#include "lvector4.h"
+#include "lpoint4.h"
 
-struct alignas(LVecBase4f) WrappedLVecBase4f {
-  float x = 0;
-  float y = 0;
-  float z = 0;
-  float w = 0;
+template<class T>
+struct alignas(T) WrappedVec4 {
+  typename T::numeric_type x = 0;
+  typename T::numeric_type y = 0;
+  typename T::numeric_type z = 0;
+  typename T::numeric_type w = 0;
 
-  constexpr WrappedLVecBase4f() = default;
-  WrappedLVecBase4f(float v0, float v1, float v2, float v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4f(const UnalignedLVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4f &() const { return *(const LVecBase4f *)this; }
-  operator const UnalignedLVecBase4f &() const { return *(const UnalignedLVecBase4f *)this; }
-  operator LVecBase4f &() { return *(LVecBase4f *)this; }
-  operator UnalignedLVecBase4f &() { return *(UnalignedLVecBase4f *)this; }
-};
-\"\"\"
-
-const wrappedLVecBase4dCode = \"\"\"
-#include "lvecBase4.h"
-
-struct alignas(LVecBase4d) WrappedLVecBase4d {
-  double x = 0;
-  double y = 0;
-  double z = 0;
-  double w = 0;
-
-  constexpr WrappedLVecBase4d() = default;
-  WrappedLVecBase4d(double v0, double v1, double v2, double v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4d(const UnalignedLVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4d &() const { return *(const LVecBase4d *)this; }
-  operator const UnalignedLVecBase4d &() const { return *(const UnalignedLVecBase4d *)this; }
-  operator LVecBase4d &() { return *(LVecBase4d *)this; }
-  operator UnalignedLVecBase4d &() { return *(UnalignedLVecBase4d *)this; }
-};
-\"\"\";
-
-const wrappedLVecBase4iCode = \"\"\"
-#include "lvecBase4.h"
-
-struct alignas(LVecBase4i) WrappedLVecBase4i {
-  int x = 0;
-  int y = 0;
-  int z = 0;
-  int w = 0;
-
-  constexpr WrappedLVecBase4i() = default;
-  WrappedLVecBase4i(int v0, int v1, int v2, int v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4i(const UnalignedLVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4i &() const { return *(const LVecBase4i *)this; }
-  operator const UnalignedLVecBase4i &() const { return *(const UnalignedLVecBase4i *)this; }
-  operator LVecBase4i &() { return *(LVecBase4i *)this; }
-  operator UnalignedLVecBase4i &() { return *(UnalignedLVecBase4i *)this; }
+  constexpr WrappedVec4() = default;
+  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : x(v0), y(v1), z(v2), w(v3) { }
+  WrappedVec4(const T &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 \"\"\";
 
@@ -1207,9 +1111,9 @@ def bind_type(out, type, bound_templates={}):
     else:
         pragmas = []
 
-        if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
-            aligned_cpp_name = cpp_name.replace("Unaligned", "")
-            pragmas += [f"importcpp: \"Wrapped{aligned_cpp_name}\", header: wrapped{aligned_cpp_name}Code"]
+        if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LPoint") or type_name.startswith("LVector"):
+            size = int(type_name[-2])
+            pragmas += [f"importcpp: \"WrappedVec{size}<{type_name}>\", header: wrappedVec{size}Code"]
         elif is_type_reference_counted(type):
             pragmas += [f"importcpp: \"PT({cpp_name})\"", "bycopy"]
         elif is_type_pointer(type):
@@ -1223,7 +1127,7 @@ def bind_type(out, type, bound_templates={}):
             pragmas.append("inheritable")
 
         header = get_type_header(type)
-        if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase"):
+        if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
             if not os.path.isfile("C:\\Users\\rdb\\panda3d2\\built_x64\\include\\" + header):
                 print("Header not found: ", header)
             pragmas.append(f"header: \"{header}\"")

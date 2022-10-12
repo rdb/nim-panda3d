@@ -13,156 +13,60 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
-const wrappedLVecBase2fCode = """
+const wrappedVec2Code = """
 #include "lvecBase2.h"
+#include "lvector2.h"
+#include "lpoint2.h"
 
-struct alignas(LVecBase2f) WrappedLVecBase2f {
-  float x = 0;
-  float y = 0;
+template<class T>
+struct alignas(T) WrappedVec2 {
+  typename T::numeric_type x;
+  typename T::numeric_type y;
 
-  constexpr WrappedLVecBase2f() = default;
-  WrappedLVecBase2f(float v0, float v1) : x(v0), y(v1) { }
-  WrappedLVecBase2f(const LVecBase2f &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2f &() const { return *(const LVecBase2f *)this; }
-  operator LVecBase2f &() { return *(LVecBase2f *)this; }
+  constexpr WrappedVec2() = default;
+  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : x(v0), y(v1) { }
+  WrappedVec2(const T &v) : x(v[0]), y(v[1]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 """;
 
-const wrappedLVecBase2dCode = """
-#include "lvecBase2.h"
-
-struct alignas(LVecBase2d) WrappedLVecBase2d {
-  double x = 0;
-  double y = 0;
-
-  constexpr WrappedLVecBase2d() = default;
-  WrappedLVecBase2d(double v0, double v1) : x(v0), y(v1) { }
-  WrappedLVecBase2d(const LVecBase2d &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2d &() const { return *(const LVecBase2d *)this; }
-  operator LVecBase2d &() { return *(LVecBase2d *)this; }
-};
-""";
-
-const wrappedLVecBase2iCode = """
-#include "lvecBase2.h"
-
-struct alignas(LVecBase2i) WrappedLVecBase2i {
-  int x = 0;
-  int y = 0;
-
-  constexpr WrappedLVecBase2i() = default;
-  WrappedLVecBase2i(int v0, int v1) : x(v0), y(v1) { }
-  WrappedLVecBase2i(const LVecBase2i &v) : x(v[0]), y(v[1]) { }
-  operator const LVecBase2i &() const { return *(const LVecBase2i *)this; }
-  operator LVecBase2i &() { return *(LVecBase2i *)this; }
-};
-""";
-
-const wrappedLVecBase3fCode = """
+const wrappedVec3Code = """
 #include "lvecBase3.h"
+#include "lvector3.h"
+#include "lpoint3.h"
 
-struct alignas(LVecBase3f) WrappedLVecBase3f {
-  float x = 0;
-  float y = 0;
-  float z = 0;
+template<class T>
+struct alignas(T) WrappedVec3 {
+  typename T::numeric_type x = 0;
+  typename T::numeric_type y = 0;
+  typename T::numeric_type z = 0;
 
-  constexpr WrappedLVecBase3f() = default;
-  WrappedLVecBase3f(float v0, float v1, float v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3f(const LVecBase3f &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3f &() const { return *(const LVecBase3f *)this; }
-  operator LVecBase3f &() { return *(LVecBase3f *)this; }
+  constexpr WrappedVec3() = default;
+  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : x(v0), y(v1), z(v2) { }
+  WrappedVec3(const T &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 """;
 
-const wrappedLVecBase3dCode = """
-#include "lvecBase3.h"
-
-struct alignas(LVecBase3d) WrappedLVecBase3d {
-  double x = 0;
-  double y = 0;
-  double z = 0;
-
-  constexpr WrappedLVecBase3d() = default;
-  WrappedLVecBase3d(double v0, double v1, double v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3d(const LVecBase3d &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3d &() const { return *(const LVecBase3d *)this; }
-  operator LVecBase3d &() { return *(LVecBase3d *)this; }
-};
-""";
-
-const wrappedLVecBase3iCode = """
-#include "lvecBase3.h"
-
-struct alignas(LVecBase3i) WrappedLVecBase3i {
-  int x = 0;
-  int y = 0;
-  int z = 0;
-
-  constexpr WrappedLVecBase3i() = default;
-  WrappedLVecBase3i(int v0, int v1, int v2) : x(v0), y(v1), z(v2) { }
-  WrappedLVecBase3i(const LVecBase3i &v) : x(v[0]), y(v[1]), z(v[2]) { }
-  operator const LVecBase3i &() const { return *(const LVecBase3i *)this; }
-  operator LVecBase3i &() { return *(LVecBase3i *)this; }
-};
-""";
-
-const wrappedLVecBase4fCode = """
+const wrappedVec4Code = """
 #include "lvecBase4.h"
+#include "lvector4.h"
+#include "lpoint4.h"
 
-struct alignas(LVecBase4f) WrappedLVecBase4f {
-  float x = 0;
-  float y = 0;
-  float z = 0;
-  float w = 0;
+template<class T>
+struct alignas(T) WrappedVec4 {
+  typename T::numeric_type x = 0;
+  typename T::numeric_type y = 0;
+  typename T::numeric_type z = 0;
+  typename T::numeric_type w = 0;
 
-  constexpr WrappedLVecBase4f() = default;
-  WrappedLVecBase4f(float v0, float v1, float v2, float v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4f(const LVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4f(const UnalignedLVecBase4f &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4f &() const { return *(const LVecBase4f *)this; }
-  operator const UnalignedLVecBase4f &() const { return *(const UnalignedLVecBase4f *)this; }
-  operator LVecBase4f &() { return *(LVecBase4f *)this; }
-  operator UnalignedLVecBase4f &() { return *(UnalignedLVecBase4f *)this; }
-};
-"""
-
-const wrappedLVecBase4dCode = """
-#include "lvecBase4.h"
-
-struct alignas(LVecBase4d) WrappedLVecBase4d {
-  double x = 0;
-  double y = 0;
-  double z = 0;
-  double w = 0;
-
-  constexpr WrappedLVecBase4d() = default;
-  WrappedLVecBase4d(double v0, double v1, double v2, double v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4d(const LVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4d(const UnalignedLVecBase4d &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4d &() const { return *(const LVecBase4d *)this; }
-  operator const UnalignedLVecBase4d &() const { return *(const UnalignedLVecBase4d *)this; }
-  operator LVecBase4d &() { return *(LVecBase4d *)this; }
-  operator UnalignedLVecBase4d &() { return *(UnalignedLVecBase4d *)this; }
-};
-""";
-
-const wrappedLVecBase4iCode = """
-#include "lvecBase4.h"
-
-struct alignas(LVecBase4i) WrappedLVecBase4i {
-  int x = 0;
-  int y = 0;
-  int z = 0;
-  int w = 0;
-
-  constexpr WrappedLVecBase4i() = default;
-  WrappedLVecBase4i(int v0, int v1, int v2, int v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedLVecBase4i(const LVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  WrappedLVecBase4i(const UnalignedLVecBase4i &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
-  operator const LVecBase4i &() const { return *(const LVecBase4i *)this; }
-  operator const UnalignedLVecBase4i &() const { return *(const UnalignedLVecBase4i *)this; }
-  operator LVecBase4i &() { return *(LVecBase4i *)this; }
-  operator UnalignedLVecBase4i &() { return *(UnalignedLVecBase4i *)this; }
+  constexpr WrappedVec4() = default;
+  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : x(v0), y(v1), z(v2), w(v3) { }
+  WrappedVec4(const T &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
 };
 """;
 
@@ -6829,52 +6733,52 @@ template M_unique*(_: typedesc[TextureStagePool]): TextureStagePool_Mode = Textu
 
 type MathNumbers* {.importcpp: "MathNumbers", pure, inheritable, header: "mathNumbers.h".} = object
 
-type LVecBase2f* {.importcpp: "WrappedLVecBase2f", header: wrappedLVecBase2fCode, pure, inheritable.} = object
+type LVecBase2f* {.importcpp: "WrappedVec2<LVecBase2f>", header: wrappedVec2Code, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
   x*: float32
   y*: float32
 
-type LVecBase2d* {.importcpp: "WrappedLVecBase2d", header: wrappedLVecBase2dCode, pure, inheritable.} = object
+type LVecBase2d* {.importcpp: "WrappedVec2<LVecBase2d>", header: wrappedVec2Code, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
   x*: float64
   y*: float64
 
-type LVecBase2i* {.importcpp: "WrappedLVecBase2i", header: wrappedLVecBase2iCode, pure, inheritable.} = object
+type LVecBase2i* {.importcpp: "WrappedVec2<LVecBase2i>", header: wrappedVec2Code, pure, inheritable.} = object
   ## This is the base class for all two-component vectors and points.
   x*: int32
   y*: int32
 
-type LVector2f* {.importcpp: "LVector2f", pure, inheritable, header: "lvector2.h".} = object of LVecBase2f
+type LVector2f* {.importcpp: "WrappedVec2<LVector2f>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2f
   ## This is a two-component vector offset.
 
-type LVector2d* {.importcpp: "LVector2d", pure, inheritable, header: "lvector2.h".} = object of LVecBase2d
+type LVector2d* {.importcpp: "WrappedVec2<LVector2d>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2d
   ## This is a two-component vector offset.
 
-type LVector2i* {.importcpp: "LVector2i", pure, inheritable, header: "lvector2.h".} = object of LVecBase2i
+type LVector2i* {.importcpp: "WrappedVec2<LVector2i>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2i
   ## This is a two-component vector offset.
 
-type LPoint2f* {.importcpp: "LPoint2f", pure, inheritable, header: "lpoint2.h".} = object of LVecBase2f
+type LPoint2f* {.importcpp: "WrappedVec2<LPoint2f>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2f
   ## This is a two-component point in space.
 
-type LPoint2d* {.importcpp: "LPoint2d", pure, inheritable, header: "lpoint2.h".} = object of LVecBase2d
+type LPoint2d* {.importcpp: "WrappedVec2<LPoint2d>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2d
   ## This is a two-component point in space.
 
-type LPoint2i* {.importcpp: "LPoint2i", pure, inheritable, header: "lpoint2.h".} = object of LVecBase2i
+type LPoint2i* {.importcpp: "WrappedVec2<LPoint2i>", header: wrappedVec2Code, pure, inheritable.} = object of LVecBase2i
   ## This is a two-component point in space.
 
-type LVecBase3f* {.importcpp: "WrappedLVecBase3f", header: wrappedLVecBase3fCode, pure, inheritable.} = object
+type LVecBase3f* {.importcpp: "WrappedVec3<LVecBase3f>", header: wrappedVec3Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: float32
   y*: float32
   z*: float32
 
-type LVecBase3d* {.importcpp: "WrappedLVecBase3d", header: wrappedLVecBase3dCode, pure, inheritable.} = object
+type LVecBase3d* {.importcpp: "WrappedVec3<LVecBase3d>", header: wrappedVec3Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: float64
   y*: float64
   z*: float64
 
-type LVecBase3i* {.importcpp: "WrappedLVecBase3i", header: wrappedLVecBase3iCode, pure, inheritable.} = object
+type LVecBase3i* {.importcpp: "WrappedVec3<LVecBase3i>", header: wrappedVec3Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: int32
   y*: int32
@@ -6888,56 +6792,56 @@ type CoordinateSystem* {.importcpp: "CoordinateSystem", header: "coordinateSyste
   CS_yup_left = 4
   CS_invalid = 5
 
-type LVector3f* {.importcpp: "LVector3f", pure, inheritable, header: "lvector3.h".} = object of LVecBase3f
+type LVector3f* {.importcpp: "WrappedVec3<LVector3f>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3f
   ## This is a three-component vector distance (as opposed to a three-component
   ## point, which represents a particular point in space).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LVector3d* {.importcpp: "LVector3d", pure, inheritable, header: "lvector3.h".} = object of LVecBase3d
+type LVector3d* {.importcpp: "WrappedVec3<LVector3d>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3d
   ## This is a three-component vector distance (as opposed to a three-component
   ## point, which represents a particular point in space).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LVector3i* {.importcpp: "LVector3i", pure, inheritable, header: "lvector3.h".} = object of LVecBase3i
+type LVector3i* {.importcpp: "WrappedVec3<LVector3i>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3i
   ## This is a three-component vector distance (as opposed to a three-component
   ## point, which represents a particular point in space).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LPoint3f* {.importcpp: "LPoint3f", pure, inheritable, header: "lpoint3.h".} = object of LVecBase3f
+type LPoint3f* {.importcpp: "WrappedVec3<LPoint3f>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3f
   ## This is a three-component point in space (as opposed to a three-component
   ## vector, which represents a direction and a distance).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LPoint3d* {.importcpp: "LPoint3d", pure, inheritable, header: "lpoint3.h".} = object of LVecBase3d
+type LPoint3d* {.importcpp: "WrappedVec3<LPoint3d>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3d
   ## This is a three-component point in space (as opposed to a three-component
   ## vector, which represents a direction and a distance).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LPoint3i* {.importcpp: "LPoint3i", pure, inheritable, header: "lpoint3.h".} = object of LVecBase3i
+type LPoint3i* {.importcpp: "WrappedVec3<LPoint3i>", header: wrappedVec3Code, pure, inheritable.} = object of LVecBase3i
   ## This is a three-component point in space (as opposed to a three-component
   ## vector, which represents a direction and a distance).  Some of the methods
   ## are slightly different between LPoint3 and LVector3; in particular,
   ## subtraction of two points yields a vector, while addition of a vector and a
   ## point yields a point.
 
-type LVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
+type LVecBase4f* {.importcpp: "WrappedVec4<LVecBase4f>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: float32
   y*: float32
   z*: float32
   w*: float32
 
-type UnalignedLVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecBase4fCode, pure, inheritable.} = object
+type UnalignedLVecBase4f* {.importcpp: "WrappedVec4<UnalignedLVecBase4f>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -6950,14 +6854,14 @@ type UnalignedLVecBase4f* {.importcpp: "WrappedLVecBase4f", header: wrappedLVecB
   z*: float32
   w*: float32
 
-type LVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
+type LVecBase4d* {.importcpp: "WrappedVec4<LVecBase4d>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: float64
   y*: float64
   z*: float64
   w*: float64
 
-type UnalignedLVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecBase4dCode, pure, inheritable.} = object
+type UnalignedLVecBase4d* {.importcpp: "WrappedVec4<UnalignedLVecBase4d>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -6970,14 +6874,14 @@ type UnalignedLVecBase4d* {.importcpp: "WrappedLVecBase4d", header: wrappedLVecB
   z*: float64
   w*: float64
 
-type LVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
+type LVecBase4i* {.importcpp: "WrappedVec4<LVecBase4i>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is the base class for all three-component vectors and points.
   x*: int32
   y*: int32
   z*: int32
   w*: int32
 
-type UnalignedLVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecBase4iCode, pure, inheritable.} = object
+type UnalignedLVecBase4i* {.importcpp: "WrappedVec4<UnalignedLVecBase4i>", header: wrappedVec4Code, pure, inheritable.} = object
   ## This is an "unaligned" LVecBase4.  It has no functionality other than to
   ## store numbers, and it will pack them in as tightly as possible, avoiding
   ## any SSE2 alignment requirements shared by the primary LVecBase4 class.
@@ -6990,22 +6894,22 @@ type UnalignedLVecBase4i* {.importcpp: "WrappedLVecBase4i", header: wrappedLVecB
   z*: int32
   w*: int32
 
-type LVector4f* {.importcpp: "LVector4f", pure, inheritable, header: "lvector4.h".} = object of LVecBase4f
+type LVector4f* {.importcpp: "WrappedVec4<LVector4f>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4f
   ## This is a four-component vector distance.
 
-type LVector4d* {.importcpp: "LVector4d", pure, inheritable, header: "lvector4.h".} = object of LVecBase4d
+type LVector4d* {.importcpp: "WrappedVec4<LVector4d>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4d
   ## This is a four-component vector distance.
 
-type LVector4i* {.importcpp: "LVector4i", pure, inheritable, header: "lvector4.h".} = object of LVecBase4i
+type LVector4i* {.importcpp: "WrappedVec4<LVector4i>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4i
   ## This is a four-component vector distance.
 
-type LPoint4f* {.importcpp: "LPoint4f", pure, inheritable, header: "lpoint4.h".} = object of LVecBase4f
+type LPoint4f* {.importcpp: "WrappedVec4<LPoint4f>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4f
   ## This is a four-component point in space.
 
-type LPoint4d* {.importcpp: "LPoint4d", pure, inheritable, header: "lpoint4.h".} = object of LVecBase4d
+type LPoint4d* {.importcpp: "WrappedVec4<LPoint4d>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4d
   ## This is a four-component point in space.
 
-type LPoint4i* {.importcpp: "LPoint4i", pure, inheritable, header: "lpoint4.h".} = object of LVecBase4i
+type LPoint4i* {.importcpp: "WrappedVec4<LPoint4i>", header: wrappedVec4Code, pure, inheritable.} = object of LVecBase4i
   ## This is a four-component point in space.
 
 type LMatrix3f* {.importcpp: "LMatrix3f", pure, inheritable, header: "lmatrix.h".} = object

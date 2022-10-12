@@ -51,6 +51,7 @@ type
     trackball*: NodePath
     win*: GraphicsOutput
     windowType*: string
+    wireframeEnabled*: bool
 
 proc makeDefaultPipe*(this: ShowBase) =
   var selection = GraphicsPipeSelection.getGlobalPtr()
@@ -330,6 +331,22 @@ proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float) =
 
 proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float, a: float) =
   this.setBackgroundColor(initLVecBase4f(r, g, b, a))
+
+proc wireframeOn*(this: ShowBase) =
+  this.render.setRenderModeWireframe(100)
+  this.render.setTwoSided(true)
+  this.wireframeEnabled = true
+
+proc wireframeOff*(this: ShowBase) =
+  this.render.clearRenderMode()
+  this.render.setTwoSided(false)
+  this.wireframeEnabled = false
+
+proc toggleWireframe*(this: ShowBase) =
+  if this.wireframeEnabled:
+    this.wireframeOff()
+  else:
+    this.wireframeOn()
 
 proc setFrameRateMeter*(this: ShowBase, flag: bool) =
   if flag:

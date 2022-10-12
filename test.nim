@@ -7,6 +7,7 @@ import std/math
 
 var base = ShowBase()
 base.openDefaultWindow()
+base.disableMouse()
 
 var env = base.loader.loadModel("models/environment")
 env.reparentTo(base.render)

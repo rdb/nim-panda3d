@@ -41,6 +41,8 @@ type
     graphicsEngine*: GraphicsEngine
     loader*: type(Loader.loader)
     mouse2cam*: NodePath
+    mouseInterface*: NodePath
+    mouseInterfaceNode*: MouseInterfaceNode
     mouseWatcher*: NodePath
     mouseWatcherNode*: MouseWatcher
     pipe*: GraphicsPipe
@@ -130,6 +132,26 @@ proc setupDataGraph*(this: ShowBase) =
   this.drive = initNodePath(newDriveInterface("drive"))
   this.mouse2cam = initNodePath(newTransform2SG("mouse2cam"))
 
+proc changeMouseInterface*(this: ShowBase, changeTo: NodePath) =
+  this.mouseInterface.detachNode()
+  this.mouseInterface = changeTo
+  this.mouseInterfaceNode = dcast(MouseInterfaceNode, changeTo.node())
+  if this.mouseWatcher:
+    this.mouseInterface.reparentTo(this.mouseWatcher)
+  if this.mouse2cam:
+    this.mouse2cam.reparentTo(this.mouseInterface)
+
+proc useDrive*(this: ShowBase) =
+  if this.drive:
+    this.changeMouseInterface(this.drive)
+    # Set the height to a good eyeheight
+    this.drive.reset()
+    this.drive.setZ(4.0)
+
+proc useTrackball*(this: ShowBase) =
+  if this.trackball:
+    this.changeMouseInterface(this.trackball)
+
 proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
   let name = win.getInputDeviceName(0)
   var mk = this.dataRoot.attachNewNode(newMouseAndKeyboard(win, 0, name))
@@ -156,6 +178,8 @@ proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
 
   this.mouseWatcher = mw
   this.mouseWatcherNode = mwn
+
+  this.mouseInterface.reparentTo(this.mouseWatcher)
 
   var timeButtonThrowerNode = newButtonThrower("timeButtons")
   this.timeButtonThrower = mw.attachNewNode(timeButtonThrowerNode)
@@ -295,13 +319,20 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   this.render = render
   this.render2d = render2d
   this.aspect2d = aspect2d
-  this.camera = this.render.attachNewNode("camera")
+  this.camera = this.render.attachNewNode(newModelNode("camera"))
   this.camNode = newCamera("cam")
   this.camLens = this.camNode.getLens()
   this.cam = this.camera.attachNewNode(this.camNode)
   this.clock = ClockObject.getGlobalClock()
 
+  dcast(ModelNode, this.camera.node()).setPreserveTransform(ModelNode.PTLocal)
+
   this.setupDataGraph()
+
+  this.mouseInterface = this.trackball
+  this.useTrackball()
+
+  dcast(Transform2SG, this.mouse2cam.node()).setNode(this.camera.node())
 
   var dr = this.win.makeDisplayRegion()
   dr.setCamera(this.cam)
@@ -347,6 +378,14 @@ proc toggleWireframe*(this: ShowBase) =
     this.wireframeOff()
   else:
     this.wireframeOn()
+
+proc disableMouse*(this: ShowBase) =
+  if this.mouse2cam:
+    this.mouse2cam.detachNode()
+
+proc enableMouse*(this: ShowBase) =
+  if this.mouse2cam:
+    this.mouse2cam.reparentTo(this.mouseInterface)
 
 proc setFrameRateMeter*(this: ShowBase, flag: bool) =
   if flag:

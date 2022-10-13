@@ -79,16 +79,35 @@ const wrappedVec2Code = \"\"\"
 #include "lpoint2.h"
 
 template<class T>
-struct alignas(T) WrappedVec2 {
+struct alignas(T) WrappedVBase2 {
   typename T::numeric_type x;
   typename T::numeric_type y;
 
-  constexpr WrappedVec2() = default;
-  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : x(v0), y(v1) { }
-  WrappedVec2(const T &v) : x(v[0]), y(v[1]) { }
+  constexpr WrappedVBase2() = default;
+  WrappedVBase2(typename T::numeric_type v0, typename T::numeric_type v1) : x(v0), y(v1) { }
+  WrappedVBase2(const T &v) : x(v[0]), y(v[1]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
+
+template<class T, class B>
+struct alignas(T) WrappedVec2 : public WrappedVBase2<B> {
+  constexpr WrappedVec2() = default;
+  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : WrappedVBase2(v0, v1) { }
+  WrappedVec2(const T &v) : WrappedVBase2(v[0], v[1]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
+};
+
+typedef WrappedVBase2<LVecBase2f> WrappedLVecBase2f;
+typedef WrappedVBase2<LVecBase2d> WrappedLVecBase2d;
+typedef WrappedVBase2<LVecBase2i> WrappedLVecBase2i;
+typedef WrappedVec2<LVector2f, LVecBase2f> WrappedLVector2f;
+typedef WrappedVec2<LVector2f, LVecBase2d> WrappedLVector2d;
+typedef WrappedVec2<LVector2f, LVecBase2i> WrappedLVector2i;
+typedef WrappedVec2<LPoint2f, LVecBase2f> WrappedLPoint2f;
+typedef WrappedVec2<LPoint2f, LVecBase2d> WrappedLPoint2d;
+typedef WrappedVec2<LPoint2f, LVecBase2i> WrappedLPoint2i;
 \"\"\";
 
 const wrappedVec3Code = \"\"\"
@@ -97,17 +116,36 @@ const wrappedVec3Code = \"\"\"
 #include "lpoint3.h"
 
 template<class T>
-struct alignas(T) WrappedVec3 {
+struct alignas(T) WrappedVBase3 {
   typename T::numeric_type x = 0;
   typename T::numeric_type y = 0;
   typename T::numeric_type z = 0;
 
-  constexpr WrappedVec3() = default;
-  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : x(v0), y(v1), z(v2) { }
-  WrappedVec3(const T &v) : x(v[0]), y(v[1]), z(v[2]) { }
+  constexpr WrappedVBase3() = default;
+  WrappedVBase3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : x(v0), y(v1), z(v2) { }
+  WrappedVBase3(const T &v) : x(v[0]), y(v[1]), z(v[2]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
+
+template<class T, class B>
+struct alignas(T) WrappedVec3 : public WrappedVBase3<B> {
+  constexpr WrappedVec3() = default;
+  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : WrappedVBase3(v0, v1, v2) { }
+  WrappedVec3(const T &v) : WrappedVBase3(v[0], v[1], v[2]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
+};
+
+typedef WrappedVBase3<LVecBase3f> WrappedLVecBase3f;
+typedef WrappedVBase3<LVecBase3d> WrappedLVecBase3d;
+typedef WrappedVBase3<LVecBase3i> WrappedLVecBase3i;
+typedef WrappedVec3<LVector3f, LVecBase3f> WrappedLVector3f;
+typedef WrappedVec3<LVector3f, LVecBase3d> WrappedLVector3d;
+typedef WrappedVec3<LVector3f, LVecBase3i> WrappedLVector3i;
+typedef WrappedVec3<LPoint3f, LVecBase3f> WrappedLPoint3f;
+typedef WrappedVec3<LPoint3f, LVecBase3d> WrappedLPoint3d;
+typedef WrappedVec3<LPoint3f, LVecBase3i> WrappedLPoint3i;
 \"\"\";
 
 const wrappedVec4Code = \"\"\"
@@ -116,18 +154,37 @@ const wrappedVec4Code = \"\"\"
 #include "lpoint4.h"
 
 template<class T>
-struct alignas(T) WrappedVec4 {
+struct alignas(T) WrappedVBase4 {
   typename T::numeric_type x = 0;
   typename T::numeric_type y = 0;
   typename T::numeric_type z = 0;
   typename T::numeric_type w = 0;
 
-  constexpr WrappedVec4() = default;
-  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : x(v0), y(v1), z(v2), w(v3) { }
-  WrappedVec4(const T &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
+  constexpr WrappedVBase4() = default;
+  WrappedVBase4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : x(v0), y(v1), z(v2), w(v3) { }
+  WrappedVBase4(const T &v) : x(v[0]), y(v[1]), z(v[2]), w(v[3]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
+
+template<class T, class B>
+struct alignas(T) WrappedVec4 : public WrappedVBase4<B> {
+  constexpr WrappedVec4() = default;
+  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : WrappedVBase4(v0, v1, v2, v3) { }
+  WrappedVec4(const T &v) : WrappedVBase4(v[0], v[1], v[2], v[3]) { }
+  operator const T &() const { return *(const T *)this; }
+  operator T &() { return *(T *)this; }
+};
+
+typedef WrappedVBase4<LVecBase4f> WrappedLVecBase4f;
+typedef WrappedVBase4<LVecBase4d> WrappedLVecBase4d;
+typedef WrappedVBase4<LVecBase4i> WrappedLVecBase4i;
+typedef WrappedVec4<LVector4f, LVecBase4f> WrappedLVector4f;
+typedef WrappedVec4<LVector4f, LVecBase4d> WrappedLVector4d;
+typedef WrappedVec4<LVector4f, LVecBase4i> WrappedLVector4i;
+typedef WrappedVec4<LPoint4f, LVecBase4f> WrappedLPoint4f;
+typedef WrappedVec4<LPoint4f, LVecBase4d> WrappedLPoint4d;
+typedef WrappedVec4<LPoint4f, LVecBase4i> WrappedLPoint4i;
 \"\"\";
 
 """
@@ -1137,7 +1194,7 @@ def bind_type(out, type, bound_templates={}):
 
         if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LPoint") or type_name.startswith("LVector"):
             size = int(type_name[-2])
-            pragmas += [f"importcpp: \"WrappedVec{size}<{type_name}>\", header: wrappedVec{size}Code"]
+            pragmas += [f"importcpp: \"Wrapped{type_name}\", header: wrappedVec{size}Code"]
         elif is_type_reference_counted(type):
             pragmas += [f"importcpp: \"PT({cpp_name})\"", "bycopy"]
         elif is_type_pointer(type):

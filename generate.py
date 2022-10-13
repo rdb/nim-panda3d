@@ -787,7 +787,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
                        not interrogate_type_true_name(interrogate_wrapper_parameter_type(wrapper2, 0)).endswith("const *"):
                         return False
 
-            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
+            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
                 # Awful hack
                 cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
 
@@ -801,6 +801,9 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
             if type_name == "string":
                 cpp_args.append("nimStringToStdString(#)")
                 headers.add("stringConversionCode")
+            elif type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
+                # Awful hack
+                cpp_args.append("(" + type_name + " &)(#)")
             else:
                 cpp_args.append("#")
 
@@ -833,7 +836,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
             cpp_name = interrogate_type_scoped_name(return_type)
             if not this_pointer:
-                cpp_expr = f"({cpp_name} &)(#)"
+                cpp_expr = f"(({cpp_name} &)(#))"
             elif is_type_reference_counted(return_type):
                 cpp_expr = f"(PT({cpp_name})(#))"
             elif is_type_reference_counted(this_type):

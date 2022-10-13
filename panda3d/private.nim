@@ -52,4 +52,4 @@ func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp
   {.emit: "memcpy(result->data, s.data(), s.size());"}
 
 func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
-  {.emit: "result = std::string(desc->data, desc->len);"}
+  {.emit: "if (desc != nullptr) result.assign(desc->data, desc->len);"}

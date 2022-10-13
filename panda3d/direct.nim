@@ -1441,7 +1441,7 @@ proc initSmoothMover*(): SmoothMover {.importcpp: "SmoothMover()".}
 
 proc initSmoothMover*(param0: SmoothMover): SmoothMover {.importcpp: "SmoothMover(#)".}
 
-proc setPos*(this: SmoothMover, pos: LVecBase3): bool {.importcpp: "#.set_pos((LVecBase3 &)(#))".} ## \
+proc setPos*(this: SmoothMover, pos: LVecBase3): bool {.importcpp: "#.set_pos((LVecBase3 const &)(#))".} ## \
 ## Specifies the position of the SmoothMover at a particular time in the past.
 ## When mark_position() is called, this will be recorded (along with hpr and
 ## timestamp) in a position report, which will then be used along with all
@@ -1470,7 +1470,7 @@ proc setY*(this: SmoothMover, y: float32): bool {.importcpp: "#.set_y(#)".} ## \
 proc setZ*(this: SmoothMover, z: float32): bool {.importcpp: "#.set_z(#)".} ## \
 ## Sets the Z position only.  See set_pos().
 
-proc setHpr*(this: SmoothMover, hpr: LVecBase3): bool {.importcpp: "#.set_hpr((LVecBase3 &)(#))".} ## \
+proc setHpr*(this: SmoothMover, hpr: LVecBase3): bool {.importcpp: "#.set_hpr((LVecBase3 const &)(#))".} ## \
 ## Specifies the orientation of the SmoothMover at a particular time in the
 ## past.  When mark_position() is called, this will be recorded (along with
 ## hpr and timestamp) in a position report, which will then be used along with
@@ -1499,7 +1499,7 @@ proc setP*(this: SmoothMover, p: float32): bool {.importcpp: "#.set_p(#)".} ## \
 proc setR*(this: SmoothMover, r: float32): bool {.importcpp: "#.set_r(#)".} ## \
 ## Sets the roll only.  See set_hpr().
 
-proc setPosHpr*(this: SmoothMover, pos: LVecBase3, hpr: LVecBase3): bool {.importcpp: "#.set_pos_hpr((LVecBase3 &)(#), (LVecBase3 &)(#))".} ## \
+proc setPosHpr*(this: SmoothMover, pos: LVecBase3, hpr: LVecBase3): bool {.importcpp: "#.set_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#))".} ## \
 ## Specifies the position and orientation of the SmoothMover at a particular
 ## time in the past.  When mark_position() is called, this will be recorded
 ## (along with timestamp) in a position report, which will then be used along
@@ -2118,7 +2118,7 @@ proc newCConstraintInterval*(param0: CConstraintInterval): CConstraintInterval {
 
 proc newCConstrainHprInterval*(param0: CConstrainHprInterval): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(#)".}
 
-proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, hprOffset: LVecBase3): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 &)(#))", header: stringConversionCode.} ## \
+proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, hprOffset: LVecBase3): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.} ## \
 ## Constructs a constraint interval that will constrain the orientation of one
 ## node to the orientation of another, possibly with an added rotation.
 ##
@@ -2144,7 +2144,7 @@ converter getClassType*(_: typedesc[CConstrainHprInterval]): TypeHandle {.import
 
 proc newCConstrainPosHprInterval*(param0: CConstrainPosHprInterval): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(#)".}
 
-proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3, hprOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 &)(#), (LVecBase3 &)(#))", header: stringConversionCode.} ## \
+proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3, hprOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#), (LVecBase3 const &)(#))", header: stringConversionCode.} ## \
 ## Constructs a constraint interval that will constrain the position and
 ## orientation of one node to the position and orientation of another.
 ##
@@ -2153,7 +2153,7 @@ proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePat
 ## false, the target node's local position and orientation will be copied
 ## unaltered.
 
-proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 &)(#))", header: stringConversionCode.} ## \
+proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.} ## \
 ## Constructs a constraint interval that will constrain the position and
 ## orientation of one node to the position and orientation of another.
 ##
@@ -2181,7 +2181,7 @@ converter getClassType*(_: typedesc[CConstrainPosHprInterval]): TypeHandle {.imp
 
 proc newCConstrainPosInterval*(param0: CConstrainPosInterval): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(#)".}
 
-proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 &)(#))", header: stringConversionCode.} ## \
+proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.} ## \
 ## Constructs a constraint interval that will constrain the position of one
 ## node to the position of another.
 ##
@@ -2283,19 +2283,19 @@ proc getOther*(this: CLerpNodePathInterval): NodePath {.importcpp: "#->get_other
 ## If this is an empty node path, the lerped node is being moved in its own
 ## coordinate system.
 
-proc setStartPos*(this: CLerpNodePathInterval, pos: LVecBase3) {.importcpp: "#->set_start_pos((LVecBase3 &)(#))".} ## \
+proc setStartPos*(this: CLerpNodePathInterval, pos: LVecBase3) {.importcpp: "#->set_start_pos((LVecBase3 const &)(#))".} ## \
 ## Indicates the initial position of the lerped node.  This is meaningful only
 ## if set_end_pos() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual position at the
 ## time the lerp is performed.
 
-proc setEndPos*(this: CLerpNodePathInterval, pos: LVecBase3) {.importcpp: "#->set_end_pos((LVecBase3 &)(#))".} ## \
+proc setEndPos*(this: CLerpNodePathInterval, pos: LVecBase3) {.importcpp: "#->set_end_pos((LVecBase3 const &)(#))".} ## \
 ## Indicates that the position of the node should be lerped, and specifies the
 ## final position of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's position will not be
 ## affected by the lerp.
 
-proc setStartHpr*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_start_hpr((LVecBase3 &)(#))".} ## \
+proc setStartHpr*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_start_hpr((LVecBase3 const &)(#))".} ## \
 ## Indicates the initial rotation of the lerped node.  This is meaningful only
 ## if either set_end_hpr() or set_end_quat() is also called.  This parameter
 ## is optional; if unspecified, the value will be taken from the node's actual
@@ -2311,7 +2311,7 @@ proc setEndHpr*(this: CLerpNodePathInterval, quat: LQuaternion) {.importcpp: "#-
 ## converted to a HPR trio, and the lerp will be performed in HPR space,
 ## componentwise.
 
-proc setEndHpr*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_end_hpr((LVecBase3 &)(#))".} ## \
+proc setEndHpr*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_end_hpr((LVecBase3 const &)(#))".} ## \
 ## Indicates that the rotation of the node should be lerped, and specifies the
 ## final rotation of the node.  This should be called before
 ## priv_initialize().
@@ -2339,7 +2339,7 @@ proc setEndQuat*(this: CLerpNodePathInterval, quat: LQuaternion) {.importcpp: "#
 ##
 ## The given quaternion needs to be normalized.
 
-proc setEndQuat*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_end_quat((LVecBase3 &)(#))".} ## \
+proc setEndQuat*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->set_end_quat((LVecBase3 const &)(#))".} ## \
 ## Indicates that the rotation of the node should be lerped, and specifies the
 ## final rotation of the node.  This should be called before
 ## priv_initialize().
@@ -2353,7 +2353,7 @@ proc setEndQuat*(this: CLerpNodePathInterval, hpr: LVecBase3) {.importcpp: "#->s
 ## quaternion, and the lerp will be performed in quaternion space, as a
 ## spherical lerp.
 
-proc setStartScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: "#->set_start_scale((LVecBase3 &)(#))".} ## \
+proc setStartScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: "#->set_start_scale((LVecBase3 const &)(#))".} ## \
 ## Indicates the initial scale of the lerped node.  This is meaningful only if
 ## set_end_scale() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual scale at the
@@ -2365,7 +2365,7 @@ proc setStartScale*(this: CLerpNodePathInterval, scale: float32) {.importcpp: "#
 ## unspecified, the value will be taken from the node's actual scale at the
 ## time the lerp is performed.
 
-proc setEndScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: "#->set_end_scale((LVecBase3 &)(#))".} ## \
+proc setEndScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: "#->set_end_scale((LVecBase3 const &)(#))".} ## \
 ## Indicates that the scale of the node should be lerped, and specifies the
 ## final scale of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's scale will not be affected by the lerp.
@@ -2375,35 +2375,35 @@ proc setEndScale*(this: CLerpNodePathInterval, scale: float32) {.importcpp: "#->
 ## final scale of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's scale will not be affected by the lerp.
 
-proc setStartShear*(this: CLerpNodePathInterval, shear: LVecBase3) {.importcpp: "#->set_start_shear((LVecBase3 &)(#))".} ## \
+proc setStartShear*(this: CLerpNodePathInterval, shear: LVecBase3) {.importcpp: "#->set_start_shear((LVecBase3 const &)(#))".} ## \
 ## Indicates the initial shear of the lerped node.  This is meaningful only if
 ## set_end_shear() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual shear at the
 ## time the lerp is performed.
 
-proc setEndShear*(this: CLerpNodePathInterval, shear: LVecBase3) {.importcpp: "#->set_end_shear((LVecBase3 &)(#))".} ## \
+proc setEndShear*(this: CLerpNodePathInterval, shear: LVecBase3) {.importcpp: "#->set_end_shear((LVecBase3 const &)(#))".} ## \
 ## Indicates that the shear of the node should be lerped, and specifies the
 ## final shear of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's shear will not be affected by the lerp.
 
-proc setStartColor*(this: CLerpNodePathInterval, color: LVecBase4) {.importcpp: "#->set_start_color((LVecBase4 &)(#))".} ## \
+proc setStartColor*(this: CLerpNodePathInterval, color: LVecBase4) {.importcpp: "#->set_start_color((LVecBase4 const &)(#))".} ## \
 ## Indicates the initial color of the lerped node.  This is meaningful only if
 ## set_end_color() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual color at the
 ## time the lerp is performed.
 
-proc setEndColor*(this: CLerpNodePathInterval, color: LVecBase4) {.importcpp: "#->set_end_color((LVecBase4 &)(#))".} ## \
+proc setEndColor*(this: CLerpNodePathInterval, color: LVecBase4) {.importcpp: "#->set_end_color((LVecBase4 const &)(#))".} ## \
 ## Indicates that the color of the node should be lerped, and specifies the
 ## final color of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's color will not be affected by the lerp.
 
-proc setStartColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_start_color_scale((LVecBase4 &)(#))".} ## \
+proc setStartColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_start_color_scale((LVecBase4 const &)(#))".} ## \
 ## Indicates the initial color scale of the lerped node.  This is meaningful
 ## only if set_end_color_scale() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual color scale
 ## at the time the lerp is performed.
 
-proc setEndColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_end_color_scale((LVecBase4 &)(#))".} ## \
+proc setEndColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_end_color_scale((LVecBase4 const &)(#))".} ## \
 ## Indicates that the color scale of the node should be lerped, and specifies
 ## the final color scale of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's color scale will not
@@ -2414,13 +2414,13 @@ proc setTextureStage*(this: CLerpNodePathInterval, stage: TextureStage) {.import
 ## and/or tex_scale.  If this is not set, the default is the default texture
 ## stage.
 
-proc setStartTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_start_tex_offset((LVecBase2 &)(#))".} ## \
+proc setStartTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_start_tex_offset((LVecBase2 const &)(#))".} ## \
 ## Indicates the initial UV offset of the lerped node.  This is meaningful
 ## only if set_end_tex_offset() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual UV offset at
 ## the time the lerp is performed.
 
-proc setEndTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_end_tex_offset((LVecBase2 &)(#))".} ## \
+proc setEndTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_end_tex_offset((LVecBase2 const &)(#))".} ## \
 ## Indicates that the UV offset of the node should be lerped, and specifies
 ## the final UV offset of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV offset will not be
@@ -2438,13 +2438,13 @@ proc setEndTexRotate*(this: CLerpNodePathInterval, tex_rotate: float32) {.import
 ## priv_initialize().  If this is not called, the node's UV rotate will not be
 ## affected by the lerp.
 
-proc setStartTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_start_tex_scale((LVecBase2 &)(#))".} ## \
+proc setStartTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_start_tex_scale((LVecBase2 const &)(#))".} ## \
 ## Indicates the initial UV scale of the lerped node.  This is meaningful only
 ## if set_end_tex_scale() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual UV scale at the
 ## time the lerp is performed.
 
-proc setEndTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_end_tex_scale((LVecBase2 &)(#))".} ## \
+proc setEndTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_end_tex_scale((LVecBase2 const &)(#))".} ## \
 ## Indicates that the UV scale of the node should be lerped, and specifies the
 ## final UV scale of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV scale will not be

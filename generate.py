@@ -93,8 +93,8 @@ struct alignas(T) WrappedVBase2 {
 template<class T, class B>
 struct alignas(T) WrappedVec2 : public WrappedVBase2<B> {
   constexpr WrappedVec2() = default;
-  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : WrappedVBase2(v0, v1) { }
-  WrappedVec2(const T &v) : WrappedVBase2(v[0], v[1]) { }
+  WrappedVec2(typename T::numeric_type v0, typename T::numeric_type v1) : WrappedVBase2<B>(v0, v1) { }
+  WrappedVec2(const T &v) : WrappedVBase2<B>(v[0], v[1]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
@@ -131,8 +131,8 @@ struct alignas(T) WrappedVBase3 {
 template<class T, class B>
 struct alignas(T) WrappedVec3 : public WrappedVBase3<B> {
   constexpr WrappedVec3() = default;
-  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : WrappedVBase3(v0, v1, v2) { }
-  WrappedVec3(const T &v) : WrappedVBase3(v[0], v[1], v[2]) { }
+  WrappedVec3(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2) : WrappedVBase3<B>(v0, v1, v2) { }
+  WrappedVec3(const T &v) : WrappedVBase3<B>(v[0], v[1], v[2]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
@@ -170,8 +170,8 @@ struct alignas(T) WrappedVBase4 {
 template<class T, class B>
 struct alignas(T) WrappedVec4 : public WrappedVBase4<B> {
   constexpr WrappedVec4() = default;
-  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : WrappedVBase4(v0, v1, v2, v3) { }
-  WrappedVec4(const T &v) : WrappedVBase4(v[0], v[1], v[2], v[3]) { }
+  WrappedVec4(typename T::numeric_type v0, typename T::numeric_type v1, typename T::numeric_type v2, typename T::numeric_type v3) : WrappedVBase4<B>(v0, v1, v2, v3) { }
+  WrappedVec4(const T &v) : WrappedVBase4<B>(v[0], v[1], v[2], v[3]) { }
   operator const T &() const { return *(const T *)this; }
   operator T &() { return *(T *)this; }
 };
@@ -801,7 +801,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
             if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
                 # Awful hack
-                cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
+                if interrogate_type_true_name(param_type).endswith("const *"):
+                    cpp_expr = "((" + type_name + " const &)#)" + cpp_expr[1:]
+                else:
+                    cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
 
             if func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
                 args.append(f"{param_name}: var {type_name}")
@@ -815,7 +818,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
                 headers.add("stringConversionCode")
             elif type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
                 # Awful hack
-                cpp_args.append("(" + type_name + " &)(#)")
+                if interrogate_type_true_name(param_type).endswith("const *"):
+                    cpp_args.append("(" + type_name + " const &)(#)")
+                else:
+                    cpp_args.append("(" + type_name + " &)(#)")
             else:
                 cpp_args.append("#")
 

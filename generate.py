@@ -690,7 +690,16 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
     if interrogate_function_is_method(function):
         this_type = interrogate_function_class(function)
         if not is_type_valid(this_type):
-            return False
+            if func_name != "get_class_type":
+                scoped_type_name = interrogate_type_scoped_name(this_type)
+                if scoped_type_name == "MovingPart< ACMatrixSwitchType >":
+                    this_type = interrogate_get_type_by_scoped_name("MovingPartMatrix")
+                elif scoped_type_name == "MovingPart< ACScalarSwitchType >":
+                    this_type = interrogate_get_type_by_scoped_name("MovingPartScalar")
+                else:
+                    return False
+            else:
+                return False
 
         if is_type_pointer(this_type):
             this_pointer = True
@@ -772,7 +781,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
         param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
         if not is_type_valid(param_type):
-            return False
+            if interrogate_wrapper_parameter_is_this(wrapper, i_param):
+                param_type = this_type
+            else:
+                return False
         type_name = translated_type_name(param_type)
 
         if interrogate_wrapper_parameter_is_this(wrapper, i_param):

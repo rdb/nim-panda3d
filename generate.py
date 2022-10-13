@@ -678,7 +678,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
     cpp_expr = interrogate_function_name(function)
 
-    if interrogate_wrapper_has_return_value(wrapper) and func_name != "operator =":
+    if interrogate_wrapper_has_return_value(wrapper) and (not func_name.startswith("operator ") or func_name[9:] not in INPLACE_OPERATORS):
         return_type = interrogate_wrapper_return_type(wrapper)
         if not is_type_valid(return_type):
             return False

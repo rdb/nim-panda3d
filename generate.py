@@ -571,20 +571,20 @@ def translate_type_name(name, mangle=False):
 
 def translated_type_name(type, scoped=True, template=True):
     while interrogate_type_is_wrapped(type) or (interrogate_type_is_typedef(type) and not interrogate_type_is_global(type)):
-        if interrogate_type_name(type) == "time_t":
+        type_name = interrogate_type_name(type)
+        if type_name == "time_t":
             return "Time"
+        elif type_name == "PN_stdfloat":
+            # For now, map to float64
+            return "float"
+        elif type_name == "size_t":
+            return "int"
 
         type = interrogate_type_wrapped_type(type)
 
     type_name = interrogate_type_name(type)
     if type_name in ("PyObject", "_object"):
         return "object"
-    elif type_name == "PN_stdfloat":
-        return "float"
-    elif type_name == "size_t":
-        return "int"
-    elif type_name == "time_t":
-        return "Time"
 
     if interrogate_type_is_atomic(type):
         token = interrogate_type_atomic_token(type)

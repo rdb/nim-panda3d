@@ -721,7 +721,7 @@ proc clear*(this: DCPackData) {.importcpp: "#.clear()".} ## \
 proc getString*(this: DCPackData): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.} ## \
 ## Returns the data buffer as a string.  Also see get_data().
 
-proc getLength*(this: DCPackData): clonglong {.importcpp: "#.get_length()".} ## \
+proc getLength*(this: DCPackData): int {.importcpp: "#.get_length()".} ## \
 ## Returns the current length of the buffer.  This is the number of useful
 ## bytes stored in the buffer, not the amount of memory it takes up.
 
@@ -972,20 +972,20 @@ proc hadError*(this: DCPacker): bool {.importcpp: "#.had_error()".} ## \
 ## error) since the most recent call to begin().  If this returns true, then
 ## the matching call to end() will indicate an error (false).
 
-proc getNumUnpackedBytes*(this: DCPacker): clonglong {.importcpp: "#.get_num_unpacked_bytes()".} ## \
+proc getNumUnpackedBytes*(this: DCPacker): int {.importcpp: "#.get_num_unpacked_bytes()".} ## \
 ## Returns the number of bytes that have been unpacked so far, or after
 ## unpack_end(), the total number of bytes that were unpacked at all.  This
 ## can be used to validate that all of the bytes in the buffer were actually
 ## unpacked (which is not otherwise considered an error).
 
-proc getLength*(this: DCPacker): clonglong {.importcpp: "#.get_length()".} ## \
+proc getLength*(this: DCPacker): int {.importcpp: "#.get_length()".} ## \
 ## Returns the current length of the buffer.  This is the number of useful
 ## bytes stored in the buffer, not the amount of memory it takes up.
 
 proc getString*(this: DCPacker): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.} ## \
 ## Returns the packed data buffer as a string.  Also see get_data().
 
-proc getUnpackLength*(this: DCPacker): clonglong {.importcpp: "#.get_unpack_length()".} ## \
+proc getUnpackLength*(this: DCPacker): int {.importcpp: "#.get_unpack_length()".} ## \
 ## Returns the total number of bytes in the unpack data buffer.  This is the
 ## buffer used when unpacking; it is separate from the pack data returned by
 ## get_length(), which is filled during packing.
@@ -1451,7 +1451,7 @@ proc setPos*(this: SmoothMover, pos: LVecBase3): bool {.importcpp: "#.set_pos((L
 ## The return value is true if any parameter has changed since the last call
 ## to set_pos(), or false if they are the same.
 
-proc setPos*(this: SmoothMover, x: float32, y: float32, z: float32): bool {.importcpp: "#.set_pos(#, #, #)".} ## \
+proc setPos*(this: SmoothMover, x: float, y: float, z: float): bool {.importcpp: "#.set_pos(#, #, #)".} ## \
 ## Specifies the position of the SmoothMover at a particular time in the past.
 ## When mark_position() is called, this will be recorded (along with hpr and
 ## timestamp) in a position report, which will then be used along with all
@@ -1461,13 +1461,13 @@ proc setPos*(this: SmoothMover, x: float32, y: float32, z: float32): bool {.impo
 ## The return value is true if any parameter has changed since the last call
 ## to set_pos(), or false if they are the same.
 
-proc setX*(this: SmoothMover, x: float32): bool {.importcpp: "#.set_x(#)".} ## \
+proc setX*(this: SmoothMover, x: float): bool {.importcpp: "#.set_x(#)".} ## \
 ## Sets the X position only.  See set_pos().
 
-proc setY*(this: SmoothMover, y: float32): bool {.importcpp: "#.set_y(#)".} ## \
+proc setY*(this: SmoothMover, y: float): bool {.importcpp: "#.set_y(#)".} ## \
 ## Sets the Y position only.  See set_pos().
 
-proc setZ*(this: SmoothMover, z: float32): bool {.importcpp: "#.set_z(#)".} ## \
+proc setZ*(this: SmoothMover, z: float): bool {.importcpp: "#.set_z(#)".} ## \
 ## Sets the Z position only.  See set_pos().
 
 proc setHpr*(this: SmoothMover, hpr: LVecBase3): bool {.importcpp: "#.set_hpr((LVecBase3 const &)(#))".} ## \
@@ -1480,7 +1480,7 @@ proc setHpr*(this: SmoothMover, hpr: LVecBase3): bool {.importcpp: "#.set_hpr((L
 ## The return value is true if any parameter has changed since the last call
 ## to set_hpr(), or false if they are the same.
 
-proc setHpr*(this: SmoothMover, h: float32, p: float32, r: float32): bool {.importcpp: "#.set_hpr(#, #, #)".} ## \
+proc setHpr*(this: SmoothMover, h: float, p: float, r: float): bool {.importcpp: "#.set_hpr(#, #, #)".} ## \
 ## Specifies the orientation of the SmoothMover at a particular time in the
 ## past.  When mark_position() is called, this will be recorded (along with
 ## hpr and timestamp) in a position report, which will then be used along with
@@ -1490,13 +1490,13 @@ proc setHpr*(this: SmoothMover, h: float32, p: float32, r: float32): bool {.impo
 ## The return value is true if any parameter has changed since the last call
 ## to set_hpr(), or false if they are the same.
 
-proc setH*(this: SmoothMover, h: float32): bool {.importcpp: "#.set_h(#)".} ## \
+proc setH*(this: SmoothMover, h: float): bool {.importcpp: "#.set_h(#)".} ## \
 ## Sets the heading only.  See set_hpr().
 
-proc setP*(this: SmoothMover, p: float32): bool {.importcpp: "#.set_p(#)".} ## \
+proc setP*(this: SmoothMover, p: float): bool {.importcpp: "#.set_p(#)".} ## \
 ## Sets the pitch only.  See set_hpr().
 
-proc setR*(this: SmoothMover, r: float32): bool {.importcpp: "#.set_r(#)".} ## \
+proc setR*(this: SmoothMover, r: float): bool {.importcpp: "#.set_r(#)".} ## \
 ## Sets the roll only.  See set_hpr().
 
 proc setPosHpr*(this: SmoothMover, pos: LVecBase3, hpr: LVecBase3): bool {.importcpp: "#.set_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#))".} ## \
@@ -1509,7 +1509,7 @@ proc setPosHpr*(this: SmoothMover, pos: LVecBase3, hpr: LVecBase3): bool {.impor
 ## The return value is true if any parameter has changed since the last call
 ## to set_pos_hpr(), or false if they are the same.
 
-proc setPosHpr*(this: SmoothMover, x: float32, y: float32, z: float32, h: float32, p: float32, r: float32): bool {.importcpp: "#.set_pos_hpr(#, #, #, #, #, #)".} ## \
+proc setPosHpr*(this: SmoothMover, x: float, y: float, z: float, h: float, p: float, r: float): bool {.importcpp: "#.set_pos_hpr(#, #, #, #, #, #)".} ## \
 ## Specifies the position of the SmoothMover at a particular time in the past.
 ## When mark_position() is called, this will be recorded (along with
 ## timestamp) in a position report, which will then be used along with all
@@ -1637,19 +1637,19 @@ proc computeAndApplySmoothHpr*(this: SmoothMover, hpr_node: NodePath) {.importcp
 ## position and applies it to the indicated node or nodes in one call.  The
 ## pos_node and hpr_node might be the same NodePath.
 
-proc getSmoothForwardVelocity*(this: SmoothMover): float32 {.importcpp: "#.get_smooth_forward_velocity()".} ## \
+proc getSmoothForwardVelocity*(this: SmoothMover): float {.importcpp: "#.get_smooth_forward_velocity()".} ## \
 ## Returns the speed at which the avatar is moving, in feet per second, along
 ## its own forward axis (after applying the avatar's hpr).  This will be a
 ## positive number if the avatar is moving forward, and a negative number if
 ## it is moving backward.
 
-proc getSmoothLateralVelocity*(this: SmoothMover): float32 {.importcpp: "#.get_smooth_lateral_velocity()".} ## \
+proc getSmoothLateralVelocity*(this: SmoothMover): float {.importcpp: "#.get_smooth_lateral_velocity()".} ## \
 ## Returns the speed at which the avatar is moving, in feet per second, along
 ## its own lateral axis (after applying the avatar's hpr).  This will be a
 ## positive number if the avatar is moving right, and a negative number if it
 ## is moving left.
 
-proc getSmoothRotationalVelocity*(this: SmoothMover): float32 {.importcpp: "#.get_smooth_rotational_velocity()".} ## \
+proc getSmoothRotationalVelocity*(this: SmoothMover): float {.importcpp: "#.get_smooth_rotational_velocity()".} ## \
 ## Returns the speed at which the avatar is rotating in the horizontal plane
 ## (i.e.  heading), in degrees per second.  This may be positive or negative,
 ## according to the direction of rotation.
@@ -2359,7 +2359,7 @@ proc setStartScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: 
 ## unspecified, the value will be taken from the node's actual scale at the
 ## time the lerp is performed.
 
-proc setStartScale*(this: CLerpNodePathInterval, scale: float32) {.importcpp: "#->set_start_scale(#)".} ## \
+proc setStartScale*(this: CLerpNodePathInterval, scale: float) {.importcpp: "#->set_start_scale(#)".} ## \
 ## Indicates the initial scale of the lerped node.  This is meaningful only if
 ## set_end_scale() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual scale at the
@@ -2370,7 +2370,7 @@ proc setEndScale*(this: CLerpNodePathInterval, scale: LVecBase3) {.importcpp: "#
 ## final scale of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's scale will not be affected by the lerp.
 
-proc setEndScale*(this: CLerpNodePathInterval, scale: float32) {.importcpp: "#->set_end_scale(#)".} ## \
+proc setEndScale*(this: CLerpNodePathInterval, scale: float) {.importcpp: "#->set_end_scale(#)".} ## \
 ## Indicates that the scale of the node should be lerped, and specifies the
 ## final scale of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's scale will not be affected by the lerp.
@@ -2426,13 +2426,13 @@ proc setEndTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.impo
 ## priv_initialize().  If this is not called, the node's UV offset will not be
 ## affected by the lerp.
 
-proc setStartTexRotate*(this: CLerpNodePathInterval, tex_rotate: float32) {.importcpp: "#->set_start_tex_rotate(#)".} ## \
+proc setStartTexRotate*(this: CLerpNodePathInterval, tex_rotate: float) {.importcpp: "#->set_start_tex_rotate(#)".} ## \
 ## Indicates the initial UV rotate of the lerped node.  This is meaningful
 ## only if set_end_tex_rotate() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual UV rotate at
 ## the time the lerp is performed.
 
-proc setEndTexRotate*(this: CLerpNodePathInterval, tex_rotate: float32) {.importcpp: "#->set_end_tex_rotate(#)".} ## \
+proc setEndTexRotate*(this: CLerpNodePathInterval, tex_rotate: float) {.importcpp: "#->set_end_tex_rotate(#)".} ## \
 ## Indicates that the UV rotate of the node should be lerped, and specifies
 ## the final UV rotate of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV rotate will not be
@@ -2917,10 +2917,10 @@ proc enable*(this: CMotionTrail, enable: bool) {.importcpp: "#->enable(#)".} ## 
 proc setGeomNode*(this: CMotionTrail, geom_node: GeomNode) {.importcpp: "#->set_geom_node(#)".} ## \
 ## Set the GeomNode.
 
-proc addVertex*(this: CMotionTrail, vertex: LVector4, start_color: LVector4, end_color: LVector4, v: float32) {.importcpp: "#->add_vertex((LVector4 &)(#), (LVector4 &)(#), (LVector4 &)(#), #)".} ## \
+proc addVertex*(this: CMotionTrail, vertex: LVector4, start_color: LVector4, end_color: LVector4, v: float) {.importcpp: "#->add_vertex((LVector4 &)(#), (LVector4 &)(#), (LVector4 &)(#), #)".} ## \
 ## Add a vertex.
 
-proc setParameters*(this: CMotionTrail, sampling_time: float32, time_window: float32, use_texture: bool, calculate_relative_matrix: bool, use_nurbs: bool, resolution_distance: float32) {.importcpp: "#->set_parameters(#, #, #, #, #, #)".} ## \
+proc setParameters*(this: CMotionTrail, sampling_time: float, time_window: float, use_texture: bool, calculate_relative_matrix: bool, use_nurbs: bool, resolution_distance: float) {.importcpp: "#->set_parameters(#, #, #, #, #, #)".} ## \
 ## Set motion trail parameters.
 ##
 ## sampling_time = Can be used to specify a lower sampling rate than the frame
@@ -2939,10 +2939,10 @@ proc setParameters*(this: CMotionTrail, sampling_time: float32, time_window: flo
 ## samples.  samples = motion trail length / resolution_distance.  Applicable
 ## only if nurbs is on.
 
-proc checkForUpdate*(this: CMotionTrail, current_time: float32): int {.importcpp: "#->check_for_update(#)".} ## \
+proc checkForUpdate*(this: CMotionTrail, current_time: float): int {.importcpp: "#->check_for_update(#)".} ## \
 ## Check if a sample can be submitted.
 
-proc updateMotionTrail*(this: CMotionTrail, current_time: float32, transform: LMatrix4) {.importcpp: "#->update_motion_trail(#, #)".} ## \
+proc updateMotionTrail*(this: CMotionTrail, current_time: float, transform: LMatrix4) {.importcpp: "#->update_motion_trail(#, #)".} ## \
 ## See class header comments.
 
 converter getClassType*(_: typedesc[CMotionTrail]): TypeHandle {.importcpp: "CMotionTrail::get_class_type()", header: "cMotionTrail.h".}

@@ -486,6 +486,13 @@ TYPE_HEADERS = {
     "URLSpec": "urlSpec.h",
 }
 
+FUNC_HEADERS = {
+    "compose_matrix": "compose_matrix.h",
+    "decompose_matrix": "decompose_matrix.h",
+    "load_prc_file": "load_prc_file.h",
+    "load_prc_file_data": "load_prc_file.h",
+}
+
 
 def translate_comment(code, prefix="## "):
     if not code:
@@ -762,6 +769,11 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
         else:
             cpp_expr = f"#.{cpp_expr}"
+    else:
+        header = get_func_header(function)
+        if header:
+            headers.add('"' + header + '"')
+
 
     cpp_args = []
     for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
@@ -1057,6 +1069,17 @@ def get_type_header(type):
         return "pnm" + type_name[3:] + ".h"
 
     return type_name[0].lower() + type_name[1:] + ".h"
+
+
+def get_func_header(func):
+    if interrogate_function_is_method(func):
+        return get_type_header(interrogate_function_class(func))
+
+    func_name = interrogate_function_scoped_name(func)
+    if func_name in FUNC_HEADERS:
+        return FUNC_HEADERS[func_name]
+
+    return None
 
 
 def get_type_element_type(type):

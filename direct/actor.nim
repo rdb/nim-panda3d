@@ -1,6 +1,6 @@
 import ../panda3d/core
-import std/tables
 import std/strutils
+import std/tables
 
 type
   AnimDef = object
@@ -54,6 +54,12 @@ proc doListJoints(this: var Actor, indentLevel: int, part: PartGroup) =
 proc listJoints*(this: var Actor, partName: string = "modelRoot") =
   this.doListJoints(0, this.bundleDict[partName])
 
+proc getAnimNames*(this: var Actor): seq[string] =
+  for partName, animDict in this.partDict:
+    for animName in animDict.keys():
+      if animName notin result:
+        result.add(animName)
+
 proc exposeJoint*(this: var Actor, node: NodePath, partName: string, jointName: string, localTransform: bool = false): NodePath =
   # Get a handle to the joint.
   var joint = dcast(CharacterJoint, this.bundleDict[partName].findChild(jointName))
@@ -83,6 +89,24 @@ proc stopJoint*(this: var Actor, partName: string, jointName: string) =
   if joint:
     joint.clearNetTransforms()
     joint.clearLocalTransforms()
+
+proc getPartJoints(this: var Actor, joints: var seq[MovingPartBase], pattern: var GlobPattern, part: PartGroup) =
+  if part.isOfType(MovingPartBase.getClassType()) and pattern.matches(part.name):
+    joints.add(MovingPartBase.dcast(part))
+
+  for child in part.children:
+    this.getPartJoints(joints, pattern, child)
+
+proc getJoints*(this: var Actor, partName: string = "modelRoot", jointName: string = "*"): seq[MovingPartBase] =
+  var pattern = initGlobPattern(jointName)
+
+  var partBundle = this.bundleDict[partName]
+  if not pattern.hasGlobCharacters():
+    var joint = partBundle.findChild(jointName)
+    if joint and joint.isOfType(MovingPartBase.getClassType()):
+      result.add(MovingPartBase.dcast(joint))
+  else:
+    this.getPartJoints(result, pattern, partBundle)
 
 proc controlJoint*(this: var Actor, node: NodePath, partName: string, jointName: string): NodePath =
   var anyGood = false

@@ -358,6 +358,17 @@ ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
 FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>="}
+FUNCTION_IGNORE = {"operator %=", "operator &=", "operator ()", "operator <<=", "operator =", "operator >>=", "operator ^=", "operator |=", "operator ~=", "operator ()"}
+FUNCTION_REMAP = {
+    "__floordiv__": "div",
+    "operator %": "mod",
+    "operator &": "and",
+    "operator <<": "shl",
+    "operator >>": "shr",
+    "operator ^": "xor",
+    "operator |": "or",
+    "operator ~": "not",
+}
 
 # Normally the header names are inferred from the type, but this doesn't
 # always work, so we have this table for overrides.
@@ -529,16 +540,24 @@ def translate_function_name(name):
     if name.startswith("__"):
         return name
 
-    new = ""
-    for i in name.split("_"):
-        if new == "":
-            new += i
-        elif i == "":
-            pass
-        elif len(i) == 1:
-            new += i[0].upper()
-        else:
-            new += i[0].upper() + i[1:]
+    if name in FUNCTION_REMAP:
+        new = FUNCTION_REMAP[name]
+    elif name.startswith("operator "):
+        new = '`' + name[9:] + '`'
+    else:
+        new = ""
+        for i in name.split("_"):
+            if new == "":
+                new += i
+            elif i == "":
+                pass
+            elif len(i) == 1:
+                new += i[0].upper()
+            else:
+                new += i[0].upper() + i[1:]
+
+    if new in NIM_KEYWORDS:
+        new = '`' + new + '`'
     return new
 
 
@@ -834,9 +853,6 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         cpp_suffix = cpp_args.pop()
         cpp_expr += "(" + ", ".join(cpp_args) + ")"
         cpp_expr += " = " + cpp_suffix
-    elif func_name.startswith("operator "):
-        func_name = "`" + func_name[9:] + "`"
-        cpp_expr += "(" + ", ".join(cpp_args) + ")"
     else:
         func_name = translate_function_name(func_name)
         cpp_expr += "(" + ", ".join(cpp_args) + ")"
@@ -900,7 +916,7 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
     if not func_name:
         func_name = interrogate_function_name(function)
 
-        if func_name in ("operator =", "operator ()"):
+        if func_name in FUNCTION_IGNORE:
             return
 
         if func_name.startswith("_"):

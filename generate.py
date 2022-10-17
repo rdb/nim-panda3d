@@ -357,17 +357,34 @@ else:
 ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "string", "clonglong", "type(nil)"]
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
 FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager"}
-INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>="}
-FUNCTION_IGNORE = {"operator %=", "operator &=", "operator ()", "operator <<=", "operator =", "operator >>=", "operator ^=", "operator |=", "operator ~=", "operator ()"}
+INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
+FUNCTION_IGNORE = {
+    "operator %=",
+    "operator &=",
+    "operator ()",
+    "operator ()",
+    "operator <<=",
+    "operator =",
+    "operator >>=",
+    "operator ^=",
+    "operator |=",
+    "operator ~=",
+}
 FUNCTION_REMAP = {
+    "__cmp__": "cmp",
     "__floordiv__": "div",
+    "__len__": "len",
+    "__pow__": "pow",
     "operator %": "mod",
     "operator &": "and",
+    "operator ++": "inc",
+    "operator --": "dec",
     "operator <<": "shl",
     "operator >>": "shr",
     "operator ^": "xor",
     "operator |": "or",
     "operator ~": "not",
+    "size": "len",
 }
 FORCE_VAR_METHODS = {
     "BitMask< uint16_t, 16 >::*",
@@ -542,13 +559,12 @@ def translate_comment(code, prefix="## "):
 
 
 def translate_function_name(name):
-    if name.startswith("__"):
-        return name
-
     if name in FUNCTION_REMAP:
         new = FUNCTION_REMAP[name]
     elif name.startswith("operator "):
         new = '`' + name[9:] + '`'
+    elif name.startswith("__"):
+        new = name
     else:
         new = ""
         for i in name.split("_"):
@@ -701,6 +717,9 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
     this_var = False
 
     cpp_expr = interrogate_function_name(function)
+
+    if cpp_expr in ("operator ++", "operator --") and interrogate_wrapper_number_of_parameters(wrapper) >= 2:
+        return
 
     if interrogate_wrapper_has_return_value(wrapper) and (not func_name.startswith("operator ") or func_name[9:] not in INPLACE_OPERATORS):
         return_type = interrogate_wrapper_return_type(wrapper)
@@ -933,11 +952,14 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
         if func_name in FUNCTION_IGNORE:
             return
 
-        if func_name.startswith("_"):
+        if func_name.startswith("_") and func_name not in FUNCTION_REMAP:
             return
 
         if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
             proc_type = "converter"
+
+        if func_name == "size":
+            proc_type = "func"
 
     if func_name in NIM_KEYWORDS:
         return
@@ -1439,7 +1461,7 @@ def bind_module(out, module_name):
                 type_name = translated_type_name(type)
                 element_type_name = translated_type_name(element_type)
                 out.write(f"iterator items*(collection: {type_name}): {element_type_name} =\n")
-                out.write(f"  for i in 0 ..< collection.size():\n")
+                out.write(f"  for i in 0 ..< len(collection):\n")
                 out.write(f"    yield collection[i]\n")
                 out.write(f"\n")
 

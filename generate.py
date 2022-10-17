@@ -387,9 +387,56 @@ FUNCTION_REMAP = {
     "size": "len",
 }
 FORCE_VAR_METHODS = {
+    "BitArray::*",
     "BitMask< uint16_t, 16 >::*",
     "BitMask< uint32_t, 32 >::*",
     "BitMask< uint64_t, 64 >::*",
+    "ButtonHandle::*",
+    "DSearchPath::*",
+    "FrameBufferProperties::*",
+    "GlobPattern::*",
+    "LMatrix3d::*",
+    "LMatrix3f::*",
+    "LMatrix4d::*",
+    "LMatrix4f::*",
+    "LoaderOptions::*",
+    "LPoint2d::*",
+    "LPoint2f::*",
+    "LPoint2i::*",
+    "LPoint3d::*",
+    "LPoint3f::*",
+    "LPoint3i::*",
+    "LPoint4d::*",
+    "LPoint4f::*",
+    "LPoint4i::*",
+    "LVecBase2d::*",
+    "LVecBase2f::*",
+    "LVecBase2i::*",
+    "LVecBase3d::*",
+    "LVecBase3f::*",
+    "LVecBase3i::*",
+    "LVecBase4d::*",
+    "LVecBase4f::*",
+    "LVecBase4i::*",
+    "LVector2d::*",
+    "LVector2f::*",
+    "LVector2i::*",
+    "LVector3d::*",
+    "LVector3f::*",
+    "LVector3i::*",
+    "LVector4d::*",
+    "LVector4f::*",
+    "LVector4i::*",
+    "NetAddress::*",
+    "NodePath::clear",
+    "SamplerState::*",
+    "SparseArray::*",
+    "UnalignedLVecBase4d::*",
+    "UnalignedLVecBase4f::*",
+    "UnalignedLVecBase4i::*",
+    "URLSpec::*",
+    "WeakNodePath::clear",
+    "WindowProperties::*",
 }
 
 # Normally the header names are inferred from the type, but this doesn't
@@ -899,7 +946,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         if type_name.startswith("BitMask["):
             type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
 
-        out.write(f": {type_name}")
+        if func_name.startswith("upcastTo") and not this_pointer:
+            out.write(f": var {type_name}")
+        else:
+            out.write(f": {type_name}")
 
         if func_name.startswith("upcastTo"):
             while interrogate_type_is_wrapped(return_type):
@@ -907,7 +957,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
             cpp_name = interrogate_type_scoped_name(return_type)
             if not this_pointer:
-                cpp_expr = f"(({cpp_name} &)(#))"
+                cpp_expr = f"(({cpp_name} *)&(#))"
             elif is_type_reference_counted(return_type):
                 cpp_expr = f"(PT({cpp_name})(#))"
             elif is_type_reference_counted(this_type):

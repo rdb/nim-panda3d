@@ -369,6 +369,11 @@ FUNCTION_REMAP = {
     "operator |": "or",
     "operator ~": "not",
 }
+FORCE_VAR_METHODS = {
+    "BitMask< uint16_t, 16 >::*",
+    "BitMask< uint32_t, 32 >::*",
+    "BitMask< uint64_t, 64 >::*",
+}
 
 # Normally the header names are inferred from the type, but this doesn't
 # always work, so we have this table for overrides.
@@ -693,6 +698,7 @@ def bind_coerce_constructor(out, function, wrapper, num_default_args=0):
 
 def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", num_default_args=0):
     this_pointer = False
+    this_var = False
 
     cpp_expr = interrogate_function_name(function)
 
@@ -721,6 +727,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
         if is_type_pointer(this_type):
             this_pointer = True
+        elif interrogate_function_scoped_name(function) in FORCE_VAR_METHODS:
+            this_var = True
+        elif (interrogate_type_scoped_name(this_type) + "::*") in FORCE_VAR_METHODS:
+            this_var = True
 
         if interrogate_function_is_constructor(function):
             type_name = translated_type_name(this_type)
@@ -831,8 +841,12 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
             if func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
                 args.append(f"{param_name}: var {type_name}")
-            else:
+            elif not this_var or interrogate_type_true_name(param_type).endswith("const *"):
+                #if not this_pointer and not interrogate_type_true_name(param_type).endswith("const *"):
+                #    print(interrogate_function_scoped_name(function))
                 args.append(f"{param_name}: {type_name}")
+            else:
+                args.append(f"{param_name}: var {type_name}")
         else:
             args.append(f"{param_name}: {type_name}")
 

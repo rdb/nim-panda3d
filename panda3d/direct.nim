@@ -228,18 +228,18 @@ type CInterval_EventType {.importcpp: "CInterval::EventType", pure, header: "cIn
   ET_instant = 1
   ET_step = 2
   ET_finalize = 3
-  ET_reverse_initialize = 4
-  ET_reverse_instant = 5
-  ET_reverse_finalize = 6
+  ET_reverseInitialize = 4
+  ET_reverseInstant = 5
+  ET_reverseFinalize = 6
   ET_interrupt = 7
 
 template ET_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_initialize
 template ET_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_instant
 template ET_step*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_step
 template ET_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_finalize
-template ET_reverse_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_initialize
-template ET_reverse_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_instant
-template ET_reverse_finalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverse_finalize
+template ET_reverseInitialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverseInitialize
+template ET_reverseInstant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverseInstant
+template ET_reverseFinalize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_reverseFinalize
 template ET_interrupt*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_interrupt
 
 type CInterval_State {.importcpp: "CInterval::State", pure, header: "cInterval.h".} = enum
@@ -324,16 +324,16 @@ func `==`*(x: CLerpInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CLerpInterval], obj: TypedObject): CLerpInterval {.importcpp: "DCAST(CLerpInterval, @)".}
 
 type CLerpInterval_BlendType {.importcpp: "CLerpInterval::BlendType", pure, header: "cLerpInterval.h".} = enum
-  BT_no_blend = 0
-  BT_ease_in = 1
-  BT_ease_out = 2
-  BT_ease_in_out = 3
+  BT_noBlend = 0
+  BT_easeIn = 1
+  BT_easeOut = 2
+  BT_easeInOut = 3
   BT_invalid = 4
 
-template BT_no_blend*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_no_blend
-template BT_ease_in*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in
-template BT_ease_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_out
-template BT_ease_in_out*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_ease_in_out
+template BT_noBlend*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_noBlend
+template BT_easeIn*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_easeIn
+template BT_easeOut*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_easeOut
+template BT_easeInOut*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_easeInOut
 template BT_invalid*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_invalid
 
 type CLerpAnimEffectInterval* {.importcpp: "PT(CLerpAnimEffectInterval)", bycopy, pure, inheritable, header: "cLerpAnimEffectInterval.h".} = object of CLerpInterval
@@ -370,24 +370,24 @@ func `==`*(x: CMetaInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CMetaInterval], obj: TypedObject): CMetaInterval {.importcpp: "DCAST(CMetaInterval, @)".}
 
 type CMetaInterval_RelativeStart {.importcpp: "CMetaInterval::RelativeStart", pure, header: "cMetaInterval.h".} = enum
-  RS_previous_end = 0
-  RS_previous_begin = 1
-  RS_level_begin = 2
+  RS_previousEnd = 0
+  RS_previousBegin = 1
+  RS_levelBegin = 2
 
-template RS_previous_end*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_end
-template RS_previous_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previous_begin
-template RS_level_begin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_level_begin
+template RS_previousEnd*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previousEnd
+template RS_previousBegin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previousBegin
+template RS_levelBegin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_levelBegin
 
 type CMetaInterval_DefType {.importcpp: "CMetaInterval::DefType", pure, header: "cMetaInterval.h".} = enum
-  DT_c_interval = 0
-  DT_ext_index = 1
-  DT_push_level = 2
-  DT_pop_level = 3
+  DT_cInterval = 0
+  DT_extIndex = 1
+  DT_pushLevel = 2
+  DT_popLevel = 3
 
-template DT_c_interval*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_c_interval
-template DT_ext_index*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_ext_index
-template DT_push_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_push_level
-template DT_pop_level*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_pop_level
+template DT_cInterval*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_cInterval
+template DT_extIndex*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_extIndex
+template DT_pushLevel*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_pushLevel
+template DT_popLevel*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_popLevel
 
 type HideInterval* {.importcpp: "PT(HideInterval)", bycopy, pure, inheritable, header: "hideInterval.h".} = object of CInterval
   ## An interval that calls NodePath::hide().
@@ -540,7 +540,7 @@ proc `t=`*(this: CInterval, t: float64) {.importcpp: "#->set_t(#)".} ## \
 func autoPause*(this: CInterval): bool {.importcpp: "#->get_auto_pause()".} ## \
 ## Returns the state of the 'auto_pause' flag.  See set_auto_pause().
 
-proc `autoPause=`*(this: CInterval, auto_pause: bool) {.importcpp: "#->set_auto_pause(#)".} ## \
+proc `autoPause=`*(this: CInterval, autoPause: bool) {.importcpp: "#->set_auto_pause(#)".} ## \
 ## Changes the state of the 'auto_pause' flag.  If this is true, the interval
 ## may be arbitrarily interrupted when the system needs to reset due to some
 ## external event by calling CIntervalManager::interrupt().  If this is false
@@ -549,7 +549,7 @@ proc `autoPause=`*(this: CInterval, auto_pause: bool) {.importcpp: "#->set_auto_
 func autoFinish*(this: CInterval): bool {.importcpp: "#->get_auto_finish()".} ## \
 ## Returns the state of the 'auto_finish' flag.  See set_auto_finish().
 
-proc `autoFinish=`*(this: CInterval, auto_finish: bool) {.importcpp: "#->set_auto_finish(#)".} ## \
+proc `autoFinish=`*(this: CInterval, autoFinish: bool) {.importcpp: "#->set_auto_finish(#)".} ## \
 ## Changes the state of the 'auto_finish' flag.  If this is true, the interval
 ## may be arbitrarily finished when the system needs to reset due to some
 ## external event by calling CIntervalManager::interrupt().  If this is false
@@ -572,7 +572,7 @@ func playRate*(this: CInterval): float64 {.importcpp: "#->get_play_rate()".} ## 
 ## Returns the play rate as set by the last call to start(), loop(), or
 ## set_play_rate().
 
-proc `playRate=`*(this: CInterval, play_rate: float64) {.importcpp: "#->set_play_rate(#)".} ## \
+proc `playRate=`*(this: CInterval, playRate: float64) {.importcpp: "#->set_play_rate(#)".} ## \
 ## Changes the play rate of the interval.  If the interval is already started,
 ## this changes its speed on-the-fly.  Note that since play_rate is a
 ## parameter to start() and loop(), the next call to start() or loop() will
@@ -707,7 +707,7 @@ proc isAirecv*(this: DCField): bool {.importcpp: "#->is_airecv()".} ## \
 proc output*(this: DCField, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 ## Write a string representation of this instance to <out>.
 
-proc write*(this: DCField, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".} ## \
+proc write*(this: DCField, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".} ## \
 ## Write a string representation of this instance to <out>.
 
 proc initDCPackData*(): DCPackData {.importcpp: "DCPackData()".}
@@ -782,7 +782,7 @@ proc endRepack*(this: DCPacker): bool {.importcpp: "#.end_repack()".} ## \
 ## The return value is true on success, or false if there has been some error
 ## during repacking (or if all fields have not been repacked).
 
-proc seek*(this: DCPacker, seek_index: int): bool {.importcpp: "#.seek(#)".} ## \
+proc seek*(this: DCPacker, seekIndex: int): bool {.importcpp: "#.seek(#)".} ## \
 ## Seeks to the field indentified by seek_index, which was returned by an
 ## earlier call to DCField::find_seek_index() to get the index of some nested
 ## field.  Also see the version of seek() that accepts a field name.
@@ -790,7 +790,7 @@ proc seek*(this: DCPacker, seek_index: int): bool {.importcpp: "#.seek(#)".} ## 
 ## Returns true if successful, false if the field is not known (or if the
 ## packer is in an invalid mode).
 
-proc seek*(this: DCPacker, field_name: string): bool {.importcpp: "#.seek(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc seek*(this: DCPacker, fieldName: string): bool {.importcpp: "#.seek(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Sets the current unpack (or repack) position to the named field.  In unpack
 ## mode, the next call to unpack_\*() or push() will begin to read the named
 ## field.  In repack mode, the next call to pack_\*() or push() will modify the
@@ -923,12 +923,12 @@ proc parseAndPack*(this: DCPacker, `in`: istream): bool {.importcpp: "#.parse_an
 ## default value string) and packs it.  Returns true on success, false on a
 ## parse error.
 
-proc parseAndPack*(this: DCPacker, formatted_object: string): bool {.importcpp: "#.parse_and_pack(nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc parseAndPack*(this: DCPacker, formattedObject: string): bool {.importcpp: "#.parse_and_pack(nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Parses an object's value according to the DC file syntax (e.g.  as a
 ## default value string) and packs it.  Returns true on success, false on a
 ## parse error.
 
-proc unpackAndFormat*(this: DCPacker, show_field_names: bool): string {.importcpp: "nimStringFromStdString(#.unpack_and_format(#))", header: stringConversionCode.} ## \
+proc unpackAndFormat*(this: DCPacker, showFieldNames: bool): string {.importcpp: "nimStringFromStdString(#.unpack_and_format(#))", header: stringConversionCode.} ## \
 ## Unpacks an object and formats its value into a syntax suitable for parsing
 ## in the dc file (e.g.  as a default value), or as an input to parse_object.
 
@@ -936,7 +936,7 @@ proc unpackAndFormat*(this: DCPacker): string {.importcpp: "nimStringFromStdStri
 ## Unpacks an object and formats its value into a syntax suitable for parsing
 ## in the dc file (e.g.  as a default value), or as an input to parse_object.
 
-proc unpackAndFormat*(this: DCPacker, `out`: ostream, show_field_names: bool) {.importcpp: "#.unpack_and_format(#, #)".} ## \
+proc unpackAndFormat*(this: DCPacker, `out`: ostream, showFieldNames: bool) {.importcpp: "#.unpack_and_format(#, #)".} ## \
 ## Unpacks an object and formats its value into a syntax suitable for parsing
 ## in the dc file (e.g.  as a default value), or as an input to parse_object.
 
@@ -1117,7 +1117,7 @@ proc asSwitch*(this: DCDeclaration): DCSwitch {.importcpp: "#->as_switch()".}
 proc output*(this: DCDeclaration, `out`: ostream) {.importcpp: "#->output(#)".} ## \
 ## Write a string representation of this instance to <out>.
 
-proc write*(this: DCDeclaration, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".} ## \
+proc write*(this: DCDeclaration, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".} ## \
 ## Write a string representation of this instance to <out>.
 
 proc getDcFile*(this: DCClass): DCFile {.importcpp: "#->get_dc_file()".} ## \
@@ -1159,7 +1159,7 @@ proc getFieldByName*(this: DCClass, name: string): DCField {.importcpp: "#->get_
 ## searched, so the value returned may not actually be a field within this
 ## class.  Returns NULL if there is no such field defined.
 
-proc getFieldByIndex*(this: DCClass, index_number: int): DCField {.importcpp: "#->get_field_by_index(#)".} ## \
+proc getFieldByIndex*(this: DCClass, indexNumber: int): DCField {.importcpp: "#->get_field_by_index(#)".} ## \
 ## Returns a pointer to the DCField that has the indicated index number.  If
 ## the numbered field is not found in the current class, the parent classes
 ## will be searched, so the value returned may not actually be a field within
@@ -1283,7 +1283,7 @@ proc getSwitchByName*(this: DCFile, name: string): DCSwitch {.importcpp: "#.get_
 ## Returns the switch that has the indicated name, or NULL if there is no such
 ## switch.
 
-proc getFieldByIndex*(this: DCFile, index_number: int): DCField {.importcpp: "#.get_field_by_index(#)".} ## \
+proc getFieldByIndex*(this: DCFile, indexNumber: int): DCField {.importcpp: "#.get_field_by_index(#)".} ## \
 ## Returns a pointer to the one DCField that has the indicated index number,
 ## of all the DCFields across all classes in the file.
 ##
@@ -1386,13 +1386,13 @@ proc getDefaultCase*(this: DCSwitch): DCPackerInterface {.importcpp: "#->get_def
 ## Returns the DCPackerInterface that packs the default case, or NULL if there
 ## is no default case.
 
-proc getNumFields*(this: DCSwitch, case_index: int): int {.importcpp: "#->get_num_fields(#)".} ## \
+proc getNumFields*(this: DCSwitch, caseIndex: int): int {.importcpp: "#->get_num_fields(#)".} ## \
 ## Returns the number of fields in the indicated case.
 
-proc getField*(this: DCSwitch, case_index: int, n: int): DCField {.importcpp: "#->get_field(#, #)".} ## \
+proc getField*(this: DCSwitch, caseIndex: int, n: int): DCField {.importcpp: "#->get_field(#, #)".} ## \
 ## Returns the nth field in the indicated case.
 
-proc getFieldByName*(this: DCSwitch, case_index: int, name: string): DCField {.importcpp: "#->get_field_by_name(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
+proc getFieldByName*(this: DCSwitch, caseIndex: int, name: string): DCField {.importcpp: "#->get_field_by_name(#, nimStringToStdString(#))", header: stringConversionCode.} ## \
 ## Returns the field with the given name from the indicated case, or NULL if
 ## no field has this name.
 
@@ -1530,7 +1530,7 @@ proc getSampleHpr*(this: SmoothMover): LVecBase3 {.importcpp: "#.get_sample_hpr(
 ## current value is copied to the sample point table when mark_position() is
 ## called.
 
-proc setPhonyTimestamp*(this: SmoothMover, timestamp: float64, period_adjust: bool) {.importcpp: "#.set_phony_timestamp(#, #)".} ## \
+proc setPhonyTimestamp*(this: SmoothMover, timestamp: float64, periodAdjust: bool) {.importcpp: "#.set_phony_timestamp(#, #)".} ## \
 ## Lies and specifies that the current position report was received now.  This
 ## is usually used for very old position reports for which we're not sure of
 ## the actual receipt time.
@@ -1564,7 +1564,7 @@ proc markPosition*(this: SmoothMover) {.importcpp: "#.mark_position()".} ## \
 ## When compute_smooth_position() is called, it uses these stored position
 ## reports to base its computation of the known position.
 
-proc clearPositions*(this: SmoothMover, reset_velocity: bool) {.importcpp: "#.clear_positions(#)".} ## \
+proc clearPositions*(this: SmoothMover, resetVelocity: bool) {.importcpp: "#.clear_positions(#)".} ## \
 ## Erases all the old position reports.  This should be done, for instance,
 ## prior to teleporting the avatar to a new position; otherwise, the smoother
 ## might try to lerp the avatar there.  If reset_velocity is true, the
@@ -1610,7 +1610,7 @@ proc applySmoothPos*(this: SmoothMover, node: NodePath) {.importcpp: "#.apply_sm
 ## exists as an optimization only, to avoid the overhead of passing the return
 ## value through Python.
 
-proc applySmoothPosHpr*(this: SmoothMover, pos_node: NodePath, hpr_node: NodePath) {.importcpp: "#.apply_smooth_pos_hpr(#, #)".} ## \
+proc applySmoothPosHpr*(this: SmoothMover, posNode: NodePath, hprNode: NodePath) {.importcpp: "#.apply_smooth_pos_hpr(#, #)".} ## \
 ## Applies the smoothed position and orientation to the indicated NodePath.
 ## This is equivalent to calling
 ## node.set_pos_hpr(smooth_mover->get_smooth_pos(),
@@ -1627,12 +1627,12 @@ proc computeAndApplySmoothPos*(this: SmoothMover, node: NodePath) {.importcpp: "
 ## A further optimization to reduce Python calls.  This computes the smooth
 ## position and applies it to the indicated node in one call.
 
-proc computeAndApplySmoothPosHpr*(this: SmoothMover, pos_node: NodePath, hpr_node: NodePath) {.importcpp: "#.compute_and_apply_smooth_pos_hpr(#, #)".} ## \
+proc computeAndApplySmoothPosHpr*(this: SmoothMover, posNode: NodePath, hprNode: NodePath) {.importcpp: "#.compute_and_apply_smooth_pos_hpr(#, #)".} ## \
 ## A further optimization to reduce Python calls.  This computes the smooth
 ## position and applies it to the indicated node or nodes in one call.  The
 ## pos_node and hpr_node might be the same NodePath.
 
-proc computeAndApplySmoothHpr*(this: SmoothMover, hpr_node: NodePath) {.importcpp: "#.compute_and_apply_smooth_hpr(#)".} ## \
+proc computeAndApplySmoothHpr*(this: SmoothMover, hprNode: NodePath) {.importcpp: "#.compute_and_apply_smooth_hpr(#)".} ## \
 ## A further optimization to reduce Python calls.  This computes the smooth
 ## position and applies it to the indicated node or nodes in one call.  The
 ## pos_node and hpr_node might be the same NodePath.
@@ -1658,7 +1658,7 @@ proc getForwardAxis*(this: SmoothMover): LVecBase3 {.importcpp: "#.get_forward_a
 ## Returns the smoothed position as computed by a previous call to
 ## compute_smooth_position().
 
-proc handleWrtReparent*(this: SmoothMover, old_parent: NodePath, new_parent: NodePath) {.importcpp: "#.handle_wrt_reparent(#, #)".} ## \
+proc handleWrtReparent*(this: SmoothMover, oldParent: NodePath, newParent: NodePath) {.importcpp: "#.handle_wrt_reparent(#, #)".} ## \
 ## Node is being wrtReparented, update recorded sample positions to reflect
 ## new parent
 
@@ -1800,7 +1800,7 @@ proc getT*(this: CInterval): float64 {.importcpp: "#->get_t()".} ## \
 ## Returns the current time of the interval: the last value of t passed to
 ## priv_initialize(), priv_step(), or priv_finalize().
 
-proc setAutoPause*(this: CInterval, auto_pause: bool) {.importcpp: "#->set_auto_pause(#)".} ## \
+proc setAutoPause*(this: CInterval, autoPause: bool) {.importcpp: "#->set_auto_pause(#)".} ## \
 ## Changes the state of the 'auto_pause' flag.  If this is true, the interval
 ## may be arbitrarily interrupted when the system needs to reset due to some
 ## external event by calling CIntervalManager::interrupt().  If this is false
@@ -1809,7 +1809,7 @@ proc setAutoPause*(this: CInterval, auto_pause: bool) {.importcpp: "#->set_auto_
 proc getAutoPause*(this: CInterval): bool {.importcpp: "#->get_auto_pause()".} ## \
 ## Returns the state of the 'auto_pause' flag.  See set_auto_pause().
 
-proc setAutoFinish*(this: CInterval, auto_finish: bool) {.importcpp: "#->set_auto_finish(#)".} ## \
+proc setAutoFinish*(this: CInterval, autoFinish: bool) {.importcpp: "#->set_auto_finish(#)".} ## \
 ## Changes the state of the 'auto_finish' flag.  If this is true, the interval
 ## may be arbitrarily finished when the system needs to reset due to some
 ## external event by calling CIntervalManager::interrupt().  If this is false
@@ -1818,7 +1818,7 @@ proc setAutoFinish*(this: CInterval, auto_finish: bool) {.importcpp: "#->set_aut
 proc getAutoFinish*(this: CInterval): bool {.importcpp: "#->get_auto_finish()".} ## \
 ## Returns the state of the 'auto_finish' flag.  See set_auto_finish().
 
-proc setWantsTCallback*(this: CInterval, wants_t_callback: bool) {.importcpp: "#->set_wants_t_callback(#)".} ## \
+proc setWantsTCallback*(this: CInterval, wantsTCallback: bool) {.importcpp: "#->set_wants_t_callback(#)".} ## \
 ## Changes the state of the 'wants_t_callback' flag.  If this is true, the
 ## interval will be returned by CIntervalManager::get_event() each time the
 ## interval's time value has been changed, regardless of whether it has any
@@ -1841,19 +1841,19 @@ proc getManager*(this: CInterval): CIntervalManager {.importcpp: "#->get_manager
 ## language, this will return the encapsulated C++ object, not the full
 ## extended object.
 
-proc start*(this: CInterval, start_t: float64, end_t: float64, play_rate: float64) {.importcpp: "#->start(#, #, #)".} ## \
+proc start*(this: CInterval, startT: float64, endT: float64, playRate: float64) {.importcpp: "#->start(#, #, #)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play to the end and stop.
 ##
 ## If end_t is less than zero, it indicates the end of the interval.
 
-proc start*(this: CInterval, start_t: float64, end_t: float64) {.importcpp: "#->start(#, #)".} ## \
+proc start*(this: CInterval, startT: float64, endT: float64) {.importcpp: "#->start(#, #)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play to the end and stop.
 ##
 ## If end_t is less than zero, it indicates the end of the interval.
 
-proc start*(this: CInterval, start_t: float64) {.importcpp: "#->start(#)".} ## \
+proc start*(this: CInterval, startT: float64) {.importcpp: "#->start(#)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play to the end and stop.
 ##
@@ -1865,21 +1865,21 @@ proc start*(this: CInterval) {.importcpp: "#->start()".} ## \
 ##
 ## If end_t is less than zero, it indicates the end of the interval.
 
-proc loop*(this: CInterval, start_t: float64, end_t: float64, play_rate: float64) {.importcpp: "#->loop(#, #, #)".} ## \
+proc loop*(this: CInterval, startT: float64, endT: float64, playRate: float64) {.importcpp: "#->loop(#, #, #)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play until it is interrupted with
 ## finish() or pause(), looping back to start_t when it reaches end_t.
 ##
 ## If end_t is less than zero, it indicates the end of the interval.
 
-proc loop*(this: CInterval, start_t: float64, end_t: float64) {.importcpp: "#->loop(#, #)".} ## \
+proc loop*(this: CInterval, startT: float64, endT: float64) {.importcpp: "#->loop(#, #)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play until it is interrupted with
 ## finish() or pause(), looping back to start_t when it reaches end_t.
 ##
 ## If end_t is less than zero, it indicates the end of the interval.
 
-proc loop*(this: CInterval, start_t: float64) {.importcpp: "#->loop(#)".} ## \
+proc loop*(this: CInterval, startT: float64) {.importcpp: "#->loop(#)".} ## \
 ## Starts the interval playing by registering it with the current
 ## CIntervalManager.  The interval will play until it is interrupted with
 ## finish() or pause(), looping back to start_t when it reaches end_t.
@@ -1901,11 +1901,11 @@ proc resume*(this: CInterval) {.importcpp: "#->resume()".} ## \
 ## Restarts the interval from its current point after a previous call to
 ## pause().
 
-proc resume*(this: CInterval, start_t: float64) {.importcpp: "#->resume(#)".} ## \
+proc resume*(this: CInterval, startT: float64) {.importcpp: "#->resume(#)".} ## \
 ## Restarts the interval from the indicated point after a previous call to
 ## pause().
 
-proc resumeUntil*(this: CInterval, end_t: float64) {.importcpp: "#->resume_until(#)".} ## \
+proc resumeUntil*(this: CInterval, endT: float64) {.importcpp: "#->resume_until(#)".} ## \
 ## Restarts the interval from the current point after a previous call to
 ## pause() (or a previous play-to-point-and-stop), to play until the indicated
 ## point and then stop.
@@ -1926,7 +1926,7 @@ proc getPlayRate*(this: CInterval): float64 {.importcpp: "#->get_play_rate()".} 
 ## Returns the play rate as set by the last call to start(), loop(), or
 ## set_play_rate().
 
-proc setPlayRate*(this: CInterval, play_rate: float64) {.importcpp: "#->set_play_rate(#)".} ## \
+proc setPlayRate*(this: CInterval, playRate: float64) {.importcpp: "#->set_play_rate(#)".} ## \
 ## Changes the play rate of the interval.  If the interval is already started,
 ## this changes its speed on-the-fly.  Note that since play_rate is a
 ## parameter to start() and loop(), the next call to start() or loop() will
@@ -1984,9 +1984,9 @@ proc privInterrupt*(this: CInterval) {.importcpp: "#->priv_interrupt()".} ## \
 
 proc output*(this: CInterval, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: CInterval, `out`: ostream, indent_level: int) {.importcpp: "#->write(#, #)".}
+proc write*(this: CInterval, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
 
-proc setupPlay*(this: CInterval, start_time: float64, end_time: float64, play_rate: float64, do_loop: bool) {.importcpp: "#->setup_play(#, #, #, #)".} ## \
+proc setupPlay*(this: CInterval, startTime: float64, endTime: float64, playRate: float64, doLoop: bool) {.importcpp: "#->setup_play(#, #, #, #)".} ## \
 ## Called to prepare the interval for automatic timed playback, e.g.  via a
 ## Python task.  The interval will be played from start_t to end_t, at a time
 ## factor specified by play_rate.  start_t must always be less than end_t
@@ -2001,7 +2001,7 @@ proc setupResume*(this: CInterval) {.importcpp: "#->setup_resume()".} ## \
 ## Called to prepare the interval for restarting at the current point within
 ## the interval after an interruption.
 
-proc setupResumeUntil*(this: CInterval, end_t: float64) {.importcpp: "#->setup_resume_until(#)".} ## \
+proc setupResumeUntil*(this: CInterval, endT: float64) {.importcpp: "#->setup_resume_until(#)".} ## \
 ## Called to prepare the interval for restarting from the current point after
 ## a previous call to pause() (or a previous play-to-point-and-stop), to play
 ## until the indicated point and then stop.
@@ -2015,7 +2015,7 @@ proc stepPlay*(this: CInterval): bool {.importcpp: "#->step_play()".} ## \
 
 proc newCIntervalManager*(): CIntervalManager {.importcpp: "new CIntervalManager()".}
 
-proc setEventQueue*(this: CIntervalManager, event_queue: EventQueue) {.importcpp: "#->set_event_queue(#)".} ## \
+proc setEventQueue*(this: CIntervalManager, eventQueue: EventQueue) {.importcpp: "#->set_event_queue(#)".} ## \
 ## Specifies a custom event queue to be used for throwing done events from
 ## intervals as they finish.  If this is not specified, the global event queue
 ## is used.
@@ -2228,7 +2228,7 @@ proc getBlendType*(this: CLerpInterval): CLerpInterval_BlendType {.importcpp: "#
 ## Returns the blend type specified for the interval.  This controls how the
 ## linear interpolation behaves near the beginning and end of the lerp period.
 
-proc stringBlendType*(_: typedesc[CLerpInterval], blend_type: string): CLerpInterval_BlendType {.importcpp: "#CLerpInterval::string_blend_type(nimStringToStdString(#))", header: "cLerpInterval.h".} ## \
+proc stringBlendType*(_: typedesc[CLerpInterval], blendType: string): CLerpInterval_BlendType {.importcpp: "#CLerpInterval::string_blend_type(nimStringToStdString(#))", header: "cLerpInterval.h".} ## \
 ## Returns the BlendType enumerated value corresponding to the indicated
 ## string, or BT_invalid if the string doesn't match anything.
 
@@ -2238,9 +2238,9 @@ proc newCLerpInterval*(param0: CLerpInterval): CLerpInterval {.importcpp: "new C
 
 proc newCLerpAnimEffectInterval*(param0: CLerpAnimEffectInterval): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(#)".}
 
-proc newCLerpAnimEffectInterval*(name: string, duration: float64, blend_type: CLerpInterval_BlendType): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(nimStringToStdString(#), #, #)", header: stringConversionCode.}
+proc newCLerpAnimEffectInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(nimStringToStdString(#), #, #)", header: stringConversionCode.}
 
-proc addControl*(this: CLerpAnimEffectInterval, control: AnimControl, name: string, begin_effect: float32, end_effect: float32) {.importcpp: "#->add_control(#, nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc addControl*(this: CLerpAnimEffectInterval, control: AnimControl, name: string, beginEffect: float32, endEffect: float32) {.importcpp: "#->add_control(#, nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## Adds another AnimControl to the list of AnimControls affected by the lerp.
 ## This control will be lerped from begin_effect to end_effect over the period
 ## of the lerp.
@@ -2252,7 +2252,7 @@ converter getClassType*(_: typedesc[CLerpAnimEffectInterval]): TypeHandle {.impo
 
 proc newCLerpNodePathInterval*(param0: CLerpNodePathInterval): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(#)".}
 
-proc newCLerpNodePathInterval*(name: string, duration: float64, blend_type: CLerpInterval_BlendType, bake_in_start: bool, fluid: bool, node: NodePath, other: NodePath): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.} ## \
+proc newCLerpNodePathInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType, bakeInStart: bool, fluid: bool, node: NodePath, other: NodePath): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.} ## \
 ## Constructs a lerp interval that will lerp some properties on the indicated
 ## node, possibly relative to the indicated other node (if other is nonempty).
 ##
@@ -2397,13 +2397,13 @@ proc setEndColor*(this: CLerpNodePathInterval, color: LVecBase4) {.importcpp: "#
 ## final color of the node.  This should be called before priv_initialize().
 ## If this is not called, the node's color will not be affected by the lerp.
 
-proc setStartColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_start_color_scale((LVecBase4 const &)(#))".} ## \
+proc setStartColorScale*(this: CLerpNodePathInterval, colorScale: LVecBase4) {.importcpp: "#->set_start_color_scale((LVecBase4 const &)(#))".} ## \
 ## Indicates the initial color scale of the lerped node.  This is meaningful
 ## only if set_end_color_scale() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual color scale
 ## at the time the lerp is performed.
 
-proc setEndColorScale*(this: CLerpNodePathInterval, color_scale: LVecBase4) {.importcpp: "#->set_end_color_scale((LVecBase4 const &)(#))".} ## \
+proc setEndColorScale*(this: CLerpNodePathInterval, colorScale: LVecBase4) {.importcpp: "#->set_end_color_scale((LVecBase4 const &)(#))".} ## \
 ## Indicates that the color scale of the node should be lerped, and specifies
 ## the final color scale of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's color scale will not
@@ -2414,37 +2414,37 @@ proc setTextureStage*(this: CLerpNodePathInterval, stage: TextureStage) {.import
 ## and/or tex_scale.  If this is not set, the default is the default texture
 ## stage.
 
-proc setStartTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_start_tex_offset((LVecBase2 const &)(#))".} ## \
+proc setStartTexOffset*(this: CLerpNodePathInterval, texOffset: LVecBase2) {.importcpp: "#->set_start_tex_offset((LVecBase2 const &)(#))".} ## \
 ## Indicates the initial UV offset of the lerped node.  This is meaningful
 ## only if set_end_tex_offset() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual UV offset at
 ## the time the lerp is performed.
 
-proc setEndTexOffset*(this: CLerpNodePathInterval, tex_offset: LVecBase2) {.importcpp: "#->set_end_tex_offset((LVecBase2 const &)(#))".} ## \
+proc setEndTexOffset*(this: CLerpNodePathInterval, texOffset: LVecBase2) {.importcpp: "#->set_end_tex_offset((LVecBase2 const &)(#))".} ## \
 ## Indicates that the UV offset of the node should be lerped, and specifies
 ## the final UV offset of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV offset will not be
 ## affected by the lerp.
 
-proc setStartTexRotate*(this: CLerpNodePathInterval, tex_rotate: float) {.importcpp: "#->set_start_tex_rotate(#)".} ## \
+proc setStartTexRotate*(this: CLerpNodePathInterval, texRotate: float) {.importcpp: "#->set_start_tex_rotate(#)".} ## \
 ## Indicates the initial UV rotate of the lerped node.  This is meaningful
 ## only if set_end_tex_rotate() is also called.  This parameter is optional;
 ## if unspecified, the value will be taken from the node's actual UV rotate at
 ## the time the lerp is performed.
 
-proc setEndTexRotate*(this: CLerpNodePathInterval, tex_rotate: float) {.importcpp: "#->set_end_tex_rotate(#)".} ## \
+proc setEndTexRotate*(this: CLerpNodePathInterval, texRotate: float) {.importcpp: "#->set_end_tex_rotate(#)".} ## \
 ## Indicates that the UV rotate of the node should be lerped, and specifies
 ## the final UV rotate of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV rotate will not be
 ## affected by the lerp.
 
-proc setStartTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_start_tex_scale((LVecBase2 const &)(#))".} ## \
+proc setStartTexScale*(this: CLerpNodePathInterval, texScale: LVecBase2) {.importcpp: "#->set_start_tex_scale((LVecBase2 const &)(#))".} ## \
 ## Indicates the initial UV scale of the lerped node.  This is meaningful only
 ## if set_end_tex_scale() is also called.  This parameter is optional; if
 ## unspecified, the value will be taken from the node's actual UV scale at the
 ## time the lerp is performed.
 
-proc setEndTexScale*(this: CLerpNodePathInterval, tex_scale: LVecBase2) {.importcpp: "#->set_end_tex_scale((LVecBase2 const &)(#))".} ## \
+proc setEndTexScale*(this: CLerpNodePathInterval, texScale: LVecBase2) {.importcpp: "#->set_end_tex_scale((LVecBase2 const &)(#))".} ## \
 ## Indicates that the UV scale of the node should be lerped, and specifies the
 ## final UV scale of the node.  This should be called before
 ## priv_initialize().  If this is not called, the node's UV scale will not be
@@ -2482,7 +2482,7 @@ proc getPrecision*(this: CMetaInterval): float64 {.importcpp: "#->get_precision(
 proc clearIntervals*(this: CMetaInterval) {.importcpp: "#->clear_intervals()".} ## \
 ## Resets the list of intervals and prepares for receiving a new list.
 
-proc pushLevel*(this: CMetaInterval, name: string, rel_time: float64, rel_to: CMetaInterval_RelativeStart): int {.importcpp: "#->push_level(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc pushLevel*(this: CMetaInterval, name: string, relTime: float64, relTo: CMetaInterval_RelativeStart): int {.importcpp: "#->push_level(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## Marks the beginning of a nested level of child intervals.  Within the
 ## nested level, a RelativeStart time of RS_level_begin refers to the start of
 ## the level, and the first interval added within the level is always relative
@@ -2490,28 +2490,28 @@ proc pushLevel*(this: CMetaInterval, name: string, rel_time: float64, rel_to: CM
 ##
 ## The return value is the index of the def entry created by this push.
 
-proc addCInterval*(this: CMetaInterval, c_interval: CInterval, rel_time: float64, rel_to: CMetaInterval_RelativeStart): int {.importcpp: "#->add_c_interval(#, #, #)".} ## \
+proc addCInterval*(this: CMetaInterval, cInterval: CInterval, relTime: float64, relTo: CMetaInterval_RelativeStart): int {.importcpp: "#->add_c_interval(#, #, #)".} ## \
 ## Adds a new CInterval to the list.  The interval will be played when the
 ## indicated time (relative to the given point) has been reached.
 ##
 ## The return value is the index of the def entry representing the new
 ## interval.
 
-proc addCInterval*(this: CMetaInterval, c_interval: CInterval, rel_time: float64): int {.importcpp: "#->add_c_interval(#, #)".} ## \
+proc addCInterval*(this: CMetaInterval, cInterval: CInterval, relTime: float64): int {.importcpp: "#->add_c_interval(#, #)".} ## \
 ## Adds a new CInterval to the list.  The interval will be played when the
 ## indicated time (relative to the given point) has been reached.
 ##
 ## The return value is the index of the def entry representing the new
 ## interval.
 
-proc addCInterval*(this: CMetaInterval, c_interval: CInterval): int {.importcpp: "#->add_c_interval(#)".} ## \
+proc addCInterval*(this: CMetaInterval, cInterval: CInterval): int {.importcpp: "#->add_c_interval(#)".} ## \
 ## Adds a new CInterval to the list.  The interval will be played when the
 ## indicated time (relative to the given point) has been reached.
 ##
 ## The return value is the index of the def entry representing the new
 ## interval.
 
-proc addExtIndex*(this: CMetaInterval, ext_index: int, name: string, duration: float64, open_ended: bool, rel_time: float64, rel_to: CMetaInterval_RelativeStart): int {.importcpp: "#->add_ext_index(#, nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.} ## \
+proc addExtIndex*(this: CMetaInterval, extIndex: int, name: string, duration: float64, openEnded: bool, relTime: float64, relTo: CMetaInterval_RelativeStart): int {.importcpp: "#->add_ext_index(#, nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.} ## \
 ## Adds a new external interval to the list.  This represents some object in
 ## the external scripting language that has properties similar to a CInterval
 ## (for instance, a Python Interval object).
@@ -2543,7 +2543,7 @@ proc popLevel*(this: CMetaInterval): int {.importcpp: "#->pop_level()".} ## \
 ## to the level, for the purposes of sequencing later intervals.  Otherwise,
 ## the level's duration is computed based on the intervals within the level.
 
-proc setIntervalStartTime*(this: CMetaInterval, name: string, rel_time: float64, rel_to: CMetaInterval_RelativeStart): bool {.importcpp: "#->set_interval_start_time(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
+proc setIntervalStartTime*(this: CMetaInterval, name: string, relTime: float64, relTo: CMetaInterval_RelativeStart): bool {.importcpp: "#->set_interval_start_time(nimStringToStdString(#), #, #)", header: stringConversionCode.} ## \
 ## Adjusts the start time of the child interval with the given name, if found.
 ## This may be either a C++ interval added via add_c_interval(), or an
 ## external interval added via add_ext_index(); the name must match exactly.
@@ -2552,7 +2552,7 @@ proc setIntervalStartTime*(this: CMetaInterval, name: string, rel_time: float64,
 ## intervals are adjusting accordingly, and true is returned.  If a matching
 ## interval is not found, nothing is changed and false is returned.
 
-proc setIntervalStartTime*(this: CMetaInterval, name: string, rel_time: float64): bool {.importcpp: "#->set_interval_start_time(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
+proc setIntervalStartTime*(this: CMetaInterval, name: string, relTime: float64): bool {.importcpp: "#->set_interval_start_time(nimStringToStdString(#), #)", header: stringConversionCode.} ## \
 ## Adjusts the start time of the child interval with the given name, if found.
 ## This may be either a C++ interval added via add_c_interval(), or an
 ## external interval added via add_ext_index(); the name must match exactly.
@@ -2664,9 +2664,9 @@ proc newWaitInterval*(duration: float64): WaitInterval {.importcpp: "new WaitInt
 
 converter getClassType*(_: typedesc[WaitInterval]): TypeHandle {.importcpp: "WaitInterval::get_class_type()", header: "waitInterval.h".}
 
-proc initCConnectionRepository*(has_owner_view: bool, threaded_net: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#, #)".}
+proc initCConnectionRepository*(hasOwnerView: bool, threadedNet: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#, #)".}
 
-proc initCConnectionRepository*(has_owner_view: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#)".}
+proc initCConnectionRepository*(hasOwnerView: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#)".}
 
 proc initCConnectionRepository*(): CConnectionRepository {.importcpp: "CConnectionRepository()".}
 
@@ -2677,7 +2677,7 @@ proc hasOwnerView*(this: CConnectionRepository): bool {.importcpp: "#.has_owner_
 ## Returns true if this repository can have 'owner' views of distributed
 ## objects.
 
-proc setHandleCUpdates*(this: CConnectionRepository, handle_c_updates: bool) {.importcpp: "#.set_handle_c_updates(#)".} ## \
+proc setHandleCUpdates*(this: CConnectionRepository, handleCUpdates: bool) {.importcpp: "#.set_handle_c_updates(#)".} ## \
 ## Set true to specify this repository should process distributed updates
 ## internally in C++ code, or false if it should return them to Python.
 
@@ -2685,7 +2685,7 @@ proc getHandleCUpdates*(this: CConnectionRepository): bool {.importcpp: "#.get_h
 ## Returns true if this repository will process distributed updates internally
 ## in C++ code, or false if it will return them to Python.
 
-proc setClientDatagram*(this: CConnectionRepository, client_datagram: bool) {.importcpp: "#.set_client_datagram(#)".} ## \
+proc setClientDatagram*(this: CConnectionRepository, clientDatagram: bool) {.importcpp: "#.set_client_datagram(#)".} ## \
 ## Sets the client_datagram flag.  If this is true, incoming datagrams are not
 ## expected to be prefixed with the server routing information like message
 ## sender, channel number, etc.; otherwise, these server fields are parsed and
@@ -2694,7 +2694,7 @@ proc setClientDatagram*(this: CConnectionRepository, client_datagram: bool) {.im
 proc getClientDatagram*(this: CConnectionRepository): bool {.importcpp: "#.get_client_datagram()".} ## \
 ## Returns the client_datagram flag.
 
-proc setHandleDatagramsInternally*(this: CConnectionRepository, handle_datagrams_internally: bool) {.importcpp: "#.set_handle_datagrams_internally(#)".} ## \
+proc setHandleDatagramsInternally*(this: CConnectionRepository, handleDatagramsInternally: bool) {.importcpp: "#.set_handle_datagrams_internally(#)".} ## \
 ## Sets the handle_datagrams_internally flag.  When true, certain message
 ## types can be handled by the C++ code in in this module.  When false, all
 ## datagrams, regardless of message type, are passed up to Python for
@@ -2705,7 +2705,7 @@ proc setHandleDatagramsInternally*(this: CConnectionRepository, handle_datagrams
 proc getHandleDatagramsInternally*(this: CConnectionRepository): bool {.importcpp: "#.get_handle_datagrams_internally()".} ## \
 ## Returns the handle_datagrams_internally flag.
 
-proc setTcpHeaderSize*(this: CConnectionRepository, tcp_header_size: int) {.importcpp: "#.set_tcp_header_size(#)".} ## \
+proc setTcpHeaderSize*(this: CConnectionRepository, tcpHeaderSize: int) {.importcpp: "#.set_tcp_header_size(#)".} ## \
 ## Sets the header size of TCP packets.  At the present, legal values for this
 ## are 0, 2, or 4; this specifies the number of bytes to use encode the
 ## datagram length at the start of each TCP datagram.  Sender and receiver
@@ -2814,7 +2814,7 @@ proc isBundlingMessages*(this: CConnectionRepository): bool {.importcpp: "#.is_b
 ## Returns true if repository is queueing outgoing messages into a message
 ## bundle
 
-proc sendMessageBundle*(this: CConnectionRepository, channel: int, sender_channel: int) {.importcpp: "#.send_message_bundle(#, #)".} ## \
+proc sendMessageBundle*(this: CConnectionRepository, channel: int, senderChannel: int) {.importcpp: "#.send_message_bundle(#, #)".} ## \
 ## Send network messages queued up since startMessageBundle was called.
 
 proc abandonMessageBundles*(this: CConnectionRepository) {.importcpp: "#.abandon_message_bundles()".} ## \
@@ -2836,7 +2836,7 @@ proc disconnect*(this: CConnectionRepository) {.importcpp: "#.disconnect()".} ##
 proc shutdown*(this: CConnectionRepository) {.importcpp: "#.shutdown()".} ## \
 ## May be called at application shutdown to ensure all threads are cleaned up.
 
-proc setSimulatedDisconnect*(this: CConnectionRepository, simulated_disconnect: bool) {.importcpp: "#.set_simulated_disconnect(#)".} ## \
+proc setSimulatedDisconnect*(this: CConnectionRepository, simulatedDisconnect: bool) {.importcpp: "#.set_simulated_disconnect(#)".} ## \
 ## Sets the simulated disconnect flag.  While this is true, no datagrams will
 ## be retrieved from or sent to the server.  The idea is to simulate a
 ## temporary network outage.
@@ -2858,7 +2858,7 @@ proc getVerbose*(this: CConnectionRepository): bool {.importcpp: "#.get_verbose(
 ## Returns the current setting of the verbose flag.  When true, this describes
 ## every message going back and forth on the wire.
 
-proc setTimeWarning*(this: CConnectionRepository, time_warning: float32) {.importcpp: "#.set_time_warning(#)".} ## \
+proc setTimeWarning*(this: CConnectionRepository, timeWarning: float32) {.importcpp: "#.set_time_warning(#)".} ## \
 ## Directly sets the time_warning field.  When non zero, this describes every
 ## message going back and forth on the wire when the msg handling time is over
 ## it
@@ -2870,11 +2870,11 @@ proc initCDistributedSmoothNodeBase*(): CDistributedSmoothNodeBase {.importcpp: 
 
 proc initCDistributedSmoothNodeBase*(param0: CDistributedSmoothNodeBase): CDistributedSmoothNodeBase {.importcpp: "CDistributedSmoothNodeBase(#)".}
 
-proc setRepository*(this: CDistributedSmoothNodeBase, repository: CConnectionRepository, is_ai: bool, ai_id: clonglong) {.importcpp: "#.set_repository(#, #, #)".} ## \
+proc setRepository*(this: CDistributedSmoothNodeBase, repository: CConnectionRepository, isAi: bool, aiId: clonglong) {.importcpp: "#.set_repository(#, #, #)".} ## \
 ## Tells the C++ instance definition about the AI or Client repository, used
 ## for sending datagrams.
 
-proc initialize*(this: CDistributedSmoothNodeBase, node_path: NodePath, dclass: DCClass, do_id: clonglong) {.importcpp: "#.initialize(#, #, #)".} ## \
+proc initialize*(this: CDistributedSmoothNodeBase, nodePath: NodePath, dclass: DCClass, doId: clonglong) {.importcpp: "#.initialize(#, #, #)".} ## \
 ## Initializes the internal structures from some constructs that are normally
 ## stored only in Python.  Also reads the current node's pos & hpr values in
 ## preparation for transmitting them via one of the broadcast_pos_hpr_\*()
@@ -2914,13 +2914,13 @@ proc resetVertexList*(this: CMotionTrail) {.importcpp: "#->reset_vertex_list()".
 proc enable*(this: CMotionTrail, enable: bool) {.importcpp: "#->enable(#)".} ## \
 ## Enable/disable the motion trail.
 
-proc setGeomNode*(this: CMotionTrail, geom_node: GeomNode) {.importcpp: "#->set_geom_node(#)".} ## \
+proc setGeomNode*(this: CMotionTrail, geomNode: GeomNode) {.importcpp: "#->set_geom_node(#)".} ## \
 ## Set the GeomNode.
 
-proc addVertex*(this: CMotionTrail, vertex: LVector4, start_color: LVector4, end_color: LVector4, v: float) {.importcpp: "#->add_vertex((LVector4 &)(#), (LVector4 &)(#), (LVector4 &)(#), #)".} ## \
+proc addVertex*(this: CMotionTrail, vertex: LVector4, startColor: LVector4, endColor: LVector4, v: float) {.importcpp: "#->add_vertex((LVector4 &)(#), (LVector4 &)(#), (LVector4 &)(#), #)".} ## \
 ## Add a vertex.
 
-proc setParameters*(this: CMotionTrail, sampling_time: float, time_window: float, use_texture: bool, calculate_relative_matrix: bool, use_nurbs: bool, resolution_distance: float) {.importcpp: "#->set_parameters(#, #, #, #, #, #)".} ## \
+proc setParameters*(this: CMotionTrail, samplingTime: float, timeWindow: float, useTexture: bool, calculateRelativeMatrix: bool, useNurbs: bool, resolutionDistance: float) {.importcpp: "#->set_parameters(#, #, #, #, #, #)".} ## \
 ## Set motion trail parameters.
 ##
 ## sampling_time = Can be used to specify a lower sampling rate than the frame
@@ -2939,10 +2939,10 @@ proc setParameters*(this: CMotionTrail, sampling_time: float, time_window: float
 ## samples.  samples = motion trail length / resolution_distance.  Applicable
 ## only if nurbs is on.
 
-proc checkForUpdate*(this: CMotionTrail, current_time: float): int {.importcpp: "#->check_for_update(#)".} ## \
+proc checkForUpdate*(this: CMotionTrail, currentTime: float): int {.importcpp: "#->check_for_update(#)".} ## \
 ## Check if a sample can be submitted.
 
-proc updateMotionTrail*(this: CMotionTrail, current_time: float, transform: LMatrix4) {.importcpp: "#->update_motion_trail(#, #)".} ## \
+proc updateMotionTrail*(this: CMotionTrail, currentTime: float, transform: LMatrix4) {.importcpp: "#->update_motion_trail(#, #)".} ## \
 ## See class header comments.
 
 converter getClassType*(_: typedesc[CMotionTrail]): TypeHandle {.importcpp: "CMotionTrail::get_class_type()", header: "cMotionTrail.h".}

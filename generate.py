@@ -205,47 +205,47 @@ func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
 
 func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
-func initLVecBase2f*(fill_value: float32): LVecBase2f = LVecBase2f(x: fill_value, y: fill_value)
+func initLVecBase2f*(fillValue: float32): LVecBase2f = LVecBase2f(x: fillValue, y: fillValue)
 func initLVecBase2f*(x: float32, y: float32): LVecBase2f = LVecBase2f(x: x, y: y)
 converter initLVecBase2f*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2f {.inline, noSideEffect.} = LVecBase2f(x: (float32)args.x, y: (float32)args.y)
 
 func initLVecBase2d*(): LVecBase2d = LVecBase2d(x: 0, y: 0)
 func initLVecBase2d*(copy: LVecBase2d): LVecBase2d = LVecBase2d(x: copy.x, y: copy.y)
-func initLVecBase2d*(fill_value: float64): LVecBase2d = LVecBase2d(x: fill_value, y: fill_value)
+func initLVecBase2d*(fillValue: float64): LVecBase2d = LVecBase2d(x: fillValue, y: fillValue)
 func initLVecBase2d*(x: float64, y: float64): LVecBase2d = LVecBase2d(x: x, y: y)
 converter initLVecBase2d*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2d {.inline, noSideEffect.} = LVecBase2d(x: (float64)args.x, y: (float64)args.y)
 
 func initLVecBase2i*(): LVecBase2i = LVecBase2i(x: 0, y: 0)
 func initLVecBase2i*(copy: LVecBase2i): LVecBase2i = LVecBase2i(x: copy.x, y: copy.y)
-func initLVecBase2i*(fill_value: int32): LVecBase2i = LVecBase2i(x: fill_value, y: fill_value)
+func initLVecBase2i*(fillValue: int32): LVecBase2i = LVecBase2i(x: fillValue, y: fillValue)
 func initLVecBase2i*(x: int32, y: int32): LVecBase2i = LVecBase2i(x: x, y: y)
 converter initLVecBase2i*[T0, T1: int | int32](args: tuple[x: T0, y: T1]): LVecBase2i {.inline, noSideEffect.} = LVecBase2i(x: (int32)args.x, y: (int32)args.y)
 
 func initLVecBase3f*(): LVecBase3f = LVecBase3f(x: 0, y: 0, z: 0)
 func initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: z)
 func initLVecBase3f*(copy: LVecBase3f): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: copy.z)
-func initLVecBase3f*(fill_value: float32): LVecBase3f = LVecBase3f(x: fill_value, y: fill_value, z: fill_value)
+func initLVecBase3f*(fillValue: float32): LVecBase3f = LVecBase3f(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f = LVecBase3f(x: x, y: y, z: z)
 converter initLVecBase3f*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3f {.inline, noSideEffect.} = LVecBase3f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z)
 
 func initLVecBase3d*(): LVecBase3d = LVecBase3d(x: 0, y: 0, z: 0)
 func initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: z)
 func initLVecBase3d*(copy: LVecBase3d): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: copy.z)
-func initLVecBase3d*(fill_value: float64): LVecBase3d = LVecBase3d(x: fill_value, y: fill_value, z: fill_value)
+func initLVecBase3d*(fillValue: float64): LVecBase3d = LVecBase3d(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d = LVecBase3d(x: x, y: y, z: z)
 converter initLVecBase3d*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3d {.inline, noSideEffect.} = LVecBase3d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z)
 
 func initLVecBase3i*(): LVecBase3i = LVecBase3i(x: 0, y: 0, z: 0)
 func initLVecBase3i*(copy: LVecBase2i, z: int32): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: z)
 func initLVecBase3i*(copy: LVecBase3i): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: copy.z)
-func initLVecBase3i*(fill_value: int32): LVecBase3i = LVecBase3i(x: fill_value, y: fill_value, z: fill_value)
+func initLVecBase3i*(fillValue: int32): LVecBase3i = LVecBase3i(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3i*(x: int32, y: int32, z: int32): LVecBase3i = LVecBase3i(x: x, y: y, z: z)
 converter initLVecBase3i*[T0, T1, T2: int | int32](args: tuple[x: T0, y: T1, z: T2]): LVecBase3i {.inline, noSideEffect.} = LVecBase3i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z)
 
 func initLVecBase4f*(): LVecBase4f = LVecBase4f(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4f*(copy: LVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initLVecBase4f*(fill_value: float32): LVecBase4f = LVecBase4f(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initLVecBase4f*(fillValue: float32): LVecBase4f = LVecBase4f(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f = LVecBase4f(x: x, y: y, z: z, w: w)
 converter initLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4f {.inline, noSideEffect.} = LVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
 converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
@@ -255,7 +255,7 @@ converter initLVecBase4f*(vector: LVector3f): LVecBase4f = LVecBase4f(x: vector.
 func initLVecBase4d*(): LVecBase4d = LVecBase4d(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4d*(copy: LVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initLVecBase4d*(fill_value: float64): LVecBase4d = LVecBase4d(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initLVecBase4d*(fillValue: float64): LVecBase4d = LVecBase4d(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d = LVecBase4d(x: x, y: y, z: z, w: w)
 converter initLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4d {.inline, noSideEffect.} = LVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
 converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
@@ -265,7 +265,7 @@ converter initLVecBase4d*(vector: LVector3d): LVecBase4d = LVecBase4d(x: vector.
 func initLVecBase4i*(): LVecBase4i = LVecBase4i(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4i*(copy: LVecBase3i, w: int32): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4i*(copy: LVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initLVecBase4i*(fill_value: int32): LVecBase4i = LVecBase4i(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initLVecBase4i*(fillValue: int32): LVecBase4i = LVecBase4i(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4i*(x: int32, y: int32, z: int32, w: int32): LVecBase4i = LVecBase4i(x: x, y: y, z: z, w: w)
 converter initLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4i {.inline, noSideEffect.} = LVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
 converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
@@ -274,21 +274,21 @@ converter initLVecBase4i*(vector: LVector3i): LVecBase4i = LVecBase4i(x: vector.
 
 func initUnalignedLVecBase4f*(): UnalignedLVecBase4f = UnalignedLVecBase4f(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4f*(copy: UnalignedLVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initUnalignedLVecBase4f*(fill_value: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initUnalignedLVecBase4f*(fillValue: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4f*(x: float32, y: float32, z: float32, w: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: x, y: y, z: z, w: w)
 converter initUnalignedLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4f {.inline, noSideEffect.} = UnalignedLVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
 converter initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 
 func initUnalignedLVecBase4d*(): UnalignedLVecBase4d = UnalignedLVecBase4d(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4d*(copy: UnalignedLVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initUnalignedLVecBase4d*(fill_value: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initUnalignedLVecBase4d*(fillValue: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4d*(x: float64, y: float64, z: float64, w: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: x, y: y, z: z, w: w)
 converter initUnalignedLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4d {.inline, noSideEffect.} = UnalignedLVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
 converter initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 
 func initUnalignedLVecBase4i*(): UnalignedLVecBase4i = UnalignedLVecBase4i(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4i*(copy: UnalignedLVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-func initUnalignedLVecBase4i*(fill_value: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: fill_value, y: fill_value, z: fill_value, w: fill_value)
+func initUnalignedLVecBase4i*(fillValue: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4i*(x: int32, y: int32, z: int32, w: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: x, y: y, z: z, w: w)
 converter initUnalignedLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4i {.inline, noSideEffect.} = UnalignedLVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
 converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
@@ -611,6 +611,47 @@ def translate_comment(code, prefix="## "):
         return ''
 
 
+def translate_enum_value_name(name):
+    new = ""
+    parts = name.split("_")
+    if len(parts) > 1 and parts[0].upper() == parts[0]:
+        new += parts.pop(0) + "_"
+
+    if parts:
+        new += parts.pop(0)
+
+    for i in parts:
+        if i == "":
+            pass
+        elif len(i) == 1:
+            new += i[0].upper()
+        else:
+            new += i[0].upper() + i[1:]
+
+    if new in NIM_KEYWORDS:
+        new = '`' + new + '`'
+
+    return new
+
+
+def translate_parameter_name(name):
+    new = ""
+    for i in name.split("_"):
+        if new == "":
+            new += i
+        elif i == "":
+            pass
+        elif len(i) == 1:
+            new += i[0].upper()
+        else:
+            new += i[0].upper() + i[1:]
+
+    if new in NIM_KEYWORDS:
+        new = '`' + new + '`'
+
+    return new
+
+
 def translate_function_name(name):
     if name in FUNCTION_REMAP:
         new = FUNCTION_REMAP[name]
@@ -721,8 +762,7 @@ def bind_coerce_constructor(out, function, wrapper, num_default_args=0):
         param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
         if param_name.startswith("_"):
             return
-        if param_name in NIM_KEYWORDS:
-            param_name = '`' + param_name + '`'
+        param_name = translate_parameter_name(param_name)
 
         param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
         if not is_type_valid(param_type):
@@ -877,14 +917,12 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         if header:
             headers.add('"' + header + '"')
 
-
     cpp_args = []
     for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
         param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
         if param_name.startswith("_"):
             return False
-        if param_name in NIM_KEYWORDS:
-            param_name = '`' + param_name + '`'
+        param_name = translate_parameter_name(param_name)
 
         param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
         if not is_type_valid(param_type):
@@ -1464,9 +1502,7 @@ def bind_type(out, type, bound_templates={}):
                 values[value] = value_name
 
             for value in sorted(values.keys()):
-                value_name = values[value]
-                if value_name in NIM_KEYWORDS:
-                    value_name = '`' + value_name + '`'
+                value_name = translate_enum_value_name(values[value])
                 out.write(f"  {value_name} = {value}\n")
 
             out.write("\n")
@@ -1474,9 +1510,7 @@ def bind_type(out, type, bound_templates={}):
         elif not interrogate_type_is_nested(type):
             # Anonymous enum, global scope
             for i_value in range(interrogate_type_number_of_enum_values(type)):
-                value_name = interrogate_type_enum_value_name(type, i_value)
-                if value_name in NIM_KEYWORDS:
-                    value_name = '`' + value_name + '`'
+                value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
                 value = interrogate_type_enum_value(type, i_value)
                 out.write(f"const {value_name}*: int = {value}\n")
 
@@ -1486,9 +1520,7 @@ def bind_type(out, type, bound_templates={}):
             # Nested enum
             parent_type_name = translated_type_name(interrogate_type_outer_class(type))
             for i_value in range(interrogate_type_number_of_enum_values(type)):
-                value_name = interrogate_type_enum_value_name(type, i_value)
-                if value_name in NIM_KEYWORDS:
-                    value_name = '`' + value_name + '`'
+                value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
                 value = interrogate_type_enum_value(type, i_value)
                 out.write(f"template {value_name}*(_: typedesc[{parent_type_name}]): {type_name} = {type_name}.{value_name}\n")
 

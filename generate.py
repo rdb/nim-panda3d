@@ -7,6 +7,9 @@ import panda3d, pandac
 from panda3d.interrogatedb import *
 
 
+panda_include_dir = os.path.join(os.path.dirname(os.path.dirname(pandac.__file__)), "include", "")
+
+
 if 'interrogate_element_is_sequence' not in globals():
     def interrogate_element_is_sequence(element):
         return False
@@ -854,7 +857,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
 
             header = get_type_header(this_type)
             if header:
-                header_path = "C:\\Users\\rdb\\panda3d2\\built_x64\\include\\" + header
+                header_path = panda_include_dir + header
                 if not os.path.isfile(header_path):
                     print("Header not found: ", header)
                 else:
@@ -1441,7 +1444,7 @@ def bind_type(out, type, bound_templates={}):
 
             header = get_type_header(type)
             if header:
-                if not os.path.isfile("C:\\Users\\rdb\\panda3d2\\built_x64\\include\\" + header):
+                if not os.path.isfile(panda_include_dir + header):
                     print("Header not found: ", header)
                 pragmas.append(f"header: \"{header}\"")
 
@@ -1522,7 +1525,7 @@ def bind_type(out, type, bound_templates={}):
 
         header = get_type_header(type)
         if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
-            if not os.path.isfile("C:\\Users\\rdb\\panda3d2\\built_x64\\include\\" + header):
+            if not os.path.isfile(panda_include_dir + header):
                 print("Header not found: ", header)
             pragmas.append(f"header: \"{header}\"")
 

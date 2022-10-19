@@ -367,6 +367,7 @@ FUNCTION_IGNORE = {
     "operator =",
     "operator >>=",
     "operator ^=",
+    "operator new",
     "operator |=",
     "operator ~=",
 }

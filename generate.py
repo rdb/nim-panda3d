@@ -1527,7 +1527,7 @@ def bind_module(out, module_name):
 
             if get_type_output_method(type):
                 type_name = translated_type_name(type)
-                out.write(f"func `$`*(this: {type_name}): string =\n")
+                out.write(f"func `$`*(this: {type_name}): string {{.inline.}} =\n")
                 out.write(f"  var str : StringStream\n")
                 out.write(f"  this.output(str)\n")
                 out.write(f"  str.data\n")

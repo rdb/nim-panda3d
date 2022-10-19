@@ -2947,32 +2947,32 @@ proc updateMotionTrail*(this: CMotionTrail, current_time: float, transform: LMat
 
 converter getClassType*(_: typedesc[CMotionTrail]): TypeHandle {.importcpp: "CMotionTrail::get_class_type()", header: "cMotionTrail.h".}
 
-func `$`*(this: DCField): string =
+func `$`*(this: DCField): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-func `$`*(this: DCDeclaration): string =
+func `$`*(this: DCDeclaration): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-func `$`*(this: DCClass): string =
+func `$`*(this: DCClass): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-func `$`*(this: SmoothMover): string =
+func `$`*(this: SmoothMover): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-func `$`*(this: CInterval): string =
+func `$`*(this: CInterval): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-func `$`*(this: CIntervalManager): string =
+func `$`*(this: CIntervalManager): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data

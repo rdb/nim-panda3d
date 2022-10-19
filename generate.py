@@ -1577,6 +1577,11 @@ def bind_type(out, type, bound_templates={}):
         if interrogate_type_is_nested(type):
             # Nested enum
             parent_type_name = translated_type_name(interrogate_type_outer_class(type))
+
+            short_type_name = translated_type_name(type, scoped=False, template=False)
+            out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}]): typedesc[{type_name}] = typedesc[{type_name}]\n")
+            out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}], value: untyped): {type_name} = {type_name}(value)\n\n")
+
             for i_value in range(interrogate_type_number_of_enum_values(type)):
                 value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
                 value = interrogate_type_enum_value(type, i_value)
@@ -1678,6 +1683,13 @@ def bind_type(out, type, bound_templates={}):
             out.write("\n  b*: uint16")
 
         out.write("\n\n")
+
+        if len(valid_bases) > 1:
+            for other_base_type in valid_bases:
+                if other_base_type != base_type:
+                    other_base_name = translated_type_name(other_base_type)
+                    out.write(f"converter upcastTo{other_base_name}*(_: typedesc[{type_name}]): typedesc[{other_base_name}] = typedesc[{other_base_name}]\n")
+            out.write("\n")
 
         if is_type_pointer(type):
             out.write(f"converter to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")

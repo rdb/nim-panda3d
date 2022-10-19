@@ -70,6 +70,8 @@ type DCKeywordList* {.importcpp: "DCKeywordList", pure, inheritable, header: "dc
 type DCField* {.importcpp: "DCField*", bycopy, pure, inheritable, header: "dcField.h".} = object of DCPackerInterface
   ## A single field of a Distributed Class, either atomic or molecular.
 
+converter upcastToDCKeywordList*(_: typedesc[DCField]): typedesc[DCKeywordList] = typedesc[DCKeywordList]
+
 converter toDCField*(_: type(nil)): DCField {.importcpp: "(nullptr)".}
 converter toBool*(this: DCField): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCField, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
@@ -198,12 +200,18 @@ type SmoothMover_SmoothMode {.importcpp: "SmoothMover::SmoothMode", pure, header
   SM_off = 0
   SM_on = 1
 
+template SmoothMode*(_: typedesc[SmoothMover]): typedesc[SmoothMover_SmoothMode] = typedesc[SmoothMover_SmoothMode]
+template SmoothMode*(_: typedesc[SmoothMover], value: untyped): SmoothMover_SmoothMode = SmoothMover_SmoothMode(value)
+
 template SM_off*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_off
 template SM_on*(_: typedesc[SmoothMover]): SmoothMover_SmoothMode = SmoothMover_SmoothMode.SM_on
 
 type SmoothMover_PredictionMode {.importcpp: "SmoothMover::PredictionMode", pure, header: "smoothMover.h".} = enum
   PM_off = 0
   PM_on = 1
+
+template PredictionMode*(_: typedesc[SmoothMover]): typedesc[SmoothMover_PredictionMode] = typedesc[SmoothMover_PredictionMode]
+template PredictionMode*(_: typedesc[SmoothMover], value: untyped): SmoothMover_PredictionMode = SmoothMover_PredictionMode(value)
 
 template PM_off*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_off
 template PM_on*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMover_PredictionMode.PM_on
@@ -233,6 +241,9 @@ type CInterval_EventType {.importcpp: "CInterval::EventType", pure, header: "cIn
   ET_reverseFinalize = 6
   ET_interrupt = 7
 
+template EventType*(_: typedesc[CInterval]): typedesc[CInterval_EventType] = typedesc[CInterval_EventType]
+template EventType*(_: typedesc[CInterval], value: untyped): CInterval_EventType = CInterval_EventType(value)
+
 template ET_initialize*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_initialize
 template ET_instant*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_instant
 template ET_step*(_: typedesc[CInterval]): CInterval_EventType = CInterval_EventType.ET_step
@@ -247,6 +258,9 @@ type CInterval_State {.importcpp: "CInterval::State", pure, header: "cInterval.h
   S_started = 1
   S_paused = 2
   S_final = 3
+
+template State*(_: typedesc[CInterval]): typedesc[CInterval_State] = typedesc[CInterval_State]
+template State*(_: typedesc[CInterval], value: untyped): CInterval_State = CInterval_State(value)
 
 template S_initial*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_initial
 template S_started*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_started
@@ -330,6 +344,9 @@ type CLerpInterval_BlendType {.importcpp: "CLerpInterval::BlendType", pure, head
   BT_easeInOut = 3
   BT_invalid = 4
 
+template BlendType*(_: typedesc[CLerpInterval]): typedesc[CLerpInterval_BlendType] = typedesc[CLerpInterval_BlendType]
+template BlendType*(_: typedesc[CLerpInterval], value: untyped): CLerpInterval_BlendType = CLerpInterval_BlendType(value)
+
 template BT_noBlend*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_noBlend
 template BT_easeIn*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_easeIn
 template BT_easeOut*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLerpInterval_BlendType.BT_easeOut
@@ -374,6 +391,9 @@ type CMetaInterval_RelativeStart {.importcpp: "CMetaInterval::RelativeStart", pu
   RS_previousBegin = 1
   RS_levelBegin = 2
 
+template RelativeStart*(_: typedesc[CMetaInterval]): typedesc[CMetaInterval_RelativeStart] = typedesc[CMetaInterval_RelativeStart]
+template RelativeStart*(_: typedesc[CMetaInterval], value: untyped): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart(value)
+
 template RS_previousEnd*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previousEnd
 template RS_previousBegin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_previousBegin
 template RS_levelBegin*(_: typedesc[CMetaInterval]): CMetaInterval_RelativeStart = CMetaInterval_RelativeStart.RS_levelBegin
@@ -383,6 +403,9 @@ type CMetaInterval_DefType {.importcpp: "CMetaInterval::DefType", pure, header: 
   DT_extIndex = 1
   DT_pushLevel = 2
   DT_popLevel = 3
+
+template DefType*(_: typedesc[CMetaInterval]): typedesc[CMetaInterval_DefType] = typedesc[CMetaInterval_DefType]
+template DefType*(_: typedesc[CMetaInterval], value: untyped): CMetaInterval_DefType = CMetaInterval_DefType(value)
 
 template DT_cInterval*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_cInterval
 template DT_extIndex*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMetaInterval_DefType.DT_extIndex

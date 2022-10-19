@@ -56,7 +56,7 @@ var floater = ralph.attach_new_node("floater")
 floater.setZ(2.0)
 
 # Set up the camera
-#base.disableMouse()
+base.disableMouse()
 base.camera.setPos(ralph.getX(), ralph.getY() + 10, 2)
 
 

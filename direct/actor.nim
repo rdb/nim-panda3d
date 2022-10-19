@@ -24,7 +24,18 @@ proc loadModel*(this: var Actor, modelPath: string, partName: string = "modelRoo
   else:
     this.bundleNP = model.find("**/+Character")
 
+  var acc: AnimControlCollection
+  autoBind(model.node(), acc, not 0)
+  let numAnims = acc.getNumAnims()
+
   this.bundleDict[partName] = Character.dcast(this.bundleNP.node()).getBundle(0)
+
+  var animDict = addr this.partDict.mgetOrPut(partName, Table[string, AnimDef]())
+  for i in 0 ..< numAnims:
+    var animControl = acc.getAnim(i)
+    var animName = acc.getAnimName(i)
+
+    animDict[][animName] = AnimDef(animControl: animControl)
 
 proc loadAnims*(this: var Actor, anims: openArray[(string, string)], partName: string = "modelRoot") =
   var animDict = addr this.partDict.mgetOrPut(partName, Table[string, AnimDef]())

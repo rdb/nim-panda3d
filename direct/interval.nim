@@ -107,5 +107,5 @@ template Func*[T1, T2, T3](function: proc(arg1: T1, arg2: T2, arg3: T3), arg1: T
 template Func*[T1, T2, T3, T4](function: proc(arg1: T1, arg2: T2, arg3: T3, arg4: T4), arg1: T1, arg2: T2, arg3: T3, arg4: T4): CInterval =
   Func(proc() = function(arg1, arg2, arg3, arg4))
 
-template Func*[T1, T2, T3, T4, T5](function: proc(arg1: T1, arg2: T2, arg3: T3, arg4: T4), arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5): CInterval =
+template Func*[T1, T2, T3, T4, T5](function: proc(arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5), arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5): CInterval =
   Func(proc() = function(arg1, arg2, arg3, arg4, arg5))

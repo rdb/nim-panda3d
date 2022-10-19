@@ -567,6 +567,7 @@ TYPE_HEADERS = {
 }
 
 FUNC_HEADERS = {
+    "auto_bind": "auto_bind.h",
     "compose_matrix": "compose_matrix.h",
     "decompose_matrix": "decompose_matrix.h",
     "load_prc_file": "load_prc_file.h",

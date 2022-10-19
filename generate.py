@@ -190,6 +190,36 @@ typedef WrappedVec4<LPoint4f, LVecBase4d> WrappedLPoint4d;
 typedef WrappedVec4<LPoint4f, LVecBase4i> WrappedLPoint4i;
 \"\"\";
 
+const nimCallbackObjectCode = \"\"\"
+#include "callbackObject.h"
+
+N_LIB_PRIVATE N_NIMCALL(void, unrefEnv)(void *envp);
+
+class NimCallbackObject final : public CallbackObject {
+public:
+  typedef void Function(CallbackData *cbdata, void *env);
+
+  NimCallbackObject(Function *function, void *env) :
+    _proc(function), _env(env) {}
+
+  virtual ~NimCallbackObject() {
+    if (_env != nullptr) {
+      unrefEnv(_env);
+    }
+  }
+
+  ALLOC_DELETED_CHAIN(NimCallbackObject);
+
+  virtual void do_callback(CallbackData *cbdata) override {
+    _proc(cbdata, _env);
+  }
+
+private:
+  Function *_proc;
+  void *_env;
+};
+\"\"\";
+
 """
 
 CORE_POSTAMBLE = """
@@ -202,6 +232,16 @@ func text*(this: TextEncoder) : string {.importcpp: "nimStringFromStdString(#->g
 func `text=`*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
+
+func newNimCallbackObject(procp: pointer, envp: pointer): CallbackObject {.importcpp: "new NimCallbackObject((NimCallbackObject::Function *)#, #)", header: nimCallbackObjectCode.}
+
+converter newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObject =
+  var procp = rawProc(function);
+  var envp = rawEnv(function);
+  if envp != nil:
+    GC_ref(cast[RootRef](envp))
+
+  newNimCallbackObject(procp, envp)
 
 func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
@@ -359,7 +399,7 @@ else:
 
 ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "string", "clonglong", "type(nil)"]
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
-FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties"}
+FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties", "CallbackData"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
 EXCLUDE_LIBRARIES = {"libp3dxml"}
 FUNCTION_IGNORE = {

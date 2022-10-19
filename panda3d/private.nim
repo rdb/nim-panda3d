@@ -56,6 +56,9 @@ func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp
 func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
   {.emit: "if (desc != nullptr) result.assign(desc->data, desc->len);"}
 
+proc unrefEnv(envp: pointer) {.noinit, exportcpp: "unrefEnv".} =
+  GC_unref(cast[RootRef](envp))
+
 when not defined(release):
   type
     const_char {.importcpp: "const char", nodecl.} = object

@@ -46,6 +46,8 @@ proc Wait*(duration: float): WaitInterval =
 {.emit: """/*TYPESECTION*/
 #include "cInterval.h"
 
+N_LIB_PRIVATE N_NIMCALL(void, unrefEnv)(void *envp);
+
 class NimFunctionInterval final : public CInterval {
 public:
   typedef void Function(void *env);
@@ -54,7 +56,12 @@ public:
     CInterval(name, 0.0, true),
     _proc(proc),
     _env(env) {}
-  virtual ~NimFunctionInterval();
+
+  virtual ~NimFunctionInterval() {
+    if (_env != nullptr) {
+      unrefEnv(_env);
+    }
+  }
 
   virtual void priv_instant() override {
     _proc(_env);
@@ -64,17 +71,6 @@ private:
   Function *_proc;
   void *_env;
 };
-""".}
-
-proc unrefIvalEnv(envp: pointer) {.noinit, exportcpp: "unrefIvalEnv".} =
-  GC_unref(cast[RootRef](envp))
-
-{.emit: """
-NimFunctionInterval::~NimFunctionInterval() {
-  if (_env != nullptr) {
-    unrefIvalEnv(_env);
-  }
-}
 """.}
 
 proc Func*(function: proc()): CInterval =
@@ -90,7 +86,7 @@ proc Func*(function: proc()): CInterval =
   {.emit: """
   std::string cname;
   if (name != nullptr) {
-    cname.assign(name->data, name->len);
+    cname.assign(`name`->data, `name`->len);
   }
   `result` = new NimFunctionInterval(cname, (NimFunctionInterval::Function *)`procp`, `envp`);
   """.}

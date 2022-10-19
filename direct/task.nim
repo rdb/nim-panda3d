@@ -3,12 +3,19 @@ import ../panda3d/core
 {.emit: """/*TYPESECTION*/
 #include "asyncTask.h"
 
+N_LIB_PRIVATE N_NIMCALL(void, unrefEnv)(void *envp);
+
 class NimTask final : public AsyncTask {
 public:
   typedef int TaskProc(PT(AsyncTask) task, void *env);
 
   NimTask(TaskProc *proc, void *env) : _proc(proc), _env(env) {}
-  virtual ~NimTask();
+
+  virtual ~NimTask() {
+    if (_env != nullptr) {
+      unrefEnv(_env);
+    }
+  }
 
   ALLOC_DELETED_CHAIN(NimTask);
 
@@ -20,17 +27,6 @@ private:
   TaskProc *_proc;
   void *_env;
 };
-""".}
-
-proc unrefEnv(envp: pointer) {.noinit, exportcpp: "unrefEnv".} =
-  GC_unref(cast[RootRef](envp))
-
-{.emit: """
-NimTask::~NimTask() {
-  if (_env != nullptr) {
-    unrefEnv(_env);
-  }
-}
 """.}
 
 type

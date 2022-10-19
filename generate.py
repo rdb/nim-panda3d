@@ -361,6 +361,7 @@ ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
 FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
+EXCLUDE_LIBRARIES = {"libp3dxml"}
 FUNCTION_IGNORE = {
     "operator %=",
     "operator &=",
@@ -1731,8 +1732,9 @@ def iter_module_types(module_name):
             if interrogate_type_has_module_name(base_type):
                 if module_name == interrogate_type_module_name(base_type):
                     if base_type not in returned_types:
-                        returned_types.add(base_type)
-                        yield base_type
+                        if interrogate_type_library_name(base_type) not in EXCLUDE_LIBRARIES:
+                            returned_types.add(base_type)
+                            yield base_type
 
 
 def iter_module_functions(module_name):
@@ -1741,7 +1743,8 @@ def iter_module_functions(module_name):
 
         if interrogate_function_has_module_name(func):
             if module_name == interrogate_function_module_name(func):
-                yield func
+                if interrogate_function_library_name(func) not in EXCLUDE_LIBRARIES:
+                    yield func
 
 
 def bind_module(out, module_name):

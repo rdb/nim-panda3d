@@ -38,3 +38,6 @@ proc Parallel*(ivals: varargs[CInterval], name: string = ""): CMetaInterval =
   for ival in ivals:
     discard meta.addCInterval(ival, 0, CMetaInterval.RSLevelBegin)
   return meta
+
+proc Wait*(duration: float): WaitInterval =
+  return newWaitInterval(duration)

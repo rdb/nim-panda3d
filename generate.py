@@ -762,7 +762,7 @@ def bind_coerce_constructor(out, function, wrapper, num_default_args=0):
     out.write("\n\n")
 
 
-def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", num_default_args=0):
+def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", num_default_args=0, wrapper_name=None):
     this_pointer = False
     this_var = False
 
@@ -840,7 +840,9 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
            not interrogate_function_is_constructor(function):
             # It's static, add a typedesc parameter.
             type_name = translated_type_name(this_type)
-            if func_name == "size" and interrogate_wrapper_number_of_parameters(wrapper) == 0:
+            if wrapper_name:
+                args.append(f"_: {wrapper_name}")
+            elif func_name == "size" and interrogate_wrapper_number_of_parameters(wrapper) == 0:
                 args.append(f"_: typedesc[{type_name}] or {type_name}")
             else:
                 args.append(f"_: typedesc[{type_name}]")
@@ -908,7 +910,9 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
                 else:
                     cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
 
-            if func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
+            if wrapper_name:
+                args.append(f"this: {wrapper_name}")
+            elif func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
                 args.append(f"{param_name}: var {type_name}")
             elif not this_var or interrogate_type_true_name(param_type).endswith("const *"):
                 #if not this_pointer and not interrogate_type_true_name(param_type).endswith("const *"):
@@ -1040,24 +1044,160 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
 
 
 def bind_property(out, element):
-    if interrogate_element_is_mapping(element) or \
-       interrogate_element_is_sequence(element):
+    prop_name = interrogate_element_name(element)
+    if prop_name in NIM_KEYWORDS:
         return
 
-    #type_name = translated_type_name(interrogate_element_type(element))
-    prop_name = interrogate_element_name(element)
+    prop_name = translate_function_name(prop_name)
+
+    getter = interrogate_element_getter(element)
+    if not getter:
+        return
+
+    is_sequence = interrogate_element_is_sequence(element)
+    is_mapping = interrogate_element_is_mapping(element)
+
+    this_type = None
+
+    getter_wrapper = None
+    getter_num_default_args = 0
+    for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
+        wrap = interrogate_function_python_wrapper(getter, i_wrap)
+        prop_type = interrogate_wrapper_return_type(wrap)
+        first_arg = int(not is_wrapper_static(wrap))
+        min_args, max_args = get_wrapper_min_max_args(wrap)
+
+        if min_args <= int(is_sequence or is_mapping) <= max_args:
+            if is_sequence:
+                if not is_type_integer(interrogate_wrapper_parameter_type(wrap, first_arg)):
+                    continue
+            if interrogate_type_atomic_token(prop_type) != 6 and is_type_valid(prop_type):
+                getter_wrapper = wrap
+                getter_num_default_args = max_args - int(is_sequence or is_mapping)
+                if first_arg > 0:
+                    this_type = interrogate_wrapper_parameter_type(wrap, 0)
+                break
+
+    if is_mapping or is_sequence:
+        if not getter_wrapper:
+            return
+
+        type_name = translated_type_name(prop_type)
+        outer_type = interrogate_function_class(interrogate_element_getter(element))
+        outer_type_name = translated_type_name(outer_type)
+        wrapper_name = outer_type_name + "_" + prop_name
+
+        if this_type is not None:
+            out.write(f"type {wrapper_name} = distinct {outer_type_name}\n")
+        else:
+            out.write(f"type {wrapper_name} = distinct typedesc[{outer_type_name}]\n")
+        out.write("\n")
+
+        bind_function_overload(out, getter, getter_wrapper, "`[]`", num_default_args=getter_num_default_args, wrapper_name=wrapper_name)
+
+        if this_type is None:
+            out.write(f"template {prop_name}*(this: typedesc[{outer_type_name}]): {wrapper_name} = {wrapper_name}(this)\n\n")
+        else:
+            out.write(f"template {prop_name}*(this: {outer_type_name}): {wrapper_name} = {wrapper_name}(this)\n\n")
+
+    if is_mapping:
+        if interrogate_element_has_has_function(element):
+            has_function = interrogate_element_has_function(element)
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(has_function)):
+                wrap = interrogate_function_python_wrapper(has_function, i_wrap)
+                if this_type is None and not is_wrapper_static(wrap):
+                    continue
+                min_args, max_args = get_wrapper_min_max_args(wrap)
+                if min_args <= 1 <= max_args:
+                    bind_function_overload(out, has_function, wrap, "hasKey", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+                    bind_function_overload(out, has_function, wrap, "contains", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+
+        if interrogate_element_has_setter(element):
+            setter = interrogate_element_setter(element)
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
+                wrap = interrogate_function_python_wrapper(setter, i_wrap)
+                if this_type is None and not is_wrapper_static(wrap):
+                    continue
+                min_args, max_args = get_wrapper_min_max_args(wrap)
+                if min_args <= 2 <= max_args:
+                    bind_function_overload(out, setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
+
+        if interrogate_element_has_del_function(element):
+            del_function = interrogate_element_del_function(element)
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(del_function)):
+                wrap = interrogate_function_python_wrapper(del_function, i_wrap)
+                if this_type is None and not is_wrapper_static(wrap):
+                    continue
+                min_args, max_args = get_wrapper_min_max_args(wrap)
+                if min_args <= 1 <= max_args:
+                    bind_function_overload(out, del_function, wrap, "del", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+
+        return
+
+    if is_sequence:
+        length = interrogate_element_length_function(element)
+        length_wrapper = None
+        for i_wrap in range(interrogate_function_number_of_python_wrappers(length)):
+            wrap = interrogate_function_python_wrapper(length, i_wrap)
+            if not is_type_integer(interrogate_wrapper_return_type(wrap)):
+                continue
+            num_args = 0
+            num_default_args = 0
+            for i_param in range(interrogate_wrapper_number_of_parameters(wrap)):
+                if interrogate_wrapper_parameter_is_this(wrap, i_param):
+                    continue
+                num_args += 1
+                if interrogate_wrapper_parameter_is_optional(wrap, i_param):
+                    num_default_args += 1
+
+            if num_args - num_default_args <= 0:
+                length_wrapper = wrap
+                break
+        else:
+            return
+
+        if this_type is None and not is_wrapper_static(length_wrapper):
+            this_type = interrogate_wrapper_parameter_type(length_wrapper, 0)
+
+        bind_function_overload(out, length, length_wrapper, "len", "func", num_default_args=num_default_args, wrapper_name=wrapper_name)
+
+        if interrogate_element_has_setter(element):
+            setter = interrogate_element_setter(element)
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
+                wrap = interrogate_function_python_wrapper(setter, i_wrap)
+                if this_type is None and not is_wrapper_static(wrap):
+                    continue
+                min_args, max_args = get_wrapper_min_max_args(wrap)
+                if min_args <= 2 <= max_args:
+                    bind_function_overload(out, setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
+
+        if is_type_pointer(prop_type):
+            out.write(f"proc contains*(this: {wrapper_name}, value: {type_name}): bool =\n")
+            out.write("  for i in 0 ..< len(this):\n")
+            out.write("    if value == this[i]:\n")
+            out.write("      return true\n")
+            out.write("  return false\n\n")
+
+        out.write(f"iterator items*(this: {wrapper_name}): {type_name} =\n")
+        out.write("  for i in 0 ..< len(this):\n")
+        out.write("    yield this[i]\n\n")
+
+        if type_name == "string":
+            out.write(f"proc `@`*(this: {wrapper_name}): seq[{type_name}] {{.inline.}} =\n")
+        else:
+            out.write(f"proc `@`*(this: {wrapper_name}): seq[{type_name}] =\n")
+        out.write("  let count = len(this)\n")
+        out.write(f"  var res = newSeq[{type_name}](count)\n")
+        out.write("  for i in 0 ..< count:\n")
+        out.write("    res[i] = this[i]\n")
+        out.write("  return res\n\n")
+
+        return
 
     if not prop_name.strip('xyzw'):
         scoped_name = interrogate_element_scoped_name(element)
         if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase") or scoped_name.startswith("LVector") or scoped_name.startswith("LPoint"):
             return
-
-    #out.write(f"proc {prop_name}*(this: {parent_type_name}): {type_name}")
-
-    #if this_pointer:
-    #    out.write(f" {{.importcpp: \"#->{prop_name}()\".}}\n\n")
-    #else:
-    #    out.write(f" {{.importcpp: \"#.{prop_name}\".}}\n\n")
 
     if interrogate_element_has_getter(element):
         bind_function(out, interrogate_element_getter(element), prop_name, "func")
@@ -1235,6 +1375,24 @@ def get_type_output_method(type):
         meth_name = interrogate_function_name(meth)
         if meth_name == "output":
             return meth
+
+
+def get_wrapper_min_max_args(wrapper):
+    min_args = 0
+    max_args = 0
+    for i_param in range(interrogate_wrapper_number_of_parameters(wrapper)):
+        if interrogate_wrapper_parameter_is_this(wrapper, i_param):
+            continue
+        max_args += 1
+        if not interrogate_wrapper_parameter_is_optional(wrapper, i_param):
+            min_args += 1
+
+    return min_args, max_args
+
+
+def is_wrapper_static(wrapper):
+    return interrogate_wrapper_number_of_parameters(wrapper) == 0 or \
+        not interrogate_wrapper_parameter_is_this(wrapper, 0)
 
 
 def bind_type(out, type, bound_templates={}):

@@ -78,6 +78,13 @@ proc igLoop(this: ShowBase): auto =
   this.graphicsEngine.renderFrame()
   return Task.cont
 
+proc audioLoop(this: ShowBase): auto =
+  if this.loader.musicManager != nil:
+    this.loader.musicManager.update()
+  if this.loader.sfxManager != nil:
+    this.loader.sfxManager.update()
+  return Task.cont
+
 proc getAspectRatio*(this: ShowBase): float =
   return this.win.getSbsLeftXSize() / this.win.getSbsLeftYSize()
 
@@ -344,6 +351,7 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   taskMgr.add(proc (task: Task): auto = this.dataLoop(), "dataLoop", -50)
   taskMgr.add(proc (task: Task): auto = this.ivalLoop(), "ivalLoop", 20)
   taskMgr.add(proc (task: Task): auto = this.igLoop(), "igLoop", 50)
+  taskMgr.add(proc (task: Task): auto = this.audioLoop(), "audioLoop", 60)
 
   this.graphicsEngine.openWindows()
 

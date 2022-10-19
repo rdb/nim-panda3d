@@ -10,7 +10,7 @@ when defined(vcc):
 else:
   {.passL: "-lp3direct".}
 
-type DCSubatomicType* {.importcpp: "DCSubatomicType", header: "dCSubatomicType.h".} = enum
+type DCSubatomicType* {.importcpp: "DCSubatomicType", header: "dcSubatomicType.h".} = enum
   ## This defines the numeric type of each element of a DCAtomicField; that is,
   ## the particular values that will get added to the message when the atomic
   ## field method is called.
@@ -52,7 +52,7 @@ type DCPackType* {.importcpp: "DCPackType", header: "dcPackerInterface.h".} = en
   PT_class = 10
   PT_switch = 11
 
-type DCPackerInterface* {.importcpp: "DCPackerInterface*", bycopy, pure, inheritable, header: "dCPackerInterface.h".} = object
+type DCPackerInterface* {.importcpp: "DCPackerInterface*", bycopy, pure, inheritable, header: "dcPackerInterface.h".} = object
   ## This defines the internal interface for packing values into a DCField.  The
   ## various different DC objects inherit from this.
   ##
@@ -63,18 +63,18 @@ converter toDCPackerInterface*(_: type(nil)): DCPackerInterface {.importcpp: "(n
 converter toBool*(this: DCPackerInterface): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCPackerInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCKeywordList* {.importcpp: "DCKeywordList", pure, inheritable, header: "dCKeywordList.h".} = object
+type DCKeywordList* {.importcpp: "DCKeywordList", pure, inheritable, header: "dcKeywordList.h".} = object
   ## This is a list of keywords (see DCKeyword) that may be set on a particular
   ## field.
 
-type DCField* {.importcpp: "DCField*", bycopy, pure, inheritable, header: "dCField.h".} = object of DCPackerInterface
+type DCField* {.importcpp: "DCField*", bycopy, pure, inheritable, header: "dcField.h".} = object of DCPackerInterface
   ## A single field of a Distributed Class, either atomic or molecular.
 
 converter toDCField*(_: type(nil)): DCField {.importcpp: "(nullptr)".}
 converter toBool*(this: DCField): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCField, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCPackData* {.importcpp: "DCPackData", pure, inheritable, header: "dCPackData.h".} = object
+type DCPackData* {.importcpp: "DCPackData", pure, inheritable, header: "dcPackData.h".} = object
   ## This is a block of data that receives the results of DCPacker.
 
 type DCPacker* {.importcpp: "DCPacker", pure, inheritable, header: "dcPacker.h".} = object
@@ -84,7 +84,7 @@ type DCPacker* {.importcpp: "DCPacker", pure, inheritable, header: "dcPacker.h".
   ## See also direct/src/doc/dcPacker.txt for a more complete description and
   ## examples of using this class.
 
-type DCParameter* {.importcpp: "DCParameter*", bycopy, pure, inheritable, header: "dCParameter.h".} = object of DCField
+type DCParameter* {.importcpp: "DCParameter*", bycopy, pure, inheritable, header: "dcParameter.h".} = object of DCField
   ## Represents the type specification for a single parameter within a field
   ## specification.  This may be a simple type, or it may be a class or an array
   ## reference.
@@ -96,7 +96,7 @@ converter toDCParameter*(_: type(nil)): DCParameter {.importcpp: "(nullptr)".}
 converter toBool*(this: DCParameter): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCArrayParameter* {.importcpp: "DCArrayParameter*", bycopy, pure, inheritable, header: "dCArrayParameter.h".} = object of DCParameter
+type DCArrayParameter* {.importcpp: "DCArrayParameter*", bycopy, pure, inheritable, header: "dcArrayParameter.h".} = object of DCParameter
   ## This represents an array of some other kind of object, meaning this
   ## parameter type accepts an arbitrary (or possibly fixed) number of nested
   ## fields, all of which are of the same type.
@@ -105,7 +105,7 @@ converter toDCArrayParameter*(_: type(nil)): DCArrayParameter {.importcpp: "(nul
 converter toBool*(this: DCArrayParameter): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCArrayParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCAtomicField* {.importcpp: "DCAtomicField*", bycopy, pure, inheritable, header: "dCAtomicField.h".} = object of DCField
+type DCAtomicField* {.importcpp: "DCAtomicField*", bycopy, pure, inheritable, header: "dcAtomicField.h".} = object of DCField
   ## A single atomic field of a Distributed Class, as read from a .dc file.
   ## This defines an interface to the Distributed Class, and is always
   ## implemented as a remote procedure method.
@@ -114,7 +114,7 @@ converter toDCAtomicField*(_: type(nil)): DCAtomicField {.importcpp: "(nullptr)"
 converter toBool*(this: DCAtomicField): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCAtomicField, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCDeclaration* {.importcpp: "DCDeclaration*", bycopy, pure, inheritable, header: "dCDeclaration.h".} = object
+type DCDeclaration* {.importcpp: "DCDeclaration*", bycopy, pure, inheritable, header: "dcDeclaration.h".} = object
   ## This is a common interface for a declaration in a DC file.  Currently, this
   ## is either a class or a typedef declaration (import declarations are still
   ## collected together at the top, and don't inherit from this object).  Its
@@ -125,22 +125,22 @@ converter toDCDeclaration*(_: type(nil)): DCDeclaration {.importcpp: "(nullptr)"
 converter toBool*(this: DCDeclaration): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCDeclaration, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCClass* {.importcpp: "DCClass*", bycopy, pure, inheritable, header: "dCClass.h".} = object of DCDeclaration
+type DCClass* {.importcpp: "DCClass*", bycopy, pure, inheritable, header: "dcClass.h".} = object of DCDeclaration
   ## Defines a particular DistributedClass as read from an input .dc file.
 
 converter toDCClass*(_: type(nil)): DCClass {.importcpp: "(nullptr)".}
 converter toBool*(this: DCClass): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCClass, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCClassParameter* {.importcpp: "DCClassParameter", pure, inheritable, header: "dCClassParameter.h".} = object of DCParameter
+type DCClassParameter* {.importcpp: "DCClassParameter", pure, inheritable, header: "dcClassParameter.h".} = object of DCParameter
   ## This represents a class (or struct) object used as a parameter itself.
   ## This means that all the fields of the class get packed into the message.
 
-type DCFile* {.importcpp: "DCFile", pure, inheritable, header: "dCFile.h".} = object
+type DCFile* {.importcpp: "DCFile", pure, inheritable, header: "dcFile.h".} = object
   ## Represents the complete list of Distributed Class descriptions as read from
   ## a .dc file.
 
-type DCKeyword* {.importcpp: "DCKeyword*", bycopy, pure, inheritable, header: "dCKeyword.h".} = object of DCDeclaration
+type DCKeyword* {.importcpp: "DCKeyword*", bycopy, pure, inheritable, header: "dcKeyword.h".} = object of DCDeclaration
   ## This represents a single keyword declaration in the dc file.  It is used to
   ## define a communication property associated with a field, for instance
   ## "broadcast" or "airecv".
@@ -149,18 +149,18 @@ converter toDCKeyword*(_: type(nil)): DCKeyword {.importcpp: "(nullptr)".}
 converter toBool*(this: DCKeyword): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCKeyword, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCMolecularField* {.importcpp: "DCMolecularField", pure, inheritable, header: "dCMolecularField.h".} = object of DCField
+type DCMolecularField* {.importcpp: "DCMolecularField", pure, inheritable, header: "dcMolecularField.h".} = object of DCField
   ## A single molecular field of a Distributed Class, as read from a .dc file.
   ## This represents a combination of two or more related atomic fields, that
   ## will often be treated as a unit.
 
-type DCSimpleParameter* {.importcpp: "DCSimpleParameter", pure, inheritable, header: "dCSimpleParameter.h".} = object of DCParameter
+type DCSimpleParameter* {.importcpp: "DCSimpleParameter", pure, inheritable, header: "dcSimpleParameter.h".} = object of DCParameter
   ## This is the most fundamental kind of parameter type: a single number or
   ## string, one of the DCSubatomicType elements.  It may also optionally have a
   ## divisor, which is meaningful only for the numeric type elements (and
   ## represents a fixed-point numeric convention).
 
-type DCSwitch* {.importcpp: "DCSwitch*", bycopy, pure, inheritable, header: "dCSwitch.h".} = object of DCDeclaration
+type DCSwitch* {.importcpp: "DCSwitch*", bycopy, pure, inheritable, header: "dcSwitch.h".} = object of DCDeclaration
   ## This represents a switch statement, which can appear inside a class body
   ## and represents two or more alternative unpacking schemes based on the first
   ## field read.
@@ -169,11 +169,11 @@ converter toDCSwitch*(_: type(nil)): DCSwitch {.importcpp: "(nullptr)".}
 converter toBool*(this: DCSwitch): bool {.importcpp: "(# != nullptr)".}
 func `==`*(x: DCSwitch, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
-type DCSwitchParameter* {.importcpp: "DCSwitchParameter", pure, inheritable, header: "dCSwitchParameter.h".} = object of DCParameter
+type DCSwitchParameter* {.importcpp: "DCSwitchParameter", pure, inheritable, header: "dcSwitchParameter.h".} = object of DCParameter
   ## This represents a switch object used as a parameter itself, which packs the
   ## appropriate fields of the switch into the message.
 
-type DCTypedef* {.importcpp: "DCTypedef*", bycopy, pure, inheritable, header: "dCTypedef.h".} = object of DCDeclaration
+type DCTypedef* {.importcpp: "DCTypedef*", bycopy, pure, inheritable, header: "dcTypedef.h".} = object of DCDeclaration
   ## This represents a single typedef declaration in the dc file.  It assigns a
   ## particular type to a new name, just like a C typedef.
 

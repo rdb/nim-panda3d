@@ -496,6 +496,7 @@ TYPE_HEADERS = {
     "LMatrix4d": "lmatrix.h",
     "LMatrix4f": "lmatrix.h",
     "LODNode": "lodNode.h",
+    "LODNodeType": "lodNodeType.h",
     "LParabola": "parabola.h",
     "LParabolad": "parabola.h",
     "LParabolaf": "parabola.h",
@@ -530,6 +531,7 @@ TYPE_HEADERS = {
     "Semaphore": "psemaphore.h",
     "SimpleAllocatorBlock": "simpleAllocator.h",
     "SimpleLruPage": "simpleLru.h",
+    "Socket_Address": "socket_address.h",
     "Socket_IP": "socket_ip.h",
     "Socket_TCP": "socket_tcp.h",
     "Socket_TCP_Listen": "socket_tcp_listen.h",
@@ -1170,6 +1172,12 @@ def get_type_header(type):
 
     if type_name.startswith("PNM"):
         return "pnm" + type_name[3:] + ".h"
+
+    if type_name.startswith("AI"):
+        return "ai" + type_name[2:] + ".h"
+
+    if type_name.startswith("DC"):
+        return "dc" + type_name[2:] + ".h"
 
     return type_name[0].lower() + type_name[1:] + ".h"
 

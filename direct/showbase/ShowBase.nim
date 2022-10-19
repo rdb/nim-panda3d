@@ -1,4 +1,5 @@
 import ../../panda3d/core
+import ../../panda3d/direct
 import ../task
 import ./DirectObject
 import ./EventManagerGlobal
@@ -7,12 +8,29 @@ from ./Loader import loader
 
 var aspect2d* = initNodePath(newPGTop("aspect2d"))
 var render* = initNodePath("render")
+var render2d* = initNodePath("render2d")
+aspect2d.reparentTo(render2d)
 
 type
   ShowBase* = ref object of DirectObject
+    a2dBackground*: NodePath
+    a2dBottom*: float
+    a2dBottomCenter*: NodePath
+    a2dBottomLeft*: NodePath
+    a2dBottomRight*: NodePath
+    a2dLeft*: float
+    a2dLeftCenter*: NodePath
+    a2dRight*: float
+    a2dRightCenter*: NodePath
+    a2dTop*: float
+    a2dTopCenter*: NodePath
+    a2dTopLeft*: NodePath
+    a2dTopRight*: NodePath
     aspect2d*: NodePath
     cam*: NodePath
+    cam2d*: NodePath
     camera*: NodePath
+    camera2d*: NodePath
     camLens*: Lens
     camNode*: Camera
     clock*: ClockObject
@@ -23,14 +41,19 @@ type
     graphicsEngine*: GraphicsEngine
     loader*: type(Loader.loader)
     mouse2cam*: NodePath
+    mouseInterface*: NodePath
+    mouseInterfaceNode*: MouseInterfaceNode
     mouseWatcher*: NodePath
     mouseWatcherNode*: MouseWatcher
     pipe*: GraphicsPipe
     render*: NodePath
+    render2d*: NodePath
     taskMgr*: TaskManager
     timeButtonThrower*: NodePath
     trackball*: NodePath
     win*: GraphicsOutput
+    windowType*: string
+    wireframeEnabled*: bool
 
 proc makeDefaultPipe*(this: ShowBase) =
   var selection = GraphicsPipeSelection.getGlobalPtr()
@@ -46,15 +69,54 @@ proc dataLoop(this: ShowBase): auto =
   dgTrav.traverse(this.dataRootNode)
   return Task.cont
 
+proc ivalLoop(this: ShowBase): auto =
+  var ivalMgr = CIntervalManager.getGlobalPtr()
+  ivalMgr.step()
+  return Task.cont
+
 proc igLoop(this: ShowBase): auto =
   this.graphicsEngine.renderFrame()
+  return Task.cont
+
+proc audioLoop(this: ShowBase): auto =
+  if this.loader.musicManager != nil:
+    this.loader.musicManager.update()
+  if this.loader.sfxManager != nil:
+    this.loader.sfxManager.update()
   return Task.cont
 
 proc getAspectRatio*(this: ShowBase): float =
   return this.win.getSbsLeftXSize() / this.win.getSbsLeftYSize()
 
 proc adjustWindowAspectRatio*(this: ShowBase, aspectRatio: float) =
-  this.camLens.aspectRatio = aspectRatio
+  if this.camLens != nil:
+    this.camLens.aspectRatio = aspectRatio
+
+  if aspectRatio < 1:
+    # If the window is TALL, lets expand the top and bottom
+    this.aspect2d.setScale(1.0, aspectRatio, aspectRatio)
+    this.a2dTop = 1.0 / aspectRatio
+    this.a2dBottom = - 1.0 / aspectRatio
+    this.a2dLeft = -1
+    this.a2dRight = 1.0
+  else:
+    # If the window is WIDE, lets expand the left and right
+    this.aspect2d.setScale(1.0 / aspectRatio, 1.0, 1.0)
+    this.a2dTop = 1.0
+    this.a2dBottom = -1.0
+    this.a2dLeft = -aspectRatio
+    this.a2dRight = aspectRatio
+
+  # Reposition the aspect2d marker nodes
+  this.a2dTopCenter.setPos(0, 0, this.a2dTop)
+  this.a2dBottomCenter.setPos(0, 0, this.a2dBottom)
+  this.a2dLeftCenter.setPos(this.a2dLeft, 0, 0)
+  this.a2dRightCenter.setPos(this.a2dRight, 0, 0)
+
+  this.a2dTopLeft.setPos(this.a2dLeft, 0, this.a2dTop)
+  this.a2dTopRight.setPos(this.a2dRight, 0, this.a2dTop)
+  this.a2dBottomLeft.setPos(this.a2dLeft, 0, this.a2dBottom)
+  this.a2dBottomRight.setPos(this.a2dRight, 0, this.a2dBottom)
 
 proc finalizeExit(this: ShowBase) =
   quit(0)
@@ -76,6 +138,26 @@ proc setupDataGraph*(this: ShowBase) =
   this.trackball = initNodePath(newTrackball("trackball"))
   this.drive = initNodePath(newDriveInterface("drive"))
   this.mouse2cam = initNodePath(newTransform2SG("mouse2cam"))
+
+proc changeMouseInterface*(this: ShowBase, changeTo: NodePath) =
+  this.mouseInterface.detachNode()
+  this.mouseInterface = changeTo
+  this.mouseInterfaceNode = dcast(MouseInterfaceNode, changeTo.node())
+  if this.mouseWatcher:
+    this.mouseInterface.reparentTo(this.mouseWatcher)
+  if this.mouse2cam:
+    this.mouse2cam.reparentTo(this.mouseInterface)
+
+proc useDrive*(this: ShowBase) =
+  if this.drive:
+    this.changeMouseInterface(this.drive)
+    # Set the height to a good eyeheight
+    this.drive.reset()
+    this.drive.setZ(4.0)
+
+proc useTrackball*(this: ShowBase) =
+  if this.trackball:
+    this.changeMouseInterface(this.trackball)
 
 proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
   let name = win.getInputDeviceName(0)
@@ -104,6 +186,8 @@ proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
   this.mouseWatcher = mw
   this.mouseWatcherNode = mwn
 
+  this.mouseInterface.reparentTo(this.mouseWatcher)
+
   var timeButtonThrowerNode = newButtonThrower("timeButtons")
   this.timeButtonThrower = mw.attachNewNode(timeButtonThrowerNode)
   timeButtonThrowerNode.setPrefix("time-")
@@ -114,6 +198,108 @@ proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
 
   mwn.addRegion(newPGMouseWatcherBackground())
 
+proc getAspectRatio*(this: ShowBase, win: GraphicsOutput): float =
+  var aspectRatio: float = 1
+
+  if win != nil and win.hasSize() and win.getSbsLeftYSize() != 0:
+    aspectRatio = float(win.getSbsLeftXSize()) / float(win.getSbsLeftYSize())
+  else:
+    var props: WindowProperties
+    if win == nil or not win.isOfType(GraphicsWindow.getClassType()):
+      props = WindowProperties.getDefault()
+    else:
+      props = dcast(GraphicsWindow, win).getRequestedProperties()
+      if not props.hasSize():
+        props = WindowProperties.getDefault()
+
+    if props.hasSize() and props.getYSize() != 0:
+      aspectRatio = float(props.getXSize()) / float(props.getYSize())
+
+  if aspectRatio == 0:
+    return 1
+
+  return aspectRatio
+
+proc makeCamera2d*(this: ShowBase, win: GraphicsOutput, sort: int = 10,
+                   displayRegion: tuple[left: float32, right: float32, bottom: float32, top: float32] = (0f32, 1f32, 0f32, 1f32),
+                   coords: tuple[left: float32, right: float32, bottom: float32, top: float32] = (-1f32, 1f32, -1f32, 1f32)): NodePath =
+
+  var dr = win.makeMonoDisplayRegion(displayRegion.left, displayRegion.right,
+                                     displayRegion.bottom, displayRegion.top)
+  dr.setSort(sort)
+
+  # Enable clearing of the depth buffer on this new display
+  # region (see the comment in setupRender2d, above).
+  dr.setClearDepthActive(true)
+
+  # Make any texture reloads on the gui come up immediately.
+  dr.setIncompleteRender(false)
+
+  var (left, right, bottom, top) = coords
+
+  # Now make a new Camera node.
+  var cam2dNode = newCamera("cam2d")
+
+  var lens = newOrthographicLens()
+  lens.setFilmSize(right - left, top - bottom)
+  lens.setFilmOffset((right + left) * 0.5, (top + bottom) * 0.5)
+  lens.setNearFar(-1000, 1000)
+  cam2dNode.setLens(lens)
+
+  # this.camera2d is the analog of this.camera, although it's
+  # not as clear how useful it is.
+  if this.camera2d.isEmpty():
+    this.camera2d = this.render2d.attachNewNode("camera2d")
+
+  var camera2d = this.camera2d.attachNewNode(cam2dNode)
+  dr.setCamera(camera2d)
+
+  if this.cam2d.isEmpty():
+    this.cam2d = camera2d
+
+  return camera2d
+
+proc setupRender2d*(this: ShowBase) =
+  this.render2d.setDepthTest(false)
+  this.render2d.setDepthWrite(false)
+  this.render2d.setMaterialOff(1)
+  this.render2d.setTwoSided(true)
+
+  var aspectRatio = this.getAspectRatio()
+  this.aspect2d.setScale(1.0 / aspectRatio, 1.0, 1.0)
+
+  this.a2dBackground = this.aspect2d.attachNewNode("a2dBackground")
+
+  # The Z position of the top border of the aspect2d screen.
+  this.a2dTop = 1.0
+  # The Z position of the bottom border of the aspect2d screen.
+  this.a2dBottom = -1.0
+  # The X position of the left border of the aspect2d screen.
+  this.a2dLeft = -aspectRatio
+  # The X position of the right border of the aspect2d screen.
+  this.a2dRight = aspectRatio
+
+  this.a2dTopCenter = this.aspect2d.attachNewNode("a2dTopCenter")
+  this.a2dBottomCenter = this.aspect2d.attachNewNode("a2dBottomCenter")
+  this.a2dLeftCenter = this.aspect2d.attachNewNode("a2dLeftCenter")
+  this.a2dRightCenter = this.aspect2d.attachNewNode("a2dRightCenter")
+
+  this.a2dTopLeft = this.aspect2d.attachNewNode("a2dTopLeft")
+  this.a2dTopRight = this.aspect2d.attachNewNode("a2dTopRight")
+  this.a2dBottomLeft = this.aspect2d.attachNewNode("a2dBottomLeft")
+  this.a2dBottomRight = this.aspect2d.attachNewNode("a2dBottomRight")
+
+  # Put the nodes in their places
+  this.a2dTopCenter.setPos(0, 0, this.a2dTop)
+  this.a2dBottomCenter.setPos(0, 0, this.a2dBottom)
+  this.a2dLeftCenter.setPos(this.a2dLeft, 0, 0)
+  this.a2dRightCenter.setPos(this.a2dRight, 0, 0)
+
+  this.a2dTopLeft.setPos(this.a2dLeft, 0, this.a2dTop)
+  this.a2dTopRight.setPos(this.a2dRight, 0, this.a2dTop)
+  this.a2dBottomLeft.setPos(this.a2dLeft, 0, this.a2dBottom)
+  this.a2dBottomRight.setPos(this.a2dRight, 0, this.a2dBottom)
+
 proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.getDefault()) =
   this.makeAllPipes()
   this.graphicsEngine = GraphicsEngine.getGlobalPtr()
@@ -121,30 +307,55 @@ proc openMainWindow*(this: ShowBase, props: WindowProperties = WindowProperties.
   eventMgr.restart()
   this.accept("window-event", proc (win: GraphicsWindow) = this.windowEvent(win))
 
+  if this.windowType == "":
+    this.windowType = "onscreen"
+
+  var flags: int
+  if this.windowType == "onscreen":
+    flags = 0x0808
+  elif this.windowType == "offscreen":
+    flags = 0x0804
+  else:
+    flags = 0x0800
+
   var fbprops: FrameBufferProperties = FrameBufferProperties.getDefault()
-  this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, 0x0008)
+  this.win = this.graphicsEngine.makeOutput(this.pipe, "window", 0, fbprops, props, flags)
 
   this.taskMgr = taskMgr
   this.loader = Loader.loader
   this.render = render
+  this.render2d = render2d
   this.aspect2d = aspect2d
-  this.camera = this.render.attachNewNode("camera")
+  this.camera = this.render.attachNewNode(newModelNode("camera"))
   this.camNode = newCamera("cam")
   this.camLens = this.camNode.getLens()
   this.cam = this.camera.attachNewNode(this.camNode)
   this.clock = ClockObject.getGlobalClock()
 
+  dcast(ModelNode, this.camera.node()).setPreserveTransform(ModelNode.PTLocal)
+
   this.setupDataGraph()
+
+  this.mouseInterface = this.trackball
+  this.useTrackball()
+
+  dcast(Transform2SG, this.mouse2cam.node()).setNode(this.camera.node())
 
   var dr = this.win.makeDisplayRegion()
   dr.setCamera(this.cam)
 
+  this.setupRender2d()
+
+  discard this.makeCamera2d(this.win)
+
   taskMgr.add(proc (task: Task): auto = this.dataLoop(), "dataLoop", -50)
+  taskMgr.add(proc (task: Task): auto = this.ivalLoop(), "ivalLoop", 20)
   taskMgr.add(proc (task: Task): auto = this.igLoop(), "igLoop", 50)
+  taskMgr.add(proc (task: Task): auto = this.audioLoop(), "audioLoop", 60)
 
   this.graphicsEngine.openWindows()
 
-  if this.win.isOfType(GraphicsWindow):
+  if this.win.isOfType(GraphicsWindow.getClassType()):
     this.setupMouse(dcast(GraphicsWindow, this.win))
 
 proc openDefaultWindow*(this: ShowBase, props: WindowProperties = WindowProperties.getDefault()): bool {.discardable.} =
@@ -159,6 +370,30 @@ proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float) =
 
 proc setBackgroundColor*(this: ShowBase, r: float, g: float, b: float, a: float) =
   this.setBackgroundColor(initLVecBase4f(r, g, b, a))
+
+proc wireframeOn*(this: ShowBase) =
+  this.render.setRenderModeWireframe(100)
+  this.render.setTwoSided(true)
+  this.wireframeEnabled = true
+
+proc wireframeOff*(this: ShowBase) =
+  this.render.clearRenderMode()
+  this.render.setTwoSided(false)
+  this.wireframeEnabled = false
+
+proc toggleWireframe*(this: ShowBase) =
+  if this.wireframeEnabled:
+    this.wireframeOff()
+  else:
+    this.wireframeOn()
+
+proc disableMouse*(this: ShowBase) =
+  if this.mouse2cam:
+    this.mouse2cam.detachNode()
+
+proc enableMouse*(this: ShowBase) =
+  if this.mouse2cam:
+    this.mouse2cam.reparentTo(this.mouseInterface)
 
 proc setFrameRateMeter*(this: ShowBase, flag: bool) =
   if flag:

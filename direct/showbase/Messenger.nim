@@ -27,6 +27,20 @@ proc accept*[T](this: Messenger, event: string, obj: DirectObject, function: pro
 
   acceptorDict[][obj.messengerId] = (proc(args: openArray[EventParameter]) = function(T.dcast(args[0].getPtr())))
 
+proc ignore*(this: Messenger, event: string, obj: DirectObject) =
+  if obj.messengerId == 0:
+    return
+
+  if this.callbacks.hasKey(event):
+    this.callbacks[event].del(obj.messengerId)
+
+proc ignoreAll*(this: Messenger, obj: DirectObject) =
+  if obj.messengerId == 0:
+    return
+
+  for event in this.callbacks.keys():
+    this.callbacks[event].del(obj.messengerId)
+
 proc send*(this: Messenger, event: string, sentArgs: openArray[EventParameter] = []) =
   if this.callbacks.hasKey(event):
     var acceptorDict = this.callbacks.getOrDefault(event)

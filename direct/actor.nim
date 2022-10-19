@@ -1,4 +1,5 @@
 import ../panda3d/core
+import std/strutils
 import std/tables
 
 type
@@ -10,6 +11,7 @@ type
   Actor* = object of NodePath
     bundleDict: Table[string, PartBundle]
     partDict: Table[string, Table[string, AnimDef]]
+    bundleNP: NodePath
 
 proc loadModel*(this: var Actor, modelPath: string, partName: string = "modelRoot") =
   var model = initNodePath(Loader.getGlobalPtr().loadSync(modelPath))
@@ -17,19 +19,130 @@ proc loadModel*(this: var Actor, modelPath: string, partName: string = "modelRoo
   (NodePath &)`this` = `model`;
   """.}
 
-  var bundleNP: NodePath
   if model.node().isOfType(Character.getClassType()):
-    bundleNP = model
+    this.bundleNP = model
   else:
-    bundleNP = model.find("**/+Character")
+    this.bundleNP = model.find("**/+Character")
 
-  this.bundleDict[partName] = Character.dcast(bundleNP.node()).getBundle(0)
+  var acc: AnimControlCollection
+  autoBind(model.node(), acc, not 0)
+  let numAnims = acc.getNumAnims()
+
+  this.bundleDict[partName] = Character.dcast(this.bundleNP.node()).getBundle(0)
+
+  var animDict = addr this.partDict.mgetOrPut(partName, Table[string, AnimDef]())
+  for i in 0 ..< numAnims:
+    var animControl = acc.getAnim(i)
+    var animName = acc.getAnimName(i)
+
+    animDict[][animName] = AnimDef(animControl: animControl)
 
 proc loadAnims*(this: var Actor, anims: openArray[(string, string)], partName: string = "modelRoot") =
   var animDict = addr this.partDict.mgetOrPut(partName, Table[string, AnimDef]())
 
   for i, (animName, filename) in anims:
     animDict[][animName] = AnimDef(filename: filename)
+
+iterator children(this: PartGroup): PartGroup =
+  var count = this.getNumChildren()
+  for i in 0 ..< count:
+    yield this.getChild(i)
+
+proc doListJoints(this: var Actor, indentLevel: int, part: PartGroup) =
+  var name = part.getName()
+  var value : string
+
+  if part.isOfType(MovingPartBase.getClassType()):
+    var lineStream : LineStream
+    dcast(MovingPartBase, part).outputValue(lineStream)
+    value = lineStream.getLine()
+
+  echo spaces(indentLevel), ' ', name, ' ', value
+
+  for child in part.children:
+    this.doListJoints(indentLevel + 2, child)
+
+proc listJoints*(this: var Actor, partName: string = "modelRoot") =
+  this.doListJoints(0, this.bundleDict[partName])
+
+proc getAnimNames*(this: var Actor): seq[string] =
+  for partName, animDict in this.partDict:
+    for animName in animDict.keys():
+      if animName notin result:
+        result.add(animName)
+
+proc exposeJoint*(this: var Actor, node: NodePath, partName: string, jointName: string, localTransform: bool = false): NodePath =
+  # Get a handle to the joint.
+  var joint = dcast(CharacterJoint, this.bundleDict[partName].findChild(jointName))
+
+  var node2: NodePath
+
+  if node:
+    node2 = node
+  else:
+    node2 = this.bundleNP.attachNewNode(jointName)
+
+  if joint:
+    if localTransform:
+      discard joint.addLocalTransform(node2.node())
+    else:
+      discard joint.addNetTransform(node2.node())
+
+  return node2
+
+proc exposeJoint*(this: var Actor, node: type(nil), partName: string, jointName: string, localTransform: bool = false): NodePath =
+  this.exposeJoint(this.bundleNP.attachNewNode(jointName), partName, jointName, localTransform)
+
+proc stopJoint*(this: var Actor, partName: string, jointName: string) =
+  # Get a handle to the joint.
+  var joint = dcast(CharacterJoint, this.bundleDict[partName].findChild(jointName))
+
+  if joint:
+    joint.clearNetTransforms()
+    joint.clearLocalTransforms()
+
+proc getPartJoints(this: var Actor, joints: var seq[MovingPartBase], pattern: var GlobPattern, part: PartGroup) =
+  if part.isOfType(MovingPartBase.getClassType()) and pattern.matches(part.name):
+    joints.add(MovingPartBase.dcast(part))
+
+  for child in part.children:
+    this.getPartJoints(joints, pattern, child)
+
+proc getJoints*(this: var Actor, partName: string = "modelRoot", jointName: string = "*"): seq[MovingPartBase] =
+  var pattern = initGlobPattern(jointName)
+
+  var partBundle = this.bundleDict[partName]
+  if not pattern.hasGlobCharacters():
+    var joint = partBundle.findChild(jointName)
+    if joint and joint.isOfType(MovingPartBase.getClassType()):
+      result.add(MovingPartBase.dcast(joint))
+  else:
+    this.getPartJoints(result, pattern, partBundle)
+
+proc controlJoint*(this: var Actor, node: NodePath, partName: string, jointName: string): NodePath =
+  var anyGood = false
+
+  var node2: NodePath
+
+  var bundle = this.bundleDict[partName]
+  if node:
+    node2 = node
+  else:
+    node2 = this.attachNewNode(newModelNode(jointName))
+    var joint = bundle.findChild(jointName)
+    if joint and joint.isOfType(MovingPartMatrix.getClassType()):
+      node2.setMat(MovingPartMatrix.dcast(joint).getDefaultValue())
+
+  if bundle.controlJoint(jointName, node2.node()):
+    anyGood = true
+
+  return node2
+
+proc controlJoint*(this: var Actor, node: type(nil), partName: string, jointName: string): NodePath =
+  this.controlJoint(NodePath(), partName, jointName)
+
+proc releaseJoint*(this: var Actor, partName: string, jointName: string) =
+  discard this.bundleDict[partName].releaseJoint(jointName)
 
 proc bindAnimToPart(this: var Actor, animName: string, partName: string): AnimControl {.discardable.} =
   var anim = addr this.partDict[partName][animName]

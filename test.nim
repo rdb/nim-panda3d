@@ -24,17 +24,17 @@ pandaActor.loop("walk")
 # Create the four lerp intervals needed for the panda to
 # walk back and forth.
 var posInterval1 = pandaActor.posInterval(13,
-                                          (0f32, -10f32, 0f32),
-                                          startPos=(0f32, 10f32, 0f32))
+                                          (0, -10, 0),
+                                          startPos=(0, 10, 0))
 var posInterval2 = pandaActor.posInterval(13,
-                                          (0f32, 10f32, 0f32),
-                                          startPos=(0f32, -10f32, 0f32))
+                                          (0, 10, 0),
+                                          startPos=(0, -10, 0))
 var hprInterval1 = pandaActor.hprInterval(3,
-                                          (180f32, 0f32, 0f32),
-                                          startHpr=(0f32, 0f32, 0f32))
+                                          (180, 0, 0),
+                                          startHpr=(0, 0, 0))
 var hprInterval2 = pandaActor.hprInterval(3,
-                                          (0f32, 0f32, 0f32),
-                                          startHpr=(180f32, 0f32, 0f32))
+                                          (0, 0, 0),
+                                          startHpr=(180, 0, 0))
 
 # Create and play the sequence that coordinates the intervals.
 var pandaPace = Sequence(posInterval1, hprInterval1,

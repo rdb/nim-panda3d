@@ -1247,6 +1247,63 @@ def bind_property(out, element):
         bind_function(out, interrogate_element_setter(element), f"`{prop_name}=`")
 
 
+def bind_make_seq(out, type, make_seq):
+    func_name = interrogate_make_seq_seq_name(make_seq)
+    if func_name in NIM_KEYWORDS:
+        return
+
+    func_name = translate_function_name(func_name)
+    type_name = translated_type_name(type)
+
+    getter_wrapper = None
+    elem_type = None
+
+    getter = interrogate_make_seq_element_getter(make_seq)
+    for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
+        wrap = interrogate_function_python_wrapper(getter, i_wrap)
+        elem_type = interrogate_wrapper_return_type(wrap)
+        min_args, max_args = get_wrapper_min_max_args(wrap)
+
+        if min_args <= 1 <= max_args:
+            if interrogate_type_atomic_token(elem_type) != 6 and is_type_valid(elem_type):
+                getter_wrapper = wrap
+                break
+    else:
+        return
+
+    nummer = interrogate_make_seq_num_getter(make_seq)
+    for i_wrap in range(interrogate_function_number_of_python_wrappers(nummer)):
+        wrap = interrogate_function_python_wrapper(nummer, i_wrap)
+        min_args, max_args = get_wrapper_min_max_args(wrap)
+
+        if min_args <= 0 <= max_args and is_type_integer(interrogate_wrapper_return_type(wrap)):
+            nummer_wrapper = wrap
+            break
+    else:
+        return
+
+    elem_type_name = translated_type_name(elem_type)
+
+    num_name = translate_function_name(interrogate_make_seq_num_name(make_seq))
+    element_name = translate_function_name(interrogate_make_seq_element_name(make_seq))
+
+    if num_name == "size":
+        num_name = "len"
+
+    out.write(f"proc {func_name}*(this: {type_name}): seq[{elem_type_name}] =\n")
+    if is_wrapper_static(nummer_wrapper):
+        out.write(f"  let count = {type_name}.{num_name}()\n")
+    else:
+        out.write(f"  let count = this.{num_name}()\n")
+    out.write(f"  var res = newSeq[{elem_type_name}](count)\n")
+    out.write(f"  for i in 0 ..< count:\n")
+    if is_wrapper_static(getter_wrapper):
+        out.write(f"    res[i] = {type_name}.{element_name}(i)\n")
+    else:
+        out.write(f"    res[i] = this.{element_name}(i)\n")
+    out.write(f"  return res\n\n")
+
+
 def is_type_pointer(type):
     while interrogate_type_is_wrapped(type) or interrogate_type_is_typedef(type):
         type = interrogate_type_wrapped_type(type)
@@ -1640,9 +1697,6 @@ def bind_type(out, type, bound_templates={}):
         if interrogate_type_is_enum(nested) and not interrogate_type_is_scoped_enum(nested) and interrogate_type_name(nested):
             bind_type(out, nested, bound_templates)
 
-    #for i_method in range(interrogate_type_number_of_make_seqs(type)):
-    #    print("list", translateFunctionName(interrogate_make_seq_seq_name(interrogate_type_get_make_seq(type, i_method))), "();", file=out)
-
     if type_name == "StringStream":
         out.write("func data*(this: StringStream): string {.importcpp: \"nimStringFromStdString(#.get_data())\", header: stringConversionCode.}\n")
         out.write("func `data=`*(this: StringStream, data: string) {.importcpp: \"#.set_data(nimStringToStdString(#))\", header: stringConversionCode.}\n")
@@ -1715,6 +1769,9 @@ def bind_module(out, module_name):
         bind_function(out, func)
 
     for type in iter_module_types(module_name):
+        for i_mseq in range(interrogate_type_number_of_make_seqs(type)):
+            bind_make_seq(out, type, interrogate_type_get_make_seq(type, i_mseq))
+
         if interrogate_type_is_struct(type) or interrogate_type_is_class(type):
             element_type = get_type_element_type(type)
             if element_type:

@@ -1,28 +1,27 @@
 # Author: Original python version by Ryan Myers
 # Models: Jeff Styers, Reagan Heller
 #
-# Last Updated: 2015-03-13 (translated to nim in 2022)
+# Last Updated: 2015-03-13 (translated to nim in 2022 by Entikan)
 #
 # This tutorial provides an example of creating a character
 # and having it walk around on uneven terrain, as well
 # as implementing a fully rotatable camera.
 
 
-import ../../direct/showbase
-import ../../direct/task
-import ../../direct/actor
-import ../../panda3d/core
-
+import direct/showbase
+import direct/task
+import direct/actor
+import panda3d/core
 
 var base = ShowBase()
 base.openDefaultWindow()
 
 proc makeText(y:float, text: string, scale: float = 0.05) =
-    var textnode = newTextNode("text")
-    var nodepath = base.aspect2d.attach_new_node(textnode)
-    textnode.set_text(text)
-    nodepath.set_scale(scale)
-    nodepath.set_pos(-0.8,0,0.8-y)
+  var textnode = newTextNode("text")
+  var nodepath = base.aspect2d.attach_new_node(textnode)
+  textnode.set_text(text)
+  nodepath.set_scale(scale)
+  nodepath.set_pos(-0.8,0,0.8-y)
 
 makeText(0, "Panda3D Tutorial: Roaming Ralph, written in Nim.", 0.06)
 makeText(0.06, "[ESC]: Quit")
@@ -141,7 +140,6 @@ proc setKey(key: Keys, value: bool) =
   keyMap[key] = value
 
 
-# TODO: input?
 base.accept("escape", proc () = quit(0))
 base.accept("arrow_left", proc () = setKey(left, true))
 base.accept("arrow_right", proc () = setKey(right, true))

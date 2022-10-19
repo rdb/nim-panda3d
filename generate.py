@@ -359,7 +359,7 @@ else:
 
 ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "string", "clonglong", "type(nil)"]
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
-FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem"}
+FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
 EXCLUDE_LIBRARIES = {"libp3dxml"}
 FUNCTION_IGNORE = {
@@ -1632,6 +1632,8 @@ def bind_type(out, type, bound_templates={}):
             base_type = interrogate_type_get_derivation(type, i)
             if is_type_valid(base_type):
                 valid_bases.append(base_type)
+                if is_type_pointer(type) and not is_type_pointer(base_type):
+                    print(f"Pointer type {type_name} has non-pointer base {translated_type_name(base_type)}!")
 
         # We inherit from the first base that is typed, if any.
         if valid_bases:
@@ -1643,9 +1645,6 @@ def bind_type(out, type, bound_templates={}):
                 base_type = valid_bases[0]
 
             base_name = translated_type_name(base_type)
-            if is_type_pointer(type) and not is_type_pointer(base_type):
-                print(f"Pointer type {type_name} has non-pointer base {base_name}!")
-
             out.write(f" of {base_name}")
 
         if interrogate_type_has_comment(type):

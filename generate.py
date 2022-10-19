@@ -1548,6 +1548,9 @@ if __name__ == "__main__":
     for lib in os.listdir(os.path.dirname(panda3d.__file__)):
         if lib.endswith(ext_suffix) and not lib.startswith('core.'):
             module_name = lib[:-len(ext_suffix)]
+            if module_name == "_rplight":
+                continue
+
             __import__("panda3d." + module_name)
 
             with open("panda3d/" + module_name + ".nim", "w") as fp:

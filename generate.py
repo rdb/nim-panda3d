@@ -385,7 +385,6 @@ FUNCTION_REMAP = {
     "operator ^": "xor",
     "operator |": "or",
     "operator ~": "not",
-    "size": "len",
 }
 FORCE_VAR_METHODS = {
     "BitArray::*",
@@ -937,6 +936,10 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
         cpp_suffix = cpp_args.pop()
         cpp_expr += "(" + ", ".join(cpp_args) + ")"
         cpp_expr += " = " + cpp_suffix
+    elif func_name == "size" and return_type and is_type_integer(return_type) and (interrogate_wrapper_number_of_parameters(wrapper) == 0 or (interrogate_wrapper_number_of_parameters(wrapper) == 1 and interrogate_wrapper_parameter_is_this(wrapper, 0))):
+        func_name = "len"
+        cpp_expr += "(" + ", ".join(cpp_args) + ")"
+        proc_type = "func"
     else:
         func_name = translate_function_name(func_name)
         cpp_expr += "(" + ", ".join(cpp_args) + ")"
@@ -1011,9 +1014,6 @@ def bind_function(out, function, func_name=None, proc_type="proc"):
 
         if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
             proc_type = "converter"
-
-        if func_name == "size":
-            proc_type = "func"
 
     if func_name in NIM_KEYWORDS:
         return
@@ -1141,6 +1141,13 @@ def is_type_valid(type):
         return type_name.startswith("BitMask")
 
     return True
+
+
+def is_type_integer(type):
+    while interrogate_type_is_wrapped(type) or interrogate_type_is_typedef(type):
+        type = interrogate_type_wrapped_type(type)
+
+    return interrogate_type_atomic_token(type) in (1, 8)
 
 
 def get_type_header(type):

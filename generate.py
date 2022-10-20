@@ -401,6 +401,7 @@ ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
 FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties", "CallbackData"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
+EXCLUDE_TYPES = {"PyTypeObject", "PyObject", "_object", "_typeobject", "ParamNodePath", "PythonCallbackObject", "PythonThread", "PythonTask"}
 EXCLUDE_LIBRARIES = {"libp3dxml"}
 FUNCTION_IGNORE = {
     "operator %=",
@@ -1401,16 +1402,16 @@ def is_type_valid(type):
     if interrogate_type_is_atomic(type):
         return True
 
+    type_name = interrogate_type_name(type)
+    if type_name in EXCLUDE_TYPES:
+        return False
+
     if interrogate_type_is_nested(type):
         if interrogate_type_is_enum(type) and not interrogate_type_is_scoped_enum(type) and interrogate_type_number_of_enum_values(type) > 0:
             return True
         return False
 
     if not interrogate_type_is_global(type):
-        return False
-
-    type_name = interrogate_type_name(type)
-    if type_name in ("PyTypeObject", "PyObject", "_object", "_typeobject", "ParamNodePath"):
         return False
 
     if type_name.count("<") > 1:

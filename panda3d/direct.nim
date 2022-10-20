@@ -1442,23 +1442,23 @@ proc isImplicitTypedef*(this: DCTypedef): bool {.importcpp: "#->is_implicit_type
 ## Returns true if the typedef has been flagged as an implicit typedef,
 ## meaning it was created for a DCClass that was referenced inline as a type.
 
-proc getParticlePath*(): ConfigVariableSearchPath {.importcpp: "get_particle_path()".}
+proc getParticlePath*(): ConfigVariableSearchPath {.importcpp: "get_particle_path()", header: "showBase.h".}
 
-proc throwNewFrame*() {.importcpp: "throw_new_frame()".}
+proc throwNewFrame*() {.importcpp: "throw_new_frame()", header: "showBase.h".}
 
-proc initAppForGui*() {.importcpp: "init_app_for_gui()".}
+proc initAppForGui*() {.importcpp: "init_app_for_gui()", header: "showBase.h".}
 
-proc addFullscreenTestsize*(xsize: int, ysize: int) {.importcpp: "add_fullscreen_testsize(#, #)".} ## \
+proc addFullscreenTestsize*(xsize: int, ysize: int) {.importcpp: "add_fullscreen_testsize(#, #)", header: "showBase.h".} ## \
 ## klunky interface since we cant pass array from python->C++
 
-proc runtestFullscreenSizes*(win: GraphicsWindow) {.importcpp: "runtest_fullscreen_sizes(#)".}
+proc runtestFullscreenSizes*(win: GraphicsWindow) {.importcpp: "runtest_fullscreen_sizes(#)", header: "showBase.h".}
 
-proc queryFullscreenTestresult*(xsize: int, ysize: int): bool {.importcpp: "query_fullscreen_testresult(#, #)".}
+proc queryFullscreenTestresult*(xsize: int, ysize: int): bool {.importcpp: "query_fullscreen_testresult(#, #)", header: "showBase.h".}
 
-proc storeAccessibilityShortcutKeys*() {.importcpp: "store_accessibility_shortcut_keys()".} ## \
+proc storeAccessibilityShortcutKeys*() {.importcpp: "store_accessibility_shortcut_keys()", header: "showBase.h".} ## \
 ## to handle windows stickykeys
 
-proc allowAccessibilityShortcutKeys*(allowKeys: bool) {.importcpp: "allow_accessibility_shortcut_keys(#)".}
+proc allowAccessibilityShortcutKeys*(allowKeys: bool) {.importcpp: "allow_accessibility_shortcut_keys(#)", header: "showBase.h".}
 
 proc initSmoothMover*(): SmoothMover {.importcpp: "SmoothMover()".}
 

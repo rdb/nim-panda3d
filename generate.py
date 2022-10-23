@@ -22,6 +22,10 @@ if 'interrogate_type_is_final' not in globals():
     def interrogate_type_is_final(type):
         return False
 
+if 'interrogate_type_is_deprecated' not in globals():
+    def interrogate_type_is_deprecated(type):
+        return False
+
 if 'interrogate_function_is_constructor' not in globals():
     def interrogate_function_is_constructor(func):
         return interrogate_function_is_method(func) and \
@@ -58,6 +62,14 @@ if 'interrogate_wrapper_is_copy_constructor' not in globals():
 
 if 'interrogate_wrapper_is_coerce_constructor' not in globals():
     def interrogate_wrapper_is_coerce_constructor(wrapper):
+        return False
+
+if 'interrogate_wrapper_is_extension' not in globals():
+    def interrogate_wrapper_is_extension(wrapper):
+        return False
+
+if 'interrogate_wrapper_is_deprecated' not in globals():
+    def interrogate_wrapper_is_deprecated(wrapper):
         return False
 
 
@@ -1134,11 +1146,16 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
             cpp_expr = "nimStringFromStdString(" + cpp_expr + ")"
             headers.add("stringConversionCode")
 
-    if len(headers) == 0:
-        out.write(f" {{.importcpp: \"{cpp_expr}\".}}")
-    else:
+    pragmas = [f"importcpp: \"{cpp_expr}\""]
+    if headers:
         header = sorted(headers)[0]
-        out.write(f" {{.importcpp: \"{cpp_expr}\", header: {header}.}}")
+        pragmas.append(f"header: {header}")
+
+    if interrogate_wrapper_is_deprecated(wrapper):
+        pragmas.append("deprecated")
+
+    pragma_str = ", ".join(pragmas)
+    out.write(f" {{.{pragma_str}.}}")
 
     if interrogate_wrapper_has_comment(wrapper):
         comment = translate_comment(interrogate_wrapper_comment(wrapper))
@@ -1639,6 +1656,9 @@ def bind_type(out, type, bound_templates={}):
             if interrogate_type_is_scoped_enum(type) or interrogate_type_is_nested(type):
                 pragmas.append("pure")
 
+            if interrogate_type_is_deprecated(type):
+                pragmas.append("deprecated")
+
             header = get_type_header(type)
             if header:
                 if not os.path.isfile(panda_include_dir + header):
@@ -1718,6 +1738,9 @@ def bind_type(out, type, bound_templates={}):
 
         if not interrogate_type_is_final(type):
             pragmas.append("inheritable")
+
+        if interrogate_type_is_deprecated(type):
+            pragmas.append("deprecated")
 
         header = get_type_header(type)
         if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):

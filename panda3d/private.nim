@@ -51,10 +51,11 @@ func size(this: std_string_const_ref): int {.importcpp: "size".}
 
 func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString".} =
   result = newString(s.size())
-  {.emit: "memcpy(result->data, s.data(), s.size());"}
+  {.emit: "memcpy(result->data, `s`.data(), `s`.size());"}
+
 
 func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
-  {.emit: "if (desc != nullptr) result.assign(desc->data, desc->len);"}
+  {.emit: "if (`desc` != nullptr) result.assign(`desc`->data, `desc`->len);"}
 
 proc unrefEnv(envp: pointer) {.noinit, exportcpp: "unrefEnv".} =
   GC_unref(cast[RootRef](envp))

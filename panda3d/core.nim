@@ -35915,11 +35915,6 @@ proc calcWidth*(this: PNMTextMaker, text: string): int {.importcpp: "#.calc_widt
 
 proc getGlyph*(this: PNMTextMaker, character: int): PNMTextGlyph {.importcpp: "#.get_glyph(#)".}
 
-func `$`*(this: TypeHandle): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getTypehandles*(this: TypeRegistry): seq[TypeHandle] =
   let count = this.getNumTypehandles()
   result.setLen(count)
@@ -35932,47 +35927,17 @@ proc getRootClasses*(this: TypeRegistry): seq[TypeHandle] =
   for i in 0 ..< count:
     result[i] = this.getRootClass(i)
 
-func `$`*(this: Filename): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getSystems*(this: PandaSystem): seq[string] =
   let count = this.getNumSystems()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getSystem(i)
 
-func `$`*(this: PandaSystem): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getDirectories*(this: DSearchPath): seq[Filename] =
   let count = this.getNumDirectories()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getDirectory(i)
-
-func `$`*(this: DSearchPath): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GlobPattern): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConfigPage): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConfigDeclaration): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getDeclarations*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   let count = this.getNumDeclarations()
@@ -35998,31 +35963,11 @@ proc getUniqueReferences*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   for i in 0 ..< count:
     result[i] = this.getUniqueReference(i)
 
-func `$`*(this: ConfigVariableCore): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConfigPageManager): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getVariables*(this: ConfigVariableManager): seq[ConfigVariableCore] =
   let count = this.getNumVariables()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getVariable(i)
-
-func `$`*(this: ConfigVariableManager): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConfigVariableBase): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: ConfigVariableBool): bool =
   for i in 0 ..< len(collection):
@@ -36044,21 +35989,11 @@ iterator items*(collection: ConfigVariableList): string =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: ConfigVariableList): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getDirectories*(this: ConfigVariableSearchPath): seq[Filename] =
   let count = this.getNumDirectories()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getDirectory(i)
-
-func `$`*(this: ConfigVariableSearchPath): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getChildren*(this: NotifyCategory): seq[NotifyCategory] =
   let count = this.getNumChildren()
@@ -36070,66 +36005,11 @@ iterator items*(collection: URLSpec): char =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: URLSpec): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: HTTPDate): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: HTTPCookie): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: HTTPEntityTag): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: DocumentSpec): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getRedirectSteps*(this: HTTPChannel): seq[URLSpec] =
   let count = this.getNumRedirectSteps()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getRedirectStep(i)
-
-func `$`*(this: DownloadDb): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: VirtualFile): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: VirtualFileMount): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: Datagram): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: DatagramIterator): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: HashVal): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getPointers*(this: MemoryUsagePointers): seq[ReferenceCount] =
   let count = this.getNumPointers()
@@ -36143,31 +36023,11 @@ proc getTypedPointers*(this: MemoryUsagePointers): seq[TypedObject] =
   for i in 0 ..< count:
     result[i] = this.getTypedPointer(i)
 
-func `$`*(this: MemoryUsagePointers): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getSubfileNames*(this: Multifile): seq[string] =
   let count = this.getNumSubfiles()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getSubfileName(i)
-
-func `$`*(this: Multifile): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: Namable): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SubfileInfo): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getFiles*(this: VirtualFileList): seq[VirtualFile] =
   let count = this.getNumFiles()
@@ -36203,16 +36063,6 @@ proc getStashed*(this: PandaNode): seq[PandaNode] =
   for i in 0 ..< count:
     result[i] = this.getStashed(i)
 
-func `$`*(this: PandaNode): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LightNode): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getDispatches*(this: ComputeNode): seq[LVecBase3i] =
   let count = this.getNumDispatches()
   result.setLen(count)
@@ -36224,11 +36074,6 @@ proc getDisplayRegions*(this: Camera): seq[DisplayRegion] =
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getDisplayRegion(i)
-
-func `$`*(this: LightLensNode): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getIns*(this: LODNode): seq[float] =
   let count = this.getNumSwitches()
@@ -36242,50 +36087,15 @@ proc getOuts*(this: LODNode): seq[float] =
   for i in 0 ..< count:
     result[i] = this.getOut(i)
 
-func `$`*(this: CallbackData): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AnimInterface): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: TransformState): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: RenderAttrib): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getStages*(this: TexMatrixAttrib): seq[TextureStage] =
   let count = this.getNumStages()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getStage(i)
 
-func `$`*(this: RenderState): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: RenderEffect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: RenderEffects): RenderEffect =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: RenderEffects): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getNames*(this: InternalNameCollection): seq[InternalName] =
   let count = this.getNumNames()
@@ -36297,19 +36107,9 @@ iterator items*(collection: InternalNameCollection): InternalName =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: InternalNameCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: MaterialCollection): Material =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: MaterialCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getTextureStages*(this: TextureStageCollection): seq[TextureStage] =
   let count = this.getNumTextureStages()
@@ -36320,11 +36120,6 @@ proc getTextureStages*(this: TextureStageCollection): seq[TextureStage] =
 iterator items*(collection: TextureStageCollection): TextureStage =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: TextureStageCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getNodes*(this: NodePath): seq[PandaNode] =
   let count = this.getNumNodes()
@@ -36338,11 +36133,6 @@ proc getAncestors*(this: NodePath): seq[NodePath] =
   for i in 0 ..< count:
     result[i] = this.getAncestor(i)
 
-func `$`*(this: NodePath): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getPaths*(this: NodePathCollection): seq[NodePath] =
   let count = this.getNumPaths()
   result.setLen(count)
@@ -36353,31 +36143,11 @@ iterator items*(collection: NodePathCollection): NodePath =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: NodePathCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getNodes*(this: AttribNodeRegistry): seq[NodePath] =
   let count = this.getNumNodes()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getNode(i)
-
-func `$`*(this: AttribNodeRegistry): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AuxSceneData): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: WeakNodePath): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getOnPlanes*(this: ClipPlaneAttrib): seq[NodePath] =
   let count = this.getNumOnPlanes()
@@ -36427,26 +36197,11 @@ proc getOffLights*(this: LightAttrib): seq[NodePath] =
   for i in 0 ..< count:
     result[i] = this.getOffLight(i)
 
-func `$`*(this: Loader): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getTypes*(this: LoaderFileTypeRegistry): seq[LoaderFileType] =
   let count = this.getNumTypes()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getType(i)
-
-func `$`*(this: AsyncFuture): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AsyncTask): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getOnStages*(this: TextureAttrib): seq[TextureStage] =
   let count = this.getNumOnStages()
@@ -36502,11 +36257,6 @@ proc getOptions*(this: MicrophoneAudio): seq[MicrophoneAudio] =
   for i in 0 ..< count:
     result[i] = MicrophoneAudio.getOption(i)
 
-func `$`*(this: TextNode): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getVertices*(this: LineSegs): seq[LVertex] =
   let count = this.getNumVertices()
   result.setLen(count)
@@ -36519,32 +36269,17 @@ proc getVertexColors*(this: LineSegs): seq[LColor] =
   for i in 0 ..< count:
     result[i] = this.getVertexColor(i)
 
-func `$`*(this: VertexTransform): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getChildren*(this: AnimGroup): seq[AnimGroup] =
   let count = this.getNumChildren()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getChild(i)
 
-func `$`*(this: AnimGroup): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getChildren*(this: PartGroup): seq[PartGroup] =
   let count = this.getNumChildren()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getChild(i)
-
-func `$`*(this: AnimControl): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getAnims*(this: AnimControlCollection): seq[AnimControl] =
   let count = this.getNumAnims()
@@ -36558,31 +36293,11 @@ proc getAnimNames*(this: AnimControlCollection): seq[string] =
   for i in 0 ..< count:
     result[i] = this.getAnimName(i)
 
-func `$`*(this: AnimControlCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AnimPreloadTable): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: PartSubset): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getNodes*(this: PartBundle): seq[PartBundleNode] =
   let count = this.getNumNodes()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getNode(i)
-
-func `$`*(this: PartBundle): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getBundles*(this: PartBundleNode): seq[PartBundle] =
   let count = this.getNumBundles()
@@ -36608,21 +36323,6 @@ proc getThreads*(this: PStatClient): seq[PStatThread] =
   for i in 0 ..< count:
     result[i] = this.getThread(i)
 
-func `$`*(this: PStatCollector): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: VertexSlider): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: CollisionSolid): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getSolids*(this: CollisionNode): seq[CollisionSolid] =
   let count = this.getNumSolids()
   result.setLen(count)
@@ -36634,21 +36334,6 @@ proc getColliders*(this: CollisionTraverser): seq[NodePath] =
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getCollider(i)
-
-func `$`*(this: CollisionTraverser): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: CollisionRecorder): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: CollisionEntry): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getVertices*(this: CollisionFloorMesh): seq[LPoint3] =
   let count = this.getNumVertices()
@@ -36692,45 +36377,15 @@ proc getEntries*(this: CollisionHandlerQueue): seq[CollisionEntry] =
   for i in 0 ..< count:
     result[i] = this.getEntry(i)
 
-func `$`*(this: CollisionHandlerQueue): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: InputDevice): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: InputDeviceSet): InputDevice =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: InputDeviceSet): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getDisplayModes*(this: DisplayInformation): seq[DisplayMode] =
   let count = this.getTotalDisplayModes()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getDisplayMode(i)
-
-func `$`*(this: WindowHandle): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: WindowProperties): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: DisplayRegion): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getDisplayRegions*(this: GraphicsOutput): seq[DisplayRegion] =
   let count = this.getNumDisplayRegions()
@@ -36756,16 +36411,6 @@ proc getWindows*(this: GraphicsEngine): seq[GraphicsOutput] =
   for i in 0 ..< count:
     result[i] = this.getWindow(i)
 
-func `$`*(this: GraphicsThreadingModel): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: FrameBufferProperties): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getInputDevices*(this: GraphicsWindow): seq[InputDevice] =
   let count = this.getNumInputDevices()
   result.setLen(count)
@@ -36778,72 +36423,17 @@ proc getInputDeviceNames*(this: GraphicsWindow): seq[string] =
   for i in 0 ..< count:
     result[i] = this.getInputDeviceName(i)
 
-func `$`*(this: DisplayMode): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getPipeTypes*(this: GraphicsPipeSelection): seq[TypeHandle] =
   let count = this.getNumPipeTypes()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getPipeType(i)
 
-func `$`*(this: Thread): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: MutexDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConditionVarDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ConditionVarFullDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ReMutexDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LightMutexDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LightReMutexDirect): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: Semaphore): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: EventParameter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getTaskChains*(this: AsyncTaskManager): seq[AsyncTaskChain] =
   let count = this.getNumTaskChains()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getTaskChain(i)
-
-func `$`*(this: AsyncTaskManager): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getTasks*(this: AsyncTaskCollection): seq[AsyncTask] =
   let count = this.getNumTasks()
@@ -36855,67 +36445,17 @@ iterator items*(collection: AsyncTaskCollection): AsyncTask =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: AsyncTaskCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AsyncTaskChain): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ParamValueBase): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getParameters*(this: Event): seq[EventParameter] =
   let count = this.getNumParameters()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getParameter(i)
 
-func `$`*(this: Event): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AdaptiveLru): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AdaptiveLruPage): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexAnimationSpec): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: InternalName): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexColumn): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getColumns*(this: GeomVertexArrayFormat): seq[GeomVertexColumn] =
   let count = this.getNumColumns()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getColumn(i)
-
-func `$`*(this: GeomVertexArrayFormat): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getArrays*(this: GeomVertexFormat): seq[GeomVertexArrayFormat] =
   let count = this.getNumArrays()
@@ -36965,41 +36505,6 @@ proc getMorphDeltas*(this: GeomVertexFormat): seq[InternalName] =
   for i in 0 ..< count:
     result[i] = this.getMorphDelta(i)
 
-func `$`*(this: GeomVertexFormat): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SimpleLru): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SimpleLruPage): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SimpleAllocator): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SimpleAllocatorBlock): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: VertexDataPage): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexArrayData): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getTransforms*(this: TransformTable): seq[VertexTransform] =
   let count = this.getNumTransforms()
   result.setLen(count)
@@ -37011,11 +36516,6 @@ proc getTransforms*(this: TransformBlend): seq[VertexTransform] =
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getTransform(i)
-
-func `$`*(this: TransformBlend): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getBlends*(this: TransformBlendTable): seq[TransformBlend] =
   let count = this.getNumBlends()
@@ -37035,62 +36535,17 @@ proc getArrays*(this: GeomVertexData): seq[GeomVertexArrayData] =
   for i in 0 ..< count:
     result[i] = this.getArray(i)
 
-func `$`*(this: GeomVertexData): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getVertexList*(this: GeomPrimitive): seq[int] =
   let count = this.getNumVertices()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getVertex(i)
 
-func `$`*(this: GeomPrimitive): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: TextureStage): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getPrimitives*(this: Geom): seq[GeomPrimitive] =
   let count = this.getNumPrimitives()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getPrimitive(i)
-
-func `$`*(this: Geom): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexReader): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexWriter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: GeomVertexRewriter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: Lens): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: Material): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getTextures*(this: TextureCollection): seq[Texture] =
   let count = this.getNumTextures()
@@ -37102,73 +36557,33 @@ iterator items*(collection: TextureCollection): Texture =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: TextureCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: LVecBase2f): float32 =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: LVecBase2f): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: LVecBase2d): float64 =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: LVecBase2d): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: LVecBase2i): int =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: LVecBase2i): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: LVecBase3f): float32 =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: LVecBase3f): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: LVecBase3d): float64 =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: LVecBase3d): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: LVecBase3i): int =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: LVecBase3i): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: LVecBase4f): float32 =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: LVecBase4f): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: UnalignedLVecBase4f): float32 =
   for i in 0 ..< len(collection):
@@ -37178,11 +36593,6 @@ iterator items*(collection: LVecBase4d): float64 =
   for i in 0 ..< len(collection):
     yield collection[i]
 
-func `$`*(this: LVecBase4d): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: UnalignedLVecBase4d): float64 =
   for i in 0 ..< len(collection):
     yield collection[i]
@@ -37190,11 +36600,6 @@ iterator items*(collection: UnalignedLVecBase4d): float64 =
 iterator items*(collection: LVecBase4i): int =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: LVecBase4i): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 iterator items*(collection: UnalignedLVecBase4i): int =
   for i in 0 ..< len(collection):
@@ -37224,11 +36629,6 @@ proc getRow2s*(this: LMatrix3f): seq[LVecBase2f] =
   for i in 0 ..< count:
     result[i] = this.getRow2(i)
 
-func `$`*(this: LMatrix3f): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getRows*(this: LMatrix4f): seq[LVecBase4f] =
   let count = LMatrix4f.len()
   result.setLen(count)
@@ -37246,11 +36646,6 @@ proc getRow3s*(this: LMatrix4f): seq[LVecBase3f] =
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getRow3(i)
-
-func `$`*(this: LMatrix4f): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getRows*(this: LMatrix3d): seq[LVecBase3d] =
   let count = LMatrix3d.len()
@@ -37276,11 +36671,6 @@ proc getRow2s*(this: LMatrix3d): seq[LVecBase2d] =
   for i in 0 ..< count:
     result[i] = this.getRow2(i)
 
-func `$`*(this: LMatrix3d): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getRows*(this: LMatrix4d): seq[LVecBase4d] =
   let count = LMatrix4d.len()
   result.setLen(count)
@@ -37298,46 +36688,6 @@ proc getRow3s*(this: LMatrix4d): seq[LVecBase3d] =
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getRow3(i)
-
-func `$`*(this: LMatrix4d): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LQuaternionf): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LQuaterniond): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BoundingVolume): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LParabolaf): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LParabolad): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LPlanef): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LPlaned): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getPoints*(this: BoundingBox): seq[LPoint3] =
   let count = this.getNumPoints()
@@ -37399,16 +36749,6 @@ proc getTimewarpCurves*(this: ParametricCurveCollection): seq[ParametricCurve] =
   for i in 0 ..< count:
     result[i] = this.getTimewarpCurve(i)
 
-func `$`*(this: ParametricCurveCollection): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: CurveFitter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getCvs*(this: NurbsCurveInterface): seq[LVecBase4] =
   let count = this.getNumCvs()
   result.setLen(count)
@@ -37445,11 +36785,6 @@ proc getKnots*(this: NurbsCurveEvaluator): seq[float] =
   for i in 0 ..< count:
     result[i] = this.getKnot(i)
 
-func `$`*(this: NurbsCurveEvaluator): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getUKnots*(this: NurbsSurfaceEvaluator): seq[float] =
   let count = this.getNumUKnots()
   result.setLen(count)
@@ -37462,19 +36797,9 @@ proc getVKnots*(this: NurbsSurfaceEvaluator): seq[float] =
   for i in 0 ..< count:
     result[i] = this.getVKnot(i)
 
-func `$`*(this: NurbsSurfaceEvaluator): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 iterator items*(collection: pixel): int =
   for i in 0 ..< len(collection):
     yield collection[i]
-
-func `$`*(this: pixel): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getExtensions*(this: PNMFileType): seq[string] =
   let count = this.getNumExtensions()
@@ -37488,16 +36813,6 @@ proc getTypes*(this: PNMFileTypeRegistry): seq[PNMFileType] =
   for i in 0 ..< count:
     result[i] = this.getType(i)
 
-func `$`*(this: PNMImageHeader): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: PfmFile): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getPages*(this: DynamicTextFont): seq[DynamicTextPage] =
   let count = this.getNumPages()
   result.setLen(count)
@@ -37510,21 +36825,11 @@ proc getParameters*(this: ButtonThrower): seq[EventParameter] =
   for i in 0 ..< count:
     result[i] = this.getParameter(i)
 
-func `$`*(this: MouseWatcherRegion): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getRegions*(this: MouseWatcherBase): seq[MouseWatcherRegion] =
   let count = this.getNumRegions()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getRegion(i)
-
-func `$`*(this: MouseWatcherBase): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getGroups*(this: MouseWatcher): seq[MouseWatcherGroup] =
   let count = this.getNumGroups()
@@ -37532,96 +36837,11 @@ proc getGroups*(this: MouseWatcher): seq[MouseWatcherGroup] =
   for i in 0 ..< count:
     result[i] = this.getGroup(i)
 
-func `$`*(this: MouseWatcherParameter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: UpdateSeq): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BamCacheRecord): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: LoaderOptions): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BitMask[uint16, 16]): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BitMask[uint32, 32]): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BitMask[uint64, 64]): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: BitArray): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ButtonHandle): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: ButtonMap): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: CallbackObject): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
 proc getButtons*(this: ModifierButtons): seq[ButtonHandle] =
   let count = this.getNumButtons()
   result.setLen(count)
   for i in 0 ..< count:
     result[i] = this.getButton(i)
-
-func `$`*(this: ModifierButtons): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: SparseArray): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: UniqueIdAllocator): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AudioSound): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: AudioManager): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: PGFrameStyle): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
 
 proc getStateDefs*(this: PGItem): seq[NodePath] =
   let count = this.getNumStateDefs()
@@ -37629,12 +36849,7 @@ proc getStateDefs*(this: PGItem): seq[NodePath] =
   for i in 0 ..< count:
     result[i] = this.getStateDef(i)
 
-func `$`*(this: PGMouseWatcherParameter): string {.inline.} =
-  var str : StringStream
-  this.output(str)
-  str.data
-
-func `$`*(this: NetAddress): string {.inline.} =
+func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollection | AnimGroup | AnimInterface | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskCollection | AsyncTaskManager | AttribNodeRegistry | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | BoundingVolume | ButtonHandle | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionRecorder | CollisionSolid | CollisionTraverser | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DisplayRegion | DocumentSpec | DownloadDb | Event | EventParameter | Filename | FrameBufferProperties | Geom | GeomPrimitive | GeomVertexAnimationSpec | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexColumn | GeomVertexData | GeomVertexFormat | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDevice | InputDeviceSet | InternalName | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LQuaterniond | LQuaternionf | LVecBase2d | LVecBase2f | LVecBase2i | LVecBase3d | LVecBase3f | LVecBase3i | LVecBase4d | LVecBase4f | LVecBase4i | Lens | LightLensNode | LightMutexDirect | LightNode | LightReMutexDirect | Loader | LoaderOptions | Material | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherBase | MouseWatcherParameter | MouseWatcherRegion | Multifile | MutexDirect | Namable | NetAddress | NodePath | NodePathCollection | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGFrameStyle | PGMouseWatcherParameter | PNMImageHeader | PStatCollector | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | PartSubset | PfmFile | ReMutexDirect | RenderAttrib | RenderEffect | RenderEffects | RenderState | Semaphore | SimpleAllocator | SimpleAllocatorBlock | SimpleLru | SimpleLruPage | SparseArray | SubfileInfo | TextNode | TextureCollection | TextureStage | TextureStageCollection | Thread | TransformBlend | TransformState | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | VertexSlider | VertexTransform | VirtualFile | VirtualFileMount | WeakNodePath | WindowHandle | WindowProperties | pixel): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data

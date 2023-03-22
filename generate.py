@@ -1909,6 +1909,8 @@ def bind_module(out, module_name):
     for func in iter_module_functions(module_name):
         bind_function(out, func)
 
+    dollar_types = set()
+
     for type in iter_module_types(module_name):
         for i_mseq in range(interrogate_type_number_of_make_seqs(type)):
             bind_make_seq(out, type, interrogate_type_get_make_seq(type, i_mseq))
@@ -1925,11 +1927,15 @@ def bind_module(out, module_name):
 
             if get_type_output_method(type):
                 type_name = translated_type_name(type)
-                out.write(f"func `$`*(this: {type_name}): string {{.inline.}} =\n")
-                out.write(f"  var str : StringStream\n")
-                out.write(f"  this.output(str)\n")
-                out.write(f"  str.data\n")
-                out.write(f"\n")
+                dollar_types.add(type_name)
+
+    if dollar_types:
+        type_str = " | ".join(sorted(dollar_types))
+        out.write(f"func `$`*(this: {type_str}): string {{.inline.}} =\n")
+        out.write(f"  var str : StringStream\n")
+        out.write(f"  this.output(str)\n")
+        out.write(f"  str.data\n")
+        out.write(f"\n")
 
 
 if __name__ == "__main__":

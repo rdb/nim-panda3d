@@ -37869,7 +37869,7 @@ func `$`*(this: NetAddress): string {.inline.} =
   str.data
 
 
-converter initFilename*(fn: string): Filename {.importcpp: "Filename(([](NimStringDesc *desc) {return std::string(desc->data, desc->len);})(#))".}
+converter initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringToStdString(#))", header: stringConversionCode.}
 
 converter toInternalName*(name: string): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#))", header: "internalName.h".}
 

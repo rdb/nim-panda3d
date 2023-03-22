@@ -33,7 +33,15 @@ template<class T> T *deconstify(const T *value) {
 }
 """;
 
-const stringConversionCode* = """
+when defined(nimSeqsV2):
+  const stringConversionCode* = """
+#include <string>
+
+N_LIB_PRIVATE N_NIMCALL(std::string, nimStringToStdString)(struct NimStringV2 desc);
+N_LIB_PRIVATE N_NIMCALL(struct NimStringV2, nimStringFromStdString)(const std::string &s);
+""";
+else:
+  const stringConversionCode* = """
 #include <string>
 
 N_LIB_PRIVATE N_NIMCALL(std::string, nimStringToStdString)(struct NimStringDesc *desc);
@@ -46,16 +54,24 @@ type
 type
   std_string_const_ref* {.importcpp: "std::string const&", header: "string".} = object
 
-func size(this: std_string): int {.importcpp: "size".}
+converter constRef(s: std_string): std_string_const_ref {.importcpp: "(#)".}
+
 func size(this: std_string_const_ref): int {.importcpp: "size".}
 
-func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString".} =
-  result = newString(s.size())
-  {.emit: "memcpy(result->data, `s`.data(), `s`.size());"}
+when defined(nimSeqsV2):
+  func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString".} =
+    result = newString(s.size())
+    {.emit: "memcpy(result.p->data, `s`.data(), `s`.size());"}
 
+  func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
+    {.emit: "if (`desc`.len > 0) result.assign(`desc`.p->data, `desc`.len);"}
+else:
+  func nimStringFromStdString(s: std_string_const_ref): string {.noinit, exportcpp: "nimStringFromStdString".} =
+    result = newString(s.size())
+    {.emit: "memcpy(result->data, `s`.data(), `s`.size());"}
 
-func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
-  {.emit: "if (`desc` != nullptr) result.assign(`desc`->data, `desc`->len);"}
+  func nimStringToStdString(desc: string): std_string {.noinit, exportcpp: "nimStringToStdString".} =
+    {.emit: "if (`desc` != nullptr) result.assign(`desc`->data, `desc`->len);"}
 
 proc unrefEnv(envp: pointer) {.noinit, exportcpp: "unrefEnv".} =
   GC_unref(cast[RootRef](envp))
@@ -67,9 +83,7 @@ when not defined(release):
   func assertHandler(expression: ptr[const_char], line: cint, sourceFile: ptr[const_char]): bool {.exportcpp: "nimAssertHandler".} =
     var cmsg : std_string
     {.emit: [cmsg, " = Notify::ptr()->get_assert_error_message();"].}
-    var msg = newString(cmsg.size())
-    {.emit: ["memcpy(", msg, "->data, ", cmsg, ".data(), ", cmsg, ".size());"].}
-    raiseAssert(msg)
+    raiseAssert(nimStringFromStdString(cmsg))
 
   proc installAssertHandler() =
     {.emit: "Notify::ptr()->set_assert_handler(&nimAssertHandler);".}

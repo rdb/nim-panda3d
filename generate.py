@@ -7,6 +7,9 @@ import panda3d, pandac
 from panda3d.interrogatedb import *
 
 
+OUTPUT_DOCSTRINGS = False
+
+
 panda_include_dir = os.path.join(os.path.dirname(os.path.dirname(pandac.__file__)), "include", "")
 
 
@@ -911,7 +914,7 @@ def bind_coerce_constructor(out, function, wrapper, num_default_args=0):
         header = sorted(headers)[0]
         out.write(f" {{.importcpp: \"{cpp_expr}\", header: {header}.}}")
 
-    if interrogate_wrapper_has_comment(wrapper):
+    if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
         comment = translate_comment(interrogate_wrapper_comment(wrapper))
         if comment:
             out.write(" ## \\\n" + comment)
@@ -1157,7 +1160,7 @@ def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", 
     pragma_str = ", ".join(pragmas)
     out.write(f" {{.{pragma_str}.}}")
 
-    if interrogate_wrapper_has_comment(wrapper):
+    if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
         comment = translate_comment(interrogate_wrapper_comment(wrapper))
         if comment:
             out.write(" ## \\\n" + comment)
@@ -1668,7 +1671,7 @@ def bind_type(out, type, bound_templates={}):
             pragma_str = ", ".join(pragmas)
             out.write(f"type {type_name_star} {{.{pragma_str}.}} = enum\n")
 
-            if interrogate_type_has_comment(type):
+            if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
                 comment = translate_comment(interrogate_type_comment(type), '  ## ')
                 if comment:
                     out.write(comment + "\n")
@@ -1716,7 +1719,7 @@ def bind_type(out, type, bound_templates={}):
             wrapped_type_name = translated_type_name(wrapped_type)
             out.write(f"type {type_name_star} = {wrapped_type_name}\n\n")
 
-            if interrogate_type_has_comment(type):
+            if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
                 comment = translate_comment(interrogate_type_comment(type), '  ## ')
                 if comment:
                     out.write("\n" + comment)
@@ -1776,7 +1779,7 @@ def bind_type(out, type, bound_templates={}):
             base_name = translated_type_name(base_type)
             out.write(f" of {base_name}")
 
-        if interrogate_type_has_comment(type):
+        if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
             comment = translate_comment(interrogate_type_comment(type), '  ## ')
             if comment:
                 out.write("\n" + comment)

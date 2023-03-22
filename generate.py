@@ -1820,8 +1820,6 @@ def bind_type(out, type, bound_templates={}):
 
         if is_type_pointer(type):
             out.write(f"converter to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")
-            out.write(f"converter toBool*(this: {type_name}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
-            out.write(f"func `==`*(x: {type_name}, y: type(nil)): bool {{.importcpp: \"(# == nullptr)\".}}\n")
 
             if cpp_name == "TypedObject":
                 out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"(@)\".}}\n")
@@ -1910,15 +1908,17 @@ def bind_module(out, module_name):
         bind_function(out, func)
 
     dollar_types = set()
+    pointer_types = set()
 
     for type in iter_module_types(module_name):
         for i_mseq in range(interrogate_type_number_of_make_seqs(type)):
             bind_make_seq(out, type, interrogate_type_get_make_seq(type, i_mseq))
 
         if interrogate_type_is_struct(type) or interrogate_type_is_class(type):
+            type_name = translated_type_name(type)
+
             element_type = get_type_element_type(type)
             if element_type:
-                type_name = translated_type_name(type)
                 element_type_name = translated_type_name(element_type)
                 out.write(f"iterator items*(collection: {type_name}): {element_type_name} =\n")
                 out.write(f"  for i in 0 ..< len(collection):\n")
@@ -1926,8 +1926,10 @@ def bind_module(out, module_name):
                 out.write(f"\n")
 
             if get_type_output_method(type):
-                type_name = translated_type_name(type)
                 dollar_types.add(type_name)
+
+            if is_type_pointer(type):
+                pointer_types.add(type_name)
 
     if dollar_types:
         type_str = " | ".join(sorted(dollar_types))
@@ -1936,6 +1938,12 @@ def bind_module(out, module_name):
         out.write(f"  this.output(str)\n")
         out.write(f"  str.data\n")
         out.write(f"\n")
+
+    if pointer_types:
+        type_str = " | ".join(sorted(pointer_types))
+        out.write(f"converter toBool*(this: {type_str}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
+        out.write(f"func `==`*(x: {type_str}, y: type(nil)): bool {{.importcpp: \"(# == nullptr)\".}}\n")
+        out.write("\n")
 
 
 if __name__ == "__main__":

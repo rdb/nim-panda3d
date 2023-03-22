@@ -50,8 +50,6 @@ type DCPackType* {.importcpp: "DCPackType", header: "dcPackerInterface.h".} = en
 type DCPackerInterface* {.importcpp: "DCPackerInterface*", bycopy, pure, inheritable, header: "dcPackerInterface.h".} = object
 
 converter toDCPackerInterface*(_: type(nil)): DCPackerInterface {.importcpp: "(nullptr)".}
-converter toBool*(this: DCPackerInterface): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCPackerInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCKeywordList* {.importcpp: "DCKeywordList", pure, inheritable, header: "dcKeywordList.h".} = object
 
@@ -60,8 +58,6 @@ type DCField* {.importcpp: "DCField*", bycopy, pure, inheritable, header: "dcFie
 converter upcastToDCKeywordList*(_: typedesc[DCField]): typedesc[DCKeywordList] = typedesc[DCKeywordList]
 
 converter toDCField*(_: type(nil)): DCField {.importcpp: "(nullptr)".}
-converter toBool*(this: DCField): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCField, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCPackData* {.importcpp: "DCPackData", pure, inheritable, header: "dcPackData.h".} = object
 
@@ -70,32 +66,22 @@ type DCPacker* {.importcpp: "DCPacker", pure, inheritable, header: "dcPacker.h".
 type DCParameter* {.importcpp: "DCParameter*", bycopy, pure, inheritable, header: "dcParameter.h".} = object of DCField
 
 converter toDCParameter*(_: type(nil)): DCParameter {.importcpp: "(nullptr)".}
-converter toBool*(this: DCParameter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCArrayParameter* {.importcpp: "DCArrayParameter*", bycopy, pure, inheritable, header: "dcArrayParameter.h".} = object of DCParameter
 
 converter toDCArrayParameter*(_: type(nil)): DCArrayParameter {.importcpp: "(nullptr)".}
-converter toBool*(this: DCArrayParameter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCArrayParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCAtomicField* {.importcpp: "DCAtomicField*", bycopy, pure, inheritable, header: "dcAtomicField.h".} = object of DCField
 
 converter toDCAtomicField*(_: type(nil)): DCAtomicField {.importcpp: "(nullptr)".}
-converter toBool*(this: DCAtomicField): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCAtomicField, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCDeclaration* {.importcpp: "DCDeclaration*", bycopy, pure, inheritable, header: "dcDeclaration.h".} = object
 
 converter toDCDeclaration*(_: type(nil)): DCDeclaration {.importcpp: "(nullptr)".}
-converter toBool*(this: DCDeclaration): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCDeclaration, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCClass* {.importcpp: "DCClass*", bycopy, pure, inheritable, header: "dcClass.h".} = object of DCDeclaration
 
 converter toDCClass*(_: type(nil)): DCClass {.importcpp: "(nullptr)".}
-converter toBool*(this: DCClass): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCClass, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCClassParameter* {.importcpp: "DCClassParameter", pure, inheritable, header: "dcClassParameter.h".} = object of DCParameter
 
@@ -104,8 +90,6 @@ type DCFile* {.importcpp: "DCFile", pure, inheritable, header: "dcFile.h".} = ob
 type DCKeyword* {.importcpp: "DCKeyword*", bycopy, pure, inheritable, header: "dcKeyword.h".} = object of DCDeclaration
 
 converter toDCKeyword*(_: type(nil)): DCKeyword {.importcpp: "(nullptr)".}
-converter toBool*(this: DCKeyword): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCKeyword, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCMolecularField* {.importcpp: "DCMolecularField", pure, inheritable, header: "dcMolecularField.h".} = object of DCField
 
@@ -114,16 +98,12 @@ type DCSimpleParameter* {.importcpp: "DCSimpleParameter", pure, inheritable, hea
 type DCSwitch* {.importcpp: "DCSwitch*", bycopy, pure, inheritable, header: "dcSwitch.h".} = object of DCDeclaration
 
 converter toDCSwitch*(_: type(nil)): DCSwitch {.importcpp: "(nullptr)".}
-converter toBool*(this: DCSwitch): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCSwitch, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DCSwitchParameter* {.importcpp: "DCSwitchParameter", pure, inheritable, header: "dcSwitchParameter.h".} = object of DCParameter
 
 type DCTypedef* {.importcpp: "DCTypedef*", bycopy, pure, inheritable, header: "dcTypedef.h".} = object of DCDeclaration
 
 converter toDCTypedef*(_: type(nil)): DCTypedef {.importcpp: "(nullptr)".}
-converter toBool*(this: DCTypedef): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DCTypedef, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type SmoothMover* {.importcpp: "SmoothMover", pure, inheritable, header: "smoothMover.h".} = object
 
@@ -150,8 +130,6 @@ template PM_on*(_: typedesc[SmoothMover]): SmoothMover_PredictionMode = SmoothMo
 type CInterval* {.importcpp: "PT(CInterval)", bycopy, pure, inheritable, header: "cInterval.h".} = object of TypedReferenceCount
 
 converter toCInterval*(_: type(nil)): CInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CInterval], obj: TypedObject): CInterval {.importcpp: "DCAST(CInterval, @)".}
 
 type CInterval_EventType {.importcpp: "CInterval::EventType", pure, header: "cInterval.h".} = enum
@@ -193,49 +171,35 @@ template S_final*(_: typedesc[CInterval]): CInterval_State = CInterval_State.S_f
 type CIntervalManager* {.importcpp: "CIntervalManager*", bycopy, pure, inheritable, header: "cIntervalManager.h".} = object
 
 converter toCIntervalManager*(_: type(nil)): CIntervalManager {.importcpp: "(nullptr)".}
-converter toBool*(this: CIntervalManager): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CIntervalManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type CConstraintInterval* {.importcpp: "PT(CConstraintInterval)", bycopy, pure, inheritable, header: "cConstraintInterval.h".} = object of CInterval
 
 converter toCConstraintInterval*(_: type(nil)): CConstraintInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CConstraintInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CConstraintInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CConstraintInterval], obj: TypedObject): CConstraintInterval {.importcpp: "DCAST(CConstraintInterval, @)".}
 
 type CConstrainHprInterval* {.importcpp: "PT(CConstrainHprInterval)", bycopy, pure, inheritable, header: "cConstrainHprInterval.h".} = object of CConstraintInterval
 
 converter toCConstrainHprInterval*(_: type(nil)): CConstrainHprInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CConstrainHprInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CConstrainHprInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CConstrainHprInterval], obj: TypedObject): CConstrainHprInterval {.importcpp: "DCAST(CConstrainHprInterval, @)".}
 
 type CConstrainPosHprInterval* {.importcpp: "PT(CConstrainPosHprInterval)", bycopy, pure, inheritable, header: "cConstrainPosHprInterval.h".} = object of CConstraintInterval
 
 converter toCConstrainPosHprInterval*(_: type(nil)): CConstrainPosHprInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CConstrainPosHprInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CConstrainPosHprInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CConstrainPosHprInterval], obj: TypedObject): CConstrainPosHprInterval {.importcpp: "DCAST(CConstrainPosHprInterval, @)".}
 
 type CConstrainPosInterval* {.importcpp: "PT(CConstrainPosInterval)", bycopy, pure, inheritable, header: "cConstrainPosInterval.h".} = object of CConstraintInterval
 
 converter toCConstrainPosInterval*(_: type(nil)): CConstrainPosInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CConstrainPosInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CConstrainPosInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CConstrainPosInterval], obj: TypedObject): CConstrainPosInterval {.importcpp: "DCAST(CConstrainPosInterval, @)".}
 
 type CConstrainTransformInterval* {.importcpp: "PT(CConstrainTransformInterval)", bycopy, pure, inheritable, header: "cConstrainTransformInterval.h".} = object of CConstraintInterval
 
 converter toCConstrainTransformInterval*(_: type(nil)): CConstrainTransformInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CConstrainTransformInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CConstrainTransformInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CConstrainTransformInterval], obj: TypedObject): CConstrainTransformInterval {.importcpp: "DCAST(CConstrainTransformInterval, @)".}
 
 type CLerpInterval* {.importcpp: "PT(CLerpInterval)", bycopy, pure, inheritable, header: "cLerpInterval.h".} = object of CInterval
 
 converter toCLerpInterval*(_: type(nil)): CLerpInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CLerpInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CLerpInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CLerpInterval], obj: TypedObject): CLerpInterval {.importcpp: "DCAST(CLerpInterval, @)".}
 
 type CLerpInterval_BlendType {.importcpp: "CLerpInterval::BlendType", pure, header: "cLerpInterval.h".} = enum
@@ -257,22 +221,16 @@ template BT_invalid*(_: typedesc[CLerpInterval]): CLerpInterval_BlendType = CLer
 type CLerpAnimEffectInterval* {.importcpp: "PT(CLerpAnimEffectInterval)", bycopy, pure, inheritable, header: "cLerpAnimEffectInterval.h".} = object of CLerpInterval
 
 converter toCLerpAnimEffectInterval*(_: type(nil)): CLerpAnimEffectInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CLerpAnimEffectInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CLerpAnimEffectInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CLerpAnimEffectInterval], obj: TypedObject): CLerpAnimEffectInterval {.importcpp: "DCAST(CLerpAnimEffectInterval, @)".}
 
 type CLerpNodePathInterval* {.importcpp: "PT(CLerpNodePathInterval)", bycopy, pure, inheritable, header: "cLerpNodePathInterval.h".} = object of CLerpInterval
 
 converter toCLerpNodePathInterval*(_: type(nil)): CLerpNodePathInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CLerpNodePathInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CLerpNodePathInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CLerpNodePathInterval], obj: TypedObject): CLerpNodePathInterval {.importcpp: "DCAST(CLerpNodePathInterval, @)".}
 
 type CMetaInterval* {.importcpp: "PT(CMetaInterval)", bycopy, pure, inheritable, header: "cMetaInterval.h".} = object of CInterval
 
 converter toCMetaInterval*(_: type(nil)): CMetaInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: CMetaInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CMetaInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CMetaInterval], obj: TypedObject): CMetaInterval {.importcpp: "DCAST(CMetaInterval, @)".}
 
 type CMetaInterval_RelativeStart {.importcpp: "CMetaInterval::RelativeStart", pure, header: "cMetaInterval.h".} = enum
@@ -304,57 +262,41 @@ template DT_popLevel*(_: typedesc[CMetaInterval]): CMetaInterval_DefType = CMeta
 type HideInterval* {.importcpp: "PT(HideInterval)", bycopy, pure, inheritable, header: "hideInterval.h".} = object of CInterval
 
 converter toHideInterval*(_: type(nil)): HideInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: HideInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: HideInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HideInterval], obj: TypedObject): HideInterval {.importcpp: "DCAST(HideInterval, @)".}
 
 type LerpBlendType* {.importcpp: "PT(LerpBlendType)", bycopy, pure, inheritable, header: "lerpblend.h".} = object of TypedReferenceCount
 
 converter toLerpBlendType*(_: type(nil)): LerpBlendType {.importcpp: "(nullptr)".}
-converter toBool*(this: LerpBlendType): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LerpBlendType, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LerpBlendType], obj: TypedObject): LerpBlendType {.importcpp: "DCAST(LerpBlendType, @)".}
 
 type EaseInBlendType* {.importcpp: "PT(EaseInBlendType)", bycopy, pure, inheritable, header: "lerpblend.h".} = object of LerpBlendType
 
 converter toEaseInBlendType*(_: type(nil)): EaseInBlendType {.importcpp: "(nullptr)".}
-converter toBool*(this: EaseInBlendType): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: EaseInBlendType, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[EaseInBlendType], obj: TypedObject): EaseInBlendType {.importcpp: "DCAST(EaseInBlendType, @)".}
 
 type EaseOutBlendType* {.importcpp: "PT(EaseOutBlendType)", bycopy, pure, inheritable, header: "lerpblend.h".} = object of LerpBlendType
 
 converter toEaseOutBlendType*(_: type(nil)): EaseOutBlendType {.importcpp: "(nullptr)".}
-converter toBool*(this: EaseOutBlendType): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: EaseOutBlendType, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[EaseOutBlendType], obj: TypedObject): EaseOutBlendType {.importcpp: "DCAST(EaseOutBlendType, @)".}
 
 type EaseInOutBlendType* {.importcpp: "PT(EaseInOutBlendType)", bycopy, pure, inheritable, header: "lerpblend.h".} = object of LerpBlendType
 
 converter toEaseInOutBlendType*(_: type(nil)): EaseInOutBlendType {.importcpp: "(nullptr)".}
-converter toBool*(this: EaseInOutBlendType): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: EaseInOutBlendType, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[EaseInOutBlendType], obj: TypedObject): EaseInOutBlendType {.importcpp: "DCAST(EaseInOutBlendType, @)".}
 
 type NoBlendType* {.importcpp: "PT(NoBlendType)", bycopy, pure, inheritable, header: "lerpblend.h".} = object of LerpBlendType
 
 converter toNoBlendType*(_: type(nil)): NoBlendType {.importcpp: "(nullptr)".}
-converter toBool*(this: NoBlendType): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NoBlendType, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NoBlendType], obj: TypedObject): NoBlendType {.importcpp: "DCAST(NoBlendType, @)".}
 
 type ShowInterval* {.importcpp: "PT(ShowInterval)", bycopy, pure, inheritable, header: "showInterval.h".} = object of CInterval
 
 converter toShowInterval*(_: type(nil)): ShowInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: ShowInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShowInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShowInterval], obj: TypedObject): ShowInterval {.importcpp: "DCAST(ShowInterval, @)".}
 
 type WaitInterval* {.importcpp: "PT(WaitInterval)", bycopy, pure, inheritable, header: "waitInterval.h".} = object of CInterval
 
 converter toWaitInterval*(_: type(nil)): WaitInterval {.importcpp: "(nullptr)".}
-converter toBool*(this: WaitInterval): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: WaitInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[WaitInterval], obj: TypedObject): WaitInterval {.importcpp: "DCAST(WaitInterval, @)".}
 
 type CConnectionRepository* {.importcpp: "CConnectionRepository", pure, inheritable, header: "cConnectionRepository.h".} = object
@@ -364,8 +306,6 @@ type CDistributedSmoothNodeBase* {.importcpp: "CDistributedSmoothNodeBase", pure
 type CMotionTrail* {.importcpp: "PT(CMotionTrail)", bycopy, pure, inheritable, header: "cMotionTrail.h".} = object of TypedReferenceCount
 
 converter toCMotionTrail*(_: type(nil)): CMotionTrail {.importcpp: "(nullptr)".}
-converter toBool*(this: CMotionTrail): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CMotionTrail, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CMotionTrail], obj: TypedObject): CMotionTrail {.importcpp: "DCAST(CMotionTrail, @)".}
 
 func name*(this: CInterval): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
@@ -1446,4 +1386,7 @@ func `$`*(this: CInterval | CIntervalManager | DCClass | DCDeclaration | DCField
   var str : StringStream
   this.output(str)
   str.data
+
+converter toBool*(this: CConstrainHprInterval | CConstrainPosHprInterval | CConstrainPosInterval | CConstrainTransformInterval | CConstraintInterval | CInterval | CIntervalManager | CLerpAnimEffectInterval | CLerpInterval | CLerpNodePathInterval | CMetaInterval | CMotionTrail | DCArrayParameter | DCAtomicField | DCClass | DCDeclaration | DCField | DCKeyword | DCPackerInterface | DCParameter | DCSwitch | DCTypedef | EaseInBlendType | EaseInOutBlendType | EaseOutBlendType | HideInterval | LerpBlendType | NoBlendType | ShowInterval | WaitInterval): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: CConstrainHprInterval | CConstrainPosHprInterval | CConstrainPosInterval | CConstrainTransformInterval | CConstraintInterval | CInterval | CIntervalManager | CLerpAnimEffectInterval | CLerpInterval | CLerpNodePathInterval | CMetaInterval | CMotionTrail | DCArrayParameter | DCAtomicField | DCClass | DCDeclaration | DCField | DCKeyword | DCPackerInterface | DCParameter | DCSwitch | DCTypedef | EaseInBlendType | EaseInOutBlendType | EaseOutBlendType | HideInterval | LerpBlendType | NoBlendType | ShowInterval | WaitInterval, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 

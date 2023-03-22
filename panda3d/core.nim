@@ -182,8 +182,6 @@ type TypeRegistry* {.importcpp: "TypeRegistry", pure, inheritable, header: "type
 type TypedObject* {.importcpp: "TypedObject*", bycopy, pure, inheritable, header: "typedObject.h".} = object
 
 converter toTypedObject*(_: type(nil)): TypedObject {.importcpp: "(nullptr)".}
-converter toBool*(this: TypedObject): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TypedObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TypedObject], obj: TypedObject): TypedObject {.importcpp: "(@)".}
 
 type ios_base* {.importcpp: "ios_base", pure, inheritable, header: "<ios>".} = object
@@ -229,8 +227,6 @@ type pfstream* = FileStream
 type TextEncoder* {.importcpp: "TextEncoder*", bycopy, pure, inheritable, header: "textEncoder.h".} = object
 
 converter toTextEncoder*(_: type(nil)): TextEncoder {.importcpp: "(nullptr)".}
-converter toBool*(this: TextEncoder): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextEncoder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TextEncoder_Encoding {.importcpp: "TextEncoder::Encoding", pure, header: "textEncoder.h".} = enum
   E_iso8859 = 0
@@ -262,8 +258,6 @@ template T_executable*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_e
 type PandaSystem* {.importcpp: "PandaSystem*", bycopy, pure, inheritable, header: "pandaSystem.h".} = object
 
 converter toPandaSystem*(_: type(nil)): PandaSystem {.importcpp: "(nullptr)".}
-converter toBool*(this: PandaSystem): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PandaSystem, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DSearchPath* {.importcpp: "DSearchPath", pure, inheritable, header: "dSearchPath.h".} = object
 
@@ -383,22 +377,16 @@ converter upcastToOStreamWrapper*(_: typedesc[StreamWrapper]): typedesc[OStreamW
 type SSReader* {.importcpp: "SSReader*", bycopy, pure, inheritable, header: "socketStream.h".} = object
 
 converter toSSReader*(_: type(nil)): SSReader {.importcpp: "(nullptr)".}
-converter toBool*(this: SSReader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SSReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type SSWriter* {.importcpp: "SSWriter*", bycopy, pure, inheritable, header: "socketStream.h".} = object
 
 converter toSSWriter*(_: type(nil)): SSWriter {.importcpp: "(nullptr)".}
-converter toBool*(this: SSWriter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SSWriter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type ISocketStream* {.importcpp: "ISocketStream*", bycopy, pure, inheritable, header: "socketStream.h".} = object of istream
 
 converter upcastToSSReader*(_: typedesc[ISocketStream]): typedesc[SSReader] = typedesc[SSReader]
 
 converter toISocketStream*(_: type(nil)): ISocketStream {.importcpp: "(nullptr)".}
-converter toBool*(this: ISocketStream): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ISocketStream, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type ISocketStream_ReadState {.importcpp: "ISocketStream::ReadState", pure, header: "socketStream.h".} = enum
   RS_initial = 0
@@ -470,14 +458,10 @@ type HTTPCookie* {.importcpp: "HTTPCookie", pure, inheritable, header: "httpCook
 type ReferenceCount* {.importcpp: "PT(ReferenceCount)", bycopy, pure, inheritable, header: "referenceCount.h".} = object
 
 converter toReferenceCount*(_: type(nil)): ReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: ReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type HTTPClient* {.importcpp: "PT(HTTPClient)", bycopy, pure, inheritable, header: "httpClient.h".} = object of ReferenceCount
 
 converter toHTTPClient*(_: type(nil)): HTTPClient {.importcpp: "(nullptr)".}
-converter toBool*(this: HTTPClient): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: HTTPClient, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HTTPClient], obj: TypedObject): HTTPClient {.importcpp: "DCAST(HTTPClient, @)".}
 
 type HTTPClient_VerifySSL {.importcpp: "HTTPClient::VerifySSL", pure, header: "httpClient.h".} = enum
@@ -527,15 +511,11 @@ type TypedReferenceCount* {.importcpp: "PT(TypedReferenceCount)", bycopy, pure, 
 converter upcastToReferenceCount*(_: typedesc[TypedReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
 converter toTypedReferenceCount*(_: type(nil)): TypedReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: TypedReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TypedReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TypedReferenceCount], obj: TypedObject): TypedReferenceCount {.importcpp: "DCAST(TypedReferenceCount, @)".}
 
 type HTTPChannel* {.importcpp: "PT(HTTPChannel)", bycopy, pure, inheritable, header: "httpChannel.h".} = object of TypedReferenceCount
 
 converter toHTTPChannel*(_: type(nil)): HTTPChannel {.importcpp: "(nullptr)".}
-converter toBool*(this: HTTPChannel): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: HTTPChannel, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HTTPChannel], obj: TypedObject): HTTPChannel {.importcpp: "DCAST(HTTPChannel, @)".}
 
 type HTTPChannel_StatusCode {.importcpp: "HTTPChannel::StatusCode", pure, header: "httpChannel.h".} = enum
@@ -609,36 +589,26 @@ type MultiplexStream* {.importcpp: "MultiplexStream", pure, inheritable, header:
 type VirtualFile* {.importcpp: "PT(VirtualFile)", bycopy, pure, inheritable, header: "virtualFile.h".} = object of TypedReferenceCount
 
 converter toVirtualFile*(_: type(nil)): VirtualFile {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFile): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFile], obj: TypedObject): VirtualFile {.importcpp: "DCAST(VirtualFile, @)".}
 
 type VirtualFileHTTP* {.importcpp: "PT(VirtualFileHTTP)", bycopy, pure, inheritable, header: "virtualFileHTTP.h".} = object of VirtualFile
 
 converter toVirtualFileHTTP*(_: type(nil)): VirtualFileHTTP {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileHTTP): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileHTTP, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileHTTP], obj: TypedObject): VirtualFileHTTP {.importcpp: "DCAST(VirtualFileHTTP, @)".}
 
 type VirtualFileMount* {.importcpp: "PT(VirtualFileMount)", bycopy, pure, inheritable, header: "virtualFileMount.h".} = object of TypedReferenceCount
 
 converter toVirtualFileMount*(_: type(nil)): VirtualFileMount {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileMount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileMount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMount], obj: TypedObject): VirtualFileMount {.importcpp: "DCAST(VirtualFileMount, @)".}
 
 type VirtualFileMountHTTP* {.importcpp: "PT(VirtualFileMountHTTP)", bycopy, pure, inheritable, header: "virtualFileMountHTTP.h".} = object of VirtualFileMount
 
 converter toVirtualFileMountHTTP*(_: type(nil)): VirtualFileMountHTTP {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileMountHTTP): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileMountHTTP, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountHTTP], obj: TypedObject): VirtualFileMountHTTP {.importcpp: "DCAST(VirtualFileMountHTTP, @)".}
 
 type Patcher* {.importcpp: "Patcher*", bycopy, pure, inheritable, header: "patcher.h".} = object
 
 converter toPatcher*(_: type(nil)): Patcher {.importcpp: "(nullptr)".}
-converter toBool*(this: Patcher): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Patcher, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type StringStream* {.importcpp: "StringStream", pure, inheritable, header: "stringStream.h".} = object of iostream
 
@@ -652,22 +622,16 @@ type MemoryUsage* {.importcpp: "MemoryUsage", pure, inheritable, header: "memory
 type Buffer* {.importcpp: "PT(Buffer)", bycopy, pure, inheritable, header: "buffer.h".} = object of ReferenceCount
 
 converter toBuffer*(_: type(nil)): Buffer {.importcpp: "(nullptr)".}
-converter toBool*(this: Buffer): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Buffer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Buffer], obj: TypedObject): Buffer {.importcpp: "DCAST(Buffer, @)".}
 
 type PStatCollectorForwardBase* {.importcpp: "PT(PStatCollectorForwardBase)", bycopy, pure, inheritable, header: "pStatCollectorForwardBase.h".} = object of ReferenceCount
 
 converter toPStatCollectorForwardBase*(_: type(nil)): PStatCollectorForwardBase {.importcpp: "(nullptr)".}
-converter toBool*(this: PStatCollectorForwardBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PStatCollectorForwardBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PStatCollectorForwardBase], obj: TypedObject): PStatCollectorForwardBase {.importcpp: "DCAST(PStatCollectorForwardBase, @)".}
 
 type NodeReferenceCount* {.importcpp: "PT(NodeReferenceCount)", bycopy, pure, inheritable, header: "nodeReferenceCount.h".} = object of ReferenceCount
 
 converter toNodeReferenceCount*(_: type(nil)): NodeReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: NodeReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NodeReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NodeReferenceCount], obj: TypedObject): NodeReferenceCount {.importcpp: "DCAST(NodeReferenceCount, @)".}
 
 type Datagram* {.importcpp: "Datagram", pure, inheritable, header: "datagram.h".} = object of TypedObject
@@ -675,22 +639,16 @@ type Datagram* {.importcpp: "Datagram", pure, inheritable, header: "datagram.h".
 type DatagramGenerator* {.importcpp: "DatagramGenerator*", bycopy, pure, inheritable, header: "datagramGenerator.h".} = object
 
 converter toDatagramGenerator*(_: type(nil)): DatagramGenerator {.importcpp: "(nullptr)".}
-converter toBool*(this: DatagramGenerator): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DatagramGenerator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DatagramIterator* {.importcpp: "DatagramIterator", pure, inheritable, header: "datagramIterator.h".} = object
 
 type DatagramSink* {.importcpp: "DatagramSink*", bycopy, pure, inheritable, header: "datagramSink.h".} = object
 
 converter toDatagramSink*(_: type(nil)): DatagramSink {.importcpp: "(nullptr)".}
-converter toBool*(this: DatagramSink): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DatagramSink, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type FileReference* {.importcpp: "PT(FileReference)", bycopy, pure, inheritable, header: "fileReference.h".} = object of TypedReferenceCount
 
 converter toFileReference*(_: type(nil)): FileReference {.importcpp: "(nullptr)".}
-converter toBool*(this: FileReference): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FileReference, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FileReference], obj: TypedObject): FileReference {.importcpp: "DCAST(FileReference, @)".}
 
 type ErrorUtilCode* {.importcpp: "ErrorUtilCode", header: "error_utils.h".} = enum
@@ -747,15 +705,11 @@ type SubStream* {.importcpp: "SubStream", pure, inheritable, header: "subStream.
 type Multifile* {.importcpp: "PT(Multifile)", bycopy, pure, inheritable, header: "multifile.h".} = object of ReferenceCount
 
 converter toMultifile*(_: type(nil)): Multifile {.importcpp: "(nullptr)".}
-converter toBool*(this: Multifile): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Multifile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Multifile], obj: TypedObject): Multifile {.importcpp: "DCAST(Multifile, @)".}
 
 type Namable* {.importcpp: "Namable*", bycopy, pure, inheritable, header: "namable.h".} = object
 
 converter toNamable*(_: type(nil)): Namable {.importcpp: "(nullptr)".}
-converter toBool*(this: Namable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Namable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type OpenSSLWrapper* {.importcpp: "OpenSSLWrapper", pure, inheritable, header: "openSSLWrapper.h".} = object
 
@@ -764,43 +718,31 @@ type SubfileInfo* {.importcpp: "SubfileInfo", pure, inheritable, header: "subfil
 type VirtualFileComposite* {.importcpp: "PT(VirtualFileComposite)", bycopy, pure, inheritable, header: "virtualFileComposite.h".} = object of VirtualFile
 
 converter toVirtualFileComposite*(_: type(nil)): VirtualFileComposite {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileComposite): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileComposite, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileComposite], obj: TypedObject): VirtualFileComposite {.importcpp: "DCAST(VirtualFileComposite, @)".}
 
 type VirtualFileMountMultifile* {.importcpp: "PT(VirtualFileMountMultifile)", bycopy, pure, inheritable, header: "virtualFileMountMultifile.h".} = object of VirtualFileMount
 
 converter toVirtualFileMountMultifile*(_: type(nil)): VirtualFileMountMultifile {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileMountMultifile): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileMountMultifile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountMultifile], obj: TypedObject): VirtualFileMountMultifile {.importcpp: "DCAST(VirtualFileMountMultifile, @)".}
 
 type VirtualFileMountRamdisk* {.importcpp: "PT(VirtualFileMountRamdisk)", bycopy, pure, inheritable, header: "virtualFileMountRamdisk.h".} = object of VirtualFileMount
 
 converter toVirtualFileMountRamdisk*(_: type(nil)): VirtualFileMountRamdisk {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileMountRamdisk): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileMountRamdisk, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountRamdisk], obj: TypedObject): VirtualFileMountRamdisk {.importcpp: "DCAST(VirtualFileMountRamdisk, @)".}
 
 type VirtualFileMountSystem* {.importcpp: "PT(VirtualFileMountSystem)", bycopy, pure, inheritable, header: "virtualFileMountSystem.h".} = object of VirtualFileMount
 
 converter toVirtualFileMountSystem*(_: type(nil)): VirtualFileMountSystem {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileMountSystem): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileMountSystem, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountSystem], obj: TypedObject): VirtualFileMountSystem {.importcpp: "DCAST(VirtualFileMountSystem, @)".}
 
 type VirtualFileSimple* {.importcpp: "PT(VirtualFileSimple)", bycopy, pure, inheritable, header: "virtualFileSimple.h".} = object of VirtualFile
 
 converter toVirtualFileSimple*(_: type(nil)): VirtualFileSimple {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileSimple): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileSimple, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileSimple], obj: TypedObject): VirtualFileSimple {.importcpp: "DCAST(VirtualFileSimple, @)".}
 
 type TemporaryFile* {.importcpp: "PT(TemporaryFile)", bycopy, pure, inheritable, header: "temporaryFile.h".} = object of FileReference
 
 converter toTemporaryFile*(_: type(nil)): TemporaryFile {.importcpp: "(nullptr)".}
-converter toBool*(this: TemporaryFile): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TemporaryFile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TemporaryFile], obj: TypedObject): TemporaryFile {.importcpp: "DCAST(TemporaryFile, @)".}
 
 type IDecompressStream* {.importcpp: "IDecompressStream", pure, inheritable, header: "zStream.h".} = object of istream
@@ -810,8 +752,6 @@ type OCompressStream* {.importcpp: "OCompressStream", pure, inheritable, header:
 type VirtualFileList* {.importcpp: "PT(VirtualFileList)", bycopy, pure, inheritable, header: "virtualFileList.h".} = object of ReferenceCount
 
 converter toVirtualFileList*(_: type(nil)): VirtualFileList {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualFileList): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualFileList, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualFileList], obj: TypedObject): VirtualFileList {.importcpp: "DCAST(VirtualFileList, @)".}
 
 type VirtualFileSystem* {.importcpp: "VirtualFileSystem", pure, inheritable, header: "virtualFileSystem.h".} = object
@@ -835,22 +775,16 @@ type WeakPointerToVoid* {.importcpp: "WeakPointerToVoid", pure, inheritable, hea
 type RecorderBase* {.importcpp: "RecorderBase*", bycopy, pure, inheritable, header: "recorderBase.h".} = object
 
 converter toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
-converter toBool*(this: RecorderBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RecorderBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TypedWritable* {.importcpp: "TypedWritable*", bycopy, pure, inheritable, header: "typedWritable.h".} = object of TypedObject
 
 converter toTypedWritable*(_: type(nil)): TypedWritable {.importcpp: "(nullptr)".}
-converter toBool*(this: TypedWritable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TypedWritable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TypedWritableReferenceCount* {.importcpp: "PT(TypedWritableReferenceCount)", bycopy, pure, inheritable, header: "typedWritableReferenceCount.h".} = object of TypedWritable
 
 converter upcastToReferenceCount*(_: typedesc[TypedWritableReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
 converter toTypedWritableReferenceCount*(_: type(nil)): TypedWritableReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: TypedWritableReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TypedWritableReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TypedWritableReferenceCount], obj: TypedObject): TypedWritableReferenceCount {.importcpp: "DCAST(TypedWritableReferenceCount, @)".}
 
 type PandaNode* {.importcpp: "PT(PandaNode)", bycopy, pure, inheritable, header: "pandaNode.h".} = object of TypedWritableReferenceCount
@@ -858,8 +792,6 @@ type PandaNode* {.importcpp: "PT(PandaNode)", bycopy, pure, inheritable, header:
 converter upcastToNamable*(_: typedesc[PandaNode]): typedesc[Namable] = typedesc[Namable]
 
 converter toPandaNode*(_: type(nil)): PandaNode {.importcpp: "(nullptr)".}
-converter toBool*(this: PandaNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PandaNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PandaNode], obj: TypedObject): PandaNode {.importcpp: "DCAST(PandaNode, @)".}
 
 type PandaNode_UnexpectedChange {.importcpp: "PandaNode::UnexpectedChange", pure, header: "pandaNode.h".} = enum
@@ -899,8 +831,6 @@ template FB_cullCallback*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNo
 type DataNode* {.importcpp: "PT(DataNode)", bycopy, pure, inheritable, header: "dataNode.h".} = object of PandaNode
 
 converter toDataNode*(_: type(nil)): DataNode {.importcpp: "(nullptr)".}
-converter toBool*(this: DataNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DataNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DataNode], obj: TypedObject): DataNode {.importcpp: "DCAST(DataNode, @)".}
 
 type MouseRecorder* {.importcpp: "PT(MouseRecorder)", bycopy, pure, inheritable, header: "mouseRecorder.h".} = object of DataNode
@@ -908,15 +838,11 @@ type MouseRecorder* {.importcpp: "PT(MouseRecorder)", bycopy, pure, inheritable,
 converter upcastToRecorderBase*(_: typedesc[MouseRecorder]): typedesc[RecorderBase] = typedesc[RecorderBase]
 
 converter toMouseRecorder*(_: type(nil)): MouseRecorder {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseRecorder): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseRecorder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseRecorder], obj: TypedObject): MouseRecorder {.importcpp: "DCAST(MouseRecorder, @)".}
 
 type RecorderController* {.importcpp: "PT(RecorderController)", bycopy, pure, inheritable, header: "recorderController.h".} = object of TypedReferenceCount
 
 converter toRecorderController*(_: type(nil)): RecorderController {.importcpp: "(nullptr)".}
-converter toBool*(this: RecorderController): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RecorderController, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RecorderController], obj: TypedObject): RecorderController {.importcpp: "DCAST(RecorderController, @)".}
 
 type SocketStreamRecorder* {.importcpp: "PT(SocketStreamRecorder)", bycopy, pure, inheritable, header: "socketStreamRecorder.h".} = object of RecorderBase
@@ -924,44 +850,32 @@ type SocketStreamRecorder* {.importcpp: "PT(SocketStreamRecorder)", bycopy, pure
 converter upcastToReferenceCount*(_: typedesc[SocketStreamRecorder]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
 converter toSocketStreamRecorder*(_: type(nil)): SocketStreamRecorder {.importcpp: "(nullptr)".}
-converter toBool*(this: SocketStreamRecorder): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SocketStreamRecorder, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SocketStreamRecorder], obj: TypedObject): SocketStreamRecorder {.importcpp: "DCAST(SocketStreamRecorder, @)".}
 
 type Light* {.importcpp: "Light*", bycopy, pure, inheritable, header: "light.h".} = object
 
 converter toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
-converter toBool*(this: Light): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Light, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of PandaNode
 
 converter upcastToLight*(_: typedesc[LightNode]): typedesc[Light] = typedesc[Light]
 
 converter toLightNode*(_: type(nil)): LightNode {.importcpp: "(nullptr)".}
-converter toBool*(this: LightNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LightNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightNode], obj: TypedObject): LightNode {.importcpp: "DCAST(LightNode, @)".}
 
 type AmbientLight* {.importcpp: "PT(AmbientLight)", bycopy, pure, inheritable, header: "ambientLight.h".} = object of LightNode
 
 converter toAmbientLight*(_: type(nil)): AmbientLight {.importcpp: "(nullptr)".}
-converter toBool*(this: AmbientLight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AmbientLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AmbientLight], obj: TypedObject): AmbientLight {.importcpp: "DCAST(AmbientLight, @)".}
 
 type CallbackNode* {.importcpp: "PT(CallbackNode)", bycopy, pure, inheritable, header: "callbackNode.h".} = object of PandaNode
 
 converter toCallbackNode*(_: type(nil)): CallbackNode {.importcpp: "(nullptr)".}
-converter toBool*(this: CallbackNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CallbackNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CallbackNode], obj: TypedObject): CallbackNode {.importcpp: "DCAST(CallbackNode, @)".}
 
 type ComputeNode* {.importcpp: "PT(ComputeNode)", bycopy, pure, inheritable, header: "computeNode.h".} = object of PandaNode
 
 converter toComputeNode*(_: type(nil)): ComputeNode {.importcpp: "(nullptr)".}
-converter toBool*(this: ComputeNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ComputeNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ComputeNode], obj: TypedObject): ComputeNode {.importcpp: "DCAST(ComputeNode, @)".}
 
 type LODNodeType* {.importcpp: "LODNodeType", header: "lodNodeType.h".} = enum
@@ -971,15 +885,11 @@ type LODNodeType* {.importcpp: "LODNodeType", header: "lodNodeType.h".} = enum
 type LensNode* {.importcpp: "PT(LensNode)", bycopy, pure, inheritable, header: "lensNode.h".} = object of PandaNode
 
 converter toLensNode*(_: type(nil)): LensNode {.importcpp: "(nullptr)".}
-converter toBool*(this: LensNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LensNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LensNode], obj: TypedObject): LensNode {.importcpp: "DCAST(LensNode, @)".}
 
 type Camera* {.importcpp: "PT(Camera)", bycopy, pure, inheritable, header: "camera.h".} = object of LensNode
 
 converter toCamera*(_: type(nil)): Camera {.importcpp: "(nullptr)".}
-converter toBool*(this: Camera): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Camera, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Camera], obj: TypedObject): Camera {.importcpp: "DCAST(Camera, @)".}
 
 type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of Camera
@@ -987,108 +897,78 @@ type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable,
 converter upcastToLight*(_: typedesc[LightLensNode]): typedesc[Light] = typedesc[Light]
 
 converter toLightLensNode*(_: type(nil)): LightLensNode {.importcpp: "(nullptr)".}
-converter toBool*(this: LightLensNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LightLensNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightLensNode], obj: TypedObject): LightLensNode {.importcpp: "DCAST(LightLensNode, @)".}
 
 type DirectionalLight* {.importcpp: "PT(DirectionalLight)", bycopy, pure, inheritable, header: "directionalLight.h".} = object of LightLensNode
 
 converter toDirectionalLight*(_: type(nil)): DirectionalLight {.importcpp: "(nullptr)".}
-converter toBool*(this: DirectionalLight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DirectionalLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DirectionalLight], obj: TypedObject): DirectionalLight {.importcpp: "DCAST(DirectionalLight, @)".}
 
 type LODNode* {.importcpp: "PT(LODNode)", bycopy, pure, inheritable, header: "lodNode.h".} = object of PandaNode
 
 converter toLODNode*(_: type(nil)): LODNode {.importcpp: "(nullptr)".}
-converter toBool*(this: LODNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LODNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LODNode], obj: TypedObject): LODNode {.importcpp: "DCAST(LODNode, @)".}
 
 type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLodNode.h".} = object of LODNode
 
 converter toFadeLODNode*(_: type(nil)): FadeLODNode {.importcpp: "(nullptr)".}
-converter toBool*(this: FadeLODNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FadeLODNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FadeLODNode], obj: TypedObject): FadeLODNode {.importcpp: "DCAST(FadeLODNode, @)".}
 
 type CallbackData* {.importcpp: "CallbackData*", bycopy, pure, inheritable, header: "callbackData.h".} = object of TypedObject
 
 converter toCallbackData*(_: type(nil)): CallbackData {.importcpp: "(nullptr)".}
-converter toBool*(this: CallbackData): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CallbackData, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NodeCullCallbackData* {.importcpp: "NodeCullCallbackData", pure, inheritable, header: "nodeCullCallbackData.h".} = object of CallbackData
 
 type PointLight* {.importcpp: "PT(PointLight)", bycopy, pure, inheritable, header: "pointLight.h".} = object of LightLensNode
 
 converter toPointLight*(_: type(nil)): PointLight {.importcpp: "(nullptr)".}
-converter toBool*(this: PointLight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PointLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PointLight], obj: TypedObject): PointLight {.importcpp: "DCAST(PointLight, @)".}
 
 type RectangleLight* {.importcpp: "PT(RectangleLight)", bycopy, pure, inheritable, header: "rectangleLight.h".} = object of LightLensNode
 
 converter toRectangleLight*(_: type(nil)): RectangleLight {.importcpp: "(nullptr)".}
-converter toBool*(this: RectangleLight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RectangleLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RectangleLight], obj: TypedObject): RectangleLight {.importcpp: "DCAST(RectangleLight, @)".}
 
 type SelectiveChildNode* {.importcpp: "PT(SelectiveChildNode)", bycopy, pure, inheritable, header: "selectiveChildNode.h".} = object of PandaNode
 
 converter toSelectiveChildNode*(_: type(nil)): SelectiveChildNode {.importcpp: "(nullptr)".}
-converter toBool*(this: SelectiveChildNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SelectiveChildNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SelectiveChildNode], obj: TypedObject): SelectiveChildNode {.importcpp: "DCAST(SelectiveChildNode, @)".}
 
 type AnimInterface* {.importcpp: "AnimInterface*", bycopy, pure, inheritable, header: "animInterface.h".} = object
 
 converter toAnimInterface*(_: type(nil)): AnimInterface {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimInterface): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type SequenceNode* {.importcpp: "PT(SequenceNode)", bycopy, pure, inheritable, header: "sequenceNode.h".} = object of SelectiveChildNode
 
 converter upcastToAnimInterface*(_: typedesc[SequenceNode]): typedesc[AnimInterface] = typedesc[AnimInterface]
 
 converter toSequenceNode*(_: type(nil)): SequenceNode {.importcpp: "(nullptr)".}
-converter toBool*(this: SequenceNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SequenceNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SequenceNode], obj: TypedObject): SequenceNode {.importcpp: "DCAST(SequenceNode, @)".}
 
 type ShaderGenerator* {.importcpp: "PT(ShaderGenerator)", bycopy, pure, inheritable, header: "shaderGenerator.h".} = object of TypedReferenceCount
 
 converter toShaderGenerator*(_: type(nil)): ShaderGenerator {.importcpp: "(nullptr)".}
-converter toBool*(this: ShaderGenerator): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShaderGenerator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShaderGenerator], obj: TypedObject): ShaderGenerator {.importcpp: "DCAST(ShaderGenerator, @)".}
 
 type SphereLight* {.importcpp: "PT(SphereLight)", bycopy, pure, inheritable, header: "sphereLight.h".} = object of PointLight
 
 converter toSphereLight*(_: type(nil)): SphereLight {.importcpp: "(nullptr)".}
-converter toBool*(this: SphereLight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SphereLight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SphereLight], obj: TypedObject): SphereLight {.importcpp: "DCAST(SphereLight, @)".}
 
 type Spotlight* {.importcpp: "PT(Spotlight)", bycopy, pure, inheritable, header: "spotlight.h".} = object of LightLensNode
 
 converter toSpotlight*(_: type(nil)): Spotlight {.importcpp: "(nullptr)".}
-converter toBool*(this: Spotlight): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Spotlight, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Spotlight], obj: TypedObject): Spotlight {.importcpp: "DCAST(Spotlight, @)".}
 
 type SwitchNode* {.importcpp: "PT(SwitchNode)", bycopy, pure, inheritable, header: "switchNode.h".} = object of SelectiveChildNode
 
 converter toSwitchNode*(_: type(nil)): SwitchNode {.importcpp: "(nullptr)".}
-converter toBool*(this: SwitchNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SwitchNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SwitchNode], obj: TypedObject): SwitchNode {.importcpp: "DCAST(SwitchNode, @)".}
 
 type UvScrollNode* {.importcpp: "PT(UvScrollNode)", bycopy, pure, inheritable, header: "uvScrollNode.h".} = object of PandaNode
 
 converter toUvScrollNode*(_: type(nil)): UvScrollNode {.importcpp: "(nullptr)".}
-converter toBool*(this: UvScrollNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UvScrollNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UvScrollNode], obj: TypedObject): UvScrollNode {.importcpp: "DCAST(UvScrollNode, @)".}
 
 type SceneGraphAnalyzer* {.importcpp: "SceneGraphAnalyzer", pure, inheritable, header: "sceneGraphAnalyzer.h".} = object
@@ -1110,15 +990,11 @@ template LM_none*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode =
 type CachedTypedWritableReferenceCount* {.importcpp: "PT(CachedTypedWritableReferenceCount)", bycopy, pure, inheritable, header: "cachedTypedWritableReferenceCount.h".} = object of TypedWritableReferenceCount
 
 converter toCachedTypedWritableReferenceCount*(_: type(nil)): CachedTypedWritableReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: CachedTypedWritableReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CachedTypedWritableReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CachedTypedWritableReferenceCount], obj: TypedObject): CachedTypedWritableReferenceCount {.importcpp: "DCAST(CachedTypedWritableReferenceCount, @)".}
 
 type NodeCachedReferenceCount* {.importcpp: "PT(NodeCachedReferenceCount)", bycopy, pure, inheritable, header: "nodeCachedReferenceCount.h".} = object of CachedTypedWritableReferenceCount
 
 converter toNodeCachedReferenceCount*(_: type(nil)): NodeCachedReferenceCount {.importcpp: "(nullptr)".}
-converter toBool*(this: NodeCachedReferenceCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NodeCachedReferenceCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NodeCachedReferenceCount], obj: TypedObject): NodeCachedReferenceCount {.importcpp: "DCAST(NodeCachedReferenceCount, @)".}
 
 type NodeCachedReferenceCount_Referenced {.importcpp: "NodeCachedReferenceCount::Referenced", pure, header: "nodeCachedReferenceCount.h".} = enum
@@ -1134,8 +1010,6 @@ template R_cache*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCou
 type TransformState* {.importcpp: "PT(TransformState)", bycopy, pure, header: "transformState.h".} = object of NodeCachedReferenceCount
 
 converter toTransformState*(_: type(nil)): TransformState {.importcpp: "(nullptr)".}
-converter toBool*(this: TransformState): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TransformState, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TransformState], obj: TypedObject): TransformState {.importcpp: "DCAST(TransformState, @)".}
 
 type RenderAttribRegistry* {.importcpp: "RenderAttribRegistry", pure, inheritable, header: "renderAttribRegistry.h".} = object
@@ -1143,8 +1017,6 @@ type RenderAttribRegistry* {.importcpp: "RenderAttribRegistry", pure, inheritabl
 type RenderAttrib* {.importcpp: "PT(RenderAttrib)", bycopy, pure, inheritable, header: "renderAttrib.h".} = object of TypedWritableReferenceCount
 
 converter toRenderAttrib*(_: type(nil)): RenderAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: RenderAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RenderAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderAttrib], obj: TypedObject): RenderAttrib {.importcpp: "DCAST(RenderAttrib, @)".}
 
 type RenderAttrib_PandaCompareFunc {.importcpp: "RenderAttrib::PandaCompareFunc", pure, header: "renderAttrib.h".} = enum
@@ -1204,8 +1076,6 @@ template M_constant*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = Rende
 type RenderModeAttrib* {.importcpp: "PT(RenderModeAttrib)", bycopy, pure, inheritable, header: "renderModeAttrib.h".} = object of RenderAttrib
 
 converter toRenderModeAttrib*(_: type(nil)): RenderModeAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: RenderModeAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RenderModeAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderModeAttrib], obj: TypedObject): RenderModeAttrib {.importcpp: "DCAST(RenderModeAttrib, @)".}
 
 type RenderModeAttrib_Mode {.importcpp: "RenderModeAttrib::Mode", pure, header: "renderModeAttrib.h".} = enum
@@ -1229,29 +1099,21 @@ template M_filledWireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mod
 type TexMatrixAttrib* {.importcpp: "PT(TexMatrixAttrib)", bycopy, pure, inheritable, header: "texMatrixAttrib.h".} = object of RenderAttrib
 
 converter toTexMatrixAttrib*(_: type(nil)): TexMatrixAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: TexMatrixAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TexMatrixAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TexMatrixAttrib], obj: TypedObject): TexMatrixAttrib {.importcpp: "DCAST(TexMatrixAttrib, @)".}
 
 type RenderState* {.importcpp: "PT(RenderState)", bycopy, pure, inheritable, header: "renderState.h".} = object of NodeCachedReferenceCount
 
 converter toRenderState*(_: type(nil)): RenderState {.importcpp: "(nullptr)".}
-converter toBool*(this: RenderState): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RenderState, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderState], obj: TypedObject): RenderState {.importcpp: "DCAST(RenderState, @)".}
 
 type AlphaTestAttrib* {.importcpp: "PT(AlphaTestAttrib)", bycopy, pure, inheritable, header: "alphaTestAttrib.h".} = object of RenderAttrib
 
 converter toAlphaTestAttrib*(_: type(nil)): AlphaTestAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: AlphaTestAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AlphaTestAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AlphaTestAttrib], obj: TypedObject): AlphaTestAttrib {.importcpp: "DCAST(AlphaTestAttrib, @)".}
 
 type AntialiasAttrib* {.importcpp: "PT(AntialiasAttrib)", bycopy, pure, inheritable, header: "antialiasAttrib.h".} = object of RenderAttrib
 
 converter toAntialiasAttrib*(_: type(nil)): AntialiasAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: AntialiasAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AntialiasAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AntialiasAttrib], obj: TypedObject): AntialiasAttrib {.importcpp: "DCAST(AntialiasAttrib, @)".}
 
 type AntialiasAttrib_Mode {.importcpp: "AntialiasAttrib::Mode", pure, header: "antialiasAttrib.h".} = enum
@@ -1282,22 +1144,16 @@ template M_dontCare*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = Antia
 type RenderEffect* {.importcpp: "PT(RenderEffect)", bycopy, pure, inheritable, header: "renderEffect.h".} = object of TypedWritableReferenceCount
 
 converter toRenderEffect*(_: type(nil)): RenderEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: RenderEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RenderEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderEffect], obj: TypedObject): RenderEffect {.importcpp: "DCAST(RenderEffect, @)".}
 
 type RenderEffects* {.importcpp: "PT(RenderEffects)", bycopy, pure, inheritable, header: "renderEffects.h".} = object of TypedWritableReferenceCount
 
 converter toRenderEffects*(_: type(nil)): RenderEffects {.importcpp: "(nullptr)".}
-converter toBool*(this: RenderEffects): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RenderEffects, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RenderEffects], obj: TypedObject): RenderEffects {.importcpp: "DCAST(RenderEffects, @)".}
 
 type TransparencyAttrib* {.importcpp: "PT(TransparencyAttrib)", bycopy, pure, inheritable, header: "transparencyAttrib.h".} = object of RenderAttrib
 
 converter toTransparencyAttrib*(_: type(nil)): TransparencyAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: TransparencyAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TransparencyAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TransparencyAttrib], obj: TypedObject): TransparencyAttrib {.importcpp: "DCAST(TransparencyAttrib, @)".}
 
 type TransparencyAttrib_Mode {.importcpp: "TransparencyAttrib::Mode", pure, header: "transparencyAttrib.h".} = enum
@@ -1323,8 +1179,6 @@ template M_dual*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = Tra
 type LogicOpAttrib* {.importcpp: "PT(LogicOpAttrib)", bycopy, pure, inheritable, header: "logicOpAttrib.h".} = object of RenderAttrib
 
 converter toLogicOpAttrib*(_: type(nil)): LogicOpAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: LogicOpAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LogicOpAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LogicOpAttrib], obj: TypedObject): LogicOpAttrib {.importcpp: "DCAST(LogicOpAttrib, @)".}
 
 type LogicOpAttrib_Operation {.importcpp: "LogicOpAttrib::Operation", pure, header: "logicOpAttrib.h".} = enum
@@ -1434,15 +1288,11 @@ type AttribNodeRegistry* {.importcpp: "AttribNodeRegistry", pure, inheritable, h
 type AudioVolumeAttrib* {.importcpp: "PT(AudioVolumeAttrib)", bycopy, pure, inheritable, header: "audioVolumeAttrib.h".} = object of RenderAttrib
 
 converter toAudioVolumeAttrib*(_: type(nil)): AudioVolumeAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: AudioVolumeAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AudioVolumeAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioVolumeAttrib], obj: TypedObject): AudioVolumeAttrib {.importcpp: "DCAST(AudioVolumeAttrib, @)".}
 
 type AuxBitplaneAttrib* {.importcpp: "PT(AuxBitplaneAttrib)", bycopy, pure, inheritable, header: "auxBitplaneAttrib.h".} = object of RenderAttrib
 
 converter toAuxBitplaneAttrib*(_: type(nil)): AuxBitplaneAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: AuxBitplaneAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AuxBitplaneAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AuxBitplaneAttrib], obj: TypedObject): AuxBitplaneAttrib {.importcpp: "DCAST(AuxBitplaneAttrib, @)".}
 
 type AuxBitplaneAttrib_AuxBitplaneOutput {.importcpp: "AuxBitplaneAttrib::AuxBitplaneOutput", pure, header: "auxBitplaneAttrib.h".} = enum
@@ -1460,8 +1310,6 @@ template ABO_auxGlow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitp
 type AuxSceneData* {.importcpp: "PT(AuxSceneData)", bycopy, pure, inheritable, header: "auxSceneData.h".} = object of TypedReferenceCount
 
 converter toAuxSceneData*(_: type(nil)): AuxSceneData {.importcpp: "(nullptr)".}
-converter toBool*(this: AuxSceneData): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AuxSceneData, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AuxSceneData], obj: TypedObject): AuxSceneData {.importcpp: "DCAST(AuxSceneData, @)".}
 
 type BamEnums* {.importcpp: "BamEnums", pure, inheritable, header: "bamEnums.h".} = object
@@ -1514,8 +1362,6 @@ type BamFile* {.importcpp: "BamFile", pure, inheritable, header: "bamFile.h".} =
 type BillboardEffect* {.importcpp: "PT(BillboardEffect)", bycopy, pure, inheritable, header: "billboardEffect.h".} = object of RenderEffect
 
 converter toBillboardEffect*(_: type(nil)): BillboardEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: BillboardEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BillboardEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BillboardEffect], obj: TypedObject): BillboardEffect {.importcpp: "DCAST(BillboardEffect, @)".}
 
 type WeakNodePath* {.importcpp: "WeakNodePath", pure, inheritable, header: "weakNodePath.h".} = object
@@ -1523,8 +1369,6 @@ type WeakNodePath* {.importcpp: "WeakNodePath", pure, inheritable, header: "weak
 type PlaneNode* {.importcpp: "PT(PlaneNode)", bycopy, pure, inheritable, header: "planeNode.h".} = object of PandaNode
 
 converter toPlaneNode*(_: type(nil)): PlaneNode {.importcpp: "(nullptr)".}
-converter toBool*(this: PlaneNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PlaneNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PlaneNode], obj: TypedObject): PlaneNode {.importcpp: "DCAST(PlaneNode, @)".}
 
 type PlaneNode_ClipEffect {.importcpp: "PlaneNode::ClipEffect", pure, header: "planeNode.h".} = enum
@@ -1540,8 +1384,6 @@ template CE_collision*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode
 type ClipPlaneAttrib* {.importcpp: "PT(ClipPlaneAttrib)", bycopy, pure, inheritable, header: "clipPlaneAttrib.h".} = object of RenderAttrib
 
 converter toClipPlaneAttrib*(_: type(nil)): ClipPlaneAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ClipPlaneAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ClipPlaneAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClipPlaneAttrib], obj: TypedObject): ClipPlaneAttrib {.importcpp: "DCAST(ClipPlaneAttrib, @)".}
 
 type ClipPlaneAttrib_Operation {.importcpp: "ClipPlaneAttrib::Operation", pure, header: "clipPlaneAttrib.h".} = enum
@@ -1559,8 +1401,6 @@ template O_remove*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = Cl
 type ColorAttrib* {.importcpp: "PT(ColorAttrib)", bycopy, pure, inheritable, header: "colorAttrib.h".} = object of RenderAttrib
 
 converter toColorAttrib*(_: type(nil)): ColorAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ColorAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ColorAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorAttrib], obj: TypedObject): ColorAttrib {.importcpp: "DCAST(ColorAttrib, @)".}
 
 type ColorAttrib_Type {.importcpp: "ColorAttrib::Type", pure, header: "colorAttrib.h".} = enum
@@ -1578,8 +1418,6 @@ template T_off*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T
 type ColorBlendAttrib* {.importcpp: "PT(ColorBlendAttrib)", bycopy, pure, inheritable, header: "colorBlendAttrib.h".} = object of RenderAttrib
 
 converter toColorBlendAttrib*(_: type(nil)): ColorBlendAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ColorBlendAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ColorBlendAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorBlendAttrib], obj: TypedObject): ColorBlendAttrib {.importcpp: "DCAST(ColorBlendAttrib, @)".}
 
 type ColorBlendAttrib_Mode {.importcpp: "ColorBlendAttrib::Mode", pure, header: "colorBlendAttrib.h".} = enum
@@ -1655,15 +1493,11 @@ template O_oneMinusAlphaScale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_
 type ColorScaleAttrib* {.importcpp: "PT(ColorScaleAttrib)", bycopy, pure, inheritable, header: "colorScaleAttrib.h".} = object of RenderAttrib
 
 converter toColorScaleAttrib*(_: type(nil)): ColorScaleAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ColorScaleAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ColorScaleAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorScaleAttrib], obj: TypedObject): ColorScaleAttrib {.importcpp: "DCAST(ColorScaleAttrib, @)".}
 
 type ColorWriteAttrib* {.importcpp: "PT(ColorWriteAttrib)", bycopy, pure, inheritable, header: "colorWriteAttrib.h".} = object of RenderAttrib
 
 converter toColorWriteAttrib*(_: type(nil)): ColorWriteAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ColorWriteAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ColorWriteAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ColorWriteAttrib], obj: TypedObject): ColorWriteAttrib {.importcpp: "DCAST(ColorWriteAttrib, @)".}
 
 type ColorWriteAttrib_Channels {.importcpp: "ColorWriteAttrib::Channels", pure, header: "colorWriteAttrib.h".} = enum
@@ -1689,8 +1523,6 @@ template C_all*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = Colo
 type CompassEffect* {.importcpp: "PT(CompassEffect)", bycopy, pure, inheritable, header: "compassEffect.h".} = object of RenderEffect
 
 converter toCompassEffect*(_: type(nil)): CompassEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: CompassEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CompassEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CompassEffect], obj: TypedObject): CompassEffect {.importcpp: "DCAST(CompassEffect, @)".}
 
 type CompassEffect_Properties {.importcpp: "CompassEffect::Properties", pure, header: "compassEffect.h".} = enum
@@ -1742,15 +1574,11 @@ template BT_fixed*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnu
 type GeomNode* {.importcpp: "PT(GeomNode)", bycopy, pure, inheritable, header: "geomNode.h".} = object of PandaNode
 
 converter toGeomNode*(_: type(nil)): GeomNode {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomNode], obj: TypedObject): GeomNode {.importcpp: "DCAST(GeomNode, @)".}
 
 type CullBinAttrib* {.importcpp: "PT(CullBinAttrib)", bycopy, pure, inheritable, header: "cullBinAttrib.h".} = object of RenderAttrib
 
 converter toCullBinAttrib*(_: type(nil)): CullBinAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: CullBinAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CullBinAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CullBinAttrib], obj: TypedObject): CullBinAttrib {.importcpp: "DCAST(CullBinAttrib, @)".}
 
 type CullBinManager* {.importcpp: "CullBinManager", pure, inheritable, header: "cullBinManager.h".} = object of CullBinEnums
@@ -1758,8 +1586,6 @@ type CullBinManager* {.importcpp: "CullBinManager", pure, inheritable, header: "
 type CullFaceAttrib* {.importcpp: "PT(CullFaceAttrib)", bycopy, pure, inheritable, header: "cullFaceAttrib.h".} = object of RenderAttrib
 
 converter toCullFaceAttrib*(_: type(nil)): CullFaceAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: CullFaceAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CullFaceAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CullFaceAttrib], obj: TypedObject): CullFaceAttrib {.importcpp: "DCAST(CullFaceAttrib, @)".}
 
 type CullFaceAttrib_Mode {.importcpp: "CullFaceAttrib::Mode", pure, header: "cullFaceAttrib.h".} = enum
@@ -1783,15 +1609,11 @@ type CullTraverserData* {.importcpp: "CullTraverserData", pure, inheritable, hea
 type SceneSetup* {.importcpp: "PT(SceneSetup)", bycopy, pure, inheritable, header: "sceneSetup.h".} = object of TypedReferenceCount
 
 converter toSceneSetup*(_: type(nil)): SceneSetup {.importcpp: "(nullptr)".}
-converter toBool*(this: SceneSetup): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SceneSetup, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SceneSetup], obj: TypedObject): SceneSetup {.importcpp: "DCAST(SceneSetup, @)".}
 
 type Fog* {.importcpp: "PT(Fog)", bycopy, pure, inheritable, header: "fog.h".} = object of PandaNode
 
 converter toFog*(_: type(nil)): Fog {.importcpp: "(nullptr)".}
-converter toBool*(this: Fog): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Fog, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Fog], obj: TypedObject): Fog {.importcpp: "DCAST(Fog, @)".}
 
 type Fog_Mode {.importcpp: "Fog::Mode", pure, header: "fog.h".} = enum
@@ -1809,15 +1631,11 @@ template M_exponentialSquared*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponent
 type FogAttrib* {.importcpp: "PT(FogAttrib)", bycopy, pure, inheritable, header: "fogAttrib.h".} = object of RenderAttrib
 
 converter toFogAttrib*(_: type(nil)): FogAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: FogAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FogAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FogAttrib], obj: TypedObject): FogAttrib {.importcpp: "DCAST(FogAttrib, @)".}
 
 type CullTraverser* {.importcpp: "PT(CullTraverser)", bycopy, pure, inheritable, header: "cullTraverser.h".} = object of TypedReferenceCount
 
 converter toCullTraverser*(_: type(nil)): CullTraverser {.importcpp: "(nullptr)".}
-converter toBool*(this: CullTraverser): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CullTraverser, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CullTraverser], obj: TypedObject): CullTraverser {.importcpp: "DCAST(CullTraverser, @)".}
 
 type GeomDrawCallbackData* {.importcpp: "GeomDrawCallbackData", pure, inheritable, header: "geomDrawCallbackData.h".} = object of CallbackData
@@ -1825,8 +1643,6 @@ type GeomDrawCallbackData* {.importcpp: "GeomDrawCallbackData", pure, inheritabl
 type RescaleNormalAttrib* {.importcpp: "PT(RescaleNormalAttrib)", bycopy, pure, inheritable, header: "rescaleNormalAttrib.h".} = object of RenderAttrib
 
 converter toRescaleNormalAttrib*(_: type(nil)): RescaleNormalAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: RescaleNormalAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RescaleNormalAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RescaleNormalAttrib], obj: TypedObject): RescaleNormalAttrib {.importcpp: "DCAST(RescaleNormalAttrib, @)".}
 
 type RescaleNormalAttrib_Mode {.importcpp: "RescaleNormalAttrib::Mode", pure, header: "rescaleNormalAttrib.h".} = enum
@@ -1846,36 +1662,26 @@ template M_auto*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = R
 type CullResult* {.importcpp: "PT(CullResult)", bycopy, pure, inheritable, header: "cullResult.h".} = object of ReferenceCount
 
 converter toCullResult*(_: type(nil)): CullResult {.importcpp: "(nullptr)".}
-converter toBool*(this: CullResult): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CullResult, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CullResult], obj: TypedObject): CullResult {.importcpp: "DCAST(CullResult, @)".}
 
 type DecalEffect* {.importcpp: "PT(DecalEffect)", bycopy, pure, inheritable, header: "decalEffect.h".} = object of RenderEffect
 
 converter toDecalEffect*(_: type(nil)): DecalEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: DecalEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DecalEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DecalEffect], obj: TypedObject): DecalEffect {.importcpp: "DCAST(DecalEffect, @)".}
 
 type DepthOffsetAttrib* {.importcpp: "PT(DepthOffsetAttrib)", bycopy, pure, inheritable, header: "depthOffsetAttrib.h".} = object of RenderAttrib
 
 converter toDepthOffsetAttrib*(_: type(nil)): DepthOffsetAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: DepthOffsetAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DepthOffsetAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DepthOffsetAttrib], obj: TypedObject): DepthOffsetAttrib {.importcpp: "DCAST(DepthOffsetAttrib, @)".}
 
 type DepthTestAttrib* {.importcpp: "PT(DepthTestAttrib)", bycopy, pure, inheritable, header: "depthTestAttrib.h".} = object of RenderAttrib
 
 converter toDepthTestAttrib*(_: type(nil)): DepthTestAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: DepthTestAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DepthTestAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DepthTestAttrib], obj: TypedObject): DepthTestAttrib {.importcpp: "DCAST(DepthTestAttrib, @)".}
 
 type DepthWriteAttrib* {.importcpp: "PT(DepthWriteAttrib)", bycopy, pure, inheritable, header: "depthWriteAttrib.h".} = object of RenderAttrib
 
 converter toDepthWriteAttrib*(_: type(nil)): DepthWriteAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: DepthWriteAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DepthWriteAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DepthWriteAttrib], obj: TypedObject): DepthWriteAttrib {.importcpp: "DCAST(DepthWriteAttrib, @)".}
 
 type DepthWriteAttrib_Mode {.importcpp: "DepthWriteAttrib::Mode", pure, header: "depthWriteAttrib.h".} = enum
@@ -1891,8 +1697,6 @@ template M_on*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWrit
 type LightAttrib* {.importcpp: "PT(LightAttrib)", bycopy, pure, inheritable, header: "lightAttrib.h".} = object of RenderAttrib
 
 converter toLightAttrib*(_: type(nil)): LightAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: LightAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LightAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightAttrib], obj: TypedObject): LightAttrib {.importcpp: "DCAST(LightAttrib, @)".}
 
 type LightAttrib_Operation {.importcpp: "LightAttrib::Operation", pure, header: "lightAttrib.h".} = enum
@@ -1910,8 +1714,6 @@ template O_remove*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttri
 type LightRampAttrib* {.importcpp: "PT(LightRampAttrib)", bycopy, pure, inheritable, header: "lightRampAttrib.h".} = object of RenderAttrib
 
 converter toLightRampAttrib*(_: type(nil)): LightRampAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: LightRampAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LightRampAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LightRampAttrib], obj: TypedObject): LightRampAttrib {.importcpp: "DCAST(LightRampAttrib, @)".}
 
 type LightRampAttrib_LightRampMode {.importcpp: "LightRampAttrib::LightRampMode", pure, header: "lightRampAttrib.h".} = enum
@@ -1939,8 +1741,6 @@ type Loader* {.importcpp: "PT(Loader)", bycopy, pure, inheritable, header: "load
 converter upcastToNamable*(_: typedesc[Loader]): typedesc[Namable] = typedesc[Namable]
 
 converter toLoader*(_: type(nil)): Loader {.importcpp: "(nullptr)".}
-converter toBool*(this: Loader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Loader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Loader], obj: TypedObject): Loader {.importcpp: "DCAST(Loader, @)".}
 
 type LoaderFileType* {.importcpp: "LoaderFileType", pure, inheritable, header: "loaderFileType.h".} = object of TypedObject
@@ -1950,15 +1750,11 @@ type LoaderFileTypeRegistry* {.importcpp: "LoaderFileTypeRegistry", pure, inheri
 type MaterialAttrib* {.importcpp: "PT(MaterialAttrib)", bycopy, pure, inheritable, header: "materialAttrib.h".} = object of RenderAttrib
 
 converter toMaterialAttrib*(_: type(nil)): MaterialAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: MaterialAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MaterialAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MaterialAttrib], obj: TypedObject): MaterialAttrib {.importcpp: "DCAST(MaterialAttrib, @)".}
 
 type AsyncFuture* {.importcpp: "PT(AsyncFuture)", bycopy, pure, inheritable, header: "asyncFuture.h".} = object of TypedReferenceCount
 
 converter toAsyncFuture*(_: type(nil)): AsyncFuture {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncFuture): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncFuture, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncFuture], obj: TypedObject): AsyncFuture {.importcpp: "DCAST(AsyncFuture, @)".}
 
 type AsyncTask* {.importcpp: "PT(AsyncTask)", bycopy, pure, inheritable, header: "asyncTask.h".} = object of AsyncFuture
@@ -1966,8 +1762,6 @@ type AsyncTask* {.importcpp: "PT(AsyncTask)", bycopy, pure, inheritable, header:
 converter upcastToNamable*(_: typedesc[AsyncTask]): typedesc[Namable] = typedesc[Namable]
 
 converter toAsyncTask*(_: type(nil)): AsyncTask {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncTask): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncTask, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTask], obj: TypedObject): AsyncTask {.importcpp: "DCAST(AsyncTask, @)".}
 
 type AsyncTask_DoneStatus {.importcpp: "AsyncTask::DoneStatus", pure, header: "asyncTask.h".} = enum
@@ -2015,22 +1809,16 @@ template S_awaiting*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.
 type ModelFlattenRequest* {.importcpp: "PT(ModelFlattenRequest)", bycopy, pure, inheritable, header: "modelFlattenRequest.h".} = object of AsyncTask
 
 converter toModelFlattenRequest*(_: type(nil)): ModelFlattenRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: ModelFlattenRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ModelFlattenRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelFlattenRequest], obj: TypedObject): ModelFlattenRequest {.importcpp: "DCAST(ModelFlattenRequest, @)".}
 
 type ModelLoadRequest* {.importcpp: "PT(ModelLoadRequest)", bycopy, pure, inheritable, header: "modelLoadRequest.h".} = object of AsyncTask
 
 converter toModelLoadRequest*(_: type(nil)): ModelLoadRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: ModelLoadRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ModelLoadRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelLoadRequest], obj: TypedObject): ModelLoadRequest {.importcpp: "DCAST(ModelLoadRequest, @)".}
 
 type ModelNode* {.importcpp: "PT(ModelNode)", bycopy, pure, inheritable, header: "modelNode.h".} = object of PandaNode
 
 converter toModelNode*(_: type(nil)): ModelNode {.importcpp: "(nullptr)".}
-converter toBool*(this: ModelNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ModelNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelNode], obj: TypedObject): ModelNode {.importcpp: "DCAST(ModelNode, @)".}
 
 type ModelNode_PreserveTransform {.importcpp: "ModelNode::PreserveTransform", pure, header: "modelNode.h".} = enum
@@ -2052,8 +1840,6 @@ template PT_noTouch*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = Mode
 type ModelRoot* {.importcpp: "PT(ModelRoot)", bycopy, pure, inheritable, header: "modelRoot.h".} = object of ModelNode
 
 converter toModelRoot*(_: type(nil)): ModelRoot {.importcpp: "(nullptr)".}
-converter toBool*(this: ModelRoot): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ModelRoot, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelRoot], obj: TypedObject): ModelRoot {.importcpp: "DCAST(ModelRoot, @)".}
 
 type ModelPool* {.importcpp: "ModelPool", pure, inheritable, header: "modelPool.h".} = object
@@ -2061,43 +1847,31 @@ type ModelPool* {.importcpp: "ModelPool", pure, inheritable, header: "modelPool.
 type ModelSaveRequest* {.importcpp: "PT(ModelSaveRequest)", bycopy, pure, inheritable, header: "modelSaveRequest.h".} = object of AsyncTask
 
 converter toModelSaveRequest*(_: type(nil)): ModelSaveRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: ModelSaveRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ModelSaveRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ModelSaveRequest], obj: TypedObject): ModelSaveRequest {.importcpp: "DCAST(ModelSaveRequest, @)".}
 
 type TextureAttrib* {.importcpp: "PT(TextureAttrib)", bycopy, pure, inheritable, header: "textureAttrib.h".} = object of RenderAttrib
 
 converter toTextureAttrib*(_: type(nil)): TextureAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: TextureAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextureAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextureAttrib], obj: TypedObject): TextureAttrib {.importcpp: "DCAST(TextureAttrib, @)".}
 
 type TexGenAttrib* {.importcpp: "PT(TexGenAttrib)", bycopy, pure, inheritable, header: "texGenAttrib.h".} = object of RenderAttrib
 
 converter toTexGenAttrib*(_: type(nil)): TexGenAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: TexGenAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TexGenAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TexGenAttrib], obj: TypedObject): TexGenAttrib {.importcpp: "DCAST(TexGenAttrib, @)".}
 
 type OccluderNode* {.importcpp: "PT(OccluderNode)", bycopy, pure, inheritable, header: "occluderNode.h".} = object of PandaNode
 
 converter toOccluderNode*(_: type(nil)): OccluderNode {.importcpp: "(nullptr)".}
-converter toBool*(this: OccluderNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OccluderNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OccluderNode], obj: TypedObject): OccluderNode {.importcpp: "DCAST(OccluderNode, @)".}
 
 type OccluderEffect* {.importcpp: "PT(OccluderEffect)", bycopy, pure, inheritable, header: "occluderEffect.h".} = object of RenderEffect
 
 converter toOccluderEffect*(_: type(nil)): OccluderEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: OccluderEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OccluderEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OccluderEffect], obj: TypedObject): OccluderEffect {.importcpp: "DCAST(OccluderEffect, @)".}
 
 type PolylightNode* {.importcpp: "PT(PolylightNode)", bycopy, pure, inheritable, header: "polylightNode.h".} = object of PandaNode
 
 converter toPolylightNode*(_: type(nil)): PolylightNode {.importcpp: "(nullptr)".}
-converter toBool*(this: PolylightNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PolylightNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PolylightNode], obj: TypedObject): PolylightNode {.importcpp: "DCAST(PolylightNode, @)".}
 
 type PolylightNode_Flicker_Type {.importcpp: "PolylightNode::Flicker_Type", pure, header: "polylightNode.h".} = enum
@@ -2125,8 +1899,6 @@ template AQUADRATIC*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type
 type PolylightEffect* {.importcpp: "PT(PolylightEffect)", bycopy, pure, inheritable, header: "polylightEffect.h".} = object of RenderEffect
 
 converter toPolylightEffect*(_: type(nil)): PolylightEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: PolylightEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PolylightEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PolylightEffect], obj: TypedObject): PolylightEffect {.importcpp: "DCAST(PolylightEffect, @)".}
 
 type PolylightEffect_ContribType {.importcpp: "PolylightEffect::ContribType", pure, header: "polylightEffect.h".} = enum
@@ -2142,29 +1914,21 @@ template CT_all*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = Po
 type ShaderAttrib* {.importcpp: "PT(ShaderAttrib)", bycopy, pure, inheritable, header: "shaderAttrib.h".} = object of RenderAttrib
 
 converter toShaderAttrib*(_: type(nil)): ShaderAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ShaderAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShaderAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShaderAttrib], obj: TypedObject): ShaderAttrib {.importcpp: "DCAST(ShaderAttrib, @)".}
 
 type ShowBoundsEffect* {.importcpp: "PT(ShowBoundsEffect)", bycopy, pure, inheritable, header: "showBoundsEffect.h".} = object of RenderEffect
 
 converter toShowBoundsEffect*(_: type(nil)): ShowBoundsEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: ShowBoundsEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShowBoundsEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShowBoundsEffect], obj: TypedObject): ShowBoundsEffect {.importcpp: "DCAST(ShowBoundsEffect, @)".}
 
 type TexProjectorEffect* {.importcpp: "PT(TexProjectorEffect)", bycopy, pure, inheritable, header: "texProjectorEffect.h".} = object of RenderEffect
 
 converter toTexProjectorEffect*(_: type(nil)): TexProjectorEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: TexProjectorEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TexProjectorEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TexProjectorEffect], obj: TypedObject): TexProjectorEffect {.importcpp: "DCAST(TexProjectorEffect, @)".}
 
 type ScissorEffect* {.importcpp: "PT(ScissorEffect)", bycopy, pure, inheritable, header: "scissorEffect.h".} = object of RenderEffect
 
 converter toScissorEffect*(_: type(nil)): ScissorEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: ScissorEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ScissorEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ScissorEffect], obj: TypedObject): ScissorEffect {.importcpp: "DCAST(ScissorEffect, @)".}
 
 type SceneGraphReducer* {.importcpp: "SceneGraphReducer", pure, inheritable, header: "sceneGraphReducer.h".} = object
@@ -2242,22 +2006,16 @@ template MN_avoidDynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_Mak
 type PortalNode* {.importcpp: "PT(PortalNode)", bycopy, pure, inheritable, header: "portalNode.h".} = object of PandaNode
 
 converter toPortalNode*(_: type(nil)): PortalNode {.importcpp: "(nullptr)".}
-converter toBool*(this: PortalNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PortalNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PortalNode], obj: TypedObject): PortalNode {.importcpp: "DCAST(PortalNode, @)".}
 
 type ScissorAttrib* {.importcpp: "PT(ScissorAttrib)", bycopy, pure, inheritable, header: "scissorAttrib.h".} = object of RenderAttrib
 
 converter toScissorAttrib*(_: type(nil)): ScissorAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ScissorAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ScissorAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ScissorAttrib], obj: TypedObject): ScissorAttrib {.importcpp: "DCAST(ScissorAttrib, @)".}
 
 type ShadeModelAttrib* {.importcpp: "PT(ShadeModelAttrib)", bycopy, pure, inheritable, header: "shadeModelAttrib.h".} = object of RenderAttrib
 
 converter toShadeModelAttrib*(_: type(nil)): ShadeModelAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: ShadeModelAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShadeModelAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShadeModelAttrib], obj: TypedObject): ShadeModelAttrib {.importcpp: "DCAST(ShadeModelAttrib, @)".}
 
 type ShadeModelAttrib_Mode {.importcpp: "ShadeModelAttrib::Mode", pure, header: "shadeModelAttrib.h".} = enum
@@ -2273,8 +2031,6 @@ template M_smooth*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = Shade
 type StencilAttrib* {.importcpp: "PT(StencilAttrib)", bycopy, pure, inheritable, header: "stencilAttrib.h".} = object of RenderAttrib
 
 converter toStencilAttrib*(_: type(nil)): StencilAttrib {.importcpp: "(nullptr)".}
-converter toBool*(this: StencilAttrib): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: StencilAttrib, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[StencilAttrib], obj: TypedObject): StencilAttrib {.importcpp: "DCAST(StencilAttrib, @)".}
 
 type StencilAttrib_StencilRenderState {.importcpp: "StencilAttrib::StencilRenderState", pure, header: "stencilAttrib.h".} = enum
@@ -2362,29 +2118,21 @@ type MovieAudio* {.importcpp: "PT(MovieAudio)", bycopy, pure, inheritable, heade
 converter upcastToNamable*(_: typedesc[MovieAudio]): typedesc[Namable] = typedesc[Namable]
 
 converter toMovieAudio*(_: type(nil)): MovieAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: MovieAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovieAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovieAudio], obj: TypedObject): MovieAudio {.importcpp: "DCAST(MovieAudio, @)".}
 
 type FlacAudio* {.importcpp: "PT(FlacAudio)", bycopy, pure, inheritable, header: "flacAudio.h".} = object of MovieAudio
 
 converter toFlacAudio*(_: type(nil)): FlacAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: FlacAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FlacAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FlacAudio], obj: TypedObject): FlacAudio {.importcpp: "DCAST(FlacAudio, @)".}
 
 type MovieAudioCursor* {.importcpp: "PT(MovieAudioCursor)", bycopy, pure, inheritable, header: "movieAudioCursor.h".} = object of TypedWritableReferenceCount
 
 converter toMovieAudioCursor*(_: type(nil)): MovieAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: MovieAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovieAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovieAudioCursor], obj: TypedObject): MovieAudioCursor {.importcpp: "DCAST(MovieAudioCursor, @)".}
 
 type FlacAudioCursor* {.importcpp: "PT(FlacAudioCursor)", bycopy, pure, inheritable, header: "flacAudioCursor.h".} = object of MovieAudioCursor
 
 converter toFlacAudioCursor*(_: type(nil)): FlacAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: FlacAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FlacAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FlacAudioCursor], obj: TypedObject): FlacAudioCursor {.importcpp: "DCAST(FlacAudioCursor, @)".}
 
 type MovieVideo* {.importcpp: "PT(MovieVideo)", bycopy, pure, inheritable, header: "movieVideo.h".} = object of TypedWritableReferenceCount
@@ -2392,92 +2140,66 @@ type MovieVideo* {.importcpp: "PT(MovieVideo)", bycopy, pure, inheritable, heade
 converter upcastToNamable*(_: typedesc[MovieVideo]): typedesc[Namable] = typedesc[Namable]
 
 converter toMovieVideo*(_: type(nil)): MovieVideo {.importcpp: "(nullptr)".}
-converter toBool*(this: MovieVideo): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovieVideo, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovieVideo], obj: TypedObject): MovieVideo {.importcpp: "DCAST(MovieVideo, @)".}
 
 type InkblotVideo* {.importcpp: "PT(InkblotVideo)", bycopy, pure, inheritable, header: "inkblotVideo.h".} = object of MovieVideo
 
 converter toInkblotVideo*(_: type(nil)): InkblotVideo {.importcpp: "(nullptr)".}
-converter toBool*(this: InkblotVideo): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: InkblotVideo, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InkblotVideo], obj: TypedObject): InkblotVideo {.importcpp: "DCAST(InkblotVideo, @)".}
 
 type MovieVideoCursor* {.importcpp: "PT(MovieVideoCursor)", bycopy, pure, inheritable, header: "movieVideoCursor.h".} = object of TypedWritableReferenceCount
 
 converter toMovieVideoCursor*(_: type(nil)): MovieVideoCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: MovieVideoCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovieVideoCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovieVideoCursor], obj: TypedObject): MovieVideoCursor {.importcpp: "DCAST(MovieVideoCursor, @)".}
 
 type InkblotVideoCursor* {.importcpp: "PT(InkblotVideoCursor)", bycopy, pure, inheritable, header: "inkblotVideoCursor.h".} = object of MovieVideoCursor
 
 converter toInkblotVideoCursor*(_: type(nil)): InkblotVideoCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: InkblotVideoCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: InkblotVideoCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InkblotVideoCursor], obj: TypedObject): InkblotVideoCursor {.importcpp: "DCAST(InkblotVideoCursor, @)".}
 
 type MicrophoneAudio* {.importcpp: "PT(MicrophoneAudio)", bycopy, pure, inheritable, header: "microphoneAudio.h".} = object of MovieAudio
 
 converter toMicrophoneAudio*(_: type(nil)): MicrophoneAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: MicrophoneAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MicrophoneAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MicrophoneAudio], obj: TypedObject): MicrophoneAudio {.importcpp: "DCAST(MicrophoneAudio, @)".}
 
 type OpusAudio* {.importcpp: "PT(OpusAudio)", bycopy, pure, inheritable, header: "opusAudio.h".} = object of MovieAudio
 
 converter toOpusAudio*(_: type(nil)): OpusAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: OpusAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OpusAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OpusAudio], obj: TypedObject): OpusAudio {.importcpp: "DCAST(OpusAudio, @)".}
 
 type OpusAudioCursor* {.importcpp: "PT(OpusAudioCursor)", bycopy, pure, inheritable, header: "opusAudioCursor.h".} = object of MovieAudioCursor
 
 converter toOpusAudioCursor*(_: type(nil)): OpusAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: OpusAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OpusAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OpusAudioCursor], obj: TypedObject): OpusAudioCursor {.importcpp: "DCAST(OpusAudioCursor, @)".}
 
 type UserDataAudio* {.importcpp: "PT(UserDataAudio)", bycopy, pure, inheritable, header: "userDataAudio.h".} = object of MovieAudio
 
 converter toUserDataAudio*(_: type(nil)): UserDataAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: UserDataAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UserDataAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UserDataAudio], obj: TypedObject): UserDataAudio {.importcpp: "DCAST(UserDataAudio, @)".}
 
 type UserDataAudioCursor* {.importcpp: "PT(UserDataAudioCursor)", bycopy, pure, inheritable, header: "userDataAudioCursor.h".} = object of MovieAudioCursor
 
 converter toUserDataAudioCursor*(_: type(nil)): UserDataAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: UserDataAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UserDataAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UserDataAudioCursor], obj: TypedObject): UserDataAudioCursor {.importcpp: "DCAST(UserDataAudioCursor, @)".}
 
 type VorbisAudio* {.importcpp: "PT(VorbisAudio)", bycopy, pure, inheritable, header: "vorbisAudio.h".} = object of MovieAudio
 
 converter toVorbisAudio*(_: type(nil)): VorbisAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: VorbisAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VorbisAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VorbisAudio], obj: TypedObject): VorbisAudio {.importcpp: "DCAST(VorbisAudio, @)".}
 
 type VorbisAudioCursor* {.importcpp: "PT(VorbisAudioCursor)", bycopy, pure, inheritable, header: "vorbisAudioCursor.h".} = object of MovieAudioCursor
 
 converter toVorbisAudioCursor*(_: type(nil)): VorbisAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: VorbisAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VorbisAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VorbisAudioCursor], obj: TypedObject): VorbisAudioCursor {.importcpp: "DCAST(VorbisAudioCursor, @)".}
 
 type WavAudio* {.importcpp: "PT(WavAudio)", bycopy, pure, inheritable, header: "wavAudio.h".} = object of MovieAudio
 
 converter toWavAudio*(_: type(nil)): WavAudio {.importcpp: "(nullptr)".}
-converter toBool*(this: WavAudio): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: WavAudio, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[WavAudio], obj: TypedObject): WavAudio {.importcpp: "DCAST(WavAudio, @)".}
 
 type WavAudioCursor* {.importcpp: "PT(WavAudioCursor)", bycopy, pure, inheritable, header: "wavAudioCursor.h".} = object of MovieAudioCursor
 
 converter toWavAudioCursor*(_: type(nil)): WavAudioCursor {.importcpp: "(nullptr)".}
-converter toBool*(this: WavAudioCursor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: WavAudioCursor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[WavAudioCursor], obj: TypedObject): WavAudioCursor {.importcpp: "DCAST(WavAudioCursor, @)".}
 
 type CardMaker* {.importcpp: "CardMaker", pure, inheritable, header: "cardMaker.h".} = object of Namable
@@ -2487,8 +2209,6 @@ type FisheyeMaker* {.importcpp: "FisheyeMaker", pure, inheritable, header: "fish
 type TextProperties* {.importcpp: "TextProperties*", bycopy, pure, inheritable, header: "textProperties.h".} = object
 
 converter toTextProperties*(_: type(nil)): TextProperties {.importcpp: "(nullptr)".}
-converter toBool*(this: TextProperties): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextProperties, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type TextProperties_Alignment {.importcpp: "TextProperties::Alignment", pure, header: "textProperties.h".} = enum
   A_left = 0
@@ -2524,8 +2244,6 @@ converter upcastToTextEncoder*(_: typedesc[TextNode]): typedesc[TextEncoder] = t
 converter upcastToTextProperties*(_: typedesc[TextNode]): typedesc[TextProperties] = typedesc[TextProperties]
 
 converter toTextNode*(_: type(nil)): TextNode {.importcpp: "(nullptr)".}
-converter toBool*(this: TextNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextNode], obj: TypedObject): TextNode {.importcpp: "DCAST(TextNode, @)".}
 
 type TextNode_FlattenFlags {.importcpp: "TextNode::FlattenFlags", pure, header: "textNode.h".} = enum
@@ -2547,8 +2265,6 @@ template FF_dynamicMerge*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNo
 type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritable, header: "frameRateMeter.h".} = object of TextNode
 
 converter toFrameRateMeter*(_: type(nil)): FrameRateMeter {.importcpp: "(nullptr)".}
-converter toBool*(this: FrameRateMeter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FrameRateMeter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FrameRateMeter], obj: TypedObject): FrameRateMeter {.importcpp: "DCAST(FrameRateMeter, @)".}
 
 type GeoMipTerrain* {.importcpp: "GeoMipTerrain", pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
@@ -2580,8 +2296,6 @@ type Texture* {.importcpp: "PT(Texture)", bycopy, pure, inheritable, header: "te
 converter upcastToNamable*(_: typedesc[Texture]): typedesc[Namable] = typedesc[Namable]
 
 converter toTexture*(_: type(nil)): Texture {.importcpp: "(nullptr)".}
-converter toBool*(this: Texture): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Texture, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Texture], obj: TypedObject): Texture {.importcpp: "DCAST(Texture, @)".}
 
 type Texture_TextureType {.importcpp: "Texture::TextureType", pure, header: "texture.h".} = enum
@@ -2835,8 +2549,6 @@ template QL_best*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityL
 type MovieTexture* {.importcpp: "PT(MovieTexture)", bycopy, pure, inheritable, header: "movieTexture.h".} = object of Texture
 
 converter toMovieTexture*(_: type(nil)): MovieTexture {.importcpp: "(nullptr)".}
-converter toBool*(this: MovieTexture): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovieTexture, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovieTexture], obj: TypedObject): MovieTexture {.importcpp: "DCAST(MovieTexture, @)".}
 
 type MultitexReducer* {.importcpp: "MultitexReducer", pure, inheritable, header: "multitexReducer.h".} = object
@@ -2844,43 +2556,31 @@ type MultitexReducer* {.importcpp: "MultitexReducer", pure, inheritable, header:
 type VertexTransform* {.importcpp: "PT(VertexTransform)", bycopy, pure, inheritable, header: "vertexTransform.h".} = object of TypedWritableReferenceCount
 
 converter toVertexTransform*(_: type(nil)): VertexTransform {.importcpp: "(nullptr)".}
-converter toBool*(this: VertexTransform): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VertexTransform, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VertexTransform], obj: TypedObject): VertexTransform {.importcpp: "DCAST(VertexTransform, @)".}
 
 type NodeVertexTransform* {.importcpp: "PT(NodeVertexTransform)", bycopy, pure, inheritable, header: "nodeVertexTransform.h".} = object of VertexTransform
 
 converter toNodeVertexTransform*(_: type(nil)): NodeVertexTransform {.importcpp: "(nullptr)".}
-converter toBool*(this: NodeVertexTransform): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NodeVertexTransform, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NodeVertexTransform], obj: TypedObject): NodeVertexTransform {.importcpp: "DCAST(NodeVertexTransform, @)".}
 
 type ShaderTerrainMesh* {.importcpp: "PT(ShaderTerrainMesh)", bycopy, pure, inheritable, header: "shaderTerrainMesh.h".} = object of PandaNode
 
 converter toShaderTerrainMesh*(_: type(nil)): ShaderTerrainMesh {.importcpp: "(nullptr)".}
-converter toBool*(this: ShaderTerrainMesh): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShaderTerrainMesh, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShaderTerrainMesh], obj: TypedObject): ShaderTerrainMesh {.importcpp: "DCAST(ShaderTerrainMesh, @)".}
 
 type SceneGraphAnalyzerMeter* {.importcpp: "PT(SceneGraphAnalyzerMeter)", bycopy, pure, inheritable, header: "sceneGraphAnalyzerMeter.h".} = object of TextNode
 
 converter toSceneGraphAnalyzerMeter*(_: type(nil)): SceneGraphAnalyzerMeter {.importcpp: "(nullptr)".}
-converter toBool*(this: SceneGraphAnalyzerMeter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SceneGraphAnalyzerMeter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SceneGraphAnalyzerMeter], obj: TypedObject): SceneGraphAnalyzerMeter {.importcpp: "DCAST(SceneGraphAnalyzerMeter, @)".}
 
 type RigidBodyCombiner* {.importcpp: "PT(RigidBodyCombiner)", bycopy, pure, inheritable, header: "rigidBodyCombiner.h".} = object of PandaNode
 
 converter toRigidBodyCombiner*(_: type(nil)): RigidBodyCombiner {.importcpp: "(nullptr)".}
-converter toBool*(this: RigidBodyCombiner): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RigidBodyCombiner, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RigidBodyCombiner], obj: TypedObject): RigidBodyCombiner {.importcpp: "DCAST(RigidBodyCombiner, @)".}
 
 type PipeOcclusionCullTraverser* {.importcpp: "PT(PipeOcclusionCullTraverser)", bycopy, pure, inheritable, header: "pipeOcclusionCullTraverser.h".} = object of CullTraverser
 
 converter toPipeOcclusionCullTraverser*(_: type(nil)): PipeOcclusionCullTraverser {.importcpp: "(nullptr)".}
-converter toBool*(this: PipeOcclusionCullTraverser): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PipeOcclusionCullTraverser, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PipeOcclusionCullTraverser], obj: TypedObject): PipeOcclusionCullTraverser {.importcpp: "DCAST(PipeOcclusionCullTraverser, @)".}
 
 type PfmVizzer* {.importcpp: "PfmVizzer", pure, inheritable, header: "pfmVizzer.h".} = object
@@ -2928,22 +2628,16 @@ type AnimGroup* {.importcpp: "PT(AnimGroup)", bycopy, pure, inheritable, header:
 converter upcastToNamable*(_: typedesc[AnimGroup]): typedesc[Namable] = typedesc[Namable]
 
 converter toAnimGroup*(_: type(nil)): AnimGroup {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimGroup): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimGroup, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimGroup], obj: TypedObject): AnimGroup {.importcpp: "DCAST(AnimGroup, @)".}
 
 type AnimBundle* {.importcpp: "PT(AnimBundle)", bycopy, pure, inheritable, header: "animBundle.h".} = object of AnimGroup
 
 converter toAnimBundle*(_: type(nil)): AnimBundle {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimBundle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimBundle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimBundle], obj: TypedObject): AnimBundle {.importcpp: "DCAST(AnimBundle, @)".}
 
 type AnimBundleNode* {.importcpp: "PT(AnimBundleNode)", bycopy, pure, inheritable, header: "animBundleNode.h".} = object of PandaNode
 
 converter toAnimBundleNode*(_: type(nil)): AnimBundleNode {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimBundleNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimBundleNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimBundleNode], obj: TypedObject): AnimBundleNode {.importcpp: "DCAST(AnimBundleNode, @)".}
 
 type PartGroup* {.importcpp: "PT(PartGroup)", bycopy, pure, inheritable, header: "partGroup.h".} = object of TypedWritableReferenceCount
@@ -2951,8 +2645,6 @@ type PartGroup* {.importcpp: "PT(PartGroup)", bycopy, pure, inheritable, header:
 converter upcastToNamable*(_: typedesc[PartGroup]): typedesc[Namable] = typedesc[Namable]
 
 converter toPartGroup*(_: type(nil)): PartGroup {.importcpp: "(nullptr)".}
-converter toBool*(this: PartGroup): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PartGroup, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartGroup], obj: TypedObject): PartGroup {.importcpp: "DCAST(PartGroup, @)".}
 
 type PartGroup_HierarchyMatchFlags {.importcpp: "PartGroup::HierarchyMatchFlags", pure, header: "partGroup.h".} = enum
@@ -2973,43 +2665,31 @@ converter upcastToAnimInterface*(_: typedesc[AnimControl]): typedesc[AnimInterfa
 converter upcastToNamable*(_: typedesc[AnimControl]): typedesc[Namable] = typedesc[Namable]
 
 converter toAnimControl*(_: type(nil)): AnimControl {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimControl): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimControl, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimControl], obj: TypedObject): AnimControl {.importcpp: "DCAST(AnimControl, @)".}
 
 type AnimChannelBase* {.importcpp: "PT(AnimChannelBase)", bycopy, pure, inheritable, header: "animChannelBase.h".} = object of AnimGroup
 
 converter toAnimChannelBase*(_: type(nil)): AnimChannelBase {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimChannelBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimChannelBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimChannelBase], obj: TypedObject): AnimChannelBase {.importcpp: "DCAST(AnimChannelBase, @)".}
 
 type AnimChannelMatrixDynamic* {.importcpp: "PT(AnimChannelMatrixDynamic)", bycopy, pure, inheritable, header: "animChannelMatrixDynamic.h".} = object
 
 converter toAnimChannelMatrixDynamic*(_: type(nil)): AnimChannelMatrixDynamic {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimChannelMatrixDynamic): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimChannelMatrixDynamic, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimChannelMatrixDynamic], obj: TypedObject): AnimChannelMatrixDynamic {.importcpp: "DCAST(AnimChannelMatrixDynamic, @)".}
 
 type AnimChannelMatrixXfmTable* {.importcpp: "PT(AnimChannelMatrixXfmTable)", bycopy, pure, inheritable, header: "animChannelMatrixXfmTable.h".} = object
 
 converter toAnimChannelMatrixXfmTable*(_: type(nil)): AnimChannelMatrixXfmTable {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimChannelMatrixXfmTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimChannelMatrixXfmTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimChannelMatrixXfmTable], obj: TypedObject): AnimChannelMatrixXfmTable {.importcpp: "DCAST(AnimChannelMatrixXfmTable, @)".}
 
 type AnimChannelScalarDynamic* {.importcpp: "PT(AnimChannelScalarDynamic)", bycopy, pure, inheritable, header: "animChannelScalarDynamic.h".} = object
 
 converter toAnimChannelScalarDynamic*(_: type(nil)): AnimChannelScalarDynamic {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimChannelScalarDynamic): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimChannelScalarDynamic, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimChannelScalarDynamic], obj: TypedObject): AnimChannelScalarDynamic {.importcpp: "DCAST(AnimChannelScalarDynamic, @)".}
 
 type AnimChannelScalarTable* {.importcpp: "PT(AnimChannelScalarTable)", bycopy, pure, inheritable, header: "animChannelScalarTable.h".} = object
 
 converter toAnimChannelScalarTable*(_: type(nil)): AnimChannelScalarTable {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimChannelScalarTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimChannelScalarTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimChannelScalarTable], obj: TypedObject): AnimChannelScalarTable {.importcpp: "DCAST(AnimChannelScalarTable, @)".}
 
 type AnimControlCollection* {.importcpp: "AnimControlCollection", pure, inheritable, header: "animControlCollection.h".} = object
@@ -3017,15 +2697,11 @@ type AnimControlCollection* {.importcpp: "AnimControlCollection", pure, inherita
 type CopyOnWriteObject* {.importcpp: "PT(CopyOnWriteObject)", bycopy, pure, inheritable, header: "copyOnWriteObject.h".} = object of CachedTypedWritableReferenceCount
 
 converter toCopyOnWriteObject*(_: type(nil)): CopyOnWriteObject {.importcpp: "(nullptr)".}
-converter toBool*(this: CopyOnWriteObject): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CopyOnWriteObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CopyOnWriteObject], obj: TypedObject): CopyOnWriteObject {.importcpp: "DCAST(CopyOnWriteObject, @)".}
 
 type AnimPreloadTable* {.importcpp: "PT(AnimPreloadTable)", bycopy, pure, inheritable, header: "animPreloadTable.h".} = object of CopyOnWriteObject
 
 converter toAnimPreloadTable*(_: type(nil)): AnimPreloadTable {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimPreloadTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimPreloadTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimPreloadTable], obj: TypedObject): AnimPreloadTable {.importcpp: "DCAST(AnimPreloadTable, @)".}
 
 type PartSubset* {.importcpp: "PartSubset", pure, inheritable, header: "partSubset.h".} = object
@@ -3033,15 +2709,11 @@ type PartSubset* {.importcpp: "PartSubset", pure, inheritable, header: "partSubs
 type BindAnimRequest* {.importcpp: "PT(BindAnimRequest)", bycopy, pure, inheritable, header: "bindAnimRequest.h".} = object of ModelLoadRequest
 
 converter toBindAnimRequest*(_: type(nil)): BindAnimRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: BindAnimRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BindAnimRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BindAnimRequest], obj: TypedObject): BindAnimRequest {.importcpp: "DCAST(BindAnimRequest, @)".}
 
 type PartBundle* {.importcpp: "PT(PartBundle)", bycopy, pure, inheritable, header: "partBundle.h".} = object of PartGroup
 
 converter toPartBundle*(_: type(nil)): PartBundle {.importcpp: "(nullptr)".}
-converter toBool*(this: PartBundle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PartBundle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartBundle], obj: TypedObject): PartBundle {.importcpp: "DCAST(PartBundle, @)".}
 
 type PartBundle_BlendType {.importcpp: "PartBundle::BlendType", pure, header: "partBundle.h".} = enum
@@ -3061,36 +2733,26 @@ template BT_componentwiseQuat*(_: typedesc[PartBundle]): PartBundle_BlendType = 
 type PartBundleNode* {.importcpp: "PT(PartBundleNode)", bycopy, pure, inheritable, header: "partBundleNode.h".} = object of PandaNode
 
 converter toPartBundleNode*(_: type(nil)): PartBundleNode {.importcpp: "(nullptr)".}
-converter toBool*(this: PartBundleNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PartBundleNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartBundleNode], obj: TypedObject): PartBundleNode {.importcpp: "DCAST(PartBundleNode, @)".}
 
 type PartBundleHandle* {.importcpp: "PT(PartBundleHandle)", bycopy, pure, inheritable, header: "partBundleHandle.h".} = object of ReferenceCount
 
 converter toPartBundleHandle*(_: type(nil)): PartBundleHandle {.importcpp: "(nullptr)".}
-converter toBool*(this: PartBundleHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PartBundleHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PartBundleHandle], obj: TypedObject): PartBundleHandle {.importcpp: "DCAST(PartBundleHandle, @)".}
 
 type MovingPartBase* {.importcpp: "PT(MovingPartBase)", bycopy, pure, inheritable, header: "movingPartBase.h".} = object of PartGroup
 
 converter toMovingPartBase*(_: type(nil)): MovingPartBase {.importcpp: "(nullptr)".}
-converter toBool*(this: MovingPartBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovingPartBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovingPartBase], obj: TypedObject): MovingPartBase {.importcpp: "DCAST(MovingPartBase, @)".}
 
 type MovingPartMatrix* {.importcpp: "PT(MovingPartMatrix)", bycopy, pure, inheritable, header: "movingPartMatrix.h".} = object
 
 converter toMovingPartMatrix*(_: type(nil)): MovingPartMatrix {.importcpp: "(nullptr)".}
-converter toBool*(this: MovingPartMatrix): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovingPartMatrix, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovingPartMatrix], obj: TypedObject): MovingPartMatrix {.importcpp: "DCAST(MovingPartMatrix, @)".}
 
 type MovingPartScalar* {.importcpp: "PT(MovingPartScalar)", bycopy, pure, inheritable, header: "movingPartScalar.h".} = object
 
 converter toMovingPartScalar*(_: type(nil)): MovingPartScalar {.importcpp: "(nullptr)".}
-converter toBool*(this: MovingPartScalar): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MovingPartScalar, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MovingPartScalar], obj: TypedObject): MovingPartScalar {.importcpp: "DCAST(MovingPartScalar, @)".}
 
 type PStatClient* {.importcpp: "PStatClient", pure, inheritable, header: "pStatClient.h".} = object
@@ -3102,99 +2764,71 @@ type PStatThread* {.importcpp: "PStatThread", pure, inheritable, header: "pStatT
 type PStatCollectorForward* {.importcpp: "PT(PStatCollectorForward)", bycopy, pure, inheritable, header: "pStatCollectorForward.h".} = object of PStatCollectorForwardBase
 
 converter toPStatCollectorForward*(_: type(nil)): PStatCollectorForward {.importcpp: "(nullptr)".}
-converter toBool*(this: PStatCollectorForward): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PStatCollectorForward, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PStatCollectorForward], obj: TypedObject): PStatCollectorForward {.importcpp: "DCAST(PStatCollectorForward, @)".}
 
 type CharacterJoint* {.importcpp: "PT(CharacterJoint)", bycopy, pure, inheritable, header: "characterJoint.h".} = object of MovingPartMatrix
 
 converter toCharacterJoint*(_: type(nil)): CharacterJoint {.importcpp: "(nullptr)".}
-converter toBool*(this: CharacterJoint): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CharacterJoint, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CharacterJoint], obj: TypedObject): CharacterJoint {.importcpp: "DCAST(CharacterJoint, @)".}
 
 type CharacterSlider* {.importcpp: "PT(CharacterSlider)", bycopy, pure, inheritable, header: "characterSlider.h".} = object of MovingPartScalar
 
 converter toCharacterSlider*(_: type(nil)): CharacterSlider {.importcpp: "(nullptr)".}
-converter toBool*(this: CharacterSlider): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CharacterSlider, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CharacterSlider], obj: TypedObject): CharacterSlider {.importcpp: "DCAST(CharacterSlider, @)".}
 
 type VertexSlider* {.importcpp: "PT(VertexSlider)", bycopy, pure, inheritable, header: "vertexSlider.h".} = object of TypedWritableReferenceCount
 
 converter toVertexSlider*(_: type(nil)): VertexSlider {.importcpp: "(nullptr)".}
-converter toBool*(this: VertexSlider): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VertexSlider, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VertexSlider], obj: TypedObject): VertexSlider {.importcpp: "DCAST(VertexSlider, @)".}
 
 type CharacterVertexSlider* {.importcpp: "PT(CharacterVertexSlider)", bycopy, pure, inheritable, header: "characterVertexSlider.h".} = object of VertexSlider
 
 converter toCharacterVertexSlider*(_: type(nil)): CharacterVertexSlider {.importcpp: "(nullptr)".}
-converter toBool*(this: CharacterVertexSlider): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CharacterVertexSlider, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CharacterVertexSlider], obj: TypedObject): CharacterVertexSlider {.importcpp: "DCAST(CharacterVertexSlider, @)".}
 
 type JointVertexTransform* {.importcpp: "PT(JointVertexTransform)", bycopy, pure, inheritable, header: "jointVertexTransform.h".} = object of VertexTransform
 
 converter toJointVertexTransform*(_: type(nil)): JointVertexTransform {.importcpp: "(nullptr)".}
-converter toBool*(this: JointVertexTransform): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: JointVertexTransform, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[JointVertexTransform], obj: TypedObject): JointVertexTransform {.importcpp: "DCAST(JointVertexTransform, @)".}
 
 type Character* {.importcpp: "PT(Character)", bycopy, pure, inheritable, header: "character.h".} = object of PartBundleNode
 
 converter toCharacter*(_: type(nil)): Character {.importcpp: "(nullptr)".}
-converter toBool*(this: Character): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Character, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Character], obj: TypedObject): Character {.importcpp: "DCAST(Character, @)".}
 
 type CharacterJointBundle* {.importcpp: "PT(CharacterJointBundle)", bycopy, pure, inheritable, header: "characterJointBundle.h".} = object of PartBundle
 
 converter toCharacterJointBundle*(_: type(nil)): CharacterJointBundle {.importcpp: "(nullptr)".}
-converter toBool*(this: CharacterJointBundle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CharacterJointBundle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CharacterJointBundle], obj: TypedObject): CharacterJointBundle {.importcpp: "DCAST(CharacterJointBundle, @)".}
 
 type CharacterJointEffect* {.importcpp: "PT(CharacterJointEffect)", bycopy, pure, inheritable, header: "characterJointEffect.h".} = object of RenderEffect
 
 converter toCharacterJointEffect*(_: type(nil)): CharacterJointEffect {.importcpp: "(nullptr)".}
-converter toBool*(this: CharacterJointEffect): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CharacterJointEffect, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CharacterJointEffect], obj: TypedObject): CharacterJointEffect {.importcpp: "DCAST(CharacterJointEffect, @)".}
 
 type CollisionSolid* {.importcpp: "PT(CollisionSolid)", bycopy, pure, inheritable, header: "collisionSolid.h".} = object of CopyOnWriteObject
 
 converter toCollisionSolid*(_: type(nil)): CollisionSolid {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionSolid): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionSolid, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionSolid], obj: TypedObject): CollisionSolid {.importcpp: "DCAST(CollisionSolid, @)".}
 
 type CollisionBox* {.importcpp: "PT(CollisionBox)", bycopy, pure, inheritable, header: "collisionBox.h".} = object of CollisionSolid
 
 converter toCollisionBox*(_: type(nil)): CollisionBox {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionBox): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionBox, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionBox], obj: TypedObject): CollisionBox {.importcpp: "DCAST(CollisionBox, @)".}
 
 type CollisionCapsule* {.importcpp: "PT(CollisionCapsule)", bycopy, pure, inheritable, header: "collisionCapsule.h".} = object of CollisionSolid
 
 converter toCollisionCapsule*(_: type(nil)): CollisionCapsule {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionCapsule): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionCapsule, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionCapsule], obj: TypedObject): CollisionCapsule {.importcpp: "DCAST(CollisionCapsule, @)".}
 
 type CollisionHandler* {.importcpp: "PT(CollisionHandler)", bycopy, pure, inheritable, header: "collisionHandler.h".} = object of TypedReferenceCount
 
 converter toCollisionHandler*(_: type(nil)): CollisionHandler {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandler): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandler, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandler], obj: TypedObject): CollisionHandler {.importcpp: "DCAST(CollisionHandler, @)".}
 
 type CollisionNode* {.importcpp: "PT(CollisionNode)", bycopy, pure, inheritable, header: "collisionNode.h".} = object of PandaNode
 
 converter toCollisionNode*(_: type(nil)): CollisionNode {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionNode], obj: TypedObject): CollisionNode {.importcpp: "DCAST(CollisionNode, @)".}
 
 type CollisionTraverser* {.importcpp: "CollisionTraverser", pure, inheritable, header: "collisionTraverser.h".} = object of Namable
@@ -3204,127 +2838,91 @@ type CollisionRecorder* {.importcpp: "CollisionRecorder", pure, inheritable, hea
 type CollisionEntry* {.importcpp: "PT(CollisionEntry)", bycopy, pure, inheritable, header: "collisionEntry.h".} = object of TypedWritableReferenceCount
 
 converter toCollisionEntry*(_: type(nil)): CollisionEntry {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionEntry): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionEntry, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionEntry], obj: TypedObject): CollisionEntry {.importcpp: "DCAST(CollisionEntry, @)".}
 
 type CollisionPlane* {.importcpp: "PT(CollisionPlane)", bycopy, pure, inheritable, header: "collisionPlane.h".} = object of CollisionSolid
 
 converter toCollisionPlane*(_: type(nil)): CollisionPlane {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionPlane): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionPlane, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionPlane], obj: TypedObject): CollisionPlane {.importcpp: "DCAST(CollisionPlane, @)".}
 
 type CollisionFloorMesh* {.importcpp: "PT(CollisionFloorMesh)", bycopy, pure, inheritable, header: "collisionFloorMesh.h".} = object of CollisionSolid
 
 converter toCollisionFloorMesh*(_: type(nil)): CollisionFloorMesh {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionFloorMesh): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionFloorMesh, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionFloorMesh], obj: TypedObject): CollisionFloorMesh {.importcpp: "DCAST(CollisionFloorMesh, @)".}
 
 type CollisionPolygon* {.importcpp: "PT(CollisionPolygon)", bycopy, pure, inheritable, header: "collisionPolygon.h".} = object of CollisionPlane
 
 converter toCollisionPolygon*(_: type(nil)): CollisionPolygon {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionPolygon): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionPolygon, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionPolygon], obj: TypedObject): CollisionPolygon {.importcpp: "DCAST(CollisionPolygon, @)".}
 
 type CollisionHandlerEvent* {.importcpp: "PT(CollisionHandlerEvent)", bycopy, pure, inheritable, header: "collisionHandlerEvent.h".} = object of CollisionHandler
 
 converter toCollisionHandlerEvent*(_: type(nil)): CollisionHandlerEvent {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerEvent): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerEvent, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerEvent], obj: TypedObject): CollisionHandlerEvent {.importcpp: "DCAST(CollisionHandlerEvent, @)".}
 
 type CollisionHandlerPhysical* {.importcpp: "PT(CollisionHandlerPhysical)", bycopy, pure, inheritable, header: "collisionHandlerPhysical.h".} = object of CollisionHandlerEvent
 
 converter toCollisionHandlerPhysical*(_: type(nil)): CollisionHandlerPhysical {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerPhysical): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerPhysical, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerPhysical], obj: TypedObject): CollisionHandlerPhysical {.importcpp: "DCAST(CollisionHandlerPhysical, @)".}
 
 type CollisionHandlerFloor* {.importcpp: "PT(CollisionHandlerFloor)", bycopy, pure, inheritable, header: "collisionHandlerFloor.h".} = object of CollisionHandlerPhysical
 
 converter toCollisionHandlerFloor*(_: type(nil)): CollisionHandlerFloor {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerFloor): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerFloor, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerFloor], obj: TypedObject): CollisionHandlerFloor {.importcpp: "DCAST(CollisionHandlerFloor, @)".}
 
 type CollisionHandlerPusher* {.importcpp: "PT(CollisionHandlerPusher)", bycopy, pure, inheritable, header: "collisionHandlerPusher.h".} = object of CollisionHandlerPhysical
 
 converter toCollisionHandlerPusher*(_: type(nil)): CollisionHandlerPusher {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerPusher): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerPusher, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerPusher], obj: TypedObject): CollisionHandlerPusher {.importcpp: "DCAST(CollisionHandlerPusher, @)".}
 
 type CollisionHandlerFluidPusher* {.importcpp: "PT(CollisionHandlerFluidPusher)", bycopy, pure, inheritable, header: "collisionHandlerFluidPusher.h".} = object of CollisionHandlerPusher
 
 converter toCollisionHandlerFluidPusher*(_: type(nil)): CollisionHandlerFluidPusher {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerFluidPusher): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerFluidPusher, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerFluidPusher], obj: TypedObject): CollisionHandlerFluidPusher {.importcpp: "DCAST(CollisionHandlerFluidPusher, @)".}
 
 type CollisionHandlerGravity* {.importcpp: "PT(CollisionHandlerGravity)", bycopy, pure, inheritable, header: "collisionHandlerGravity.h".} = object of CollisionHandlerPhysical
 
 converter toCollisionHandlerGravity*(_: type(nil)): CollisionHandlerGravity {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerGravity): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerGravity, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerGravity], obj: TypedObject): CollisionHandlerGravity {.importcpp: "DCAST(CollisionHandlerGravity, @)".}
 
 type CollisionHandlerHighestEvent* {.importcpp: "PT(CollisionHandlerHighestEvent)", bycopy, pure, inheritable, header: "collisionHandlerHighestEvent.h".} = object of CollisionHandlerEvent
 
 converter toCollisionHandlerHighestEvent*(_: type(nil)): CollisionHandlerHighestEvent {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerHighestEvent): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerHighestEvent, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerHighestEvent], obj: TypedObject): CollisionHandlerHighestEvent {.importcpp: "DCAST(CollisionHandlerHighestEvent, @)".}
 
 type CollisionHandlerQueue* {.importcpp: "PT(CollisionHandlerQueue)", bycopy, pure, inheritable, header: "collisionHandlerQueue.h".} = object of CollisionHandler
 
 converter toCollisionHandlerQueue*(_: type(nil)): CollisionHandlerQueue {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionHandlerQueue): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionHandlerQueue, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerQueue], obj: TypedObject): CollisionHandlerQueue {.importcpp: "DCAST(CollisionHandlerQueue, @)".}
 
 type CollisionSphere* {.importcpp: "PT(CollisionSphere)", bycopy, pure, inheritable, header: "collisionSphere.h".} = object of CollisionSolid
 
 converter toCollisionSphere*(_: type(nil)): CollisionSphere {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionSphere): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionSphere, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionSphere], obj: TypedObject): CollisionSphere {.importcpp: "DCAST(CollisionSphere, @)".}
 
 type CollisionInvSphere* {.importcpp: "PT(CollisionInvSphere)", bycopy, pure, inheritable, header: "collisionInvSphere.h".} = object of CollisionSphere
 
 converter toCollisionInvSphere*(_: type(nil)): CollisionInvSphere {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionInvSphere): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionInvSphere, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionInvSphere], obj: TypedObject): CollisionInvSphere {.importcpp: "DCAST(CollisionInvSphere, @)".}
 
 type CollisionRay* {.importcpp: "PT(CollisionRay)", bycopy, pure, inheritable, header: "collisionRay.h".} = object of CollisionSolid
 
 converter toCollisionRay*(_: type(nil)): CollisionRay {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionRay): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionRay, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionRay], obj: TypedObject): CollisionRay {.importcpp: "DCAST(CollisionRay, @)".}
 
 type CollisionLine* {.importcpp: "PT(CollisionLine)", bycopy, pure, inheritable, header: "collisionLine.h".} = object of CollisionRay
 
 converter toCollisionLine*(_: type(nil)): CollisionLine {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionLine): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionLine, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionLine], obj: TypedObject): CollisionLine {.importcpp: "DCAST(CollisionLine, @)".}
 
 type CollisionParabola* {.importcpp: "PT(CollisionParabola)", bycopy, pure, inheritable, header: "collisionParabola.h".} = object of CollisionSolid
 
 converter toCollisionParabola*(_: type(nil)): CollisionParabola {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionParabola): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionParabola, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionParabola], obj: TypedObject): CollisionParabola {.importcpp: "DCAST(CollisionParabola, @)".}
 
 type CollisionSegment* {.importcpp: "PT(CollisionSegment)", bycopy, pure, inheritable, header: "collisionSegment.h".} = object of CollisionSolid
 
 converter toCollisionSegment*(_: type(nil)): CollisionSegment {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionSegment): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionSegment, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionSegment], obj: TypedObject): CollisionSegment {.importcpp: "DCAST(CollisionSegment, @)".}
 
 type CollisionTube* = CollisionCapsule
@@ -3334,8 +2932,6 @@ type CollisionVisualizer* {.importcpp: "PT(CollisionVisualizer)", bycopy, pure, 
 converter upcastToCollisionRecorder*(_: typedesc[CollisionVisualizer]): typedesc[CollisionRecorder] = typedesc[CollisionRecorder]
 
 converter toCollisionVisualizer*(_: type(nil)): CollisionVisualizer {.importcpp: "(nullptr)".}
-converter toBool*(this: CollisionVisualizer): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CollisionVisualizer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CollisionVisualizer], obj: TypedObject): CollisionVisualizer {.importcpp: "DCAST(CollisionVisualizer, @)".}
 
 type TrackerData* {.importcpp: "TrackerData", pure, inheritable, header: "trackerData.h".} = object
@@ -3343,8 +2939,6 @@ type TrackerData* {.importcpp: "TrackerData", pure, inheritable, header: "tracke
 type InputDevice* {.importcpp: "PT(InputDevice)", bycopy, pure, inheritable, header: "inputDevice.h".} = object of TypedReferenceCount
 
 converter toInputDevice*(_: type(nil)): InputDevice {.importcpp: "(nullptr)".}
-converter toBool*(this: InputDevice): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: InputDevice, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InputDevice], obj: TypedObject): InputDevice {.importcpp: "DCAST(InputDevice, @)".}
 
 type InputDevice_State {.importcpp: "InputDevice::State", pure, header: "inputDevice.h".} = enum
@@ -3362,29 +2956,21 @@ template S_down*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_Stat
 type ClientBase* {.importcpp: "PT(ClientBase)", bycopy, pure, inheritable, header: "clientBase.h".} = object of TypedReferenceCount
 
 converter toClientBase*(_: type(nil)): ClientBase {.importcpp: "(nullptr)".}
-converter toBool*(this: ClientBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ClientBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClientBase], obj: TypedObject): ClientBase {.importcpp: "DCAST(ClientBase, @)".}
 
 type AnalogNode* {.importcpp: "PT(AnalogNode)", bycopy, pure, inheritable, header: "analogNode.h".} = object of DataNode
 
 converter toAnalogNode*(_: type(nil)): AnalogNode {.importcpp: "(nullptr)".}
-converter toBool*(this: AnalogNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnalogNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnalogNode], obj: TypedObject): AnalogNode {.importcpp: "DCAST(AnalogNode, @)".}
 
 type ButtonNode* {.importcpp: "PT(ButtonNode)", bycopy, pure, inheritable, header: "buttonNode.h".} = object of DataNode
 
 converter toButtonNode*(_: type(nil)): ButtonNode {.importcpp: "(nullptr)".}
-converter toBool*(this: ButtonNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ButtonNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ButtonNode], obj: TypedObject): ButtonNode {.importcpp: "DCAST(ButtonNode, @)".}
 
 type DialNode* {.importcpp: "PT(DialNode)", bycopy, pure, inheritable, header: "dialNode.h".} = object of DataNode
 
 converter toDialNode*(_: type(nil)): DialNode {.importcpp: "(nullptr)".}
-converter toBool*(this: DialNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DialNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DialNode], obj: TypedObject): DialNode {.importcpp: "DCAST(DialNode, @)".}
 
 type InputDeviceSet* {.importcpp: "InputDeviceSet", pure, inheritable, header: "inputDeviceSet.h".} = object
@@ -3394,29 +2980,21 @@ type InputDeviceManager* {.importcpp: "InputDeviceManager", pure, inheritable, h
 type InputDeviceNode* {.importcpp: "PT(InputDeviceNode)", bycopy, pure, inheritable, header: "inputDeviceNode.h".} = object of DataNode
 
 converter toInputDeviceNode*(_: type(nil)): InputDeviceNode {.importcpp: "(nullptr)".}
-converter toBool*(this: InputDeviceNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: InputDeviceNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InputDeviceNode], obj: TypedObject): InputDeviceNode {.importcpp: "DCAST(InputDeviceNode, @)".}
 
 type LinuxJoystickDevice* {.importcpp: "PT(LinuxJoystickDevice)", bycopy, pure, inheritable, header: "linuxJoystickDevice.h".} = object of InputDevice
 
 converter toLinuxJoystickDevice*(_: type(nil)): LinuxJoystickDevice {.importcpp: "(nullptr)".}
-converter toBool*(this: LinuxJoystickDevice): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: LinuxJoystickDevice, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[LinuxJoystickDevice], obj: TypedObject): LinuxJoystickDevice {.importcpp: "DCAST(LinuxJoystickDevice, @)".}
 
 type TrackerNode* {.importcpp: "PT(TrackerNode)", bycopy, pure, inheritable, header: "trackerNode.h".} = object of DataNode
 
 converter toTrackerNode*(_: type(nil)): TrackerNode {.importcpp: "(nullptr)".}
-converter toBool*(this: TrackerNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TrackerNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TrackerNode], obj: TypedObject): TrackerNode {.importcpp: "DCAST(TrackerNode, @)".}
 
 type VirtualMouse* {.importcpp: "PT(VirtualMouse)", bycopy, pure, inheritable, header: "virtualMouse.h".} = object of DataNode
 
 converter toVirtualMouse*(_: type(nil)): VirtualMouse {.importcpp: "(nullptr)".}
-converter toBool*(this: VirtualMouse): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VirtualMouse, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VirtualMouse], obj: TypedObject): VirtualMouse {.importcpp: "DCAST(VirtualMouse, @)".}
 
 type DataGraphTraverser* {.importcpp: "DataGraphTraverser", pure, inheritable, header: "dataGraphTraverser.h".} = object
@@ -3424,15 +3002,11 @@ type DataGraphTraverser* {.importcpp: "DataGraphTraverser", pure, inheritable, h
 type GraphicsDevice* {.importcpp: "PT(GraphicsDevice)", bycopy, pure, inheritable, header: "graphicsDevice.h".} = object of TypedReferenceCount
 
 converter toGraphicsDevice*(_: type(nil)): GraphicsDevice {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsDevice): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsDevice, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsDevice], obj: TypedObject): GraphicsDevice {.importcpp: "DCAST(GraphicsDevice, @)".}
 
 type GraphicsPipe* {.importcpp: "PT(GraphicsPipe)", bycopy, pure, inheritable, header: "graphicsPipe.h".} = object of TypedReferenceCount
 
 converter toGraphicsPipe*(_: type(nil)): GraphicsPipe {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsPipe): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsPipe, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsPipe], obj: TypedObject): GraphicsPipe {.importcpp: "DCAST(GraphicsPipe, @)".}
 
 type GraphicsPipe_OutputTypes {.importcpp: "GraphicsPipe::OutputTypes", pure, header: "graphicsPipe.h".} = enum
@@ -3504,8 +3078,6 @@ template DS_createDeviceError*(_: typedesc[DisplayInformation]): DisplayInformat
 type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, header: "drawableRegion.h".} = object
 
 converter toDrawableRegion*(_: type(nil)): DrawableRegion {.importcpp: "(nullptr)".}
-converter toBool*(this: DrawableRegion): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DrawableRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DrawableRegion_RenderTexturePlane {.importcpp: "DrawableRegion::RenderTexturePlane", pure, header: "drawableRegion.h".} = enum
   RTP_stencil = 0
@@ -3550,8 +3122,6 @@ template RTP_COUNT*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePl
 type WindowHandle* {.importcpp: "PT(WindowHandle)", bycopy, pure, inheritable, header: "windowHandle.h".} = object of TypedReferenceCount
 
 converter toWindowHandle*(_: type(nil)): WindowHandle {.importcpp: "(nullptr)".}
-converter toBool*(this: WindowHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[WindowHandle], obj: TypedObject): WindowHandle {.importcpp: "DCAST(WindowHandle, @)".}
 
 type WindowProperties* {.importcpp: "WindowProperties", pure, inheritable, header: "windowProperties.h".} = object
@@ -3585,15 +3155,11 @@ type DisplayRegion* {.importcpp: "PT(DisplayRegion)", bycopy, pure, inheritable,
 converter upcastToDrawableRegion*(_: typedesc[DisplayRegion]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
 
 converter toDisplayRegion*(_: type(nil)): DisplayRegion {.importcpp: "(nullptr)".}
-converter toBool*(this: DisplayRegion): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DisplayRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DisplayRegion], obj: TypedObject): DisplayRegion {.importcpp: "DCAST(DisplayRegion, @)".}
 
 type GraphicsOutputBase* {.importcpp: "PT(GraphicsOutputBase)", bycopy, pure, inheritable, header: "graphicsOutputBase.h".} = object of TypedWritableReferenceCount
 
 converter toGraphicsOutputBase*(_: type(nil)): GraphicsOutputBase {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsOutputBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsOutputBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsOutputBase], obj: TypedObject): GraphicsOutputBase {.importcpp: "DCAST(GraphicsOutputBase, @)".}
 
 type GraphicsOutput* {.importcpp: "PT(GraphicsOutput)", bycopy, pure, inheritable, header: "graphicsOutput.h".} = object of GraphicsOutputBase
@@ -3601,8 +3167,6 @@ type GraphicsOutput* {.importcpp: "PT(GraphicsOutput)", bycopy, pure, inheritabl
 converter upcastToDrawableRegion*(_: typedesc[GraphicsOutput]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
 
 converter toGraphicsOutput*(_: type(nil)): GraphicsOutput {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsOutput): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsOutput, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsOutput], obj: TypedObject): GraphicsOutput {.importcpp: "DCAST(GraphicsOutput, @)".}
 
 type GraphicsOutput_RenderTextureMode {.importcpp: "GraphicsOutput::RenderTextureMode", pure, header: "graphicsOutput.h".} = enum
@@ -3640,15 +3204,11 @@ template FM_refresh*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = Gr
 type GraphicsStateGuardianBase* {.importcpp: "PT(GraphicsStateGuardianBase)", bycopy, pure, inheritable, header: "graphicsStateGuardianBase.h".} = object of TypedWritableReferenceCount
 
 converter toGraphicsStateGuardianBase*(_: type(nil)): GraphicsStateGuardianBase {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsStateGuardianBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsStateGuardianBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsStateGuardianBase], obj: TypedObject): GraphicsStateGuardianBase {.importcpp: "DCAST(GraphicsStateGuardianBase, @)".}
 
 type GraphicsStateGuardian* {.importcpp: "PT(GraphicsStateGuardian)", bycopy, pure, inheritable, header: "graphicsStateGuardian.h".} = object of GraphicsStateGuardianBase
 
 converter toGraphicsStateGuardian*(_: type(nil)): GraphicsStateGuardian {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsStateGuardian): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsStateGuardian, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsStateGuardian], obj: TypedObject): GraphicsStateGuardian {.importcpp: "DCAST(GraphicsStateGuardian, @)".}
 
 type GraphicsStateGuardian_ShaderModel {.importcpp: "GraphicsStateGuardian::ShaderModel", pure, header: "graphicsStateGuardian.h".} = enum
@@ -3676,8 +3236,6 @@ template SM_51*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_Shade
 type GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", bycopy, pure, inheritable, header: "graphicsEngine.h".} = object of ReferenceCount
 
 converter toGraphicsEngine*(_: type(nil)): GraphicsEngine {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsEngine): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsEngine, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsEngine], obj: TypedObject): GraphicsEngine {.importcpp: "DCAST(GraphicsEngine, @)".}
 
 type GraphicsThreadingModel* {.importcpp: "GraphicsThreadingModel", pure, inheritable, header: "graphicsThreadingModel.h".} = object
@@ -3685,8 +3243,6 @@ type GraphicsThreadingModel* {.importcpp: "GraphicsThreadingModel", pure, inheri
 type StereoDisplayRegion* {.importcpp: "PT(StereoDisplayRegion)", bycopy, pure, inheritable, header: "stereoDisplayRegion.h".} = object of DisplayRegion
 
 converter toStereoDisplayRegion*(_: type(nil)): StereoDisplayRegion {.importcpp: "(nullptr)".}
-converter toBool*(this: StereoDisplayRegion): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: StereoDisplayRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[StereoDisplayRegion], obj: TypedObject): StereoDisplayRegion {.importcpp: "DCAST(StereoDisplayRegion, @)".}
 
 type FrameBufferProperties* {.importcpp: "FrameBufferProperties", pure, inheritable, header: "frameBufferProperties.h".} = object
@@ -3694,8 +3250,6 @@ type FrameBufferProperties* {.importcpp: "FrameBufferProperties", pure, inherita
 type GraphicsWindowInputDevice* {.importcpp: "PT(GraphicsWindowInputDevice)", bycopy, pure, inheritable, header: "graphicsWindowInputDevice.h".} = object of InputDevice
 
 converter toGraphicsWindowInputDevice*(_: type(nil)): GraphicsWindowInputDevice {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsWindowInputDevice): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsWindowInputDevice, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsWindowInputDevice], obj: TypedObject): GraphicsWindowInputDevice {.importcpp: "DCAST(GraphicsWindowInputDevice, @)".}
 
 type TouchInfo* {.importcpp: "TouchInfo", pure, inheritable, header: "touchInfo.h".} = object
@@ -3717,15 +3271,11 @@ type GraphicsWindowProcCallbackData* {.importcpp: "GraphicsWindowProcCallbackDat
 type GraphicsWindow* {.importcpp: "PT(GraphicsWindow)", bycopy, pure, inheritable, header: "graphicsWindow.h".} = object of GraphicsOutput
 
 converter toGraphicsWindow*(_: type(nil)): GraphicsWindow {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsWindow): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsWindow, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsWindow], obj: TypedObject): GraphicsWindow {.importcpp: "DCAST(GraphicsWindow, @)".}
 
 type CallbackGraphicsWindow* {.importcpp: "PT(CallbackGraphicsWindow)", bycopy, pure, inheritable, header: "callbackGraphicsWindow.h".} = object of GraphicsWindow
 
 converter toCallbackGraphicsWindow*(_: type(nil)): CallbackGraphicsWindow {.importcpp: "(nullptr)".}
-converter toBool*(this: CallbackGraphicsWindow): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CallbackGraphicsWindow, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CallbackGraphicsWindow], obj: TypedObject): CallbackGraphicsWindow {.importcpp: "DCAST(CallbackGraphicsWindow, @)".}
 
 type CallbackGraphicsWindow_RenderCallbackType {.importcpp: "CallbackGraphicsWindow::RenderCallbackType", pure, header: "callbackGraphicsWindow.h".} = enum
@@ -3753,35 +3303,25 @@ type DisplaySearchParameters* {.importcpp: "DisplaySearchParameters", pure, inhe
 type GraphicsBuffer* {.importcpp: "PT(GraphicsBuffer)", bycopy, pure, inheritable, header: "graphicsBuffer.h".} = object of GraphicsOutput
 
 converter toGraphicsBuffer*(_: type(nil)): GraphicsBuffer {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsBuffer): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsBuffer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GraphicsBuffer], obj: TypedObject): GraphicsBuffer {.importcpp: "DCAST(GraphicsBuffer, @)".}
 
 type GraphicsPipeSelection* {.importcpp: "GraphicsPipeSelection*", bycopy, pure, inheritable, header: "graphicsPipeSelection.h".} = object
 
 converter toGraphicsPipeSelection*(_: type(nil)): GraphicsPipeSelection {.importcpp: "(nullptr)".}
-converter toBool*(this: GraphicsPipeSelection): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GraphicsPipeSelection, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type MouseAndKeyboard* {.importcpp: "PT(MouseAndKeyboard)", bycopy, pure, inheritable, header: "mouseAndKeyboard.h".} = object of DataNode
 
 converter toMouseAndKeyboard*(_: type(nil)): MouseAndKeyboard {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseAndKeyboard): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseAndKeyboard, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseAndKeyboard], obj: TypedObject): MouseAndKeyboard {.importcpp: "DCAST(MouseAndKeyboard, @)".}
 
 type NativeWindowHandle* {.importcpp: "PT(NativeWindowHandle)", bycopy, pure, header: "nativeWindowHandle.h".} = object of WindowHandle
 
 converter toNativeWindowHandle*(_: type(nil)): NativeWindowHandle {.importcpp: "(nullptr)".}
-converter toBool*(this: NativeWindowHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NativeWindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NativeWindowHandle], obj: TypedObject): NativeWindowHandle {.importcpp: "DCAST(NativeWindowHandle, @)".}
 
 type ParasiteBuffer* {.importcpp: "PT(ParasiteBuffer)", bycopy, pure, inheritable, header: "parasiteBuffer.h".} = object of GraphicsOutput
 
 converter toParasiteBuffer*(_: type(nil)): ParasiteBuffer {.importcpp: "(nullptr)".}
-converter toBool*(this: ParasiteBuffer): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParasiteBuffer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParasiteBuffer], obj: TypedObject): ParasiteBuffer {.importcpp: "DCAST(ParasiteBuffer, @)".}
 
 type ThreadPriority* {.importcpp: "ThreadPriority", header: "threadPriority.h".} = enum
@@ -3795,8 +3335,6 @@ type Thread* {.importcpp: "PT(Thread)", bycopy, pure, inheritable, header: "thre
 converter upcastToNamable*(_: typedesc[Thread]): typedesc[Namable] = typedesc[Namable]
 
 converter toThread*(_: type(nil)): Thread {.importcpp: "(nullptr)".}
-converter toBool*(this: Thread): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Thread, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Thread], obj: TypedObject): Thread {.importcpp: "DCAST(Thread, @)".}
 
 type MutexDirect* {.importcpp: "MutexDirect", pure, inheritable, header: "mutexDirect.h".} = object
@@ -3818,8 +3356,6 @@ type ReMutex* {.importcpp: "ReMutex", pure, inheritable, header: "reMutex.h".} =
 type ExternalThread* {.importcpp: "PT(ExternalThread)", bycopy, pure, inheritable, header: "externalThread.h".} = object of Thread
 
 converter toExternalThread*(_: type(nil)): ExternalThread {.importcpp: "(nullptr)".}
-converter toBool*(this: ExternalThread): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ExternalThread, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ExternalThread], obj: TypedObject): ExternalThread {.importcpp: "DCAST(ExternalThread, @)".}
 
 type LightMutexDirect* {.importcpp: "LightMutexDirect", pure, inheritable, header: "lightMutexDirect.h".} = object
@@ -3833,8 +3369,6 @@ type LightReMutex* {.importcpp: "LightReMutex", pure, inheritable, header: "ligh
 type MainThread* {.importcpp: "PT(MainThread)", bycopy, pure, inheritable, header: "mainThread.h".} = object of Thread
 
 converter toMainThread*(_: type(nil)): MainThread {.importcpp: "(nullptr)".}
-converter toBool*(this: MainThread): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MainThread, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MainThread], obj: TypedObject): MainThread {.importcpp: "DCAST(MainThread, @)".}
 
 type Semaphore* {.importcpp: "Semaphore", pure, inheritable, header: "psemaphore.h".} = object
@@ -3846,8 +3380,6 @@ type AsyncTaskManager* {.importcpp: "PT(AsyncTaskManager)", bycopy, pure, inheri
 converter upcastToNamable*(_: typedesc[AsyncTaskManager]): typedesc[Namable] = typedesc[Namable]
 
 converter toAsyncTaskManager*(_: type(nil)): AsyncTaskManager {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncTaskManager): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncTaskManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTaskManager], obj: TypedObject): AsyncTaskManager {.importcpp: "DCAST(AsyncTaskManager, @)".}
 
 type AsyncTaskCollection* {.importcpp: "AsyncTaskCollection", pure, inheritable, header: "asyncTaskCollection.h".} = object
@@ -3857,15 +3389,11 @@ type AsyncTaskChain* {.importcpp: "PT(AsyncTaskChain)", bycopy, pure, inheritabl
 converter upcastToNamable*(_: typedesc[AsyncTaskChain]): typedesc[Namable] = typedesc[Namable]
 
 converter toAsyncTaskChain*(_: type(nil)): AsyncTaskChain {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncTaskChain): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncTaskChain, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTaskChain], obj: TypedObject): AsyncTaskChain {.importcpp: "DCAST(AsyncTaskChain, @)".}
 
 type AsyncTaskPause* {.importcpp: "PT(AsyncTaskPause)", bycopy, pure, inheritable, header: "asyncTaskPause.h".} = object of AsyncTask
 
 converter toAsyncTaskPause*(_: type(nil)): AsyncTaskPause {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncTaskPause): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncTaskPause, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTaskPause], obj: TypedObject): AsyncTaskPause {.importcpp: "DCAST(AsyncTaskPause, @)".}
 
 type AsyncTaskSequence* {.importcpp: "PT(AsyncTaskSequence)", bycopy, pure, inheritable, header: "asyncTaskSequence.h".} = object of AsyncTask
@@ -3873,8 +3401,6 @@ type AsyncTaskSequence* {.importcpp: "PT(AsyncTaskSequence)", bycopy, pure, inhe
 converter upcastToAsyncTaskCollection*(_: typedesc[AsyncTaskSequence]): typedesc[AsyncTaskCollection] = typedesc[AsyncTaskCollection]
 
 converter toAsyncTaskSequence*(_: type(nil)): AsyncTaskSequence {.importcpp: "(nullptr)".}
-converter toBool*(this: AsyncTaskSequence): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AsyncTaskSequence, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AsyncTaskSequence], obj: TypedObject): AsyncTaskSequence {.importcpp: "DCAST(AsyncTaskSequence, @)".}
 
 type ButtonEvent* {.importcpp: "ButtonEvent", pure, inheritable, header: "buttonEvent.h".} = object
@@ -3906,22 +3432,16 @@ template T_rawUp*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type
 type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValue.h".} = object of TypedWritableReferenceCount
 
 converter toParamValueBase*(_: type(nil)): ParamValueBase {.importcpp: "(nullptr)".}
-converter toBool*(this: ParamValueBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParamValueBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParamValueBase], obj: TypedObject): ParamValueBase {.importcpp: "DCAST(ParamValueBase, @)".}
 
 type ButtonEventList* {.importcpp: "PT(ButtonEventList)", bycopy, pure, inheritable, header: "buttonEventList.h".} = object of ParamValueBase
 
 converter toButtonEventList*(_: type(nil)): ButtonEventList {.importcpp: "(nullptr)".}
-converter toBool*(this: ButtonEventList): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ButtonEventList, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ButtonEventList], obj: TypedObject): ButtonEventList {.importcpp: "DCAST(ButtonEventList, @)".}
 
 type Event* {.importcpp: "PT(Event)", bycopy, pure, inheritable, header: "event.h".} = object of TypedReferenceCount
 
 converter toEvent*(_: type(nil)): Event {.importcpp: "(nullptr)".}
-converter toBool*(this: Event): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Event, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Event], obj: TypedObject): Event {.importcpp: "DCAST(Event, @)".}
 
 type EventHandler* {.importcpp: "EventHandler", pure, inheritable, header: "eventHandler.h".} = object of TypedObject
@@ -3929,14 +3449,10 @@ type EventHandler* {.importcpp: "EventHandler", pure, inheritable, header: "even
 type EventQueue* {.importcpp: "EventQueue*", bycopy, pure, inheritable, header: "eventQueue.h".} = object
 
 converter toEventQueue*(_: type(nil)): EventQueue {.importcpp: "(nullptr)".}
-converter toBool*(this: EventQueue): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: EventQueue, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type PointerEventList* {.importcpp: "PT(PointerEventList)", bycopy, pure, inheritable, header: "pointerEventList.h".} = object of ParamValueBase
 
 converter toPointerEventList*(_: type(nil)): PointerEventList {.importcpp: "(nullptr)".}
-converter toBool*(this: PointerEventList): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PointerEventList, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PointerEventList], obj: TypedObject): PointerEventList {.importcpp: "DCAST(PointerEventList, @)".}
 
 type AdaptiveLru* {.importcpp: "AdaptiveLru", pure, inheritable, header: "adaptiveLru.h".} = object of Namable
@@ -3944,8 +3460,6 @@ type AdaptiveLru* {.importcpp: "AdaptiveLru", pure, inheritable, header: "adapti
 type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage*", bycopy, pure, inheritable, header: "adaptiveLru.h".} = object
 
 converter toAdaptiveLruPage*(_: type(nil)): AdaptiveLruPage {.importcpp: "(nullptr)".}
-converter toBool*(this: AdaptiveLruPage): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AdaptiveLruPage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type GeomEnums* {.importcpp: "GeomEnums", pure, inheritable, header: "geomEnums.h".} = object
 
@@ -4122,8 +3636,6 @@ type GeomVertexAnimationSpec* {.importcpp: "GeomVertexAnimationSpec", pure, inhe
 type InternalName* {.importcpp: "PT(InternalName)", bycopy, pure, header: "internalName.h".} = object of TypedWritableReferenceCount
 
 converter toInternalName*(_: type(nil)): InternalName {.importcpp: "(nullptr)".}
-converter toBool*(this: InternalName): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: InternalName, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[InternalName], obj: TypedObject): InternalName {.importcpp: "DCAST(InternalName, @)".}
 
 type GeomVertexColumn* {.importcpp: "GeomVertexColumn", pure, inheritable, header: "geomVertexColumn.h".} = object of GeomEnums
@@ -4133,8 +3645,6 @@ type GeomVertexArrayFormat* {.importcpp: "PT(GeomVertexArrayFormat)", bycopy, pu
 converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomVertexArrayFormat*(_: type(nil)): GeomVertexArrayFormat {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomVertexArrayFormat): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomVertexArrayFormat, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayFormat], obj: TypedObject): GeomVertexArrayFormat {.importcpp: "DCAST(GeomVertexArrayFormat, @)".}
 
 type GeomVertexFormat* {.importcpp: "PT(GeomVertexFormat)", bycopy, pure, header: "geomVertexFormat.h".} = object of TypedWritableReferenceCount
@@ -4142,8 +3652,6 @@ type GeomVertexFormat* {.importcpp: "PT(GeomVertexFormat)", bycopy, pure, header
 converter upcastToGeomEnums*(_: typedesc[GeomVertexFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomVertexFormat*(_: type(nil)): GeomVertexFormat {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomVertexFormat): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomVertexFormat, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexFormat], obj: TypedObject): GeomVertexFormat {.importcpp: "DCAST(GeomVertexFormat, @)".}
 
 type SimpleLru* {.importcpp: "SimpleLru", pure, inheritable, header: "simpleLru.h".} = object of Namable
@@ -4151,26 +3659,18 @@ type SimpleLru* {.importcpp: "SimpleLru", pure, inheritable, header: "simpleLru.
 type SimpleLruPage* {.importcpp: "SimpleLruPage*", bycopy, pure, inheritable, header: "simpleLru.h".} = object
 
 converter toSimpleLruPage*(_: type(nil)): SimpleLruPage {.importcpp: "(nullptr)".}
-converter toBool*(this: SimpleLruPage): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SimpleLruPage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type SimpleAllocator* {.importcpp: "SimpleAllocator*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
 
 converter toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullptr)".}
-converter toBool*(this: SimpleAllocator): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SimpleAllocator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
 
 converter toSimpleAllocatorBlock*(_: type(nil)): SimpleAllocatorBlock {.importcpp: "(nullptr)".}
-converter toBool*(this: SimpleAllocatorBlock): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SimpleAllocatorBlock, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile*", bycopy, pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
 
 converter toVertexDataSaveFile*(_: type(nil)): VertexDataSaveFile {.importcpp: "(nullptr)".}
-converter toBool*(this: VertexDataSaveFile): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VertexDataSaveFile, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type VertexDataPage* {.importcpp: "VertexDataPage", pure, inheritable, header: "vertexDataPage.h".} = object of SimpleAllocator
 
@@ -4197,8 +3697,6 @@ type VertexDataBlock* {.importcpp: "PT(VertexDataBlock)", bycopy, pure, inherita
 converter upcastToReferenceCount*(_: typedesc[VertexDataBlock]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
 converter toVertexDataBlock*(_: type(nil)): VertexDataBlock {.importcpp: "(nullptr)".}
-converter toBool*(this: VertexDataBlock): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VertexDataBlock, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VertexDataBlock], obj: TypedObject): VertexDataBlock {.importcpp: "DCAST(VertexDataBlock, @)".}
 
 type GeomVertexArrayData* {.importcpp: "PT(GeomVertexArrayData)", bycopy, pure, inheritable, header: "geomVertexArrayData.h".} = object of CopyOnWriteObject
@@ -4207,8 +3705,6 @@ converter upcastToSimpleLruPage*(_: typedesc[GeomVertexArrayData]): typedesc[Sim
 converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayData]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomVertexArrayData*(_: type(nil)): GeomVertexArrayData {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomVertexArrayData): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomVertexArrayData, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayData], obj: TypedObject): GeomVertexArrayData {.importcpp: "DCAST(GeomVertexArrayData, @)".}
 
 type GeomVertexArrayDataHandle* {.importcpp: "PT(GeomVertexArrayDataHandle)", bycopy, pure, inheritable, header: "geomVertexArrayData.h".} = object of ReferenceCount
@@ -4216,8 +3712,6 @@ type GeomVertexArrayDataHandle* {.importcpp: "PT(GeomVertexArrayDataHandle)", by
 converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayDataHandle]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomVertexArrayDataHandle*(_: type(nil)): GeomVertexArrayDataHandle {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomVertexArrayDataHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomVertexArrayDataHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayDataHandle], obj: TypedObject): GeomVertexArrayDataHandle {.importcpp: "DCAST(GeomVertexArrayDataHandle, @)".}
 
 type GeomCacheManager* {.importcpp: "GeomCacheManager", pure, inheritable, header: "geomCacheManager.h".} = object
@@ -4225,8 +3719,6 @@ type GeomCacheManager* {.importcpp: "GeomCacheManager", pure, inheritable, heade
 type TransformTable* {.importcpp: "PT(TransformTable)", bycopy, pure, inheritable, header: "transformTable.h".} = object of TypedWritableReferenceCount
 
 converter toTransformTable*(_: type(nil)): TransformTable {.importcpp: "(nullptr)".}
-converter toBool*(this: TransformTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TransformTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TransformTable], obj: TypedObject): TransformTable {.importcpp: "DCAST(TransformTable, @)".}
 
 type TransformBlend* {.importcpp: "TransformBlend", pure, inheritable, header: "transformBlend.h".} = object
@@ -4234,15 +3726,11 @@ type TransformBlend* {.importcpp: "TransformBlend", pure, inheritable, header: "
 type TransformBlendTable* {.importcpp: "PT(TransformBlendTable)", bycopy, pure, inheritable, header: "transformBlendTable.h".} = object of CopyOnWriteObject
 
 converter toTransformBlendTable*(_: type(nil)): TransformBlendTable {.importcpp: "(nullptr)".}
-converter toBool*(this: TransformBlendTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TransformBlendTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TransformBlendTable], obj: TypedObject): TransformBlendTable {.importcpp: "DCAST(TransformBlendTable, @)".}
 
 type SliderTable* {.importcpp: "PT(SliderTable)", bycopy, pure, inheritable, header: "sliderTable.h".} = object of TypedWritableReferenceCount
 
 converter toSliderTable*(_: type(nil)): SliderTable {.importcpp: "(nullptr)".}
-converter toBool*(this: SliderTable): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SliderTable, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SliderTable], obj: TypedObject): SliderTable {.importcpp: "DCAST(SliderTable, @)".}
 
 type GeomVertexData* {.importcpp: "PT(GeomVertexData)", bycopy, pure, inheritable, header: "geomVertexData.h".} = object of CopyOnWriteObject
@@ -4250,43 +3738,31 @@ type GeomVertexData* {.importcpp: "PT(GeomVertexData)", bycopy, pure, inheritabl
 converter upcastToGeomEnums*(_: typedesc[GeomVertexData]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomVertexData*(_: type(nil)): GeomVertexData {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomVertexData): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomVertexData, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomVertexData], obj: TypedObject): GeomVertexData {.importcpp: "DCAST(GeomVertexData, @)".}
 
 type AnimateVerticesRequest* {.importcpp: "PT(AnimateVerticesRequest)", bycopy, pure, inheritable, header: "animateVerticesRequest.h".} = object of AsyncTask
 
 converter toAnimateVerticesRequest*(_: type(nil)): AnimateVerticesRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: AnimateVerticesRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AnimateVerticesRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AnimateVerticesRequest], obj: TypedObject): AnimateVerticesRequest {.importcpp: "DCAST(AnimateVerticesRequest, @)".}
 
 type SavedContext* {.importcpp: "SavedContext*", bycopy, pure, inheritable, header: "savedContext.h".} = object of TypedObject
 
 converter toSavedContext*(_: type(nil)): SavedContext {.importcpp: "(nullptr)".}
-converter toBool*(this: SavedContext): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SavedContext, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type BufferContext* {.importcpp: "BufferContext*", bycopy, pure, inheritable, header: "bufferContext.h".} = object of SavedContext
 
 converter toBufferContext*(_: type(nil)): BufferContext {.importcpp: "(nullptr)".}
-converter toBool*(this: BufferContext): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BufferContext, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type GeomPrimitive* {.importcpp: "PT(GeomPrimitive)", bycopy, pure, inheritable, header: "geomPrimitive.h".} = object of CopyOnWriteObject
 
 converter upcastToGeomEnums*(_: typedesc[GeomPrimitive]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeomPrimitive*(_: type(nil)): GeomPrimitive {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomPrimitive): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomPrimitive, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomPrimitive], obj: TypedObject): GeomPrimitive {.importcpp: "DCAST(GeomPrimitive, @)".}
 
 type TextureStage* {.importcpp: "PT(TextureStage)", bycopy, pure, inheritable, header: "textureStage.h".} = object of TypedWritableReferenceCount
 
 converter toTextureStage*(_: type(nil)): TextureStage {.importcpp: "(nullptr)".}
-converter toBool*(this: TextureStage): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextureStage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextureStage], obj: TypedObject): TextureStage {.importcpp: "DCAST(TextureStage, @)".}
 
 type TextureStage_Mode {.importcpp: "TextureStage::Mode", pure, header: "textureStage.h".} = enum
@@ -4394,8 +3870,6 @@ type Geom* {.importcpp: "PT(Geom)", bycopy, pure, inheritable, header: "geom.h".
 converter upcastToGeomEnums*(_: typedesc[Geom]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toGeom*(_: type(nil)): Geom {.importcpp: "(nullptr)".}
-converter toBool*(this: Geom): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Geom, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Geom], obj: TypedObject): Geom {.importcpp: "DCAST(Geom, @)".}
 
 type GeomContext* {.importcpp: "GeomContext", pure, inheritable, header: "geomContext.h".} = object of SavedContext
@@ -4403,78 +3877,56 @@ type GeomContext* {.importcpp: "GeomContext", pure, inheritable, header: "geomCo
 type GeomLines* {.importcpp: "PT(GeomLines)", bycopy, pure, inheritable, header: "geomLines.h".} = object of GeomPrimitive
 
 converter toGeomLines*(_: type(nil)): GeomLines {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomLines): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomLines, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomLines], obj: TypedObject): GeomLines {.importcpp: "DCAST(GeomLines, @)".}
 
 type GeomLinesAdjacency* {.importcpp: "PT(GeomLinesAdjacency)", bycopy, pure, inheritable, header: "geomLinesAdjacency.h".} = object of GeomPrimitive
 
 converter toGeomLinesAdjacency*(_: type(nil)): GeomLinesAdjacency {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomLinesAdjacency): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomLinesAdjacency, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomLinesAdjacency], obj: TypedObject): GeomLinesAdjacency {.importcpp: "DCAST(GeomLinesAdjacency, @)".}
 
 type GeomLinestrips* {.importcpp: "PT(GeomLinestrips)", bycopy, pure, inheritable, header: "geomLinestrips.h".} = object of GeomPrimitive
 
 converter toGeomLinestrips*(_: type(nil)): GeomLinestrips {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomLinestrips): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomLinestrips, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomLinestrips], obj: TypedObject): GeomLinestrips {.importcpp: "DCAST(GeomLinestrips, @)".}
 
 type GeomLinestripsAdjacency* {.importcpp: "PT(GeomLinestripsAdjacency)", bycopy, pure, inheritable, header: "geomLinestripsAdjacency.h".} = object of GeomPrimitive
 
 converter toGeomLinestripsAdjacency*(_: type(nil)): GeomLinestripsAdjacency {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomLinestripsAdjacency): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomLinestripsAdjacency, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomLinestripsAdjacency], obj: TypedObject): GeomLinestripsAdjacency {.importcpp: "DCAST(GeomLinestripsAdjacency, @)".}
 
 type GeomPatches* {.importcpp: "PT(GeomPatches)", bycopy, pure, inheritable, header: "geomPatches.h".} = object of GeomPrimitive
 
 converter toGeomPatches*(_: type(nil)): GeomPatches {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomPatches): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomPatches, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomPatches], obj: TypedObject): GeomPatches {.importcpp: "DCAST(GeomPatches, @)".}
 
 type GeomPoints* {.importcpp: "PT(GeomPoints)", bycopy, pure, inheritable, header: "geomPoints.h".} = object of GeomPrimitive
 
 converter toGeomPoints*(_: type(nil)): GeomPoints {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomPoints): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomPoints, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomPoints], obj: TypedObject): GeomPoints {.importcpp: "DCAST(GeomPoints, @)".}
 
 type GeomTriangles* {.importcpp: "PT(GeomTriangles)", bycopy, pure, inheritable, header: "geomTriangles.h".} = object of GeomPrimitive
 
 converter toGeomTriangles*(_: type(nil)): GeomTriangles {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTriangles): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTriangles, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTriangles], obj: TypedObject): GeomTriangles {.importcpp: "DCAST(GeomTriangles, @)".}
 
 type GeomTrianglesAdjacency* {.importcpp: "PT(GeomTrianglesAdjacency)", bycopy, pure, inheritable, header: "geomTrianglesAdjacency.h".} = object of GeomPrimitive
 
 converter toGeomTrianglesAdjacency*(_: type(nil)): GeomTrianglesAdjacency {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTrianglesAdjacency): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTrianglesAdjacency, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTrianglesAdjacency], obj: TypedObject): GeomTrianglesAdjacency {.importcpp: "DCAST(GeomTrianglesAdjacency, @)".}
 
 type GeomTrifans* {.importcpp: "PT(GeomTrifans)", bycopy, pure, inheritable, header: "geomTrifans.h".} = object of GeomPrimitive
 
 converter toGeomTrifans*(_: type(nil)): GeomTrifans {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTrifans): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTrifans, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTrifans], obj: TypedObject): GeomTrifans {.importcpp: "DCAST(GeomTrifans, @)".}
 
 type GeomTristrips* {.importcpp: "PT(GeomTristrips)", bycopy, pure, inheritable, header: "geomTristrips.h".} = object of GeomPrimitive
 
 converter toGeomTristrips*(_: type(nil)): GeomTristrips {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTristrips): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTristrips, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTristrips], obj: TypedObject): GeomTristrips {.importcpp: "DCAST(GeomTristrips, @)".}
 
 type GeomTristripsAdjacency* {.importcpp: "PT(GeomTristripsAdjacency)", bycopy, pure, inheritable, header: "geomTristripsAdjacency.h".} = object of GeomPrimitive
 
 converter toGeomTristripsAdjacency*(_: type(nil)): GeomTristripsAdjacency {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTristripsAdjacency): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTristripsAdjacency, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTristripsAdjacency], obj: TypedObject): GeomTristripsAdjacency {.importcpp: "DCAST(GeomTristripsAdjacency, @)".}
 
 type GeomVertexReader* {.importcpp: "GeomVertexReader", pure, inheritable, header: "geomVertexReader.h".} = object of GeomEnums
@@ -4532,8 +3984,6 @@ template WM_invalid*(_: typedesc[SamplerState]): SamplerState_WrapMode = Sampler
 type Shader* {.importcpp: "PT(Shader)", bycopy, pure, inheritable, header: "shader.h".} = object of TypedWritableReferenceCount
 
 converter toShader*(_: type(nil)): Shader {.importcpp: "(nullptr)".}
-converter toBool*(this: Shader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Shader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Shader], obj: TypedObject): Shader {.importcpp: "DCAST(Shader, @)".}
 
 type Shader_ShaderLanguage {.importcpp: "Shader::ShaderLanguage", pure, header: "shader.h".} = enum
@@ -4612,15 +4062,11 @@ converter upcastToNamable*(_: typedesc[ShaderBuffer]): typedesc[Namable] = typed
 converter upcastToGeomEnums*(_: typedesc[ShaderBuffer]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
 converter toShaderBuffer*(_: type(nil)): ShaderBuffer {.importcpp: "(nullptr)".}
-converter toBool*(this: ShaderBuffer): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ShaderBuffer, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ShaderBuffer], obj: TypedObject): ShaderBuffer {.importcpp: "DCAST(ShaderBuffer, @)".}
 
 type PreparedGraphicsObjects* {.importcpp: "PT(PreparedGraphicsObjects)", bycopy, pure, inheritable, header: "preparedGraphicsObjects.h".} = object of ReferenceCount
 
 converter toPreparedGraphicsObjects*(_: type(nil)): PreparedGraphicsObjects {.importcpp: "(nullptr)".}
-converter toBool*(this: PreparedGraphicsObjects): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PreparedGraphicsObjects, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PreparedGraphicsObjects], obj: TypedObject): PreparedGraphicsObjects {.importcpp: "DCAST(PreparedGraphicsObjects, @)".}
 
 type IndexBufferContext* {.importcpp: "IndexBufferContext", pure, inheritable, header: "indexBufferContext.h".} = object of BufferContext
@@ -4630,8 +4076,6 @@ converter upcastToAdaptiveLruPage*(_: typedesc[IndexBufferContext]): typedesc[Ad
 type Lens* {.importcpp: "PT(Lens)", bycopy, pure, inheritable, header: "lens.h".} = object of TypedWritableReferenceCount
 
 converter toLens*(_: type(nil)): Lens {.importcpp: "(nullptr)".}
-converter toBool*(this: Lens): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Lens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Lens], obj: TypedObject): Lens {.importcpp: "DCAST(Lens, @)".}
 
 type Lens_StereoChannel {.importcpp: "Lens::StereoChannel", pure, header: "lens.h".} = enum
@@ -4671,8 +4115,6 @@ type Material* {.importcpp: "PT(Material)", bycopy, pure, inheritable, header: "
 converter upcastToNamable*(_: typedesc[Material]): typedesc[Namable] = typedesc[Namable]
 
 converter toMaterial*(_: type(nil)): Material {.importcpp: "(nullptr)".}
-converter toBool*(this: Material): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Material, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Material], obj: TypedObject): Material {.importcpp: "DCAST(Material, @)".}
 
 type MaterialPool* {.importcpp: "MaterialPool", pure, inheritable, header: "materialPool.h".} = object
@@ -4680,43 +4122,31 @@ type MaterialPool* {.importcpp: "MaterialPool", pure, inheritable, header: "mate
 type MatrixLens* {.importcpp: "PT(MatrixLens)", bycopy, pure, inheritable, header: "matrixLens.h".} = object of Lens
 
 converter toMatrixLens*(_: type(nil)): MatrixLens {.importcpp: "(nullptr)".}
-converter toBool*(this: MatrixLens): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MatrixLens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MatrixLens], obj: TypedObject): MatrixLens {.importcpp: "DCAST(MatrixLens, @)".}
 
 type OrthographicLens* {.importcpp: "PT(OrthographicLens)", bycopy, pure, inheritable, header: "orthographicLens.h".} = object of Lens
 
 converter toOrthographicLens*(_: type(nil)): OrthographicLens {.importcpp: "(nullptr)".}
-converter toBool*(this: OrthographicLens): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OrthographicLens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OrthographicLens], obj: TypedObject): OrthographicLens {.importcpp: "DCAST(OrthographicLens, @)".}
 
 type ParamTextureSampler* {.importcpp: "PT(ParamTextureSampler)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
 
 converter toParamTextureSampler*(_: type(nil)): ParamTextureSampler {.importcpp: "(nullptr)".}
-converter toBool*(this: ParamTextureSampler): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParamTextureSampler, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParamTextureSampler], obj: TypedObject): ParamTextureSampler {.importcpp: "DCAST(ParamTextureSampler, @)".}
 
 type ParamTextureImage* {.importcpp: "PT(ParamTextureImage)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
 
 converter toParamTextureImage*(_: type(nil)): ParamTextureImage {.importcpp: "(nullptr)".}
-converter toBool*(this: ParamTextureImage): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParamTextureImage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParamTextureImage], obj: TypedObject): ParamTextureImage {.importcpp: "DCAST(ParamTextureImage, @)".}
 
 type PerspectiveLens* {.importcpp: "PT(PerspectiveLens)", bycopy, pure, inheritable, header: "perspectiveLens.h".} = object of Lens
 
 converter toPerspectiveLens*(_: type(nil)): PerspectiveLens {.importcpp: "(nullptr)".}
-converter toBool*(this: PerspectiveLens): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PerspectiveLens, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PerspectiveLens], obj: TypedObject): PerspectiveLens {.importcpp: "DCAST(PerspectiveLens, @)".}
 
 type TextureReloadRequest* {.importcpp: "PT(TextureReloadRequest)", bycopy, pure, inheritable, header: "textureReloadRequest.h".} = object of AsyncTask
 
 converter toTextureReloadRequest*(_: type(nil)): TextureReloadRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: TextureReloadRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextureReloadRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextureReloadRequest], obj: TypedObject): TextureReloadRequest {.importcpp: "DCAST(TextureReloadRequest, @)".}
 
 type TextureContext* {.importcpp: "TextureContext", pure, inheritable, header: "textureContext.h".} = object of BufferContext
@@ -4728,15 +4158,11 @@ type ShaderContext* {.importcpp: "ShaderContext", pure, inheritable, header: "sh
 type UserVertexSlider* {.importcpp: "PT(UserVertexSlider)", bycopy, pure, inheritable, header: "userVertexSlider.h".} = object of VertexSlider
 
 converter toUserVertexSlider*(_: type(nil)): UserVertexSlider {.importcpp: "(nullptr)".}
-converter toBool*(this: UserVertexSlider): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UserVertexSlider, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UserVertexSlider], obj: TypedObject): UserVertexSlider {.importcpp: "DCAST(UserVertexSlider, @)".}
 
 type UserVertexTransform* {.importcpp: "PT(UserVertexTransform)", bycopy, pure, inheritable, header: "userVertexTransform.h".} = object of VertexTransform
 
 converter toUserVertexTransform*(_: type(nil)): UserVertexTransform {.importcpp: "(nullptr)".}
-converter toBool*(this: UserVertexTransform): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UserVertexTransform, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UserVertexTransform], obj: TypedObject): UserVertexTransform {.importcpp: "DCAST(UserVertexTransform, @)".}
 
 type VideoTexture* {.importcpp: "PT(VideoTexture)", bycopy, pure, inheritable, header: "videoTexture.h".} = object of Texture
@@ -4744,8 +4170,6 @@ type VideoTexture* {.importcpp: "PT(VideoTexture)", bycopy, pure, inheritable, h
 converter upcastToAnimInterface*(_: typedesc[VideoTexture]): typedesc[AnimInterface] = typedesc[AnimInterface]
 
 converter toVideoTexture*(_: type(nil)): VideoTexture {.importcpp: "(nullptr)".}
-converter toBool*(this: VideoTexture): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: VideoTexture, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[VideoTexture], obj: TypedObject): VideoTexture {.importcpp: "DCAST(VideoTexture, @)".}
 
 type VertexBufferContext* {.importcpp: "VertexBufferContext", pure, inheritable, header: "vertexBufferContext.h".} = object of BufferContext
@@ -4759,8 +4183,6 @@ type TexturePool* {.importcpp: "TexturePool", pure, inheritable, header: "textur
 type TexturePeeker* {.importcpp: "PT(TexturePeeker)", bycopy, pure, inheritable, header: "texturePeeker.h".} = object of ReferenceCount
 
 converter toTexturePeeker*(_: type(nil)): TexturePeeker {.importcpp: "(nullptr)".}
-converter toBool*(this: TexturePeeker): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TexturePeeker, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TexturePeeker], obj: TypedObject): TexturePeeker {.importcpp: "DCAST(TexturePeeker, @)".}
 
 type TextureStagePool* {.importcpp: "TextureStagePool", pure, inheritable, header: "textureStagePool.h".} = object
@@ -5055,8 +4477,6 @@ type ConfigVariableColor* {.importcpp: "ConfigVariableColor", pure, inheritable,
 type BoundingVolume* {.importcpp: "PT(BoundingVolume)", bycopy, pure, inheritable, header: "boundingVolume.h".} = object of TypedReferenceCount
 
 converter toBoundingVolume*(_: type(nil)): BoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingVolume], obj: TypedObject): BoundingVolume {.importcpp: "DCAST(BoundingVolume, @)".}
 
 type BoundingVolume_IntersectionFlags {.importcpp: "BoundingVolume::IntersectionFlags", pure, header: "boundingVolume.h".} = enum
@@ -5094,15 +4514,11 @@ template BT_fastest*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = B
 type GeometricBoundingVolume* {.importcpp: "PT(GeometricBoundingVolume)", bycopy, pure, inheritable, header: "geometricBoundingVolume.h".} = object of BoundingVolume
 
 converter toGeometricBoundingVolume*(_: type(nil)): GeometricBoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: GeometricBoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeometricBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeometricBoundingVolume], obj: TypedObject): GeometricBoundingVolume {.importcpp: "DCAST(GeometricBoundingVolume, @)".}
 
 type FiniteBoundingVolume* {.importcpp: "PT(FiniteBoundingVolume)", bycopy, pure, inheritable, header: "finiteBoundingVolume.h".} = object of GeometricBoundingVolume
 
 converter toFiniteBoundingVolume*(_: type(nil)): FiniteBoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: FiniteBoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FiniteBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FiniteBoundingVolume], obj: TypedObject): FiniteBoundingVolume {.importcpp: "DCAST(FiniteBoundingVolume, @)".}
 
 type LParabolaf* {.importcpp: "LParabolaf", pure, inheritable, header: "parabola.h".} = object
@@ -5126,8 +4542,6 @@ type Plane* = LPlanef
 type BoundingBox* {.importcpp: "PT(BoundingBox)", bycopy, pure, inheritable, header: "boundingBox.h".} = object of FiniteBoundingVolume
 
 converter toBoundingBox*(_: type(nil)): BoundingBox {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingBox): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingBox, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingBox], obj: TypedObject): BoundingBox {.importcpp: "DCAST(BoundingBox, @)".}
 
 type LFrustumf* {.importcpp: "LFrustumf", pure, inheritable, header: "frustum.h".} = object
@@ -5145,36 +4559,26 @@ type Frustum* = LFrustumf
 type BoundingHexahedron* {.importcpp: "PT(BoundingHexahedron)", bycopy, pure, inheritable, header: "boundingHexahedron.h".} = object of FiniteBoundingVolume
 
 converter toBoundingHexahedron*(_: type(nil)): BoundingHexahedron {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingHexahedron): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingHexahedron, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingHexahedron], obj: TypedObject): BoundingHexahedron {.importcpp: "DCAST(BoundingHexahedron, @)".}
 
 type BoundingLine* {.importcpp: "PT(BoundingLine)", bycopy, pure, inheritable, header: "boundingLine.h".} = object of GeometricBoundingVolume
 
 converter toBoundingLine*(_: type(nil)): BoundingLine {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingLine): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingLine, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingLine], obj: TypedObject): BoundingLine {.importcpp: "DCAST(BoundingLine, @)".}
 
 type BoundingPlane* {.importcpp: "PT(BoundingPlane)", bycopy, pure, inheritable, header: "boundingPlane.h".} = object of GeometricBoundingVolume
 
 converter toBoundingPlane*(_: type(nil)): BoundingPlane {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingPlane): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingPlane, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingPlane], obj: TypedObject): BoundingPlane {.importcpp: "DCAST(BoundingPlane, @)".}
 
 type BoundingSphere* {.importcpp: "PT(BoundingSphere)", bycopy, pure, inheritable, header: "boundingSphere.h".} = object of FiniteBoundingVolume
 
 converter toBoundingSphere*(_: type(nil)): BoundingSphere {.importcpp: "(nullptr)".}
-converter toBool*(this: BoundingSphere): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BoundingSphere, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BoundingSphere], obj: TypedObject): BoundingSphere {.importcpp: "DCAST(BoundingSphere, @)".}
 
 type IntersectionBoundingVolume* {.importcpp: "PT(IntersectionBoundingVolume)", bycopy, pure, inheritable, header: "intersectionBoundingVolume.h".} = object of GeometricBoundingVolume
 
 converter toIntersectionBoundingVolume*(_: type(nil)): IntersectionBoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: IntersectionBoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: IntersectionBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[IntersectionBoundingVolume], obj: TypedObject): IntersectionBoundingVolume {.importcpp: "DCAST(IntersectionBoundingVolume, @)".}
 
 type Mersenne* {.importcpp: "Mersenne", pure, inheritable, header: "mersenne.h".} = object
@@ -5182,15 +4586,11 @@ type Mersenne* {.importcpp: "Mersenne", pure, inheritable, header: "mersenne.h".
 type OmniBoundingVolume* {.importcpp: "PT(OmniBoundingVolume)", bycopy, pure, inheritable, header: "omniBoundingVolume.h".} = object of GeometricBoundingVolume
 
 converter toOmniBoundingVolume*(_: type(nil)): OmniBoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: OmniBoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: OmniBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[OmniBoundingVolume], obj: TypedObject): OmniBoundingVolume {.importcpp: "DCAST(OmniBoundingVolume, @)".}
 
 type UnionBoundingVolume* {.importcpp: "PT(UnionBoundingVolume)", bycopy, pure, inheritable, header: "unionBoundingVolume.h".} = object of GeometricBoundingVolume
 
 converter toUnionBoundingVolume*(_: type(nil)): UnionBoundingVolume {.importcpp: "(nullptr)".}
-converter toBool*(this: UnionBoundingVolume): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: UnionBoundingVolume, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[UnionBoundingVolume], obj: TypedObject): UnionBoundingVolume {.importcpp: "DCAST(UnionBoundingVolume, @)".}
 
 type Randomizer* {.importcpp: "Randomizer", pure, inheritable, header: "randomizer.h".} = object
@@ -5212,22 +4612,16 @@ type Triangulator3* {.importcpp: "Triangulator3", pure, inheritable, header: "tr
 type ParametricCurve* {.importcpp: "PT(ParametricCurve)", bycopy, pure, inheritable, header: "parametricCurve.h".} = object of PandaNode
 
 converter toParametricCurve*(_: type(nil)): ParametricCurve {.importcpp: "(nullptr)".}
-converter toBool*(this: ParametricCurve): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParametricCurve, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParametricCurve], obj: TypedObject): ParametricCurve {.importcpp: "DCAST(ParametricCurve, @)".}
 
 type CubicCurveseg* {.importcpp: "PT(CubicCurveseg)", bycopy, pure, inheritable, header: "cubicCurveseg.h".} = object of ParametricCurve
 
 converter toCubicCurveseg*(_: type(nil)): CubicCurveseg {.importcpp: "(nullptr)".}
-converter toBool*(this: CubicCurveseg): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CubicCurveseg, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CubicCurveseg], obj: TypedObject): CubicCurveseg {.importcpp: "DCAST(CubicCurveseg, @)".}
 
 type ParametricCurveCollection* {.importcpp: "PT(ParametricCurveCollection)", bycopy, pure, inheritable, header: "parametricCurveCollection.h".} = object of ReferenceCount
 
 converter toParametricCurveCollection*(_: type(nil)): ParametricCurveCollection {.importcpp: "(nullptr)".}
-converter toBool*(this: ParametricCurveCollection): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParametricCurveCollection, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParametricCurveCollection], obj: TypedObject): ParametricCurveCollection {.importcpp: "DCAST(ParametricCurveCollection, @)".}
 
 type CurveFitter* {.importcpp: "CurveFitter", pure, inheritable, header: "curveFitter.h".} = object
@@ -5235,65 +4629,47 @@ type CurveFitter* {.importcpp: "CurveFitter", pure, inheritable, header: "curveF
 type PiecewiseCurve* {.importcpp: "PT(PiecewiseCurve)", bycopy, pure, inheritable, header: "piecewiseCurve.h".} = object of ParametricCurve
 
 converter toPiecewiseCurve*(_: type(nil)): PiecewiseCurve {.importcpp: "(nullptr)".}
-converter toBool*(this: PiecewiseCurve): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PiecewiseCurve, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PiecewiseCurve], obj: TypedObject): PiecewiseCurve {.importcpp: "DCAST(PiecewiseCurve, @)".}
 
 type HermiteCurve* {.importcpp: "PT(HermiteCurve)", bycopy, pure, inheritable, header: "hermiteCurve.h".} = object of PiecewiseCurve
 
 converter toHermiteCurve*(_: type(nil)): HermiteCurve {.importcpp: "(nullptr)".}
-converter toBool*(this: HermiteCurve): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: HermiteCurve, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[HermiteCurve], obj: TypedObject): HermiteCurve {.importcpp: "DCAST(HermiteCurve, @)".}
 
 type NurbsCurveInterface* {.importcpp: "NurbsCurveInterface*", bycopy, pure, inheritable, header: "nurbsCurveInterface.h".} = object
 
 converter toNurbsCurveInterface*(_: type(nil)): NurbsCurveInterface {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsCurveInterface): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsCurveInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NurbsCurve* {.importcpp: "PT(NurbsCurve)", bycopy, pure, inheritable, header: "nurbsCurve.h".} = object of PiecewiseCurve
 
 converter upcastToNurbsCurveInterface*(_: typedesc[NurbsCurve]): typedesc[NurbsCurveInterface] = typedesc[NurbsCurveInterface]
 
 converter toNurbsCurve*(_: type(nil)): NurbsCurve {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsCurve): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsCurve, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NurbsCurve], obj: TypedObject): NurbsCurve {.importcpp: "DCAST(NurbsCurve, @)".}
 
 type NurbsCurveResult* {.importcpp: "PT(NurbsCurveResult)", bycopy, pure, inheritable, header: "nurbsCurveResult.h".} = object of ReferenceCount
 
 converter toNurbsCurveResult*(_: type(nil)): NurbsCurveResult {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsCurveResult): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsCurveResult, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NurbsCurveResult], obj: TypedObject): NurbsCurveResult {.importcpp: "DCAST(NurbsCurveResult, @)".}
 
 type NurbsCurveEvaluator* {.importcpp: "PT(NurbsCurveEvaluator)", bycopy, pure, inheritable, header: "nurbsCurveEvaluator.h".} = object of ReferenceCount
 
 converter toNurbsCurveEvaluator*(_: type(nil)): NurbsCurveEvaluator {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsCurveEvaluator): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsCurveEvaluator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NurbsCurveEvaluator], obj: TypedObject): NurbsCurveEvaluator {.importcpp: "DCAST(NurbsCurveEvaluator, @)".}
 
 type NurbsSurfaceResult* {.importcpp: "PT(NurbsSurfaceResult)", bycopy, pure, inheritable, header: "nurbsSurfaceResult.h".} = object of ReferenceCount
 
 converter toNurbsSurfaceResult*(_: type(nil)): NurbsSurfaceResult {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsSurfaceResult): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsSurfaceResult, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NurbsSurfaceResult], obj: TypedObject): NurbsSurfaceResult {.importcpp: "DCAST(NurbsSurfaceResult, @)".}
 
 type NurbsSurfaceEvaluator* {.importcpp: "PT(NurbsSurfaceEvaluator)", bycopy, pure, inheritable, header: "nurbsSurfaceEvaluator.h".} = object of ReferenceCount
 
 converter toNurbsSurfaceEvaluator*(_: type(nil)): NurbsSurfaceEvaluator {.importcpp: "(nullptr)".}
-converter toBool*(this: NurbsSurfaceEvaluator): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: NurbsSurfaceEvaluator, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[NurbsSurfaceEvaluator], obj: TypedObject): NurbsSurfaceEvaluator {.importcpp: "DCAST(NurbsSurfaceEvaluator, @)".}
 
 type RopeNode* {.importcpp: "PT(RopeNode)", bycopy, pure, inheritable, header: "ropeNode.h".} = object of PandaNode
 
 converter toRopeNode*(_: type(nil)): RopeNode {.importcpp: "(nullptr)".}
-converter toBool*(this: RopeNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RopeNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[RopeNode], obj: TypedObject): RopeNode {.importcpp: "DCAST(RopeNode, @)".}
 
 type RopeNode_RenderMode {.importcpp: "RopeNode::RenderMode", pure, header: "ropeNode.h".} = enum
@@ -5337,8 +4713,6 @@ template NM_vertex*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_Norma
 type SheetNode* {.importcpp: "PT(SheetNode)", bycopy, pure, inheritable, header: "sheetNode.h".} = object of PandaNode
 
 converter toSheetNode*(_: type(nil)): SheetNode {.importcpp: "(nullptr)".}
-converter toBool*(this: SheetNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: SheetNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[SheetNode], obj: TypedObject): SheetNode {.importcpp: "DCAST(SheetNode, @)".}
 
 type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".} = object
@@ -5375,8 +4749,6 @@ type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} =
 type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pnmBrush.h".} = object of ReferenceCount
 
 converter toPNMBrush*(_: type(nil)): PNMBrush {.importcpp: "(nullptr)".}
-converter toBool*(this: PNMBrush): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PNMBrush, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PNMBrush], obj: TypedObject): PNMBrush {.importcpp: "DCAST(PNMBrush, @)".}
 
 type PNMBrush_BrushEffect {.importcpp: "PNMBrush::BrushEffect", pure, header: "pnmBrush.h".} = enum
@@ -5400,8 +4772,6 @@ type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pnmPaint
 type TextGlyph* {.importcpp: "PT(TextGlyph)", bycopy, pure, inheritable, header: "textGlyph.h".} = object of TypedReferenceCount
 
 converter toTextGlyph*(_: type(nil)): TextGlyph {.importcpp: "(nullptr)".}
-converter toBool*(this: TextGlyph): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextGlyph, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextGlyph], obj: TypedObject): TextGlyph {.importcpp: "DCAST(TextGlyph, @)".}
 
 type TextFont* {.importcpp: "PT(TextFont)", bycopy, pure, inheritable, header: "textFont.h".} = object of TypedReferenceCount
@@ -5409,8 +4779,6 @@ type TextFont* {.importcpp: "PT(TextFont)", bycopy, pure, inheritable, header: "
 converter upcastToNamable*(_: typedesc[TextFont]): typedesc[Namable] = typedesc[Namable]
 
 converter toTextFont*(_: type(nil)): TextFont {.importcpp: "(nullptr)".}
-converter toBool*(this: TextFont): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: TextFont, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[TextFont], obj: TypedObject): TextFont {.importcpp: "DCAST(TextFont, @)".}
 
 type TextFont_RenderMode {.importcpp: "TextFont::RenderMode", pure, header: "textFont.h".} = enum
@@ -5436,15 +4804,11 @@ template RM_invalid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_Rend
 type DynamicTextGlyph* {.importcpp: "PT(DynamicTextGlyph)", bycopy, pure, inheritable, header: "dynamicTextGlyph.h".} = object of TextGlyph
 
 converter toDynamicTextGlyph*(_: type(nil)): DynamicTextGlyph {.importcpp: "(nullptr)".}
-converter toBool*(this: DynamicTextGlyph): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DynamicTextGlyph, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DynamicTextGlyph], obj: TypedObject): DynamicTextGlyph {.importcpp: "DCAST(DynamicTextGlyph, @)".}
 
 type DynamicTextPage* {.importcpp: "PT(DynamicTextPage)", bycopy, pure, inheritable, header: "dynamicTextPage.h".} = object of Texture
 
 converter toDynamicTextPage*(_: type(nil)): DynamicTextPage {.importcpp: "(nullptr)".}
-converter toBool*(this: DynamicTextPage): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DynamicTextPage, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DynamicTextPage], obj: TypedObject): DynamicTextPage {.importcpp: "DCAST(DynamicTextPage, @)".}
 
 type FreetypeFont* {.importcpp: "FreetypeFont", pure, inheritable, header: "freetypeFont.h".} = object of Namable
@@ -5468,8 +4832,6 @@ type DynamicTextFont* {.importcpp: "PT(DynamicTextFont)", bycopy, pure, inherita
 converter upcastToFreetypeFont*(_: typedesc[DynamicTextFont]): typedesc[FreetypeFont] = typedesc[FreetypeFont]
 
 converter toDynamicTextFont*(_: type(nil)): DynamicTextFont {.importcpp: "(nullptr)".}
-converter toBool*(this: DynamicTextFont): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DynamicTextFont, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DynamicTextFont], obj: TypedObject): DynamicTextFont {.importcpp: "DCAST(DynamicTextFont, @)".}
 
 type FontPool* {.importcpp: "FontPool", pure, inheritable, header: "fontPool.h".} = object
@@ -5477,15 +4839,11 @@ type FontPool* {.importcpp: "FontPool", pure, inheritable, header: "fontPool.h".
 type GeomTextGlyph* {.importcpp: "PT(GeomTextGlyph)", bycopy, pure, inheritable, header: "geomTextGlyph.h".} = object of Geom
 
 converter toGeomTextGlyph*(_: type(nil)): GeomTextGlyph {.importcpp: "(nullptr)".}
-converter toBool*(this: GeomTextGlyph): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: GeomTextGlyph, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[GeomTextGlyph], obj: TypedObject): GeomTextGlyph {.importcpp: "DCAST(GeomTextGlyph, @)".}
 
 type StaticTextFont* {.importcpp: "PT(StaticTextFont)", bycopy, pure, inheritable, header: "staticTextFont.h".} = object of TextFont
 
 converter toStaticTextFont*(_: type(nil)): StaticTextFont {.importcpp: "(nullptr)".}
-converter toBool*(this: StaticTextFont): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: StaticTextFont, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[StaticTextFont], obj: TypedObject): StaticTextFont {.importcpp: "DCAST(StaticTextFont, @)".}
 
 type TextGraphic* {.importcpp: "TextGraphic", pure, inheritable, header: "textGraphic.h".} = object
@@ -5497,29 +4855,21 @@ type TextAssembler* {.importcpp: "TextAssembler", pure, inheritable, header: "te
 type ButtonThrower* {.importcpp: "PT(ButtonThrower)", bycopy, pure, inheritable, header: "buttonThrower.h".} = object of DataNode
 
 converter toButtonThrower*(_: type(nil)): ButtonThrower {.importcpp: "(nullptr)".}
-converter toBool*(this: ButtonThrower): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ButtonThrower, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ButtonThrower], obj: TypedObject): ButtonThrower {.importcpp: "DCAST(ButtonThrower, @)".}
 
 type MouseInterfaceNode* {.importcpp: "PT(MouseInterfaceNode)", bycopy, pure, inheritable, header: "mouseInterfaceNode.h".} = object of DataNode
 
 converter toMouseInterfaceNode*(_: type(nil)): MouseInterfaceNode {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseInterfaceNode): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseInterfaceNode, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseInterfaceNode], obj: TypedObject): MouseInterfaceNode {.importcpp: "DCAST(MouseInterfaceNode, @)".}
 
 type DriveInterface* {.importcpp: "PT(DriveInterface)", bycopy, pure, inheritable, header: "driveInterface.h".} = object of MouseInterfaceNode
 
 converter toDriveInterface*(_: type(nil)): DriveInterface {.importcpp: "(nullptr)".}
-converter toBool*(this: DriveInterface): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DriveInterface, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[DriveInterface], obj: TypedObject): DriveInterface {.importcpp: "DCAST(DriveInterface, @)".}
 
 type MouseSubregion* {.importcpp: "PT(MouseSubregion)", bycopy, pure, inheritable, header: "mouseSubregion.h".} = object of MouseInterfaceNode
 
 converter toMouseSubregion*(_: type(nil)): MouseSubregion {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseSubregion): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseSubregion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseSubregion], obj: TypedObject): MouseSubregion {.importcpp: "DCAST(MouseSubregion, @)".}
 
 type MouseWatcherRegion* {.importcpp: "PT(MouseWatcherRegion)", bycopy, pure, inheritable, header: "mouseWatcherRegion.h".} = object of TypedWritableReferenceCount
@@ -5527,8 +4877,6 @@ type MouseWatcherRegion* {.importcpp: "PT(MouseWatcherRegion)", bycopy, pure, in
 converter upcastToNamable*(_: typedesc[MouseWatcherRegion]): typedesc[Namable] = typedesc[Namable]
 
 converter toMouseWatcherRegion*(_: type(nil)): MouseWatcherRegion {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseWatcherRegion): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseWatcherRegion, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseWatcherRegion], obj: TypedObject): MouseWatcherRegion {.importcpp: "DCAST(MouseWatcherRegion, @)".}
 
 type MouseWatcherRegion_SuppressFlags {.importcpp: "MouseWatcherRegion::SuppressFlags", pure, header: "mouseWatcherRegion.h".} = enum
@@ -5548,16 +4896,12 @@ template SF_mousePosition*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_
 type MouseWatcherBase* {.importcpp: "MouseWatcherBase*", bycopy, pure, inheritable, header: "mouseWatcherBase.h".} = object
 
 converter toMouseWatcherBase*(_: type(nil)): MouseWatcherBase {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseWatcherBase): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseWatcherBase, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type MouseWatcherGroup* {.importcpp: "PT(MouseWatcherGroup)", bycopy, pure, inheritable, header: "mouseWatcherGroup.h".} = object of MouseWatcherBase
 
 converter upcastToReferenceCount*(_: typedesc[MouseWatcherGroup]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
 converter toMouseWatcherGroup*(_: type(nil)): MouseWatcherGroup {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseWatcherGroup): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseWatcherGroup, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseWatcherGroup], obj: TypedObject): MouseWatcherGroup {.importcpp: "DCAST(MouseWatcherGroup, @)".}
 
 type MouseWatcher* {.importcpp: "PT(MouseWatcher)", bycopy, pure, inheritable, header: "mouseWatcher.h".} = object of DataNode
@@ -5565,8 +4909,6 @@ type MouseWatcher* {.importcpp: "PT(MouseWatcher)", bycopy, pure, inheritable, h
 converter upcastToMouseWatcherBase*(_: typedesc[MouseWatcher]): typedesc[MouseWatcherBase] = typedesc[MouseWatcherBase]
 
 converter toMouseWatcher*(_: type(nil)): MouseWatcher {.importcpp: "(nullptr)".}
-converter toBool*(this: MouseWatcher): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: MouseWatcher, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[MouseWatcher], obj: TypedObject): MouseWatcher {.importcpp: "DCAST(MouseWatcher, @)".}
 
 type MouseWatcherParameter* {.importcpp: "MouseWatcherParameter", pure, inheritable, header: "mouseWatcherParameter.h".} = object
@@ -5574,8 +4916,6 @@ type MouseWatcherParameter* {.importcpp: "MouseWatcherParameter", pure, inherita
 type Trackball* {.importcpp: "PT(Trackball)", bycopy, pure, inheritable, header: "trackball.h".} = object of MouseInterfaceNode
 
 converter toTrackball*(_: type(nil)): Trackball {.importcpp: "(nullptr)".}
-converter toBool*(this: Trackball): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Trackball, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Trackball], obj: TypedObject): Trackball {.importcpp: "DCAST(Trackball, @)".}
 
 type Trackball_ControlMode {.importcpp: "Trackball::ControlMode", pure, header: "trackball.h".} = enum
@@ -5597,8 +4937,6 @@ template CM_roll*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_Con
 type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2sg.h".} = object of DataNode
 
 converter toTransform2SG*(_: type(nil)): Transform2SG {.importcpp: "(nullptr)".}
-converter toBool*(this: Transform2SG): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Transform2SG, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Transform2SG], obj: TypedObject): Transform2SG {.importcpp: "DCAST(Transform2SG, @)".}
 
 type AutoTextureScale* {.importcpp: "AutoTextureScale", header: "autoTextureScale.h".} = enum
@@ -5613,8 +4951,6 @@ type UpdateSeq* {.importcpp: "UpdateSeq", pure, inheritable, header: "updateSeq.
 type BamCacheRecord* {.importcpp: "PT(BamCacheRecord)", bycopy, pure, inheritable, header: "bamCacheRecord.h".} = object of TypedWritableReferenceCount
 
 converter toBamCacheRecord*(_: type(nil)): BamCacheRecord {.importcpp: "(nullptr)".}
-converter toBool*(this: BamCacheRecord): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: BamCacheRecord, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[BamCacheRecord], obj: TypedObject): BamCacheRecord {.importcpp: "DCAST(BamCacheRecord, @)".}
 
 type BamCache* {.importcpp: "BamCache", pure, inheritable, header: "bamCache.h".} = object
@@ -5692,15 +5028,11 @@ type ButtonRegistry* {.importcpp: "ButtonRegistry", pure, inheritable, header: "
 type ButtonMap* {.importcpp: "PT(ButtonMap)", bycopy, pure, inheritable, header: "buttonMap.h".} = object of TypedReferenceCount
 
 converter toButtonMap*(_: type(nil)): ButtonMap {.importcpp: "(nullptr)".}
-converter toBool*(this: ButtonMap): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ButtonMap, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ButtonMap], obj: TypedObject): ButtonMap {.importcpp: "DCAST(ButtonMap, @)".}
 
 type CallbackObject* {.importcpp: "PT(CallbackObject)", bycopy, pure, inheritable, header: "callbackObject.h".} = object of TypedReferenceCount
 
 converter toCallbackObject*(_: type(nil)): CallbackObject {.importcpp: "(nullptr)".}
-converter toBool*(this: CallbackObject): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: CallbackObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[CallbackObject], obj: TypedObject): CallbackObject {.importcpp: "DCAST(CallbackObject, @)".}
 
 type TimeVal* {.importcpp: "TimeVal", pure, inheritable, header: "clockObject.h".} = object
@@ -5708,8 +5040,6 @@ type TimeVal* {.importcpp: "TimeVal", pure, inheritable, header: "clockObject.h"
 type ClockObject* {.importcpp: "PT(ClockObject)", bycopy, pure, inheritable, header: "clockObject.h".} = object of ReferenceCount
 
 converter toClockObject*(_: type(nil)): ClockObject {.importcpp: "(nullptr)".}
-converter toBool*(this: ClockObject): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ClockObject, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ClockObject], obj: TypedObject): ClockObject {.importcpp: "DCAST(ClockObject, @)".}
 
 type ClockObject_Mode {.importcpp: "ClockObject::Mode", pure, header: "clockObject.h".} = enum
@@ -5776,8 +5106,6 @@ type SparseArray* {.importcpp: "SparseArray", pure, inheritable, header: "sparse
 type ParamTypedRefCount* {.importcpp: "PT(ParamTypedRefCount)", bycopy, pure, inheritable, header: "paramValue.h".} = object of ParamValueBase
 
 converter toParamTypedRefCount*(_: type(nil)): ParamTypedRefCount {.importcpp: "(nullptr)".}
-converter toBool*(this: ParamTypedRefCount): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ParamTypedRefCount, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[ParamTypedRefCount], obj: TypedObject): ParamTypedRefCount {.importcpp: "DCAST(ParamTypedRefCount, @)".}
 
 type WritableConfigurable* {.importcpp: "WritableConfigurable", pure, inheritable, header: "writableConfigurable.h".} = object of TypedWritable
@@ -5789,15 +5117,11 @@ type PortalMask* = BitMask32
 type FilterProperties* {.importcpp: "PT(FilterProperties)", bycopy, pure, inheritable, header: "filterProperties.h".} = object of TypedReferenceCount
 
 converter toFilterProperties*(_: type(nil)): FilterProperties {.importcpp: "(nullptr)".}
-converter toBool*(this: FilterProperties): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: FilterProperties, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[FilterProperties], obj: TypedObject): FilterProperties {.importcpp: "DCAST(FilterProperties, @)".}
 
 type AudioSound* {.importcpp: "PT(AudioSound)", bycopy, pure, inheritable, header: "audioSound.h".} = object of TypedReferenceCount
 
 converter toAudioSound*(_: type(nil)): AudioSound {.importcpp: "(nullptr)".}
-converter toBool*(this: AudioSound): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AudioSound, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioSound], obj: TypedObject): AudioSound {.importcpp: "DCAST(AudioSound, @)".}
 
 type AudioSound_SoundStatus {.importcpp: "AudioSound::SoundStatus", pure, header: "audioSound.h".} = enum
@@ -5815,8 +5139,6 @@ template PLAYING*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_
 type AudioManager* {.importcpp: "PT(AudioManager)", bycopy, pure, inheritable, header: "audioManager.h".} = object of TypedReferenceCount
 
 converter toAudioManager*(_: type(nil)): AudioManager {.importcpp: "(nullptr)".}
-converter toBool*(this: AudioManager): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AudioManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioManager], obj: TypedObject): AudioManager {.importcpp: "DCAST(AudioManager, @)".}
 
 type AudioManager_SpeakerModeCategory {.importcpp: "AudioManager::SpeakerModeCategory", pure, header: "audioManager.h".} = enum
@@ -5884,8 +5206,6 @@ template SM_stream*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioM
 type AudioLoadRequest* {.importcpp: "PT(AudioLoadRequest)", bycopy, pure, inheritable, header: "audioLoadRequest.h".} = object of AsyncTask
 
 converter toAudioLoadRequest*(_: type(nil)): AudioLoadRequest {.importcpp: "(nullptr)".}
-converter toBool*(this: AudioLoadRequest): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AudioLoadRequest, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[AudioLoadRequest], obj: TypedObject): AudioLoadRequest {.importcpp: "DCAST(AudioLoadRequest, @)".}
 
 type PGFrameStyle* {.importcpp: "PGFrameStyle", pure, inheritable, header: "pgFrameStyle.h".} = object
@@ -5913,15 +5233,11 @@ template T_textureBorder*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFram
 type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pgItem.h".} = object of PandaNode
 
 converter toPGItem*(_: type(nil)): PGItem {.importcpp: "(nullptr)".}
-converter toBool*(this: PGItem): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGItem, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGItem], obj: TypedObject): PGItem {.importcpp: "DCAST(PGItem, @)".}
 
 type PGButton* {.importcpp: "PT(PGButton)", bycopy, pure, inheritable, header: "pgButton.h".} = object of PGItem
 
 converter toPGButton*(_: type(nil)): PGButton {.importcpp: "(nullptr)".}
-converter toBool*(this: PGButton): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGButton, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGButton], obj: TypedObject): PGButton {.importcpp: "DCAST(PGButton, @)".}
 
 type PGButton_State {.importcpp: "PGButton::State", pure, header: "pgButton.h".} = enum
@@ -5941,15 +5257,11 @@ template S_inactive*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_i
 type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pgTop.h".} = object of PandaNode
 
 converter toPGTop*(_: type(nil)): PGTop {.importcpp: "(nullptr)".}
-converter toBool*(this: PGTop): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGTop, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGTop], obj: TypedObject): PGTop {.importcpp: "DCAST(PGTop, @)".}
 
 type PGEntry* {.importcpp: "PT(PGEntry)", bycopy, pure, inheritable, header: "pgEntry.h".} = object of PGItem
 
 converter toPGEntry*(_: type(nil)): PGEntry {.importcpp: "(nullptr)".}
-converter toBool*(this: PGEntry): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGEntry, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGEntry], obj: TypedObject): PGEntry {.importcpp: "DCAST(PGEntry, @)".}
 
 type PGEntry_State {.importcpp: "PGEntry::State", pure, header: "pgEntry.h".} = enum
@@ -5969,43 +5281,31 @@ type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy
 converter upcastToMouseWatcherParameter*(_: typedesc[PGMouseWatcherParameter]): typedesc[MouseWatcherParameter] = typedesc[MouseWatcherParameter]
 
 converter toPGMouseWatcherParameter*(_: type(nil)): PGMouseWatcherParameter {.importcpp: "(nullptr)".}
-converter toBool*(this: PGMouseWatcherParameter): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGMouseWatcherParameter, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherParameter], obj: TypedObject): PGMouseWatcherParameter {.importcpp: "DCAST(PGMouseWatcherParameter, @)".}
 
 type PGMouseWatcherBackground* {.importcpp: "PT(PGMouseWatcherBackground)", bycopy, pure, inheritable, header: "pgMouseWatcherBackground.h".} = object of MouseWatcherRegion
 
 converter toPGMouseWatcherBackground*(_: type(nil)): PGMouseWatcherBackground {.importcpp: "(nullptr)".}
-converter toBool*(this: PGMouseWatcherBackground): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGMouseWatcherBackground, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherBackground], obj: TypedObject): PGMouseWatcherBackground {.importcpp: "DCAST(PGMouseWatcherBackground, @)".}
 
 type PGVirtualFrame* {.importcpp: "PT(PGVirtualFrame)", bycopy, pure, inheritable, header: "pgVirtualFrame.h".} = object of PGItem
 
 converter toPGVirtualFrame*(_: type(nil)): PGVirtualFrame {.importcpp: "(nullptr)".}
-converter toBool*(this: PGVirtualFrame): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGVirtualFrame, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGVirtualFrame], obj: TypedObject): PGVirtualFrame {.importcpp: "DCAST(PGVirtualFrame, @)".}
 
 type PGSliderBar* {.importcpp: "PT(PGSliderBar)", bycopy, pure, inheritable, header: "pgSliderBar.h".} = object of PGItem
 
 converter toPGSliderBar*(_: type(nil)): PGSliderBar {.importcpp: "(nullptr)".}
-converter toBool*(this: PGSliderBar): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGSliderBar, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGSliderBar], obj: TypedObject): PGSliderBar {.importcpp: "DCAST(PGSliderBar, @)".}
 
 type PGScrollFrame* {.importcpp: "PT(PGScrollFrame)", bycopy, pure, inheritable, header: "pgScrollFrame.h".} = object of PGVirtualFrame
 
 converter toPGScrollFrame*(_: type(nil)): PGScrollFrame {.importcpp: "(nullptr)".}
-converter toBool*(this: PGScrollFrame): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGScrollFrame, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGScrollFrame], obj: TypedObject): PGScrollFrame {.importcpp: "DCAST(PGScrollFrame, @)".}
 
 type PGWaitBar* {.importcpp: "PT(PGWaitBar)", bycopy, pure, inheritable, header: "pgWaitBar.h".} = object of PGItem
 
 converter toPGWaitBar*(_: type(nil)): PGWaitBar {.importcpp: "(nullptr)".}
-converter toBool*(this: PGWaitBar): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: PGWaitBar, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[PGWaitBar], obj: TypedObject): PGWaitBar {.importcpp: "DCAST(PGWaitBar, @)".}
 
 type NetAddress* {.importcpp: "NetAddress", pure, inheritable, header: "netAddress.h".} = object
@@ -6013,29 +5313,21 @@ type NetAddress* {.importcpp: "NetAddress", pure, inheritable, header: "netAddre
 type Connection* {.importcpp: "PT(Connection)", bycopy, pure, inheritable, header: "connection.h".} = object of ReferenceCount
 
 converter toConnection*(_: type(nil)): Connection {.importcpp: "(nullptr)".}
-converter toBool*(this: Connection): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Connection, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 func dcast*(_: typedesc[Connection], obj: TypedObject): Connection {.importcpp: "DCAST(Connection, @)".}
 
 type ConnectionReader* {.importcpp: "ConnectionReader*", bycopy, pure, inheritable, header: "connectionReader.h".} = object
 
 converter toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nullptr)".}
-converter toBool*(this: ConnectionReader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type ConnectionListener* {.importcpp: "ConnectionListener*", bycopy, pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
 
 converter toConnectionListener*(_: type(nil)): ConnectionListener {.importcpp: "(nullptr)".}
-converter toBool*(this: ConnectionListener): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ConnectionListener, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type NetDatagram* {.importcpp: "NetDatagram", pure, inheritable, header: "netDatagram.h".} = object of Datagram
 
 type ConnectionManager* {.importcpp: "ConnectionManager*", bycopy, pure, inheritable, header: "connectionManager.h".} = object
 
 converter toConnectionManager*(_: type(nil)): ConnectionManager {.importcpp: "(nullptr)".}
-converter toBool*(this: ConnectionManager): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: ConnectionManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type ConnectionWriter* {.importcpp: "ConnectionWriter", pure, inheritable, header: "connectionWriter.h".} = object
 
@@ -6044,8 +5336,6 @@ type DatagramGeneratorNet* {.importcpp: "DatagramGeneratorNet*", bycopy, pure, i
 converter upcastToConnectionReader*(_: typedesc[DatagramGeneratorNet]): typedesc[ConnectionReader] = typedesc[ConnectionReader]
 
 converter toDatagramGeneratorNet*(_: type(nil)): DatagramGeneratorNet {.importcpp: "(nullptr)".}
-converter toBool*(this: DatagramGeneratorNet): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: DatagramGeneratorNet, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type DatagramSinkNet* {.importcpp: "DatagramSinkNet", pure, inheritable, header: "datagramSinkNet.h".} = object of DatagramSink
 
@@ -6054,32 +5344,22 @@ converter upcastToConnectionWriter*(_: typedesc[DatagramSinkNet]): typedesc[Conn
 type QueuedConnectionListener* {.importcpp: "QueuedConnectionListener*", bycopy, pure, inheritable, header: "queuedConnectionListener.h".} = object of ConnectionListener
 
 converter toQueuedConnectionListener*(_: type(nil)): QueuedConnectionListener {.importcpp: "(nullptr)".}
-converter toBool*(this: QueuedConnectionListener): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: QueuedConnectionListener, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type QueuedConnectionManager* {.importcpp: "QueuedConnectionManager*", bycopy, pure, inheritable, header: "queuedConnectionManager.h".} = object of ConnectionManager
 
 converter toQueuedConnectionManager*(_: type(nil)): QueuedConnectionManager {.importcpp: "(nullptr)".}
-converter toBool*(this: QueuedConnectionManager): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: QueuedConnectionManager, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type QueuedConnectionReader* {.importcpp: "QueuedConnectionReader*", bycopy, pure, inheritable, header: "queuedConnectionReader.h".} = object of ConnectionReader
 
 converter toQueuedConnectionReader*(_: type(nil)): QueuedConnectionReader {.importcpp: "(nullptr)".}
-converter toBool*(this: QueuedConnectionReader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: QueuedConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type RecentConnectionReader* {.importcpp: "RecentConnectionReader*", bycopy, pure, inheritable, header: "recentConnectionReader.h".} = object of ConnectionReader
 
 converter toRecentConnectionReader*(_: type(nil)): RecentConnectionReader {.importcpp: "(nullptr)".}
-converter toBool*(this: RecentConnectionReader): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: RecentConnectionReader, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type Socket_Address* {.importcpp: "Socket_Address*", bycopy, pure, inheritable, header: "socket_address.h".} = object
 
 converter toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr)".}
-converter toBool*(this: Socket_Address): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: Socket_Address, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_ip.h".} = object of TypedObject
 
@@ -36853,6 +36133,9 @@ func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollect
   var str : StringStream
   this.output(str)
   str.data
+
+converter toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 
 converter initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringToStdString(#))", header: stringConversionCode.}

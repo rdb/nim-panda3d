@@ -1350,11 +1350,10 @@ def bind_property(out, element):
         else:
             out.write(f"proc `@`*(this: {wrapper_name}): seq[{type_name}] =\n")
         out.write("  let count = len(this)\n")
-        out.write(f"  var res: seq[{type_name}]\n")
-        out.write("  res.setLen(count)\n")
+        out.write("  result.setLen(count)\n")
         out.write("  for i in 0 ..< count:\n")
-        out.write("    res[i] = this[i]\n")
-        out.write("  return res\n\n")
+        out.write("    result[i] = this[i]\n")
+        out.write("\n")
 
         return
 
@@ -1418,14 +1417,13 @@ def bind_make_seq(out, type, make_seq):
         out.write(f"  let count = {type_name}.{num_name}()\n")
     else:
         out.write(f"  let count = this.{num_name}()\n")
-    out.write(f"  var res: seq[{elem_type_name}]\n")
-    out.write("  res.setLen(count)\n")
+    out.write("  result.setLen(count)\n")
     out.write("  for i in 0 ..< count:\n")
     if is_wrapper_static(getter_wrapper):
-        out.write(f"    res[i] = {type_name}.{element_name}(i)\n")
+        out.write(f"    result[i] = {type_name}.{element_name}(i)\n")
     else:
-        out.write(f"    res[i] = this.{element_name}(i)\n")
-    out.write(f"  return res\n\n")
+        out.write(f"    result[i] = this.{element_name}(i)\n")
+    out.write("\n")
 
 
 def is_type_pointer(type):

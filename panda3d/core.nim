@@ -6133,11 +6133,9 @@ iterator items*(this: TypeHandle_parentClasses): TypeHandle =
 
 proc `@`*(this: TypeHandle_parentClasses): seq[TypeHandle] =
   let count = len(this)
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TypeHandle_childClasses = distinct TypeHandle
 
@@ -6153,11 +6151,9 @@ iterator items*(this: TypeHandle_childClasses): TypeHandle =
 
 proc `@`*(this: TypeHandle_childClasses): seq[TypeHandle] =
   let count = len(this)
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TypeRegistry_typehandles = distinct TypeRegistry
 
@@ -6173,11 +6169,9 @@ iterator items*(this: TypeRegistry_typehandles): TypeHandle =
 
 proc `@`*(this: TypeRegistry_typehandles): seq[TypeHandle] =
   let count = len(this)
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TypeRegistry_rootClasses = distinct TypeRegistry
 
@@ -6193,11 +6187,9 @@ iterator items*(this: TypeRegistry_rootClasses): TypeHandle =
 
 proc `@`*(this: TypeRegistry_rootClasses): seq[TypeHandle] =
   let count = len(this)
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func defaultEncoding*(_: typedesc[TextEncoder]): TextEncoder_Encoding {.importcpp: "TextEncoder::get_default_encoding()", header: "textEncoder.h".}
 
@@ -6239,11 +6231,9 @@ iterator items*(this: PandaSystem_systems): string =
 
 proc `@`*(this: PandaSystem_systems): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type DSearchPath_directories = distinct DSearchPath
 
@@ -6259,11 +6249,9 @@ iterator items*(this: DSearchPath_directories): Filename =
 
 proc `@`*(this: DSearchPath_directories): seq[Filename] =
   let count = len(this)
-  var res: seq[Filename]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ExecutionEnvironment_environmentVariables = distinct typedesc[ExecutionEnvironment]
 
@@ -6291,11 +6279,9 @@ iterator items*(this: ExecutionEnvironment_args): string =
 
 proc `@`*(this: ExecutionEnvironment_args): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func binaryName*(_: typedesc[ExecutionEnvironment]): string {.importcpp: "nimStringFromStdString(ExecutionEnvironment::get_binary_name())", header: "executionEnvironment.h".}
 
@@ -6351,11 +6337,9 @@ iterator items*(this: ConfigPage_declarations): ConfigDeclaration =
 
 proc `@`*(this: ConfigPage_declarations): seq[ConfigDeclaration] =
   let count = len(this)
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func page*(this: ConfigDeclaration): ConfigPage {.importcpp: "#.get_page()".}
 
@@ -6375,11 +6359,9 @@ iterator items*(this: ConfigVariableCore_declarations): ConfigDeclaration =
 
 proc `@`*(this: ConfigVariableCore_declarations): seq[ConfigDeclaration] =
   let count = len(this)
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func name*(this: ConfigVariableCore): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
 
@@ -6417,11 +6399,9 @@ iterator items*(this: ConfigVariableCore_references): ConfigDeclaration =
 
 proc `@`*(this: ConfigVariableCore_references): seq[ConfigDeclaration] =
   let count = len(this)
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigVariableCore_trustedReferences = distinct ConfigVariableCore
 
@@ -6437,11 +6417,9 @@ iterator items*(this: ConfigVariableCore_trustedReferences): ConfigDeclaration =
 
 proc `@`*(this: ConfigVariableCore_trustedReferences): seq[ConfigDeclaration] =
   let count = len(this)
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigVariableCore_uniqueReferences = distinct ConfigVariableCore
 
@@ -6457,11 +6435,9 @@ iterator items*(this: ConfigVariableCore_uniqueReferences): ConfigDeclaration =
 
 proc `@`*(this: ConfigVariableCore_uniqueReferences): seq[ConfigDeclaration] =
   let count = len(this)
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func searchPath*(this: ConfigPageManager): DSearchPath {.importcpp: "#.get_search_path()".}
 
@@ -6479,11 +6455,9 @@ iterator items*(this: ConfigPageManager_prcPatterns): string =
 
 proc `@`*(this: ConfigPageManager_prcPatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigPageManager_prcEncryptedPatterns = distinct ConfigPageManager
 
@@ -6499,11 +6473,9 @@ iterator items*(this: ConfigPageManager_prcEncryptedPatterns): string =
 
 proc `@`*(this: ConfigPageManager_prcEncryptedPatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigPageManager_prcExecutablePatterns = distinct ConfigPageManager
 
@@ -6519,11 +6491,9 @@ iterator items*(this: ConfigPageManager_prcExecutablePatterns): string =
 
 proc `@`*(this: ConfigPageManager_prcExecutablePatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigPageManager_implicitPages = distinct ConfigPageManager
 
@@ -6539,11 +6509,9 @@ iterator items*(this: ConfigPageManager_implicitPages): ConfigPage =
 
 proc `@`*(this: ConfigPageManager_implicitPages): seq[ConfigPage] =
   let count = len(this)
-  var res: seq[ConfigPage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigPageManager_explicitPages = distinct ConfigPageManager
 
@@ -6559,11 +6527,9 @@ iterator items*(this: ConfigPageManager_explicitPages): ConfigPage =
 
 proc `@`*(this: ConfigPageManager_explicitPages): seq[ConfigPage] =
   let count = len(this)
-  var res: seq[ConfigPage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type ConfigVariableManager_variables = distinct ConfigVariableManager
 
@@ -6579,11 +6545,9 @@ iterator items*(this: ConfigVariableManager_variables): ConfigVariableCore =
 
 proc `@`*(this: ConfigVariableManager_variables): seq[ConfigVariableCore] =
   let count = len(this)
-  var res: seq[ConfigVariableCore]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func name*(this: ConfigVariableBase): string {.importcpp: "nimStringFromStdString(#.get_name())", header: stringConversionCode.}
 
@@ -6645,11 +6609,9 @@ iterator items*(this: ConfigVariableSearchPath_directories): Filename =
 
 proc `@`*(this: ConfigVariableSearchPath_directories): seq[Filename] =
   let count = len(this)
-  var res: seq[Filename]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func value*(this: ConfigVariableString): string {.importcpp: "nimStringFromStdString(#.get_value())", header: stringConversionCode.}
 
@@ -6679,11 +6641,9 @@ iterator items*(this: NotifyCategory_children): NotifyCategory =
 
 proc `@`*(this: NotifyCategory_children): seq[NotifyCategory] =
   let count = len(this)
-  var res: seq[NotifyCategory]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func algorithm*(this: IDecryptStream): string {.importcpp: "nimStringFromStdString(#.get_algorithm())", header: stringConversionCode.}
 
@@ -6835,11 +6795,9 @@ iterator items*(this: VirtualFileSystem_mounts): VirtualFileMount =
 
 proc `@`*(this: VirtualFileSystem_mounts): seq[VirtualFileMount] =
   let count = len(this)
-  var res: seq[VirtualFileMount]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func longTime*(this: TrueClock): float64 {.importcpp: "#.get_long_time()".}
 
@@ -6987,11 +6945,9 @@ iterator items*(this: ComputeNode_dispatches): LVecBase3i =
 
 proc `@`*(this: ComputeNode_dispatches): seq[LVecBase3i] =
   let count = len(this)
-  var res: seq[LVecBase3i]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func active*(this: Camera): bool {.importcpp: "#->is_active()".}
 
@@ -7021,11 +6977,9 @@ iterator items*(this: Camera_displayRegions): DisplayRegion =
 
 proc `@`*(this: Camera_displayRegions): seq[DisplayRegion] =
   let count = len(this)
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func cameraMask*(this: Camera): DrawMask {.importcpp: "#->get_camera_mask()".}
 
@@ -7113,11 +7067,9 @@ iterator items*(this: LODNode_ins): float =
 
 proc `@`*(this: LODNode_ins): seq[float] =
   let count = len(this)
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LODNode_outs = distinct LODNode
 
@@ -7133,11 +7085,9 @@ iterator items*(this: LODNode_outs): float =
 
 proc `@`*(this: LODNode_outs): seq[float] =
   let count = len(this)
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func lowestSwitch*(this: LODNode): int {.importcpp: "#->get_lowest_switch()".}
 
@@ -7321,11 +7271,9 @@ iterator items*(this: NodePath_nodes): PandaNode =
 
 proc `@`*(this: NodePath_nodes): seq[PandaNode] =
   let count = len(this)
-  var res: seq[PandaNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type NodePath_ancestors = distinct NodePath
 
@@ -7341,11 +7289,9 @@ iterator items*(this: NodePath_ancestors): NodePath =
 
 proc `@`*(this: NodePath_ancestors): seq[NodePath] =
   let count = len(this)
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func errorType*(this: NodePath): NodePath_ErrorType {.importcpp: "#.get_error_type()".}
 
@@ -7523,11 +7469,9 @@ iterator items*(this: LightAttrib_onLights): NodePath =
 
 proc `@`*(this: LightAttrib_onLights): seq[NodePath] =
   let count = len(this)
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LightAttrib_offLights = distinct LightAttrib
 
@@ -7543,11 +7487,9 @@ iterator items*(this: LightAttrib_offLights): NodePath =
 
 proc `@`*(this: LightAttrib_offLights): seq[NodePath] =
   let count = len(this)
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func classSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
 
@@ -7569,11 +7511,9 @@ iterator items*(this: LoaderFileTypeRegistry_types): LoaderFileType =
 
 proc `@`*(this: LoaderFileTypeRegistry_types): seq[LoaderFileType] =
   let count = len(this)
-  var res: seq[LoaderFileType]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func material*(this: MaterialAttrib): Material {.importcpp: "#->get_material()".}
 
@@ -7659,11 +7599,9 @@ iterator items*(this: TextureAttrib_onStages): TextureStage =
 
 proc `@`*(this: TextureAttrib_onStages): seq[TextureStage] =
   let count = len(this)
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TextureAttrib_textures = distinct TextureAttrib
 
@@ -7705,11 +7643,9 @@ iterator items*(this: TextureAttrib_offStages): TextureStage =
 
 proc `@`*(this: TextureAttrib_offStages): seq[TextureStage] =
   let count = len(this)
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func classSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib::get_class_slot()", header: "textureAttrib.h".}
 
@@ -7739,11 +7675,9 @@ iterator items*(this: OccluderNode_vertices): LPoint3 =
 
 proc `@`*(this: OccluderNode_vertices): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func shader*(this: ShaderAttrib): Shader {.importcpp: "deconstify(#->get_shader())", header: deconstifyCode.}
 
@@ -7777,11 +7711,9 @@ iterator items*(this: PortalNode_vertices): LPoint3 =
 
 proc `@`*(this: PortalNode_vertices): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func cellIn*(this: PortalNode): NodePath {.importcpp: "#->get_cell_in()".}
 
@@ -7843,11 +7775,9 @@ iterator items*(this: MicrophoneAudio_options): MicrophoneAudio =
 
 proc `@`*(this: MicrophoneAudio_options): seq[MicrophoneAudio] =
   let count = len(this)
-  var res: seq[MicrophoneAudio]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func channels*(this: MicrophoneAudio): int {.importcpp: "#->get_channels()".}
 
@@ -8277,11 +8207,9 @@ iterator items*(this: AnimGroup_children): AnimGroup =
 
 proc `@`*(this: AnimGroup_children): seq[AnimGroup] =
   let count = len(this)
-  var res: seq[AnimGroup]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func baseFrameRate*(this: AnimBundle): float64 {.importcpp: "#->get_base_frame_rate()".}
 
@@ -8309,11 +8237,9 @@ iterator items*(this: PartGroup_children): PartGroup =
 
 proc `@`*(this: PartGroup_children): seq[PartGroup] =
   let count = len(this)
-  var res: seq[PartGroup]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func valueNode*(this: AnimChannelMatrixDynamic): PandaNode {.importcpp: "#->get_value_node()".}
 
@@ -8359,11 +8285,9 @@ iterator items*(this: PartBundle_nodes): PartBundleNode =
 
 proc `@`*(this: PartBundle_nodes): seq[PartBundleNode] =
   let count = len(this)
-  var res: seq[PartBundleNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type PartBundleNode_bundles = distinct PartBundleNode
 
@@ -8385,11 +8309,9 @@ iterator items*(this: PartBundleNode_bundles): PartBundle =
 
 proc `@`*(this: PartBundleNode_bundles): seq[PartBundle] =
   let count = len(this)
-  var res: seq[PartBundle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type PartBundleNode_bundleHandles = distinct PartBundleNode
 
@@ -8411,11 +8333,9 @@ iterator items*(this: PartBundleNode_bundleHandles): PartBundleHandle =
 
 proc `@`*(this: PartBundleNode_bundleHandles): seq[PartBundleHandle] =
   let count = len(this)
-  var res: seq[PartBundleHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func bundle*(this: PartBundleHandle): PartBundle {.importcpp: "#->get_bundle()".}
 
@@ -8443,11 +8363,9 @@ iterator items*(this: PStatClient_collectors): PStatCollector =
 
 proc `@`*(this: PStatClient_collectors): seq[PStatCollector] =
   let count = len(this)
-  var res: seq[PStatCollector]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type PStatClient_threads = distinct PStatClient
 
@@ -8463,11 +8381,9 @@ iterator items*(this: PStatClient_threads): PStatThread =
 
 proc `@`*(this: PStatClient_threads): seq[PStatThread] =
   let count = len(this)
-  var res: seq[PStatThread]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func mainThread*(this: PStatClient): PStatThread {.importcpp: "#.get_main_thread()".}
 
@@ -8555,11 +8471,9 @@ iterator items*(this: CollisionNode_solids): CollisionSolid =
 
 proc `@`*(this: CollisionNode_solids): seq[CollisionSolid] =
   let count = len(this)
-  var res: seq[CollisionSolid]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func colliderSort*(this: CollisionNode): int {.importcpp: "#->get_collider_sort()".}
 
@@ -8585,11 +8499,9 @@ iterator items*(this: CollisionTraverser_colliders): NodePath =
 
 proc `@`*(this: CollisionTraverser_colliders): seq[NodePath] =
   let count = len(this)
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func recorder*(this: CollisionTraverser): CollisionRecorder {.importcpp: "#.get_recorder()".}
 
@@ -8633,11 +8545,9 @@ iterator items*(this: CollisionFloorMesh_vertices): LPoint3 =
 
 proc `@`*(this: CollisionFloorMesh_vertices): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type CollisionFloorMesh_triangles = distinct CollisionFloorMesh
 
@@ -8653,11 +8563,9 @@ iterator items*(this: CollisionFloorMesh_triangles): LPoint3i =
 
 proc `@`*(this: CollisionFloorMesh_triangles): seq[LPoint3i] =
   let count = len(this)
-  var res: seq[LPoint3i]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type CollisionPolygon_points = distinct CollisionPolygon
 
@@ -8673,11 +8581,9 @@ iterator items*(this: CollisionPolygon_points): LPoint3 =
 
 proc `@`*(this: CollisionPolygon_points): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func valid*(this: CollisionPolygon): bool {.importcpp: "#->is_valid()".}
 
@@ -8697,11 +8603,9 @@ iterator items*(this: CollisionHandlerEvent_inPatterns): string =
 
 proc `@`*(this: CollisionHandlerEvent_inPatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type CollisionHandlerEvent_againPatterns = distinct CollisionHandlerEvent
 
@@ -8717,11 +8621,9 @@ iterator items*(this: CollisionHandlerEvent_againPatterns): string =
 
 proc `@`*(this: CollisionHandlerEvent_againPatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type CollisionHandlerEvent_outPatterns = distinct CollisionHandlerEvent
 
@@ -8737,11 +8639,9 @@ iterator items*(this: CollisionHandlerEvent_outPatterns): string =
 
 proc `@`*(this: CollisionHandlerEvent_outPatterns): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func center*(this: CollisionHandlerPhysical): NodePath {.importcpp: "#->get_center()".}
 
@@ -8811,11 +8711,9 @@ iterator items*(this: CollisionHandlerQueue_entries): CollisionEntry =
 
 proc `@`*(this: CollisionHandlerQueue_entries): seq[CollisionEntry] =
   let count = len(this)
-  var res: seq[CollisionEntry]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func center*(this: CollisionSphere): LPoint3 {.importcpp: "#->get_center()".}
 
@@ -9109,11 +9007,9 @@ iterator items*(this: GraphicsOutput_displayRegions): DisplayRegion =
 
 proc `@`*(this: GraphicsOutput_displayRegions): seq[DisplayRegion] =
   let count = len(this)
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type GraphicsOutput_activeDisplayRegions = distinct GraphicsOutput
 
@@ -9135,11 +9031,9 @@ iterator items*(this: GraphicsOutput_activeDisplayRegions): DisplayRegion =
 
 proc `@`*(this: GraphicsOutput_activeDisplayRegions): seq[DisplayRegion] =
   let count = len(this)
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func supportsRenderTexture*(this: GraphicsOutput): bool {.importcpp: "#->get_supports_render_texture()".}
 
@@ -9317,11 +9211,9 @@ iterator items*(this: GraphicsEngine_windows): GraphicsOutput =
 
 proc `@`*(this: GraphicsEngine_windows): seq[GraphicsOutput] =
   let count = len(this)
-  var res: seq[GraphicsOutput]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func leftEye*(this: StereoDisplayRegion): DisplayRegion {.importcpp: "#->get_left_eye()".}
 
@@ -9451,11 +9343,9 @@ iterator items*(this: GraphicsPipeSelection_pipeTypes): TypeHandle =
 
 proc `@`*(this: GraphicsPipeSelection_pipeTypes): seq[TypeHandle] =
   let count = len(this)
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func syncName*(this: Thread): string {.importcpp: "nimStringFromStdString(#->get_sync_name())", header: stringConversionCode.}
 
@@ -9515,11 +9405,9 @@ iterator items*(this: ButtonEventList_events): ButtonEvent =
 
 proc `@`*(this: ButtonEventList_events): seq[ButtonEvent] =
   let count = len(this)
-  var res: seq[ButtonEvent]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func name*(this: Event): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
@@ -9539,11 +9427,9 @@ iterator items*(this: Event_parameters): EventParameter =
 
 proc `@`*(this: Event_parameters): seq[EventParameter] =
   let count = len(this)
-  var res: seq[EventParameter]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func animationType*(this: GeomVertexAnimationSpec): GeomEnums_AnimationType {.importcpp: "#.get_animation_type()".}
 
@@ -9587,11 +9473,9 @@ iterator items*(this: GeomVertexArrayFormat_columns): GeomVertexColumn =
 
 proc `@`*(this: GeomVertexArrayFormat_columns): seq[GeomVertexColumn] =
   let count = len(this)
-  var res: seq[GeomVertexColumn]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func registered*(this: GeomVertexFormat): bool {.importcpp: "#->is_registered()".}
 
@@ -9621,11 +9505,9 @@ iterator items*(this: GeomVertexFormat_arrays): GeomVertexArrayFormat =
 
 proc `@`*(this: GeomVertexFormat_arrays): seq[GeomVertexArrayFormat] =
   let count = len(this)
-  var res: seq[GeomVertexArrayFormat]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type GeomVertexFormat_points = distinct GeomVertexFormat
 
@@ -9647,11 +9529,9 @@ iterator items*(this: GeomVertexFormat_points): InternalName =
 
 proc `@`*(this: GeomVertexFormat_points): seq[InternalName] =
   let count = len(this)
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type GeomVertexFormat_vectors = distinct GeomVertexFormat
 
@@ -9673,11 +9553,9 @@ iterator items*(this: GeomVertexFormat_vectors): InternalName =
 
 proc `@`*(this: GeomVertexFormat_vectors): seq[InternalName] =
   let count = len(this)
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type GeomVertexFormat_columns = distinct GeomVertexFormat
 
@@ -9737,11 +9615,9 @@ iterator items*(this: TransformTable_transforms): VertexTransform =
 
 proc `@`*(this: TransformTable_transforms): seq[VertexTransform] =
   let count = len(this)
-  var res: seq[VertexTransform]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TransformBlend_transforms = distinct TransformBlend
 
@@ -9765,11 +9641,9 @@ iterator items*(this: TransformBlend_transforms): VertexTransform =
 
 proc `@`*(this: TransformBlend_transforms): seq[VertexTransform] =
   let count = len(this)
-  var res: seq[VertexTransform]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type TransformBlend_weights = distinct TransformBlend
 
@@ -9801,11 +9675,9 @@ iterator items*(this: TransformBlendTable_blends): TransformBlend =
 
 proc `@`*(this: TransformBlendTable_blends): seq[TransformBlend] =
   let count = len(this)
-  var res: seq[TransformBlend]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func modified*(this: TransformBlendTable, currentThread: Thread): UpdateSeq {.importcpp: "#->get_modified(#)".}
 
@@ -9857,11 +9729,9 @@ iterator items*(this: GeomVertexData_arrays): GeomVertexArrayData =
 
 proc `@`*(this: GeomVertexData_arrays): seq[GeomVertexArrayData] =
   let count = len(this)
-  var res: seq[GeomVertexArrayData]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func transformTable*(this: GeomVertexData): TransformTable {.importcpp: "deconstify(#->get_transform_table())", header: deconstifyCode.}
 
@@ -9991,11 +9861,9 @@ iterator items*(this: Geom_primitives): GeomPrimitive =
 
 proc `@`*(this: Geom_primitives): seq[GeomPrimitive] =
   let count = len(this)
-  var res: seq[GeomPrimitive]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func numBytes*(this: Geom): int {.importcpp: "#->get_num_bytes()".}
 
@@ -10221,11 +10089,9 @@ iterator items*(this: LMatrix3f_rows): LVecBase3f =
 
 proc `@`*(this: LMatrix3f_rows): seq[LVecBase3f] =
   let count = len(this)
-  var res: seq[LVecBase3f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix3f_cols = distinct LMatrix3f
 
@@ -10245,11 +10111,9 @@ iterator items*(this: LMatrix3f_cols): LVecBase3f =
 
 proc `@`*(this: LMatrix3f_cols): seq[LVecBase3f] =
   let count = len(this)
-  var res: seq[LVecBase3f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix4f_rows = distinct LMatrix4f
 
@@ -10269,11 +10133,9 @@ iterator items*(this: LMatrix4f_rows): LVecBase4f =
 
 proc `@`*(this: LMatrix4f_rows): seq[LVecBase4f] =
   let count = len(this)
-  var res: seq[LVecBase4f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix4f_cols = distinct LMatrix4f
 
@@ -10293,11 +10155,9 @@ iterator items*(this: LMatrix4f_cols): LVecBase4f =
 
 proc `@`*(this: LMatrix4f_cols): seq[LVecBase4f] =
   let count = len(this)
-  var res: seq[LVecBase4f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix3d_rows = distinct LMatrix3d
 
@@ -10317,11 +10177,9 @@ iterator items*(this: LMatrix3d_rows): LVecBase3d =
 
 proc `@`*(this: LMatrix3d_rows): seq[LVecBase3d] =
   let count = len(this)
-  var res: seq[LVecBase3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix3d_cols = distinct LMatrix3d
 
@@ -10341,11 +10199,9 @@ iterator items*(this: LMatrix3d_cols): LVecBase3d =
 
 proc `@`*(this: LMatrix3d_cols): seq[LVecBase3d] =
   let count = len(this)
-  var res: seq[LVecBase3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix4d_rows = distinct LMatrix4d
 
@@ -10365,11 +10221,9 @@ iterator items*(this: LMatrix4d_rows): LVecBase4d =
 
 proc `@`*(this: LMatrix4d_rows): seq[LVecBase4d] =
   let count = len(this)
-  var res: seq[LVecBase4d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type LMatrix4d_cols = distinct LMatrix4d
 
@@ -10389,11 +10243,9 @@ iterator items*(this: LMatrix4d_cols): LVecBase4d =
 
 proc `@`*(this: LMatrix4d_cols): seq[LVecBase4d] =
   let count = len(this)
-  var res: seq[LVecBase4d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func min*(this: FiniteBoundingVolume): LPoint3 {.importcpp: "#->get_min()".}
 
@@ -10415,11 +10267,9 @@ iterator items*(this: BoundingBox_points): LPoint3 =
 
 proc `@`*(this: BoundingBox_points): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type BoundingBox_planes = distinct BoundingBox
 
@@ -10435,11 +10285,9 @@ iterator items*(this: BoundingBox_planes): LPlane =
 
 proc `@`*(this: BoundingBox_planes): seq[LPlane] =
   let count = len(this)
-  var res: seq[LPlane]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type BoundingHexahedron_points = distinct BoundingHexahedron
 
@@ -10455,11 +10303,9 @@ iterator items*(this: BoundingHexahedron_points): LPoint3 =
 
 proc `@`*(this: BoundingHexahedron_points): seq[LPoint3] =
   let count = len(this)
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type BoundingHexahedron_planes = distinct BoundingHexahedron
 
@@ -10475,11 +10321,9 @@ iterator items*(this: BoundingHexahedron_planes): LPlane =
 
 proc `@`*(this: BoundingHexahedron_planes): seq[LPlane] =
   let count = len(this)
-  var res: seq[LPlane]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func plane*(this: BoundingPlane): LPlane {.importcpp: "#->get_plane()".}
 
@@ -10511,11 +10355,9 @@ iterator items*(this: IntersectionBoundingVolume_components): GeometricBoundingV
 
 proc `@`*(this: IntersectionBoundingVolume_components): seq[GeometricBoundingVolume] =
   let count = len(this)
-  var res: seq[GeometricBoundingVolume]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type UnionBoundingVolume_components = distinct UnionBoundingVolume
 
@@ -10537,11 +10379,9 @@ iterator items*(this: UnionBoundingVolume_components): GeometricBoundingVolume =
 
 proc `@`*(this: UnionBoundingVolume_components): seq[GeometricBoundingVolume] =
   let count = len(this)
-  var res: seq[GeometricBoundingVolume]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type Triangulator_vertices = distinct Triangulator
 
@@ -10557,11 +10397,9 @@ iterator items*(this: Triangulator_vertices): LPoint2d =
 
 proc `@`*(this: Triangulator_vertices): seq[LPoint2d] =
   let count = len(this)
-  var res: seq[LPoint2d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type Triangulator3_vertices = distinct Triangulator3
 
@@ -10577,11 +10415,9 @@ iterator items*(this: Triangulator3_vertices): LPoint3d =
 
 proc `@`*(this: Triangulator3_vertices): seq[LPoint3d] =
   let count = len(this)
-  var res: seq[LPoint3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func plane*(this: Triangulator3): LPlaned {.importcpp: "#.get_plane()".}
 
@@ -10607,11 +10443,9 @@ iterator items*(this: ParametricCurveCollection_curves): ParametricCurve =
 
 proc `@`*(this: ParametricCurveCollection_curves): seq[ParametricCurve] =
   let count = len(this)
-  var res: seq[ParametricCurve]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func xyzCurve*(this: ParametricCurveCollection): ParametricCurve {.importcpp: "#->get_xyz_curve()".}
 
@@ -10639,11 +10473,9 @@ iterator items*(this: ParametricCurveCollection_timewarpCurves): ParametricCurve
 
 proc `@`*(this: ParametricCurveCollection_timewarpCurves): seq[ParametricCurve] =
   let count = len(this)
-  var res: seq[ParametricCurve]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func maxT*(this: ParametricCurveCollection): float {.importcpp: "#->get_max_t()".}
 
@@ -10671,11 +10503,9 @@ iterator items*(this: NurbsSurfaceEvaluator_uKnots): float =
 
 proc `@`*(this: NurbsSurfaceEvaluator_uKnots): seq[float] =
   let count = len(this)
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 type NurbsSurfaceEvaluator_vKnots = distinct NurbsSurfaceEvaluator
 
@@ -10693,11 +10523,9 @@ iterator items*(this: NurbsSurfaceEvaluator_vKnots): float =
 
 proc `@`*(this: NurbsSurfaceEvaluator_vKnots): seq[float] =
   let count = len(this)
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func curve*(this: RopeNode): NurbsCurveEvaluator {.importcpp: "#->get_curve()".}
 
@@ -10771,11 +10599,9 @@ iterator items*(this: PNMFileType_extensions): string =
 
 proc `@`*(this: PNMFileType_extensions): seq[string] {.inline.} =
   let count = len(this)
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func suggestedExtension*(this: PNMFileType): string {.importcpp: "nimStringFromStdString(#.get_suggested_extension())", header: stringConversionCode.}
 
@@ -10793,11 +10619,9 @@ iterator items*(this: PNMFileTypeRegistry_types): PNMFileType =
 
 proc `@`*(this: PNMFileTypeRegistry_types): seq[PNMFileType] =
   let count = len(this)
-  var res: seq[PNMFileType]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func numChannels*(this: PNMImageHeader): int {.importcpp: "#.get_num_channels()".}
 
@@ -10925,11 +10749,9 @@ iterator items*(this: DynamicTextFont_pages): DynamicTextPage =
 
 proc `@`*(this: DynamicTextFont_pages): seq[DynamicTextPage] =
   let count = len(this)
-  var res: seq[DynamicTextPage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func model*(this: TextGraphic): NodePath {.importcpp: "#.get_model()".}
 
@@ -11027,11 +10849,9 @@ iterator items*(this: ButtonThrower_parameters): EventParameter =
 
 proc `@`*(this: ButtonThrower_parameters): seq[EventParameter] =
   let count = len(this)
-  var res: seq[EventParameter]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func modifierButtons*(this: ButtonThrower): ModifierButtons {.importcpp: "#->get_modifier_buttons()".}
 
@@ -11087,11 +10907,9 @@ iterator items*(this: MouseWatcherBase_regions): MouseWatcherRegion =
 
 proc `@`*(this: MouseWatcherBase_regions): seq[MouseWatcherRegion] =
   let count = len(this)
-  var res: seq[MouseWatcherRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func seq*(this: UpdateSeq): int {.importcpp: "#.get_seq()".}
 
@@ -11269,11 +11087,9 @@ iterator items*(this: ModifierButtons_buttons): ButtonHandle =
 
 proc `@`*(this: ModifierButtons_buttons): seq[ButtonHandle] =
   let count = len(this)
-  var res: seq[ButtonHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this[i]
-  return res
+    result[i] = this[i]
 
 func x*(this: PointerData): float64 {.importcpp: "#.get_x()".}
 
@@ -36106,19 +35922,15 @@ func `$`*(this: TypeHandle): string {.inline.} =
 
 proc getTypehandles*(this: TypeRegistry): seq[TypeHandle] =
   let count = this.getNumTypehandles()
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTypehandle(i)
-  return res
+    result[i] = this.getTypehandle(i)
 
 proc getRootClasses*(this: TypeRegistry): seq[TypeHandle] =
   let count = this.getNumRootClasses()
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRootClass(i)
-  return res
+    result[i] = this.getRootClass(i)
 
 func `$`*(this: Filename): string {.inline.} =
   var str : StringStream
@@ -36127,11 +35939,9 @@ func `$`*(this: Filename): string {.inline.} =
 
 proc getSystems*(this: PandaSystem): seq[string] =
   let count = this.getNumSystems()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSystem(i)
-  return res
+    result[i] = this.getSystem(i)
 
 func `$`*(this: PandaSystem): string {.inline.} =
   var str : StringStream
@@ -36140,11 +35950,9 @@ func `$`*(this: PandaSystem): string {.inline.} =
 
 proc getDirectories*(this: DSearchPath): seq[Filename] =
   let count = this.getNumDirectories()
-  var res: seq[Filename]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDirectory(i)
-  return res
+    result[i] = this.getDirectory(i)
 
 func `$`*(this: DSearchPath): string {.inline.} =
   var str : StringStream
@@ -36168,35 +35976,27 @@ func `$`*(this: ConfigDeclaration): string {.inline.} =
 
 proc getDeclarations*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   let count = this.getNumDeclarations()
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDeclaration(i)
-  return res
+    result[i] = this.getDeclaration(i)
 
 proc getReferences*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   let count = this.getNumReferences()
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getReference(i)
-  return res
+    result[i] = this.getReference(i)
 
 proc getTrustedReferences*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   let count = this.getNumTrustedReferences()
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTrustedReference(i)
-  return res
+    result[i] = this.getTrustedReference(i)
 
 proc getUniqueReferences*(this: ConfigVariableCore): seq[ConfigDeclaration] =
   let count = this.getNumUniqueReferences()
-  var res: seq[ConfigDeclaration]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getUniqueReference(i)
-  return res
+    result[i] = this.getUniqueReference(i)
 
 func `$`*(this: ConfigVariableCore): string {.inline.} =
   var str : StringStream
@@ -36210,11 +36010,9 @@ func `$`*(this: ConfigPageManager): string {.inline.} =
 
 proc getVariables*(this: ConfigVariableManager): seq[ConfigVariableCore] =
   let count = this.getNumVariables()
-  var res: seq[ConfigVariableCore]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVariable(i)
-  return res
+    result[i] = this.getVariable(i)
 
 func `$`*(this: ConfigVariableManager): string {.inline.} =
   var str : StringStream
@@ -36253,11 +36051,9 @@ func `$`*(this: ConfigVariableList): string {.inline.} =
 
 proc getDirectories*(this: ConfigVariableSearchPath): seq[Filename] =
   let count = this.getNumDirectories()
-  var res: seq[Filename]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDirectory(i)
-  return res
+    result[i] = this.getDirectory(i)
 
 func `$`*(this: ConfigVariableSearchPath): string {.inline.} =
   var str : StringStream
@@ -36266,11 +36062,9 @@ func `$`*(this: ConfigVariableSearchPath): string {.inline.} =
 
 proc getChildren*(this: NotifyCategory): seq[NotifyCategory] =
   let count = this.getNumChildren()
-  var res: seq[NotifyCategory]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getChild(i)
-  return res
+    result[i] = this.getChild(i)
 
 iterator items*(collection: URLSpec): char =
   for i in 0 ..< len(collection):
@@ -36303,11 +36097,9 @@ func `$`*(this: DocumentSpec): string {.inline.} =
 
 proc getRedirectSteps*(this: HTTPChannel): seq[URLSpec] =
   let count = this.getNumRedirectSteps()
-  var res: seq[URLSpec]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRedirectStep(i)
-  return res
+    result[i] = this.getRedirectStep(i)
 
 func `$`*(this: DownloadDb): string {.inline.} =
   var str : StringStream
@@ -36341,19 +36133,15 @@ func `$`*(this: HashVal): string {.inline.} =
 
 proc getPointers*(this: MemoryUsagePointers): seq[ReferenceCount] =
   let count = this.getNumPointers()
-  var res: seq[ReferenceCount]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPointer(i)
-  return res
+    result[i] = this.getPointer(i)
 
 proc getTypedPointers*(this: MemoryUsagePointers): seq[TypedObject] =
   let count = this.getNumPointers()
-  var res: seq[TypedObject]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTypedPointer(i)
-  return res
+    result[i] = this.getTypedPointer(i)
 
 func `$`*(this: MemoryUsagePointers): string {.inline.} =
   var str : StringStream
@@ -36362,11 +36150,9 @@ func `$`*(this: MemoryUsagePointers): string {.inline.} =
 
 proc getSubfileNames*(this: Multifile): seq[string] =
   let count = this.getNumSubfiles()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSubfileName(i)
-  return res
+    result[i] = this.getSubfileName(i)
 
 func `$`*(this: Multifile): string {.inline.} =
   var str : StringStream
@@ -36385,11 +36171,9 @@ func `$`*(this: SubfileInfo): string {.inline.} =
 
 proc getFiles*(this: VirtualFileList): seq[VirtualFile] =
   let count = this.getNumFiles()
-  var res: seq[VirtualFile]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getFile(i)
-  return res
+    result[i] = this.getFile(i)
 
 iterator items*(collection: VirtualFileList): VirtualFile =
   for i in 0 ..< len(collection):
@@ -36397,35 +36181,27 @@ iterator items*(collection: VirtualFileList): VirtualFile =
 
 proc getMounts*(this: VirtualFileSystem): seq[VirtualFileMount] =
   let count = this.getNumMounts()
-  var res: seq[VirtualFileMount]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getMount(i)
-  return res
+    result[i] = this.getMount(i)
 
 proc getParents*(this: PandaNode): seq[PandaNode] =
   let count = this.getNumParents()
-  var res: seq[PandaNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getParent(i)
-  return res
+    result[i] = this.getParent(i)
 
 proc getChildren*(this: PandaNode): seq[PandaNode] =
   let count = this.getNumChildren()
-  var res: seq[PandaNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getChild(i)
-  return res
+    result[i] = this.getChild(i)
 
 proc getStashed*(this: PandaNode): seq[PandaNode] =
   let count = this.getNumStashed()
-  var res: seq[PandaNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getStashed(i)
-  return res
+    result[i] = this.getStashed(i)
 
 func `$`*(this: PandaNode): string {.inline.} =
   var str : StringStream
@@ -36439,19 +36215,15 @@ func `$`*(this: LightNode): string {.inline.} =
 
 proc getDispatches*(this: ComputeNode): seq[LVecBase3i] =
   let count = this.getNumDispatches()
-  var res: seq[LVecBase3i]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDispatch(i)
-  return res
+    result[i] = this.getDispatch(i)
 
 proc getDisplayRegions*(this: Camera): seq[DisplayRegion] =
   let count = this.getNumDisplayRegions()
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDisplayRegion(i)
-  return res
+    result[i] = this.getDisplayRegion(i)
 
 func `$`*(this: LightLensNode): string {.inline.} =
   var str : StringStream
@@ -36460,19 +36232,15 @@ func `$`*(this: LightLensNode): string {.inline.} =
 
 proc getIns*(this: LODNode): seq[float] =
   let count = this.getNumSwitches()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getIn(i)
-  return res
+    result[i] = this.getIn(i)
 
 proc getOuts*(this: LODNode): seq[float] =
   let count = this.getNumSwitches()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOut(i)
-  return res
+    result[i] = this.getOut(i)
 
 func `$`*(this: CallbackData): string {.inline.} =
   var str : StringStream
@@ -36496,11 +36264,9 @@ func `$`*(this: RenderAttrib): string {.inline.} =
 
 proc getStages*(this: TexMatrixAttrib): seq[TextureStage] =
   let count = this.getNumStages()
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getStage(i)
-  return res
+    result[i] = this.getStage(i)
 
 func `$`*(this: RenderState): string {.inline.} =
   var str : StringStream
@@ -36523,11 +36289,9 @@ func `$`*(this: RenderEffects): string {.inline.} =
 
 proc getNames*(this: InternalNameCollection): seq[InternalName] =
   let count = this.getNumNames()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getName(i)
-  return res
+    result[i] = this.getName(i)
 
 iterator items*(collection: InternalNameCollection): InternalName =
   for i in 0 ..< len(collection):
@@ -36549,11 +36313,9 @@ func `$`*(this: MaterialCollection): string {.inline.} =
 
 proc getTextureStages*(this: TextureStageCollection): seq[TextureStage] =
   let count = this.getNumTextureStages()
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTextureStage(i)
-  return res
+    result[i] = this.getTextureStage(i)
 
 iterator items*(collection: TextureStageCollection): TextureStage =
   for i in 0 ..< len(collection):
@@ -36566,19 +36328,15 @@ func `$`*(this: TextureStageCollection): string {.inline.} =
 
 proc getNodes*(this: NodePath): seq[PandaNode] =
   let count = this.getNumNodes()
-  var res: seq[PandaNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getNode(i)
-  return res
+    result[i] = this.getNode(i)
 
 proc getAncestors*(this: NodePath): seq[NodePath] =
   let count = this.getNumNodes()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getAncestor(i)
-  return res
+    result[i] = this.getAncestor(i)
 
 func `$`*(this: NodePath): string {.inline.} =
   var str : StringStream
@@ -36587,11 +36345,9 @@ func `$`*(this: NodePath): string {.inline.} =
 
 proc getPaths*(this: NodePathCollection): seq[NodePath] =
   let count = this.getNumPaths()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPath(i)
-  return res
+    result[i] = this.getPath(i)
 
 iterator items*(collection: NodePathCollection): NodePath =
   for i in 0 ..< len(collection):
@@ -36604,11 +36360,9 @@ func `$`*(this: NodePathCollection): string {.inline.} =
 
 proc getNodes*(this: AttribNodeRegistry): seq[NodePath] =
   let count = this.getNumNodes()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getNode(i)
-  return res
+    result[i] = this.getNode(i)
 
 func `$`*(this: AttribNodeRegistry): string {.inline.} =
   var str : StringStream
@@ -36627,67 +36381,51 @@ func `$`*(this: WeakNodePath): string {.inline.} =
 
 proc getOnPlanes*(this: ClipPlaneAttrib): seq[NodePath] =
   let count = this.getNumOnPlanes()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOnPlane(i)
-  return res
+    result[i] = this.getOnPlane(i)
 
 proc getOffPlanes*(this: ClipPlaneAttrib): seq[NodePath] =
   let count = this.getNumOffPlanes()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOffPlane(i)
-  return res
+    result[i] = this.getOffPlane(i)
 
 proc getGeoms*(this: GeomNode): seq[Geom] =
   let count = this.getNumGeoms()
-  var res: seq[Geom]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getGeom(i)
-  return res
+    result[i] = this.getGeom(i)
 
 proc modifyGeoms*(this: GeomNode): seq[Geom] =
   let count = this.getNumGeoms()
-  var res: seq[Geom]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.modifyGeom(i)
-  return res
+    result[i] = this.modifyGeom(i)
 
 proc getGeomStates*(this: GeomNode): seq[RenderState] =
   let count = this.getNumGeoms()
-  var res: seq[RenderState]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getGeomState(i)
-  return res
+    result[i] = this.getGeomState(i)
 
 proc getBins*(this: CullBinManager): seq[int] =
   let count = this.getNumBins()
-  var res: seq[int]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getBin(i)
-  return res
+    result[i] = this.getBin(i)
 
 proc getOnLights*(this: LightAttrib): seq[NodePath] =
   let count = this.getNumOnLights()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOnLight(i)
-  return res
+    result[i] = this.getOnLight(i)
 
 proc getOffLights*(this: LightAttrib): seq[NodePath] =
   let count = this.getNumOffLights()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOffLight(i)
-  return res
+    result[i] = this.getOffLight(i)
 
 func `$`*(this: Loader): string {.inline.} =
   var str : StringStream
@@ -36696,11 +36434,9 @@ func `$`*(this: Loader): string {.inline.} =
 
 proc getTypes*(this: LoaderFileTypeRegistry): seq[LoaderFileType] =
   let count = this.getNumTypes()
-  var res: seq[LoaderFileType]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getType(i)
-  return res
+    result[i] = this.getType(i)
 
 func `$`*(this: AsyncFuture): string {.inline.} =
   var str : StringStream
@@ -36714,75 +36450,57 @@ func `$`*(this: AsyncTask): string {.inline.} =
 
 proc getOnStages*(this: TextureAttrib): seq[TextureStage] =
   let count = this.getNumOnStages()
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOnStage(i)
-  return res
+    result[i] = this.getOnStage(i)
 
 proc getOnFfStages*(this: TextureAttrib): seq[TextureStage] =
   let count = this.getNumOnFfStages()
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOnFfStage(i)
-  return res
+    result[i] = this.getOnFfStage(i)
 
 proc getOffStages*(this: TextureAttrib): seq[TextureStage] =
   let count = this.getNumOffStages()
-  var res: seq[TextureStage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOffStage(i)
-  return res
+    result[i] = this.getOffStage(i)
 
 proc getVertices*(this: OccluderNode): seq[LPoint3] =
   let count = this.getNumVertices()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getOnOccluders*(this: OccluderEffect): seq[NodePath] =
   let count = this.getNumOnOccluders()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOnOccluder(i)
-  return res
+    result[i] = this.getOnOccluder(i)
 
 proc getPoints*(this: ScissorEffect): seq[LPoint3] =
   let count = this.getNumPoints()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPoint(i)
-  return res
+    result[i] = this.getPoint(i)
 
 proc getNodes*(this: ScissorEffect): seq[NodePath] =
   let count = this.getNumPoints()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getNode(i)
-  return res
+    result[i] = this.getNode(i)
 
 proc getVertices*(this: PortalNode): seq[LPoint3] =
   let count = this.getNumVertices()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getOptions*(this: MicrophoneAudio): seq[MicrophoneAudio] =
   let count = MicrophoneAudio.getNumOptions()
-  var res: seq[MicrophoneAudio]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = MicrophoneAudio.getOption(i)
-  return res
+    result[i] = MicrophoneAudio.getOption(i)
 
 func `$`*(this: TextNode): string {.inline.} =
   var str : StringStream
@@ -36791,19 +36509,15 @@ func `$`*(this: TextNode): string {.inline.} =
 
 proc getVertices*(this: LineSegs): seq[LVertex] =
   let count = this.getNumVertices()
-  var res: seq[LVertex]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getVertexColors*(this: LineSegs): seq[LColor] =
   let count = this.getNumVertices()
-  var res: seq[LColor]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertexColor(i)
-  return res
+    result[i] = this.getVertexColor(i)
 
 func `$`*(this: VertexTransform): string {.inline.} =
   var str : StringStream
@@ -36812,11 +36526,9 @@ func `$`*(this: VertexTransform): string {.inline.} =
 
 proc getChildren*(this: AnimGroup): seq[AnimGroup] =
   let count = this.getNumChildren()
-  var res: seq[AnimGroup]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getChild(i)
-  return res
+    result[i] = this.getChild(i)
 
 func `$`*(this: AnimGroup): string {.inline.} =
   var str : StringStream
@@ -36825,11 +36537,9 @@ func `$`*(this: AnimGroup): string {.inline.} =
 
 proc getChildren*(this: PartGroup): seq[PartGroup] =
   let count = this.getNumChildren()
-  var res: seq[PartGroup]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getChild(i)
-  return res
+    result[i] = this.getChild(i)
 
 func `$`*(this: AnimControl): string {.inline.} =
   var str : StringStream
@@ -36838,19 +36548,15 @@ func `$`*(this: AnimControl): string {.inline.} =
 
 proc getAnims*(this: AnimControlCollection): seq[AnimControl] =
   let count = this.getNumAnims()
-  var res: seq[AnimControl]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getAnim(i)
-  return res
+    result[i] = this.getAnim(i)
 
 proc getAnimNames*(this: AnimControlCollection): seq[string] =
   let count = this.getNumAnims()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getAnimName(i)
-  return res
+    result[i] = this.getAnimName(i)
 
 func `$`*(this: AnimControlCollection): string {.inline.} =
   var str : StringStream
@@ -36869,11 +36575,9 @@ func `$`*(this: PartSubset): string {.inline.} =
 
 proc getNodes*(this: PartBundle): seq[PartBundleNode] =
   let count = this.getNumNodes()
-  var res: seq[PartBundleNode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getNode(i)
-  return res
+    result[i] = this.getNode(i)
 
 func `$`*(this: PartBundle): string {.inline.} =
   var str : StringStream
@@ -36882,35 +36586,27 @@ func `$`*(this: PartBundle): string {.inline.} =
 
 proc getBundles*(this: PartBundleNode): seq[PartBundle] =
   let count = this.getNumBundles()
-  var res: seq[PartBundle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getBundle(i)
-  return res
+    result[i] = this.getBundle(i)
 
 proc getBundleHandles*(this: PartBundleNode): seq[PartBundleHandle] =
   let count = this.getNumBundles()
-  var res: seq[PartBundleHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getBundleHandle(i)
-  return res
+    result[i] = this.getBundleHandle(i)
 
 proc getCollectors*(this: PStatClient): seq[PStatCollector] =
   let count = this.getNumCollectors()
-  var res: seq[PStatCollector]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCollector(i)
-  return res
+    result[i] = this.getCollector(i)
 
 proc getThreads*(this: PStatClient): seq[PStatThread] =
   let count = this.getNumThreads()
-  var res: seq[PStatThread]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getThread(i)
-  return res
+    result[i] = this.getThread(i)
 
 func `$`*(this: PStatCollector): string {.inline.} =
   var str : StringStream
@@ -36929,19 +36625,15 @@ func `$`*(this: CollisionSolid): string {.inline.} =
 
 proc getSolids*(this: CollisionNode): seq[CollisionSolid] =
   let count = this.getNumSolids()
-  var res: seq[CollisionSolid]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSolid(i)
-  return res
+    result[i] = this.getSolid(i)
 
 proc getColliders*(this: CollisionTraverser): seq[NodePath] =
   let count = this.getNumColliders()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCollider(i)
-  return res
+    result[i] = this.getCollider(i)
 
 func `$`*(this: CollisionTraverser): string {.inline.} =
   var str : StringStream
@@ -36960,59 +36652,45 @@ func `$`*(this: CollisionEntry): string {.inline.} =
 
 proc getVertices*(this: CollisionFloorMesh): seq[LPoint3] =
   let count = this.getNumVertices()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getTriangles*(this: CollisionFloorMesh): seq[LPoint3i] =
   let count = this.getNumTriangles()
-  var res: seq[LPoint3i]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTriangle(i)
-  return res
+    result[i] = this.getTriangle(i)
 
 proc getPoints*(this: CollisionPolygon): seq[LPoint3] =
   let count = this.getNumPoints()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPoint(i)
-  return res
+    result[i] = this.getPoint(i)
 
 proc getInPatterns*(this: CollisionHandlerEvent): seq[string] =
   let count = this.getNumInPatterns()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getInPattern(i)
-  return res
+    result[i] = this.getInPattern(i)
 
 proc getAgainPatterns*(this: CollisionHandlerEvent): seq[string] =
   let count = this.getNumAgainPatterns()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getAgainPattern(i)
-  return res
+    result[i] = this.getAgainPattern(i)
 
 proc getOutPatterns*(this: CollisionHandlerEvent): seq[string] =
   let count = this.getNumOutPatterns()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getOutPattern(i)
-  return res
+    result[i] = this.getOutPattern(i)
 
 proc getEntries*(this: CollisionHandlerQueue): seq[CollisionEntry] =
   let count = this.getNumEntries()
-  var res: seq[CollisionEntry]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getEntry(i)
-  return res
+    result[i] = this.getEntry(i)
 
 func `$`*(this: CollisionHandlerQueue): string {.inline.} =
   var str : StringStream
@@ -37035,11 +36713,9 @@ func `$`*(this: InputDeviceSet): string {.inline.} =
 
 proc getDisplayModes*(this: DisplayInformation): seq[DisplayMode] =
   let count = this.getTotalDisplayModes()
-  var res: seq[DisplayMode]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDisplayMode(i)
-  return res
+    result[i] = this.getDisplayMode(i)
 
 func `$`*(this: WindowHandle): string {.inline.} =
   var str : StringStream
@@ -37058,35 +36734,27 @@ func `$`*(this: DisplayRegion): string {.inline.} =
 
 proc getDisplayRegions*(this: GraphicsOutput): seq[DisplayRegion] =
   let count = this.getNumDisplayRegions()
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getDisplayRegion(i)
-  return res
+    result[i] = this.getDisplayRegion(i)
 
 proc getActiveDisplayRegions*(this: GraphicsOutput): seq[DisplayRegion] =
   let count = this.getNumActiveDisplayRegions()
-  var res: seq[DisplayRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getActiveDisplayRegion(i)
-  return res
+    result[i] = this.getActiveDisplayRegion(i)
 
 proc getGsgs*(this: GraphicsStateGuardianBase): seq[GraphicsStateGuardianBase] =
   let count = GraphicsStateGuardianBase.getNumGsgs()
-  var res: seq[GraphicsStateGuardianBase]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = GraphicsStateGuardianBase.getGsg(i)
-  return res
+    result[i] = GraphicsStateGuardianBase.getGsg(i)
 
 proc getWindows*(this: GraphicsEngine): seq[GraphicsOutput] =
   let count = this.getNumWindows()
-  var res: seq[GraphicsOutput]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getWindow(i)
-  return res
+    result[i] = this.getWindow(i)
 
 func `$`*(this: GraphicsThreadingModel): string {.inline.} =
   var str : StringStream
@@ -37100,19 +36768,15 @@ func `$`*(this: FrameBufferProperties): string {.inline.} =
 
 proc getInputDevices*(this: GraphicsWindow): seq[InputDevice] =
   let count = this.getNumInputDevices()
-  var res: seq[InputDevice]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getInputDevice(i)
-  return res
+    result[i] = this.getInputDevice(i)
 
 proc getInputDeviceNames*(this: GraphicsWindow): seq[string] =
   let count = this.getNumInputDevices()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getInputDeviceName(i)
-  return res
+    result[i] = this.getInputDeviceName(i)
 
 func `$`*(this: DisplayMode): string {.inline.} =
   var str : StringStream
@@ -37121,11 +36785,9 @@ func `$`*(this: DisplayMode): string {.inline.} =
 
 proc getPipeTypes*(this: GraphicsPipeSelection): seq[TypeHandle] =
   let count = this.getNumPipeTypes()
-  var res: seq[TypeHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPipeType(i)
-  return res
+    result[i] = this.getPipeType(i)
 
 func `$`*(this: Thread): string {.inline.} =
   var str : StringStream
@@ -37174,11 +36836,9 @@ func `$`*(this: EventParameter): string {.inline.} =
 
 proc getTaskChains*(this: AsyncTaskManager): seq[AsyncTaskChain] =
   let count = this.getNumTaskChains()
-  var res: seq[AsyncTaskChain]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTaskChain(i)
-  return res
+    result[i] = this.getTaskChain(i)
 
 func `$`*(this: AsyncTaskManager): string {.inline.} =
   var str : StringStream
@@ -37187,11 +36847,9 @@ func `$`*(this: AsyncTaskManager): string {.inline.} =
 
 proc getTasks*(this: AsyncTaskCollection): seq[AsyncTask] =
   let count = this.getNumTasks()
-  var res: seq[AsyncTask]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTask(i)
-  return res
+    result[i] = this.getTask(i)
 
 iterator items*(collection: AsyncTaskCollection): AsyncTask =
   for i in 0 ..< len(collection):
@@ -37214,11 +36872,9 @@ func `$`*(this: ParamValueBase): string {.inline.} =
 
 proc getParameters*(this: Event): seq[EventParameter] =
   let count = this.getNumParameters()
-  var res: seq[EventParameter]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getParameter(i)
-  return res
+    result[i] = this.getParameter(i)
 
 func `$`*(this: Event): string {.inline.} =
   var str : StringStream
@@ -37252,11 +36908,9 @@ func `$`*(this: GeomVertexColumn): string {.inline.} =
 
 proc getColumns*(this: GeomVertexArrayFormat): seq[GeomVertexColumn] =
   let count = this.getNumColumns()
-  var res: seq[GeomVertexColumn]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getColumn(i)
-  return res
+    result[i] = this.getColumn(i)
 
 func `$`*(this: GeomVertexArrayFormat): string {.inline.} =
   var str : StringStream
@@ -37265,67 +36919,51 @@ func `$`*(this: GeomVertexArrayFormat): string {.inline.} =
 
 proc getArrays*(this: GeomVertexFormat): seq[GeomVertexArrayFormat] =
   let count = this.getNumArrays()
-  var res: seq[GeomVertexArrayFormat]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getArray(i)
-  return res
+    result[i] = this.getArray(i)
 
 proc getColumns*(this: GeomVertexFormat): seq[GeomVertexColumn] =
   let count = this.getNumColumns()
-  var res: seq[GeomVertexColumn]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getColumn(i)
-  return res
+    result[i] = this.getColumn(i)
 
 proc getPoints*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumPoints()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPoint(i)
-  return res
+    result[i] = this.getPoint(i)
 
 proc getVectors*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumVectors()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVector(i)
-  return res
+    result[i] = this.getVector(i)
 
 proc getTexcoords*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumTexcoords()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTexcoord(i)
-  return res
+    result[i] = this.getTexcoord(i)
 
 proc getMorphSliders*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumMorphs()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getMorphSlider(i)
-  return res
+    result[i] = this.getMorphSlider(i)
 
 proc getMorphBases*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumMorphs()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getMorphBase(i)
-  return res
+    result[i] = this.getMorphBase(i)
 
 proc getMorphDeltas*(this: GeomVertexFormat): seq[InternalName] =
   let count = this.getNumMorphs()
-  var res: seq[InternalName]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getMorphDelta(i)
-  return res
+    result[i] = this.getMorphDelta(i)
 
 func `$`*(this: GeomVertexFormat): string {.inline.} =
   var str : StringStream
@@ -37364,19 +37002,15 @@ func `$`*(this: GeomVertexArrayData): string {.inline.} =
 
 proc getTransforms*(this: TransformTable): seq[VertexTransform] =
   let count = this.getNumTransforms()
-  var res: seq[VertexTransform]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTransform(i)
-  return res
+    result[i] = this.getTransform(i)
 
 proc getTransforms*(this: TransformBlend): seq[VertexTransform] =
   let count = this.getNumTransforms()
-  var res: seq[VertexTransform]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTransform(i)
-  return res
+    result[i] = this.getTransform(i)
 
 func `$`*(this: TransformBlend): string {.inline.} =
   var str : StringStream
@@ -37385,27 +37019,21 @@ func `$`*(this: TransformBlend): string {.inline.} =
 
 proc getBlends*(this: TransformBlendTable): seq[TransformBlend] =
   let count = this.getNumBlends()
-  var res: seq[TransformBlend]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getBlend(i)
-  return res
+    result[i] = this.getBlend(i)
 
 proc getSliders*(this: SliderTable): seq[VertexSlider] =
   let count = this.getNumSliders()
-  var res: seq[VertexSlider]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSlider(i)
-  return res
+    result[i] = this.getSlider(i)
 
 proc getArrays*(this: GeomVertexData): seq[GeomVertexArrayData] =
   let count = this.getNumArrays()
-  var res: seq[GeomVertexArrayData]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getArray(i)
-  return res
+    result[i] = this.getArray(i)
 
 func `$`*(this: GeomVertexData): string {.inline.} =
   var str : StringStream
@@ -37414,11 +37042,9 @@ func `$`*(this: GeomVertexData): string {.inline.} =
 
 proc getVertexList*(this: GeomPrimitive): seq[int] =
   let count = this.getNumVertices()
-  var res: seq[int]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 func `$`*(this: GeomPrimitive): string {.inline.} =
   var str : StringStream
@@ -37432,11 +37058,9 @@ func `$`*(this: TextureStage): string {.inline.} =
 
 proc getPrimitives*(this: Geom): seq[GeomPrimitive] =
   let count = this.getNumPrimitives()
-  var res: seq[GeomPrimitive]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPrimitive(i)
-  return res
+    result[i] = this.getPrimitive(i)
 
 func `$`*(this: Geom): string {.inline.} =
   var str : StringStream
@@ -37470,11 +37094,9 @@ func `$`*(this: Material): string {.inline.} =
 
 proc getTextures*(this: TextureCollection): seq[Texture] =
   let count = this.getNumTextures()
-  var res: seq[Texture]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTexture(i)
-  return res
+    result[i] = this.getTexture(i)
 
 iterator items*(collection: TextureCollection): Texture =
   for i in 0 ..< len(collection):
@@ -37580,35 +37202,27 @@ iterator items*(collection: UnalignedLVecBase4i): int =
 
 proc getRows*(this: LMatrix3f): seq[LVecBase3f] =
   let count = LMatrix3f.len()
-  var res: seq[LVecBase3f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow(i)
-  return res
+    result[i] = this.getRow(i)
 
 proc getCols*(this: LMatrix3f): seq[LVecBase3f] =
   let count = LMatrix3f.len()
-  var res: seq[LVecBase3f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol(i)
-  return res
+    result[i] = this.getCol(i)
 
 proc getCol2s*(this: LMatrix3f): seq[LVecBase2f] =
   let count = LMatrix3f.len()
-  var res: seq[LVecBase2f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol2(i)
-  return res
+    result[i] = this.getCol2(i)
 
 proc getRow2s*(this: LMatrix3f): seq[LVecBase2f] =
   let count = LMatrix3f.len()
-  var res: seq[LVecBase2f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow2(i)
-  return res
+    result[i] = this.getRow2(i)
 
 func `$`*(this: LMatrix3f): string {.inline.} =
   var str : StringStream
@@ -37617,27 +37231,21 @@ func `$`*(this: LMatrix3f): string {.inline.} =
 
 proc getRows*(this: LMatrix4f): seq[LVecBase4f] =
   let count = LMatrix4f.len()
-  var res: seq[LVecBase4f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow(i)
-  return res
+    result[i] = this.getRow(i)
 
 proc getCols*(this: LMatrix4f): seq[LVecBase4f] =
   let count = LMatrix4f.len()
-  var res: seq[LVecBase4f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol(i)
-  return res
+    result[i] = this.getCol(i)
 
 proc getRow3s*(this: LMatrix4f): seq[LVecBase3f] =
   let count = LMatrix4f.len()
-  var res: seq[LVecBase3f]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow3(i)
-  return res
+    result[i] = this.getRow3(i)
 
 func `$`*(this: LMatrix4f): string {.inline.} =
   var str : StringStream
@@ -37646,35 +37254,27 @@ func `$`*(this: LMatrix4f): string {.inline.} =
 
 proc getRows*(this: LMatrix3d): seq[LVecBase3d] =
   let count = LMatrix3d.len()
-  var res: seq[LVecBase3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow(i)
-  return res
+    result[i] = this.getRow(i)
 
 proc getCols*(this: LMatrix3d): seq[LVecBase3d] =
   let count = LMatrix3d.len()
-  var res: seq[LVecBase3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol(i)
-  return res
+    result[i] = this.getCol(i)
 
 proc getCol2s*(this: LMatrix3d): seq[LVecBase2d] =
   let count = LMatrix3d.len()
-  var res: seq[LVecBase2d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol2(i)
-  return res
+    result[i] = this.getCol2(i)
 
 proc getRow2s*(this: LMatrix3d): seq[LVecBase2d] =
   let count = LMatrix3d.len()
-  var res: seq[LVecBase2d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow2(i)
-  return res
+    result[i] = this.getRow2(i)
 
 func `$`*(this: LMatrix3d): string {.inline.} =
   var str : StringStream
@@ -37683,27 +37283,21 @@ func `$`*(this: LMatrix3d): string {.inline.} =
 
 proc getRows*(this: LMatrix4d): seq[LVecBase4d] =
   let count = LMatrix4d.len()
-  var res: seq[LVecBase4d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow(i)
-  return res
+    result[i] = this.getRow(i)
 
 proc getCols*(this: LMatrix4d): seq[LVecBase4d] =
   let count = LMatrix4d.len()
-  var res: seq[LVecBase4d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCol(i)
-  return res
+    result[i] = this.getCol(i)
 
 proc getRow3s*(this: LMatrix4d): seq[LVecBase3d] =
   let count = LMatrix4d.len()
-  var res: seq[LVecBase3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRow3(i)
-  return res
+    result[i] = this.getRow3(i)
 
 func `$`*(this: LMatrix4d): string {.inline.} =
   var str : StringStream
@@ -37747,83 +37341,63 @@ func `$`*(this: LPlaned): string {.inline.} =
 
 proc getPoints*(this: BoundingBox): seq[LPoint3] =
   let count = this.getNumPoints()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPoint(i)
-  return res
+    result[i] = this.getPoint(i)
 
 proc getPlanes*(this: BoundingBox): seq[LPlane] =
   let count = this.getNumPlanes()
-  var res: seq[LPlane]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPlane(i)
-  return res
+    result[i] = this.getPlane(i)
 
 proc getPoints*(this: BoundingHexahedron): seq[LPoint3] =
   let count = this.getNumPoints()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPoint(i)
-  return res
+    result[i] = this.getPoint(i)
 
 proc getPlanes*(this: BoundingHexahedron): seq[LPlane] =
   let count = this.getNumPlanes()
-  var res: seq[LPlane]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPlane(i)
-  return res
+    result[i] = this.getPlane(i)
 
 proc getComponents*(this: IntersectionBoundingVolume): seq[GeometricBoundingVolume] =
   let count = this.getNumComponents()
-  var res: seq[GeometricBoundingVolume]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getComponent(i)
-  return res
+    result[i] = this.getComponent(i)
 
 proc getComponents*(this: UnionBoundingVolume): seq[GeometricBoundingVolume] =
   let count = this.getNumComponents()
-  var res: seq[GeometricBoundingVolume]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getComponent(i)
-  return res
+    result[i] = this.getComponent(i)
 
 proc getVertices*(this: Triangulator): seq[LPoint2d] =
   let count = this.getNumVertices()
-  var res: seq[LPoint2d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getVertices*(this: Triangulator3): seq[LPoint3d] =
   let count = this.getNumVertices()
-  var res: seq[LPoint3d]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getCurves*(this: ParametricCurveCollection): seq[ParametricCurve] =
   let count = this.getNumCurves()
-  var res: seq[ParametricCurve]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCurve(i)
-  return res
+    result[i] = this.getCurve(i)
 
 proc getTimewarpCurves*(this: ParametricCurveCollection): seq[ParametricCurve] =
   let count = this.getNumTimewarps()
-  var res: seq[ParametricCurve]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getTimewarpCurve(i)
-  return res
+    result[i] = this.getTimewarpCurve(i)
 
 func `$`*(this: ParametricCurveCollection): string {.inline.} =
   var str : StringStream
@@ -37837,51 +37411,39 @@ func `$`*(this: CurveFitter): string {.inline.} =
 
 proc getCvs*(this: NurbsCurveInterface): seq[LVecBase4] =
   let count = this.getNumCvs()
-  var res: seq[LVecBase4]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getCv(i)
-  return res
+    result[i] = this.getCv(i)
 
 proc getKnots*(this: NurbsCurveInterface): seq[float] =
   let count = this.getNumKnots()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getKnot(i)
-  return res
+    result[i] = this.getKnot(i)
 
 proc getSampleTs*(this: NurbsCurveResult): seq[float] =
   let count = this.getNumSamples()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSampleT(i)
-  return res
+    result[i] = this.getSampleT(i)
 
 proc getSamplePoints*(this: NurbsCurveResult): seq[LPoint3] =
   let count = this.getNumSamples()
-  var res: seq[LPoint3]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getSamplePoint(i)
-  return res
+    result[i] = this.getSamplePoint(i)
 
 proc getVertices*(this: NurbsCurveEvaluator): seq[LVecBase4] =
   let count = this.getNumVertices()
-  var res: seq[LVecBase4]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVertex(i)
-  return res
+    result[i] = this.getVertex(i)
 
 proc getKnots*(this: NurbsCurveEvaluator): seq[float] =
   let count = this.getNumKnots()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getKnot(i)
-  return res
+    result[i] = this.getKnot(i)
 
 func `$`*(this: NurbsCurveEvaluator): string {.inline.} =
   var str : StringStream
@@ -37890,19 +37452,15 @@ func `$`*(this: NurbsCurveEvaluator): string {.inline.} =
 
 proc getUKnots*(this: NurbsSurfaceEvaluator): seq[float] =
   let count = this.getNumUKnots()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getUKnot(i)
-  return res
+    result[i] = this.getUKnot(i)
 
 proc getVKnots*(this: NurbsSurfaceEvaluator): seq[float] =
   let count = this.getNumVKnots()
-  var res: seq[float]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getVKnot(i)
-  return res
+    result[i] = this.getVKnot(i)
 
 func `$`*(this: NurbsSurfaceEvaluator): string {.inline.} =
   var str : StringStream
@@ -37920,19 +37478,15 @@ func `$`*(this: pixel): string {.inline.} =
 
 proc getExtensions*(this: PNMFileType): seq[string] =
   let count = this.getNumExtensions()
-  var res: seq[string]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getExtension(i)
-  return res
+    result[i] = this.getExtension(i)
 
 proc getTypes*(this: PNMFileTypeRegistry): seq[PNMFileType] =
   let count = this.getNumTypes()
-  var res: seq[PNMFileType]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getType(i)
-  return res
+    result[i] = this.getType(i)
 
 func `$`*(this: PNMImageHeader): string {.inline.} =
   var str : StringStream
@@ -37946,19 +37500,15 @@ func `$`*(this: PfmFile): string {.inline.} =
 
 proc getPages*(this: DynamicTextFont): seq[DynamicTextPage] =
   let count = this.getNumPages()
-  var res: seq[DynamicTextPage]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getPage(i)
-  return res
+    result[i] = this.getPage(i)
 
 proc getParameters*(this: ButtonThrower): seq[EventParameter] =
   let count = this.getNumParameters()
-  var res: seq[EventParameter]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getParameter(i)
-  return res
+    result[i] = this.getParameter(i)
 
 func `$`*(this: MouseWatcherRegion): string {.inline.} =
   var str : StringStream
@@ -37967,11 +37517,9 @@ func `$`*(this: MouseWatcherRegion): string {.inline.} =
 
 proc getRegions*(this: MouseWatcherBase): seq[MouseWatcherRegion] =
   let count = this.getNumRegions()
-  var res: seq[MouseWatcherRegion]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getRegion(i)
-  return res
+    result[i] = this.getRegion(i)
 
 func `$`*(this: MouseWatcherBase): string {.inline.} =
   var str : StringStream
@@ -37980,11 +37528,9 @@ func `$`*(this: MouseWatcherBase): string {.inline.} =
 
 proc getGroups*(this: MouseWatcher): seq[MouseWatcherGroup] =
   let count = this.getNumGroups()
-  var res: seq[MouseWatcherGroup]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getGroup(i)
-  return res
+    result[i] = this.getGroup(i)
 
 func `$`*(this: MouseWatcherParameter): string {.inline.} =
   var str : StringStream
@@ -38043,11 +37589,9 @@ func `$`*(this: CallbackObject): string {.inline.} =
 
 proc getButtons*(this: ModifierButtons): seq[ButtonHandle] =
   let count = this.getNumButtons()
-  var res: seq[ButtonHandle]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getButton(i)
-  return res
+    result[i] = this.getButton(i)
 
 func `$`*(this: ModifierButtons): string {.inline.} =
   var str : StringStream
@@ -38081,11 +37625,9 @@ func `$`*(this: PGFrameStyle): string {.inline.} =
 
 proc getStateDefs*(this: PGItem): seq[NodePath] =
   let count = this.getNumStateDefs()
-  var res: seq[NodePath]
-  res.setLen(count)
+  result.setLen(count)
   for i in 0 ..< count:
-    res[i] = this.getStateDef(i)
-  return res
+    result[i] = this.getStateDef(i)
 
 func `$`*(this: PGMouseWatcherParameter): string {.inline.} =
   var str : StringStream

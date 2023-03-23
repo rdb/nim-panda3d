@@ -308,6 +308,166 @@ type CMotionTrail* {.importcpp: "PT(CMotionTrail)", bycopy, pure, inheritable, h
 converter toCMotionTrail*(_: type(nil)): CMotionTrail {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CMotionTrail], obj: TypedObject): CMotionTrail {.importcpp: "DCAST(CMotionTrail, @)".}
 
+proc initDCPackData*(): DCPackData {.importcpp: "DCPackData()".}
+
+proc initDCPackData*(param0: DCPackData): DCPackData {.importcpp: "DCPackData(#)".}
+
+proc initDCPacker*(): DCPacker {.importcpp: "DCPacker()".}
+
+proc initDCPacker*(param0: DCPacker): DCPacker {.importcpp: "DCPacker(#)".}
+
+proc getNumStackElementsEverAllocated*(_: typedesc[DCPacker]): int {.importcpp: "DCPacker::get_num_stack_elements_ever_allocated()", header: "dcPacker.h".}
+
+proc initDCFile*(): DCFile {.importcpp: "DCFile()".}
+
+proc initDCFile*(param0: DCFile): DCFile {.importcpp: "DCFile(#)".}
+
+proc getParticlePath*(): ConfigVariableSearchPath {.importcpp: "get_particle_path()", header: "showBase.h".}
+
+proc throwNewFrame*() {.importcpp: "throw_new_frame()", header: "showBase.h".}
+
+proc initAppForGui*() {.importcpp: "init_app_for_gui()", header: "showBase.h".}
+
+proc addFullscreenTestsize*(xsize: int, ysize: int) {.importcpp: "add_fullscreen_testsize(#, #)", header: "showBase.h".}
+
+proc runtestFullscreenSizes*(win: GraphicsWindow) {.importcpp: "runtest_fullscreen_sizes(#)", header: "showBase.h".}
+
+proc queryFullscreenTestresult*(xsize: int, ysize: int): bool {.importcpp: "query_fullscreen_testresult(#, #)", header: "showBase.h".}
+
+proc storeAccessibilityShortcutKeys*() {.importcpp: "store_accessibility_shortcut_keys()", header: "showBase.h".}
+
+proc allowAccessibilityShortcutKeys*(allowKeys: bool) {.importcpp: "allow_accessibility_shortcut_keys(#)", header: "showBase.h".}
+
+proc initSmoothMover*(): SmoothMover {.importcpp: "SmoothMover()".}
+
+proc initSmoothMover*(param0: SmoothMover): SmoothMover {.importcpp: "SmoothMover(#)".}
+
+proc newCIntervalManager*(): CIntervalManager {.importcpp: "new CIntervalManager()".}
+
+proc getGlobalPtr*(_: typedesc[CIntervalManager]): CIntervalManager {.importcpp: "CIntervalManager::get_global_ptr()", header: "cIntervalManager.h".}
+
+converter getClassType*(_: typedesc[CInterval]): TypeHandle {.importcpp: "CInterval::get_class_type()", header: "cInterval.h".}
+
+proc newCInterval*(param0: CInterval): CInterval {.importcpp: "new CInterval(#)".}
+
+converter getClassType*(_: typedesc[CConstraintInterval]): TypeHandle {.importcpp: "CConstraintInterval::get_class_type()", header: "cConstraintInterval.h".}
+
+proc newCConstraintInterval*(param0: CConstraintInterval): CConstraintInterval {.importcpp: "new CConstraintInterval(#)".}
+
+proc newCConstrainHprInterval*(param0: CConstrainHprInterval): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(#)".}
+
+proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, hprOffset: LVecBase3): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
+
+proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CConstrainHprInterval]): TypeHandle {.importcpp: "CConstrainHprInterval::get_class_type()", header: "cConstrainHprInterval.h".}
+
+proc newCConstrainPosHprInterval*(param0: CConstrainPosHprInterval): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(#)".}
+
+proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3, hprOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#), (LVecBase3 const &)(#))", header: stringConversionCode.}
+
+proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
+
+proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CConstrainPosHprInterval]): TypeHandle {.importcpp: "CConstrainPosHprInterval::get_class_type()", header: "cConstrainPosHprInterval.h".}
+
+proc newCConstrainPosInterval*(param0: CConstrainPosInterval): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(#)".}
+
+proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
+
+proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CConstrainPosInterval]): TypeHandle {.importcpp: "CConstrainPosInterval::get_class_type()", header: "cConstrainPosInterval.h".}
+
+proc newCConstrainTransformInterval*(param0: CConstrainTransformInterval): CConstrainTransformInterval {.importcpp: "new CConstrainTransformInterval(#)".}
+
+proc newCConstrainTransformInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainTransformInterval {.importcpp: "new CConstrainTransformInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CConstrainTransformInterval]): TypeHandle {.importcpp: "CConstrainTransformInterval::get_class_type()", header: "cConstrainTransformInterval.h".}
+
+proc stringBlendType*(_: typedesc[CLerpInterval], blendType: string): CLerpInterval_BlendType {.importcpp: "#CLerpInterval::string_blend_type(nimStringToStdString(#))", header: "cLerpInterval.h".}
+
+converter getClassType*(_: typedesc[CLerpInterval]): TypeHandle {.importcpp: "CLerpInterval::get_class_type()", header: "cLerpInterval.h".}
+
+proc newCLerpInterval*(param0: CLerpInterval): CLerpInterval {.importcpp: "new CLerpInterval(#)".}
+
+proc newCLerpAnimEffectInterval*(param0: CLerpAnimEffectInterval): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(#)".}
+
+proc newCLerpAnimEffectInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(nimStringToStdString(#), #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CLerpAnimEffectInterval]): TypeHandle {.importcpp: "CLerpAnimEffectInterval::get_class_type()", header: "cLerpAnimEffectInterval.h".}
+
+proc newCLerpNodePathInterval*(param0: CLerpNodePathInterval): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(#)".}
+
+proc newCLerpNodePathInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType, bakeInStart: bool, fluid: bool, node: NodePath, other: NodePath): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CLerpNodePathInterval]): TypeHandle {.importcpp: "CLerpNodePathInterval::get_class_type()", header: "cLerpNodePathInterval.h".}
+
+proc newCMetaInterval*(param0: CMetaInterval): CMetaInterval {.importcpp: "new CMetaInterval(#)".}
+
+proc newCMetaInterval*(name: string): CMetaInterval {.importcpp: "new CMetaInterval(nimStringToStdString(#))", header: stringConversionCode.}
+
+converter getClassType*(_: typedesc[CMetaInterval]): TypeHandle {.importcpp: "CMetaInterval::get_class_type()", header: "cMetaInterval.h".}
+
+proc newHideInterval*(param0: HideInterval): HideInterval {.importcpp: "new HideInterval(#)".}
+
+proc newHideInterval*(node: NodePath, name: string): HideInterval {.importcpp: "new HideInterval(#, nimStringToStdString(#))", header: stringConversionCode.}
+
+proc newHideInterval*(node: NodePath): HideInterval {.importcpp: "new HideInterval(#)".}
+
+converter getClassType*(_: typedesc[HideInterval]): TypeHandle {.importcpp: "HideInterval::get_class_type()", header: "hideInterval.h".}
+
+converter getClassType*(_: typedesc[LerpBlendType]): TypeHandle {.importcpp: "LerpBlendType::get_class_type()", header: "lerpblend.h".}
+
+proc newEaseInBlendType*(): EaseInBlendType {.importcpp: "new EaseInBlendType()".}
+
+converter getClassType*(_: typedesc[EaseInBlendType]): TypeHandle {.importcpp: "EaseInBlendType::get_class_type()", header: "lerpblend.h".}
+
+proc newEaseOutBlendType*(): EaseOutBlendType {.importcpp: "new EaseOutBlendType()".}
+
+converter getClassType*(_: typedesc[EaseOutBlendType]): TypeHandle {.importcpp: "EaseOutBlendType::get_class_type()", header: "lerpblend.h".}
+
+proc newEaseInOutBlendType*(): EaseInOutBlendType {.importcpp: "new EaseInOutBlendType()".}
+
+converter getClassType*(_: typedesc[EaseInOutBlendType]): TypeHandle {.importcpp: "EaseInOutBlendType::get_class_type()", header: "lerpblend.h".}
+
+proc newNoBlendType*(): NoBlendType {.importcpp: "new NoBlendType()".}
+
+converter getClassType*(_: typedesc[NoBlendType]): TypeHandle {.importcpp: "NoBlendType::get_class_type()", header: "lerpblend.h".}
+
+proc newShowInterval*(node: NodePath, name: string): ShowInterval {.importcpp: "new ShowInterval(#, nimStringToStdString(#))", header: stringConversionCode.}
+
+proc newShowInterval*(node: NodePath): ShowInterval {.importcpp: "new ShowInterval(#)".}
+
+proc newShowInterval*(param0: ShowInterval): ShowInterval {.importcpp: "new ShowInterval(#)".}
+
+converter getClassType*(_: typedesc[ShowInterval]): TypeHandle {.importcpp: "ShowInterval::get_class_type()", header: "showInterval.h".}
+
+proc newWaitInterval*(param0: WaitInterval): WaitInterval {.importcpp: "new WaitInterval(#)".}
+
+proc newWaitInterval*(duration: float64): WaitInterval {.importcpp: "new WaitInterval(#)".}
+
+converter getClassType*(_: typedesc[WaitInterval]): TypeHandle {.importcpp: "WaitInterval::get_class_type()", header: "waitInterval.h".}
+
+proc initCConnectionRepository*(hasOwnerView: bool, threadedNet: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#, #)".}
+
+proc initCConnectionRepository*(hasOwnerView: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#)".}
+
+proc initCConnectionRepository*(): CConnectionRepository {.importcpp: "CConnectionRepository()".}
+
+proc getOverflowEventName*(_: typedesc[CConnectionRepository]): string {.importcpp: "nimStringFromStdString(CConnectionRepository::get_overflow_event_name())", header: "cConnectionRepository.h".}
+
+proc initCDistributedSmoothNodeBase*(): CDistributedSmoothNodeBase {.importcpp: "CDistributedSmoothNodeBase()".}
+
+proc initCDistributedSmoothNodeBase*(param0: CDistributedSmoothNodeBase): CDistributedSmoothNodeBase {.importcpp: "CDistributedSmoothNodeBase(#)".}
+
+proc newCMotionTrail*(): CMotionTrail {.importcpp: "new CMotionTrail()".}
+
+proc newCMotionTrail*(param0: CMotionTrail): CMotionTrail {.importcpp: "new CMotionTrail(#)".}
+
+converter getClassType*(_: typedesc[CMotionTrail]): TypeHandle {.importcpp: "CMotionTrail::get_class_type()", header: "cMotionTrail.h".}
+
 func name*(this: CInterval): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 func duration*(this: CInterval): float64 {.importcpp: "#->get_duration()".}
@@ -344,11 +504,11 @@ proc `playRate=`*(this: CInterval, playRate: float64) {.importcpp: "#->set_play_
 
 func playing*(this: CInterval): bool {.importcpp: "#->is_playing()".}
 
-proc getName*(this: DCPackerInterface): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
+proc getName*(this: CInterval | DCClass | DCKeyword | DCPackerInterface | DCSwitch | DCTypedef): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 proc findSeekIndex*(this: DCPackerInterface, name: string): int {.importcpp: "#->find_seek_index(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc asField*(this: DCPackerInterface): DCField {.importcpp: "#->as_field()".}
+proc asField*(this: DCField | DCPackerInterface): DCField {.importcpp: "#->as_field()".}
 
 proc asSwitchParameter*(this: DCPackerInterface): DCSwitchParameter {.importcpp: "#->as_switch_parameter()".}
 
@@ -364,11 +524,11 @@ proc hasKeyword*(this: DCKeywordList, keyword: DCKeyword): bool {.importcpp: "#.
 
 proc hasKeyword*(this: DCKeywordList, name: string): bool {.importcpp: "#.has_keyword(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getNumKeywords*(this: DCKeywordList): int {.importcpp: "#.get_num_keywords()".}
+proc getNumKeywords*(this: DCFile | DCKeywordList): int {.importcpp: "#.get_num_keywords()".}
 
-proc getKeyword*(this: DCKeywordList, n: int): DCKeyword {.importcpp: "#.get_keyword(#)".}
+proc getKeyword*(this: DCFile | DCKeywordList, n: int): DCKeyword {.importcpp: "#.get_keyword(#)".}
 
-proc getKeywordByName*(this: DCKeywordList, name: string): DCKeyword {.importcpp: "#.get_keyword_by_name(nimStringToStdString(#))", header: stringConversionCode.}
+proc getKeywordByName*(this: DCFile | DCKeywordList, name: string): DCKeyword {.importcpp: "#.get_keyword_by_name(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc compareKeywords*(this: DCKeywordList, other: DCKeywordList): bool {.importcpp: "#.compare_keywords(#)".}
 
@@ -376,11 +536,9 @@ converter upcastToDCPackerInterface*(this: DCField): DCPackerInterface {.importc
 
 converter upcastToDCKeywordList*(this: DCField): DCKeywordList {.importcpp: "((DCKeywordList *)(#))".}
 
-proc getNumber*(this: DCField): int {.importcpp: "#->get_number()".}
+proc getNumber*(this: DCClass | DCField | DCTypedef): int {.importcpp: "#->get_number()".}
 
 proc getClass*(this: DCField): DCClass {.importcpp: "#->get_class()".}
-
-proc asField*(this: DCField): DCField {.importcpp: "#->as_field()".}
 
 proc asAtomicField*(this: DCField): DCAtomicField {.importcpp: "#->as_atomic_field()".}
 
@@ -410,23 +568,15 @@ proc isOwnrecv*(this: DCField): bool {.importcpp: "#->is_ownrecv()".}
 
 proc isAirecv*(this: DCField): bool {.importcpp: "#->is_airecv()".}
 
-proc output*(this: DCField, `out`: ostream) {.importcpp: "#->output(#)".}
+proc output*(this: CInterval | CIntervalManager | DCClass | DCDeclaration | DCField, `out`: ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: DCField, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
+proc write*(this: CInterval | DCDeclaration | DCField, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
 
-proc initDCPackData*(): DCPackData {.importcpp: "DCPackData()".}
+proc clear*(this: DCFile | DCPackData) {.importcpp: "#.clear()".}
 
-proc initDCPackData*(param0: DCPackData): DCPackData {.importcpp: "DCPackData(#)".}
+proc getString*(this: DCPackData | DCPacker): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
 
-proc clear*(this: DCPackData) {.importcpp: "#.clear()".}
-
-proc getString*(this: DCPackData): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
-
-proc getLength*(this: DCPackData): int {.importcpp: "#.get_length()".}
-
-proc initDCPacker*(): DCPacker {.importcpp: "DCPacker()".}
-
-proc initDCPacker*(param0: DCPacker): DCPacker {.importcpp: "DCPacker(#)".}
+proc getLength*(this: DCPackData | DCPacker): int {.importcpp: "#.get_length()".}
 
 proc clearData*(this: DCPacker) {.importcpp: "#.clear_data()".}
 
@@ -518,15 +668,9 @@ proc hadError*(this: DCPacker): bool {.importcpp: "#.had_error()".}
 
 proc getNumUnpackedBytes*(this: DCPacker): int {.importcpp: "#.get_num_unpacked_bytes()".}
 
-proc getLength*(this: DCPacker): int {.importcpp: "#.get_length()".}
-
-proc getString*(this: DCPacker): string {.importcpp: "nimStringFromStdString(#.get_string())", header: stringConversionCode.}
-
 proc getUnpackLength*(this: DCPacker): int {.importcpp: "#.get_unpack_length()".}
 
 proc getUnpackString*(this: DCPacker): string {.importcpp: "nimStringFromStdString(#.get_unpack_string())", header: stringConversionCode.}
-
-proc getNumStackElementsEverAllocated*(_: typedesc[DCPacker]): int {.importcpp: "DCPacker::get_num_stack_elements_ever_allocated()", header: "dcPacker.h".}
 
 proc rawPackInt8*(this: DCPacker, value: int) {.importcpp: "#.raw_pack_int8(#)".}
 
@@ -598,15 +742,7 @@ proc asClass*(this: DCDeclaration): DCClass {.importcpp: "#->as_class()".}
 
 proc asSwitch*(this: DCDeclaration): DCSwitch {.importcpp: "#->as_switch()".}
 
-proc output*(this: DCDeclaration, `out`: ostream) {.importcpp: "#->output(#)".}
-
-proc write*(this: DCDeclaration, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
-
 proc getDcFile*(this: DCClass): DCFile {.importcpp: "#->get_dc_file()".}
-
-proc getName*(this: DCClass): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
-
-proc getNumber*(this: DCClass): int {.importcpp: "#->get_number()".}
 
 proc getNumParents*(this: DCClass): int {.importcpp: "#->get_num_parents()".}
 
@@ -638,19 +774,11 @@ proc startGenerate*(this: DCClass) {.importcpp: "#->start_generate()".}
 
 proc stopGenerate*(this: DCClass) {.importcpp: "#->stop_generate()".}
 
-proc output*(this: DCClass, `out`: ostream) {.importcpp: "#->output(#)".}
-
 proc hasClassDef*(this: DCClass): bool {.importcpp: "#->has_class_def()".}
 
 proc hasOwnerClassDef*(this: DCClass): bool {.importcpp: "#->has_owner_class_def()".}
 
 proc getClass*(this: DCClassParameter): DCClass {.importcpp: "#.get_class()".}
-
-proc initDCFile*(): DCFile {.importcpp: "DCFile()".}
-
-proc initDCFile*(param0: DCFile): DCFile {.importcpp: "DCFile(#)".}
-
-proc clear*(this: DCFile) {.importcpp: "#.clear()".}
 
 proc readAll*(this: DCFile): bool {.importcpp: "#.read_all()".}
 
@@ -690,15 +818,7 @@ proc getTypedef*(this: DCFile, n: int): DCTypedef {.importcpp: "#.get_typedef(#)
 
 proc getTypedefByName*(this: DCFile, name: string): DCTypedef {.importcpp: "#.get_typedef_by_name(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc getNumKeywords*(this: DCFile): int {.importcpp: "#.get_num_keywords()".}
-
-proc getKeyword*(this: DCFile, n: int): DCKeyword {.importcpp: "#.get_keyword(#)".}
-
-proc getKeywordByName*(this: DCFile, name: string): DCKeyword {.importcpp: "#.get_keyword_by_name(nimStringToStdString(#))", header: stringConversionCode.}
-
 proc getHash*(this: DCFile): int {.importcpp: "#.get_hash()".}
-
-proc getName*(this: DCKeyword): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 proc getNumAtomics*(this: DCMolecularField): int {.importcpp: "#.get_num_atomics()".}
 
@@ -711,8 +831,6 @@ proc hasModulus*(this: DCSimpleParameter): bool {.importcpp: "#.has_modulus()".}
 proc getModulus*(this: DCSimpleParameter): float64 {.importcpp: "#.get_modulus()".}
 
 proc getDivisor*(this: DCSimpleParameter): int {.importcpp: "#.get_divisor()".}
-
-proc getName*(this: DCSwitch): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 proc getKeyParameter*(this: DCSwitch): DCField {.importcpp: "#->get_key_parameter()".}
 
@@ -730,35 +848,11 @@ proc getFieldByName*(this: DCSwitch, caseIndex: int, name: string): DCField {.im
 
 proc getSwitch*(this: DCSwitchParameter): DCSwitch {.importcpp: "#.get_switch()".}
 
-proc getNumber*(this: DCTypedef): int {.importcpp: "#->get_number()".}
-
-proc getName*(this: DCTypedef): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
-
 proc getDescription*(this: DCTypedef): string {.importcpp: "nimStringFromStdString(#->get_description())", header: stringConversionCode.}
 
 proc isBogusTypedef*(this: DCTypedef): bool {.importcpp: "#->is_bogus_typedef()".}
 
 proc isImplicitTypedef*(this: DCTypedef): bool {.importcpp: "#->is_implicit_typedef()".}
-
-proc getParticlePath*(): ConfigVariableSearchPath {.importcpp: "get_particle_path()", header: "showBase.h".}
-
-proc throwNewFrame*() {.importcpp: "throw_new_frame()", header: "showBase.h".}
-
-proc initAppForGui*() {.importcpp: "init_app_for_gui()", header: "showBase.h".}
-
-proc addFullscreenTestsize*(xsize: int, ysize: int) {.importcpp: "add_fullscreen_testsize(#, #)", header: "showBase.h".}
-
-proc runtestFullscreenSizes*(win: GraphicsWindow) {.importcpp: "runtest_fullscreen_sizes(#)", header: "showBase.h".}
-
-proc queryFullscreenTestresult*(xsize: int, ysize: int): bool {.importcpp: "query_fullscreen_testresult(#, #)", header: "showBase.h".}
-
-proc storeAccessibilityShortcutKeys*() {.importcpp: "store_accessibility_shortcut_keys()", header: "showBase.h".}
-
-proc allowAccessibilityShortcutKeys*(allowKeys: bool) {.importcpp: "allow_accessibility_shortcut_keys(#)", header: "showBase.h".}
-
-proc initSmoothMover*(): SmoothMover {.importcpp: "SmoothMover()".}
-
-proc initSmoothMover*(param0: SmoothMover): SmoothMover {.importcpp: "SmoothMover(#)".}
 
 proc setPos*(this: SmoothMover, pos: LVecBase3): bool {.importcpp: "#.set_pos((LVecBase3 const &)(#))".}
 
@@ -876,8 +970,6 @@ proc output*(this: SmoothMover, `out`: ostream) {.importcpp: "#.output(#)".}
 
 proc write*(this: SmoothMover, `out`: ostream) {.importcpp: "#.write(#)".}
 
-proc getName*(this: CInterval): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
-
 proc getDuration*(this: CInterval): float64 {.importcpp: "#->get_duration()".}
 
 proc getOpenEnded*(this: CInterval): bool {.importcpp: "#->get_open_ended()".}
@@ -962,10 +1054,6 @@ proc privReverseFinalize*(this: CInterval) {.importcpp: "#->priv_reverse_finaliz
 
 proc privInterrupt*(this: CInterval) {.importcpp: "#->priv_interrupt()".}
 
-proc output*(this: CInterval, `out`: ostream) {.importcpp: "#->output(#)".}
-
-proc write*(this: CInterval, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
-
 proc setupPlay*(this: CInterval, startTime: float64, endTime: float64, playRate: float64, doLoop: bool) {.importcpp: "#->setup_play(#, #, #, #)".}
 
 proc setupResume*(this: CInterval) {.importcpp: "#->setup_resume()".}
@@ -973,8 +1061,6 @@ proc setupResume*(this: CInterval) {.importcpp: "#->setup_resume()".}
 proc setupResumeUntil*(this: CInterval, endT: float64) {.importcpp: "#->setup_resume_until(#)".}
 
 proc stepPlay*(this: CInterval): bool {.importcpp: "#->step_play()".}
-
-proc newCIntervalManager*(): CIntervalManager {.importcpp: "new CIntervalManager()".}
 
 proc setEventQueue*(this: CIntervalManager, eventQueue: EventQueue) {.importcpp: "#->set_event_queue(#)".}
 
@@ -1000,89 +1086,15 @@ proc getNextEvent*(this: CIntervalManager): int {.importcpp: "#->get_next_event(
 
 proc getNextRemoval*(this: CIntervalManager): int {.importcpp: "#->get_next_removal()".}
 
-proc output*(this: CIntervalManager, `out`: ostream) {.importcpp: "#->output(#)".}
-
 proc write*(this: CIntervalManager, `out`: ostream) {.importcpp: "#->write(#)".}
 
-proc getGlobalPtr*(_: typedesc[CIntervalManager]): CIntervalManager {.importcpp: "CIntervalManager::get_global_ptr()", header: "cIntervalManager.h".}
+proc getNode*(this: CConstrainHprInterval | CConstrainPosHprInterval | CConstrainPosInterval | CConstrainTransformInterval | CLerpNodePathInterval): NodePath {.importcpp: "#->get_node()".}
 
-converter getClassType*(_: typedesc[CInterval]): TypeHandle {.importcpp: "CInterval::get_class_type()", header: "cInterval.h".}
-
-proc newCInterval*(param0: CInterval): CInterval {.importcpp: "new CInterval(#)".}
-
-converter getClassType*(_: typedesc[CConstraintInterval]): TypeHandle {.importcpp: "CConstraintInterval::get_class_type()", header: "cConstraintInterval.h".}
-
-proc newCConstraintInterval*(param0: CConstraintInterval): CConstraintInterval {.importcpp: "new CConstraintInterval(#)".}
-
-proc newCConstrainHprInterval*(param0: CConstrainHprInterval): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(#)".}
-
-proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, hprOffset: LVecBase3): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
-
-proc newCConstrainHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainHprInterval {.importcpp: "new CConstrainHprInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
-
-proc getNode*(this: CConstrainHprInterval): NodePath {.importcpp: "#->get_node()".}
-
-proc getTarget*(this: CConstrainHprInterval): NodePath {.importcpp: "#->get_target()".}
-
-converter getClassType*(_: typedesc[CConstrainHprInterval]): TypeHandle {.importcpp: "CConstrainHprInterval::get_class_type()", header: "cConstrainHprInterval.h".}
-
-proc newCConstrainPosHprInterval*(param0: CConstrainPosHprInterval): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(#)".}
-
-proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3, hprOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#), (LVecBase3 const &)(#))", header: stringConversionCode.}
-
-proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
-
-proc newCConstrainPosHprInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainPosHprInterval {.importcpp: "new CConstrainPosHprInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
-
-proc getNode*(this: CConstrainPosHprInterval): NodePath {.importcpp: "#->get_node()".}
-
-proc getTarget*(this: CConstrainPosHprInterval): NodePath {.importcpp: "#->get_target()".}
-
-converter getClassType*(_: typedesc[CConstrainPosHprInterval]): TypeHandle {.importcpp: "CConstrainPosHprInterval::get_class_type()", header: "cConstrainPosHprInterval.h".}
-
-proc newCConstrainPosInterval*(param0: CConstrainPosInterval): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(#)".}
-
-proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool, posOffset: LVecBase3): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #, (LVecBase3 const &)(#))", header: stringConversionCode.}
-
-proc newCConstrainPosInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainPosInterval {.importcpp: "new CConstrainPosInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
-
-proc getNode*(this: CConstrainPosInterval): NodePath {.importcpp: "#->get_node()".}
-
-proc getTarget*(this: CConstrainPosInterval): NodePath {.importcpp: "#->get_target()".}
-
-converter getClassType*(_: typedesc[CConstrainPosInterval]): TypeHandle {.importcpp: "CConstrainPosInterval::get_class_type()", header: "cConstrainPosInterval.h".}
-
-proc newCConstrainTransformInterval*(param0: CConstrainTransformInterval): CConstrainTransformInterval {.importcpp: "new CConstrainTransformInterval(#)".}
-
-proc newCConstrainTransformInterval*(name: string, duration: float64, node: NodePath, target: NodePath, wrt: bool): CConstrainTransformInterval {.importcpp: "new CConstrainTransformInterval(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
-
-proc getNode*(this: CConstrainTransformInterval): NodePath {.importcpp: "#->get_node()".}
-
-proc getTarget*(this: CConstrainTransformInterval): NodePath {.importcpp: "#->get_target()".}
-
-converter getClassType*(_: typedesc[CConstrainTransformInterval]): TypeHandle {.importcpp: "CConstrainTransformInterval::get_class_type()", header: "cConstrainTransformInterval.h".}
+proc getTarget*(this: CConstrainHprInterval | CConstrainPosHprInterval | CConstrainPosInterval | CConstrainTransformInterval): NodePath {.importcpp: "#->get_target()".}
 
 proc getBlendType*(this: CLerpInterval): CLerpInterval_BlendType {.importcpp: "#->get_blend_type()".}
 
-proc stringBlendType*(_: typedesc[CLerpInterval], blendType: string): CLerpInterval_BlendType {.importcpp: "#CLerpInterval::string_blend_type(nimStringToStdString(#))", header: "cLerpInterval.h".}
-
-converter getClassType*(_: typedesc[CLerpInterval]): TypeHandle {.importcpp: "CLerpInterval::get_class_type()", header: "cLerpInterval.h".}
-
-proc newCLerpInterval*(param0: CLerpInterval): CLerpInterval {.importcpp: "new CLerpInterval(#)".}
-
-proc newCLerpAnimEffectInterval*(param0: CLerpAnimEffectInterval): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(#)".}
-
-proc newCLerpAnimEffectInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType): CLerpAnimEffectInterval {.importcpp: "new CLerpAnimEffectInterval(nimStringToStdString(#), #, #)", header: stringConversionCode.}
-
 proc addControl*(this: CLerpAnimEffectInterval, control: AnimControl, name: string, beginEffect: float32, endEffect: float32) {.importcpp: "#->add_control(#, nimStringToStdString(#), #, #)", header: stringConversionCode.}
-
-converter getClassType*(_: typedesc[CLerpAnimEffectInterval]): TypeHandle {.importcpp: "CLerpAnimEffectInterval::get_class_type()", header: "cLerpAnimEffectInterval.h".}
-
-proc newCLerpNodePathInterval*(param0: CLerpNodePathInterval): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(#)".}
-
-proc newCLerpNodePathInterval*(name: string, duration: float64, blendType: CLerpInterval_BlendType, bakeInStart: bool, fluid: bool, node: NodePath, other: NodePath): CLerpNodePathInterval {.importcpp: "new CLerpNodePathInterval(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.}
-
-proc getNode*(this: CLerpNodePathInterval): NodePath {.importcpp: "#->get_node()".}
 
 proc getOther*(this: CLerpNodePathInterval): NodePath {.importcpp: "#->get_other()".}
 
@@ -1140,12 +1152,6 @@ proc setOverride*(this: CLerpNodePathInterval, override: int) {.importcpp: "#->s
 
 proc getOverride*(this: CLerpNodePathInterval): int {.importcpp: "#->get_override()".}
 
-converter getClassType*(_: typedesc[CLerpNodePathInterval]): TypeHandle {.importcpp: "CLerpNodePathInterval::get_class_type()", header: "cLerpNodePathInterval.h".}
-
-proc newCMetaInterval*(param0: CMetaInterval): CMetaInterval {.importcpp: "new CMetaInterval(#)".}
-
-proc newCMetaInterval*(name: string): CMetaInterval {.importcpp: "new CMetaInterval(nimStringToStdString(#))", header: stringConversionCode.}
-
 proc setPrecision*(this: CMetaInterval, precision: float64) {.importcpp: "#->set_precision(#)".}
 
 proc getPrecision*(this: CMetaInterval): float64 {.importcpp: "#->get_precision()".}
@@ -1193,54 +1199,6 @@ proc getEventType*(this: CMetaInterval): CInterval_EventType {.importcpp: "#->ge
 proc popEvent*(this: CMetaInterval) {.importcpp: "#->pop_event()".}
 
 proc timeline*(this: CMetaInterval, `out`: ostream) {.importcpp: "#->timeline(#)".}
-
-converter getClassType*(_: typedesc[CMetaInterval]): TypeHandle {.importcpp: "CMetaInterval::get_class_type()", header: "cMetaInterval.h".}
-
-proc newHideInterval*(param0: HideInterval): HideInterval {.importcpp: "new HideInterval(#)".}
-
-proc newHideInterval*(node: NodePath, name: string): HideInterval {.importcpp: "new HideInterval(#, nimStringToStdString(#))", header: stringConversionCode.}
-
-proc newHideInterval*(node: NodePath): HideInterval {.importcpp: "new HideInterval(#)".}
-
-converter getClassType*(_: typedesc[HideInterval]): TypeHandle {.importcpp: "HideInterval::get_class_type()", header: "hideInterval.h".}
-
-converter getClassType*(_: typedesc[LerpBlendType]): TypeHandle {.importcpp: "LerpBlendType::get_class_type()", header: "lerpblend.h".}
-
-proc newEaseInBlendType*(): EaseInBlendType {.importcpp: "new EaseInBlendType()".}
-
-converter getClassType*(_: typedesc[EaseInBlendType]): TypeHandle {.importcpp: "EaseInBlendType::get_class_type()", header: "lerpblend.h".}
-
-proc newEaseOutBlendType*(): EaseOutBlendType {.importcpp: "new EaseOutBlendType()".}
-
-converter getClassType*(_: typedesc[EaseOutBlendType]): TypeHandle {.importcpp: "EaseOutBlendType::get_class_type()", header: "lerpblend.h".}
-
-proc newEaseInOutBlendType*(): EaseInOutBlendType {.importcpp: "new EaseInOutBlendType()".}
-
-converter getClassType*(_: typedesc[EaseInOutBlendType]): TypeHandle {.importcpp: "EaseInOutBlendType::get_class_type()", header: "lerpblend.h".}
-
-proc newNoBlendType*(): NoBlendType {.importcpp: "new NoBlendType()".}
-
-converter getClassType*(_: typedesc[NoBlendType]): TypeHandle {.importcpp: "NoBlendType::get_class_type()", header: "lerpblend.h".}
-
-proc newShowInterval*(node: NodePath, name: string): ShowInterval {.importcpp: "new ShowInterval(#, nimStringToStdString(#))", header: stringConversionCode.}
-
-proc newShowInterval*(node: NodePath): ShowInterval {.importcpp: "new ShowInterval(#)".}
-
-proc newShowInterval*(param0: ShowInterval): ShowInterval {.importcpp: "new ShowInterval(#)".}
-
-converter getClassType*(_: typedesc[ShowInterval]): TypeHandle {.importcpp: "ShowInterval::get_class_type()", header: "showInterval.h".}
-
-proc newWaitInterval*(param0: WaitInterval): WaitInterval {.importcpp: "new WaitInterval(#)".}
-
-proc newWaitInterval*(duration: float64): WaitInterval {.importcpp: "new WaitInterval(#)".}
-
-converter getClassType*(_: typedesc[WaitInterval]): TypeHandle {.importcpp: "WaitInterval::get_class_type()", header: "waitInterval.h".}
-
-proc initCConnectionRepository*(hasOwnerView: bool, threadedNet: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#, #)".}
-
-proc initCConnectionRepository*(hasOwnerView: bool): CConnectionRepository {.importcpp: "CConnectionRepository(#)".}
-
-proc initCConnectionRepository*(): CConnectionRepository {.importcpp: "CConnectionRepository()".}
 
 proc getDcFile*(this: CConnectionRepository): DCFile {.importcpp: "#.get_dc_file()".}
 
@@ -1294,8 +1252,6 @@ proc getMsgSender*(this: CConnectionRepository): clonglong {.importcpp: "#.get_m
 
 proc getMsgType*(this: CConnectionRepository): int {.importcpp: "#.get_msg_type()".}
 
-proc getOverflowEventName*(_: typedesc[CConnectionRepository]): string {.importcpp: "nimStringFromStdString(CConnectionRepository::get_overflow_event_name())", header: "cConnectionRepository.h".}
-
 proc isConnected*(this: CConnectionRepository): bool {.importcpp: "#.is_connected()".}
 
 proc sendDatagram*(this: CConnectionRepository, dg: Datagram): bool {.importcpp: "#.send_datagram(#)".}
@@ -1340,10 +1296,6 @@ proc setTimeWarning*(this: CConnectionRepository, timeWarning: float32) {.import
 
 proc getTimeWarning*(this: CConnectionRepository): float32 {.importcpp: "#.get_time_warning()".}
 
-proc initCDistributedSmoothNodeBase*(): CDistributedSmoothNodeBase {.importcpp: "CDistributedSmoothNodeBase()".}
-
-proc initCDistributedSmoothNodeBase*(param0: CDistributedSmoothNodeBase): CDistributedSmoothNodeBase {.importcpp: "CDistributedSmoothNodeBase(#)".}
-
 proc setRepository*(this: CDistributedSmoothNodeBase, repository: CConnectionRepository, isAi: bool, aiId: clonglong) {.importcpp: "#.set_repository(#, #, #)".}
 
 proc initialize*(this: CDistributedSmoothNodeBase, nodePath: NodePath, dclass: DCClass, doId: clonglong) {.importcpp: "#.initialize(#, #, #)".}
@@ -1360,10 +1312,6 @@ proc setCurrL*(this: CDistributedSmoothNodeBase, l: clonglong) {.importcpp: "#.s
 
 proc printCurrL*(this: CDistributedSmoothNodeBase) {.importcpp: "#.print_curr_l()".}
 
-proc newCMotionTrail*(): CMotionTrail {.importcpp: "new CMotionTrail()".}
-
-proc newCMotionTrail*(param0: CMotionTrail): CMotionTrail {.importcpp: "new CMotionTrail(#)".}
-
 proc reset*(this: CMotionTrail) {.importcpp: "#->reset()".}
 
 proc resetVertexList*(this: CMotionTrail) {.importcpp: "#->reset_vertex_list()".}
@@ -1379,8 +1327,6 @@ proc setParameters*(this: CMotionTrail, samplingTime: float, timeWindow: float, 
 proc checkForUpdate*(this: CMotionTrail, currentTime: float): int {.importcpp: "#->check_for_update(#)".}
 
 proc updateMotionTrail*(this: CMotionTrail, currentTime: float, transform: LMatrix4) {.importcpp: "#->update_motion_trail(#, #)".}
-
-converter getClassType*(_: typedesc[CMotionTrail]): TypeHandle {.importcpp: "CMotionTrail::get_class_type()", header: "cMotionTrail.h".}
 
 func `$`*(this: CInterval | CIntervalManager | DCClass | DCDeclaration | DCField | SmoothMover): string {.inline.} =
   var str : StringStream

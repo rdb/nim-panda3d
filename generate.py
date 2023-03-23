@@ -3,6 +3,7 @@ __all__ = []
 import os, sys
 from distutils import sysconfig
 import pathlib
+from collections import defaultdict
 import panda3d, pandac
 from panda3d.interrogatedb import *
 
@@ -866,566 +867,6 @@ def translated_type_name(type, scoped=True, template=True):
         return type_name
 
 
-def bind_coerce_constructor(out, function, wrapper, num_default_args=0):
-    return
-    cpp_expr = interrogate_function_name(function)
-    return_type = interrogate_wrapper_return_type(wrapper)
-
-    cpp_expr += "("
-
-    headers = set()
-    args = []
-    for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
-        param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
-        if param_name.startswith("_"):
-            return
-        param_name = translate_parameter_name(param_name)
-
-        param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
-        if not is_type_valid(param_type):
-            return
-        type_name = translated_type_name(param_type)
-
-        args.append(f"{param_name}: {type_name}")
-
-        if not cpp_expr.endswith("("):
-            cpp_expr += ", "
-
-        if type_name == "string":
-            cpp_expr += f"nimStringToStdString(@.Field{i_param})"
-            headers.add("stringConversionCode")
-        else:
-            cpp_expr += f"@.Field{i_param}"
-
-    cpp_expr += ")"
-
-    type_name = translated_type_name(return_type, scoped=False, template=False)
-    args_string = ", ".join(args)
-    out.write(f"converter init{type_name}*(args: tuple[{args_string}])")
-
-    if type_name.startswith("BitMask["):
-        type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
-
-    out.write(f": {type_name}")
-
-    if len(headers) == 0:
-        out.write(f" {{.importcpp: \"{cpp_expr}\".}}")
-    else:
-        header = sorted(headers)[0]
-        out.write(f" {{.importcpp: \"{cpp_expr}\", header: {header}.}}")
-
-    if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
-        comment = translate_comment(interrogate_wrapper_comment(wrapper))
-        if comment:
-            out.write(" ## \\\n" + comment)
-
-    out.write("\n\n")
-
-
-def bind_function_overload(out, function, wrapper, func_name, proc_type="proc", num_default_args=0, wrapper_name=None):
-    this_pointer = False
-    this_var = False
-
-    cpp_expr = interrogate_function_name(function)
-
-    if cpp_expr in ("operator ++", "operator --") and interrogate_wrapper_number_of_parameters(wrapper) >= 2:
-        return
-
-    if interrogate_wrapper_has_return_value(wrapper) and (not func_name.startswith("operator ") or func_name[9:] not in INPLACE_OPERATORS):
-        return_type = interrogate_wrapper_return_type(wrapper)
-        if not is_type_valid(return_type):
-            return False
-    else:
-        return_type = None
-
-    headers = set()
-    args = []
-    if interrogate_function_is_method(function):
-        this_type = interrogate_function_class(function)
-        if not is_type_valid(this_type):
-            if func_name != "get_class_type":
-                scoped_type_name = interrogate_type_scoped_name(this_type)
-                if scoped_type_name == "MovingPart< ACMatrixSwitchType >":
-                    this_type = interrogate_get_type_by_scoped_name("MovingPartMatrix")
-                elif scoped_type_name == "MovingPart< ACScalarSwitchType >":
-                    this_type = interrogate_get_type_by_scoped_name("MovingPartScalar")
-                else:
-                    return False
-            else:
-                return False
-
-        if is_type_pointer(this_type):
-            this_pointer = True
-        elif interrogate_function_scoped_name(function) in FORCE_VAR_METHODS:
-            this_var = True
-        elif (interrogate_type_scoped_name(this_type) + "::*") in FORCE_VAR_METHODS:
-            this_var = True
-
-        if interrogate_function_is_constructor(function):
-            type_name = translated_type_name(this_type)
-            if type_name.startswith("BitMask["):
-                type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
-
-            if this_pointer:
-                func_name = "new" + type_name
-                cpp_expr = f"new {type_name}"
-            else:
-                func_name = "init" + type_name
-                cpp_expr = type_name
-
-                if interrogate_wrapper_is_coerce_constructor(wrapper):
-                    num_args = interrogate_wrapper_number_of_parameters(wrapper) - num_default_args
-                    if num_args == 1 and \
-                       interrogate_wrapper_is_coerce_constructor(wrapper) and \
-                       is_type_valid(interrogate_wrapper_parameter_type(wrapper, 0)):
-                        # These constructors not being marked explicit is a mistake
-                        # in Panda3D 1.10 that will be rectified in 1.11.
-                        if not type_name.startswith("ConfigVariable") and \
-                           type_name != "LoaderOptions" and \
-                           type_name != "pixel" and \
-                           (type_name != "ButtonHandle" or interrogate_wrapper_parameter_name(wrapper, 0) != "index") and \
-                           interrogate_wrapper_parameter_name(wrapper, 0) != "fill_value":
-                            proc_type = "converter"
-                    elif num_args > 1 and is_type_valid(interrogate_wrapper_parameter_type(wrapper, 0)):
-                        # Accept a tuple for coercion.
-                        if not type_name.startswith("ConfigVariable") and \
-                           (not type_name.startswith("LVecBase2") or interrogate_wrapper_number_of_parameters(wrapper) == 2) and \
-                           (not type_name.startswith("LVecBase3") or interrogate_wrapper_number_of_parameters(wrapper) == 3) and \
-                           (not type_name.startswith("LVecBase4") or interrogate_wrapper_number_of_parameters(wrapper) == 4) and \
-                           (not type_name.startswith("UnalignedLVecBase4") or interrogate_wrapper_number_of_parameters(wrapper) == 4):
-                            bind_coerce_constructor(out, function, wrapper, num_default_args=num_default_args)
-
-        elif (interrogate_wrapper_number_of_parameters(wrapper) == 0 or \
-            not interrogate_wrapper_parameter_is_this(wrapper, 0)) and \
-           not interrogate_function_is_constructor(function):
-            # It's static, add a typedesc parameter.
-            type_name = translated_type_name(this_type)
-            if wrapper_name:
-                args.append(f"_: {wrapper_name}")
-            elif func_name == "size" and interrogate_wrapper_number_of_parameters(wrapper) == 0:
-                args.append(f"_: typedesc[{type_name}] or {type_name}")
-            else:
-                args.append(f"_: typedesc[{type_name}]")
-            cpp_expr = f"{interrogate_type_name(this_type)}::{cpp_expr}"
-
-            # Insert a dummy # (gets expanded to nothing) to cover this param
-            if interrogate_wrapper_number_of_parameters(wrapper) - num_default_args > 0:
-                cpp_expr = "#" + cpp_expr
-
-            header = get_type_header(this_type)
-            if header:
-                header_path = panda_include_dir + header
-                if not os.path.isfile(header_path):
-                    print("Header not found: ", header)
-                else:
-                    resolved = pathlib.Path(header_path).resolve()
-                    recased = str(resolved).replace('\\', '/').split('/')[-1]
-                    if recased != header:
-                        print("Header wrong case: ", header, recased)
-                headers.add('"' + header + '"')
-
-        elif this_pointer:
-            cpp_expr = f"#->{cpp_expr}"
-
-        else:
-            cpp_expr = f"#.{cpp_expr}"
-    else:
-        header = get_func_header(function)
-        if header:
-            headers.add('"' + header + '"')
-
-    cpp_args = []
-    for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
-        param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
-        if param_name.startswith("_"):
-            return False
-        param_name = translate_parameter_name(param_name)
-
-        param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
-        if not is_type_valid(param_type):
-            if interrogate_wrapper_parameter_is_this(wrapper, i_param):
-                param_type = this_type
-            else:
-                return False
-        type_name = translated_type_name(param_type)
-
-        if interrogate_wrapper_parameter_is_this(wrapper, i_param):
-            if interrogate_type_true_name(param_type).endswith("const *") and \
-               interrogate_function_number_of_python_wrappers(function) > 1 and \
-               func_name != "operator []":
-                # Is there a non-const version?  Then we skip this.
-                for i_wrapper in range(interrogate_function_number_of_python_wrappers(function)):
-                    wrapper2 = interrogate_function_python_wrapper(function, i_wrapper)
-                    if interrogate_wrapper_number_of_parameters(wrapper2) > 0 and \
-                       interrogate_wrapper_parameter_is_this(wrapper2, 0) and \
-                       not interrogate_type_true_name(interrogate_wrapper_parameter_type(wrapper2, 0)).endswith("const *"):
-                        return False
-
-            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
-                # Awful hack
-                if interrogate_type_true_name(param_type).endswith("const *"):
-                    cpp_expr = "((" + type_name + " const &)#)" + cpp_expr[1:]
-                else:
-                    cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
-
-            if wrapper_name:
-                args.append(f"this: {wrapper_name}")
-            elif func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
-                args.append(f"{param_name}: var {type_name}")
-            elif not this_var or interrogate_type_true_name(param_type).endswith("const *"):
-                #if not this_pointer and not interrogate_type_true_name(param_type).endswith("const *"):
-                #    print(interrogate_function_scoped_name(function))
-                args.append(f"{param_name}: {type_name}")
-            else:
-                args.append(f"{param_name}: var {type_name}")
-        else:
-            args.append(f"{param_name}: {type_name}")
-
-            if type_name == "string":
-                cpp_args.append("nimStringToStdString(#)")
-                headers.add("stringConversionCode")
-            elif type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
-                # Awful hack
-                if interrogate_type_true_name(param_type).endswith("const *"):
-                    cpp_args.append("(" + type_name + " const &)(#)")
-                else:
-                    cpp_args.append("(" + type_name + " &)(#)")
-            else:
-                cpp_args.append("#")
-
-    if func_name == "operator []" and interrogate_wrapper_number_of_parameters(wrapper) > 2:
-        func_name = "`[]=`"
-        cpp_suffix = cpp_args.pop()
-        cpp_expr += "(" + ", ".join(cpp_args) + ")"
-        cpp_expr += " = " + cpp_suffix
-    elif func_name == "size" and return_type and is_type_integer(return_type) and (interrogate_wrapper_number_of_parameters(wrapper) == 0 or (interrogate_wrapper_number_of_parameters(wrapper) == 1 and interrogate_wrapper_parameter_is_this(wrapper, 0))):
-        func_name = "len"
-        cpp_expr += "(" + ", ".join(cpp_args) + ")"
-        proc_type = "func"
-    else:
-        func_name = translate_function_name(func_name)
-        cpp_expr += "(" + ", ".join(cpp_args) + ")"
-
-    args_string = ", ".join(args)
-
-    out.write(f"{proc_type} {func_name}*({args_string})")
-
-    if return_type:
-        type_name = translated_type_name(return_type)
-        if type_name.startswith("BitMask["):
-            type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
-
-        if func_name.startswith("upcastTo") and not this_pointer:
-            out.write(f": var {type_name}")
-        else:
-            out.write(f": {type_name}")
-
-        if func_name.startswith("upcastTo"):
-            while interrogate_type_is_wrapped(return_type):
-                return_type = interrogate_type_wrapped_type(return_type)
-
-            cpp_name = interrogate_type_scoped_name(return_type)
-            if not this_pointer:
-                cpp_expr = f"(({cpp_name} *)&(#))"
-            elif is_type_reference_counted(return_type):
-                cpp_expr = f"(PT({cpp_name})(#))"
-            elif is_type_reference_counted(this_type):
-                cpp_expr = f"(({cpp_name} *)({interrogate_type_true_name(this_type)} *)(#))"
-            else:
-                cpp_expr = f"(({cpp_name} *)(#))"
-
-        elif func_name.startswith("`typecast "):
-            if this_pointer:
-                cpp_expr = f"({func_name[10:-1]})*(#)"
-            else:
-                cpp_expr = f"({func_name[10:-1]})(#)"
-
-        elif this_pointer and interrogate_type_is_pointer(return_type) and interrogate_type_is_const(interrogate_type_wrapped_type(return_type)):
-            if is_type_reference_counted(return_type):
-                cpp_expr = f"deconstify({cpp_expr})"
-                headers.add("deconstifyCode")
-
-        elif type_name == "string":
-            cpp_expr = "nimStringFromStdString(" + cpp_expr + ")"
-            headers.add("stringConversionCode")
-
-    pragmas = [f"importcpp: \"{cpp_expr}\""]
-    if headers:
-        header = sorted(headers)[0]
-        pragmas.append(f"header: {header}")
-
-    if interrogate_wrapper_is_deprecated(wrapper):
-        pragmas.append("deprecated")
-
-    pragma_str = ", ".join(pragmas)
-    out.write(f" {{.{pragma_str}.}}")
-
-    if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
-        comment = translate_comment(interrogate_wrapper_comment(wrapper))
-        if comment:
-            out.write(" ## \\\n" + comment)
-
-    out.write("\n\n")
-    return True
-
-
-def bind_function(out, function, func_name=None, proc_type="proc"):
-    if not func_name:
-        func_name = interrogate_function_name(function)
-
-        if func_name in FUNCTION_IGNORE:
-            return
-
-        if func_name.startswith("_") and func_name not in FUNCTION_REMAP:
-            return
-
-        if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
-            proc_type = "converter"
-
-    if func_name in NIM_KEYWORDS:
-        return
-
-    if (not func_name.strip('xyzw')) or interrogate_function_is_constructor(function):
-        type_name = interrogate_type_name(interrogate_function_class(function))
-        if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
-            return
-
-    overloads = {}
-    for i_wrapper in range(interrogate_function_number_of_python_wrappers(function)):
-        wrapper = interrogate_function_python_wrapper(function, i_wrapper)
-
-        num_optional_args = 0
-        for i_param in range(interrogate_wrapper_number_of_parameters(wrapper)):
-            if interrogate_wrapper_parameter_is_optional(wrapper, i_param):
-                num_optional_args += 1
-
-        for num_default_args in range(num_optional_args + 1):
-            sig = tuple(interrogate_wrapper_parameter_type(wrapper, i) for i in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args))
-            if sig not in overloads:
-                if bind_function_overload(out, function, wrapper, func_name, proc_type, num_default_args):
-                    overloads[sig] = wrapper
-
-
-def bind_property(out, element):
-    prop_name = interrogate_element_name(element)
-    if prop_name in NIM_KEYWORDS:
-        return
-
-    prop_name = translate_function_name(prop_name)
-
-    getter = interrogate_element_getter(element)
-    if not getter:
-        return
-
-    is_sequence = interrogate_element_is_sequence(element)
-    is_mapping = interrogate_element_is_mapping(element)
-
-    this_type = None
-
-    getter_wrapper = None
-    getter_num_default_args = 0
-    for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
-        wrap = interrogate_function_python_wrapper(getter, i_wrap)
-        prop_type = interrogate_wrapper_return_type(wrap)
-        first_arg = int(not is_wrapper_static(wrap))
-        min_args, max_args = get_wrapper_min_max_args(wrap)
-
-        if min_args <= int(is_sequence or is_mapping) <= max_args:
-            if is_sequence:
-                if not is_type_integer(interrogate_wrapper_parameter_type(wrap, first_arg)):
-                    continue
-            if interrogate_type_atomic_token(prop_type) != 6 and is_type_valid(prop_type):
-                getter_wrapper = wrap
-                getter_num_default_args = max_args - int(is_sequence or is_mapping)
-                if first_arg > 0:
-                    this_type = interrogate_wrapper_parameter_type(wrap, 0)
-                break
-
-    if is_mapping or is_sequence:
-        if not getter_wrapper:
-            return
-
-        type_name = translated_type_name(prop_type)
-        outer_type = interrogate_function_class(interrogate_element_getter(element))
-        outer_type_name = translated_type_name(outer_type)
-        wrapper_name = outer_type_name + "_" + prop_name
-
-        if this_type is not None:
-            out.write(f"type {wrapper_name} = distinct {outer_type_name}\n")
-        else:
-            out.write(f"type {wrapper_name} = distinct typedesc[{outer_type_name}]\n")
-        out.write("\n")
-
-        bind_function_overload(out, getter, getter_wrapper, "`[]`", num_default_args=getter_num_default_args, wrapper_name=wrapper_name)
-
-        if this_type is None:
-            out.write(f"template {prop_name}*(this: typedesc[{outer_type_name}]): {wrapper_name} = {wrapper_name}(this)\n\n")
-        else:
-            out.write(f"template {prop_name}*(this: {outer_type_name}): {wrapper_name} = {wrapper_name}(this)\n\n")
-
-    if is_mapping:
-        if interrogate_element_has_has_function(element):
-            has_function = interrogate_element_has_function(element)
-            for i_wrap in range(interrogate_function_number_of_python_wrappers(has_function)):
-                wrap = interrogate_function_python_wrapper(has_function, i_wrap)
-                if this_type is None and not is_wrapper_static(wrap):
-                    continue
-                min_args, max_args = get_wrapper_min_max_args(wrap)
-                if min_args <= 1 <= max_args:
-                    bind_function_overload(out, has_function, wrap, "hasKey", num_default_args=max_args - 1, wrapper_name=wrapper_name)
-                    bind_function_overload(out, has_function, wrap, "contains", num_default_args=max_args - 1, wrapper_name=wrapper_name)
-
-        if interrogate_element_has_setter(element):
-            setter = interrogate_element_setter(element)
-            for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
-                wrap = interrogate_function_python_wrapper(setter, i_wrap)
-                if this_type is None and not is_wrapper_static(wrap):
-                    continue
-                min_args, max_args = get_wrapper_min_max_args(wrap)
-                if min_args <= 2 <= max_args:
-                    bind_function_overload(out, setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
-
-        if interrogate_element_has_del_function(element):
-            del_function = interrogate_element_del_function(element)
-            for i_wrap in range(interrogate_function_number_of_python_wrappers(del_function)):
-                wrap = interrogate_function_python_wrapper(del_function, i_wrap)
-                if this_type is None and not is_wrapper_static(wrap):
-                    continue
-                min_args, max_args = get_wrapper_min_max_args(wrap)
-                if min_args <= 1 <= max_args:
-                    bind_function_overload(out, del_function, wrap, "del", num_default_args=max_args - 1, wrapper_name=wrapper_name)
-
-        return
-
-    if is_sequence:
-        length = interrogate_element_length_function(element)
-        length_wrapper = None
-        for i_wrap in range(interrogate_function_number_of_python_wrappers(length)):
-            wrap = interrogate_function_python_wrapper(length, i_wrap)
-            if not is_type_integer(interrogate_wrapper_return_type(wrap)):
-                continue
-            num_args = 0
-            num_default_args = 0
-            for i_param in range(interrogate_wrapper_number_of_parameters(wrap)):
-                if interrogate_wrapper_parameter_is_this(wrap, i_param):
-                    continue
-                num_args += 1
-                if interrogate_wrapper_parameter_is_optional(wrap, i_param):
-                    num_default_args += 1
-
-            if num_args - num_default_args <= 0:
-                length_wrapper = wrap
-                break
-        else:
-            return
-
-        if this_type is None and not is_wrapper_static(length_wrapper):
-            this_type = interrogate_wrapper_parameter_type(length_wrapper, 0)
-
-        bind_function_overload(out, length, length_wrapper, "len", "func", num_default_args=num_default_args, wrapper_name=wrapper_name)
-
-        if interrogate_element_has_setter(element):
-            setter = interrogate_element_setter(element)
-            for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
-                wrap = interrogate_function_python_wrapper(setter, i_wrap)
-                if this_type is None and not is_wrapper_static(wrap):
-                    continue
-                min_args, max_args = get_wrapper_min_max_args(wrap)
-                if min_args <= 2 <= max_args:
-                    bind_function_overload(out, setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
-
-        if is_type_pointer(prop_type):
-            out.write(f"proc contains*(this: {wrapper_name}, value: {type_name}): bool =\n")
-            out.write("  for i in 0 ..< len(this):\n")
-            out.write("    if value == this[i]:\n")
-            out.write("      return true\n")
-            out.write("  return false\n\n")
-
-        out.write(f"iterator items*(this: {wrapper_name}): {type_name} =\n")
-        out.write("  for i in 0 ..< len(this):\n")
-        out.write("    yield this[i]\n\n")
-
-        if type_name == "string":
-            out.write(f"proc `@`*(this: {wrapper_name}): seq[{type_name}] {{.inline.}} =\n")
-        else:
-            out.write(f"proc `@`*(this: {wrapper_name}): seq[{type_name}] =\n")
-        out.write("  let count = len(this)\n")
-        out.write("  result.setLen(count)\n")
-        out.write("  for i in 0 ..< count:\n")
-        out.write("    result[i] = this[i]\n")
-        out.write("\n")
-
-        return
-
-    if not prop_name.strip('xyzw'):
-        scoped_name = interrogate_element_scoped_name(element)
-        if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase") or scoped_name.startswith("LVector") or scoped_name.startswith("LPoint"):
-            return
-
-    if interrogate_element_has_getter(element):
-        bind_function(out, interrogate_element_getter(element), prop_name, "func")
-
-    if interrogate_element_has_setter(element):
-        bind_function(out, interrogate_element_setter(element), f"`{prop_name}=`")
-
-
-def bind_make_seq(out, type, make_seq):
-    func_name = interrogate_make_seq_seq_name(make_seq)
-    if func_name in NIM_KEYWORDS:
-        return
-
-    func_name = translate_function_name(func_name)
-    type_name = translated_type_name(type)
-
-    getter_wrapper = None
-    elem_type = None
-
-    getter = interrogate_make_seq_element_getter(make_seq)
-    for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
-        wrap = interrogate_function_python_wrapper(getter, i_wrap)
-        elem_type = interrogate_wrapper_return_type(wrap)
-        min_args, max_args = get_wrapper_min_max_args(wrap)
-
-        if min_args <= 1 <= max_args:
-            if interrogate_type_atomic_token(elem_type) != 6 and is_type_valid(elem_type):
-                getter_wrapper = wrap
-                break
-    else:
-        return
-
-    nummer = interrogate_make_seq_num_getter(make_seq)
-    for i_wrap in range(interrogate_function_number_of_python_wrappers(nummer)):
-        wrap = interrogate_function_python_wrapper(nummer, i_wrap)
-        min_args, max_args = get_wrapper_min_max_args(wrap)
-
-        if min_args <= 0 <= max_args and is_type_integer(interrogate_wrapper_return_type(wrap)):
-            nummer_wrapper = wrap
-            break
-    else:
-        return
-
-    elem_type_name = translated_type_name(elem_type)
-
-    num_name = translate_function_name(interrogate_make_seq_num_name(make_seq))
-    element_name = translate_function_name(interrogate_make_seq_element_name(make_seq))
-
-    if num_name == "size":
-        num_name = "len"
-
-    out.write(f"proc {func_name}*(this: {type_name}): seq[{elem_type_name}] =\n")
-    if is_wrapper_static(nummer_wrapper):
-        out.write(f"  let count = {type_name}.{num_name}()\n")
-    else:
-        out.write(f"  let count = this.{num_name}()\n")
-    out.write("  result.setLen(count)\n")
-    out.write("  for i in 0 ..< count:\n")
-    if is_wrapper_static(getter_wrapper):
-        out.write(f"    result[i] = {type_name}.{element_name}(i)\n")
-    else:
-        out.write(f"    result[i] = this.{element_name}(i)\n")
-    out.write("\n")
-
-
 def is_type_pointer(type):
     while interrogate_type_is_wrapped(type) or interrogate_type_is_typedef(type):
         type = interrogate_type_wrapped_type(type)
@@ -1615,229 +1056,953 @@ def is_wrapper_static(wrapper):
         not interrogate_wrapper_parameter_is_this(wrapper, 0)
 
 
-def bind_type(out, type, bound_templates={}):
-    if not is_type_valid(type):
+class BindingGenerator:
+    def __init__(self, output):
+        self.output = output
+        self.bound_templates = set()
+        self.seq_properties = defaultdict(set)
+        self.contains_funcs = defaultdict(set)
+        self.wrapped_funcs = defaultdict(set)
+
+    def bind_coerce_constructor(self, function, wrapper, num_default_args=0):
         return
+        out = self.output
+        cpp_expr = interrogate_function_name(function)
+        return_type = interrogate_wrapper_return_type(wrapper)
 
-    cpp_name = interrogate_type_name(type)
-    type_name = translated_type_name(type, scoped=True, template=False)
+        cpp_expr += "("
 
-    if '<' in cpp_name:
-        type_args = []
-        cpp_name, tmpl_args = cpp_name.split('<', 1)
-        tmpl_args = tmpl_args.strip('<> ').split(', ')
+        headers = set()
+        args = []
+        for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
+            param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
+            if param_name.startswith("_"):
+                return
+            param_name = translate_parameter_name(param_name)
 
-        if cpp_name in bound_templates:
-            return
-        bound_templates.add(cpp_name)
+            param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
+            if not is_type_valid(param_type):
+                return
+            type_name = translated_type_name(param_type)
 
-        cpp_name += '<'
-        for i, arg in enumerate(tmpl_args):
-            letter = chr(ord('T') + i)
-            if arg.isnumeric():
-                type_args.append(f"{letter}: static[int]")
+            args.append(f"{param_name}: {type_name}")
+
+            if not cpp_expr.endswith("("):
+                cpp_expr += ", "
+
+            if type_name == "string":
+                cpp_expr += f"nimStringToStdString(@.Field{i_param})"
+                headers.add("stringConversionCode")
             else:
-                type_args.append(f"{letter}: static[typedesc]")
+                cpp_expr += f"@.Field{i_param}"
 
-            if not cpp_name.endswith('<'):
-                cpp_name += ', '
-            cpp_name += f"'{i}"
+        cpp_expr += ")"
 
-        cpp_name += '>'
-    else:
-        type_args = None
+        type_name = translated_type_name(return_type, scoped=False, template=False)
+        args_string = ", ".join(args)
+        out.write(f"converter init{type_name}*(args: tuple[{args_string}])")
 
-    type_name_star = type_name
-    if not interrogate_type_is_nested(type):
-        type_name_star += "*"
+        if type_name.startswith("BitMask["):
+            type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
 
-    if interrogate_type_is_enum(type):
-        if cpp_name:
-            # Named enum
-            pragmas = [f"importcpp: \"{interrogate_type_scoped_name(type)}\""]
+        out.write(f": {type_name}")
 
-            if interrogate_type_is_scoped_enum(type) or interrogate_type_is_nested(type):
-                pragmas.append("pure")
+        if len(headers) == 0:
+            out.write(f" {{.importcpp: \"{cpp_expr}\".}}")
+        else:
+            header = sorted(headers)[0]
+            out.write(f" {{.importcpp: \"{cpp_expr}\", header: {header}.}}")
+
+        if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
+            comment = translate_comment(interrogate_wrapper_comment(wrapper))
+            if comment:
+                out.write(" ## \\\n" + comment)
+
+        out.write("\n\n")
+
+    def bind_function_overload(self, function, wrapper, func_name, proc_type="proc", num_default_args=0, wrapper_name=None):
+        this_pointer = False
+        this_var = False
+
+        cpp_expr = interrogate_function_name(function)
+
+        if cpp_expr in ("operator ++", "operator --") and interrogate_wrapper_number_of_parameters(wrapper) >= 2:
+            return
+
+        if interrogate_wrapper_has_return_value(wrapper) and (not func_name.startswith("operator ") or func_name[9:] not in INPLACE_OPERATORS):
+            return_type = interrogate_wrapper_return_type(wrapper)
+            if not is_type_valid(return_type):
+                return False
+        else:
+            return_type = None
+
+        headers = set()
+        args = []
+        if interrogate_function_is_method(function):
+            this_type = interrogate_function_class(function)
+            if not is_type_valid(this_type):
+                if func_name != "get_class_type":
+                    scoped_type_name = interrogate_type_scoped_name(this_type)
+                    if scoped_type_name == "MovingPart< ACMatrixSwitchType >":
+                        this_type = interrogate_get_type_by_scoped_name("MovingPartMatrix")
+                    elif scoped_type_name == "MovingPart< ACScalarSwitchType >":
+                        this_type = interrogate_get_type_by_scoped_name("MovingPartScalar")
+                    else:
+                        return False
+                else:
+                    return False
+
+            if is_type_pointer(this_type):
+                this_pointer = True
+            elif interrogate_function_scoped_name(function) in FORCE_VAR_METHODS:
+                this_var = True
+            elif (interrogate_type_scoped_name(this_type) + "::*") in FORCE_VAR_METHODS:
+                this_var = True
+
+            if interrogate_function_is_constructor(function):
+                type_name = translated_type_name(this_type)
+                if type_name.startswith("BitMask["):
+                    type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
+
+                if this_pointer:
+                    func_name = "new" + type_name
+                    cpp_expr = f"new {type_name}"
+                else:
+                    func_name = "init" + type_name
+                    cpp_expr = type_name
+
+                    if interrogate_wrapper_is_coerce_constructor(wrapper):
+                        num_args = interrogate_wrapper_number_of_parameters(wrapper) - num_default_args
+                        if num_args == 1 and \
+                           interrogate_wrapper_is_coerce_constructor(wrapper) and \
+                           is_type_valid(interrogate_wrapper_parameter_type(wrapper, 0)):
+                            # These constructors not being marked explicit is a mistake
+                            # in Panda3D 1.10 that will be rectified in 1.11.
+                            if not type_name.startswith("ConfigVariable") and \
+                               type_name != "LoaderOptions" and \
+                               type_name != "pixel" and \
+                               (type_name != "ButtonHandle" or interrogate_wrapper_parameter_name(wrapper, 0) != "index") and \
+                               interrogate_wrapper_parameter_name(wrapper, 0) != "fill_value":
+                                proc_type = "converter"
+                        elif num_args > 1 and is_type_valid(interrogate_wrapper_parameter_type(wrapper, 0)):
+                            # Accept a tuple for coercion.
+                            if not type_name.startswith("ConfigVariable") and \
+                               (not type_name.startswith("LVecBase2") or interrogate_wrapper_number_of_parameters(wrapper) == 2) and \
+                               (not type_name.startswith("LVecBase3") or interrogate_wrapper_number_of_parameters(wrapper) == 3) and \
+                               (not type_name.startswith("LVecBase4") or interrogate_wrapper_number_of_parameters(wrapper) == 4) and \
+                               (not type_name.startswith("UnalignedLVecBase4") or interrogate_wrapper_number_of_parameters(wrapper) == 4):
+                                self.bind_coerce_constructor(function, wrapper, num_default_args=num_default_args)
+
+            elif (interrogate_wrapper_number_of_parameters(wrapper) == 0 or \
+                not interrogate_wrapper_parameter_is_this(wrapper, 0)) and \
+               not interrogate_function_is_constructor(function):
+                # It's static, add a typedesc parameter.
+                type_name = translated_type_name(this_type)
+                if wrapper_name:
+                    args.append(f"_: {wrapper_name}")
+                elif func_name == "size" and interrogate_wrapper_number_of_parameters(wrapper) == 0:
+                    args.append(f"_: typedesc[{type_name}] or {type_name}")
+                else:
+                    args.append(f"_: typedesc[{type_name}]")
+                cpp_expr = f"{interrogate_type_name(this_type)}::{cpp_expr}"
+
+                # Insert a dummy # (gets expanded to nothing) to cover this param
+                if interrogate_wrapper_number_of_parameters(wrapper) - num_default_args > 0:
+                    cpp_expr = "#" + cpp_expr
+
+                header = get_type_header(this_type)
+                if header:
+                    header_path = panda_include_dir + header
+                    if not os.path.isfile(header_path):
+                        print("Header not found: ", header)
+                    else:
+                        resolved = pathlib.Path(header_path).resolve()
+                        recased = str(resolved).replace('\\', '/').split('/')[-1]
+                        if recased != header:
+                            print("Header wrong case: ", header, recased)
+                    headers.add('"' + header + '"')
+
+            elif this_pointer:
+                cpp_expr = f"#->{cpp_expr}"
+
+            else:
+                cpp_expr = f"#.{cpp_expr}"
+        else:
+            header = get_func_header(function)
+            if header:
+                headers.add('"' + header + '"')
+
+        cpp_args = []
+        for i_param in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args):
+            param_name = interrogate_wrapper_parameter_name(wrapper, i_param)
+            if param_name.startswith("_"):
+                return False
+            param_name = translate_parameter_name(param_name)
+
+            param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
+            if not is_type_valid(param_type):
+                if interrogate_wrapper_parameter_is_this(wrapper, i_param):
+                    param_type = this_type
+                else:
+                    return False
+            type_name = translated_type_name(param_type)
+
+            if interrogate_wrapper_parameter_is_this(wrapper, i_param):
+                if interrogate_type_true_name(param_type).endswith("const *") and \
+                   interrogate_function_number_of_python_wrappers(function) > 1 and \
+                   func_name != "operator []":
+                    # Is there a non-const version?  Then we skip this.
+                    for i_wrapper in range(interrogate_function_number_of_python_wrappers(function)):
+                        wrapper2 = interrogate_function_python_wrapper(function, i_wrapper)
+                        if interrogate_wrapper_number_of_parameters(wrapper2) > 0 and \
+                           interrogate_wrapper_parameter_is_this(wrapper2, 0) and \
+                           not interrogate_type_true_name(interrogate_wrapper_parameter_type(wrapper2, 0)).endswith("const *"):
+                            return False
+
+                if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
+                    # Awful hack
+                    if interrogate_type_true_name(param_type).endswith("const *"):
+                        cpp_expr = "((" + type_name + " const &)#)" + cpp_expr[1:]
+                    else:
+                        cpp_expr = "((" + type_name + " &)#)" + cpp_expr[1:]
+
+                if wrapper_name:
+                    args.append(f"this: {wrapper_name}")
+                elif func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
+                    args.append(f"{param_name}: var {type_name}")
+                elif not this_var or interrogate_type_true_name(param_type).endswith("const *"):
+                    #if not this_pointer and not interrogate_type_true_name(param_type).endswith("const *"):
+                    #    print(interrogate_function_scoped_name(function))
+                    args.append(f"{param_name}: {type_name}")
+                else:
+                    args.append(f"{param_name}: var {type_name}")
+            else:
+                args.append(f"{param_name}: {type_name}")
+
+                if type_name == "string":
+                    cpp_args.append("nimStringToStdString(#)")
+                    headers.add("stringConversionCode")
+                elif type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LVector") or type_name.startswith("LPoint"):
+                    # Awful hack
+                    if interrogate_type_true_name(param_type).endswith("const *"):
+                        cpp_args.append("(" + type_name + " const &)(#)")
+                    else:
+                        cpp_args.append("(" + type_name + " &)(#)")
+                else:
+                    cpp_args.append("#")
+
+        if func_name == "operator []" and interrogate_wrapper_number_of_parameters(wrapper) > 2:
+            func_name = "`[]=`"
+            cpp_suffix = cpp_args.pop()
+            cpp_expr += "(" + ", ".join(cpp_args) + ")"
+            cpp_expr += " = " + cpp_suffix
+        elif func_name == "size" and return_type and is_type_integer(return_type) and (interrogate_wrapper_number_of_parameters(wrapper) == 0 or (interrogate_wrapper_number_of_parameters(wrapper) == 1 and interrogate_wrapper_parameter_is_this(wrapper, 0))):
+            func_name = "len"
+            cpp_expr += "(" + ", ".join(cpp_args) + ")"
+            proc_type = "func"
+        else:
+            func_name = translate_function_name(func_name)
+            cpp_expr += "(" + ", ".join(cpp_args) + ")"
+
+        args_string = ", ".join(args)
+        suffix = ""
+
+        if return_type:
+            type_name = translated_type_name(return_type)
+            if type_name.startswith("BitMask["):
+                type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
+
+            if func_name.startswith("upcastTo") and not this_pointer:
+                suffix = f": var {type_name}"
+            else:
+                suffix = f": {type_name}"
+
+            if func_name.startswith("upcastTo"):
+                while interrogate_type_is_wrapped(return_type):
+                    return_type = interrogate_type_wrapped_type(return_type)
+
+                cpp_name = interrogate_type_scoped_name(return_type)
+                if not this_pointer:
+                    cpp_expr = f"(({cpp_name} *)&(#))"
+                elif is_type_reference_counted(return_type):
+                    cpp_expr = f"(PT({cpp_name})(#))"
+                elif is_type_reference_counted(this_type):
+                    cpp_expr = f"(({cpp_name} *)({interrogate_type_true_name(this_type)} *)(#))"
+                else:
+                    cpp_expr = f"(({cpp_name} *)(#))"
+
+            elif func_name.startswith("`typecast "):
+                if this_pointer:
+                    cpp_expr = f"({func_name[10:-1]})*(#)"
+                else:
+                    cpp_expr = f"({func_name[10:-1]})(#)"
+
+            elif this_pointer and interrogate_type_is_pointer(return_type) and interrogate_type_is_const(interrogate_type_wrapped_type(return_type)):
+                if is_type_reference_counted(return_type):
+                    cpp_expr = f"deconstify({cpp_expr})"
+                    headers.add("deconstifyCode")
+
+            elif type_name == "string":
+                cpp_expr = "nimStringFromStdString(" + cpp_expr + ")"
+                headers.add("stringConversionCode")
+
+        if headers:
+            header = sorted(headers)[0]
+        else:
+            header = None
+
+        if not interrogate_wrapper_is_deprecated(wrapper) and not (OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper)):
+            if args and args[0].startswith("this: "):
+                self.wrapped_funcs[(proc_type, func_name, suffix, cpp_expr, tuple(args[1:]), header)].add(args[0][6:])
+                return True
+
+        pragmas = [f"importcpp: \"{cpp_expr}\""]
+        if header:
+            pragmas.append(f"header: {header}")
+
+        if interrogate_wrapper_is_deprecated(wrapper):
+            pragmas.append("deprecated")
+
+        pragma_str = ", ".join(pragmas)
+        out = self.output
+        out.write(f"{proc_type} {func_name}*({args_string}){suffix} {{.{pragma_str}.}}")
+
+        if OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper):
+            comment = translate_comment(interrogate_wrapper_comment(wrapper))
+            if comment:
+                out.write(" ## \\\n" + comment)
+
+        out.write("\n\n")
+        return True
+
+    def bind_function(self, function, func_name=None, proc_type="proc", min_num_args=0, max_num_args=None):
+        if not func_name:
+            func_name = interrogate_function_name(function)
+
+            if func_name in FUNCTION_IGNORE:
+                return
+
+            if func_name.startswith("_") and func_name not in FUNCTION_REMAP:
+                return
+
+            if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
+                proc_type = "converter"
+
+        if func_name in NIM_KEYWORDS:
+            return
+
+        if (not func_name.strip('xyzw')) or interrogate_function_is_constructor(function):
+            type_name = interrogate_type_name(interrogate_function_class(function))
+            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
+                return
+
+        overloads = {}
+        for i_wrapper in range(interrogate_function_number_of_python_wrappers(function)):
+            wrapper = interrogate_function_python_wrapper(function, i_wrapper)
+
+            num_optional_args = 0
+            for i_param in range(interrogate_wrapper_number_of_parameters(wrapper)):
+                if interrogate_wrapper_parameter_is_optional(wrapper, i_param):
+                    num_optional_args += 1
+
+            for num_default_args in range(num_optional_args + 1):
+                sig = tuple(interrogate_wrapper_parameter_type(wrapper, i) for i in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args))
+
+                num_args = len(sig)
+                if num_args > 0:
+                    num_args -= interrogate_wrapper_parameter_is_this(wrapper, 0)
+
+                if num_args < min_num_args or (max_num_args is not None and num_args > max_num_args):
+                    continue
+
+                sig = tuple(interrogate_wrapper_parameter_type(wrapper, i) for i in range(interrogate_wrapper_number_of_parameters(wrapper) - num_default_args))
+                if sig not in overloads:
+                    if self.bind_function_overload(function, wrapper, func_name, proc_type, num_default_args):
+                        overloads[sig] = wrapper
+
+    def bind_property(self, element):
+        prop_name = interrogate_element_name(element)
+        if prop_name in NIM_KEYWORDS:
+            return
+
+        prop_name = translate_function_name(prop_name)
+
+        getter = interrogate_element_getter(element)
+        assert getter
+        if not getter:
+            return
+
+        is_sequence = interrogate_element_is_sequence(element)
+        is_mapping = interrogate_element_is_mapping(element)
+
+        this_type = None
+
+        getter_wrapper = None
+        getter_num_default_args = 0
+        for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
+            wrap = interrogate_function_python_wrapper(getter, i_wrap)
+            prop_type = interrogate_wrapper_return_type(wrap)
+            first_arg = int(not is_wrapper_static(wrap))
+            min_args, max_args = get_wrapper_min_max_args(wrap)
+
+            if min_args <= int(is_sequence or is_mapping) <= max_args:
+                if is_sequence:
+                    if not is_type_integer(interrogate_wrapper_parameter_type(wrap, first_arg)):
+                        continue
+                if interrogate_type_atomic_token(prop_type) != 6 and is_type_valid(prop_type):
+                    getter_wrapper = wrap
+                    getter_num_default_args = max_args - int(is_sequence or is_mapping)
+                    if first_arg > 0:
+                        this_type = interrogate_wrapper_parameter_type(wrap, 0)
+                    break
+
+        out = self.output
+
+        if is_mapping or is_sequence:
+            if not getter_wrapper:
+                return
+
+            type_name = translated_type_name(prop_type)
+            outer_type = interrogate_function_class(interrogate_element_getter(element))
+            outer_type_name = translated_type_name(outer_type)
+            wrapper_name = outer_type_name + "_" + prop_name
+
+            if this_type is not None:
+                out.write(f"type {wrapper_name} = distinct {outer_type_name}\n")
+            else:
+                out.write(f"type {wrapper_name} = distinct typedesc[{outer_type_name}]\n")
+            out.write("\n")
+
+            self.bind_function_overload(getter, getter_wrapper, "`[]`", num_default_args=getter_num_default_args, wrapper_name=wrapper_name)
+
+            if this_type is None:
+                out.write(f"template {prop_name}*(this: typedesc[{outer_type_name}]): {wrapper_name} = {wrapper_name}(this)\n\n")
+            else:
+                out.write(f"template {prop_name}*(this: {outer_type_name}): {wrapper_name} = {wrapper_name}(this)\n\n")
+
+        if is_mapping:
+            if interrogate_element_has_has_function(element):
+                has_function = interrogate_element_has_function(element)
+                for i_wrap in range(interrogate_function_number_of_python_wrappers(has_function)):
+                    wrap = interrogate_function_python_wrapper(has_function, i_wrap)
+                    if this_type is None and not is_wrapper_static(wrap):
+                        continue
+                    min_args, max_args = get_wrapper_min_max_args(wrap)
+                    if min_args <= 1 <= max_args:
+                        self.bind_function_overload(has_function, wrap, "hasKey", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+                        self.bind_function_overload(has_function, wrap, "contains", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+
+            if interrogate_element_has_setter(element):
+                setter = interrogate_element_setter(element)
+                for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
+                    wrap = interrogate_function_python_wrapper(setter, i_wrap)
+                    if this_type is None and not is_wrapper_static(wrap):
+                        continue
+                    min_args, max_args = get_wrapper_min_max_args(wrap)
+                    if min_args <= 2 <= max_args:
+                        self.bind_function_overload(setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
+
+            if interrogate_element_has_del_function(element):
+                del_function = interrogate_element_del_function(element)
+                for i_wrap in range(interrogate_function_number_of_python_wrappers(del_function)):
+                    wrap = interrogate_function_python_wrapper(del_function, i_wrap)
+                    if this_type is None and not is_wrapper_static(wrap):
+                        continue
+                    min_args, max_args = get_wrapper_min_max_args(wrap)
+                    if min_args <= 1 <= max_args:
+                        self.bind_function_overload(del_function, wrap, "del", num_default_args=max_args - 1, wrapper_name=wrapper_name)
+
+            return
+
+        if is_sequence:
+            length = interrogate_element_length_function(element)
+            length_wrapper = None
+            for i_wrap in range(interrogate_function_number_of_python_wrappers(length)):
+                wrap = interrogate_function_python_wrapper(length, i_wrap)
+                if not is_type_integer(interrogate_wrapper_return_type(wrap)):
+                    continue
+                num_args = 0
+                num_default_args = 0
+                for i_param in range(interrogate_wrapper_number_of_parameters(wrap)):
+                    if interrogate_wrapper_parameter_is_this(wrap, i_param):
+                        continue
+                    num_args += 1
+                    if interrogate_wrapper_parameter_is_optional(wrap, i_param):
+                        num_default_args += 1
+
+                if num_args - num_default_args <= 0:
+                    length_wrapper = wrap
+                    break
+            else:
+                return
+
+            if this_type is None and not is_wrapper_static(length_wrapper):
+                this_type = interrogate_wrapper_parameter_type(length_wrapper, 0)
+
+            self.bind_function_overload(length, length_wrapper, "len", "func", num_default_args=num_default_args, wrapper_name=wrapper_name)
+
+            if interrogate_element_has_setter(element):
+                setter = interrogate_element_setter(element)
+                for i_wrap in range(interrogate_function_number_of_python_wrappers(setter)):
+                    wrap = interrogate_function_python_wrapper(setter, i_wrap)
+                    if this_type is None and not is_wrapper_static(wrap):
+                        continue
+                    min_args, max_args = get_wrapper_min_max_args(wrap)
+                    if min_args <= 2 <= max_args:
+                        self.bind_function_overload(setter, wrap, "`[]=`", num_default_args=max_args - 2, wrapper_name=wrapper_name)
+
+            if is_type_pointer(prop_type):
+                self.contains_funcs[type_name].add(wrapper_name)
+
+            self.seq_properties[type_name].add(wrapper_name)
+
+            return
+
+        if not prop_name.strip('xyzw'):
+            scoped_name = interrogate_element_scoped_name(element)
+            if scoped_name.startswith("LVecBase") or scoped_name.startswith("UnalignedLVecBase") or scoped_name.startswith("LVector") or scoped_name.startswith("LPoint"):
+                return
+
+        if interrogate_element_has_getter(element):
+            self.bind_function(interrogate_element_getter(element), prop_name, "func", min_num_args=0, max_num_args=0)
+
+        if interrogate_element_has_setter(element):
+            self.bind_function(interrogate_element_setter(element), f"`{prop_name}=`", min_num_args=1, max_num_args=1)
+
+
+    def bind_make_seq(self, type, make_seq):
+        func_name = interrogate_make_seq_seq_name(make_seq)
+        if func_name in NIM_KEYWORDS:
+            return
+
+        func_name = translate_function_name(func_name)
+        type_name = translated_type_name(type)
+
+        getter_wrapper = None
+        elem_type = None
+
+        getter = interrogate_make_seq_element_getter(make_seq)
+        for i_wrap in range(interrogate_function_number_of_python_wrappers(getter)):
+            wrap = interrogate_function_python_wrapper(getter, i_wrap)
+            elem_type = interrogate_wrapper_return_type(wrap)
+            min_args, max_args = get_wrapper_min_max_args(wrap)
+
+            if min_args <= 1 <= max_args:
+                if interrogate_type_atomic_token(elem_type) != 6 and is_type_valid(elem_type):
+                    getter_wrapper = wrap
+                    break
+        else:
+            return
+
+        nummer = interrogate_make_seq_num_getter(make_seq)
+        for i_wrap in range(interrogate_function_number_of_python_wrappers(nummer)):
+            wrap = interrogate_function_python_wrapper(nummer, i_wrap)
+            min_args, max_args = get_wrapper_min_max_args(wrap)
+
+            if min_args <= 0 <= max_args and is_type_integer(interrogate_wrapper_return_type(wrap)):
+                nummer_wrapper = wrap
+                break
+        else:
+            return
+
+        elem_type_name = translated_type_name(elem_type)
+
+        num_name = translate_function_name(interrogate_make_seq_num_name(make_seq))
+        element_name = translate_function_name(interrogate_make_seq_element_name(make_seq))
+
+        if num_name == "size":
+            num_name = "len"
+
+        out = self.output
+        out.write(f"proc {func_name}*(this: {type_name}): seq[{elem_type_name}] =\n")
+        if is_wrapper_static(nummer_wrapper):
+            out.write(f"  let count = {type_name}.{num_name}()\n")
+        else:
+            out.write(f"  let count = this.{num_name}()\n")
+        out.write("  result.setLen(count)\n")
+        out.write("  for i in 0 ..< count:\n")
+        if is_wrapper_static(getter_wrapper):
+            out.write(f"    result[i] = {type_name}.{element_name}(i)\n")
+        else:
+            out.write(f"    result[i] = this.{element_name}(i)\n")
+        out.write("\n")
+
+    def bind_type(self, type):
+        if not is_type_valid(type):
+            return
+
+        out = self.output
+
+        cpp_name = interrogate_type_name(type)
+        type_name = translated_type_name(type, scoped=True, template=False)
+
+        if '<' in cpp_name:
+            type_args = []
+            cpp_name, tmpl_args = cpp_name.split('<', 1)
+            tmpl_args = tmpl_args.strip('<> ').split(', ')
+
+            if cpp_name in self.bound_templates:
+                return
+            self.bound_templates.add(cpp_name)
+
+            cpp_name += '<'
+            for i, arg in enumerate(tmpl_args):
+                letter = chr(ord('T') + i)
+                if arg.isnumeric():
+                    type_args.append(f"{letter}: static[int]")
+                else:
+                    type_args.append(f"{letter}: static[typedesc]")
+
+                if not cpp_name.endswith('<'):
+                    cpp_name += ', '
+                cpp_name += f"'{i}"
+
+            cpp_name += '>'
+        else:
+            type_args = None
+
+        type_name_star = type_name
+        if not interrogate_type_is_nested(type):
+            type_name_star += "*"
+
+        if interrogate_type_is_enum(type):
+            if cpp_name:
+                # Named enum
+                pragmas = [f"importcpp: \"{interrogate_type_scoped_name(type)}\""]
+
+                if interrogate_type_is_scoped_enum(type) or interrogate_type_is_nested(type):
+                    pragmas.append("pure")
+
+                if interrogate_type_is_deprecated(type):
+                    pragmas.append("deprecated")
+
+                header = get_type_header(type)
+                if header:
+                    if not os.path.isfile(panda_include_dir + header):
+                        print("Header not found: ", header)
+                    pragmas.append(f"header: \"{header}\"")
+
+                pragma_str = ", ".join(pragmas)
+                out.write(f"type {type_name_star} {{.{pragma_str}.}} = enum\n")
+
+                if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
+                    comment = translate_comment(interrogate_type_comment(type), '  ## ')
+                    if comment:
+                        out.write(comment + "\n")
+
+                values = {}
+
+                for i_value in range(interrogate_type_number_of_enum_values(type)):
+                    value_name = interrogate_type_enum_value_name(type, i_value)
+                    value = interrogate_type_enum_value(type, i_value)
+                    values[value] = value_name
+
+                for value in sorted(values.keys()):
+                    value_name = translate_enum_value_name(values[value])
+                    out.write(f"  {value_name} = {value}\n")
+
+                out.write("\n")
+
+            elif not interrogate_type_is_nested(type):
+                # Anonymous enum, global scope
+                for i_value in range(interrogate_type_number_of_enum_values(type)):
+                    value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
+                    value = interrogate_type_enum_value(type, i_value)
+                    out.write(f"const {value_name}*: int = {value}\n")
+
+                out.write("\n")
+
+            if interrogate_type_is_nested(type):
+                # Nested enum
+                parent_type_name = translated_type_name(interrogate_type_outer_class(type))
+
+                short_type_name = translated_type_name(type, scoped=False, template=False)
+                out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}]): typedesc[{type_name}] = typedesc[{type_name}]\n")
+                out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}], value: untyped): {type_name} = {type_name}(value)\n\n")
+
+                for i_value in range(interrogate_type_number_of_enum_values(type)):
+                    value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
+                    value = interrogate_type_enum_value(type, i_value)
+                    out.write(f"template {value_name}*(_: typedesc[{parent_type_name}]): {type_name} = {type_name}.{value_name}\n")
+
+                out.write("\n")
+
+        elif interrogate_type_is_typedef(type):
+            wrapped_type = interrogate_type_wrapped_type(type)
+            if is_type_valid(wrapped_type) and interrogate_type_is_global(wrapped_type):
+                wrapped_type_name = translated_type_name(wrapped_type)
+                out.write(f"type {type_name_star} = {wrapped_type_name}\n\n")
+
+                if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
+                    comment = translate_comment(interrogate_type_comment(type), '  ## ')
+                    if comment:
+                        out.write("\n" + comment)
+
+        else:
+            pragmas = []
+
+            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LPoint") or type_name.startswith("LVector"):
+                size = int(type_name[-2])
+                pragmas += [f"importcpp: \"Wrapped{type_name}\", header: wrappedVec{size}Code"]
+            elif is_type_reference_counted(type):
+                pragmas += [f"importcpp: \"PT({cpp_name})\"", "bycopy"]
+            elif is_type_pointer(type):
+                pragmas += [f"importcpp: \"{cpp_name}*\"", "bycopy"]
+            else:
+                pragmas += [f"importcpp: \"{cpp_name}\""]
+
+            pragmas += ["pure"]
+
+            if not interrogate_type_is_final(type):
+                pragmas.append("inheritable")
 
             if interrogate_type_is_deprecated(type):
                 pragmas.append("deprecated")
 
             header = get_type_header(type)
-            if header:
+            if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
                 if not os.path.isfile(panda_include_dir + header):
                     print("Header not found: ", header)
                 pragmas.append(f"header: \"{header}\"")
 
             pragma_str = ", ".join(pragmas)
-            out.write(f"type {type_name_star} {{.{pragma_str}.}} = enum\n")
 
-            if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
-                comment = translate_comment(interrogate_type_comment(type), '  ## ')
-                if comment:
-                    out.write(comment + "\n")
+            if type_args is not None:
+                out.write(f"type {type_name_star}[{', '.join(type_args)}] {{.{pragma_str}.}} = object")
+            else:
+                out.write(f"type {type_name_star} {{.{pragma_str}.}} = object")
 
-            values = {}
+            # Determine the class to inherit from.
+            valid_bases = []
+            for i in range(interrogate_type_number_of_derivations(type)):
+                base_type = interrogate_type_get_derivation(type, i)
+                if is_type_valid(base_type):
+                    valid_bases.append(base_type)
+                    if is_type_pointer(type) and not is_type_pointer(base_type):
+                        print(f"Pointer type {type_name} has non-pointer base {translated_type_name(base_type)}!")
 
-            for i_value in range(interrogate_type_number_of_enum_values(type)):
-                value_name = interrogate_type_enum_value_name(type, i_value)
-                value = interrogate_type_enum_value(type, i_value)
-                values[value] = value_name
+            # We inherit from the first base that is typed, if any.
+            if valid_bases:
+                for base_type in valid_bases:
+                    if is_type_typed(base_type):
+                        break
+                else:
+                    # Grab the first type.
+                    base_type = valid_bases[0]
 
-            for value in sorted(values.keys()):
-                value_name = translate_enum_value_name(values[value])
-                out.write(f"  {value_name} = {value}\n")
-
-            out.write("\n")
-
-        elif not interrogate_type_is_nested(type):
-            # Anonymous enum, global scope
-            for i_value in range(interrogate_type_number_of_enum_values(type)):
-                value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
-                value = interrogate_type_enum_value(type, i_value)
-                out.write(f"const {value_name}*: int = {value}\n")
-
-            out.write("\n")
-
-        if interrogate_type_is_nested(type):
-            # Nested enum
-            parent_type_name = translated_type_name(interrogate_type_outer_class(type))
-
-            short_type_name = translated_type_name(type, scoped=False, template=False)
-            out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}]): typedesc[{type_name}] = typedesc[{type_name}]\n")
-            out.write(f"template {short_type_name}*(_: typedesc[{parent_type_name}], value: untyped): {type_name} = {type_name}(value)\n\n")
-
-            for i_value in range(interrogate_type_number_of_enum_values(type)):
-                value_name = translate_enum_value_name(interrogate_type_enum_value_name(type, i_value))
-                value = interrogate_type_enum_value(type, i_value)
-                out.write(f"template {value_name}*(_: typedesc[{parent_type_name}]): {type_name} = {type_name}.{value_name}\n")
-
-            out.write("\n")
-
-    elif interrogate_type_is_typedef(type):
-        wrapped_type = interrogate_type_wrapped_type(type)
-        if is_type_valid(wrapped_type) and interrogate_type_is_global(wrapped_type):
-            wrapped_type_name = translated_type_name(wrapped_type)
-            out.write(f"type {type_name_star} = {wrapped_type_name}\n\n")
+                base_name = translated_type_name(base_type)
+                out.write(f" of {base_name}")
 
             if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
                 comment = translate_comment(interrogate_type_comment(type), '  ## ')
                 if comment:
                     out.write("\n" + comment)
 
-    else:
-        pragmas = []
+            if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
+                if type_name[-1] == 'f':
+                    float_type = "float32"
+                elif type_name[-1] == 'd':
+                    float_type = "float64"
+                elif type_name[-1] == 'i':
+                    float_type = "int32"
+                else:
+                    assert False
 
-        if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase") or type_name.startswith("LPoint") or type_name.startswith("LVector"):
-            size = int(type_name[-2])
-            pragmas += [f"importcpp: \"Wrapped{type_name}\", header: wrappedVec{size}Code"]
-        elif is_type_reference_counted(type):
-            pragmas += [f"importcpp: \"PT({cpp_name})\"", "bycopy"]
-        elif is_type_pointer(type):
-            pragmas += [f"importcpp: \"{cpp_name}*\"", "bycopy"]
-        else:
-            pragmas += [f"importcpp: \"{cpp_name}\""]
+                num_components = int(type_name[-2])
+                if num_components >= 1:
+                    out.write("\n  x*: " + float_type)
+                if num_components >= 2:
+                    out.write("\n  y*: " + float_type)
+                if num_components >= 3:
+                    out.write("\n  z*: " + float_type)
+                if num_components >= 4:
+                    out.write("\n  w*: " + float_type)
 
-        pragmas += ["pure"]
+            elif type_name == "pixel":
+                out.write("\n  r*: uint16")
+                out.write("\n  g*: uint16")
+                out.write("\n  b*: uint16")
 
-        if not interrogate_type_is_final(type):
-            pragmas.append("inheritable")
+            out.write("\n\n")
 
-        if interrogate_type_is_deprecated(type):
-            pragmas.append("deprecated")
+            if len(valid_bases) > 1:
+                for other_base_type in valid_bases:
+                    if other_base_type != base_type:
+                        other_base_name = translated_type_name(other_base_type)
+                        out.write(f"converter upcastTo{other_base_name}*(_: typedesc[{type_name}]): typedesc[{other_base_name}] = typedesc[{other_base_name}]\n")
+                out.write("\n")
 
-        header = get_type_header(type)
-        if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
-            if not os.path.isfile(panda_include_dir + header):
-                print("Header not found: ", header)
-            pragmas.append(f"header: \"{header}\"")
+            if is_type_pointer(type):
+                out.write(f"converter to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")
 
-        pragma_str = ", ".join(pragmas)
+                if cpp_name == "TypedObject":
+                    out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"(@)\".}}\n")
+                elif is_type_typed(type):
+                    out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"DCAST({cpp_name}, @)\".}}\n")
 
-        if type_args is not None:
-            out.write(f"type {type_name_star}[{', '.join(type_args)}] {{.{pragma_str}.}} = object")
-        else:
-            out.write(f"type {type_name_star} {{.{pragma_str}.}} = object")
+                out.write("\n")
 
-        # Determine the class to inherit from.
-        valid_bases = []
-        for i in range(interrogate_type_number_of_derivations(type)):
-            base_type = interrogate_type_get_derivation(type, i)
-            if is_type_valid(base_type):
-                valid_bases.append(base_type)
-                if is_type_pointer(type) and not is_type_pointer(base_type):
-                    print(f"Pointer type {type_name} has non-pointer base {translated_type_name(base_type)}!")
+        # Wrap nested enums.
+        for i_nested in range(interrogate_type_number_of_nested_types(type)):
+            nested = interrogate_type_get_nested_type(type, i_nested)
+            if interrogate_type_is_enum(nested) and not interrogate_type_is_scoped_enum(nested) and interrogate_type_name(nested):
+                self.bind_type(nested)
 
-        # We inherit from the first base that is typed, if any.
-        if valid_bases:
-            for base_type in valid_bases:
-                if is_type_typed(base_type):
-                    break
-            else:
-                # Grab the first type.
-                base_type = valid_bases[0]
-
-            base_name = translated_type_name(base_type)
-            out.write(f" of {base_name}")
-
-        if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
-            comment = translate_comment(interrogate_type_comment(type), '  ## ')
-            if comment:
-                out.write("\n" + comment)
-
-        if type_name.startswith("LVecBase") or type_name.startswith("UnalignedLVecBase"):
-            if type_name[-1] == 'f':
-                float_type = "float32"
-            elif type_name[-1] == 'd':
-                float_type = "float64"
-            elif type_name[-1] == 'i':
-                float_type = "int32"
-            else:
-                assert False
-
-            num_components = int(type_name[-2])
-            if num_components >= 1:
-                out.write("\n  x*: " + float_type)
-            if num_components >= 2:
-                out.write("\n  y*: " + float_type)
-            if num_components >= 3:
-                out.write("\n  z*: " + float_type)
-            if num_components >= 4:
-                out.write("\n  w*: " + float_type)
-
-        elif type_name == "pixel":
-            out.write("\n  r*: uint16")
-            out.write("\n  g*: uint16")
-            out.write("\n  b*: uint16")
-
-        out.write("\n\n")
-
-        if len(valid_bases) > 1:
-            for other_base_type in valid_bases:
-                if other_base_type != base_type:
-                    other_base_name = translated_type_name(other_base_type)
-                    out.write(f"converter upcastTo{other_base_name}*(_: typedesc[{type_name}]): typedesc[{other_base_name}] = typedesc[{other_base_name}]\n")
+        if type_name == "StringStream":
+            out.write("func data*(this: StringStream): string {.importcpp: \"nimStringFromStdString(#.get_data())\", header: stringConversionCode.}\n")
+            out.write("func `data=`*(this: StringStream, data: string) {.importcpp: \"#.set_data(nimStringToStdString(#))\", header: stringConversionCode.}\n")
             out.write("\n")
 
-        if is_type_pointer(type):
-            out.write(f"converter to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")
+    def bind_module(self, module_name):
+        print("Generating bindings for %s" % (module_name))
 
-            if cpp_name == "TypedObject":
-                out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"(@)\".}}\n")
-            elif is_type_typed(type):
-                out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"DCAST({cpp_name}, @)\".}}\n")
+        # Prevent conflicts between type names and properties
+        ignore_properties_named = set(NIM_KEYWORDS)
+        ignore_properties_named.add("respect_preV_transform")
 
+        for type in iter_module_types(module_name):
+            ignore_properties_named.add(interrogate_type_name(type))
+            self.bind_type(type)
+
+        for type in iter_module_types(module_name):
+            for i_element in range(interrogate_type_number_of_elements(type)):
+                element = interrogate_type_get_element(type, i_element)
+                element_name = interrogate_element_name(element)
+                if element_name not in ignore_properties_named:
+                    self.bind_property(element)
+                else:
+                    print(f"  ignoring property {element_name} due to name conflict")
+
+        for func in iter_module_functions(module_name):
+            self.bind_function(func)
+
+        # Process functions that may be collapsed.  Do this before doing the
+        # make_seqs since they may depend on these.
+        out = self.output
+
+        # Very common case hack: transform write() with optional indentLevel
+        write_procs1 = self.wrapped_funcs[("proc", "write", "", "#.write(#)", ("`out`: ostream",), None)]
+        write_procs2 = self.wrapped_funcs[("proc", "write", "", "#.write(#, #)", ("`out`: ostream", "indentLevel: int"), None)]
+        write_procs_both = write_procs1 & write_procs2
+        write_procs1 -= write_procs_both
+        write_procs2 -= write_procs_both
+        self.wrapped_funcs[("proc", "write", "", "#.write(#, #)", ("`out`: ostream", "indentLevel: int = 0"), None)] |= write_procs_both
+
+        write_procs1 = self.wrapped_funcs[("proc", "write", "", "#->write(#)", ("`out`: ostream",), None)]
+        write_procs2 = self.wrapped_funcs[("proc", "write", "", "#->write(#, #)", ("`out`: ostream", "indentLevel: int"), None)]
+        write_procs_both = write_procs1 & write_procs2
+        write_procs1 -= write_procs_both
+        write_procs2 -= write_procs_both
+        self.wrapped_funcs[("proc", "write", "", "#->write(#, #)", ("`out`: ostream", "indentLevel: int = 0"), None)] |= write_procs_both
+
+        # Another common case: optional currentThread parameter
+        for stuff, type_names in list(self.wrapped_funcs.items()):
+            proc_type, func_name, suffix, cpp_expr, args, header = stuff
+
+            if args and args[-1] == "currentThread: Thread":
+                args_wo_thread = args[:-1]
+                if cpp_expr.endswith("(#)"):
+                    cpp_expr_wo_thread = cpp_expr[:-3] + "()"
+                elif cpp_expr.endswith(", #)"):
+                    cpp_expr_wo_thread = cpp_expr[:-4] + ")"
+                elif cpp_expr.endswith("(#))"):
+                    cpp_expr_wo_thread = cpp_expr[:-4] + "())"
+                elif cpp_expr.endswith(", #))"):
+                    cpp_expr_wo_thread = cpp_expr[:-5] + "))"
+                else:
+                    assert False, cpp_expr
+                stuff_wo_thread = proc_type, func_name, suffix, cpp_expr_wo_thread, args_wo_thread, header
+                type_names_wo_thread = self.wrapped_funcs[stuff_wo_thread]
+                type_names_both = type_names & type_names_wo_thread
+                type_names -= type_names_both
+                type_names_wo_thread -= type_names_both
+
+                self.wrapped_funcs[proc_type, func_name, suffix, cpp_expr, args_wo_thread + ("currentThread: Thread = Thread.getCurrentThread()",), header] |= type_names_both
+
+        for stuff, type_names in self.wrapped_funcs.items():
+            if not type_names:
+                continue
+
+            type_str = " | ".join(sorted(type_names))
+
+            proc_type, func_name, suffix, cpp_expr, args, header = stuff
+            args_str = ", ".join((f"this: {type_str}",) + args)
+            if header:
+                out.write(f"{proc_type} {func_name}*({args_str}){suffix} {{.importcpp: \"{cpp_expr}\", header: {header}.}}\n\n")
+            else:
+                out.write(f"{proc_type} {func_name}*({args_str}){suffix} {{.importcpp: \"{cpp_expr}\".}}\n\n")
+
+        dollar_types = set()
+        pointer_types = set()
+        items_types = defaultdict(set)
+
+        for type in iter_module_types(module_name):
+            for i_mseq in range(interrogate_type_number_of_make_seqs(type)):
+                self.bind_make_seq(type, interrogate_type_get_make_seq(type, i_mseq))
+
+            if interrogate_type_is_struct(type) or interrogate_type_is_class(type):
+                type_name = translated_type_name(type)
+
+                element_type = get_type_element_type(type)
+                if element_type:
+                    element_type_name = translated_type_name(element_type)
+                    items_types[element_type_name].add(type_name)
+
+                if get_type_output_method(type):
+                    dollar_types.add(type_name)
+
+                if is_type_pointer(type):
+                    pointer_types.add(type_name)
+
+        if dollar_types:
+            type_str = " | ".join(sorted(dollar_types))
+            out.write(f"func `$`*(this: {type_str}): string {{.inline.}} =\n")
+            out.write(f"  var str : StringStream\n")
+            out.write(f"  this.output(str)\n")
+            out.write(f"  str.data\n")
+            out.write(f"\n")
+
+        if pointer_types:
+            type_str = " | ".join(sorted(pointer_types))
+            out.write(f"converter toBool*(this: {type_str}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
+            out.write(f"func `==`*(x: {type_str}, y: type(nil)): bool {{.importcpp: \"(# == nullptr)\".}}\n")
             out.write("\n")
 
-    # Wrap nested enums.
-    for i_nested in range(interrogate_type_number_of_nested_types(type)):
-        nested = interrogate_type_get_nested_type(type, i_nested)
-        if interrogate_type_is_enum(nested) and not interrogate_type_is_scoped_enum(nested) and interrogate_type_name(nested):
-            bind_type(out, nested, bound_templates)
+        for element_type_name, wrapper_names in self.contains_funcs.items():
+            type_str = " | ".join(sorted(wrapper_names))
 
-    if type_name == "StringStream":
-        out.write("func data*(this: StringStream): string {.importcpp: \"nimStringFromStdString(#.get_data())\", header: stringConversionCode.}\n")
-        out.write("func `data=`*(this: StringStream, data: string) {.importcpp: \"#.set_data(nimStringToStdString(#))\", header: stringConversionCode.}\n")
-        out.write("\n")
+            out.write(f"proc contains*(this: {type_str}, value: {element_type_name}): bool =\n")
+            out.write("  for i in 0 ..< len(this):\n")
+            out.write("    if value == this[i]:\n")
+            out.write("      return true\n")
+            out.write("  return false\n\n")
+
+        self.contains_funcs.clear()
+
+        for element_type_name, wrapper_names in self.seq_properties.items():
+            items_types[element_type_name].update(wrapper_names)
+
+            type_str = " | ".join(sorted(wrapper_names))
+
+            if element_type_name == "string":
+                out.write(f"proc `@`*(this: {type_str}): seq[{element_type_name}] {{.inline.}} =\n")
+            else:
+                out.write(f"proc `@`*(this: {type_str}): seq[{element_type_name}] =\n")
+            out.write("  let count = len(this)\n")
+            out.write("  result.setLen(count)\n")
+            out.write("  for i in 0 ..< count:\n")
+            out.write("    result[i] = this[i]\n")
+            out.write("\n")
+
+        self.seq_properties.clear()
+
+        for element_type_name, type_names in items_types.items():
+            type_str = " | ".join(sorted(type_names))
+
+            out.write(f"iterator items*(this: {type_str}): {element_type_name} =\n")
+            out.write(f"  for i in 0 ..< len(this):\n")
+            out.write(f"    yield this[i]\n")
+            out.write(f"\n")
 
 
 def iter_type_tree(type):
@@ -1883,69 +2048,6 @@ def iter_module_functions(module_name):
                     yield func
 
 
-def bind_module(out, module_name):
-    print("Generating bindings for %s" % (module_name))
-
-    # Prevent conflicts between type names and properties
-    ignore_properties_named = set(("respect_preV_transform",))
-
-    bound_templates = set()
-
-    for type in iter_module_types(module_name):
-        ignore_properties_named.add(interrogate_type_name(type))
-        bind_type(out, type, bound_templates)
-
-    for type in iter_module_types(module_name):
-        for i_element in range(interrogate_type_number_of_elements(type)):
-            element = interrogate_type_get_element(type, i_element)
-            element_name = interrogate_element_name(element)
-            if element_name not in ignore_properties_named:
-                bind_property(out, element)
-            else:
-                print(f"  ignoring property {element_name} due to name conflict")
-
-    for func in iter_module_functions(module_name):
-        bind_function(out, func)
-
-    dollar_types = set()
-    pointer_types = set()
-
-    for type in iter_module_types(module_name):
-        for i_mseq in range(interrogate_type_number_of_make_seqs(type)):
-            bind_make_seq(out, type, interrogate_type_get_make_seq(type, i_mseq))
-
-        if interrogate_type_is_struct(type) or interrogate_type_is_class(type):
-            type_name = translated_type_name(type)
-
-            element_type = get_type_element_type(type)
-            if element_type:
-                element_type_name = translated_type_name(element_type)
-                out.write(f"iterator items*(collection: {type_name}): {element_type_name} =\n")
-                out.write(f"  for i in 0 ..< len(collection):\n")
-                out.write(f"    yield collection[i]\n")
-                out.write(f"\n")
-
-            if get_type_output_method(type):
-                dollar_types.add(type_name)
-
-            if is_type_pointer(type):
-                pointer_types.add(type_name)
-
-    if dollar_types:
-        type_str = " | ".join(sorted(dollar_types))
-        out.write(f"func `$`*(this: {type_str}): string {{.inline.}} =\n")
-        out.write(f"  var str : StringStream\n")
-        out.write(f"  this.output(str)\n")
-        out.write(f"  str.data\n")
-        out.write(f"\n")
-
-    if pointer_types:
-        type_str = " | ".join(sorted(pointer_types))
-        out.write(f"converter toBool*(this: {type_str}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
-        out.write(f"func `==`*(x: {type_str}, y: type(nil)): bool {{.importcpp: \"(# == nullptr)\".}}\n")
-        out.write("\n")
-
-
 if __name__ == "__main__":
     # Determine the path to the interrogatedb files
     pandac = os.path.dirname(pandac.__file__)
@@ -1954,8 +2056,9 @@ if __name__ == "__main__":
 
     import panda3d.core
     with open("panda3d/core.nim", "w") as fp:
+        gen = BindingGenerator(fp)
         fp.write(CORE_PREAMBLE)
-        bind_module(fp, "panda3d.core")
+        gen.bind_module("panda3d.core")
         fp.write(CORE_POSTAMBLE)
 
     # Determine the suffix for the extension modules.
@@ -1976,5 +2079,6 @@ if __name__ == "__main__":
             __import__("panda3d." + module_name)
 
             with open("panda3d/" + module_name + ".nim", "w") as fp:
+                gen = BindingGenerator(fp)
                 fp.write(OTHER_PREAMBLE % dict(libname="p3" + module_name))
-                bind_module(fp, "panda3d." + module_name)
+                gen.bind_module("panda3d." + module_name)

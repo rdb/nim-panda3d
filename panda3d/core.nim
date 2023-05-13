@@ -2202,9 +2202,13 @@ type WavAudioCursor* {.importcpp: "PT(WavAudioCursor)", bycopy, pure, inheritabl
 converter toWavAudioCursor*(_: type(nil)): WavAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[WavAudioCursor], obj: TypedObject): WavAudioCursor {.importcpp: "DCAST(WavAudioCursor, @)".}
 
-type CardMaker* {.importcpp: "CardMaker", pure, inheritable, header: "cardMaker.h".} = object of Namable
+type CardMaker* {.importcpp: "CardMaker*", bycopy, pure, inheritable, header: "cardMaker.h".} = object of Namable
 
-type FisheyeMaker* {.importcpp: "FisheyeMaker", pure, inheritable, header: "fisheyeMaker.h".} = object of Namable
+converter toCardMaker*(_: type(nil)): CardMaker {.importcpp: "(nullptr)".}
+
+type FisheyeMaker* {.importcpp: "FisheyeMaker*", bycopy, pure, inheritable, header: "fisheyeMaker.h".} = object of Namable
+
+converter toFisheyeMaker*(_: type(nil)): FisheyeMaker {.importcpp: "(nullptr)".}
 
 type TextProperties* {.importcpp: "TextProperties*", bycopy, pure, inheritable, header: "textProperties.h".} = object
 
@@ -2267,7 +2271,9 @@ type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritabl
 converter toFrameRateMeter*(_: type(nil)): FrameRateMeter {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FrameRateMeter], obj: TypedObject): FrameRateMeter {.importcpp: "DCAST(FrameRateMeter, @)".}
 
-type GeoMipTerrain* {.importcpp: "GeoMipTerrain", pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
+type GeoMipTerrain* {.importcpp: "GeoMipTerrain*", bycopy, pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
+
+converter toGeoMipTerrain*(_: type(nil)): GeoMipTerrain {.importcpp: "(nullptr)".}
 
 type GeoMipTerrain_AutoFlattenMode {.importcpp: "GeoMipTerrain::AutoFlattenMode", pure, header: "geoMipTerrain.h".} = enum
   AFM_off = 0
@@ -7747,13 +7753,13 @@ proc newWavAudioCursor*(param0: WavAudioCursor): WavAudioCursor {.importcpp: "ne
 
 converter getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
 
-proc initCardMaker*(param0: CardMaker): CardMaker {.importcpp: "CardMaker(#)".}
+proc newCardMaker*(param0: CardMaker): CardMaker {.importcpp: "new CardMaker(#)".}
 
-proc initCardMaker*(name: string): CardMaker {.importcpp: "CardMaker(nimStringToStdString(#))", header: stringConversionCode.}
+proc newCardMaker*(name: string): CardMaker {.importcpp: "new CardMaker(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initFisheyeMaker*(param0: FisheyeMaker): FisheyeMaker {.importcpp: "FisheyeMaker(#)".}
+proc newFisheyeMaker*(param0: FisheyeMaker): FisheyeMaker {.importcpp: "new FisheyeMaker(#)".}
 
-proc initFisheyeMaker*(name: string): FisheyeMaker {.importcpp: "FisheyeMaker(nimStringToStdString(#))", header: stringConversionCode.}
+proc newFisheyeMaker*(name: string): FisheyeMaker {.importcpp: "new FisheyeMaker(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newFrameRateMeter*(param0: FrameRateMeter): FrameRateMeter {.importcpp: "new FrameRateMeter(#)".}
 
@@ -7761,7 +7767,7 @@ proc newFrameRateMeter*(name: string): FrameRateMeter {.importcpp: "new FrameRat
 
 converter getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
 
-proc initGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
+proc newGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "new GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
 
 converter getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
 
@@ -15511,7 +15517,7 @@ proc getLastByteDelivered*(this: HTTPChannel): int {.importcpp: "#->get_last_byt
 
 proc writeHeaders*(this: HTTPChannel, `out`: ostream) {.importcpp: "#->write_headers(#)".}
 
-proc reset*(this: ClockObject | DriveInterface | HTTPChannel | Trackball) {.importcpp: "#->reset()".}
+proc reset*(this: CardMaker | ClockObject | DriveInterface | FisheyeMaker | HTTPChannel | Trackball) {.importcpp: "#->reset()".}
 
 proc preserveStatus*(this: HTTPChannel) {.importcpp: "#->preserve_status()".}
 
@@ -15671,7 +15677,7 @@ proc setMultifile*(this: Extractor, multifileName: Filename): bool {.importcpp: 
 
 proc setExtractDir*(this: Extractor, extractDir: Filename) {.importcpp: "#.set_extract_dir(#)".}
 
-proc reset*(this: CardMaker | CurveFitter | Extractor | FisheyeMaker | LineSegs) {.importcpp: "#.reset()".}
+proc reset*(this: CurveFitter | Extractor | LineSegs) {.importcpp: "#.reset()".}
 
 proc requestSubfile*(this: Extractor, subfileName: Filename): bool {.importcpp: "#.request_subfile(#)".}
 
@@ -17095,11 +17101,11 @@ proc setTextureOff*(this: NodePath | NodePathCollection) {.importcpp: "#.set_tex
 
 proc setColor*(this: NodePath | NodePathCollection, color: LColor, priority: int) {.importcpp: "#.set_color(#, #)".}
 
-proc setColor*(this: CardMaker | LineSegs | NodePath | NodePathCollection | PGFrameStyle, color: LColor) {.importcpp: "#.set_color(#)".}
+proc setColor*(this: LineSegs | NodePath | NodePathCollection | PGFrameStyle, color: LColor) {.importcpp: "#.set_color(#)".}
 
 proc setColor*(this: NodePath | NodePathCollection, r: float, g: float, b: float, a: float, priority: int) {.importcpp: "#.set_color(#, #, #, #, #)".}
 
-proc setColor*(this: CardMaker | LineSegs | NodePath | NodePathCollection | PGFrameStyle, r: float, g: float, b: float, a: float) {.importcpp: "#.set_color(#, #, #, #)".}
+proc setColor*(this: LineSegs | NodePath | NodePathCollection | PGFrameStyle, r: float, g: float, b: float, a: float) {.importcpp: "#.set_color(#, #, #, #)".}
 
 proc setColor*(this: LineSegs | NodePath | NodePathCollection, r: float, g: float, b: float) {.importcpp: "#.set_color(#, #, #)".}
 
@@ -18513,7 +18519,7 @@ proc getMode*(this: Fog): Fog_Mode {.importcpp: "#->get_mode()".}
 
 proc setMode*(this: Fog, mode: Fog_Mode) {.importcpp: "#->set_mode(#)".}
 
-proc setColor*(this: Fog | Light | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
+proc setColor*(this: CardMaker | Fog | Light | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
 
 proc setColor*(this: Fog | PolylightNode, r: float, g: float, b: float) {.importcpp: "#->set_color(#, #, #)".}
 
@@ -19159,45 +19165,47 @@ proc append*(this: UserDataAudio, str: string) {.importcpp: "#->append(nimString
 
 proc done*(this: UserDataAudio) {.importcpp: "#->done()".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord, ur: LTexCoord) {.importcpp: "#.set_uv_range(#, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord, ur: LTexCoord) {.importcpp: "#->set_uv_range(#, #)".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord, lr: LTexCoord, ur: LTexCoord, ul: LTexCoord) {.importcpp: "#.set_uv_range(#, #, #, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord, lr: LTexCoord, ur: LTexCoord, ul: LTexCoord) {.importcpp: "#->set_uv_range(#, #, #, #)".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord3, lr: LTexCoord3, ur: LTexCoord3, ul: LTexCoord3) {.importcpp: "#.set_uv_range(#, #, #, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord3, lr: LTexCoord3, ur: LTexCoord3, ul: LTexCoord3) {.importcpp: "#->set_uv_range(#, #, #, #)".}
 
-proc setUvRange*(this: CardMaker, x: LVector4, y: LVector4, z: LVector4) {.importcpp: "#.set_uv_range((LVector4 const &)(#), (LVector4 const &)(#), (LVector4 const &)(#))".}
+proc setUvRange*(this: CardMaker, x: LVector4, y: LVector4, z: LVector4) {.importcpp: "#->set_uv_range((LVector4 const &)(#), (LVector4 const &)(#), (LVector4 const &)(#))".}
 
-proc setUvRange*(this: CardMaker, tex: Texture) {.importcpp: "#.set_uv_range(#)".}
+proc setUvRange*(this: CardMaker, tex: Texture) {.importcpp: "#->set_uv_range(#)".}
 
-proc setUvRangeCube*(this: CardMaker, face: int) {.importcpp: "#.set_uv_range_cube(#)".}
+proc setUvRangeCube*(this: CardMaker, face: int) {.importcpp: "#->set_uv_range_cube(#)".}
 
-proc setHasUvs*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_uvs(#)".}
+proc setHasUvs*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_uvs(#)".}
 
-proc setHas3dUvs*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_3d_uvs(#)".}
+proc setHas3dUvs*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_3d_uvs(#)".}
 
-proc setFrame*(this: CardMaker | TextGraphic, frame: LVecBase4) {.importcpp: "#.set_frame((LVecBase4 const &)(#))".}
+proc setFrame*(this: CardMaker | MouseWatcher | MouseWatcherRegion | PGItem, frame: LVecBase4) {.importcpp: "#->set_frame((LVecBase4 const &)(#))".}
 
-proc setFrame*(this: CardMaker, ll: LVertex, lr: LVertex, ur: LVertex, ul: LVertex) {.importcpp: "#.set_frame(#, #, #, #)".}
+proc setFrame*(this: CardMaker, ll: LVertex, lr: LVertex, ur: LVertex, ul: LVertex) {.importcpp: "#->set_frame(#, #, #, #)".}
 
-proc setFrame*(this: CardMaker | TextGraphic, left: float, right: float, bottom: float, top: float) {.importcpp: "#.set_frame(#, #, #, #)".}
+proc setFrame*(this: CardMaker | MouseWatcher | MouseWatcherRegion | PGItem, left: float, right: float, bottom: float, top: float) {.importcpp: "#->set_frame(#, #, #, #)".}
 
-proc setFrameFullscreenQuad*(this: CardMaker) {.importcpp: "#.set_frame_fullscreen_quad()".}
+proc setFrameFullscreenQuad*(this: CardMaker) {.importcpp: "#->set_frame_fullscreen_quad()".}
 
-proc setHasNormals*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_normals(#)".}
+proc setColor*(this: CardMaker, r: float, g: float, b: float, a: float) {.importcpp: "#->set_color(#, #, #, #)".}
 
-proc setSourceGeometry*(this: CardMaker, node: PandaNode, frame: LVecBase4) {.importcpp: "#.set_source_geometry(#, (LVecBase4 const &)(#))".}
+proc setHasNormals*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_normals(#)".}
 
-proc clearSourceGeometry*(this: CardMaker) {.importcpp: "#.clear_source_geometry()".}
+proc setSourceGeometry*(this: CardMaker, node: PandaNode, frame: LVecBase4) {.importcpp: "#->set_source_geometry(#, (LVecBase4 const &)(#))".}
 
-proc generate*(this: CardMaker | FisheyeMaker): PandaNode {.importcpp: "#.generate()".}
+proc clearSourceGeometry*(this: CardMaker) {.importcpp: "#->clear_source_geometry()".}
 
-proc setFov*(this: FisheyeMaker, fov: float) {.importcpp: "#.set_fov(#)".}
+proc generate*(this: CardMaker | FisheyeMaker | TextNode): PandaNode {.importcpp: "#->generate()".}
 
-proc setNumVertices*(this: FisheyeMaker, numVertices: int) {.importcpp: "#.set_num_vertices(#)".}
+proc setFov*(this: FisheyeMaker | Lens, fov: float) {.importcpp: "#->set_fov(#)".}
 
-proc setSquareInscribed*(this: FisheyeMaker, squareInscribed: bool, squareRadius: float) {.importcpp: "#.set_square_inscribed(#, #)".}
+proc setNumVertices*(this: FisheyeMaker, numVertices: int) {.importcpp: "#->set_num_vertices(#)".}
 
-proc setReflection*(this: FisheyeMaker, reflection: bool) {.importcpp: "#.set_reflection(#)".}
+proc setSquareInscribed*(this: FisheyeMaker, squareInscribed: bool, squareRadius: float) {.importcpp: "#->set_square_inscribed(#, #)".}
+
+proc setReflection*(this: FisheyeMaker, reflection: bool) {.importcpp: "#->set_reflection(#)".}
 
 proc setupWindow*(this: FrameRateMeter | SceneGraphAnalyzerMeter, window: GraphicsOutput) {.importcpp: "#->setup_window(#)".}
 
@@ -19219,105 +19227,111 @@ proc getClockObject*(this: FrameRateMeter): ClockObject {.importcpp: "#->get_clo
 
 proc update*(this: AudioManager | Character | FrameRateMeter | SceneGraphAnalyzerMeter | TextNode) {.importcpp: "#->update()".}
 
-proc heightfield*(this: GeoMipTerrain | HeightfieldTesselator): PNMImage {.importcpp: "#.heightfield()".}
+proc heightfield*(this: GeoMipTerrain): PNMImage {.importcpp: "#->heightfield()".}
 
-proc setHeightfield*(this: GeoMipTerrain | HeightfieldTesselator, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_heightfield(#, #)".}
+proc setHeightfield*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#->set_heightfield(#, #)".}
 
-proc setHeightfield*(this: GeoMipTerrain | HeightfieldTesselator, filename: Filename): bool {.importcpp: "#.set_heightfield(#)".}
+proc setHeightfield*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#->set_heightfield(#)".}
 
-proc setHeightfield*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#.set_heightfield(#)".}
+proc setHeightfield*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#->set_heightfield(#)".}
 
-proc colorMap*(this: GeoMipTerrain): PNMImage {.importcpp: "#.color_map()".}
+proc colorMap*(this: GeoMipTerrain): PNMImage {.importcpp: "#->color_map()".}
 
-proc setColorMap*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_color_map(#, #)".}
+proc setColorMap*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#->set_color_map(#, #)".}
 
-proc setColorMap*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, image: Texture): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, image: Texture): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, path: string): bool {.importcpp: "#.set_color_map(nimStringToStdString(#))", header: stringConversionCode.}
+proc setColorMap*(this: GeoMipTerrain, path: string): bool {.importcpp: "#->set_color_map(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc hasColorMap*(this: GeoMipTerrain): bool {.importcpp: "#.has_color_map()".}
+proc hasColorMap*(this: GeoMipTerrain): bool {.importcpp: "#->has_color_map()".}
 
-proc clearColorMap*(this: GeoMipTerrain) {.importcpp: "#.clear_color_map()".}
+proc clearColorMap*(this: GeoMipTerrain) {.importcpp: "#->clear_color_map()".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float, brightness: float) {.importcpp: "#.calc_ambient_occlusion(#, #, #)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float, brightness: float) {.importcpp: "#->calc_ambient_occlusion(#, #, #)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float) {.importcpp: "#.calc_ambient_occlusion(#, #)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float) {.importcpp: "#->calc_ambient_occlusion(#, #)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float) {.importcpp: "#.calc_ambient_occlusion(#)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float) {.importcpp: "#->calc_ambient_occlusion(#)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain) {.importcpp: "#.calc_ambient_occlusion()".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain) {.importcpp: "#->calc_ambient_occlusion()".}
 
-proc getElevation*(this: GeoMipTerrain | HeightfieldTesselator, x: float64, y: float64): float64 {.importcpp: "#.get_elevation(#, #)".}
+proc getElevation*(this: GeoMipTerrain, x: float64, y: float64): float64 {.importcpp: "#->get_elevation(#, #)".}
 
-proc getNormal*(this: GeoMipTerrain, x: int, y: int): LVector3 {.importcpp: "#.get_normal(#, #)".}
+proc getNormal*(this: GeoMipTerrain, x: int, y: int): LVector3 {.importcpp: "#->get_normal(#, #)".}
 
-proc getNormal*(this: GeoMipTerrain, mx: int, my: int, x: int, y: int): LVector3 {.importcpp: "#.get_normal(#, #, #, #)".}
+proc getNormal*(this: GeoMipTerrain, mx: int, my: int, x: int, y: int): LVector3 {.importcpp: "#->get_normal(#, #, #, #)".}
 
-proc setBruteforce*(this: GeoMipTerrain, bf: bool) {.importcpp: "#.set_bruteforce(#)".}
+proc setBruteforce*(this: GeoMipTerrain, bf: bool) {.importcpp: "#->set_bruteforce(#)".}
 
-proc getBruteforce*(this: GeoMipTerrain): bool {.importcpp: "#.get_bruteforce()".}
+proc getBruteforce*(this: GeoMipTerrain): bool {.importcpp: "#->get_bruteforce()".}
 
-proc setAutoFlatten*(this: GeoMipTerrain, mode: int) {.importcpp: "#.set_auto_flatten(#)".}
+proc setAutoFlatten*(this: GeoMipTerrain, mode: int) {.importcpp: "#->set_auto_flatten(#)".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2d) {.importcpp: "#.set_focal_point((LPoint2d const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2d) {.importcpp: "#->set_focal_point((LPoint2d const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2f) {.importcpp: "#.set_focal_point((LPoint2f const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2f) {.importcpp: "#->set_focal_point((LPoint2f const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3d) {.importcpp: "#.set_focal_point((LPoint3d const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3d) {.importcpp: "#->set_focal_point((LPoint3d const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3f) {.importcpp: "#.set_focal_point((LPoint3f const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3f) {.importcpp: "#->set_focal_point((LPoint3f const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fnp: NodePath) {.importcpp: "#.set_focal_point(#)".}
+proc setFocalPoint*(this: GeoMipTerrain, fnp: NodePath) {.importcpp: "#->set_focal_point(#)".}
 
-proc setFocalPoint*(this: GeoMipTerrain, x: float64, y: float64) {.importcpp: "#.set_focal_point(#, #)".}
+proc setFocalPoint*(this: GeoMipTerrain, x: float64, y: float64) {.importcpp: "#->set_focal_point(#, #)".}
 
-proc getFocalPoint*(this: GeoMipTerrain): NodePath {.importcpp: "#.get_focal_point()".}
+proc getFocalPoint*(this: GeoMipTerrain): NodePath {.importcpp: "#->get_focal_point()".}
 
-proc getRoot*(this: GeoMipTerrain | MeshDrawer | MeshDrawer2D): NodePath {.importcpp: "#.get_root()".}
+proc getRoot*(this: GeoMipTerrain): NodePath {.importcpp: "#->get_root()".}
 
-proc setBlockSize*(this: GeoMipTerrain, newbs: int) {.importcpp: "#.set_block_size(#)".}
+proc setBlockSize*(this: GeoMipTerrain, newbs: int) {.importcpp: "#->set_block_size(#)".}
 
-proc getBlockSize*(this: GeoMipTerrain): int {.importcpp: "#.get_block_size()".}
+proc getBlockSize*(this: GeoMipTerrain): int {.importcpp: "#->get_block_size()".}
 
-proc getMaxLevel*(this: GeoMipTerrain): int {.importcpp: "#.get_max_level()".}
+proc getMaxLevel*(this: GeoMipTerrain): int {.importcpp: "#->get_max_level()".}
 
-proc setMinLevel*(this: GeoMipTerrain, minlevel: int) {.importcpp: "#.set_min_level(#)".}
+proc setMinLevel*(this: GeoMipTerrain, minlevel: int) {.importcpp: "#->set_min_level(#)".}
 
-proc getMinLevel*(this: GeoMipTerrain): int {.importcpp: "#.get_min_level()".}
+proc getMinLevel*(this: GeoMipTerrain): int {.importcpp: "#->get_min_level()".}
 
-proc isDirty*(this: GeoMipTerrain): bool {.importcpp: "#.is_dirty()".}
+proc isDirty*(this: GeoMipTerrain): bool {.importcpp: "#->is_dirty()".}
 
-proc setFactor*(this: GeoMipTerrain, factor: float) {.importcpp: "#.set_factor(#)".}
+proc setFactor*(this: GeoMipTerrain, factor: float) {.importcpp: "#->set_factor(#)".}
 
-proc setNearFar*(this: GeoMipTerrain, inputNear: float64, inputFar: float64) {.importcpp: "#.set_near_far(#, #)".}
+proc setNearFar*(this: GeoMipTerrain, inputNear: float64, inputFar: float64) {.importcpp: "#->set_near_far(#, #)".}
 
-proc setNear*(this: GeoMipTerrain, inputNear: float64) {.importcpp: "#.set_near(#)".}
+proc setNear*(this: GeoMipTerrain, inputNear: float64) {.importcpp: "#->set_near(#)".}
 
-proc setFar*(this: GeoMipTerrain, inputFar: float64) {.importcpp: "#.set_far(#)".}
+proc setFar*(this: GeoMipTerrain, inputFar: float64) {.importcpp: "#->set_far(#)".}
 
-proc getBlockNodePath*(this: GeoMipTerrain, mx: int, my: int): NodePath {.importcpp: "#.get_block_node_path(#, #)".}
+proc getBlockNodePath*(this: GeoMipTerrain, mx: int, my: int): NodePath {.importcpp: "#->get_block_node_path(#, #)".}
 
-proc getBlockFromPos*(this: GeoMipTerrain, x: float64, y: float64): LVecBase2 {.importcpp: "#.get_block_from_pos(#, #)".}
+proc getBlockFromPos*(this: GeoMipTerrain, x: float64, y: float64): LVecBase2 {.importcpp: "#->get_block_from_pos(#, #)".}
 
-proc setBorderStitching*(this: GeoMipTerrain, stitching: bool) {.importcpp: "#.set_border_stitching(#)".}
+proc setBorderStitching*(this: GeoMipTerrain, stitching: bool) {.importcpp: "#->set_border_stitching(#)".}
 
-proc getBorderStitching*(this: GeoMipTerrain): bool {.importcpp: "#.get_border_stitching()".}
+proc getBorderStitching*(this: GeoMipTerrain): bool {.importcpp: "#->get_border_stitching()".}
 
-proc getFar*(this: GeoMipTerrain): float64 {.importcpp: "#.get_far()".}
+proc getFar*(this: GeoMipTerrain): float64 {.importcpp: "#->get_far()".}
 
-proc getNear*(this: GeoMipTerrain): float64 {.importcpp: "#.get_near()".}
+proc getNear*(this: GeoMipTerrain): float64 {.importcpp: "#->get_near()".}
 
-proc getFlattenMode*(this: GeoMipTerrain): int {.importcpp: "#.get_flatten_mode()".}
+proc getFlattenMode*(this: GeoMipTerrain): int {.importcpp: "#->get_flatten_mode()".}
 
-proc makeSlopeImage*(this: GeoMipTerrain): PNMImage {.importcpp: "#.make_slope_image()".}
+proc makeSlopeImage*(this: GeoMipTerrain): PNMImage {.importcpp: "#->make_slope_image()".}
 
-proc generate*(this: GeoMipTerrain) {.importcpp: "#.generate()".}
+proc generate*(this: GeoMipTerrain) {.importcpp: "#->generate()".}
 
-proc update*(this: GeoMipTerrain): bool {.importcpp: "#.update()".}
+proc update*(this: GeoMipTerrain | PartBundle): bool {.importcpp: "#->update()".}
+
+proc heightfield*(this: HeightfieldTesselator): PNMImage {.importcpp: "#.heightfield()".}
+
+proc setHeightfield*(this: HeightfieldTesselator, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_heightfield(#, #)".}
+
+proc setHeightfield*(this: HeightfieldTesselator, filename: Filename): bool {.importcpp: "#.set_heightfield(#)".}
 
 proc setPolyCount*(this: HeightfieldTesselator, n: int) {.importcpp: "#.set_poly_count(#)".}
 
@@ -19330,6 +19344,8 @@ proc setHorizontalScale*(this: HeightfieldTesselator, h: float64) {.importcpp: "
 proc setVerticalScale*(this: HeightfieldTesselator, v: float64) {.importcpp: "#.set_vertical_scale(#)".}
 
 proc setMaxTriangles*(this: HeightfieldTesselator, n: int) {.importcpp: "#.set_max_triangles(#)".}
+
+proc getElevation*(this: HeightfieldTesselator, x: float64, y: float64): float64 {.importcpp: "#.get_elevation(#, #)".}
 
 proc generate*(this: HeightfieldTesselator): NodePath {.importcpp: "#.generate()".}
 
@@ -19370,6 +19386,8 @@ proc setVertexColor*(this: LineSegs, vertex: int, r: float, g: float, b: float) 
 proc setBudget*(this: MeshDrawer | MeshDrawer2D, budget: int) {.importcpp: "#.set_budget(#)".}
 
 proc getBudget*(this: MeshDrawer | MeshDrawer2D): int {.importcpp: "#.get_budget()".}
+
+proc getRoot*(this: MeshDrawer | MeshDrawer2D): NodePath {.importcpp: "#.get_root()".}
 
 proc begin*(this: MeshDrawer, camera: NodePath, render: NodePath) {.importcpp: "#.begin(#, #)".}
 
@@ -19810,8 +19828,6 @@ proc freezeJoint*(this: PartBundle, jointName: string, transform: TransformState
 proc controlJoint*(this: PartBundle, jointName: string, node: PandaNode): bool {.importcpp: "#->control_joint(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc releaseJoint*(this: PartBundle, jointName: string): bool {.importcpp: "#->release_joint(nimStringToStdString(#))", header: stringConversionCode.}
-
-proc update*(this: PartBundle): bool {.importcpp: "#->update()".}
 
 proc forceUpdate*(this: PartBundle): bool {.importcpp: "#->force_update()".}
 
@@ -23540,8 +23556,6 @@ proc getFocalLength*(this: Lens): float {.importcpp: "#->get_focal_length()".}
 proc setMinFov*(this: Lens, minFov: float) {.importcpp: "#->set_min_fov(#)".}
 
 proc setFov*(this: Lens, fov: LVecBase2) {.importcpp: "#->set_fov((LVecBase2 const &)(#))".}
-
-proc setFov*(this: Lens, fov: float) {.importcpp: "#->set_fov(#)".}
 
 proc setFov*(this: Lens, hfov: float, vfov: float) {.importcpp: "#->set_fov(#, #)".}
 
@@ -27497,6 +27511,10 @@ proc setModel*(this: TextGraphic, model: NodePath) {.importcpp: "#.set_model(#)"
 
 proc getFrame*(this: TextGraphic): LVecBase4 {.importcpp: "#.get_frame()".}
 
+proc setFrame*(this: TextGraphic, frame: LVecBase4) {.importcpp: "#.set_frame((LVecBase4 const &)(#))".}
+
+proc setFrame*(this: TextGraphic, left: float, right: float, bottom: float, top: float) {.importcpp: "#.set_frame(#, #, #, #)".}
+
 proc getInstanceFlag*(this: TextGraphic): bool {.importcpp: "#.get_instance_flag()".}
 
 proc setInstanceFlag*(this: TextGraphic, instanceFlag: bool) {.importcpp: "#.set_instance_flag(#)".}
@@ -27703,8 +27721,6 @@ proc getUpperLeft3d*(this: TextNode): LPoint3 {.importcpp: "#->get_upper_left_3d
 
 proc getLowerRight3d*(this: TextNode): LPoint3 {.importcpp: "#->get_lower_right_3d()".}
 
-proc generate*(this: TextNode): PandaNode {.importcpp: "#->generate()".}
-
 proc getInternalGeom*(this: TextNode): PandaNode {.importcpp: "#->get_internal_geom()".}
 
 proc setButtonDownEvent*(this: ButtonThrower, buttonDownEvent: string) {.importcpp: "#->set_button_down_event(nimStringToStdString(#))", header: stringConversionCode.}
@@ -27864,10 +27880,6 @@ proc setMat*(this: DriveInterface | Trackball, mat: LMatrix4) {.importcpp: "#->s
 proc forceDgraph*(this: DriveInterface) {.importcpp: "#->force_dgraph()".}
 
 converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
-
-proc setFrame*(this: MouseWatcher | MouseWatcherRegion | PGItem, frame: LVecBase4) {.importcpp: "#->set_frame((LVecBase4 const &)(#))".}
-
-proc setFrame*(this: MouseWatcher | MouseWatcherRegion | PGItem, left: float, right: float, bottom: float, top: float) {.importcpp: "#->set_frame(#, #, #, #)".}
 
 proc getArea*(this: MouseWatcherRegion): float {.importcpp: "#->get_area()".}
 
@@ -30608,8 +30620,8 @@ func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollect
   this.output(str)
   str.data
 
-converter toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+converter toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | CardMaker | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FisheyeMaker | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | GeoMipTerrain | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | CardMaker | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FisheyeMaker | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | GeoMipTerrain | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 proc contains*(this: VirtualFileSystem_mounts, value: VirtualFileMount): bool =
   for i in 0 ..< len(this):

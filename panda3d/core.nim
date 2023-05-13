@@ -2202,9 +2202,13 @@ type WavAudioCursor* {.importcpp: "PT(WavAudioCursor)", bycopy, pure, inheritabl
 proc toWavAudioCursor*(_: type(nil)): WavAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[WavAudioCursor], obj: TypedObject): WavAudioCursor {.importcpp: "DCAST(WavAudioCursor, @)".}
 
-type CardMaker* {.importcpp: "CardMaker", pure, inheritable, header: "cardMaker.h".} = object of Namable
+type CardMaker* {.importcpp: "CardMaker*", bycopy, pure, inheritable, header: "cardMaker.h".} = object of Namable
 
-type FisheyeMaker* {.importcpp: "FisheyeMaker", pure, inheritable, header: "fisheyeMaker.h".} = object of Namable
+proc toCardMaker*(_: type(nil)): CardMaker {.importcpp: "(nullptr)".}
+
+type FisheyeMaker* {.importcpp: "FisheyeMaker*", bycopy, pure, inheritable, header: "fisheyeMaker.h".} = object of Namable
+
+proc toFisheyeMaker*(_: type(nil)): FisheyeMaker {.importcpp: "(nullptr)".}
 
 type TextProperties* {.importcpp: "TextProperties*", bycopy, pure, inheritable, header: "textProperties.h".} = object
 
@@ -2267,7 +2271,9 @@ type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritabl
 proc toFrameRateMeter*(_: type(nil)): FrameRateMeter {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FrameRateMeter], obj: TypedObject): FrameRateMeter {.importcpp: "DCAST(FrameRateMeter, @)".}
 
-type GeoMipTerrain* {.importcpp: "GeoMipTerrain", pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
+type GeoMipTerrain* {.importcpp: "GeoMipTerrain*", bycopy, pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
+
+proc toGeoMipTerrain*(_: type(nil)): GeoMipTerrain {.importcpp: "(nullptr)".}
 
 type GeoMipTerrain_AutoFlattenMode {.importcpp: "GeoMipTerrain::AutoFlattenMode", pure, header: "geoMipTerrain.h".} = enum
   AFM_off = 0
@@ -6037,7 +6043,7 @@ proc initFileStream*(filename: string): FileStream {.importcpp: "FileStream(nimS
 
 proc newTextEncoder*(): TextEncoder {.importcpp: "new TextEncoder()".}
 
-proc newTextEncoder*(copy: TextEncoder | TextNode): TextEncoder {.importcpp: "new TextEncoder(#)".}
+proc newTextEncoder*(copy: TextNode | TextEncoder): TextEncoder {.importcpp: "new TextEncoder(#)".}
 
 proc setDefaultEncoding*(_: typedesc[TextEncoder], encoding: TextEncoder_Encoding) {.importcpp: "#TextEncoder::set_default_encoding(#)", header: "textEncoder.h".}
 
@@ -6341,7 +6347,7 @@ proc initIDecryptStream*(source: istream, ownsSource: bool, password: string): I
 
 proc initOEncryptStream*(): OEncryptStream {.importcpp: "OEncryptStream()".}
 
-proc initOEncryptStream*(dest: ostream | iostream, ownsDest: bool, password: string): OEncryptStream {.importcpp: "OEncryptStream(#, #, nimStringToStdString(#))", header: stringConversionCode.}
+proc initOEncryptStream*(dest: iostream | ostream, ownsDest: bool, password: string): OEncryptStream {.importcpp: "OEncryptStream(#, #, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initStreamReader*(copy: StreamReader): StreamReader {.importcpp: "StreamReader(#)".}
 
@@ -6349,11 +6355,11 @@ proc initStreamReader*(`in`: istream, ownsStream: bool): StreamReader {.importcp
 
 proc initStreamWriter*(copy: StreamWriter): StreamWriter {.importcpp: "StreamWriter(#)".}
 
-proc initStreamWriter*(`out`: ostream | iostream, ownsStream: bool): StreamWriter {.importcpp: "StreamWriter(#, #)".}
+proc initStreamWriter*(`out`: iostream | ostream, ownsStream: bool): StreamWriter {.importcpp: "StreamWriter(#, #)".}
 
 proc initIStreamWrapper*(stream: istream): IStreamWrapper {.importcpp: "IStreamWrapper(#)".}
 
-proc initOStreamWrapper*(stream: ostream | iostream): OStreamWrapper {.importcpp: "OStreamWrapper(#)".}
+proc initOStreamWrapper*(stream: iostream | ostream): OStreamWrapper {.importcpp: "OStreamWrapper(#)".}
 
 proc initStreamWrapper*(stream: iostream): StreamWrapper {.importcpp: "StreamWrapper(#)".}
 
@@ -6529,11 +6535,11 @@ proc compressFile*(source: Filename, dest: Filename, compressionLevel: int): boo
 
 proc decompressFile*(source: Filename, dest: Filename): bool {.importcpp: "decompress_file(#, #)", header: "compress_string.h".}
 
-proc compressStream*(source: istream, dest: ostream | iostream, compressionLevel: int): bool {.importcpp: "compress_stream(#, #, #)", header: "compress_string.h".}
+proc compressStream*(source: istream, dest: iostream | ostream, compressionLevel: int): bool {.importcpp: "compress_stream(#, #, #)", header: "compress_string.h".}
 
-proc decompressStream*(source: istream, dest: ostream | iostream): bool {.importcpp: "decompress_stream(#, #)", header: "compress_string.h".}
+proc decompressStream*(source: istream, dest: iostream | ostream): bool {.importcpp: "decompress_stream(#, #)", header: "compress_string.h".}
 
-proc copyStream*(source: istream, dest: ostream | iostream): bool {.importcpp: "copy_stream(#, #)", header: "copy_stream.h".}
+proc copyStream*(source: istream, dest: iostream | ostream): bool {.importcpp: "copy_stream(#, #)", header: "copy_stream.h".}
 
 proc getClassType*(_: typedesc[NodeReferenceCount]): TypeHandle {.importcpp: "NodeReferenceCount::get_class_type()", header: "nodeReferenceCount.h".}
 
@@ -6581,15 +6587,15 @@ proc encryptFile*(source: Filename, dest: Filename, password: string): bool {.im
 
 proc decryptFile*(source: Filename, dest: Filename, password: string): bool {.importcpp: "decrypt_file(#, #, nimStringToStdString(#))", header: "encrypt_file.h".}
 
-proc encryptStream*(source: istream, dest: ostream | iostream, password: string, algorithm: string, keyLength: int, iterationCount: int): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#), #, #)", header: "encrypt_stream.h".}
+proc encryptStream*(source: istream, dest: iostream | ostream, password: string, algorithm: string, keyLength: int, iterationCount: int): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#), #, #)", header: "encrypt_stream.h".}
 
-proc encryptStream*(source: istream, dest: ostream | iostream, password: string, algorithm: string, keyLength: int): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#), #)", header: "encrypt_stream.h".}
+proc encryptStream*(source: istream, dest: iostream | ostream, password: string, algorithm: string, keyLength: int): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#), #)", header: "encrypt_stream.h".}
 
-proc encryptStream*(source: istream, dest: ostream | iostream, password: string, algorithm: string): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#))", header: "encrypt_stream.h".}
+proc encryptStream*(source: istream, dest: iostream | ostream, password: string, algorithm: string): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#), nimStringToStdString(#))", header: "encrypt_stream.h".}
 
-proc encryptStream*(source: istream, dest: ostream | iostream, password: string): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#))", header: "encrypt_stream.h".}
+proc encryptStream*(source: istream, dest: iostream | ostream, password: string): bool {.importcpp: "encrypt_stream(#, #, nimStringToStdString(#))", header: "encrypt_stream.h".}
 
-proc decryptStream*(source: istream, dest: ostream | iostream, password: string): bool {.importcpp: "decrypt_stream(#, #, nimStringToStdString(#))", header: "encrypt_stream.h".}
+proc decryptStream*(source: istream, dest: iostream | ostream, password: string): bool {.importcpp: "decrypt_stream(#, #, nimStringToStdString(#))", header: "encrypt_stream.h".}
 
 proc errorToText*(err: ErrorUtilCode): string {.importcpp: "nimStringFromStdString(error_to_text(#))", header: "error_utils.h".}
 
@@ -6617,9 +6623,9 @@ proc initISubStream*(source: IStreamWrapper, start: clonglong, `end`: clonglong)
 
 proc initOSubStream*(): OSubStream {.importcpp: "OSubStream()".}
 
-proc initOSubStream*(dest: OStreamWrapper | StreamWrapper, start: clonglong, `end`: clonglong, append: bool): OSubStream {.importcpp: "OSubStream(#, #, #, #)".}
+proc initOSubStream*(dest: StreamWrapper | OStreamWrapper, start: clonglong, `end`: clonglong, append: bool): OSubStream {.importcpp: "OSubStream(#, #, #, #)".}
 
-proc initOSubStream*(dest: OStreamWrapper | StreamWrapper, start: clonglong, `end`: clonglong): OSubStream {.importcpp: "OSubStream(#, #, #)".}
+proc initOSubStream*(dest: StreamWrapper | OStreamWrapper, start: clonglong, `end`: clonglong): OSubStream {.importcpp: "OSubStream(#, #, #)".}
 
 proc initSubStream*(): SubStream {.importcpp: "SubStream()".}
 
@@ -6633,7 +6639,7 @@ proc closeReadSubfile*(_: typedesc[Multifile], stream: istream) {.importcpp: "#M
 
 proc getMagicNumber*(_: typedesc[Multifile]): string {.importcpp: "nimStringFromStdString(Multifile::get_magic_number())", header: "multifile.h".}
 
-proc newNamable*(param0: Thread | ShaderBuffer | AnimGroup | Material | MovieAudio | Texture | TextFont | Loader | MovieVideo | AnimControl | AsyncTaskManager | PandaNode | AsyncTask | Namable | PartGroup | MouseWatcherRegion | AsyncTaskChain): Namable {.importcpp: "new Namable(#)".}
+proc newNamable*(param0: Loader | AnimControl | TextFont | Material | Namable | MovieVideo | Texture | ShaderBuffer | Thread | AsyncTaskManager | MouseWatcherRegion | PandaNode | PartGroup | MovieAudio | AnimGroup | AsyncTaskChain | AsyncTask): Namable {.importcpp: "new Namable(#)".}
 
 proc newNamable*(initialName: string): Namable {.importcpp: "new Namable(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -6683,9 +6689,9 @@ proc initIDecompressStream*(source: istream, ownsSource: bool): IDecompressStrea
 
 proc initOCompressStream*(): OCompressStream {.importcpp: "OCompressStream()".}
 
-proc initOCompressStream*(dest: ostream | iostream, ownsDest: bool, compressionLevel: int): OCompressStream {.importcpp: "OCompressStream(#, #, #)".}
+proc initOCompressStream*(dest: iostream | ostream, ownsDest: bool, compressionLevel: int): OCompressStream {.importcpp: "OCompressStream(#, #, #)".}
 
-proc initOCompressStream*(dest: ostream | iostream, ownsDest: bool): OCompressStream {.importcpp: "OCompressStream(#, #)".}
+proc initOCompressStream*(dest: iostream | ostream, ownsDest: bool): OCompressStream {.importcpp: "OCompressStream(#, #)".}
 
 proc newVirtualFileList*(param0: VirtualFileList): VirtualFileList {.importcpp: "new VirtualFileList(#)".}
 
@@ -6695,7 +6701,7 @@ proc getGlobalPtr*(_: typedesc[VirtualFileSystem]): VirtualFileSystem {.importcp
 
 proc closeReadFile*(_: typedesc[VirtualFileSystem], stream: istream) {.importcpp: "#VirtualFileSystem::close_read_file(#)", header: "virtualFileSystem.h".}
 
-proc closeWriteFile*(_: typedesc[VirtualFileSystem], stream: ostream | iostream) {.importcpp: "#VirtualFileSystem::close_write_file(#)", header: "virtualFileSystem.h".}
+proc closeWriteFile*(_: typedesc[VirtualFileSystem], stream: iostream | ostream) {.importcpp: "#VirtualFileSystem::close_write_file(#)", header: "virtualFileSystem.h".}
 
 proc closeReadWriteFile*(_: typedesc[VirtualFileSystem], stream: iostream) {.importcpp: "#VirtualFileSystem::close_read_write_file(#)", header: "virtualFileSystem.h".}
 
@@ -6715,11 +6721,11 @@ proc initProfileTimer*(name: string): ProfileTimer {.importcpp: "ProfileTimer(ni
 
 proc initProfileTimer*(): ProfileTimer {.importcpp: "ProfileTimer()".}
 
-proc consolidateAllTo*(_: typedesc[ProfileTimer], `out`: ostream | iostream) {.importcpp: "#ProfileTimer::consolidateAllTo(#)", header: "profileTimer.h".}
+proc consolidateAllTo*(_: typedesc[ProfileTimer], `out`: iostream | ostream) {.importcpp: "#ProfileTimer::consolidateAllTo(#)", header: "profileTimer.h".}
 
 proc consolidateAllTo*(_: typedesc[ProfileTimer]) {.importcpp: "ProfileTimer::consolidateAllTo()", header: "profileTimer.h".}
 
-proc printAllTo*(_: typedesc[ProfileTimer], `out`: ostream | iostream) {.importcpp: "#ProfileTimer::printAllTo(#)", header: "profileTimer.h".}
+proc printAllTo*(_: typedesc[ProfileTimer], `out`: iostream | ostream) {.importcpp: "#ProfileTimer::printAllTo(#)", header: "profileTimer.h".}
 
 proc printAllTo*(_: typedesc[ProfileTimer]) {.importcpp: "ProfileTimer::printAllTo()", header: "profileTimer.h".}
 
@@ -6817,51 +6823,51 @@ proc initSceneGraphAnalyzer*(): SceneGraphAnalyzer {.importcpp: "SceneGraphAnaly
 
 proc initSceneGraphAnalyzer*(param0: SceneGraphAnalyzer): SceneGraphAnalyzer {.importcpp: "SceneGraphAnalyzer(#)".}
 
-proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "transformState.h".}
+proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "transformState.h".}
+proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_hpr((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_hpr((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(#TransformState::make_quat(#))", header: "transformState.h".}
+proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(#TransformState::make_quat(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_scale((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_scale((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "transformState.h".}
+proc makeScale*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_shear((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_shear((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale((LVecBase3 const &)(#), #, (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale((LVecBase3 const &)(#), #, (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale_shear((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale_shear((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale_shear((LVecBase3 const &)(#), #, (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale_shear((LVecBase3 const &)(#), #, (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(#TransformState::make_mat(#))", header: "transformState.h".}
+proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(#TransformState::make_mat(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos2d((LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos2d((LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeRotate2d*(_: typedesc[TransformState], rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_rotate2d(#))", header: "transformState.h".}
+proc makeRotate2d*(_: typedesc[TransformState], rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_rotate2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate2d((LVecBase2 const &)(#), #))", header: "transformState.h".}
+proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate2d((LVecBase2 const &)(#), #))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d((LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d((LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale2d*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "transformState.h".}
+proc makeScale2d*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeShear2d*(_: typedesc[TransformState], shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_shear2d(#))", header: "transformState.h".}
+proc makeShear2d*(_: typedesc[TransformState], shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_shear2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2, shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale_shear2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#), #))", header: "transformState.h".}
+proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2, shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale_shear2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#), #))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(#TransformState::make_mat3(#))", header: "transformState.h".}
+proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(#TransformState::make_mat3(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
 proc getNumStates*(_: typedesc[TransformState]): int {.importcpp: "TransformState::get_num_states()", header: "transformState.h".}
 
@@ -6871,9 +6877,9 @@ proc clearCache*(_: typedesc[TransformState]): int {.importcpp: "TransformState:
 
 proc garbageCollect*(_: typedesc[TransformState]): int {.importcpp: "TransformState::garbage_collect()", header: "transformState.h".}
 
-proc listCycles*(_: typedesc[TransformState], `out`: ostream | iostream) {.importcpp: "#TransformState::list_cycles(#)", header: "transformState.h".}
+proc listCycles*(_: typedesc[TransformState], `out`: iostream | ostream) {.importcpp: "#TransformState::list_cycles(#)", header: "transformState.h".}
 
-proc listStates*(_: typedesc[TransformState], `out`: ostream | iostream) {.importcpp: "#TransformState::list_states(#)", header: "transformState.h".}
+proc listStates*(_: typedesc[TransformState], `out`: iostream | ostream) {.importcpp: "#TransformState::list_states(#)", header: "transformState.h".}
 
 proc validateStates*(_: typedesc[TransformState]): bool {.importcpp: "TransformState::validate_states()", header: "transformState.h".}
 
@@ -6885,7 +6891,7 @@ proc getGlobalPtr*(_: typedesc[RenderAttribRegistry]): RenderAttribRegistry {.im
 
 proc getNumAttribs*(_: typedesc[RenderAttrib]): int {.importcpp: "RenderAttrib::get_num_attribs()", header: "renderAttrib.h".}
 
-proc listAttribs*(_: typedesc[RenderAttrib], `out`: ostream | iostream) {.importcpp: "#RenderAttrib::list_attribs(#)", header: "renderAttrib.h".}
+proc listAttribs*(_: typedesc[RenderAttrib], `out`: iostream | ostream) {.importcpp: "#RenderAttrib::list_attribs(#)", header: "renderAttrib.h".}
 
 proc garbageCollect*(_: typedesc[RenderAttrib]): int {.importcpp: "RenderAttrib::garbage_collect()", header: "renderAttrib.h".}
 
@@ -6893,53 +6899,53 @@ proc validateAttribs*(_: typedesc[RenderAttrib]): bool {.importcpp: "RenderAttri
 
 proc getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool, wireframeColor: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool, wireframeColor: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "renderModeAttrib.h".}
+proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeAttrib::get_class_slot()", header: "renderModeAttrib.h".}
 
 proc getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
-proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#))", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#))", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#, #))", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#, #))", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "texMatrixAttrib.h".}
+proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TexMatrixAttrib]): int {.importcpp: "TexMatrixAttrib::get_class_slot()", header: "texMatrixAttrib.h".}
 
 proc getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
 
-proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "renderState.h".}
+proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
 proc getMaxPriority*(_: typedesc[RenderState]): int {.importcpp: "RenderState::get_max_priority()", header: "renderState.h".}
 
@@ -6953,25 +6959,25 @@ proc clearMungerCache*(_: typedesc[RenderState]) {.importcpp: "RenderState::clea
 
 proc garbageCollect*(_: typedesc[RenderState]): int {.importcpp: "RenderState::garbage_collect()", header: "renderState.h".}
 
-proc listCycles*(_: typedesc[RenderState], `out`: ostream | iostream) {.importcpp: "#RenderState::list_cycles(#)", header: "renderState.h".}
+proc listCycles*(_: typedesc[RenderState], `out`: iostream | ostream) {.importcpp: "#RenderState::list_cycles(#)", header: "renderState.h".}
 
-proc listStates*(_: typedesc[RenderState], `out`: ostream | iostream) {.importcpp: "#RenderState::list_states(#)", header: "renderState.h".}
+proc listStates*(_: typedesc[RenderState], `out`: iostream | ostream) {.importcpp: "#RenderState::list_states(#)", header: "renderState.h".}
 
 proc validateStates*(_: typedesc[RenderState]): bool {.importcpp: "RenderState::validate_states()", header: "renderState.h".}
 
 proc getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
-proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, referenceAlpha: float): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "alphaTestAttrib.h".}
+proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, referenceAlpha: float): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "#include \"alphaTestAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "alphaTestAttrib.h".}
+proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "#include \"alphaTestAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
 proc getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
-proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "antialiasAttrib.h".}
+proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "#include \"antialiasAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "antialiasAttrib.h".}
+proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "#include \"antialiasAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AntialiasAttrib]): int {.importcpp: "AntialiasAttrib::get_class_slot()", header: "antialiasAttrib.h".}
 
@@ -6979,25 +6985,25 @@ proc getClassType*(_: typedesc[AntialiasAttrib]): TypeHandle {.importcpp: "Antia
 
 proc getNumEffects*(_: typedesc[RenderEffect]): int {.importcpp: "RenderEffect::get_num_effects()", header: "renderEffect.h".}
 
-proc listEffects*(_: typedesc[RenderEffect], `out`: ostream | iostream) {.importcpp: "#RenderEffect::list_effects(#)", header: "renderEffect.h".}
+proc listEffects*(_: typedesc[RenderEffect], `out`: iostream | ostream) {.importcpp: "#RenderEffect::list_effects(#)", header: "renderEffect.h".}
 
 proc validateEffects*(_: typedesc[RenderEffect]): bool {.importcpp: "RenderEffect::validate_effects()", header: "renderEffect.h".}
 
 proc getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
 
-proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "renderEffects.h".}
+proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
 proc getNumStates*(_: typedesc[RenderEffects]): int {.importcpp: "RenderEffects::get_num_states()", header: "renderEffects.h".}
 
-proc listStates*(_: typedesc[RenderEffects], `out`: ostream | iostream) {.importcpp: "#RenderEffects::list_states(#)", header: "renderEffects.h".}
+proc listStates*(_: typedesc[RenderEffects], `out`: iostream | ostream) {.importcpp: "#RenderEffects::list_states(#)", header: "renderEffects.h".}
 
 proc validateStates*(_: typedesc[RenderEffects]): bool {.importcpp: "RenderEffects::validate_states()", header: "renderEffects.h".}
 
@@ -7015,19 +7021,19 @@ proc getAllCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode
 
 proc getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
-proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "transparencyAttrib.h".}
+proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "#include \"transparencyAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "transparencyAttrib.h".}
+proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "#include \"transparencyAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
 proc getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
-proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "logicOpAttrib.h".}
+proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LogicOpAttrib], op: LogicOpAttrib_Operation): RenderAttrib {.importcpp: "deconstify(#LogicOpAttrib::make(#))", header: "logicOpAttrib.h".}
+proc make*(_: typedesc[LogicOpAttrib], op: LogicOpAttrib_Operation): RenderAttrib {.importcpp: "deconstify(#LogicOpAttrib::make(#))", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "logicOpAttrib.h".}
+proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
 
@@ -7103,23 +7109,23 @@ proc getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePath::ge
 
 proc getGlobalPtr*(_: typedesc[AttribNodeRegistry]): AttribNodeRegistry {.importcpp: "AttribNodeRegistry::get_global_ptr()", header: "attribNodeRegistry.h".}
 
-proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "audioVolumeAttrib.h".}
+proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[AudioVolumeAttrib], volume: float): RenderAttrib {.importcpp: "deconstify(#AudioVolumeAttrib::make(#))", header: "audioVolumeAttrib.h".}
+proc make*(_: typedesc[AudioVolumeAttrib], volume: float): RenderAttrib {.importcpp: "deconstify(#AudioVolumeAttrib::make(#))", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "audioVolumeAttrib.h".}
+proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "audioVolumeAttrib.h".}
+proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolumeAttrib::get_class_slot()", header: "audioVolumeAttrib.h".}
 
 proc getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
-proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "auxBitplaneAttrib.h".}
+proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(#AuxBitplaneAttrib::make(#))", header: "auxBitplaneAttrib.h".}
+proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(#AuxBitplaneAttrib::make(#))", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "auxBitplaneAttrib.h".}
+proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AuxBitplaneAttrib]): int {.importcpp: "AuxBitplaneAttrib::get_class_slot()", header: "auxBitplaneAttrib.h".}
 
@@ -7131,15 +7137,15 @@ proc newAuxSceneData*(param0: AuxSceneData): AuxSceneData {.importcpp: "new AuxS
 
 proc initBamFile*(): BamFile {.importcpp: "BamFile()".}
 
-proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3, fixedDepth: bool): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#), #))", header: "billboardEffect.h".}
+proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3, fixedDepth: bool): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#), #))", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#)))", header: "billboardEffect.h".}
+proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#)))", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "billboardEffect.h".}
+proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "billboardEffect.h".}
+proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "billboardEffect.h".}
+proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
 
@@ -7167,49 +7173,49 @@ proc newPlaneNode*(name: string): PlaneNode {.importcpp: "new PlaneNode(nimStrin
 
 proc getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
-proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode, plane4: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode, plane4: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "clipPlaneAttrib.h".}
+proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "clipPlaneAttrib.h".}
+proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAttrib::get_class_slot()", header: "clipPlaneAttrib.h".}
 
 proc getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
-proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "colorAttrib.h".}
+proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorAttrib::make_flat(#))", header: "colorAttrib.h".}
+proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorAttrib::make_flat(#))", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "colorAttrib.h".}
+proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "colorAttrib.h".}
+proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get_class_slot()", header: "colorAttrib.h".}
 
 proc getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
-proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "colorBlendAttrib.h".}
+proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "colorBlendAttrib.h".}
+proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
 proc involvesConstantColor*(_: typedesc[ColorBlendAttrib], operand: ColorBlendAttrib_Operand): bool {.importcpp: "#ColorBlendAttrib::involves_constant_color(#)", header: "colorBlendAttrib.h".}
 
@@ -7219,29 +7225,29 @@ proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendA
 
 proc getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
-proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "colorScaleAttrib.h".}
+proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ColorScaleAttrib::make((LVecBase4 const &)(#)))", header: "colorScaleAttrib.h".}
+proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ColorScaleAttrib::make((LVecBase4 const &)(#)))", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "colorScaleAttrib.h".}
+proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "colorScaleAttrib.h".}
+proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleAttrib::get_class_slot()", header: "colorScaleAttrib.h".}
 
 proc getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
-proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "colorWriteAttrib.h".}
+proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "#include \"colorWriteAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "colorWriteAttrib.h".}
+proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "#include \"colorWriteAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
 proc getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "compassEffect.h".}
+proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "#include \"compassEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "compassEffect.h".}
+proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "#include \"compassEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
 
@@ -7255,9 +7261,9 @@ proc getDefaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "Ge
 
 proc getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
-proc make*(_: typedesc[CullBinAttrib], binName: string, drawOrder: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".}
+proc make*(_: typedesc[CullBinAttrib], binName: string, drawOrder: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "#include \"cullBinAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "cullBinAttrib.h".}
+proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "#include \"cullBinAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib::get_class_slot()", header: "cullBinAttrib.h".}
 
@@ -7265,13 +7271,13 @@ proc getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBin
 
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".}
 
-proc make*(_: typedesc[CullFaceAttrib], mode: CullFaceAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#CullFaceAttrib::make(#))", header: "cullFaceAttrib.h".}
+proc make*(_: typedesc[CullFaceAttrib], mode: CullFaceAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#CullFaceAttrib::make(#))", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "cullFaceAttrib.h".}
+proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "cullFaceAttrib.h".}
+proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "cullFaceAttrib.h".}
+proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
 
@@ -7287,11 +7293,11 @@ proc newFog*(name: string): Fog {.importcpp: "new Fog(nimStringToStdString(#))",
 
 proc getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
-proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "fogAttrib.h".}
+proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "fogAttrib.h".}
+proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "fogAttrib.h".}
+proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[FogAttrib]): int {.importcpp: "FogAttrib::get_class_slot()", header: "fogAttrib.h".}
 
@@ -7307,9 +7313,9 @@ proc getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "CullTra
 
 proc getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
-proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "rescaleNormalAttrib.h".}
+proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "#include \"rescaleNormalAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "rescaleNormalAttrib.h".}
+proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "#include \"rescaleNormalAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
@@ -7319,33 +7325,33 @@ proc getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullResult
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
-proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "decalEffect.h".}
+proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "#include \"decalEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int, minValue: float, maxValue: float): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#, #, #))", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int, minValue: float, maxValue: float): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#, #, #))", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "depthOffsetAttrib.h".}
+proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffsetAttrib::get_class_slot()", header: "depthOffsetAttrib.h".}
 
 proc getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
-proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "depthTestAttrib.h".}
+proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "#include \"depthTestAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "depthTestAttrib.h".}
+proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "#include \"depthTestAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
 
 proc getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
-proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "depthWriteAttrib.h".}
+proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "#include \"depthWriteAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "depthWriteAttrib.h".}
+proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "#include \"depthWriteAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
@@ -7353,37 +7359,37 @@ proc getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "Dept
 
 proc getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
-proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | Light | LightNode, light2: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | LightNode | Light, light2: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | Light | LightNode, light2: LightLensNode | Light | LightNode, light3: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | LightNode | Light, light2: LightLensNode | LightNode | Light, light3: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | Light | LightNode, light2: LightLensNode | Light | LightNode, light3: LightLensNode | Light | LightNode, light4: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: LightLensNode | LightNode | Light, light2: LightLensNode | LightNode | Light, light3: LightLensNode | LightNode | Light, light4: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "lightAttrib.h".}
+proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "lightAttrib.h".}
+proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
 
 proc getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
-proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "lightRampAttrib.h".}
+proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "lightRampAttrib.h".}
+proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_single_threshold(#, #))", header: "lightRampAttrib.h".}
+proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_single_threshold(#, #))", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float, thresh1: float, lev1: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_double_threshold(#, #, #, #))", header: "lightRampAttrib.h".}
+proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float, thresh1: float, lev1: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_double_threshold(#, #, #, #))", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "lightRampAttrib.h".}
+proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "lightRampAttrib.h".}
+proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "lightRampAttrib.h".}
+proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LightRampAttrib]): int {.importcpp: "LightRampAttrib::get_class_slot()", header: "lightRampAttrib.h".}
 
@@ -7405,11 +7411,11 @@ proc getGlobalPtr*(_: typedesc[LoaderFileTypeRegistry]): LoaderFileTypeRegistry 
 
 proc initLoaderFileTypeRegistry*(param0: LoaderFileTypeRegistry): LoaderFileTypeRegistry {.importcpp: "LoaderFileTypeRegistry(#)".}
 
-proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(#MaterialAttrib::make(#))", header: "materialAttrib.h".}
+proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(#MaterialAttrib::make(#))", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "materialAttrib.h".}
+proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "materialAttrib.h".}
+proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[MaterialAttrib]): int {.importcpp: "MaterialAttrib::get_class_slot()", header: "materialAttrib.h".}
 
@@ -7461,9 +7467,9 @@ proc garbageCollect*(_: typedesc[ModelPool]): int {.importcpp: "ModelPool::garba
 
 proc listContents*(_: typedesc[ModelPool]) {.importcpp: "ModelPool::list_contents()", header: "modelPool.h".}
 
-proc listContents*(_: typedesc[ModelPool], `out`: ostream | iostream) {.importcpp: "#ModelPool::list_contents(#)", header: "modelPool.h".}
+proc listContents*(_: typedesc[ModelPool], `out`: iostream | ostream) {.importcpp: "#ModelPool::list_contents(#)", header: "modelPool.h".}
 
-proc write*(_: typedesc[ModelPool], `out`: ostream | iostream) {.importcpp: "#ModelPool::write(#)", header: "modelPool.h".}
+proc write*(_: typedesc[ModelPool], `out`: iostream | ostream) {.importcpp: "#ModelPool::write(#)", header: "modelPool.h".}
 
 proc newModelSaveRequest*(param0: ModelSaveRequest): ModelSaveRequest {.importcpp: "new ModelSaveRequest(#)".}
 
@@ -7471,25 +7477,25 @@ proc newModelSaveRequest*(name: string, filename: Filename, options: LoaderOptio
 
 proc getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
-proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "textureAttrib.h".}
+proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(#TextureAttrib::make(#))", header: "textureAttrib.h".}
+proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(#TextureAttrib::make(#))", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "textureAttrib.h".}
+proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "textureAttrib.h".}
+proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "textureAttrib.h".}
+proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib::get_class_slot()", header: "textureAttrib.h".}
 
 proc getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
-proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".}
+proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexGenAttrib], stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#TexGenAttrib::make(#, #))", header: "texGenAttrib.h".}
+proc make*(_: typedesc[TexGenAttrib], stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#TexGenAttrib::make(#, #))", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "texGenAttrib.h".}
+proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TexGenAttrib]): int {.importcpp: "TexGenAttrib::get_class_slot()", header: "texGenAttrib.h".}
 
@@ -7499,7 +7505,7 @@ proc newOccluderNode*(name: string): OccluderNode {.importcpp: "new OccluderNode
 
 proc getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
-proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "occluderEffect.h".}
+proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "#include \"occluderEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
 
@@ -7509,21 +7515,21 @@ proc newPolylightNode*(name: string): PolylightNode {.importcpp: "new PolylightN
 
 proc getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
-proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".}
+proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "#include \"polylightEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[PolylightEffect], weight: float, contrib: PolylightEffect_ContribType, effectCenter: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, (LPoint3 const &)(#)))", header: "polylightEffect.h".}
+proc make*(_: typedesc[PolylightEffect], weight: float, contrib: PolylightEffect_ContribType, effectCenter: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, (LPoint3 const &)(#)))", header: "#include \"polylightEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#))", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#))", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "shaderAttrib.h".}
+proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "shaderAttrib.h".}
+proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
 proc registerWithReadFactory*(_: typedesc[ShaderAttrib]) {.importcpp: "ShaderAttrib::register_with_read_factory()", header: "shaderAttrib.h".}
 
@@ -7531,31 +7537,31 @@ proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::g
 
 proc getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
-proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "showBoundsEffect.h".}
+proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "#include \"showBoundsEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "showBoundsEffect.h".}
+proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "#include \"showBoundsEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
-proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "texProjectorEffect.h".}
+proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "#include \"texProjectorEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#), #))", header: "scissorEffect.h".}
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#)))", header: "scissorEffect.h".}
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
 
@@ -7573,39 +7579,39 @@ proc newPortalNode*(name: string, pos: LPoint3): PortalNode {.importcpp: "new Po
 
 proc getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
-proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "scissorAttrib.h".}
+proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make((LVecBase4 const &)(#)))", header: "scissorAttrib.h".}
+proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make((LVecBase4 const &)(#)))", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ScissorAttrib], left: float, right: float, bottom: float, top: float): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#, #, #, #))", header: "scissorAttrib.h".}
+proc make*(_: typedesc[ScissorAttrib], left: float, right: float, bottom: float, top: float): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#, #, #, #))", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "scissorAttrib.h".}
+proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib::get_class_slot()", header: "scissorAttrib.h".}
 
 proc getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
-proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "shadeModelAttrib.h".}
+proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "#include \"shadeModelAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "shadeModelAttrib.h".}
+proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "#include \"shadeModelAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
 proc getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
-proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "stencilAttrib.h".}
+proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "stencilAttrib.h".}
+proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make2Sided*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided(#, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make2Sided*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided(#, #, #, #, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc makeWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_with_clear(#, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc makeWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_with_clear(#, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make2SidedWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided_with_clear(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make2SidedWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided_with_clear(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
 
@@ -7625,9 +7631,9 @@ proc releaseAllShaders*(_: typedesc[ShaderPool]) {.importcpp: "ShaderPool::relea
 
 proc garbageCollect*(_: typedesc[ShaderPool]): int {.importcpp: "ShaderPool::garbage_collect()", header: "shaderPool.h".}
 
-proc listContents*(_: typedesc[ShaderPool], `out`: ostream | iostream) {.importcpp: "#ShaderPool::list_contents(#)", header: "shaderPool.h".}
+proc listContents*(_: typedesc[ShaderPool], `out`: iostream | ostream) {.importcpp: "#ShaderPool::list_contents(#)", header: "shaderPool.h".}
 
-proc write*(_: typedesc[ShaderPool], `out`: ostream | iostream) {.importcpp: "#ShaderPool::write(#)", header: "shaderPool.h".}
+proc write*(_: typedesc[ShaderPool], `out`: iostream | ostream) {.importcpp: "#ShaderPool::write(#)", header: "shaderPool.h".}
 
 proc newMovieAudio*(param0: MovieAudio): MovieAudio {.importcpp: "new MovieAudio(#)".}
 
@@ -7747,13 +7753,13 @@ proc newWavAudioCursor*(param0: WavAudioCursor): WavAudioCursor {.importcpp: "ne
 
 proc getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
 
-proc initCardMaker*(param0: CardMaker): CardMaker {.importcpp: "CardMaker(#)".}
+proc newCardMaker*(param0: CardMaker): CardMaker {.importcpp: "new CardMaker(#)".}
 
-proc initCardMaker*(name: string): CardMaker {.importcpp: "CardMaker(nimStringToStdString(#))", header: stringConversionCode.}
+proc newCardMaker*(name: string): CardMaker {.importcpp: "new CardMaker(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc initFisheyeMaker*(param0: FisheyeMaker): FisheyeMaker {.importcpp: "FisheyeMaker(#)".}
+proc newFisheyeMaker*(param0: FisheyeMaker): FisheyeMaker {.importcpp: "new FisheyeMaker(#)".}
 
-proc initFisheyeMaker*(name: string): FisheyeMaker {.importcpp: "FisheyeMaker(nimStringToStdString(#))", header: stringConversionCode.}
+proc newFisheyeMaker*(name: string): FisheyeMaker {.importcpp: "new FisheyeMaker(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newFrameRateMeter*(param0: FrameRateMeter): FrameRateMeter {.importcpp: "new FrameRateMeter(#)".}
 
@@ -7761,7 +7767,7 @@ proc newFrameRateMeter*(name: string): FrameRateMeter {.importcpp: "new FrameRat
 
 proc getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
 
-proc initGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
+proc newGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "new GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
 
@@ -7969,7 +7975,7 @@ proc newCharacterJointBundle*(): CharacterJointBundle {.importcpp: "new Characte
 
 proc getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
-proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "characterJointEffect.h".}
+proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "#include \"characterJointEffect.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
 
@@ -8301,7 +8307,7 @@ proc forceYield*(_: typedesc[Thread]) {.importcpp: "Thread::force_yield()", head
 
 proc considerYield*(_: typedesc[Thread]) {.importcpp: "Thread::consider_yield()", header: "thread.h".}
 
-proc writeStatus*(_: typedesc[Thread], `out`: ostream | iostream) {.importcpp: "#Thread::write_status(#)", header: "thread.h".}
+proc writeStatus*(_: typedesc[Thread], `out`: iostream | ostream) {.importcpp: "#Thread::write_status(#)", header: "thread.h".}
 
 proc prepareForExit*(_: typedesc[Thread]) {.importcpp: "Thread::prepare_for_exit()", header: "thread.h".}
 
@@ -8361,7 +8367,7 @@ proc newAsyncTaskManager*(name: string): AsyncTaskManager {.importcpp: "new Asyn
 
 proc initAsyncTaskCollection*(): AsyncTaskCollection {.importcpp: "AsyncTaskCollection()".}
 
-proc initAsyncTaskCollection*(copy: AsyncTaskCollection | AsyncTaskSequence): AsyncTaskCollection {.importcpp: "AsyncTaskCollection(#)".}
+proc initAsyncTaskCollection*(copy: AsyncTaskSequence | AsyncTaskCollection): AsyncTaskCollection {.importcpp: "AsyncTaskCollection(#)".}
 
 proc getGlobalPtr*(_: typedesc[AsyncTaskManager]): AsyncTaskManager {.importcpp: "AsyncTaskManager::get_global_ptr()", header: "asyncTaskManager.h".}
 
@@ -8415,13 +8421,13 @@ proc getClassType*(_: typedesc[PointerEventList]): TypeHandle {.importcpp: "Poin
 
 proc initAdaptiveLru*(name: string, maxSize: int): AdaptiveLru {.importcpp: "AdaptiveLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc newAdaptiveLruPage*(copy: IndexBufferContext | TextureContext | AdaptiveLruPage | VertexBufferContext): AdaptiveLruPage {.importcpp: "new AdaptiveLruPage(#)".}
+proc newAdaptiveLruPage*(copy: IndexBufferContext | VertexBufferContext | AdaptiveLruPage | TextureContext): AdaptiveLruPage {.importcpp: "new AdaptiveLruPage(#)".}
 
 proc newAdaptiveLruPage*(lruSize: int): AdaptiveLruPage {.importcpp: "new AdaptiveLruPage(#)".}
 
 proc initGeomEnums*(): GeomEnums {.importcpp: "GeomEnums()".}
 
-proc initGeomEnums*(param0: GeomVertexData | GeomEnums | Geom | GeomVertexArrayFormat | ShaderBuffer | GeomPrimitive | GeomVertexFormat | GeomVertexArrayDataHandle | GeomVertexArrayData): GeomEnums {.importcpp: "GeomEnums(#)".}
+proc initGeomEnums*(param0: GeomVertexFormat | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexArrayDataHandle | GeomEnums | Geom | ShaderBuffer | GeomVertexData): GeomEnums {.importcpp: "GeomEnums(#)".}
 
 proc initGeomVertexAnimationSpec*(): GeomVertexAnimationSpec {.importcpp: "GeomVertexAnimationSpec()".}
 
@@ -8499,7 +8505,7 @@ proc newGeomVertexArrayFormat*(name0: InternalName, numComponents0: int, numeric
 
 proc newGeomVertexArrayFormat*(copy: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#)".}
 
-proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "geomVertexArrayFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "#include \"geomVertexArrayFormat.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
 
@@ -8509,41 +8515,41 @@ proc newGeomVertexFormat*(arrayFormat: GeomVertexArrayFormat): GeomVertexFormat 
 
 proc newGeomVertexFormat*(copy: GeomVertexFormat): GeomVertexFormat {.importcpp: "new GeomVertexFormat(#)".}
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "geomVertexFormat.h".}
+proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "geomVertexFormat.h".}
+proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "geomVertexFormat.h".}
+proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "geomVertexFormat.h".}
+proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "geomVertexFormat.h".}
+proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "geomVertexFormat.h".}
+proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "geomVertexFormat.h".}
+proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "geomVertexFormat.h".}
+proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "geomVertexFormat.h".}
+proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "geomVertexFormat.h".}
+proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "geomVertexFormat.h".}
+proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "geomVertexFormat.h".}
+proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "geomVertexFormat.h".}
+proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
 
 proc initSimpleLru*(name: string, maxSize: int): SimpleLru {.importcpp: "SimpleLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc newSimpleLruPage*(copy: SimpleLruPage | VertexDataPage | GeomVertexArrayData): SimpleLruPage {.importcpp: "new SimpleLruPage(#)".}
+proc newSimpleLruPage*(copy: GeomVertexArrayData | SimpleLruPage | VertexDataPage): SimpleLruPage {.importcpp: "new SimpleLruPage(#)".}
 
 proc newSimpleLruPage*(lruSize: int): SimpleLruPage {.importcpp: "new SimpleLruPage(#)".}
 
@@ -8597,7 +8603,7 @@ proc newTransformTable*(): TransformTable {.importcpp: "new TransformTable()".}
 
 proc newTransformTable*(copy: TransformTable): TransformTable {.importcpp: "new TransformTable(#)".}
 
-proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "transformTable.h".}
+proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "#include \"transformTable.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
 
@@ -8627,7 +8633,7 @@ proc newSliderTable*(): SliderTable {.importcpp: "new SliderTable()".}
 
 proc newSliderTable*(copy: SliderTable): SliderTable {.importcpp: "new SliderTable(#)".}
 
-proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "sliderTable.h".}
+proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "#include \"sliderTable.h\"\n" & deconstifyCode.}
 
 proc getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
 
@@ -8747,7 +8753,7 @@ proc initGeomVertexReader*(vertexData: GeomVertexData, currentThread: Thread): G
 
 proc initGeomVertexReader*(vertexData: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
-proc initGeomVertexReader*(copy: GeomVertexRewriter | GeomVertexReader): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
+proc initGeomVertexReader*(copy: GeomVertexReader | GeomVertexRewriter): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
 proc initGeomVertexReader*(currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
@@ -8923,9 +8929,9 @@ proc releaseAllMaterials*(_: typedesc[MaterialPool]) {.importcpp: "MaterialPool:
 
 proc garbageCollect*(_: typedesc[MaterialPool]): int {.importcpp: "MaterialPool::garbage_collect()", header: "materialPool.h".}
 
-proc listContents*(_: typedesc[MaterialPool], `out`: ostream | iostream) {.importcpp: "#MaterialPool::list_contents(#)", header: "materialPool.h".}
+proc listContents*(_: typedesc[MaterialPool], `out`: iostream | ostream) {.importcpp: "#MaterialPool::list_contents(#)", header: "materialPool.h".}
 
-proc write*(_: typedesc[MaterialPool], `out`: ostream | iostream) {.importcpp: "#MaterialPool::write(#)", header: "materialPool.h".}
+proc write*(_: typedesc[MaterialPool], `out`: iostream | ostream) {.importcpp: "#MaterialPool::write(#)", header: "materialPool.h".}
 
 proc newMatrixLens*(): MatrixLens {.importcpp: "new MatrixLens()".}
 
@@ -9051,7 +9057,7 @@ proc garbageCollect*(_: typedesc[TexturePool]): int {.importcpp: "TexturePool::g
 
 proc listContents*(_: typedesc[TexturePool]) {.importcpp: "TexturePool::list_contents()", header: "texturePool.h".}
 
-proc listContents*(_: typedesc[TexturePool], `out`: ostream | iostream) {.importcpp: "#TexturePool::list_contents(#)", header: "texturePool.h".}
+proc listContents*(_: typedesc[TexturePool], `out`: iostream | ostream) {.importcpp: "#TexturePool::list_contents(#)", header: "texturePool.h".}
 
 proc findTexture*(_: typedesc[TexturePool], name: string): Texture {.importcpp: "#TexturePool::find_texture(nimStringToStdString(#))", header: "texturePool.h".}
 
@@ -9069,7 +9075,7 @@ proc getFakeTextureImage*(_: typedesc[TexturePool]): Filename {.importcpp: "Text
 
 proc makeTexture*(_: typedesc[TexturePool], extension: string): Texture {.importcpp: "#TexturePool::make_texture(nimStringToStdString(#))", header: "texturePool.h".}
 
-proc write*(_: typedesc[TexturePool], `out`: ostream | iostream) {.importcpp: "#TexturePool::write(#)", header: "texturePool.h".}
+proc write*(_: typedesc[TexturePool], `out`: iostream | ostream) {.importcpp: "#TexturePool::write(#)", header: "texturePool.h".}
 
 proc newTexturePeeker*(param0: TexturePeeker): TexturePeeker {.importcpp: "new TexturePeeker(#)".}
 
@@ -9085,9 +9091,9 @@ proc getMode*(_: typedesc[TextureStagePool]): TextureStagePool_Mode {.importcpp:
 
 proc garbageCollect*(_: typedesc[TextureStagePool]): int {.importcpp: "TextureStagePool::garbage_collect()", header: "textureStagePool.h".}
 
-proc listContents*(_: typedesc[TextureStagePool], `out`: ostream | iostream) {.importcpp: "#TextureStagePool::list_contents(#)", header: "textureStagePool.h".}
+proc listContents*(_: typedesc[TextureStagePool], `out`: iostream | ostream) {.importcpp: "#TextureStagePool::list_contents(#)", header: "textureStagePool.h".}
 
-proc write*(_: typedesc[TextureStagePool], `out`: ostream | iostream) {.importcpp: "#TextureStagePool::write(#)", header: "textureStagePool.h".}
+proc write*(_: typedesc[TextureStagePool], `out`: iostream | ostream) {.importcpp: "#TextureStagePool::write(#)", header: "textureStagePool.h".}
 
 proc getClassType*(_: typedesc[GraphicsOutputBase]): TypeHandle {.importcpp: "GraphicsOutputBase::get_class_type()", header: "graphicsOutputBase.h".}
 
@@ -10769,9 +10775,9 @@ proc releaseAllFonts*(_: typedesc[FontPool]) {.importcpp: "FontPool::release_all
 
 proc garbageCollect*(_: typedesc[FontPool]): int {.importcpp: "FontPool::garbage_collect()", header: "fontPool.h".}
 
-proc listContents*(_: typedesc[FontPool], `out`: ostream | iostream) {.importcpp: "#FontPool::list_contents(#)", header: "fontPool.h".}
+proc listContents*(_: typedesc[FontPool], `out`: iostream | ostream) {.importcpp: "#FontPool::list_contents(#)", header: "fontPool.h".}
 
-proc write*(_: typedesc[FontPool], `out`: ostream | iostream) {.importcpp: "#FontPool::write(#)", header: "fontPool.h".}
+proc write*(_: typedesc[FontPool], `out`: iostream | ostream) {.importcpp: "#FontPool::write(#)", header: "fontPool.h".}
 
 proc getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
 
@@ -10783,7 +10789,7 @@ proc getClassType*(_: typedesc[StaticTextFont]): TypeHandle {.importcpp: "Static
 
 proc newTextProperties*(): TextProperties {.importcpp: "new TextProperties()".}
 
-proc newTextProperties*(copy: TextProperties | TextNode): TextProperties {.importcpp: "new TextProperties(#)".}
+proc newTextProperties*(copy: TextNode | TextProperties): TextProperties {.importcpp: "new TextProperties(#)".}
 
 proc setDefaultFont*(_: typedesc[TextProperties], param0: TextFont) {.importcpp: "#TextProperties::set_default_font(#)", header: "textProperties.h".}
 
@@ -10803,21 +10809,21 @@ proc getGlobalPtr*(_: typedesc[TextPropertiesManager]): TextPropertiesManager {.
 
 proc initTextAssembler*(copy: TextAssembler): TextAssembler {.importcpp: "TextAssembler(#)".}
 
-proc initTextAssembler*(encoder: TextEncoder | TextNode): TextAssembler {.importcpp: "TextAssembler(#)".}
+proc initTextAssembler*(encoder: TextNode | TextEncoder): TextAssembler {.importcpp: "TextAssembler(#)".}
 
-proc calcWidth*(_: typedesc[TextAssembler], graphic: TextGraphic, properties: TextProperties | TextNode): float {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".}
+proc calcWidth*(_: typedesc[TextAssembler], graphic: TextGraphic, properties: TextNode | TextProperties): float {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".}
 
-proc calcWidth*(_: typedesc[TextAssembler], character: int, properties: TextProperties | TextNode): float {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".}
+proc calcWidth*(_: typedesc[TextAssembler], character: int, properties: TextNode | TextProperties): float {.importcpp: "#TextAssembler::calc_width(#, #)", header: "textAssembler.h".}
 
-proc hasExactCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties | TextNode): bool {.importcpp: "#TextAssembler::has_exact_character(#, #)", header: "textAssembler.h".}
+proc hasExactCharacter*(_: typedesc[TextAssembler], character: int, properties: TextNode | TextProperties): bool {.importcpp: "#TextAssembler::has_exact_character(#, #)", header: "textAssembler.h".}
 
-proc hasCharacter*(_: typedesc[TextAssembler], character: int, properties: TextProperties | TextNode): bool {.importcpp: "#TextAssembler::has_character(#, #)", header: "textAssembler.h".}
+proc hasCharacter*(_: typedesc[TextAssembler], character: int, properties: TextNode | TextProperties): bool {.importcpp: "#TextAssembler::has_character(#, #)", header: "textAssembler.h".}
 
-proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextProperties | TextNode): bool {.importcpp: "#TextAssembler::is_whitespace(#, #)", header: "textAssembler.h".}
+proc isWhitespace*(_: typedesc[TextAssembler], character: int, properties: TextNode | TextProperties): bool {.importcpp: "#TextAssembler::is_whitespace(#, #)", header: "textAssembler.h".}
 
 proc newTextNode*(name: string): TextNode {.importcpp: "new TextNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc newTextNode*(name: string, copy: TextProperties | TextNode): TextNode {.importcpp: "new TextNode(nimStringToStdString(#), #)", header: stringConversionCode.}
+proc newTextNode*(name: string, copy: TextNode | TextProperties): TextNode {.importcpp: "new TextNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc getClassType*(_: typedesc[TextNode]): TypeHandle {.importcpp: "TextNode::get_class_type()", header: "textNode.h".}
 
@@ -10913,7 +10919,7 @@ proc initLoaderOptions*(): LoaderOptions {.importcpp: "LoaderOptions()".}
 
 proc initLoaderOptions*(flags: int, textureFlags: int): LoaderOptions {.importcpp: "LoaderOptions(#, #)".}
 
-proc initBamReader*(source: DatagramGenerator | DatagramBuffer): BamReader {.importcpp: "BamReader(#)".}
+proc initBamReader*(source: DatagramBuffer | DatagramGenerator): BamReader {.importcpp: "BamReader(#)".}
 
 proc initBamReader*(): BamReader {.importcpp: "BamReader()".}
 
@@ -11535,7 +11541,7 @@ proc initPNMTextGlyph*(advance: float64): PNMTextGlyph {.importcpp: "PNMTextGlyp
 
 proc initPNMTextMaker*(fontFilename: Filename, faceIndex: int): PNMTextMaker {.importcpp: "PNMTextMaker(#, #)".}
 
-proc initPNMTextMaker*(copy: DynamicTextFont | FreetypeFont): PNMTextMaker {.importcpp: "PNMTextMaker(#)".}
+proc initPNMTextMaker*(copy: FreetypeFont | DynamicTextFont): PNMTextMaker {.importcpp: "PNMTextMaker(#)".}
 
 proc initPNMTextMaker*(copy: PNMTextMaker): PNMTextMaker {.importcpp: "PNMTextMaker(#)".}
 
@@ -14007,7 +14013,7 @@ proc `multilineMode=`*(this: TextAssembler, flag: bool) {.importcpp: "#.set_mult
 
 func properties*(this: TextAssembler): TextProperties {.importcpp: "#.get_properties()".}
 
-proc `properties=`*(this: TextAssembler, properties: TextProperties | TextNode) {.importcpp: "#.set_properties(#)".}
+proc `properties=`*(this: TextAssembler, properties: TextNode | TextProperties) {.importcpp: "#.set_properties(#)".}
 
 func buttonDownEvent*(this: ButtonThrower): string {.importcpp: "nimStringFromStdString(#->get_button_down_event())", header: stringConversionCode.}
 
@@ -14149,7 +14155,7 @@ proc `autoTextureScale=`*(this: var LoaderOptions, scale: AutoTextureScale) {.im
 
 func source*(this: BamReader): DatagramGenerator {.importcpp: "#.get_source()".}
 
-proc `source=`*(this: BamReader, source: DatagramGenerator | DatagramBuffer) {.importcpp: "#.set_source(#)".}
+proc `source=`*(this: BamReader, source: DatagramBuffer | DatagramGenerator) {.importcpp: "#.set_source(#)".}
 
 func filename*(this: BamReader | BamWriter): Filename {.importcpp: "#.get_filename()".}
 
@@ -14265,7 +14271,7 @@ proc decMemoryUsage*(this: TypeHandle, memoryClass: TypeHandle_MemoryClass, size
 
 proc getIndex*(this: ButtonHandle | PStatCollector | PStatThread | TypeHandle): int {.importcpp: "#.get_index()".}
 
-proc output*(this: AdaptiveLru | AnimControlCollection | AsyncTaskCollection | AsyncTaskSequence | AttribNodeRegistry | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | ButtonHandle | CollisionRecorder | CollisionTraverser | CollisionVisualizer | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DocumentSpec | DownloadDb | EventParameter | Filename | FrameBufferProperties | GeomVertexAnimationSpec | GeomVertexColumn | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LightMutexDirect | LightReMutexDirect | LoaderOptions | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherParameter | MutexDirect | NetAddress | NodePath | NodePathCollection | PGFrameStyle | PGMouseWatcherParameter | PNMImageHeader | PStatCollector | PartSubset | PfmFile | ReMutexDirect | Semaphore | SimpleLru | SparseArray | SubfileInfo | TextureCollection | TextureStageCollection | TransformBlend | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | WeakNodePath | WindowProperties | pixel, `out`: ostream | iostream) {.importcpp: "#.output(#)".}
+proc output*(this: AdaptiveLru | AnimControlCollection | AsyncTaskCollection | AsyncTaskSequence | AttribNodeRegistry | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | ButtonHandle | CollisionRecorder | CollisionTraverser | CollisionVisualizer | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DocumentSpec | DownloadDb | EventParameter | Filename | FrameBufferProperties | GeomVertexAnimationSpec | GeomVertexColumn | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LightMutexDirect | LightReMutexDirect | LoaderOptions | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherParameter | MutexDirect | NetAddress | NodePath | NodePathCollection | PGFrameStyle | PGMouseWatcherParameter | PNMImageHeader | PStatCollector | PartSubset | PfmFile | ReMutexDirect | Semaphore | SimpleLru | SparseArray | SubfileInfo | TextureCollection | TextureStageCollection | TransformBlend | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | WeakNodePath | WindowProperties | pixel, `out`: iostream | ostream) {.importcpp: "#.output(#)".}
 
 proc `typecast bool`*(this: ButtonHandle | ConfigVariableBool | NodePath | ShaderInput | TypeHandle | URLSpec | WeakNodePath): bool {.importcpp: "(bool)(#)".}
 
@@ -14301,7 +14307,7 @@ proc getChildClass*(this: TypeRegistry, child: TypeHandle, index: int): TypeHand
 
 proc getParentTowards*(this: TypeRegistry, child: TypeHandle, base: TypeHandle, childObject: TypedObject): TypeHandle {.importcpp: "#.get_parent_towards(#, #, #)".}
 
-proc write*(this: AnimControlCollection | AsyncTaskCollection | AsyncTaskSequence | AttribNodeRegistry | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | ButtonRegistry | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CullBinManager | CurveFitter | DSearchPath | Datagram | DatagramIterator | DocumentSpec | DownloadDb | EventHandler | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LoaderFileTypeRegistry | MaterialCollection | ModifierButtons | NodePathCollection | PNMFileTypeRegistry | SceneGraphAnalyzer | TextPropertiesManager | TextureCollection | TextureStageCollection | TypeRegistry | UniqueIdAllocator | VirtualFileSystem, `out`: ostream | iostream) {.importcpp: "#.write(#)".}
+proc write*(this: AnimControlCollection | AsyncTaskCollection | AsyncTaskSequence | AttribNodeRegistry | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | ButtonRegistry | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CullBinManager | CurveFitter | DSearchPath | Datagram | DatagramIterator | DocumentSpec | DownloadDb | EventHandler | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LoaderFileTypeRegistry | MaterialCollection | ModifierButtons | NodePathCollection | PNMFileTypeRegistry | SceneGraphAnalyzer | TextPropertiesManager | TextureCollection | TextureStageCollection | TypeRegistry | UniqueIdAllocator | VirtualFileSystem, `out`: iostream | ostream) {.importcpp: "#.write(#)".}
 
 proc getType*(this: AnimChannelBase | TypedObject): TypeHandle {.importcpp: "#->get_type()".}
 
@@ -14567,9 +14573,9 @@ proc setSystemTag*(this: PandaSystem, system: string, tag: string, value: string
 
 proc heapTrim*(this: PandaSystem, pad: int): bool {.importcpp: "#->heap_trim(#)".}
 
-proc output*(this: AdaptiveLruPage | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DisplayRegion | Event | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | IndexBufferContext | InputDevice | InternalName | Lens | LightLensNode | LightNode | Loader | Material | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | MovieAudio | MovieVideo | Multifile | Namable | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGMouseWatcherParameter | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | PartGroup | RenderAttrib | RenderEffect | RenderEffects | RenderState | SequenceNode | ShaderBuffer | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | TextFont | TextNode | Texture | TextureContext | TextureStage | Thread | TransformState | VertexBufferContext | VertexDataPage | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileMount | WindowHandle, `out`: ostream | iostream) {.importcpp: "#->output(#)".}
+proc output*(this: AdaptiveLruPage | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DisplayRegion | Event | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | IndexBufferContext | InputDevice | InternalName | Lens | LightLensNode | LightNode | Loader | Material | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | MovieAudio | MovieVideo | Multifile | Namable | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGMouseWatcherParameter | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | PartGroup | RenderAttrib | RenderEffect | RenderEffects | RenderState | SequenceNode | ShaderBuffer | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | TextFont | TextNode | Texture | TextureContext | TextureStage | Thread | TransformState | VertexBufferContext | VertexDataPage | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileMount | WindowHandle, `out`: iostream | ostream) {.importcpp: "#->output(#)".}
 
-proc write*(this: AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonEventList | ButtonMap | CollisionEntry | CollisionHandlerQueue | CollisionSolid | Geom | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | Lens | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | PandaSystem | ParametricCurveCollection | SimpleAllocator | SliderTable | TextNode | TextProperties | TextureStage | TransformTable | VirtualFileMount, `out`: ostream | iostream) {.importcpp: "#->write(#)".}
+proc write*(this: AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonEventList | ButtonMap | CollisionEntry | CollisionHandlerQueue | CollisionSolid | Geom | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | Lens | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | PandaSystem | ParametricCurveCollection | SimpleAllocator | SliderTable | TextNode | TextProperties | TextureStage | TransformTable | VirtualFileMount, `out`: iostream | ostream) {.importcpp: "#->write(#)".}
 
 proc clear*(this: AsyncTaskCollection | AsyncTaskSequence | AttribNodeRegistry | ConfigPage | ConfigVariableSearchPath | Datagram | DatagramBuffer | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | InputDeviceSet | InternalNameCollection | MaterialCollection | MemoryUsagePointers | MultitexReducer | NodePathCollection | PNMImage | PfmFile | Ramfile | SceneGraphAnalyzer | Socket_fdset | StackedPerlinNoise2 | StackedPerlinNoise3 | TextAssembler | TextureCollection | TextureStageCollection | Triangulator | Triangulator3 | UpdateSeq | var BitArray | var BitMask[uint16, 16] | var BitMask[uint32, 32] | var BitMask[uint64, 64] | var DSearchPath | var FrameBufferProperties | var NetAddress | var NodePath | var SparseArray | var WeakNodePath | var WindowProperties) {.importcpp: "#.clear()".}
 
@@ -14593,9 +14599,9 @@ proc getDirectory*(this: ConfigVariableSearchPath | DSearchPath, n: int): Filena
 
 proc findFile*(this: ConfigVariableSearchPath | DSearchPath, filename: Filename): Filename {.importcpp: "#.find_file(#)".}
 
-proc output*(this: DSearchPath, `out`: ostream | iostream, separator: string) {.importcpp: "#.output(#, nimStringToStdString(#))", header: stringConversionCode.}
+proc output*(this: DSearchPath, `out`: iostream | ostream, separator: string) {.importcpp: "#.output(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc write*(this: AdaptiveLru | AsyncTaskCollection | AsyncTaskSequence | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | CollisionTraverser | DSearchPath | DocumentSpec | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LoaderFileTypeRegistry | MaterialCollection | NodePathCollection | PNMFileTypeRegistry | SceneGraphAnalyzer | SimpleLru | TextPropertiesManager | TextureCollection | TextureStageCollection | TransformBlend | VertexDataPage, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#.write(#, #)".}
+proc write*(this: AdaptiveLru | AsyncTaskCollection | AsyncTaskSequence | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | CollisionTraverser | DSearchPath | DocumentSpec | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LoaderFileTypeRegistry | MaterialCollection | NodePathCollection | PNMFileTypeRegistry | SceneGraphAnalyzer | SimpleLru | TextPropertiesManager | TextureCollection | TextureStageCollection | TransformBlend | VertexDataPage, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#.write(#, #)".}
 
 proc `==`*(this: GlobPattern, other: GlobPattern): bool {.importcpp: "#.operator ==(#)".}
 
@@ -14755,7 +14761,7 @@ proc getFilenameValue*(this: ConfigDeclaration): Filename {.importcpp: "#.get_fi
 
 proc getDeclSeq*(this: ConfigDeclaration): int {.importcpp: "#.get_decl_seq()".}
 
-proc outputBriefSignature*(this: ConfigPage, `out`: ostream | iostream) {.importcpp: "#.output_brief_signature(#)".}
+proc outputBriefSignature*(this: ConfigPage, `out`: iostream | ostream) {.importcpp: "#.output_brief_signature(#)".}
 
 proc getOstreamPtr*(this: Notify): ostream {.importcpp: "#.get_ostream_ptr()".}
 
@@ -14823,7 +14829,7 @@ proc getNumVariables*(this: ConfigVariableManager): int {.importcpp: "#.get_num_
 
 proc getVariable*(this: ConfigVariableManager, n: int): ConfigVariableCore {.importcpp: "#.get_variable(#)".}
 
-proc writePrcVariables*(this: ConfigVariableManager, `out`: ostream | iostream) {.importcpp: "#.write_prc_variables(#)".}
+proc writePrcVariables*(this: ConfigVariableManager, `out`: iostream | ostream) {.importcpp: "#.write_prc_variables(#)".}
 
 proc listUnusedVariables*(this: ConfigVariableManager) {.importcpp: "#.list_unused_variables()".}
 
@@ -14991,7 +14997,7 @@ proc getKeyLength*(this: IDecryptStream): int {.importcpp: "#.get_key_length()".
 
 proc getIterationCount*(this: IDecryptStream): int {.importcpp: "#.get_iteration_count()".}
 
-proc open*(this: OEncryptStream, dest: ostream | iostream, ownsDest: bool, password: string): OEncryptStream {.importcpp: "#.open(#, #, nimStringToStdString(#))", header: stringConversionCode.}
+proc open*(this: OEncryptStream, dest: iostream | ostream, ownsDest: bool, password: string): OEncryptStream {.importcpp: "#.open(#, #, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc close*(this: OEncryptStream): OEncryptStream {.importcpp: "#.close()".}
 
@@ -15321,9 +15327,9 @@ proc getCookie*(this: HTTPClient, cookie: HTTPCookie): HTTPCookie {.importcpp: "
 
 proc copyCookiesFrom*(this: HTTPClient, other: HTTPClient) {.importcpp: "#->copy_cookies_from(#)".}
 
-proc writeCookies*(this: HTTPClient, `out`: ostream | iostream) {.importcpp: "#->write_cookies(#)".}
+proc writeCookies*(this: HTTPClient, `out`: iostream | ostream) {.importcpp: "#->write_cookies(#)".}
 
-proc sendCookies*(this: HTTPClient, `out`: ostream | iostream, url: URLSpec) {.importcpp: "#->send_cookies(#, #)".}
+proc sendCookies*(this: HTTPClient, `out`: iostream | ostream, url: URLSpec) {.importcpp: "#->send_cookies(#, #)".}
 
 proc setClientCertificateFilename*(this: HTTPClient, filename: Filename) {.importcpp: "#->set_client_certificate_filename(#)".}
 
@@ -15509,9 +15515,9 @@ proc getFirstByteDelivered*(this: HTTPChannel): int {.importcpp: "#->get_first_b
 
 proc getLastByteDelivered*(this: HTTPChannel): int {.importcpp: "#->get_last_byte_delivered()".}
 
-proc writeHeaders*(this: HTTPChannel, `out`: ostream | iostream) {.importcpp: "#->write_headers(#)".}
+proc writeHeaders*(this: HTTPChannel, `out`: iostream | ostream) {.importcpp: "#->write_headers(#)".}
 
-proc reset*(this: ClockObject | DriveInterface | HTTPChannel | Trackball) {.importcpp: "#->reset()".}
+proc reset*(this: CardMaker | ClockObject | DriveInterface | FisheyeMaker | HTTPChannel | Trackball) {.importcpp: "#->reset()".}
 
 proc preserveStatus*(this: HTTPChannel) {.importcpp: "#->preserve_status()".}
 
@@ -15561,9 +15567,9 @@ proc downloadToRam*(this: HTTPChannel, ramfile: Ramfile, subdocumentResumes: boo
 
 proc downloadToRam*(this: HTTPChannel, ramfile: Ramfile): bool {.importcpp: "#->download_to_ram(#)".}
 
-proc downloadToStream*(this: HTTPChannel, strm: ostream | iostream, subdocumentResumes: bool): bool {.importcpp: "#->download_to_stream(#, #)".}
+proc downloadToStream*(this: HTTPChannel, strm: iostream | ostream, subdocumentResumes: bool): bool {.importcpp: "#->download_to_stream(#, #)".}
 
-proc downloadToStream*(this: HTTPChannel, strm: ostream | iostream): bool {.importcpp: "#->download_to_stream(#)".}
+proc downloadToStream*(this: HTTPChannel, strm: iostream | ostream): bool {.importcpp: "#->download_to_stream(#)".}
 
 proc getConnection*(this: HTTPChannel): SocketStream {.importcpp: "#->get_connection()".}
 
@@ -15585,7 +15591,7 @@ proc decompress*(this: Decompressor, sourceAndDestFile: Ramfile): bool {.importc
 
 proc getProgress*(this: Decompressor | Extractor | Patchfile): float {.importcpp: "#.get_progress()".}
 
-proc writeVersionMap*(this: DownloadDb, `out`: ostream | iostream) {.importcpp: "#.write_version_map(#)".}
+proc writeVersionMap*(this: DownloadDb, `out`: iostream | ostream) {.importcpp: "#.write_version_map(#)".}
 
 proc writeClientDb*(this: DownloadDb, file: Filename): bool {.importcpp: "#.write_client_db(#)".}
 
@@ -15671,7 +15677,7 @@ proc setMultifile*(this: Extractor, multifileName: Filename): bool {.importcpp: 
 
 proc setExtractDir*(this: Extractor, extractDir: Filename) {.importcpp: "#.set_extract_dir(#)".}
 
-proc reset*(this: CardMaker | CurveFitter | Extractor | FisheyeMaker | LineSegs) {.importcpp: "#.reset()".}
+proc reset*(this: CurveFitter | Extractor | LineSegs) {.importcpp: "#.reset()".}
 
 proc requestSubfile*(this: Extractor, subfileName: Filename): bool {.importcpp: "#.request_subfile(#)".}
 
@@ -15681,9 +15687,9 @@ proc step*(this: Extractor): int {.importcpp: "#.step()".}
 
 proc run*(this: Extractor): bool {.importcpp: "#.run()".}
 
-proc addOstream*(this: MultiplexStream, `out`: ostream | iostream, deleteLater: bool) {.importcpp: "#.add_ostream(#, #)".}
+proc addOstream*(this: MultiplexStream, `out`: iostream | ostream, deleteLater: bool) {.importcpp: "#.add_ostream(#, #)".}
 
-proc addOstream*(this: MultiplexStream, `out`: ostream | iostream) {.importcpp: "#.add_ostream(#)".}
+proc addOstream*(this: MultiplexStream, `out`: iostream | ostream) {.importcpp: "#.add_ostream(#)".}
 
 proc addStandardOutput*(this: MultiplexStream) {.importcpp: "#.add_standard_output()".}
 
@@ -15727,9 +15733,9 @@ proc nodeUnref*(this: NodeCachedReferenceCount | NodeReferenceCount | RenderStat
 
 proc nodeUnrefOnly*(this: NodeReferenceCount) {.importcpp: "#->node_unref_only()".}
 
-proc dumpHex*(this: Datagram, `out`: ostream | iostream, indent: int) {.importcpp: "#.dump_hex(#, #)".}
+proc dumpHex*(this: Datagram, `out`: iostream | ostream, indent: int) {.importcpp: "#.dump_hex(#, #)".}
 
-proc dumpHex*(this: Datagram, `out`: ostream | iostream) {.importcpp: "#.dump_hex(#)".}
+proc dumpHex*(this: Datagram, `out`: iostream | ostream) {.importcpp: "#.dump_hex(#)".}
 
 proc addStdfloat*(this: Datagram, value: float) {.importcpp: "#.add_stdfloat(#)".}
 
@@ -15747,7 +15753,7 @@ proc `!=`*(this: Datagram, other: Datagram): bool {.importcpp: "#.operator !=(#)
 
 proc `<`*(this: Datagram, other: Datagram): bool {.importcpp: "#.operator <(#)".}
 
-proc write*(this: Datagram | DatagramIterator, `out`: ostream | iostream, indent: int) {.importcpp: "#.write(#, #)".}
+proc write*(this: Datagram | DatagramIterator, `out`: iostream | ostream, indent: int) {.importcpp: "#.write(#, #)".}
 
 proc getDatagram*(this: DatagramBuffer | DatagramGenerator | DatagramGeneratorNet, data: Datagram): bool {.importcpp: "#->get_datagram(#)".}
 
@@ -15803,15 +15809,15 @@ proc compareTo*(this: HashVal, other: HashVal): int {.importcpp: "#.compare_to(#
 
 proc mergeWith*(this: HashVal, other: HashVal) {.importcpp: "#.merge_with(#)".}
 
-proc outputDec*(this: HashVal, `out`: ostream | iostream) {.importcpp: "#.output_dec(#)".}
+proc outputDec*(this: HashVal, `out`: iostream | ostream) {.importcpp: "#.output_dec(#)".}
 
 proc inputDec*(this: HashVal, `in`: istream) {.importcpp: "#.input_dec(#)".}
 
-proc outputHex*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | HashVal, `out`: ostream | iostream) {.importcpp: "#.output_hex(#)".}
+proc outputHex*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | HashVal, `out`: iostream | ostream) {.importcpp: "#.output_hex(#)".}
 
 proc inputHex*(this: HashVal, `in`: istream) {.importcpp: "#.input_hex(#)".}
 
-proc outputBinary*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | HashVal, `out`: ostream | iostream) {.importcpp: "#.output_binary(#)".}
+proc outputBinary*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | HashVal, `out`: iostream | ostream) {.importcpp: "#.output_binary(#)".}
 
 proc inputBinary*(this: HashVal, `in`: istream) {.importcpp: "#.input_binary(#)".}
 
@@ -15857,9 +15863,9 @@ proc open*(this: ISubStream, source: IStreamWrapper, start: clonglong, `end`: cl
 
 proc close*(this: ISubStream): ISubStream {.importcpp: "#.close()".}
 
-proc open*(this: OSubStream, dest: OStreamWrapper | StreamWrapper, start: clonglong, `end`: clonglong, append: bool): OSubStream {.importcpp: "#.open(#, #, #, #)".}
+proc open*(this: OSubStream, dest: StreamWrapper | OStreamWrapper, start: clonglong, `end`: clonglong, append: bool): OSubStream {.importcpp: "#.open(#, #, #, #)".}
 
-proc open*(this: OSubStream, dest: OStreamWrapper | StreamWrapper, start: clonglong, `end`: clonglong): OSubStream {.importcpp: "#.open(#, #, #)".}
+proc open*(this: OSubStream, dest: StreamWrapper | OStreamWrapper, start: clonglong, `end`: clonglong): OSubStream {.importcpp: "#.open(#, #, #)".}
 
 proc close*(this: OSubStream): OSubStream {.importcpp: "#.close()".}
 
@@ -15881,9 +15887,9 @@ proc openRead*(this: Multifile, multifileStream: IStreamWrapper): bool {.importc
 
 proc openWrite*(this: Multifile, multifileName: Filename): bool {.importcpp: "#->open_write(#)".}
 
-proc openWrite*(this: Multifile, multifileStream: ostream | iostream, ownsPointer: bool): bool {.importcpp: "#->open_write(#, #)".}
+proc openWrite*(this: Multifile, multifileStream: iostream | ostream, ownsPointer: bool): bool {.importcpp: "#->open_write(#, #)".}
 
-proc openWrite*(this: Multifile, multifileStream: ostream | iostream): bool {.importcpp: "#->open_write(#)".}
+proc openWrite*(this: Multifile, multifileStream: iostream | ostream): bool {.importcpp: "#->open_write(#)".}
 
 proc openReadWrite*(this: Multifile, multifileName: Filename): bool {.importcpp: "#->open_read_write(#)".}
 
@@ -15953,9 +15959,9 @@ proc getSignatureFriendlyName*(this: Multifile, n: int): string {.importcpp: "ni
 
 proc getSignaturePublicKey*(this: Multifile, n: int): string {.importcpp: "nimStringFromStdString(#->get_signature_public_key(#))", header: stringConversionCode.}
 
-proc printSignatureCertificate*(this: Multifile, n: int, `out`: ostream | iostream) {.importcpp: "#->print_signature_certificate(#, #)".}
+proc printSignatureCertificate*(this: Multifile, n: int, `out`: iostream | ostream) {.importcpp: "#->print_signature_certificate(#, #)".}
 
-proc writeSignatureCertificate*(this: Multifile, n: int, `out`: ostream | iostream) {.importcpp: "#->write_signature_certificate(#, #)".}
+proc writeSignatureCertificate*(this: Multifile, n: int, `out`: iostream | ostream) {.importcpp: "#->write_signature_certificate(#, #)".}
 
 proc validateSignatureCertificate*(this: Multifile, n: int): int {.importcpp: "#->validate_signature_certificate(#)".}
 
@@ -15993,11 +15999,11 @@ proc openReadSubfile*(this: Multifile, index: int): istream {.importcpp: "#->ope
 
 proc extractSubfile*(this: Multifile, index: int, filename: Filename): bool {.importcpp: "#->extract_subfile(#, #)".}
 
-proc extractSubfileTo*(this: Multifile, index: int, `out`: ostream | iostream): bool {.importcpp: "#->extract_subfile_to(#, #)".}
+proc extractSubfileTo*(this: Multifile, index: int, `out`: iostream | ostream): bool {.importcpp: "#->extract_subfile_to(#, #)".}
 
 proc compareSubfile*(this: Multifile, index: int, filename: Filename): bool {.importcpp: "#->compare_subfile(#, #)".}
 
-proc ls*(this: Multifile | VirtualFile, `out`: ostream | iostream) {.importcpp: "#->ls(#)".}
+proc ls*(this: Multifile | VirtualFile, `out`: iostream | ostream) {.importcpp: "#->ls(#)".}
 
 proc ls*(this: Multifile | VirtualFile) {.importcpp: "#->ls()".}
 
@@ -16057,7 +16063,7 @@ proc copyFile*(this: VirtualFile, newFile: VirtualFile): bool {.importcpp: "#->c
 
 proc scanDirectory*(this: VirtualFile): VirtualFileList {.importcpp: "#->scan_directory()".}
 
-proc lsAll*(this: VirtualFile, `out`: ostream | iostream) {.importcpp: "#->ls_all(#)".}
+proc lsAll*(this: VirtualFile, `out`: iostream | ostream) {.importcpp: "#->ls_all(#)".}
 
 proc lsAll*(this: VirtualFile) {.importcpp: "#->ls_all()".}
 
@@ -16071,7 +16077,7 @@ proc openWriteFile*(this: VirtualFile, autoWrap: bool, truncate: bool): ostream 
 
 proc openAppendFile*(this: VirtualFile): ostream {.importcpp: "#->open_append_file()".}
 
-proc closeWriteFile*(this: VirtualFile, stream: ostream | iostream) {.importcpp: "#->close_write_file(#)".}
+proc closeWriteFile*(this: VirtualFile, stream: iostream | ostream) {.importcpp: "#->close_write_file(#)".}
 
 proc openReadWriteFile*(this: VirtualFile, truncate: bool): iostream {.importcpp: "#->open_read_write_file(#)".}
 
@@ -16099,9 +16105,9 @@ proc open*(this: IDecompressStream, source: istream, ownsSource: bool): IDecompr
 
 proc close*(this: IDecompressStream): IDecompressStream {.importcpp: "#.close()".}
 
-proc open*(this: OCompressStream, dest: ostream | iostream, ownsDest: bool, compressionLevel: int): OCompressStream {.importcpp: "#.open(#, #, #)".}
+proc open*(this: OCompressStream, dest: iostream | ostream, ownsDest: bool, compressionLevel: int): OCompressStream {.importcpp: "#.open(#, #, #)".}
 
-proc open*(this: OCompressStream, dest: ostream | iostream, ownsDest: bool): OCompressStream {.importcpp: "#.open(#, #)".}
+proc open*(this: OCompressStream, dest: iostream | ostream, ownsDest: bool): OCompressStream {.importcpp: "#.open(#, #)".}
 
 proc close*(this: OCompressStream): OCompressStream {.importcpp: "#.close()".}
 
@@ -16245,11 +16251,11 @@ proc off*(this: ProfileTimer, tag: string) {.importcpp: "#.off(nimStringToStdStr
 
 proc getTotalTime*(this: ProfileTimer): float64 {.importcpp: "#.getTotalTime()".}
 
-proc consolidateTo*(this: ProfileTimer, `out`: ostream | iostream) {.importcpp: "#.consolidateTo(#)".}
+proc consolidateTo*(this: ProfileTimer, `out`: iostream | ostream) {.importcpp: "#.consolidateTo(#)".}
 
 proc consolidateTo*(this: ProfileTimer) {.importcpp: "#.consolidateTo()".}
 
-proc printTo*(this: ProfileTimer, `out`: ostream | iostream) {.importcpp: "#.printTo(#)".}
+proc printTo*(this: ProfileTimer, `out`: iostream | ostream) {.importcpp: "#.printTo(#)".}
 
 proc printTo*(this: ProfileTimer) {.importcpp: "#.printTo()".}
 
@@ -16281,7 +16287,7 @@ proc getClockOffset*(this: RecorderController): float64 {.importcpp: "#->get_clo
 
 proc getFrameOffset*(this: RecorderController): int {.importcpp: "#->get_frame_offset()".}
 
-proc addRecorder*(this: RecorderController, name: string, recorder: MouseRecorder | RecorderBase) {.importcpp: "#->add_recorder(nimStringToStdString(#), #)", header: stringConversionCode.}
+proc addRecorder*(this: RecorderController, name: string, recorder: RecorderBase | MouseRecorder) {.importcpp: "#->add_recorder(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc hasRecorder*(this: RecorderController, name: string): bool {.importcpp: "#->has_recorder(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -16303,7 +16309,7 @@ proc upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(LightNode *
 
 proc upcastToPandaNode*(this: CollisionVisualizer | LightNode | TextNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
-proc write*(this: AdaptiveLruPage | AnimGroup | AnimPreloadTable | AsyncTaskChain | AsyncTaskManager | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonEventList | ButtonMap | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DynamicTextFont | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | IndexBufferContext | Lens | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | PandaNode | ParametricCurveCollection | PartGroup | RenderAttrib | RenderEffect | RenderEffects | RenderState | SimpleLruPage | TextFont | TextNode | TextProperties | TextureContext | TextureStage | TransformBlendTable | TransformState | VertexBufferContext | VertexDataPage | VertexSlider | VertexTransform, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
+proc write*(this: AdaptiveLruPage | AnimGroup | AnimPreloadTable | AsyncTaskChain | AsyncTaskManager | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonEventList | ButtonMap | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DynamicTextFont | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | IndexBufferContext | Lens | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | MouseWatcherRegion | PandaNode | ParametricCurveCollection | PartGroup | RenderAttrib | RenderEffect | RenderEffects | RenderState | SimpleLruPage | TextFont | TextNode | TextProperties | TextureContext | TextureStage | TransformBlendTable | TransformState | VertexBufferContext | VertexDataPage | VertexSlider | VertexTransform, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
 
 proc setCullCallback*(this: CallbackNode | DisplayRegion, `object`: CallbackObject) {.importcpp: "#->set_cull_callback(#)".}
 
@@ -16655,7 +16661,7 @@ proc getInvertCompositionCacheResult*(this: TransformState, n: int): TransformSt
 
 proc validateCompositionCache*(this: TransformState): bool {.importcpp: "#->validate_composition_cache()".}
 
-proc writeCompositionCache*(this: TransformState, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->write_composition_cache(#, #)".}
+proc writeCompositionCache*(this: TransformState, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->write_composition_cache(#, #)".}
 
 proc getSlot*(this: RenderAttribRegistry, typeHandle: TypeHandle): int {.importcpp: "#.get_slot(#)".}
 
@@ -16841,9 +16847,9 @@ proc hasTags*(this: PandaNode): bool {.importcpp: "#->has_tags()".}
 
 proc copyTags*(this: PandaNode, other: PandaNode) {.importcpp: "#->copy_tags(#)".}
 
-proc listTags*(this: PandaNode, `out`: ostream | iostream, separator: string) {.importcpp: "#->list_tags(#, nimStringToStdString(#))", header: stringConversionCode.}
+proc listTags*(this: PandaNode, `out`: iostream | ostream, separator: string) {.importcpp: "#->list_tags(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc listTags*(this: PandaNode, `out`: ostream | iostream) {.importcpp: "#->list_tags(#)".}
+proc listTags*(this: PandaNode, `out`: iostream | ostream) {.importcpp: "#->list_tags(#)".}
 
 proc compareTags*(this: PandaNode, other: PandaNode): int {.importcpp: "#->compare_tags(#)".}
 
@@ -16883,7 +16889,7 @@ proc isSceneRoot*(this: PandaNode): bool {.importcpp: "#->is_scene_root()".}
 
 proc isUnderSceneRoot*(this: PandaNode): bool {.importcpp: "#->is_under_scene_root()".}
 
-proc ls*(this: PandaNode, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->ls(#, #)".}
+proc ls*(this: PandaNode, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->ls(#, #)".}
 
 proc setBoundsType*(this: Geom | PandaNode, boundsType: BoundingVolume_BoundsType) {.importcpp: "#->set_bounds_type(#)".}
 
@@ -17047,9 +17053,9 @@ proc extend*(this: NodePathCollection, other: NodePathCollection) {.importcpp: "
 
 proc ls*(this: NodePath | NodePathCollection) {.importcpp: "#.ls()".}
 
-proc ls*(this: NodePath | NodePathCollection, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#.ls(#, #)".}
+proc ls*(this: NodePath | NodePathCollection, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#.ls(#, #)".}
 
-proc ls*(this: NodePath | NodePathCollection, `out`: ostream | iostream) {.importcpp: "#.ls(#)".}
+proc ls*(this: NodePath | NodePathCollection, `out`: iostream | ostream) {.importcpp: "#.ls(#)".}
 
 proc findAllMatches*(this: NodePath | NodePathCollection, path: string): NodePathCollection {.importcpp: "#.find_all_matches(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -17095,11 +17101,11 @@ proc setTextureOff*(this: NodePath | NodePathCollection) {.importcpp: "#.set_tex
 
 proc setColor*(this: NodePath | NodePathCollection, color: LColor, priority: int) {.importcpp: "#.set_color(#, #)".}
 
-proc setColor*(this: CardMaker | LineSegs | NodePath | NodePathCollection | PGFrameStyle, color: LColor) {.importcpp: "#.set_color(#)".}
+proc setColor*(this: LineSegs | NodePath | NodePathCollection | PGFrameStyle, color: LColor) {.importcpp: "#.set_color(#)".}
 
 proc setColor*(this: NodePath | NodePathCollection, r: float, g: float, b: float, a: float, priority: int) {.importcpp: "#.set_color(#, #, #, #, #)".}
 
-proc setColor*(this: CardMaker | LineSegs | NodePath | NodePathCollection | PGFrameStyle, r: float, g: float, b: float, a: float) {.importcpp: "#.set_color(#, #, #, #)".}
+proc setColor*(this: LineSegs | NodePath | NodePathCollection | PGFrameStyle, r: float, g: float, b: float, a: float) {.importcpp: "#.set_color(#, #, #, #)".}
 
 proc setColor*(this: LineSegs | NodePath | NodePathCollection, r: float, g: float, b: float) {.importcpp: "#.set_color(#, #, #)".}
 
@@ -17149,9 +17155,9 @@ proc attachNewNode*(this: NodePath, name: string): NodePath {.importcpp: "#.atta
 
 proc reverseLs*(this: NodePath) {.importcpp: "#.reverse_ls()".}
 
-proc reverseLs*(this: NodePath, `out`: ostream | iostream, indentLevel: int): int {.importcpp: "#.reverse_ls(#, #)".}
+proc reverseLs*(this: NodePath, `out`: iostream | ostream, indentLevel: int): int {.importcpp: "#.reverse_ls(#, #)".}
 
-proc reverseLs*(this: NodePath, `out`: ostream | iostream): int {.importcpp: "#.reverse_ls(#)".}
+proc reverseLs*(this: NodePath, `out`: iostream | ostream): int {.importcpp: "#.reverse_ls(#)".}
 
 proc getAttrib*(this: NodePath, `type`: TypeHandle): RenderAttrib {.importcpp: "#.get_attrib(#)".}
 
@@ -18055,7 +18061,7 @@ proc hideBounds*(this: NodePath) {.importcpp: "#.hide_bounds()".}
 
 proc forceRecomputeBounds*(this: NodePath) {.importcpp: "#.force_recompute_bounds()".}
 
-proc writeBounds*(this: NodePath, `out`: ostream | iostream) {.importcpp: "#.write_bounds(#)".}
+proc writeBounds*(this: NodePath, `out`: iostream | ostream) {.importcpp: "#.write_bounds(#)".}
 
 proc flattenLight*(this: NodePath): int {.importcpp: "#.flatten_light()".}
 
@@ -18085,7 +18091,7 @@ proc listTags*(this: NodePath) {.importcpp: "#.list_tags()".}
 
 proc writeBamFile*(this: NodePath, filename: Filename): bool {.importcpp: "#.write_bam_file(#)".}
 
-proc writeBamStream*(this: NodePath, `out`: ostream | iostream): bool {.importcpp: "#.write_bam_stream(#)".}
+proc writeBamStream*(this: NodePath, `out`: iostream | ostream): bool {.importcpp: "#.write_bam_stream(#)".}
 
 proc addNode*(this: AttribNodeRegistry, attribNode: NodePath) {.importcpp: "#.add_node(#)".}
 
@@ -18149,11 +18155,11 @@ proc openWrite*(this: BamFile, bamFilename: Filename, reportErrors: bool): bool 
 
 proc openWrite*(this: BamFile, bamFilename: Filename): bool {.importcpp: "#.open_write(#)".}
 
-proc openWrite*(this: BamFile, `out`: ostream | iostream, bamFilename: string, reportErrors: bool): bool {.importcpp: "#.open_write(#, nimStringToStdString(#), #)", header: stringConversionCode.}
+proc openWrite*(this: BamFile, `out`: iostream | ostream, bamFilename: string, reportErrors: bool): bool {.importcpp: "#.open_write(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc openWrite*(this: BamFile, `out`: ostream | iostream, bamFilename: string): bool {.importcpp: "#.open_write(#, nimStringToStdString(#))", header: stringConversionCode.}
+proc openWrite*(this: BamFile, `out`: iostream | ostream, bamFilename: string): bool {.importcpp: "#.open_write(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc openWrite*(this: BamFile, `out`: ostream | iostream): bool {.importcpp: "#.open_write(#)".}
+proc openWrite*(this: BamFile, `out`: iostream | ostream): bool {.importcpp: "#.open_write(#)".}
 
 proc writeObject*(this: BamFile, `object`: TypedWritable): bool {.importcpp: "#.write_object(#)".}
 
@@ -18273,7 +18279,7 @@ proc clearAuxSceneData*(this: Camera, nodePath: NodePath): bool {.importcpp: "#-
 
 proc getAuxSceneData*(this: Camera, nodePath: NodePath): AuxSceneData {.importcpp: "#->get_aux_scene_data(#)".}
 
-proc listAuxSceneData*(this: Camera, `out`: ostream | iostream) {.importcpp: "#->list_aux_scene_data(#)".}
+proc listAuxSceneData*(this: Camera, `out`: iostream | ostream) {.importcpp: "#->list_aux_scene_data(#)".}
 
 proc setPlane*(this: CollisionPlane | PlaneNode, plane: LPlane) {.importcpp: "#->set_plane(#)".}
 
@@ -18393,9 +18399,9 @@ proc decompose*(this: GeomNode) {.importcpp: "#->decompose()".}
 
 proc unify*(this: GeomNode, maxIndices: int, preserveOrder: bool) {.importcpp: "#->unify(#, #)".}
 
-proc writeGeoms*(this: GeomNode, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->write_geoms(#, #)".}
+proc writeGeoms*(this: GeomNode, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->write_geoms(#, #)".}
 
-proc writeVerbose*(this: GeomNode, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->write_verbose(#, #)".}
+proc writeVerbose*(this: GeomNode, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->write_verbose(#, #)".}
 
 proc getBinName*(this: CullBinAttrib): string {.importcpp: "nimStringFromStdString(#->get_bin_name())", header: stringConversionCode.}
 
@@ -18513,7 +18519,7 @@ proc getMode*(this: Fog): Fog_Mode {.importcpp: "#->get_mode()".}
 
 proc setMode*(this: Fog, mode: Fog_Mode) {.importcpp: "#->set_mode(#)".}
 
-proc setColor*(this: Fog | Light | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
+proc setColor*(this: CardMaker | Fog | Light | LightLensNode | LightNode | MouseWatcher | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
 
 proc setColor*(this: Fog | PolylightNode, r: float, g: float, b: float) {.importcpp: "#->set_color(#, #, #)".}
 
@@ -18617,11 +18623,11 @@ proc getNumLights*(this: LightAttrib): int {.importcpp: "#->get_num_lights()".}
 
 proc getLight*(this: LightAttrib, n: int): Light {.importcpp: "#->get_light(#)".}
 
-proc hasLight*(this: LightAttrib, light: LightLensNode | Light | LightNode): bool {.importcpp: "#->has_light(#)".}
+proc hasLight*(this: LightAttrib, light: LightLensNode | LightNode | Light): bool {.importcpp: "#->has_light(#)".}
 
-proc addLight*(this: LightAttrib, light: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.}
+proc addLight*(this: LightAttrib, light: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#->add_light(#))", header: deconstifyCode.}
 
-proc removeLight*(this: LightAttrib, light: LightLensNode | Light | LightNode): RenderAttrib {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.}
+proc removeLight*(this: LightAttrib, light: LightLensNode | LightNode | Light): RenderAttrib {.importcpp: "deconstify(#->remove_light(#))", header: deconstifyCode.}
 
 proc getNumOnLights*(this: LightAttrib): int {.importcpp: "#->get_num_on_lights()".}
 
@@ -19159,45 +19165,47 @@ proc append*(this: UserDataAudio, str: string) {.importcpp: "#->append(nimString
 
 proc done*(this: UserDataAudio) {.importcpp: "#->done()".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord, ur: LTexCoord) {.importcpp: "#.set_uv_range(#, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord, ur: LTexCoord) {.importcpp: "#->set_uv_range(#, #)".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord, lr: LTexCoord, ur: LTexCoord, ul: LTexCoord) {.importcpp: "#.set_uv_range(#, #, #, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord, lr: LTexCoord, ur: LTexCoord, ul: LTexCoord) {.importcpp: "#->set_uv_range(#, #, #, #)".}
 
-proc setUvRange*(this: CardMaker, ll: LTexCoord3, lr: LTexCoord3, ur: LTexCoord3, ul: LTexCoord3) {.importcpp: "#.set_uv_range(#, #, #, #)".}
+proc setUvRange*(this: CardMaker, ll: LTexCoord3, lr: LTexCoord3, ur: LTexCoord3, ul: LTexCoord3) {.importcpp: "#->set_uv_range(#, #, #, #)".}
 
-proc setUvRange*(this: CardMaker, x: LVector4, y: LVector4, z: LVector4) {.importcpp: "#.set_uv_range((LVector4 const &)(#), (LVector4 const &)(#), (LVector4 const &)(#))".}
+proc setUvRange*(this: CardMaker, x: LVector4, y: LVector4, z: LVector4) {.importcpp: "#->set_uv_range((LVector4 const &)(#), (LVector4 const &)(#), (LVector4 const &)(#))".}
 
-proc setUvRange*(this: CardMaker, tex: Texture) {.importcpp: "#.set_uv_range(#)".}
+proc setUvRange*(this: CardMaker, tex: Texture) {.importcpp: "#->set_uv_range(#)".}
 
-proc setUvRangeCube*(this: CardMaker, face: int) {.importcpp: "#.set_uv_range_cube(#)".}
+proc setUvRangeCube*(this: CardMaker, face: int) {.importcpp: "#->set_uv_range_cube(#)".}
 
-proc setHasUvs*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_uvs(#)".}
+proc setHasUvs*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_uvs(#)".}
 
-proc setHas3dUvs*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_3d_uvs(#)".}
+proc setHas3dUvs*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_3d_uvs(#)".}
 
-proc setFrame*(this: CardMaker | TextGraphic, frame: LVecBase4) {.importcpp: "#.set_frame((LVecBase4 const &)(#))".}
+proc setFrame*(this: CardMaker | MouseWatcher | MouseWatcherRegion | PGItem, frame: LVecBase4) {.importcpp: "#->set_frame((LVecBase4 const &)(#))".}
 
-proc setFrame*(this: CardMaker, ll: LVertex, lr: LVertex, ur: LVertex, ul: LVertex) {.importcpp: "#.set_frame(#, #, #, #)".}
+proc setFrame*(this: CardMaker, ll: LVertex, lr: LVertex, ur: LVertex, ul: LVertex) {.importcpp: "#->set_frame(#, #, #, #)".}
 
-proc setFrame*(this: CardMaker | TextGraphic, left: float, right: float, bottom: float, top: float) {.importcpp: "#.set_frame(#, #, #, #)".}
+proc setFrame*(this: CardMaker | MouseWatcher | MouseWatcherRegion | PGItem, left: float, right: float, bottom: float, top: float) {.importcpp: "#->set_frame(#, #, #, #)".}
 
-proc setFrameFullscreenQuad*(this: CardMaker) {.importcpp: "#.set_frame_fullscreen_quad()".}
+proc setFrameFullscreenQuad*(this: CardMaker) {.importcpp: "#->set_frame_fullscreen_quad()".}
 
-proc setHasNormals*(this: CardMaker, flag: bool) {.importcpp: "#.set_has_normals(#)".}
+proc setColor*(this: CardMaker, r: float, g: float, b: float, a: float) {.importcpp: "#->set_color(#, #, #, #)".}
 
-proc setSourceGeometry*(this: CardMaker, node: PandaNode, frame: LVecBase4) {.importcpp: "#.set_source_geometry(#, (LVecBase4 const &)(#))".}
+proc setHasNormals*(this: CardMaker, flag: bool) {.importcpp: "#->set_has_normals(#)".}
 
-proc clearSourceGeometry*(this: CardMaker) {.importcpp: "#.clear_source_geometry()".}
+proc setSourceGeometry*(this: CardMaker, node: PandaNode, frame: LVecBase4) {.importcpp: "#->set_source_geometry(#, (LVecBase4 const &)(#))".}
 
-proc generate*(this: CardMaker | FisheyeMaker): PandaNode {.importcpp: "#.generate()".}
+proc clearSourceGeometry*(this: CardMaker) {.importcpp: "#->clear_source_geometry()".}
 
-proc setFov*(this: FisheyeMaker, fov: float) {.importcpp: "#.set_fov(#)".}
+proc generate*(this: CardMaker | FisheyeMaker | TextNode): PandaNode {.importcpp: "#->generate()".}
 
-proc setNumVertices*(this: FisheyeMaker, numVertices: int) {.importcpp: "#.set_num_vertices(#)".}
+proc setFov*(this: FisheyeMaker | Lens, fov: float) {.importcpp: "#->set_fov(#)".}
 
-proc setSquareInscribed*(this: FisheyeMaker, squareInscribed: bool, squareRadius: float) {.importcpp: "#.set_square_inscribed(#, #)".}
+proc setNumVertices*(this: FisheyeMaker, numVertices: int) {.importcpp: "#->set_num_vertices(#)".}
 
-proc setReflection*(this: FisheyeMaker, reflection: bool) {.importcpp: "#.set_reflection(#)".}
+proc setSquareInscribed*(this: FisheyeMaker, squareInscribed: bool, squareRadius: float) {.importcpp: "#->set_square_inscribed(#, #)".}
+
+proc setReflection*(this: FisheyeMaker, reflection: bool) {.importcpp: "#->set_reflection(#)".}
 
 proc setupWindow*(this: FrameRateMeter | SceneGraphAnalyzerMeter, window: GraphicsOutput) {.importcpp: "#->setup_window(#)".}
 
@@ -19219,105 +19227,111 @@ proc getClockObject*(this: FrameRateMeter): ClockObject {.importcpp: "#->get_clo
 
 proc update*(this: AudioManager | Character | FrameRateMeter | SceneGraphAnalyzerMeter | TextNode) {.importcpp: "#->update()".}
 
-proc heightfield*(this: GeoMipTerrain | HeightfieldTesselator): PNMImage {.importcpp: "#.heightfield()".}
+proc heightfield*(this: GeoMipTerrain): PNMImage {.importcpp: "#->heightfield()".}
 
-proc setHeightfield*(this: GeoMipTerrain | HeightfieldTesselator, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_heightfield(#, #)".}
+proc setHeightfield*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#->set_heightfield(#, #)".}
 
-proc setHeightfield*(this: GeoMipTerrain | HeightfieldTesselator, filename: Filename): bool {.importcpp: "#.set_heightfield(#)".}
+proc setHeightfield*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#->set_heightfield(#)".}
 
-proc setHeightfield*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#.set_heightfield(#)".}
+proc setHeightfield*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#->set_heightfield(#)".}
 
-proc colorMap*(this: GeoMipTerrain): PNMImage {.importcpp: "#.color_map()".}
+proc colorMap*(this: GeoMipTerrain): PNMImage {.importcpp: "#->color_map()".}
 
-proc setColorMap*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_color_map(#, #)".}
+proc setColorMap*(this: GeoMipTerrain, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#->set_color_map(#, #)".}
 
-proc setColorMap*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, filename: Filename): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, image: PNMImage): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, image: Texture): bool {.importcpp: "#.set_color_map(#)".}
+proc setColorMap*(this: GeoMipTerrain, image: Texture): bool {.importcpp: "#->set_color_map(#)".}
 
-proc setColorMap*(this: GeoMipTerrain, path: string): bool {.importcpp: "#.set_color_map(nimStringToStdString(#))", header: stringConversionCode.}
+proc setColorMap*(this: GeoMipTerrain, path: string): bool {.importcpp: "#->set_color_map(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc hasColorMap*(this: GeoMipTerrain): bool {.importcpp: "#.has_color_map()".}
+proc hasColorMap*(this: GeoMipTerrain): bool {.importcpp: "#->has_color_map()".}
 
-proc clearColorMap*(this: GeoMipTerrain) {.importcpp: "#.clear_color_map()".}
+proc clearColorMap*(this: GeoMipTerrain) {.importcpp: "#->clear_color_map()".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float, brightness: float) {.importcpp: "#.calc_ambient_occlusion(#, #, #)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float, brightness: float) {.importcpp: "#->calc_ambient_occlusion(#, #, #)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float) {.importcpp: "#.calc_ambient_occlusion(#, #)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float, contrast: float) {.importcpp: "#->calc_ambient_occlusion(#, #)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float) {.importcpp: "#.calc_ambient_occlusion(#)".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain, radius: float) {.importcpp: "#->calc_ambient_occlusion(#)".}
 
-proc calcAmbientOcclusion*(this: GeoMipTerrain) {.importcpp: "#.calc_ambient_occlusion()".}
+proc calcAmbientOcclusion*(this: GeoMipTerrain) {.importcpp: "#->calc_ambient_occlusion()".}
 
-proc getElevation*(this: GeoMipTerrain | HeightfieldTesselator, x: float64, y: float64): float64 {.importcpp: "#.get_elevation(#, #)".}
+proc getElevation*(this: GeoMipTerrain, x: float64, y: float64): float64 {.importcpp: "#->get_elevation(#, #)".}
 
-proc getNormal*(this: GeoMipTerrain, x: int, y: int): LVector3 {.importcpp: "#.get_normal(#, #)".}
+proc getNormal*(this: GeoMipTerrain, x: int, y: int): LVector3 {.importcpp: "#->get_normal(#, #)".}
 
-proc getNormal*(this: GeoMipTerrain, mx: int, my: int, x: int, y: int): LVector3 {.importcpp: "#.get_normal(#, #, #, #)".}
+proc getNormal*(this: GeoMipTerrain, mx: int, my: int, x: int, y: int): LVector3 {.importcpp: "#->get_normal(#, #, #, #)".}
 
-proc setBruteforce*(this: GeoMipTerrain, bf: bool) {.importcpp: "#.set_bruteforce(#)".}
+proc setBruteforce*(this: GeoMipTerrain, bf: bool) {.importcpp: "#->set_bruteforce(#)".}
 
-proc getBruteforce*(this: GeoMipTerrain): bool {.importcpp: "#.get_bruteforce()".}
+proc getBruteforce*(this: GeoMipTerrain): bool {.importcpp: "#->get_bruteforce()".}
 
-proc setAutoFlatten*(this: GeoMipTerrain, mode: int) {.importcpp: "#.set_auto_flatten(#)".}
+proc setAutoFlatten*(this: GeoMipTerrain, mode: int) {.importcpp: "#->set_auto_flatten(#)".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2d) {.importcpp: "#.set_focal_point((LPoint2d const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2d) {.importcpp: "#->set_focal_point((LPoint2d const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2f) {.importcpp: "#.set_focal_point((LPoint2f const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint2f) {.importcpp: "#->set_focal_point((LPoint2f const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3d) {.importcpp: "#.set_focal_point((LPoint3d const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3d) {.importcpp: "#->set_focal_point((LPoint3d const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3f) {.importcpp: "#.set_focal_point((LPoint3f const &)(#))".}
+proc setFocalPoint*(this: GeoMipTerrain, fp: LPoint3f) {.importcpp: "#->set_focal_point((LPoint3f const &)(#))".}
 
-proc setFocalPoint*(this: GeoMipTerrain, fnp: NodePath) {.importcpp: "#.set_focal_point(#)".}
+proc setFocalPoint*(this: GeoMipTerrain, fnp: NodePath) {.importcpp: "#->set_focal_point(#)".}
 
-proc setFocalPoint*(this: GeoMipTerrain, x: float64, y: float64) {.importcpp: "#.set_focal_point(#, #)".}
+proc setFocalPoint*(this: GeoMipTerrain, x: float64, y: float64) {.importcpp: "#->set_focal_point(#, #)".}
 
-proc getFocalPoint*(this: GeoMipTerrain): NodePath {.importcpp: "#.get_focal_point()".}
+proc getFocalPoint*(this: GeoMipTerrain): NodePath {.importcpp: "#->get_focal_point()".}
 
-proc getRoot*(this: GeoMipTerrain | MeshDrawer | MeshDrawer2D): NodePath {.importcpp: "#.get_root()".}
+proc getRoot*(this: GeoMipTerrain): NodePath {.importcpp: "#->get_root()".}
 
-proc setBlockSize*(this: GeoMipTerrain, newbs: int) {.importcpp: "#.set_block_size(#)".}
+proc setBlockSize*(this: GeoMipTerrain, newbs: int) {.importcpp: "#->set_block_size(#)".}
 
-proc getBlockSize*(this: GeoMipTerrain): int {.importcpp: "#.get_block_size()".}
+proc getBlockSize*(this: GeoMipTerrain): int {.importcpp: "#->get_block_size()".}
 
-proc getMaxLevel*(this: GeoMipTerrain): int {.importcpp: "#.get_max_level()".}
+proc getMaxLevel*(this: GeoMipTerrain): int {.importcpp: "#->get_max_level()".}
 
-proc setMinLevel*(this: GeoMipTerrain, minlevel: int) {.importcpp: "#.set_min_level(#)".}
+proc setMinLevel*(this: GeoMipTerrain, minlevel: int) {.importcpp: "#->set_min_level(#)".}
 
-proc getMinLevel*(this: GeoMipTerrain): int {.importcpp: "#.get_min_level()".}
+proc getMinLevel*(this: GeoMipTerrain): int {.importcpp: "#->get_min_level()".}
 
-proc isDirty*(this: GeoMipTerrain): bool {.importcpp: "#.is_dirty()".}
+proc isDirty*(this: GeoMipTerrain): bool {.importcpp: "#->is_dirty()".}
 
-proc setFactor*(this: GeoMipTerrain, factor: float) {.importcpp: "#.set_factor(#)".}
+proc setFactor*(this: GeoMipTerrain, factor: float) {.importcpp: "#->set_factor(#)".}
 
-proc setNearFar*(this: GeoMipTerrain, inputNear: float64, inputFar: float64) {.importcpp: "#.set_near_far(#, #)".}
+proc setNearFar*(this: GeoMipTerrain, inputNear: float64, inputFar: float64) {.importcpp: "#->set_near_far(#, #)".}
 
-proc setNear*(this: GeoMipTerrain, inputNear: float64) {.importcpp: "#.set_near(#)".}
+proc setNear*(this: GeoMipTerrain, inputNear: float64) {.importcpp: "#->set_near(#)".}
 
-proc setFar*(this: GeoMipTerrain, inputFar: float64) {.importcpp: "#.set_far(#)".}
+proc setFar*(this: GeoMipTerrain, inputFar: float64) {.importcpp: "#->set_far(#)".}
 
-proc getBlockNodePath*(this: GeoMipTerrain, mx: int, my: int): NodePath {.importcpp: "#.get_block_node_path(#, #)".}
+proc getBlockNodePath*(this: GeoMipTerrain, mx: int, my: int): NodePath {.importcpp: "#->get_block_node_path(#, #)".}
 
-proc getBlockFromPos*(this: GeoMipTerrain, x: float64, y: float64): LVecBase2 {.importcpp: "#.get_block_from_pos(#, #)".}
+proc getBlockFromPos*(this: GeoMipTerrain, x: float64, y: float64): LVecBase2 {.importcpp: "#->get_block_from_pos(#, #)".}
 
-proc setBorderStitching*(this: GeoMipTerrain, stitching: bool) {.importcpp: "#.set_border_stitching(#)".}
+proc setBorderStitching*(this: GeoMipTerrain, stitching: bool) {.importcpp: "#->set_border_stitching(#)".}
 
-proc getBorderStitching*(this: GeoMipTerrain): bool {.importcpp: "#.get_border_stitching()".}
+proc getBorderStitching*(this: GeoMipTerrain): bool {.importcpp: "#->get_border_stitching()".}
 
-proc getFar*(this: GeoMipTerrain): float64 {.importcpp: "#.get_far()".}
+proc getFar*(this: GeoMipTerrain): float64 {.importcpp: "#->get_far()".}
 
-proc getNear*(this: GeoMipTerrain): float64 {.importcpp: "#.get_near()".}
+proc getNear*(this: GeoMipTerrain): float64 {.importcpp: "#->get_near()".}
 
-proc getFlattenMode*(this: GeoMipTerrain): int {.importcpp: "#.get_flatten_mode()".}
+proc getFlattenMode*(this: GeoMipTerrain): int {.importcpp: "#->get_flatten_mode()".}
 
-proc makeSlopeImage*(this: GeoMipTerrain): PNMImage {.importcpp: "#.make_slope_image()".}
+proc makeSlopeImage*(this: GeoMipTerrain): PNMImage {.importcpp: "#->make_slope_image()".}
 
-proc generate*(this: GeoMipTerrain) {.importcpp: "#.generate()".}
+proc generate*(this: GeoMipTerrain) {.importcpp: "#->generate()".}
 
-proc update*(this: GeoMipTerrain): bool {.importcpp: "#.update()".}
+proc update*(this: GeoMipTerrain | PartBundle): bool {.importcpp: "#->update()".}
+
+proc heightfield*(this: HeightfieldTesselator): PNMImage {.importcpp: "#.heightfield()".}
+
+proc setHeightfield*(this: HeightfieldTesselator, filename: Filename, `type`: PNMFileType): bool {.importcpp: "#.set_heightfield(#, #)".}
+
+proc setHeightfield*(this: HeightfieldTesselator, filename: Filename): bool {.importcpp: "#.set_heightfield(#)".}
 
 proc setPolyCount*(this: HeightfieldTesselator, n: int) {.importcpp: "#.set_poly_count(#)".}
 
@@ -19330,6 +19344,8 @@ proc setHorizontalScale*(this: HeightfieldTesselator, h: float64) {.importcpp: "
 proc setVerticalScale*(this: HeightfieldTesselator, v: float64) {.importcpp: "#.set_vertical_scale(#)".}
 
 proc setMaxTriangles*(this: HeightfieldTesselator, n: int) {.importcpp: "#.set_max_triangles(#)".}
+
+proc getElevation*(this: HeightfieldTesselator, x: float64, y: float64): float64 {.importcpp: "#.get_elevation(#, #)".}
 
 proc generate*(this: HeightfieldTesselator): NodePath {.importcpp: "#.generate()".}
 
@@ -19370,6 +19386,8 @@ proc setVertexColor*(this: LineSegs, vertex: int, r: float, g: float, b: float) 
 proc setBudget*(this: MeshDrawer | MeshDrawer2D, budget: int) {.importcpp: "#.set_budget(#)".}
 
 proc getBudget*(this: MeshDrawer | MeshDrawer2D): int {.importcpp: "#.get_budget()".}
+
+proc getRoot*(this: MeshDrawer | MeshDrawer2D): NodePath {.importcpp: "#.get_root()".}
 
 proc begin*(this: MeshDrawer, camera: NodePath, render: NodePath) {.importcpp: "#.begin(#, #)".}
 
@@ -19611,7 +19629,7 @@ proc clearForcedChannel*(this: PartGroup): bool {.importcpp: "#->clear_forced_ch
 
 proc getForcedChannel*(this: PartGroup): AnimChannelBase {.importcpp: "#->get_forced_channel()".}
 
-proc writeWithValue*(this: PartGroup, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#->write_with_value(#, #)".}
+proc writeWithValue*(this: PartGroup, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#->write_with_value(#, #)".}
 
 proc upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(AnimControl *)(#))".}
 
@@ -19811,15 +19829,13 @@ proc controlJoint*(this: PartBundle, jointName: string, node: PandaNode): bool {
 
 proc releaseJoint*(this: PartBundle, jointName: string): bool {.importcpp: "#->release_joint(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc update*(this: PartBundle): bool {.importcpp: "#->update()".}
-
 proc forceUpdate*(this: PartBundle): bool {.importcpp: "#->force_update()".}
 
 proc getMaxBound*(this: MovingPartBase): int {.importcpp: "#->get_max_bound()".}
 
 proc getBound*(this: MovingPartBase, n: int): AnimChannelBase {.importcpp: "#->get_bound(#)".}
 
-proc outputValue*(this: MovingPartBase, `out`: ostream | iostream) {.importcpp: "#->output_value(#)".}
+proc outputValue*(this: MovingPartBase, `out`: iostream | ostream) {.importcpp: "#->output_value(#)".}
 
 proc getValue*(this: MovingPartMatrix): LMatrix4 {.importcpp: "#->get_value()".}
 
@@ -19981,9 +19997,9 @@ proc findJoint*(this: Character, name: string): CharacterJoint {.importcpp: "#->
 
 proc findSlider*(this: Character, name: string): CharacterSlider {.importcpp: "#->find_slider(nimStringToStdString(#))", header: stringConversionCode.}
 
-proc writeParts*(this: Character, `out`: ostream | iostream) {.importcpp: "#->write_parts(#)".}
+proc writeParts*(this: Character, `out`: iostream | ostream) {.importcpp: "#->write_parts(#)".}
 
-proc writePartValues*(this: Character, `out`: ostream | iostream) {.importcpp: "#->write_part_values(#)".}
+proc writePartValues*(this: Character, `out`: iostream | ostream) {.importcpp: "#->write_part_values(#)".}
 
 proc updateToNow*(this: Character) {.importcpp: "#->update_to_now()".}
 
@@ -20409,11 +20425,11 @@ proc traverse*(this: DataGraphTraverser, node: PandaNode) {.importcpp: "#.traver
 
 proc collectLeftovers*(this: DataGraphTraverser) {.importcpp: "#.collect_leftovers()".}
 
-proc writeInputs*(this: DataNode, `out`: ostream | iostream) {.importcpp: "#->write_inputs(#)".}
+proc writeInputs*(this: DataNode, `out`: iostream | ostream) {.importcpp: "#->write_inputs(#)".}
 
-proc writeOutputs*(this: DataNode, `out`: ostream | iostream) {.importcpp: "#->write_outputs(#)".}
+proc writeOutputs*(this: DataNode, `out`: iostream | ostream) {.importcpp: "#->write_outputs(#)".}
 
-proc writeConnections*(this: DataNode, `out`: ostream | iostream) {.importcpp: "#->write_connections(#)".}
+proc writeConnections*(this: DataNode, `out`: iostream | ostream) {.importcpp: "#->write_connections(#)".}
 
 proc getPipe*(this: DisplayRegion | GraphicsDevice | GraphicsOutput | GraphicsStateGuardian): GraphicsPipe {.importcpp: "#->get_pipe()".}
 
@@ -21545,7 +21561,7 @@ proc setPipelineStage*(this: Thread, pipelineStage: int) {.importcpp: "#->set_pi
 
 proc setMinPipelineStage*(this: Thread, minPipelineStage: int) {.importcpp: "#->set_min_pipeline_stage(#)".}
 
-proc outputBlocker*(this: Thread, `out`: ostream | iostream) {.importcpp: "#->output_blocker(#)".}
+proc outputBlocker*(this: Thread, `out`: iostream | ostream) {.importcpp: "#->output_blocker(#)".}
 
 proc isStarted*(this: AsyncTaskChain | Thread): bool {.importcpp: "#->is_started()".}
 
@@ -21693,7 +21709,7 @@ proc findTasks*(this: AsyncTaskManager, name: string): AsyncTaskCollection {.imp
 
 proc findTasksMatching*(this: AsyncTaskManager, pattern: GlobPattern): AsyncTaskCollection {.importcpp: "#->find_tasks_matching(#)".}
 
-proc remove*(this: AsyncTaskManager, tasks: AsyncTaskCollection | AsyncTaskSequence): int {.importcpp: "#->remove(#)".}
+proc remove*(this: AsyncTaskManager, tasks: AsyncTaskSequence | AsyncTaskCollection): int {.importcpp: "#->remove(#)".}
 
 proc waitForTasks*(this: AsyncTaskChain | AsyncTaskManager) {.importcpp: "#->wait_for_tasks()".}
 
@@ -21713,9 +21729,9 @@ proc removeTask*(this: AsyncTaskCollection | AsyncTaskSequence, task: AsyncTask)
 
 proc removeTask*(this: AsyncTaskCollection | AsyncTaskSequence, index: int) {.importcpp: "#.remove_task(#)".}
 
-proc addTasksFrom*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskCollection | AsyncTaskSequence) {.importcpp: "#.add_tasks_from(#)".}
+proc addTasksFrom*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskSequence | AsyncTaskCollection) {.importcpp: "#.add_tasks_from(#)".}
 
-proc removeTasksFrom*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskCollection | AsyncTaskSequence) {.importcpp: "#.remove_tasks_from(#)".}
+proc removeTasksFrom*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskSequence | AsyncTaskCollection) {.importcpp: "#.remove_tasks_from(#)".}
 
 proc removeDuplicateTasks*(this: AsyncTaskCollection | AsyncTaskSequence) {.importcpp: "#.remove_duplicate_tasks()".}
 
@@ -21729,9 +21745,9 @@ proc getTask*(this: AsyncTaskCollection | AsyncTaskSequence, index: int): AsyncT
 
 proc `[]`*(this: AsyncTaskCollection | AsyncTaskSequence, index: int): AsyncTask {.importcpp: "#.operator [](#)".}
 
-proc `+=`*(this: AsyncTaskSequence | var AsyncTaskCollection, other: AsyncTaskCollection | AsyncTaskSequence) {.importcpp: "#.operator +=(#)".}
+proc `+=`*(this: AsyncTaskCollection | var AsyncTaskSequence, other: AsyncTaskSequence | AsyncTaskCollection) {.importcpp: "#.operator +=(#)".}
 
-proc `+`*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskCollection | AsyncTaskSequence): AsyncTaskCollection {.importcpp: "#.operator +(#)".}
+proc `+`*(this: AsyncTaskCollection | AsyncTaskSequence, other: AsyncTaskSequence | AsyncTaskCollection): AsyncTaskCollection {.importcpp: "#.operator +(#)".}
 
 proc getNextWakeTime*(this: AsyncTaskChain | AsyncTaskManager): float64 {.importcpp: "#->get_next_wake_time()".}
 
@@ -21997,7 +22013,7 @@ proc isDataSubsetOf*(this: GeomVertexArrayFormat, other: GeomVertexArrayFormat):
 
 proc countUnusedSpace*(this: GeomVertexArrayFormat): int {.importcpp: "#->count_unused_space()".}
 
-proc writeWithData*(this: GeomVertexArrayFormat, `out`: ostream | iostream, indentLevel: int, arrayData: GeomVertexArrayData) {.importcpp: "#->write_with_data(#, #, #)".}
+proc writeWithData*(this: GeomVertexArrayFormat, `out`: iostream | ostream, indentLevel: int, arrayData: GeomVertexArrayData) {.importcpp: "#->write_with_data(#, #, #)".}
 
 proc getFormatString*(this: GeomVertexArrayFormat, pad: bool): string {.importcpp: "nimStringFromStdString(#->get_format_string(#))", header: stringConversionCode.}
 
@@ -22059,7 +22075,7 @@ proc getMorphBase*(this: GeomVertexFormat, n: int): InternalName {.importcpp: "d
 
 proc getMorphDelta*(this: GeomVertexFormat, n: int): InternalName {.importcpp: "deconstify(#->get_morph_delta(#))", header: deconstifyCode.}
 
-proc writeWithData*(this: GeomVertexFormat, `out`: ostream | iostream, indentLevel: int, data: GeomVertexData) {.importcpp: "#->write_with_data(#, #, #)".}
+proc writeWithData*(this: GeomVertexFormat, `out`: iostream | ostream, indentLevel: int, data: GeomVertexData) {.importcpp: "#->write_with_data(#, #, #)".}
 
 proc upcastToNamable*(this: SimpleLru): var Namable {.importcpp: "((Namable *)&(#))".}
 
@@ -22359,7 +22375,7 @@ proc transformVertices*(this: GeomVertexData, mat: LMatrix4, beginRow: int, endR
 
 proc replaceColumn*(this: GeomVertexData, name: InternalName, numComponents: int, numericType: GeomEnums_NumericType, contents: GeomEnums_Contents): GeomVertexData {.importcpp: "#->replace_column(#, #, #, #)".}
 
-proc describeVertex*(this: GeomVertexData, `out`: ostream | iostream, row: int) {.importcpp: "#->describe_vertex(#, #)".}
+proc describeVertex*(this: GeomVertexData, `out`: iostream | ostream, row: int) {.importcpp: "#->describe_vertex(#, #)".}
 
 proc clearCache*(this: AudioManager | Geom | GeomVertexData) {.importcpp: "#->clear_cache()".}
 
@@ -23005,9 +23021,9 @@ proc readTxo*(this: Texture, `in`: istream, filename: string): bool {.importcpp:
 
 proc readTxo*(this: Texture, `in`: istream): bool {.importcpp: "#->read_txo(#)".}
 
-proc writeTxo*(this: Texture, `out`: ostream | iostream, filename: string): bool {.importcpp: "#->write_txo(#, nimStringToStdString(#))", header: stringConversionCode.}
+proc writeTxo*(this: Texture, `out`: iostream | ostream, filename: string): bool {.importcpp: "#->write_txo(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc writeTxo*(this: Texture, `out`: ostream | iostream): bool {.importcpp: "#->write_txo(#)".}
+proc writeTxo*(this: Texture, `out`: iostream | ostream): bool {.importcpp: "#->write_txo(#)".}
 
 proc readDds*(this: Texture, `in`: istream, filename: string, headerOnly: bool): bool {.importcpp: "#->read_dds(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -23371,9 +23387,9 @@ proc setGraphicsMemoryLimit*(this: PreparedGraphicsObjects, limit: int) {.import
 
 proc getGraphicsMemoryLimit*(this: PreparedGraphicsObjects): int {.importcpp: "#->get_graphics_memory_limit()".}
 
-proc showGraphicsMemoryLru*(this: PreparedGraphicsObjects, `out`: ostream | iostream) {.importcpp: "#->show_graphics_memory_lru(#)".}
+proc showGraphicsMemoryLru*(this: PreparedGraphicsObjects, `out`: iostream | ostream) {.importcpp: "#->show_graphics_memory_lru(#)".}
 
-proc showResidencyTrackers*(this: PreparedGraphicsObjects, `out`: ostream | iostream) {.importcpp: "#->show_residency_trackers(#)".}
+proc showResidencyTrackers*(this: PreparedGraphicsObjects, `out`: iostream | ostream) {.importcpp: "#->show_residency_trackers(#)".}
 
 proc getNumQueued*(this: PreparedGraphicsObjects): int {.importcpp: "#->get_num_queued()".}
 
@@ -23540,8 +23556,6 @@ proc getFocalLength*(this: Lens): float {.importcpp: "#->get_focal_length()".}
 proc setMinFov*(this: Lens, minFov: float) {.importcpp: "#->set_min_fov(#)".}
 
 proc setFov*(this: Lens, fov: LVecBase2) {.importcpp: "#->set_fov((LVecBase2 const &)(#))".}
-
-proc setFov*(this: Lens, fov: float) {.importcpp: "#->set_fov(#)".}
 
 proc setFov*(this: Lens, hfov: float, vfov: float) {.importcpp: "#->set_fov(#, #)".}
 
@@ -23721,7 +23735,7 @@ proc `<`*(this: Material, other: Material): bool {.importcpp: "#->operator <(#)"
 
 proc compareTo*(this: Material, other: Material): int {.importcpp: "#->compare_to(#)".}
 
-proc write*(this: Material, `out`: ostream | iostream, indent: int) {.importcpp: "#->write(#, #)".}
+proc write*(this: Material, `out`: iostream | ostream, indent: int) {.importcpp: "#->write(#, #)".}
 
 proc isAttribLocked*(this: Material): bool {.importcpp: "#->is_attrib_locked()".}
 
@@ -23951,7 +23965,7 @@ proc almostEqual*(this: LVecBase2f, other: LVecBase2f): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase2f, other: LVecBase2f, threshold: float32): bool {.importcpp: "((LVecBase2f const &)#).almost_equal((LVecBase2f const &)(#), #)".}
 
-proc output*(this: LVecBase2f, `out`: ostream | iostream) {.importcpp: "((LVecBase2f const &)#).output(#)".}
+proc output*(this: LVecBase2f, `out`: iostream | ostream) {.importcpp: "((LVecBase2f const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase2f, destination: Datagram) {.importcpp: "((LVecBase2f const &)#).write_datagram_fixed(#)".}
 
@@ -24049,7 +24063,7 @@ proc almostEqual*(this: LVecBase2d, other: LVecBase2d): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase2d, other: LVecBase2d, threshold: float64): bool {.importcpp: "((LVecBase2d const &)#).almost_equal((LVecBase2d const &)(#), #)".}
 
-proc output*(this: LVecBase2d, `out`: ostream | iostream) {.importcpp: "((LVecBase2d const &)#).output(#)".}
+proc output*(this: LVecBase2d, `out`: iostream | ostream) {.importcpp: "((LVecBase2d const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase2d, destination: Datagram) {.importcpp: "((LVecBase2d const &)#).write_datagram_fixed(#)".}
 
@@ -24133,7 +24147,7 @@ proc almostEqual*(this: LVecBase2i, other: LVecBase2i): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase2i, other: LVecBase2i, threshold: int): bool {.importcpp: "((LVecBase2i const &)#).almost_equal((LVecBase2i const &)(#), #)".}
 
-proc output*(this: LVecBase2i, `out`: ostream | iostream) {.importcpp: "((LVecBase2i const &)#).output(#)".}
+proc output*(this: LVecBase2i, `out`: iostream | ostream) {.importcpp: "((LVecBase2i const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase2i, destination: Datagram) {.importcpp: "((LVecBase2i const &)#).write_datagram_fixed(#)".}
 
@@ -24363,7 +24377,7 @@ proc almostEqual*(this: LVecBase3f, other: LVecBase3f): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase3f, other: LVecBase3f, threshold: float32): bool {.importcpp: "((LVecBase3f const &)#).almost_equal((LVecBase3f const &)(#), #)".}
 
-proc output*(this: LVecBase3f, `out`: ostream | iostream) {.importcpp: "((LVecBase3f const &)#).output(#)".}
+proc output*(this: LVecBase3f, `out`: iostream | ostream) {.importcpp: "((LVecBase3f const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase3f, destination: Datagram) {.importcpp: "((LVecBase3f const &)#).write_datagram_fixed(#)".}
 
@@ -24479,7 +24493,7 @@ proc almostEqual*(this: LVecBase3d, other: LVecBase3d): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase3d, other: LVecBase3d, threshold: float64): bool {.importcpp: "((LVecBase3d const &)#).almost_equal((LVecBase3d const &)(#), #)".}
 
-proc output*(this: LVecBase3d, `out`: ostream | iostream) {.importcpp: "((LVecBase3d const &)#).output(#)".}
+proc output*(this: LVecBase3d, `out`: iostream | ostream) {.importcpp: "((LVecBase3d const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase3d, destination: Datagram) {.importcpp: "((LVecBase3d const &)#).write_datagram_fixed(#)".}
 
@@ -24579,7 +24593,7 @@ proc almostEqual*(this: LVecBase3i, other: LVecBase3i): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase3i, other: LVecBase3i, threshold: int): bool {.importcpp: "((LVecBase3i const &)#).almost_equal((LVecBase3i const &)(#), #)".}
 
-proc output*(this: LVecBase3i, `out`: ostream | iostream) {.importcpp: "((LVecBase3i const &)#).output(#)".}
+proc output*(this: LVecBase3i, `out`: iostream | ostream) {.importcpp: "((LVecBase3i const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase3i, destination: Datagram) {.importcpp: "((LVecBase3i const &)#).write_datagram_fixed(#)".}
 
@@ -24871,7 +24885,7 @@ proc almostEqual*(this: LVecBase4f, other: LVecBase4f): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase4f, other: LVecBase4f, threshold: float32): bool {.importcpp: "((LVecBase4f const &)#).almost_equal((LVecBase4f const &)(#), #)".}
 
-proc output*(this: LVecBase4f, `out`: ostream | iostream) {.importcpp: "((LVecBase4f const &)#).output(#)".}
+proc output*(this: LVecBase4f, `out`: iostream | ostream) {.importcpp: "((LVecBase4f const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase4f, destination: Datagram) {.importcpp: "((LVecBase4f const &)#).write_datagram_fixed(#)".}
 
@@ -24999,7 +25013,7 @@ proc almostEqual*(this: LVecBase4d, other: LVecBase4d): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase4d, other: LVecBase4d, threshold: float64): bool {.importcpp: "((LVecBase4d const &)#).almost_equal((LVecBase4d const &)(#), #)".}
 
-proc output*(this: LVecBase4d, `out`: ostream | iostream) {.importcpp: "((LVecBase4d const &)#).output(#)".}
+proc output*(this: LVecBase4d, `out`: iostream | ostream) {.importcpp: "((LVecBase4d const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase4d, destination: Datagram) {.importcpp: "((LVecBase4d const &)#).write_datagram_fixed(#)".}
 
@@ -25113,7 +25127,7 @@ proc almostEqual*(this: LVecBase4i, other: LVecBase4i): bool {.importcpp: "((LVe
 
 proc almostEqual*(this: LVecBase4i, other: LVecBase4i, threshold: int): bool {.importcpp: "((LVecBase4i const &)#).almost_equal((LVecBase4i const &)(#), #)".}
 
-proc output*(this: LVecBase4i, `out`: ostream | iostream) {.importcpp: "((LVecBase4i const &)#).output(#)".}
+proc output*(this: LVecBase4i, `out`: iostream | ostream) {.importcpp: "((LVecBase4i const &)#).output(#)".}
 
 proc writeDatagramFixed*(this: LVecBase4i, destination: Datagram) {.importcpp: "((LVecBase4i const &)#).write_datagram_fixed(#)".}
 
@@ -25705,7 +25719,7 @@ proc isSameDirection*(this: LQuaternionf, other: LQuaternionf): bool {.importcpp
 
 proc almostSameDirection*(this: LQuaternionf, other: LQuaternionf, threshold: float32): bool {.importcpp: "#.almost_same_direction(#, #)".}
 
-proc output*(this: LQuaterniond | LQuaternionf, param0: ostream | iostream) {.importcpp: "#.output(#)".}
+proc output*(this: LQuaterniond | LQuaternionf, param0: iostream | ostream) {.importcpp: "#.output(#)".}
 
 proc extractToMatrix*(this: LQuaternionf, m: LMatrix3f) {.importcpp: "#.extract_to_matrix(#)".}
 
@@ -26147,7 +26161,7 @@ proc writeEgg*(this: ParametricCurve | ParametricCurveCollection, filename: File
 
 proc writeEgg*(this: ParametricCurve | ParametricCurveCollection, filename: Filename): bool {.importcpp: "#->write_egg(#)".}
 
-proc writeEgg*(this: ParametricCurve | ParametricCurveCollection, `out`: ostream | iostream, filename: Filename, cs: CoordinateSystem): bool {.importcpp: "#->write_egg(#, #, #)".}
+proc writeEgg*(this: ParametricCurve | ParametricCurveCollection, `out`: iostream | ostream, filename: Filename, cs: CoordinateSystem): bool {.importcpp: "#->write_egg(#, #, #)".}
 
 proc addCurve*(this: ParametricCurveCollection, curve: ParametricCurve) {.importcpp: "#->add_curve(#)".}
 
@@ -26289,7 +26303,7 @@ proc getCvTstart*(this: HermiteCurve, n: int): float {.importcpp: "#->get_cv_tst
 
 proc getCvName*(this: HermiteCurve, n: int): string {.importcpp: "nimStringFromStdString(#->get_cv_name(#))", header: stringConversionCode.}
 
-proc writeCv*(this: HermiteCurve | NurbsCurve | NurbsCurveInterface, `out`: ostream | iostream, n: int) {.importcpp: "#->write_cv(#, #)".}
+proc writeCv*(this: HermiteCurve | NurbsCurve | NurbsCurveInterface, `out`: iostream | ostream, n: int) {.importcpp: "#->write_cv(#, #)".}
 
 proc setOrder*(this: NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface, order: int) {.importcpp: "#->set_order(#)".}
 
@@ -26615,9 +26629,9 @@ proc read*(this: PfmFile, `in`: istream): bool {.importcpp: "#.read(#)".}
 
 proc write*(this: PfmFile, fullpath: Filename): bool {.importcpp: "#.write(#)".}
 
-proc write*(this: PfmFile, `out`: ostream | iostream, fullpath: Filename): bool {.importcpp: "#.write(#, #)".}
+proc write*(this: PfmFile, `out`: iostream | ostream, fullpath: Filename): bool {.importcpp: "#.write(#, #)".}
 
-proc write*(this: PfmFile, `out`: ostream | iostream): bool {.importcpp: "#.write(#)".}
+proc write*(this: PfmFile, `out`: iostream | ostream): bool {.importcpp: "#.write(#)".}
 
 proc load*(this: PfmFile, pnmimage: PNMImage): bool {.importcpp: "#.load(#)".}
 
@@ -26933,11 +26947,11 @@ proc write*(this: PNMImage, filename: Filename, `type`: PNMFileType): bool {.imp
 
 proc write*(this: PNMImage, filename: Filename): bool {.importcpp: "#.write(#)".}
 
-proc write*(this: PNMImage, data: ostream | iostream, filename: string, `type`: PNMFileType): bool {.importcpp: "#.write(#, nimStringToStdString(#), #)", header: stringConversionCode.}
+proc write*(this: PNMImage, data: iostream | ostream, filename: string, `type`: PNMFileType): bool {.importcpp: "#.write(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-proc write*(this: PNMImage, data: ostream | iostream, filename: string): bool {.importcpp: "#.write(#, nimStringToStdString(#))", header: stringConversionCode.}
+proc write*(this: PNMImage, data: iostream | ostream, filename: string): bool {.importcpp: "#.write(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-proc write*(this: PNMImage, data: ostream | iostream): bool {.importcpp: "#.write(#)".}
+proc write*(this: PNMImage, data: iostream | ostream): bool {.importcpp: "#.write(#)".}
 
 proc setNumChannels*(this: PNMImage, numChannels: int) {.importcpp: "#.set_num_channels(#)".}
 
@@ -27319,9 +27333,9 @@ proc getPage*(this: DynamicTextFont, n: int): DynamicTextPage {.importcpp: "#->g
 
 proc garbageCollect*(this: DynamicTextFont): int {.importcpp: "#->garbage_collect()".}
 
-proc `==`*(this: TextNode | TextProperties, other: TextProperties | TextNode): bool {.importcpp: "#->operator ==(#)".}
+proc `==`*(this: TextNode | TextProperties, other: TextNode | TextProperties): bool {.importcpp: "#->operator ==(#)".}
 
-proc `!=`*(this: TextNode | TextProperties, other: TextProperties | TextNode): bool {.importcpp: "#->operator !=(#)".}
+proc `!=`*(this: TextNode | TextProperties, other: TextNode | TextProperties): bool {.importcpp: "#->operator !=(#)".}
 
 proc isAnySpecified*(this: TextNode | TextProperties): bool {.importcpp: "#->is_any_specified()".}
 
@@ -27489,7 +27503,7 @@ proc hasDirection*(this: TextNode | TextProperties): bool {.importcpp: "#->has_d
 
 proc getDirection*(this: TextNode | TextProperties): TextProperties_Direction {.importcpp: "#->get_direction()".}
 
-proc addProperties*(this: TextNode | TextProperties, other: TextProperties | TextNode) {.importcpp: "#->add_properties(#)".}
+proc addProperties*(this: TextNode | TextProperties, other: TextNode | TextProperties) {.importcpp: "#->add_properties(#)".}
 
 proc getModel*(this: TextGraphic): NodePath {.importcpp: "#.get_model()".}
 
@@ -27497,11 +27511,15 @@ proc setModel*(this: TextGraphic, model: NodePath) {.importcpp: "#.set_model(#)"
 
 proc getFrame*(this: TextGraphic): LVecBase4 {.importcpp: "#.get_frame()".}
 
+proc setFrame*(this: TextGraphic, frame: LVecBase4) {.importcpp: "#.set_frame((LVecBase4 const &)(#))".}
+
+proc setFrame*(this: TextGraphic, left: float, right: float, bottom: float, top: float) {.importcpp: "#.set_frame(#, #, #, #)".}
+
 proc getInstanceFlag*(this: TextGraphic): bool {.importcpp: "#.get_instance_flag()".}
 
 proc setInstanceFlag*(this: TextGraphic, instanceFlag: bool) {.importcpp: "#.set_instance_flag(#)".}
 
-proc setProperties*(this: TextPropertiesManager, name: string, properties: TextProperties | TextNode) {.importcpp: "#.set_properties(nimStringToStdString(#), #)", header: stringConversionCode.}
+proc setProperties*(this: TextPropertiesManager, name: string, properties: TextNode | TextProperties) {.importcpp: "#.set_properties(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc getProperties*(this: TextPropertiesManager, name: string): TextProperties {.importcpp: "#.get_properties(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -27535,7 +27553,7 @@ proc setMultilineMode*(this: TextAssembler, flag: bool) {.importcpp: "#.set_mult
 
 proc getMultilineMode*(this: TextAssembler): bool {.importcpp: "#.get_multiline_mode()".}
 
-proc setProperties*(this: TextAssembler, properties: TextProperties | TextNode) {.importcpp: "#.set_properties(#)".}
+proc setProperties*(this: TextAssembler, properties: TextNode | TextProperties) {.importcpp: "#.set_properties(#)".}
 
 proc getProperties*(this: TextAssembler): TextProperties {.importcpp: "#.get_properties()".}
 
@@ -27703,8 +27721,6 @@ proc getUpperLeft3d*(this: TextNode): LPoint3 {.importcpp: "#->get_upper_left_3d
 
 proc getLowerRight3d*(this: TextNode): LPoint3 {.importcpp: "#->get_lower_right_3d()".}
 
-proc generate*(this: TextNode): PandaNode {.importcpp: "#->generate()".}
-
 proc getInternalGeom*(this: TextNode): PandaNode {.importcpp: "#->get_internal_geom()".}
 
 proc setButtonDownEvent*(this: ButtonThrower, buttonDownEvent: string) {.importcpp: "#->set_button_down_event(nimStringToStdString(#))", header: stringConversionCode.}
@@ -27864,10 +27880,6 @@ proc setMat*(this: DriveInterface | Trackball, mat: LMatrix4) {.importcpp: "#->s
 proc forceDgraph*(this: DriveInterface) {.importcpp: "#->force_dgraph()".}
 
 proc upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
-
-proc setFrame*(this: MouseWatcher | MouseWatcherRegion | PGItem, frame: LVecBase4) {.importcpp: "#->set_frame((LVecBase4 const &)(#))".}
-
-proc setFrame*(this: MouseWatcher | MouseWatcherRegion | PGItem, left: float, right: float, bottom: float, top: float) {.importcpp: "#->set_frame(#, #, #, #)".}
 
 proc getArea*(this: MouseWatcherRegion): float {.importcpp: "#->get_area()".}
 
@@ -28151,7 +28163,7 @@ proc getData*(this: BamCacheRecord): TypedWritable {.importcpp: "#->get_data()".
 
 proc setData*(this: BamCacheRecord, `ptr`: TypedWritable) {.importcpp: "#->set_data(#)".}
 
-proc setData*(this: BamCacheRecord, `ptr`: TypedWritable, refPtr: VertexDataBlock | ReferenceCount | SocketStreamRecorder | TypedReferenceCount | MouseWatcherGroup | TypedWritableReferenceCount) {.importcpp: "#->set_data(#, #)".}
+proc setData*(this: BamCacheRecord, `ptr`: TypedWritable, refPtr: TypedReferenceCount | SocketStreamRecorder | VertexDataBlock | MouseWatcherGroup | TypedWritableReferenceCount | ReferenceCount) {.importcpp: "#->set_data(#, #)".}
 
 proc setData*(this: BamCacheRecord, `ptr`: TypedWritable, dummy: int) {.importcpp: "#->set_data(#, #)".}
 
@@ -28201,9 +28213,9 @@ proc considerFlushIndex*(this: BamCache) {.importcpp: "#.consider_flush_index()"
 
 proc flushIndex*(this: BamCache) {.importcpp: "#.flush_index()".}
 
-proc listIndex*(this: BamCache, `out`: ostream | iostream, indentLevel: int) {.importcpp: "#.list_index(#, #)".}
+proc listIndex*(this: BamCache, `out`: iostream | ostream, indentLevel: int) {.importcpp: "#.list_index(#, #)".}
 
-proc listIndex*(this: BamCache, `out`: ostream | iostream) {.importcpp: "#.list_index(#)".}
+proc listIndex*(this: BamCache, `out`: iostream | ostream) {.importcpp: "#.list_index(#)".}
 
 proc setTextureFlags*(this: var LoaderOptions, flags: int) {.importcpp: "#.set_texture_flags(#)".}
 
@@ -28217,7 +28229,7 @@ proc setAutoTextureScale*(this: var LoaderOptions, scale: AutoTextureScale) {.im
 
 proc getAutoTextureScale*(this: LoaderOptions): AutoTextureScale {.importcpp: "#.get_auto_texture_scale()".}
 
-proc setSource*(this: BamReader, source: DatagramGenerator | DatagramBuffer) {.importcpp: "#.set_source(#)".}
+proc setSource*(this: BamReader, source: DatagramBuffer | DatagramGenerator) {.importcpp: "#.set_source(#)".}
 
 proc getSource*(this: BamReader): DatagramGenerator {.importcpp: "#.get_source()".}
 
@@ -28297,9 +28309,9 @@ proc invertInPlace*(this: var BitArray | var BitMask[uint16, 16] | var BitMask[u
 
 proc hasBitsInCommon*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.has_bits_in_common(#)".}
 
-proc outputBinary*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64], `out`: ostream | iostream, spacesEvery: int) {.importcpp: "#.output_binary(#, #)".}
+proc outputBinary*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64], `out`: iostream | ostream, spacesEvery: int) {.importcpp: "#.output_binary(#, #)".}
 
-proc outputHex*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64], `out`: ostream | iostream, spacesEvery: int) {.importcpp: "#.output_hex(#, #)".}
+proc outputHex*(this: BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64], `out`: iostream | ostream, spacesEvery: int) {.importcpp: "#.output_hex(#, #)".}
 
 proc `==`*(this: BitMask[uint16, 16], other: BitMask[uint16, 16]): bool {.importcpp: "#.operator ==(#)".}
 
@@ -28539,9 +28551,9 @@ proc open*(this: DatagramInputFile, `in`: istream): bool {.importcpp: "#.open(#)
 
 proc getStream*(this: DatagramInputFile): istream {.importcpp: "#.get_stream()".}
 
-proc open*(this: DatagramOutputFile, `out`: ostream | iostream, filename: Filename): bool {.importcpp: "#.open(#, #)".}
+proc open*(this: DatagramOutputFile, `out`: iostream | ostream, filename: Filename): bool {.importcpp: "#.open(#, #)".}
 
-proc open*(this: DatagramOutputFile, `out`: ostream | iostream): bool {.importcpp: "#.open(#)".}
+proc open*(this: DatagramOutputFile, `out`: iostream | ostream): bool {.importcpp: "#.open(#)".}
 
 proc writeHeader*(this: DatagramOutputFile, header: string): bool {.importcpp: "#.write_header(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -30604,8 +30616,8 @@ func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollect
   this.output(str)
   str.data
 
-proc toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+proc toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | CardMaker | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FisheyeMaker | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | GeoMipTerrain | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | CardMaker | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FisheyeMaker | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | GeoMipTerrain | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 proc contains*(this: VirtualFileSystem_mounts, value: VirtualFileMount): bool =
   for i in 0 ..< len(this):

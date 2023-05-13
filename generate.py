@@ -416,7 +416,7 @@ else:
 
 ATOMIC_TYPES = ["object", "int", "float32", "float64", "bool", "char", "void", "string", "clonglong", "type(nil)"]
 NIM_KEYWORDS = {"addr", "and", "as", "asm", "bind", "block", "break", "case", "cast", "concept", "const", "continue", "converter", "defer", "discard", "distinct", "div", "do", "elif", "else", "end", "enum", "except", "export", "finally", "for", "from", "func", "if", "import", "in", "include", "interface", "is", "isnot", "iterator", "let", "macro", "method", "mixin", "mod", "nil", "not", "notin", "object", "of", "or", "out", "proc", "ptr", "raise", "ref", "return", "shl", "shr", "static", "template", "try", "tuple", "type", "using", "var", "when", "while", "xor", "yield"}
-FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties", "CallbackData"}
+FORCE_POINTER_TYPES = {"ReferenceCount", "EventQueue", "GraphicsPipeSelection", "TypedObject", "AnimInterface", "TypedWritable", "SavedContext", "ConnectionListener", "SimpleAllocatorBlock", "Namable", "CIntervalManager", "PandaSystem", "TextProperties", "CallbackData", "CardMaker", "FisheyeMaker", "GeoMipTerrain"}
 INPLACE_OPERATORS = {"=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=", "++", "--"}
 EXCLUDE_TYPES = {"PyTypeObject", "PyObject", "_object", "_typeobject", "ParamNodePath", "PythonCallbackObject", "PythonThread", "PythonTask"}
 EXCLUDE_LIBRARIES = {"libp3dxml"}
@@ -1387,8 +1387,30 @@ class BindingGenerator:
                 cpp_expr = "nimStringFromStdString(" + cpp_expr + ")"
                 headers.add("stringConversionCode")
 
-        if headers:
-            header = sorted(headers)[0]
+        if len(headers) > 1:
+            headers.discard("stringConversionCode")
+
+        if len(headers) > 1:
+            header = ""
+            for h in sorted(headers):
+                if h.startswith('"'):
+                    h = h.replace('"', "\\\"")
+                    if header:
+                        header += f"\\n#include {h}"
+                    else:
+                        header += f"\"#include {h}"
+                else:
+                    if header:
+                        header += f"\\n\" & {h} & \""
+                    else:
+                        header += f"{h} & \""
+
+            if header.endswith(" & \""):
+                header = header[:-4]
+            else:
+                header += "\""
+        elif headers:
+            header = next(iter(headers))
         else:
             header = None
 

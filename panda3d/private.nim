@@ -1,6 +1,8 @@
 import std/time_t
 export time_t.Time
 
+from os import splitPath
+
 when defined(pandaDir):
   const pandaDir* {.strdefine.}: string = ""
   when len(pandaDir) < 1:
@@ -18,20 +20,7 @@ when defined(vcc):
 #include "pnotify.h"
 """.}
 
-const deconstifyCode* = """
-#include "pointerTo.h"
-
-template<class T> PT(T) deconstify(CPT(T) value) {
-  PT(T) result;
-  result.cheat() = (T *)value.p();
-  value.cheat() = nullptr;
-  return result;
-}
-
-template<class T> T *deconstify(const T *value) {
-  return (T *)value;
-}
-""";
+const deconstifyCode* = "#include \"" & currentSourcePath().splitPath.head & "/helpers.hpp\"";
 
 when defined(nimSeqsV2):
   const stringConversionCode* = """

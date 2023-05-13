@@ -143,20 +143,20 @@ proc changeMouseInterface*(this: ShowBase, changeTo: NodePath) =
   this.mouseInterface.detachNode()
   this.mouseInterface = changeTo
   this.mouseInterfaceNode = dcast(MouseInterfaceNode, changeTo.node())
-  if this.mouseWatcher:
+  if not this.mouseWatcher.isEmpty:
     this.mouseInterface.reparentTo(this.mouseWatcher)
-  if this.mouse2cam:
+  if not this.mouse2cam.isEmpty:
     this.mouse2cam.reparentTo(this.mouseInterface)
 
 proc useDrive*(this: ShowBase) =
-  if this.drive:
+  if not this.drive.isEmpty:
     this.changeMouseInterface(this.drive)
     # Set the height to a good eyeheight
     this.drive.reset()
     this.drive.setZ(4.0)
 
 proc useTrackball*(this: ShowBase) =
-  if this.trackball:
+  if not this.trackball.isEmpty:
     this.changeMouseInterface(this.trackball)
 
 proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
@@ -196,7 +196,7 @@ proc setupMouse*(this: ShowBase, win: GraphicsWindow) =
   # Tell the gui system about our new mouse watcher.
   dcast(PGTop, aspect2d.node()).setMouseWatcher(mwn)
 
-  mwn.addRegion(newPGMouseWatcherBackground())
+  mwn.upcastToMouseWatcherBase.addRegion(newPGMouseWatcherBackground())
 
 proc getAspectRatio*(this: ShowBase, win: GraphicsOutput): float =
   var aspectRatio: float = 1
@@ -388,11 +388,11 @@ proc toggleWireframe*(this: ShowBase) =
     this.wireframeOn()
 
 proc disableMouse*(this: ShowBase) =
-  if this.mouse2cam:
+  if not this.mouse2cam.isEmpty:
     this.mouse2cam.detachNode()
 
 proc enableMouse*(this: ShowBase) =
-  if this.mouse2cam:
+  if not this.mouse2cam.isEmpty:
     this.mouse2cam.reparentTo(this.mouseInterface)
 
 proc setFrameRateMeter*(this: ShowBase, flag: bool) =
@@ -403,7 +403,7 @@ proc setFrameRateMeter*(this: ShowBase, flag: bool) =
   else:
     if this.frameRateMeter != nil:
       this.frameRateMeter.clearWindow()
-      this.frameRateMeter = nil
+      this.frameRateMeter = toFrameRateMeter(nil)
 
 proc run*(this: ShowBase) =
   taskMgr.run()

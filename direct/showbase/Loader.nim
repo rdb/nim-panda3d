@@ -10,10 +10,10 @@ type
 
 proc loadModel*(this: Loader, modelPath: string, loaderOptions: LoaderOptions = LoaderOptions()): NodePath =
   var loader = PandaLoader.getGlobalPtr()
-  return initNodePath(loader.loadSync(modelPath, loaderOptions))
+  return initNodePath(loader.loadSync(initFilename(modelPath), loaderOptions))
 
 proc loadTexture*(this: Loader, texturePath: string): Texture =
-  var texture = TexturePool.loadTexture(texturePath)
+  var texture = TexturePool.loadTexture(initFilename(texturePath))
   if texture == nil:
     var e: ref IOError
     new(e)
@@ -22,7 +22,7 @@ proc loadTexture*(this: Loader, texturePath: string): Texture =
   return texture
 
 proc loadSound*(this: Loader, manager: AudioManager, soundPath: string, positional: bool = false): AudioSound =
-  return manager.getSound(soundPath, positional, 0)
+  return manager.getSound(initFilename(soundPath), positional, 0)
 
 proc loadSfx*(this: Loader, soundPath: string, positional: bool = false): AudioSound =
   if this.sfxManager == nil:

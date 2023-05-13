@@ -6817,51 +6817,51 @@ proc initSceneGraphAnalyzer*(): SceneGraphAnalyzer {.importcpp: "SceneGraphAnaly
 
 proc initSceneGraphAnalyzer*(param0: SceneGraphAnalyzer): SceneGraphAnalyzer {.importcpp: "SceneGraphAnalyzer(#)".}
 
-proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "transformState.h".}
+proc makeIdentity*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_identity())", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "transformState.h".}
+proc makeInvalid*(_: typedesc[TransformState]): TransformState {.importcpp: "deconstify(TransformState::make_invalid())", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePos*(_: typedesc[TransformState], pos: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_hpr((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeHpr*(_: typedesc[TransformState], hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_hpr((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(#TransformState::make_quat(#))", header: "transformState.h".}
+proc makeQuat*(_: typedesc[TransformState], quat: LQuaternion): TransformState {.importcpp: "deconstify(#TransformState::make_quat(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHpr*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr((LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_scale((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeScale*(_: typedesc[TransformState], scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_scale((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "transformState.h".}
+proc makeScale*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_shear((LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makeShear*(_: typedesc[TransformState], shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_shear((LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHprScale*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale((LVecBase3 const &)(#), #, (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosQuatScale*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale((LVecBase3 const &)(#), #, (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale_shear((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosHprScaleShear*(_: typedesc[TransformState], pos: LVecBase3, hpr: LVecBase3, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_hpr_scale_shear((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale_shear((LVecBase3 const &)(#), #, (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "transformState.h".}
+proc makePosQuatScaleShear*(_: typedesc[TransformState], pos: LVecBase3, quat: LQuaternion, scale: LVecBase3, shear: LVecBase3): TransformState {.importcpp: "deconstify(#TransformState::make_pos_quat_scale_shear((LVecBase3 const &)(#), #, (LVecBase3 const &)(#), (LVecBase3 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(#TransformState::make_mat(#))", header: "transformState.h".}
+proc makeMat*(_: typedesc[TransformState], mat: LMatrix4): TransformState {.importcpp: "deconstify(#TransformState::make_mat(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos2d((LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makePos2d*(_: typedesc[TransformState], pos: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos2d((LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeRotate2d*(_: typedesc[TransformState], rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_rotate2d(#))", header: "transformState.h".}
+proc makeRotate2d*(_: typedesc[TransformState], rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_rotate2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate2d((LVecBase2 const &)(#), #))", header: "transformState.h".}
+proc makePosRotate2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate2d((LVecBase2 const &)(#), #))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d((LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makeScale2d*(_: typedesc[TransformState], scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d((LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeScale2d*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "transformState.h".}
+proc makeScale2d*(_: typedesc[TransformState], scale: float): TransformState {.importcpp: "deconstify(#TransformState::make_scale2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeShear2d*(_: typedesc[TransformState], shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_shear2d(#))", header: "transformState.h".}
+proc makeShear2d*(_: typedesc[TransformState], shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_shear2d(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#)))", header: "transformState.h".}
+proc makePosRotateScale2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#)))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2, shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale_shear2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#), #))", header: "transformState.h".}
+proc makePosRotateScaleShear2d*(_: typedesc[TransformState], pos: LVecBase2, rotate: float, scale: LVecBase2, shear: float): TransformState {.importcpp: "deconstify(#TransformState::make_pos_rotate_scale_shear2d((LVecBase2 const &)(#), #, (LVecBase2 const &)(#), #))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
-proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(#TransformState::make_mat3(#))", header: "transformState.h".}
+proc makeMat3*(_: typedesc[TransformState], mat: LMatrix3): TransformState {.importcpp: "deconstify(#TransformState::make_mat3(#))", header: "#include \"transformState.h\"\n" & deconstifyCode.}
 
 proc getNumStates*(_: typedesc[TransformState]): int {.importcpp: "TransformState::get_num_states()", header: "transformState.h".}
 
@@ -6893,53 +6893,53 @@ proc validateAttribs*(_: typedesc[RenderAttrib]): bool {.importcpp: "RenderAttri
 
 converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool, wireframeColor: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool, wireframeColor: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#))", header: "renderModeAttrib.h".}
+proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#))", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "renderModeAttrib.h".}
+proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "deconstify(RenderModeAttrib::make_default())", header: "#include \"renderModeAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeAttrib::get_class_slot()", header: "renderModeAttrib.h".}
 
 converter getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
-proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#))", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib], mat: LMatrix4): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#))", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#, #))", header: "texMatrixAttrib.h".}
+proc make*(_: typedesc[TexMatrixAttrib], stage: TextureStage, transform: TransformState): RenderAttrib {.importcpp: "deconstify(#TexMatrixAttrib::make(#, #))", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "texMatrixAttrib.h".}
+proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make_default())", header: "#include \"texMatrixAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TexMatrixAttrib]): int {.importcpp: "TexMatrixAttrib::get_class_slot()", header: "texMatrixAttrib.h".}
 
 converter getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
 
-proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "renderState.h".}
+proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, attrib5: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, attrib4: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, attrib3: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib1: RenderAttrib, attrib2: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib, override: int): RenderState {.importcpp: "deconstify(#RenderState::make(#, #))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#))", header: "renderState.h".}
+proc make*(_: typedesc[RenderState], attrib: RenderAttrib): RenderState {.importcpp: "deconstify(#RenderState::make(#))", header: "#include \"renderState.h\"\n" & deconstifyCode.}
 
 proc getMaxPriority*(_: typedesc[RenderState]): int {.importcpp: "RenderState::get_max_priority()", header: "renderState.h".}
 
@@ -6961,17 +6961,17 @@ proc validateStates*(_: typedesc[RenderState]): bool {.importcpp: "RenderState::
 
 converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
-proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, referenceAlpha: float): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "alphaTestAttrib.h".}
+proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, referenceAlpha: float): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "#include \"alphaTestAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "alphaTestAttrib.h".}
+proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deconstify(AlphaTestAttrib::make_default())", header: "#include \"alphaTestAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
 converter getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
-proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "antialiasAttrib.h".}
+proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "#include \"antialiasAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "antialiasAttrib.h".}
+proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deconstify(AntialiasAttrib::make_default())", header: "#include \"antialiasAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AntialiasAttrib]): int {.importcpp: "AntialiasAttrib::get_class_slot()", header: "antialiasAttrib.h".}
 
@@ -6985,15 +6985,15 @@ proc validateEffects*(_: typedesc[RenderEffect]): bool {.importcpp: "RenderEffec
 
 converter getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
 
-proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "renderEffects.h".}
+proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #, #))", header: "renderEffects.h".}
+proc make*(_: typedesc[RenderEffects], effect1: RenderEffect, effect2: RenderEffect, effect3: RenderEffect, effect4: RenderEffect): RenderEffects {.importcpp: "deconstify(#RenderEffects::make(#, #, #, #))", header: "#include \"renderEffects.h\"\n" & deconstifyCode.}
 
 proc getNumStates*(_: typedesc[RenderEffects]): int {.importcpp: "RenderEffects::get_num_states()", header: "renderEffects.h".}
 
@@ -7015,19 +7015,19 @@ proc getAllCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode
 
 converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
-proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "transparencyAttrib.h".}
+proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "#include \"transparencyAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "transparencyAttrib.h".}
+proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "deconstify(TransparencyAttrib::make_default())", header: "#include \"transparencyAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
 converter getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
-proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "logicOpAttrib.h".}
+proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LogicOpAttrib], op: LogicOpAttrib_Operation): RenderAttrib {.importcpp: "deconstify(#LogicOpAttrib::make(#))", header: "logicOpAttrib.h".}
+proc make*(_: typedesc[LogicOpAttrib], op: LogicOpAttrib_Operation): RenderAttrib {.importcpp: "deconstify(#LogicOpAttrib::make(#))", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "logicOpAttrib.h".}
+proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_default())", header: "#include \"logicOpAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
 
@@ -7103,23 +7103,23 @@ converter getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePat
 
 proc getGlobalPtr*(_: typedesc[AttribNodeRegistry]): AttribNodeRegistry {.importcpp: "AttribNodeRegistry::get_global_ptr()", header: "attribNodeRegistry.h".}
 
-proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "audioVolumeAttrib.h".}
+proc makeIdentity*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_identity())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[AudioVolumeAttrib], volume: float): RenderAttrib {.importcpp: "deconstify(#AudioVolumeAttrib::make(#))", header: "audioVolumeAttrib.h".}
+proc make*(_: typedesc[AudioVolumeAttrib], volume: float): RenderAttrib {.importcpp: "deconstify(#AudioVolumeAttrib::make(#))", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "audioVolumeAttrib.h".}
+proc makeOff*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_off())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "audioVolumeAttrib.h".}
+proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "deconstify(AudioVolumeAttrib::make_default())", header: "#include \"audioVolumeAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolumeAttrib::get_class_slot()", header: "audioVolumeAttrib.h".}
 
 converter getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
-proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "auxBitplaneAttrib.h".}
+proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(#AuxBitplaneAttrib::make(#))", header: "auxBitplaneAttrib.h".}
+proc make*(_: typedesc[AuxBitplaneAttrib], outputs: int): RenderAttrib {.importcpp: "deconstify(#AuxBitplaneAttrib::make(#))", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "auxBitplaneAttrib.h".}
+proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make_default())", header: "#include \"auxBitplaneAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[AuxBitplaneAttrib]): int {.importcpp: "AuxBitplaneAttrib::get_class_slot()", header: "auxBitplaneAttrib.h".}
 
@@ -7131,15 +7131,15 @@ proc newAuxSceneData*(param0: AuxSceneData): AuxSceneData {.importcpp: "new AuxS
 
 proc initBamFile*(): BamFile {.importcpp: "BamFile()".}
 
-proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3, fixedDepth: bool): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#), #))", header: "billboardEffect.h".}
+proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3, fixedDepth: bool): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#), #))", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#)))", header: "billboardEffect.h".}
+proc make*(_: typedesc[BillboardEffect], upVector: LVector3, eyeRelative: bool, axialRotate: bool, offset: float, lookAt: NodePath, lookAtPoint: LPoint3): RenderEffect {.importcpp: "deconstify(#BillboardEffect::make((LVector3 const &)(#), #, #, #, #, (LPoint3 const &)(#)))", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "billboardEffect.h".}
+proc makeAxis*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_axis())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "billboardEffect.h".}
+proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_eye())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
-proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "billboardEffect.h".}
+proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "#include \"billboardEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
 
@@ -7167,49 +7167,49 @@ proc newPlaneNode*(name: string): PlaneNode {.importcpp: "new PlaneNode(nimStrin
 
 converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
-proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode, plane4: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #, #))", header: "clipPlaneAttrib.h".}
+proc make*(_: typedesc[ClipPlaneAttrib], op: ClipPlaneAttrib_Operation, plane1: PlaneNode, plane2: PlaneNode, plane3: PlaneNode, plane4: PlaneNode): RenderAttrib {.importcpp: "deconstify(#ClipPlaneAttrib::make(#, #, #, #, #))", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "clipPlaneAttrib.h".}
+proc makeDefault*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_default())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "clipPlaneAttrib.h".}
+proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make_all_off())", header: "#include \"clipPlaneAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAttrib::get_class_slot()", header: "clipPlaneAttrib.h".}
 
 converter getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
-proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "colorAttrib.h".}
+proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorAttrib::make_flat(#))", header: "colorAttrib.h".}
+proc makeFlat*(_: typedesc[ColorAttrib], color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorAttrib::make_flat(#))", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "colorAttrib.h".}
+proc makeOff*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_off())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "colorAttrib.h".}
+proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_default())", header: "#include \"colorAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get_class_slot()", header: "colorAttrib.h".}
 
 converter getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
-proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "colorBlendAttrib.h".}
+proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], rgbMode: ColorBlendAttrib_Mode, rgbA: ColorBlendAttrib_Operand, rgbB: ColorBlendAttrib_Operand, alphaMode: ColorBlendAttrib_Mode, alphaA: ColorBlendAttrib_Operand, alphaB: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand, color: LColor): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #))", header: "colorBlendAttrib.h".}
+proc make*(_: typedesc[ColorBlendAttrib], mode: ColorBlendAttrib_Mode, a: ColorBlendAttrib_Operand, b: ColorBlendAttrib_Operand): RenderAttrib {.importcpp: "deconstify(#ColorBlendAttrib::make(#, #, #))", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "colorBlendAttrib.h".}
+proc makeDefault*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_default())", header: "#include \"colorBlendAttrib.h\"\n" & deconstifyCode.}
 
 proc involvesConstantColor*(_: typedesc[ColorBlendAttrib], operand: ColorBlendAttrib_Operand): bool {.importcpp: "#ColorBlendAttrib::involves_constant_color(#)", header: "colorBlendAttrib.h".}
 
@@ -7219,29 +7219,29 @@ proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendA
 
 converter getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
-proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "colorScaleAttrib.h".}
+proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ColorScaleAttrib::make((LVecBase4 const &)(#)))", header: "colorScaleAttrib.h".}
+proc make*(_: typedesc[ColorScaleAttrib], scale: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ColorScaleAttrib::make((LVecBase4 const &)(#)))", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "colorScaleAttrib.h".}
+proc makeOff*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_off())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "colorScaleAttrib.h".}
+proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_default())", header: "#include \"colorScaleAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleAttrib::get_class_slot()", header: "colorScaleAttrib.h".}
 
 converter getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
-proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "colorWriteAttrib.h".}
+proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "#include \"colorWriteAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "colorWriteAttrib.h".}
+proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "deconstify(ColorWriteAttrib::make_default())", header: "#include \"colorWriteAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
 converter getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "compassEffect.h".}
+proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "#include \"compassEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "compassEffect.h".}
+proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "#include \"compassEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
 
@@ -7255,9 +7255,9 @@ proc getDefaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "Ge
 
 converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
-proc make*(_: typedesc[CullBinAttrib], binName: string, drawOrder: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".}
+proc make*(_: typedesc[CullBinAttrib], binName: string, drawOrder: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "#include \"cullBinAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "cullBinAttrib.h".}
+proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "deconstify(CullBinAttrib::make_default())", header: "#include \"cullBinAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib::get_class_slot()", header: "cullBinAttrib.h".}
 
@@ -7265,13 +7265,13 @@ converter getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "Cu
 
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".}
 
-proc make*(_: typedesc[CullFaceAttrib], mode: CullFaceAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#CullFaceAttrib::make(#))", header: "cullFaceAttrib.h".}
+proc make*(_: typedesc[CullFaceAttrib], mode: CullFaceAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#CullFaceAttrib::make(#))", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "cullFaceAttrib.h".}
+proc make*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "cullFaceAttrib.h".}
+proc makeReverse*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_reverse())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "cullFaceAttrib.h".}
+proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "deconstify(CullFaceAttrib::make_default())", header: "#include \"cullFaceAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
 
@@ -7287,11 +7287,11 @@ proc newFog*(name: string): Fog {.importcpp: "new Fog(nimStringToStdString(#))",
 
 converter getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
-proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "fogAttrib.h".}
+proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "fogAttrib.h".}
+proc makeOff*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_off())", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "fogAttrib.h".}
+proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify(FogAttrib::make_default())", header: "#include \"fogAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[FogAttrib]): int {.importcpp: "FogAttrib::get_class_slot()", header: "fogAttrib.h".}
 
@@ -7307,9 +7307,9 @@ converter getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "Cu
 
 converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
-proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "rescaleNormalAttrib.h".}
+proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "#include \"rescaleNormalAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "rescaleNormalAttrib.h".}
+proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "deconstify(RescaleNormalAttrib::make_default())", header: "#include \"rescaleNormalAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
@@ -7319,33 +7319,33 @@ converter getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullR
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
-proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "decalEffect.h".}
+proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "#include \"decalEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make())", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[DepthOffsetAttrib], offset: int, minValue: float, maxValue: float): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#, #, #))", header: "depthOffsetAttrib.h".}
+proc make*(_: typedesc[DepthOffsetAttrib], offset: int, minValue: float, maxValue: float): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#, #, #))", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "depthOffsetAttrib.h".}
+proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "deconstify(DepthOffsetAttrib::make_default())", header: "#include \"depthOffsetAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffsetAttrib::get_class_slot()", header: "depthOffsetAttrib.h".}
 
 converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
-proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "depthTestAttrib.h".}
+proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "#include \"depthTestAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "depthTestAttrib.h".}
+proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deconstify(DepthTestAttrib::make_default())", header: "#include \"depthTestAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
 
 converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
-proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "depthWriteAttrib.h".}
+proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "#include \"depthWriteAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "depthWriteAttrib.h".}
+proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "deconstify(DepthWriteAttrib::make_default())", header: "#include \"depthWriteAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
@@ -7353,37 +7353,37 @@ converter getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: 
 
 converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
-proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light, light4: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #, #))", header: "lightAttrib.h".}
+proc make*(_: typedesc[LightAttrib], op: LightAttrib_Operation, light1: Light, light2: Light, light3: Light, light4: Light): RenderAttrib {.importcpp: "deconstify(#LightAttrib::make(#, #, #, #, #))", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "lightAttrib.h".}
+proc makeDefault*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_default())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "lightAttrib.h".}
+proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make_all_off())", header: "#include \"lightAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
 
 converter getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
-proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "lightRampAttrib.h".}
+proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "lightRampAttrib.h".}
+proc makeIdentity*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_identity())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_single_threshold(#, #))", header: "lightRampAttrib.h".}
+proc makeSingleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_single_threshold(#, #))", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float, thresh1: float, lev1: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_double_threshold(#, #, #, #))", header: "lightRampAttrib.h".}
+proc makeDoubleThreshold*(_: typedesc[LightRampAttrib], thresh0: float, lev0: float, thresh1: float, lev1: float): RenderAttrib {.importcpp: "deconstify(#LightRampAttrib::make_double_threshold(#, #, #, #))", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "lightRampAttrib.h".}
+proc makeHdr0*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr0())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "lightRampAttrib.h".}
+proc makeHdr1*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr1())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
-proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "lightRampAttrib.h".}
+proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_hdr2())", header: "#include \"lightRampAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[LightRampAttrib]): int {.importcpp: "LightRampAttrib::get_class_slot()", header: "lightRampAttrib.h".}
 
@@ -7405,11 +7405,11 @@ proc getGlobalPtr*(_: typedesc[LoaderFileTypeRegistry]): LoaderFileTypeRegistry 
 
 proc initLoaderFileTypeRegistry*(param0: LoaderFileTypeRegistry): LoaderFileTypeRegistry {.importcpp: "LoaderFileTypeRegistry(#)".}
 
-proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(#MaterialAttrib::make(#))", header: "materialAttrib.h".}
+proc make*(_: typedesc[MaterialAttrib], material: Material): RenderAttrib {.importcpp: "deconstify(#MaterialAttrib::make(#))", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "materialAttrib.h".}
+proc makeOff*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_off())", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "materialAttrib.h".}
+proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "deconstify(MaterialAttrib::make_default())", header: "#include \"materialAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[MaterialAttrib]): int {.importcpp: "MaterialAttrib::get_class_slot()", header: "materialAttrib.h".}
 
@@ -7471,25 +7471,25 @@ proc newModelSaveRequest*(name: string, filename: Filename, options: LoaderOptio
 
 converter getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
-proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "textureAttrib.h".}
+proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(#TextureAttrib::make(#))", header: "textureAttrib.h".}
+proc make*(_: typedesc[TextureAttrib], tex: Texture): RenderAttrib {.importcpp: "deconstify(#TextureAttrib::make(#))", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "textureAttrib.h".}
+proc makeOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_off())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "textureAttrib.h".}
+proc makeDefault*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_default())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
-proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "textureAttrib.h".}
+proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make_all_off())", header: "#include \"textureAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib::get_class_slot()", header: "textureAttrib.h".}
 
 converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
-proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".}
+proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[TexGenAttrib], stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#TexGenAttrib::make(#, #))", header: "texGenAttrib.h".}
+proc make*(_: typedesc[TexGenAttrib], stage: TextureStage, mode: RenderAttrib_TexGenMode): RenderAttrib {.importcpp: "deconstify(#TexGenAttrib::make(#, #))", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "texGenAttrib.h".}
+proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make_default())", header: "#include \"texGenAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[TexGenAttrib]): int {.importcpp: "TexGenAttrib::get_class_slot()", header: "texGenAttrib.h".}
 
@@ -7499,7 +7499,7 @@ proc newOccluderNode*(name: string): OccluderNode {.importcpp: "new OccluderNode
 
 converter getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
-proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "occluderEffect.h".}
+proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "#include \"occluderEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
 
@@ -7509,21 +7509,21 @@ proc newPolylightNode*(name: string): PolylightNode {.importcpp: "new PolylightN
 
 converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
-proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".}
+proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "#include \"polylightEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[PolylightEffect], weight: float, contrib: PolylightEffect_ContribType, effectCenter: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, (LPoint3 const &)(#)))", header: "polylightEffect.h".}
+proc make*(_: typedesc[PolylightEffect], weight: float, contrib: PolylightEffect_ContribType, effectCenter: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, (LPoint3 const &)(#)))", header: "#include \"polylightEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#))", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib], shader: Shader): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#))", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "shaderAttrib.h".}
+proc make*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "shaderAttrib.h".}
+proc makeOff*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_off())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "shaderAttrib.h".}
+proc makeDefault*(_: typedesc[ShaderAttrib]): RenderAttrib {.importcpp: "deconstify(ShaderAttrib::make_default())", header: "#include \"shaderAttrib.h\"\n" & deconstifyCode.}
 
 proc registerWithReadFactory*(_: typedesc[ShaderAttrib]) {.importcpp: "ShaderAttrib::register_with_read_factory()", header: "shaderAttrib.h".}
 
@@ -7531,31 +7531,31 @@ proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::g
 
 converter getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
-proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "showBoundsEffect.h".}
+proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "#include \"showBoundsEffect.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "showBoundsEffect.h".}
+proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "#include \"showBoundsEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
-proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "texProjectorEffect.h".}
+proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "#include \"texProjectorEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#), #))", header: "scissorEffect.h".}
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#)))", header: "scissorEffect.h".}
+proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3, node: NodePath): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#), #))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], a: LPoint3, b: LPoint3): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node((LPoint3 const &)(#), (LPoint3 const &)(#)))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#))", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_node(#))", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
-proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "scissorEffect.h".}
+proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "#include \"scissorEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
 
@@ -7573,39 +7573,39 @@ proc newPortalNode*(name: string, pos: LPoint3): PortalNode {.importcpp: "new Po
 
 converter getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
-proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "scissorAttrib.h".}
+proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make((LVecBase4 const &)(#)))", header: "scissorAttrib.h".}
+proc make*(_: typedesc[ScissorAttrib], frame: LVecBase4): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make((LVecBase4 const &)(#)))", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[ScissorAttrib], left: float, right: float, bottom: float, top: float): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#, #, #, #))", header: "scissorAttrib.h".}
+proc make*(_: typedesc[ScissorAttrib], left: float, right: float, bottom: float, top: float): RenderAttrib {.importcpp: "deconstify(#ScissorAttrib::make(#, #, #, #))", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "scissorAttrib.h".}
+proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_default())", header: "#include \"scissorAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib::get_class_slot()", header: "scissorAttrib.h".}
 
 converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
-proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "shadeModelAttrib.h".}
+proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "#include \"shadeModelAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "shadeModelAttrib.h".}
+proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "deconstify(ShadeModelAttrib::make_default())", header: "#include \"shadeModelAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
 converter getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
-proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "stencilAttrib.h".}
+proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "stencilAttrib.h".}
+proc makeDefault*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_default())", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make(#, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make2Sided*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided(#, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make2Sided*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided(#, #, #, #, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc makeWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_with_clear(#, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc makeWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_with_clear(#, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
-proc make2SidedWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided_with_clear(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #))", header: "stencilAttrib.h".}
+proc make2SidedWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, backEnable: bool, frontComparisonFunction: RenderAttrib_PandaCompareFunc, stencilFailOperation: StencilAttrib_StencilOperation, stencilPassZFailOperation: StencilAttrib_StencilOperation, frontStencilPassZPassOperation: StencilAttrib_StencilOperation, reference: int, readMask: int, writeMask: int, backComparisonFunction: RenderAttrib_PandaCompareFunc, backStencilFailOperation: StencilAttrib_StencilOperation, backStencilPassZFailOperation: StencilAttrib_StencilOperation, backStencilPassZPassOperation: StencilAttrib_StencilOperation, clear: bool, clearValue: int): RenderAttrib {.importcpp: "deconstify(#StencilAttrib::make_2_sided_with_clear(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #))", header: "#include \"stencilAttrib.h\"\n" & deconstifyCode.}
 
 proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
 
@@ -7969,7 +7969,7 @@ proc newCharacterJointBundle*(): CharacterJointBundle {.importcpp: "new Characte
 
 converter getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
-proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "characterJointEffect.h".}
+proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "#include \"characterJointEffect.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
 
@@ -8499,7 +8499,7 @@ proc newGeomVertexArrayFormat*(name0: InternalName, numComponents0: int, numeric
 
 proc newGeomVertexArrayFormat*(copy: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "new GeomVertexArrayFormat(#)".}
 
-proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "geomVertexArrayFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "#include \"geomVertexArrayFormat.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
 
@@ -8509,35 +8509,35 @@ proc newGeomVertexFormat*(arrayFormat: GeomVertexArrayFormat): GeomVertexFormat 
 
 proc newGeomVertexFormat*(copy: GeomVertexFormat): GeomVertexFormat {.importcpp: "new GeomVertexFormat(#)".}
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexArrayFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "geomVertexFormat.h".}
+proc registerFormat*(_: typedesc[GeomVertexFormat], format: GeomVertexFormat): GeomVertexFormat {.importcpp: "deconstify(#GeomVertexFormat::register_format(#))", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "geomVertexFormat.h".}
+proc getEmpty*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_empty())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "geomVertexFormat.h".}
+proc getV3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "geomVertexFormat.h".}
+proc getV3n3*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "geomVertexFormat.h".}
+proc getV3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "geomVertexFormat.h".}
+proc getV3n3t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "geomVertexFormat.h".}
+proc getV3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cp())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "geomVertexFormat.h".}
+proc getV3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3cpt2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "geomVertexFormat.h".}
+proc getV3n3cp*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cp())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "geomVertexFormat.h".}
+proc getV3n3cpt2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3cpt2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "geomVertexFormat.h".}
+proc getV3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "geomVertexFormat.h".}
+proc getV3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3c4t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "geomVertexFormat.h".}
+proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
-proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "geomVertexFormat.h".}
+proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "#include \"geomVertexFormat.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
 
@@ -8597,7 +8597,7 @@ proc newTransformTable*(): TransformTable {.importcpp: "new TransformTable()".}
 
 proc newTransformTable*(copy: TransformTable): TransformTable {.importcpp: "new TransformTable(#)".}
 
-proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "transformTable.h".}
+proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "#include \"transformTable.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
 
@@ -8627,7 +8627,7 @@ proc newSliderTable*(): SliderTable {.importcpp: "new SliderTable()".}
 
 proc newSliderTable*(copy: SliderTable): SliderTable {.importcpp: "new SliderTable(#)".}
 
-proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "sliderTable.h".}
+proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "#include \"sliderTable.h\"\n" & deconstifyCode.}
 
 converter getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
 

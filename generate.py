@@ -1346,8 +1346,30 @@ class BindingGenerator:
                 cpp_expr = "nimStringFromStdString(" + cpp_expr + ")"
                 headers.add("stringConversionCode")
 
-        if headers:
-            header = sorted(headers)[0]
+        if len(headers) > 1:
+            headers.discard("stringConversionCode")
+
+        if len(headers) > 1:
+            header = ""
+            for h in sorted(headers):
+                if h.startswith('"'):
+                    h = h.replace('"', "\\\"")
+                    if header:
+                        header += f"\\n#include {h}"
+                    else:
+                        header += f"\"#include {h}"
+                else:
+                    if header:
+                        header += f"\\n\" & {h} & \""
+                    else:
+                        header += f"{h} & \""
+
+            if header.endswith(" & \""):
+                header = header[:-4]
+            else:
+                header += "\""
+        elif headers:
+            header = next(iter(headers))
         else:
             header = None
 

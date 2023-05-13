@@ -14,7 +14,7 @@ type
     bundleNP: NodePath
 
 proc loadModel*(this: var Actor, modelPath: string, partName: string = "modelRoot") =
-  var model = initNodePath(Loader.getGlobalPtr().loadSync(modelPath))
+  var model = initNodePath(Loader.getGlobalPtr().loadSync(initFilename(modelPath)))
   {.emit: """
   (NodePath &)`this` = `model`;
   """.}
@@ -77,12 +77,12 @@ proc exposeJoint*(this: var Actor, node: NodePath, partName: string, jointName: 
 
   var node2: NodePath
 
-  if node:
+  if not node.isEmpty:
     node2 = node
   else:
     node2 = this.bundleNP.attachNewNode(jointName)
 
-  if joint:
+  if joint != nil:
     if localTransform:
       discard joint.addLocalTransform(node2.node())
     else:
@@ -97,12 +97,12 @@ proc stopJoint*(this: var Actor, partName: string, jointName: string) =
   # Get a handle to the joint.
   var joint = dcast(CharacterJoint, this.bundleDict[partName].findChild(jointName))
 
-  if joint:
+  if joint != nil:
     joint.clearNetTransforms()
     joint.clearLocalTransforms()
 
 proc getPartJoints(this: var Actor, joints: var seq[MovingPartBase], pattern: var GlobPattern, part: PartGroup) =
-  if part.isOfType(MovingPartBase.getClassType()) and pattern.matches(part.name):
+  if part.isOfType(MovingPartBase.getClassType()) and pattern.matches(part.getName):
     joints.add(MovingPartBase.dcast(part))
 
   for child in part.children:
@@ -114,7 +114,7 @@ proc getJoints*(this: var Actor, partName: string = "modelRoot", jointName: stri
   var partBundle = this.bundleDict[partName]
   if not pattern.hasGlobCharacters():
     var joint = partBundle.findChild(jointName)
-    if joint and joint.isOfType(MovingPartBase.getClassType()):
+    if joint != nil and joint.isOfType(MovingPartBase.getClassType()):
       result.add(MovingPartBase.dcast(joint))
   else:
     this.getPartJoints(result, pattern, partBundle)
@@ -125,12 +125,12 @@ proc controlJoint*(this: var Actor, node: NodePath, partName: string, jointName:
   var node2: NodePath
 
   var bundle = this.bundleDict[partName]
-  if node:
+  if not node.isEmpty:
     node2 = node
   else:
     node2 = this.attachNewNode(newModelNode(jointName))
     var joint = bundle.findChild(jointName)
-    if joint and joint.isOfType(MovingPartMatrix.getClassType()):
+    if joint != nil and joint.isOfType(MovingPartMatrix.getClassType()):
       node2.setMat(MovingPartMatrix.dcast(joint).getDefaultValue())
 
   if bundle.controlJoint(jointName, node2.node()):
@@ -147,20 +147,20 @@ proc releaseJoint*(this: var Actor, partName: string, jointName: string) =
 proc bindAnimToPart(this: var Actor, animName: string, partName: string): AnimControl {.discardable.} =
   var anim = addr this.partDict[partName][animName]
 
-  var animControl = this.bundleDict[partName].loadBindAnim(Loader.getGlobalPtr(), anim.filename, -1, PartSubset(), false)
+  var animControl = this.bundleDict[partName].loadBindAnim(Loader.getGlobalPtr(), initFilename(anim.filename), -1, PartSubset(), false)
   anim.animControl = animControl
   return animControl
 
 proc getAnimControl*(this: var Actor, animName: string, partName: string = "modelRoot"): AnimControl =
   if not this.partDict.hasKey(partName):
-    return nil
+    return toAnimControl(nil)
 
   var animDict = addr this.partDict[partName]
   if not animDict[].hasKey(animName):
-    return nil
+    return toAnimControl(nil)
 
   var anim = addr animDict[][animName]
-  if not anim.animControl:
+  if anim.animControl == nil:
     this.bindAnimToPart(animName, partName)
   return anim.animControl
 
@@ -181,7 +181,7 @@ proc pose*(this: var Actor, animName: string, frame: float, partName: string = "
 
 proc getCurrentAnim*(this: var Actor, partName: string = "modelRoot"): string =
   for animName, anim in this.partDict[partName]:
-    if anim.animControl and anim.animControl.isPlaying():
+    if anim.animControl != nil and anim.animControl.isPlaying():
       return animName
 
 proc setPlayRate*(this: var Actor, rate: float, animName: string, partName: string = "modelRoot") =

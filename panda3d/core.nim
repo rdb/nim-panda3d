@@ -181,7 +181,7 @@ type TypeRegistry* {.importcpp: "TypeRegistry", pure, inheritable, header: "type
 
 type TypedObject* {.importcpp: "TypedObject*", bycopy, pure, inheritable, header: "typedObject.h".} = object
 
-converter toTypedObject*(_: type(nil)): TypedObject {.importcpp: "(nullptr)".}
+proc toTypedObject*(_: type(nil)): TypedObject {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TypedObject], obj: TypedObject): TypedObject {.importcpp: "(@)".}
 
 type ios_base* {.importcpp: "ios_base", pure, inheritable, header: "<ios>".} = object
@@ -204,7 +204,7 @@ type ostream* {.importcpp: "ostream", pure, inheritable, header: "<ostream>".} =
 
 type iostream* {.importcpp: "iostream", pure, inheritable, header: "<iostream>".} = object of istream
 
-converter upcastToostream*(_: typedesc[iostream]): typedesc[ostream] = typedesc[ostream]
+proc upcastToostream*(_: typedesc[iostream]): typedesc[ostream] = typedesc[ostream]
 
 type fstream* {.importcpp: "fstream", pure, inheritable, header: "<fstream>".} = object of iostream
 
@@ -226,7 +226,7 @@ type pfstream* = FileStream
 
 type TextEncoder* {.importcpp: "TextEncoder*", bycopy, pure, inheritable, header: "textEncoder.h".} = object
 
-converter toTextEncoder*(_: type(nil)): TextEncoder {.importcpp: "(nullptr)".}
+proc toTextEncoder*(_: type(nil)): TextEncoder {.importcpp: "(nullptr)".}
 
 type TextEncoder_Encoding {.importcpp: "TextEncoder::Encoding", pure, header: "textEncoder.h".} = enum
   E_iso8859 = 0
@@ -257,7 +257,7 @@ template T_executable*(_: typedesc[Filename]): Filename_Type = Filename_Type.T_e
 
 type PandaSystem* {.importcpp: "PandaSystem*", bycopy, pure, inheritable, header: "pandaSystem.h".} = object
 
-converter toPandaSystem*(_: type(nil)): PandaSystem {.importcpp: "(nullptr)".}
+proc toPandaSystem*(_: type(nil)): PandaSystem {.importcpp: "(nullptr)".}
 
 type DSearchPath* {.importcpp: "DSearchPath", pure, inheritable, header: "dSearchPath.h".} = object
 
@@ -372,21 +372,21 @@ type OStreamWrapper* {.importcpp: "OStreamWrapper", pure, inheritable, header: "
 
 type StreamWrapper* {.importcpp: "StreamWrapper", pure, inheritable, header: "streamWrapper.h".} = object of IStreamWrapper
 
-converter upcastToOStreamWrapper*(_: typedesc[StreamWrapper]): typedesc[OStreamWrapper] = typedesc[OStreamWrapper]
+proc upcastToOStreamWrapper*(_: typedesc[StreamWrapper]): typedesc[OStreamWrapper] = typedesc[OStreamWrapper]
 
 type SSReader* {.importcpp: "SSReader*", bycopy, pure, inheritable, header: "socketStream.h".} = object
 
-converter toSSReader*(_: type(nil)): SSReader {.importcpp: "(nullptr)".}
+proc toSSReader*(_: type(nil)): SSReader {.importcpp: "(nullptr)".}
 
 type SSWriter* {.importcpp: "SSWriter*", bycopy, pure, inheritable, header: "socketStream.h".} = object
 
-converter toSSWriter*(_: type(nil)): SSWriter {.importcpp: "(nullptr)".}
+proc toSSWriter*(_: type(nil)): SSWriter {.importcpp: "(nullptr)".}
 
 type ISocketStream* {.importcpp: "ISocketStream*", bycopy, pure, inheritable, header: "socketStream.h".} = object of istream
 
-converter upcastToSSReader*(_: typedesc[ISocketStream]): typedesc[SSReader] = typedesc[SSReader]
+proc upcastToSSReader*(_: typedesc[ISocketStream]): typedesc[SSReader] = typedesc[SSReader]
 
-converter toISocketStream*(_: type(nil)): ISocketStream {.importcpp: "(nullptr)".}
+proc toISocketStream*(_: type(nil)): ISocketStream {.importcpp: "(nullptr)".}
 
 type ISocketStream_ReadState {.importcpp: "ISocketStream::ReadState", pure, header: "socketStream.h".} = enum
   RS_initial = 0
@@ -404,12 +404,12 @@ template RS_error*(_: typedesc[ISocketStream]): ISocketStream_ReadState = ISocke
 
 type OSocketStream* {.importcpp: "OSocketStream", pure, inheritable, header: "socketStream.h".} = object of ostream
 
-converter upcastToSSWriter*(_: typedesc[OSocketStream]): typedesc[SSWriter] = typedesc[SSWriter]
+proc upcastToSSWriter*(_: typedesc[OSocketStream]): typedesc[SSWriter] = typedesc[SSWriter]
 
 type SocketStream* {.importcpp: "SocketStream", pure, inheritable, header: "socketStream.h".} = object of iostream
 
-converter upcastToSSReader*(_: typedesc[SocketStream]): typedesc[SSReader] = typedesc[SSReader]
-converter upcastToSSWriter*(_: typedesc[SocketStream]): typedesc[SSWriter] = typedesc[SSWriter]
+proc upcastToSSReader*(_: typedesc[SocketStream]): typedesc[SSReader] = typedesc[SSReader]
+proc upcastToSSWriter*(_: typedesc[SocketStream]): typedesc[SSWriter] = typedesc[SSWriter]
 
 type URLSpec* {.importcpp: "URLSpec", pure, inheritable, header: "urlSpec.h".} = object
 
@@ -457,11 +457,11 @@ type HTTPCookie* {.importcpp: "HTTPCookie", pure, inheritable, header: "httpCook
 
 type ReferenceCount* {.importcpp: "PT(ReferenceCount)", bycopy, pure, inheritable, header: "referenceCount.h".} = object
 
-converter toReferenceCount*(_: type(nil)): ReferenceCount {.importcpp: "(nullptr)".}
+proc toReferenceCount*(_: type(nil)): ReferenceCount {.importcpp: "(nullptr)".}
 
 type HTTPClient* {.importcpp: "PT(HTTPClient)", bycopy, pure, inheritable, header: "httpClient.h".} = object of ReferenceCount
 
-converter toHTTPClient*(_: type(nil)): HTTPClient {.importcpp: "(nullptr)".}
+proc toHTTPClient*(_: type(nil)): HTTPClient {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[HTTPClient], obj: TypedObject): HTTPClient {.importcpp: "DCAST(HTTPClient, @)".}
 
 type HTTPClient_VerifySSL {.importcpp: "HTTPClient::VerifySSL", pure, header: "httpClient.h".} = enum
@@ -508,14 +508,14 @@ template CC_noCache*(_: typedesc[DocumentSpec]): DocumentSpec_CacheControl = Doc
 
 type TypedReferenceCount* {.importcpp: "PT(TypedReferenceCount)", bycopy, pure, inheritable, header: "typedReferenceCount.h".} = object of TypedObject
 
-converter upcastToReferenceCount*(_: typedesc[TypedReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
+proc upcastToReferenceCount*(_: typedesc[TypedReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
-converter toTypedReferenceCount*(_: type(nil)): TypedReferenceCount {.importcpp: "(nullptr)".}
+proc toTypedReferenceCount*(_: type(nil)): TypedReferenceCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TypedReferenceCount], obj: TypedObject): TypedReferenceCount {.importcpp: "DCAST(TypedReferenceCount, @)".}
 
 type HTTPChannel* {.importcpp: "PT(HTTPChannel)", bycopy, pure, inheritable, header: "httpChannel.h".} = object of TypedReferenceCount
 
-converter toHTTPChannel*(_: type(nil)): HTTPChannel {.importcpp: "(nullptr)".}
+proc toHTTPChannel*(_: type(nil)): HTTPChannel {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[HTTPChannel], obj: TypedObject): HTTPChannel {.importcpp: "DCAST(HTTPChannel, @)".}
 
 type HTTPChannel_StatusCode {.importcpp: "HTTPChannel::StatusCode", pure, header: "httpChannel.h".} = enum
@@ -588,27 +588,27 @@ type MultiplexStream* {.importcpp: "MultiplexStream", pure, inheritable, header:
 
 type VirtualFile* {.importcpp: "PT(VirtualFile)", bycopy, pure, inheritable, header: "virtualFile.h".} = object of TypedReferenceCount
 
-converter toVirtualFile*(_: type(nil)): VirtualFile {.importcpp: "(nullptr)".}
+proc toVirtualFile*(_: type(nil)): VirtualFile {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFile], obj: TypedObject): VirtualFile {.importcpp: "DCAST(VirtualFile, @)".}
 
 type VirtualFileHTTP* {.importcpp: "PT(VirtualFileHTTP)", bycopy, pure, inheritable, header: "virtualFileHTTP.h".} = object of VirtualFile
 
-converter toVirtualFileHTTP*(_: type(nil)): VirtualFileHTTP {.importcpp: "(nullptr)".}
+proc toVirtualFileHTTP*(_: type(nil)): VirtualFileHTTP {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileHTTP], obj: TypedObject): VirtualFileHTTP {.importcpp: "DCAST(VirtualFileHTTP, @)".}
 
 type VirtualFileMount* {.importcpp: "PT(VirtualFileMount)", bycopy, pure, inheritable, header: "virtualFileMount.h".} = object of TypedReferenceCount
 
-converter toVirtualFileMount*(_: type(nil)): VirtualFileMount {.importcpp: "(nullptr)".}
+proc toVirtualFileMount*(_: type(nil)): VirtualFileMount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileMount], obj: TypedObject): VirtualFileMount {.importcpp: "DCAST(VirtualFileMount, @)".}
 
 type VirtualFileMountHTTP* {.importcpp: "PT(VirtualFileMountHTTP)", bycopy, pure, inheritable, header: "virtualFileMountHTTP.h".} = object of VirtualFileMount
 
-converter toVirtualFileMountHTTP*(_: type(nil)): VirtualFileMountHTTP {.importcpp: "(nullptr)".}
+proc toVirtualFileMountHTTP*(_: type(nil)): VirtualFileMountHTTP {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountHTTP], obj: TypedObject): VirtualFileMountHTTP {.importcpp: "DCAST(VirtualFileMountHTTP, @)".}
 
 type Patcher* {.importcpp: "Patcher*", bycopy, pure, inheritable, header: "patcher.h".} = object
 
-converter toPatcher*(_: type(nil)): Patcher {.importcpp: "(nullptr)".}
+proc toPatcher*(_: type(nil)): Patcher {.importcpp: "(nullptr)".}
 
 type StringStream* {.importcpp: "StringStream", pure, inheritable, header: "stringStream.h".} = object of iostream
 
@@ -621,34 +621,34 @@ type MemoryUsage* {.importcpp: "MemoryUsage", pure, inheritable, header: "memory
 
 type Buffer* {.importcpp: "PT(Buffer)", bycopy, pure, inheritable, header: "buffer.h".} = object of ReferenceCount
 
-converter toBuffer*(_: type(nil)): Buffer {.importcpp: "(nullptr)".}
+proc toBuffer*(_: type(nil)): Buffer {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Buffer], obj: TypedObject): Buffer {.importcpp: "DCAST(Buffer, @)".}
 
 type PStatCollectorForwardBase* {.importcpp: "PT(PStatCollectorForwardBase)", bycopy, pure, inheritable, header: "pStatCollectorForwardBase.h".} = object of ReferenceCount
 
-converter toPStatCollectorForwardBase*(_: type(nil)): PStatCollectorForwardBase {.importcpp: "(nullptr)".}
+proc toPStatCollectorForwardBase*(_: type(nil)): PStatCollectorForwardBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PStatCollectorForwardBase], obj: TypedObject): PStatCollectorForwardBase {.importcpp: "DCAST(PStatCollectorForwardBase, @)".}
 
 type NodeReferenceCount* {.importcpp: "PT(NodeReferenceCount)", bycopy, pure, inheritable, header: "nodeReferenceCount.h".} = object of ReferenceCount
 
-converter toNodeReferenceCount*(_: type(nil)): NodeReferenceCount {.importcpp: "(nullptr)".}
+proc toNodeReferenceCount*(_: type(nil)): NodeReferenceCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NodeReferenceCount], obj: TypedObject): NodeReferenceCount {.importcpp: "DCAST(NodeReferenceCount, @)".}
 
 type Datagram* {.importcpp: "Datagram", pure, inheritable, header: "datagram.h".} = object of TypedObject
 
 type DatagramGenerator* {.importcpp: "DatagramGenerator*", bycopy, pure, inheritable, header: "datagramGenerator.h".} = object
 
-converter toDatagramGenerator*(_: type(nil)): DatagramGenerator {.importcpp: "(nullptr)".}
+proc toDatagramGenerator*(_: type(nil)): DatagramGenerator {.importcpp: "(nullptr)".}
 
 type DatagramIterator* {.importcpp: "DatagramIterator", pure, inheritable, header: "datagramIterator.h".} = object
 
 type DatagramSink* {.importcpp: "DatagramSink*", bycopy, pure, inheritable, header: "datagramSink.h".} = object
 
-converter toDatagramSink*(_: type(nil)): DatagramSink {.importcpp: "(nullptr)".}
+proc toDatagramSink*(_: type(nil)): DatagramSink {.importcpp: "(nullptr)".}
 
 type FileReference* {.importcpp: "PT(FileReference)", bycopy, pure, inheritable, header: "fileReference.h".} = object of TypedReferenceCount
 
-converter toFileReference*(_: type(nil)): FileReference {.importcpp: "(nullptr)".}
+proc toFileReference*(_: type(nil)): FileReference {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FileReference], obj: TypedObject): FileReference {.importcpp: "DCAST(FileReference, @)".}
 
 type ErrorUtilCode* {.importcpp: "ErrorUtilCode", header: "error_utils.h".} = enum
@@ -704,12 +704,12 @@ type SubStream* {.importcpp: "SubStream", pure, inheritable, header: "subStream.
 
 type Multifile* {.importcpp: "PT(Multifile)", bycopy, pure, inheritable, header: "multifile.h".} = object of ReferenceCount
 
-converter toMultifile*(_: type(nil)): Multifile {.importcpp: "(nullptr)".}
+proc toMultifile*(_: type(nil)): Multifile {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Multifile], obj: TypedObject): Multifile {.importcpp: "DCAST(Multifile, @)".}
 
 type Namable* {.importcpp: "Namable*", bycopy, pure, inheritable, header: "namable.h".} = object
 
-converter toNamable*(_: type(nil)): Namable {.importcpp: "(nullptr)".}
+proc toNamable*(_: type(nil)): Namable {.importcpp: "(nullptr)".}
 
 type OpenSSLWrapper* {.importcpp: "OpenSSLWrapper", pure, inheritable, header: "openSSLWrapper.h".} = object
 
@@ -717,32 +717,32 @@ type SubfileInfo* {.importcpp: "SubfileInfo", pure, inheritable, header: "subfil
 
 type VirtualFileComposite* {.importcpp: "PT(VirtualFileComposite)", bycopy, pure, inheritable, header: "virtualFileComposite.h".} = object of VirtualFile
 
-converter toVirtualFileComposite*(_: type(nil)): VirtualFileComposite {.importcpp: "(nullptr)".}
+proc toVirtualFileComposite*(_: type(nil)): VirtualFileComposite {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileComposite], obj: TypedObject): VirtualFileComposite {.importcpp: "DCAST(VirtualFileComposite, @)".}
 
 type VirtualFileMountMultifile* {.importcpp: "PT(VirtualFileMountMultifile)", bycopy, pure, inheritable, header: "virtualFileMountMultifile.h".} = object of VirtualFileMount
 
-converter toVirtualFileMountMultifile*(_: type(nil)): VirtualFileMountMultifile {.importcpp: "(nullptr)".}
+proc toVirtualFileMountMultifile*(_: type(nil)): VirtualFileMountMultifile {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountMultifile], obj: TypedObject): VirtualFileMountMultifile {.importcpp: "DCAST(VirtualFileMountMultifile, @)".}
 
 type VirtualFileMountRamdisk* {.importcpp: "PT(VirtualFileMountRamdisk)", bycopy, pure, inheritable, header: "virtualFileMountRamdisk.h".} = object of VirtualFileMount
 
-converter toVirtualFileMountRamdisk*(_: type(nil)): VirtualFileMountRamdisk {.importcpp: "(nullptr)".}
+proc toVirtualFileMountRamdisk*(_: type(nil)): VirtualFileMountRamdisk {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountRamdisk], obj: TypedObject): VirtualFileMountRamdisk {.importcpp: "DCAST(VirtualFileMountRamdisk, @)".}
 
 type VirtualFileMountSystem* {.importcpp: "PT(VirtualFileMountSystem)", bycopy, pure, inheritable, header: "virtualFileMountSystem.h".} = object of VirtualFileMount
 
-converter toVirtualFileMountSystem*(_: type(nil)): VirtualFileMountSystem {.importcpp: "(nullptr)".}
+proc toVirtualFileMountSystem*(_: type(nil)): VirtualFileMountSystem {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileMountSystem], obj: TypedObject): VirtualFileMountSystem {.importcpp: "DCAST(VirtualFileMountSystem, @)".}
 
 type VirtualFileSimple* {.importcpp: "PT(VirtualFileSimple)", bycopy, pure, inheritable, header: "virtualFileSimple.h".} = object of VirtualFile
 
-converter toVirtualFileSimple*(_: type(nil)): VirtualFileSimple {.importcpp: "(nullptr)".}
+proc toVirtualFileSimple*(_: type(nil)): VirtualFileSimple {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileSimple], obj: TypedObject): VirtualFileSimple {.importcpp: "DCAST(VirtualFileSimple, @)".}
 
 type TemporaryFile* {.importcpp: "PT(TemporaryFile)", bycopy, pure, inheritable, header: "temporaryFile.h".} = object of FileReference
 
-converter toTemporaryFile*(_: type(nil)): TemporaryFile {.importcpp: "(nullptr)".}
+proc toTemporaryFile*(_: type(nil)): TemporaryFile {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TemporaryFile], obj: TypedObject): TemporaryFile {.importcpp: "DCAST(TemporaryFile, @)".}
 
 type IDecompressStream* {.importcpp: "IDecompressStream", pure, inheritable, header: "zStream.h".} = object of istream
@@ -751,7 +751,7 @@ type OCompressStream* {.importcpp: "OCompressStream", pure, inheritable, header:
 
 type VirtualFileList* {.importcpp: "PT(VirtualFileList)", bycopy, pure, inheritable, header: "virtualFileList.h".} = object of ReferenceCount
 
-converter toVirtualFileList*(_: type(nil)): VirtualFileList {.importcpp: "(nullptr)".}
+proc toVirtualFileList*(_: type(nil)): VirtualFileList {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualFileList], obj: TypedObject): VirtualFileList {.importcpp: "DCAST(VirtualFileList, @)".}
 
 type VirtualFileSystem* {.importcpp: "VirtualFileSystem", pure, inheritable, header: "virtualFileSystem.h".} = object
@@ -774,24 +774,24 @@ type WeakPointerToVoid* {.importcpp: "WeakPointerToVoid", pure, inheritable, hea
 
 type RecorderBase* {.importcpp: "RecorderBase*", bycopy, pure, inheritable, header: "recorderBase.h".} = object
 
-converter toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
+proc toRecorderBase*(_: type(nil)): RecorderBase {.importcpp: "(nullptr)".}
 
 type TypedWritable* {.importcpp: "TypedWritable*", bycopy, pure, inheritable, header: "typedWritable.h".} = object of TypedObject
 
-converter toTypedWritable*(_: type(nil)): TypedWritable {.importcpp: "(nullptr)".}
+proc toTypedWritable*(_: type(nil)): TypedWritable {.importcpp: "(nullptr)".}
 
 type TypedWritableReferenceCount* {.importcpp: "PT(TypedWritableReferenceCount)", bycopy, pure, inheritable, header: "typedWritableReferenceCount.h".} = object of TypedWritable
 
-converter upcastToReferenceCount*(_: typedesc[TypedWritableReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
+proc upcastToReferenceCount*(_: typedesc[TypedWritableReferenceCount]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
-converter toTypedWritableReferenceCount*(_: type(nil)): TypedWritableReferenceCount {.importcpp: "(nullptr)".}
+proc toTypedWritableReferenceCount*(_: type(nil)): TypedWritableReferenceCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TypedWritableReferenceCount], obj: TypedObject): TypedWritableReferenceCount {.importcpp: "DCAST(TypedWritableReferenceCount, @)".}
 
 type PandaNode* {.importcpp: "PT(PandaNode)", bycopy, pure, inheritable, header: "pandaNode.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[PandaNode]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[PandaNode]): typedesc[Namable] = typedesc[Namable]
 
-converter toPandaNode*(_: type(nil)): PandaNode {.importcpp: "(nullptr)".}
+proc toPandaNode*(_: type(nil)): PandaNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PandaNode], obj: TypedObject): PandaNode {.importcpp: "DCAST(PandaNode, @)".}
 
 type PandaNode_UnexpectedChange {.importcpp: "PandaNode::UnexpectedChange", pure, header: "pandaNode.h".} = enum
@@ -830,52 +830,52 @@ template FB_cullCallback*(_: typedesc[PandaNode]): PandaNode_FancyBits = PandaNo
 
 type DataNode* {.importcpp: "PT(DataNode)", bycopy, pure, inheritable, header: "dataNode.h".} = object of PandaNode
 
-converter toDataNode*(_: type(nil)): DataNode {.importcpp: "(nullptr)".}
+proc toDataNode*(_: type(nil)): DataNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DataNode], obj: TypedObject): DataNode {.importcpp: "DCAST(DataNode, @)".}
 
 type MouseRecorder* {.importcpp: "PT(MouseRecorder)", bycopy, pure, inheritable, header: "mouseRecorder.h".} = object of DataNode
 
-converter upcastToRecorderBase*(_: typedesc[MouseRecorder]): typedesc[RecorderBase] = typedesc[RecorderBase]
+proc upcastToRecorderBase*(_: typedesc[MouseRecorder]): typedesc[RecorderBase] = typedesc[RecorderBase]
 
-converter toMouseRecorder*(_: type(nil)): MouseRecorder {.importcpp: "(nullptr)".}
+proc toMouseRecorder*(_: type(nil)): MouseRecorder {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseRecorder], obj: TypedObject): MouseRecorder {.importcpp: "DCAST(MouseRecorder, @)".}
 
 type RecorderController* {.importcpp: "PT(RecorderController)", bycopy, pure, inheritable, header: "recorderController.h".} = object of TypedReferenceCount
 
-converter toRecorderController*(_: type(nil)): RecorderController {.importcpp: "(nullptr)".}
+proc toRecorderController*(_: type(nil)): RecorderController {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RecorderController], obj: TypedObject): RecorderController {.importcpp: "DCAST(RecorderController, @)".}
 
 type SocketStreamRecorder* {.importcpp: "PT(SocketStreamRecorder)", bycopy, pure, inheritable, header: "socketStreamRecorder.h".} = object of RecorderBase
 
-converter upcastToReferenceCount*(_: typedesc[SocketStreamRecorder]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
+proc upcastToReferenceCount*(_: typedesc[SocketStreamRecorder]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
-converter toSocketStreamRecorder*(_: type(nil)): SocketStreamRecorder {.importcpp: "(nullptr)".}
+proc toSocketStreamRecorder*(_: type(nil)): SocketStreamRecorder {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SocketStreamRecorder], obj: TypedObject): SocketStreamRecorder {.importcpp: "DCAST(SocketStreamRecorder, @)".}
 
 type Light* {.importcpp: "Light*", bycopy, pure, inheritable, header: "light.h".} = object
 
-converter toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
+proc toLight*(_: type(nil)): Light {.importcpp: "(nullptr)".}
 
 type LightNode* {.importcpp: "PT(LightNode)", bycopy, pure, inheritable, header: "lightNode.h".} = object of PandaNode
 
-converter upcastToLight*(_: typedesc[LightNode]): typedesc[Light] = typedesc[Light]
+proc upcastToLight*(_: typedesc[LightNode]): typedesc[Light] = typedesc[Light]
 
-converter toLightNode*(_: type(nil)): LightNode {.importcpp: "(nullptr)".}
+proc toLightNode*(_: type(nil)): LightNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LightNode], obj: TypedObject): LightNode {.importcpp: "DCAST(LightNode, @)".}
 
 type AmbientLight* {.importcpp: "PT(AmbientLight)", bycopy, pure, inheritable, header: "ambientLight.h".} = object of LightNode
 
-converter toAmbientLight*(_: type(nil)): AmbientLight {.importcpp: "(nullptr)".}
+proc toAmbientLight*(_: type(nil)): AmbientLight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AmbientLight], obj: TypedObject): AmbientLight {.importcpp: "DCAST(AmbientLight, @)".}
 
 type CallbackNode* {.importcpp: "PT(CallbackNode)", bycopy, pure, inheritable, header: "callbackNode.h".} = object of PandaNode
 
-converter toCallbackNode*(_: type(nil)): CallbackNode {.importcpp: "(nullptr)".}
+proc toCallbackNode*(_: type(nil)): CallbackNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CallbackNode], obj: TypedObject): CallbackNode {.importcpp: "DCAST(CallbackNode, @)".}
 
 type ComputeNode* {.importcpp: "PT(ComputeNode)", bycopy, pure, inheritable, header: "computeNode.h".} = object of PandaNode
 
-converter toComputeNode*(_: type(nil)): ComputeNode {.importcpp: "(nullptr)".}
+proc toComputeNode*(_: type(nil)): ComputeNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ComputeNode], obj: TypedObject): ComputeNode {.importcpp: "DCAST(ComputeNode, @)".}
 
 type LODNodeType* {.importcpp: "LODNodeType", header: "lodNodeType.h".} = enum
@@ -884,91 +884,91 @@ type LODNodeType* {.importcpp: "LODNodeType", header: "lodNodeType.h".} = enum
 
 type LensNode* {.importcpp: "PT(LensNode)", bycopy, pure, inheritable, header: "lensNode.h".} = object of PandaNode
 
-converter toLensNode*(_: type(nil)): LensNode {.importcpp: "(nullptr)".}
+proc toLensNode*(_: type(nil)): LensNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LensNode], obj: TypedObject): LensNode {.importcpp: "DCAST(LensNode, @)".}
 
 type Camera* {.importcpp: "PT(Camera)", bycopy, pure, inheritable, header: "camera.h".} = object of LensNode
 
-converter toCamera*(_: type(nil)): Camera {.importcpp: "(nullptr)".}
+proc toCamera*(_: type(nil)): Camera {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Camera], obj: TypedObject): Camera {.importcpp: "DCAST(Camera, @)".}
 
 type LightLensNode* {.importcpp: "PT(LightLensNode)", bycopy, pure, inheritable, header: "lightLensNode.h".} = object of Camera
 
-converter upcastToLight*(_: typedesc[LightLensNode]): typedesc[Light] = typedesc[Light]
+proc upcastToLight*(_: typedesc[LightLensNode]): typedesc[Light] = typedesc[Light]
 
-converter toLightLensNode*(_: type(nil)): LightLensNode {.importcpp: "(nullptr)".}
+proc toLightLensNode*(_: type(nil)): LightLensNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LightLensNode], obj: TypedObject): LightLensNode {.importcpp: "DCAST(LightLensNode, @)".}
 
 type DirectionalLight* {.importcpp: "PT(DirectionalLight)", bycopy, pure, inheritable, header: "directionalLight.h".} = object of LightLensNode
 
-converter toDirectionalLight*(_: type(nil)): DirectionalLight {.importcpp: "(nullptr)".}
+proc toDirectionalLight*(_: type(nil)): DirectionalLight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DirectionalLight], obj: TypedObject): DirectionalLight {.importcpp: "DCAST(DirectionalLight, @)".}
 
 type LODNode* {.importcpp: "PT(LODNode)", bycopy, pure, inheritable, header: "lodNode.h".} = object of PandaNode
 
-converter toLODNode*(_: type(nil)): LODNode {.importcpp: "(nullptr)".}
+proc toLODNode*(_: type(nil)): LODNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LODNode], obj: TypedObject): LODNode {.importcpp: "DCAST(LODNode, @)".}
 
 type FadeLODNode* {.importcpp: "PT(FadeLODNode)", bycopy, pure, inheritable, header: "fadeLodNode.h".} = object of LODNode
 
-converter toFadeLODNode*(_: type(nil)): FadeLODNode {.importcpp: "(nullptr)".}
+proc toFadeLODNode*(_: type(nil)): FadeLODNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FadeLODNode], obj: TypedObject): FadeLODNode {.importcpp: "DCAST(FadeLODNode, @)".}
 
 type CallbackData* {.importcpp: "CallbackData*", bycopy, pure, inheritable, header: "callbackData.h".} = object of TypedObject
 
-converter toCallbackData*(_: type(nil)): CallbackData {.importcpp: "(nullptr)".}
+proc toCallbackData*(_: type(nil)): CallbackData {.importcpp: "(nullptr)".}
 
 type NodeCullCallbackData* {.importcpp: "NodeCullCallbackData", pure, inheritable, header: "nodeCullCallbackData.h".} = object of CallbackData
 
 type PointLight* {.importcpp: "PT(PointLight)", bycopy, pure, inheritable, header: "pointLight.h".} = object of LightLensNode
 
-converter toPointLight*(_: type(nil)): PointLight {.importcpp: "(nullptr)".}
+proc toPointLight*(_: type(nil)): PointLight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PointLight], obj: TypedObject): PointLight {.importcpp: "DCAST(PointLight, @)".}
 
 type RectangleLight* {.importcpp: "PT(RectangleLight)", bycopy, pure, inheritable, header: "rectangleLight.h".} = object of LightLensNode
 
-converter toRectangleLight*(_: type(nil)): RectangleLight {.importcpp: "(nullptr)".}
+proc toRectangleLight*(_: type(nil)): RectangleLight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RectangleLight], obj: TypedObject): RectangleLight {.importcpp: "DCAST(RectangleLight, @)".}
 
 type SelectiveChildNode* {.importcpp: "PT(SelectiveChildNode)", bycopy, pure, inheritable, header: "selectiveChildNode.h".} = object of PandaNode
 
-converter toSelectiveChildNode*(_: type(nil)): SelectiveChildNode {.importcpp: "(nullptr)".}
+proc toSelectiveChildNode*(_: type(nil)): SelectiveChildNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SelectiveChildNode], obj: TypedObject): SelectiveChildNode {.importcpp: "DCAST(SelectiveChildNode, @)".}
 
 type AnimInterface* {.importcpp: "AnimInterface*", bycopy, pure, inheritable, header: "animInterface.h".} = object
 
-converter toAnimInterface*(_: type(nil)): AnimInterface {.importcpp: "(nullptr)".}
+proc toAnimInterface*(_: type(nil)): AnimInterface {.importcpp: "(nullptr)".}
 
 type SequenceNode* {.importcpp: "PT(SequenceNode)", bycopy, pure, inheritable, header: "sequenceNode.h".} = object of SelectiveChildNode
 
-converter upcastToAnimInterface*(_: typedesc[SequenceNode]): typedesc[AnimInterface] = typedesc[AnimInterface]
+proc upcastToAnimInterface*(_: typedesc[SequenceNode]): typedesc[AnimInterface] = typedesc[AnimInterface]
 
-converter toSequenceNode*(_: type(nil)): SequenceNode {.importcpp: "(nullptr)".}
+proc toSequenceNode*(_: type(nil)): SequenceNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SequenceNode], obj: TypedObject): SequenceNode {.importcpp: "DCAST(SequenceNode, @)".}
 
 type ShaderGenerator* {.importcpp: "PT(ShaderGenerator)", bycopy, pure, inheritable, header: "shaderGenerator.h".} = object of TypedReferenceCount
 
-converter toShaderGenerator*(_: type(nil)): ShaderGenerator {.importcpp: "(nullptr)".}
+proc toShaderGenerator*(_: type(nil)): ShaderGenerator {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShaderGenerator], obj: TypedObject): ShaderGenerator {.importcpp: "DCAST(ShaderGenerator, @)".}
 
 type SphereLight* {.importcpp: "PT(SphereLight)", bycopy, pure, inheritable, header: "sphereLight.h".} = object of PointLight
 
-converter toSphereLight*(_: type(nil)): SphereLight {.importcpp: "(nullptr)".}
+proc toSphereLight*(_: type(nil)): SphereLight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SphereLight], obj: TypedObject): SphereLight {.importcpp: "DCAST(SphereLight, @)".}
 
 type Spotlight* {.importcpp: "PT(Spotlight)", bycopy, pure, inheritable, header: "spotlight.h".} = object of LightLensNode
 
-converter toSpotlight*(_: type(nil)): Spotlight {.importcpp: "(nullptr)".}
+proc toSpotlight*(_: type(nil)): Spotlight {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Spotlight], obj: TypedObject): Spotlight {.importcpp: "DCAST(Spotlight, @)".}
 
 type SwitchNode* {.importcpp: "PT(SwitchNode)", bycopy, pure, inheritable, header: "switchNode.h".} = object of SelectiveChildNode
 
-converter toSwitchNode*(_: type(nil)): SwitchNode {.importcpp: "(nullptr)".}
+proc toSwitchNode*(_: type(nil)): SwitchNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SwitchNode], obj: TypedObject): SwitchNode {.importcpp: "DCAST(SwitchNode, @)".}
 
 type UvScrollNode* {.importcpp: "PT(UvScrollNode)", bycopy, pure, inheritable, header: "uvScrollNode.h".} = object of PandaNode
 
-converter toUvScrollNode*(_: type(nil)): UvScrollNode {.importcpp: "(nullptr)".}
+proc toUvScrollNode*(_: type(nil)): UvScrollNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UvScrollNode], obj: TypedObject): UvScrollNode {.importcpp: "DCAST(UvScrollNode, @)".}
 
 type SceneGraphAnalyzer* {.importcpp: "SceneGraphAnalyzer", pure, inheritable, header: "sceneGraphAnalyzer.h".} = object
@@ -989,12 +989,12 @@ template LM_none*(_: typedesc[SceneGraphAnalyzer]): SceneGraphAnalyzer_LodMode =
 
 type CachedTypedWritableReferenceCount* {.importcpp: "PT(CachedTypedWritableReferenceCount)", bycopy, pure, inheritable, header: "cachedTypedWritableReferenceCount.h".} = object of TypedWritableReferenceCount
 
-converter toCachedTypedWritableReferenceCount*(_: type(nil)): CachedTypedWritableReferenceCount {.importcpp: "(nullptr)".}
+proc toCachedTypedWritableReferenceCount*(_: type(nil)): CachedTypedWritableReferenceCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CachedTypedWritableReferenceCount], obj: TypedObject): CachedTypedWritableReferenceCount {.importcpp: "DCAST(CachedTypedWritableReferenceCount, @)".}
 
 type NodeCachedReferenceCount* {.importcpp: "PT(NodeCachedReferenceCount)", bycopy, pure, inheritable, header: "nodeCachedReferenceCount.h".} = object of CachedTypedWritableReferenceCount
 
-converter toNodeCachedReferenceCount*(_: type(nil)): NodeCachedReferenceCount {.importcpp: "(nullptr)".}
+proc toNodeCachedReferenceCount*(_: type(nil)): NodeCachedReferenceCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NodeCachedReferenceCount], obj: TypedObject): NodeCachedReferenceCount {.importcpp: "DCAST(NodeCachedReferenceCount, @)".}
 
 type NodeCachedReferenceCount_Referenced {.importcpp: "NodeCachedReferenceCount::Referenced", pure, header: "nodeCachedReferenceCount.h".} = enum
@@ -1009,14 +1009,14 @@ template R_cache*(_: typedesc[NodeCachedReferenceCount]): NodeCachedReferenceCou
 
 type TransformState* {.importcpp: "PT(TransformState)", bycopy, pure, header: "transformState.h".} = object of NodeCachedReferenceCount
 
-converter toTransformState*(_: type(nil)): TransformState {.importcpp: "(nullptr)".}
+proc toTransformState*(_: type(nil)): TransformState {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TransformState], obj: TypedObject): TransformState {.importcpp: "DCAST(TransformState, @)".}
 
 type RenderAttribRegistry* {.importcpp: "RenderAttribRegistry", pure, inheritable, header: "renderAttribRegistry.h".} = object
 
 type RenderAttrib* {.importcpp: "PT(RenderAttrib)", bycopy, pure, inheritable, header: "renderAttrib.h".} = object of TypedWritableReferenceCount
 
-converter toRenderAttrib*(_: type(nil)): RenderAttrib {.importcpp: "(nullptr)".}
+proc toRenderAttrib*(_: type(nil)): RenderAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RenderAttrib], obj: TypedObject): RenderAttrib {.importcpp: "DCAST(RenderAttrib, @)".}
 
 type RenderAttrib_PandaCompareFunc {.importcpp: "RenderAttrib::PandaCompareFunc", pure, header: "renderAttrib.h".} = enum
@@ -1075,7 +1075,7 @@ template M_constant*(_: typedesc[RenderAttrib]): RenderAttrib_TexGenMode = Rende
 
 type RenderModeAttrib* {.importcpp: "PT(RenderModeAttrib)", bycopy, pure, inheritable, header: "renderModeAttrib.h".} = object of RenderAttrib
 
-converter toRenderModeAttrib*(_: type(nil)): RenderModeAttrib {.importcpp: "(nullptr)".}
+proc toRenderModeAttrib*(_: type(nil)): RenderModeAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RenderModeAttrib], obj: TypedObject): RenderModeAttrib {.importcpp: "DCAST(RenderModeAttrib, @)".}
 
 type RenderModeAttrib_Mode {.importcpp: "RenderModeAttrib::Mode", pure, header: "renderModeAttrib.h".} = enum
@@ -1098,22 +1098,22 @@ template M_filledWireframe*(_: typedesc[RenderModeAttrib]): RenderModeAttrib_Mod
 
 type TexMatrixAttrib* {.importcpp: "PT(TexMatrixAttrib)", bycopy, pure, inheritable, header: "texMatrixAttrib.h".} = object of RenderAttrib
 
-converter toTexMatrixAttrib*(_: type(nil)): TexMatrixAttrib {.importcpp: "(nullptr)".}
+proc toTexMatrixAttrib*(_: type(nil)): TexMatrixAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TexMatrixAttrib], obj: TypedObject): TexMatrixAttrib {.importcpp: "DCAST(TexMatrixAttrib, @)".}
 
 type RenderState* {.importcpp: "PT(RenderState)", bycopy, pure, inheritable, header: "renderState.h".} = object of NodeCachedReferenceCount
 
-converter toRenderState*(_: type(nil)): RenderState {.importcpp: "(nullptr)".}
+proc toRenderState*(_: type(nil)): RenderState {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RenderState], obj: TypedObject): RenderState {.importcpp: "DCAST(RenderState, @)".}
 
 type AlphaTestAttrib* {.importcpp: "PT(AlphaTestAttrib)", bycopy, pure, inheritable, header: "alphaTestAttrib.h".} = object of RenderAttrib
 
-converter toAlphaTestAttrib*(_: type(nil)): AlphaTestAttrib {.importcpp: "(nullptr)".}
+proc toAlphaTestAttrib*(_: type(nil)): AlphaTestAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AlphaTestAttrib], obj: TypedObject): AlphaTestAttrib {.importcpp: "DCAST(AlphaTestAttrib, @)".}
 
 type AntialiasAttrib* {.importcpp: "PT(AntialiasAttrib)", bycopy, pure, inheritable, header: "antialiasAttrib.h".} = object of RenderAttrib
 
-converter toAntialiasAttrib*(_: type(nil)): AntialiasAttrib {.importcpp: "(nullptr)".}
+proc toAntialiasAttrib*(_: type(nil)): AntialiasAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AntialiasAttrib], obj: TypedObject): AntialiasAttrib {.importcpp: "DCAST(AntialiasAttrib, @)".}
 
 type AntialiasAttrib_Mode {.importcpp: "AntialiasAttrib::Mode", pure, header: "antialiasAttrib.h".} = enum
@@ -1143,17 +1143,17 @@ template M_dontCare*(_: typedesc[AntialiasAttrib]): AntialiasAttrib_Mode = Antia
 
 type RenderEffect* {.importcpp: "PT(RenderEffect)", bycopy, pure, inheritable, header: "renderEffect.h".} = object of TypedWritableReferenceCount
 
-converter toRenderEffect*(_: type(nil)): RenderEffect {.importcpp: "(nullptr)".}
+proc toRenderEffect*(_: type(nil)): RenderEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RenderEffect], obj: TypedObject): RenderEffect {.importcpp: "DCAST(RenderEffect, @)".}
 
 type RenderEffects* {.importcpp: "PT(RenderEffects)", bycopy, pure, inheritable, header: "renderEffects.h".} = object of TypedWritableReferenceCount
 
-converter toRenderEffects*(_: type(nil)): RenderEffects {.importcpp: "(nullptr)".}
+proc toRenderEffects*(_: type(nil)): RenderEffects {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RenderEffects], obj: TypedObject): RenderEffects {.importcpp: "DCAST(RenderEffects, @)".}
 
 type TransparencyAttrib* {.importcpp: "PT(TransparencyAttrib)", bycopy, pure, inheritable, header: "transparencyAttrib.h".} = object of RenderAttrib
 
-converter toTransparencyAttrib*(_: type(nil)): TransparencyAttrib {.importcpp: "(nullptr)".}
+proc toTransparencyAttrib*(_: type(nil)): TransparencyAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TransparencyAttrib], obj: TypedObject): TransparencyAttrib {.importcpp: "DCAST(TransparencyAttrib, @)".}
 
 type TransparencyAttrib_Mode {.importcpp: "TransparencyAttrib::Mode", pure, header: "transparencyAttrib.h".} = enum
@@ -1178,7 +1178,7 @@ template M_dual*(_: typedesc[TransparencyAttrib]): TransparencyAttrib_Mode = Tra
 
 type LogicOpAttrib* {.importcpp: "PT(LogicOpAttrib)", bycopy, pure, inheritable, header: "logicOpAttrib.h".} = object of RenderAttrib
 
-converter toLogicOpAttrib*(_: type(nil)): LogicOpAttrib {.importcpp: "(nullptr)".}
+proc toLogicOpAttrib*(_: type(nil)): LogicOpAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LogicOpAttrib], obj: TypedObject): LogicOpAttrib {.importcpp: "DCAST(LogicOpAttrib, @)".}
 
 type LogicOpAttrib_Operation {.importcpp: "LogicOpAttrib::Operation", pure, header: "logicOpAttrib.h".} = enum
@@ -1287,12 +1287,12 @@ type AttribNodeRegistry* {.importcpp: "AttribNodeRegistry", pure, inheritable, h
 
 type AudioVolumeAttrib* {.importcpp: "PT(AudioVolumeAttrib)", bycopy, pure, inheritable, header: "audioVolumeAttrib.h".} = object of RenderAttrib
 
-converter toAudioVolumeAttrib*(_: type(nil)): AudioVolumeAttrib {.importcpp: "(nullptr)".}
+proc toAudioVolumeAttrib*(_: type(nil)): AudioVolumeAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AudioVolumeAttrib], obj: TypedObject): AudioVolumeAttrib {.importcpp: "DCAST(AudioVolumeAttrib, @)".}
 
 type AuxBitplaneAttrib* {.importcpp: "PT(AuxBitplaneAttrib)", bycopy, pure, inheritable, header: "auxBitplaneAttrib.h".} = object of RenderAttrib
 
-converter toAuxBitplaneAttrib*(_: type(nil)): AuxBitplaneAttrib {.importcpp: "(nullptr)".}
+proc toAuxBitplaneAttrib*(_: type(nil)): AuxBitplaneAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AuxBitplaneAttrib], obj: TypedObject): AuxBitplaneAttrib {.importcpp: "DCAST(AuxBitplaneAttrib, @)".}
 
 type AuxBitplaneAttrib_AuxBitplaneOutput {.importcpp: "AuxBitplaneAttrib::AuxBitplaneOutput", pure, header: "auxBitplaneAttrib.h".} = enum
@@ -1309,7 +1309,7 @@ template ABO_auxGlow*(_: typedesc[AuxBitplaneAttrib]): AuxBitplaneAttrib_AuxBitp
 
 type AuxSceneData* {.importcpp: "PT(AuxSceneData)", bycopy, pure, inheritable, header: "auxSceneData.h".} = object of TypedReferenceCount
 
-converter toAuxSceneData*(_: type(nil)): AuxSceneData {.importcpp: "(nullptr)".}
+proc toAuxSceneData*(_: type(nil)): AuxSceneData {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AuxSceneData], obj: TypedObject): AuxSceneData {.importcpp: "DCAST(AuxSceneData, @)".}
 
 type BamEnums* {.importcpp: "BamEnums", pure, inheritable, header: "bamEnums.h".} = object
@@ -1361,14 +1361,14 @@ type BamFile* {.importcpp: "BamFile", pure, inheritable, header: "bamFile.h".} =
 
 type BillboardEffect* {.importcpp: "PT(BillboardEffect)", bycopy, pure, inheritable, header: "billboardEffect.h".} = object of RenderEffect
 
-converter toBillboardEffect*(_: type(nil)): BillboardEffect {.importcpp: "(nullptr)".}
+proc toBillboardEffect*(_: type(nil)): BillboardEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BillboardEffect], obj: TypedObject): BillboardEffect {.importcpp: "DCAST(BillboardEffect, @)".}
 
 type WeakNodePath* {.importcpp: "WeakNodePath", pure, inheritable, header: "weakNodePath.h".} = object
 
 type PlaneNode* {.importcpp: "PT(PlaneNode)", bycopy, pure, inheritable, header: "planeNode.h".} = object of PandaNode
 
-converter toPlaneNode*(_: type(nil)): PlaneNode {.importcpp: "(nullptr)".}
+proc toPlaneNode*(_: type(nil)): PlaneNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PlaneNode], obj: TypedObject): PlaneNode {.importcpp: "DCAST(PlaneNode, @)".}
 
 type PlaneNode_ClipEffect {.importcpp: "PlaneNode::ClipEffect", pure, header: "planeNode.h".} = enum
@@ -1383,7 +1383,7 @@ template CE_collision*(_: typedesc[PlaneNode]): PlaneNode_ClipEffect = PlaneNode
 
 type ClipPlaneAttrib* {.importcpp: "PT(ClipPlaneAttrib)", bycopy, pure, inheritable, header: "clipPlaneAttrib.h".} = object of RenderAttrib
 
-converter toClipPlaneAttrib*(_: type(nil)): ClipPlaneAttrib {.importcpp: "(nullptr)".}
+proc toClipPlaneAttrib*(_: type(nil)): ClipPlaneAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ClipPlaneAttrib], obj: TypedObject): ClipPlaneAttrib {.importcpp: "DCAST(ClipPlaneAttrib, @)".}
 
 type ClipPlaneAttrib_Operation {.importcpp: "ClipPlaneAttrib::Operation", pure, header: "clipPlaneAttrib.h".} = enum
@@ -1400,7 +1400,7 @@ template O_remove*(_: typedesc[ClipPlaneAttrib]): ClipPlaneAttrib_Operation = Cl
 
 type ColorAttrib* {.importcpp: "PT(ColorAttrib)", bycopy, pure, inheritable, header: "colorAttrib.h".} = object of RenderAttrib
 
-converter toColorAttrib*(_: type(nil)): ColorAttrib {.importcpp: "(nullptr)".}
+proc toColorAttrib*(_: type(nil)): ColorAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ColorAttrib], obj: TypedObject): ColorAttrib {.importcpp: "DCAST(ColorAttrib, @)".}
 
 type ColorAttrib_Type {.importcpp: "ColorAttrib::Type", pure, header: "colorAttrib.h".} = enum
@@ -1417,7 +1417,7 @@ template T_off*(_: typedesc[ColorAttrib]): ColorAttrib_Type = ColorAttrib_Type.T
 
 type ColorBlendAttrib* {.importcpp: "PT(ColorBlendAttrib)", bycopy, pure, inheritable, header: "colorBlendAttrib.h".} = object of RenderAttrib
 
-converter toColorBlendAttrib*(_: type(nil)): ColorBlendAttrib {.importcpp: "(nullptr)".}
+proc toColorBlendAttrib*(_: type(nil)): ColorBlendAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ColorBlendAttrib], obj: TypedObject): ColorBlendAttrib {.importcpp: "DCAST(ColorBlendAttrib, @)".}
 
 type ColorBlendAttrib_Mode {.importcpp: "ColorBlendAttrib::Mode", pure, header: "colorBlendAttrib.h".} = enum
@@ -1492,12 +1492,12 @@ template O_oneMinusAlphaScale*(_: typedesc[ColorBlendAttrib]): ColorBlendAttrib_
 
 type ColorScaleAttrib* {.importcpp: "PT(ColorScaleAttrib)", bycopy, pure, inheritable, header: "colorScaleAttrib.h".} = object of RenderAttrib
 
-converter toColorScaleAttrib*(_: type(nil)): ColorScaleAttrib {.importcpp: "(nullptr)".}
+proc toColorScaleAttrib*(_: type(nil)): ColorScaleAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ColorScaleAttrib], obj: TypedObject): ColorScaleAttrib {.importcpp: "DCAST(ColorScaleAttrib, @)".}
 
 type ColorWriteAttrib* {.importcpp: "PT(ColorWriteAttrib)", bycopy, pure, inheritable, header: "colorWriteAttrib.h".} = object of RenderAttrib
 
-converter toColorWriteAttrib*(_: type(nil)): ColorWriteAttrib {.importcpp: "(nullptr)".}
+proc toColorWriteAttrib*(_: type(nil)): ColorWriteAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ColorWriteAttrib], obj: TypedObject): ColorWriteAttrib {.importcpp: "DCAST(ColorWriteAttrib, @)".}
 
 type ColorWriteAttrib_Channels {.importcpp: "ColorWriteAttrib::Channels", pure, header: "colorWriteAttrib.h".} = enum
@@ -1522,7 +1522,7 @@ template C_all*(_: typedesc[ColorWriteAttrib]): ColorWriteAttrib_Channels = Colo
 
 type CompassEffect* {.importcpp: "PT(CompassEffect)", bycopy, pure, inheritable, header: "compassEffect.h".} = object of RenderEffect
 
-converter toCompassEffect*(_: type(nil)): CompassEffect {.importcpp: "(nullptr)".}
+proc toCompassEffect*(_: type(nil)): CompassEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CompassEffect], obj: TypedObject): CompassEffect {.importcpp: "DCAST(CompassEffect, @)".}
 
 type CompassEffect_Properties {.importcpp: "CompassEffect::Properties", pure, header: "compassEffect.h".} = enum
@@ -1573,19 +1573,19 @@ template BT_fixed*(_: typedesc[CullBinEnums]): CullBinEnums_BinType = CullBinEnu
 
 type GeomNode* {.importcpp: "PT(GeomNode)", bycopy, pure, inheritable, header: "geomNode.h".} = object of PandaNode
 
-converter toGeomNode*(_: type(nil)): GeomNode {.importcpp: "(nullptr)".}
+proc toGeomNode*(_: type(nil)): GeomNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomNode], obj: TypedObject): GeomNode {.importcpp: "DCAST(GeomNode, @)".}
 
 type CullBinAttrib* {.importcpp: "PT(CullBinAttrib)", bycopy, pure, inheritable, header: "cullBinAttrib.h".} = object of RenderAttrib
 
-converter toCullBinAttrib*(_: type(nil)): CullBinAttrib {.importcpp: "(nullptr)".}
+proc toCullBinAttrib*(_: type(nil)): CullBinAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CullBinAttrib], obj: TypedObject): CullBinAttrib {.importcpp: "DCAST(CullBinAttrib, @)".}
 
 type CullBinManager* {.importcpp: "CullBinManager", pure, inheritable, header: "cullBinManager.h".} = object of CullBinEnums
 
 type CullFaceAttrib* {.importcpp: "PT(CullFaceAttrib)", bycopy, pure, inheritable, header: "cullFaceAttrib.h".} = object of RenderAttrib
 
-converter toCullFaceAttrib*(_: type(nil)): CullFaceAttrib {.importcpp: "(nullptr)".}
+proc toCullFaceAttrib*(_: type(nil)): CullFaceAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CullFaceAttrib], obj: TypedObject): CullFaceAttrib {.importcpp: "DCAST(CullFaceAttrib, @)".}
 
 type CullFaceAttrib_Mode {.importcpp: "CullFaceAttrib::Mode", pure, header: "cullFaceAttrib.h".} = enum
@@ -1608,12 +1608,12 @@ type CullTraverserData* {.importcpp: "CullTraverserData", pure, inheritable, hea
 
 type SceneSetup* {.importcpp: "PT(SceneSetup)", bycopy, pure, inheritable, header: "sceneSetup.h".} = object of TypedReferenceCount
 
-converter toSceneSetup*(_: type(nil)): SceneSetup {.importcpp: "(nullptr)".}
+proc toSceneSetup*(_: type(nil)): SceneSetup {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SceneSetup], obj: TypedObject): SceneSetup {.importcpp: "DCAST(SceneSetup, @)".}
 
 type Fog* {.importcpp: "PT(Fog)", bycopy, pure, inheritable, header: "fog.h".} = object of PandaNode
 
-converter toFog*(_: type(nil)): Fog {.importcpp: "(nullptr)".}
+proc toFog*(_: type(nil)): Fog {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Fog], obj: TypedObject): Fog {.importcpp: "DCAST(Fog, @)".}
 
 type Fog_Mode {.importcpp: "Fog::Mode", pure, header: "fog.h".} = enum
@@ -1630,19 +1630,19 @@ template M_exponentialSquared*(_: typedesc[Fog]): Fog_Mode = Fog_Mode.M_exponent
 
 type FogAttrib* {.importcpp: "PT(FogAttrib)", bycopy, pure, inheritable, header: "fogAttrib.h".} = object of RenderAttrib
 
-converter toFogAttrib*(_: type(nil)): FogAttrib {.importcpp: "(nullptr)".}
+proc toFogAttrib*(_: type(nil)): FogAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FogAttrib], obj: TypedObject): FogAttrib {.importcpp: "DCAST(FogAttrib, @)".}
 
 type CullTraverser* {.importcpp: "PT(CullTraverser)", bycopy, pure, inheritable, header: "cullTraverser.h".} = object of TypedReferenceCount
 
-converter toCullTraverser*(_: type(nil)): CullTraverser {.importcpp: "(nullptr)".}
+proc toCullTraverser*(_: type(nil)): CullTraverser {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CullTraverser], obj: TypedObject): CullTraverser {.importcpp: "DCAST(CullTraverser, @)".}
 
 type GeomDrawCallbackData* {.importcpp: "GeomDrawCallbackData", pure, inheritable, header: "geomDrawCallbackData.h".} = object of CallbackData
 
 type RescaleNormalAttrib* {.importcpp: "PT(RescaleNormalAttrib)", bycopy, pure, inheritable, header: "rescaleNormalAttrib.h".} = object of RenderAttrib
 
-converter toRescaleNormalAttrib*(_: type(nil)): RescaleNormalAttrib {.importcpp: "(nullptr)".}
+proc toRescaleNormalAttrib*(_: type(nil)): RescaleNormalAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RescaleNormalAttrib], obj: TypedObject): RescaleNormalAttrib {.importcpp: "DCAST(RescaleNormalAttrib, @)".}
 
 type RescaleNormalAttrib_Mode {.importcpp: "RescaleNormalAttrib::Mode", pure, header: "rescaleNormalAttrib.h".} = enum
@@ -1661,27 +1661,27 @@ template M_auto*(_: typedesc[RescaleNormalAttrib]): RescaleNormalAttrib_Mode = R
 
 type CullResult* {.importcpp: "PT(CullResult)", bycopy, pure, inheritable, header: "cullResult.h".} = object of ReferenceCount
 
-converter toCullResult*(_: type(nil)): CullResult {.importcpp: "(nullptr)".}
+proc toCullResult*(_: type(nil)): CullResult {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CullResult], obj: TypedObject): CullResult {.importcpp: "DCAST(CullResult, @)".}
 
 type DecalEffect* {.importcpp: "PT(DecalEffect)", bycopy, pure, inheritable, header: "decalEffect.h".} = object of RenderEffect
 
-converter toDecalEffect*(_: type(nil)): DecalEffect {.importcpp: "(nullptr)".}
+proc toDecalEffect*(_: type(nil)): DecalEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DecalEffect], obj: TypedObject): DecalEffect {.importcpp: "DCAST(DecalEffect, @)".}
 
 type DepthOffsetAttrib* {.importcpp: "PT(DepthOffsetAttrib)", bycopy, pure, inheritable, header: "depthOffsetAttrib.h".} = object of RenderAttrib
 
-converter toDepthOffsetAttrib*(_: type(nil)): DepthOffsetAttrib {.importcpp: "(nullptr)".}
+proc toDepthOffsetAttrib*(_: type(nil)): DepthOffsetAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DepthOffsetAttrib], obj: TypedObject): DepthOffsetAttrib {.importcpp: "DCAST(DepthOffsetAttrib, @)".}
 
 type DepthTestAttrib* {.importcpp: "PT(DepthTestAttrib)", bycopy, pure, inheritable, header: "depthTestAttrib.h".} = object of RenderAttrib
 
-converter toDepthTestAttrib*(_: type(nil)): DepthTestAttrib {.importcpp: "(nullptr)".}
+proc toDepthTestAttrib*(_: type(nil)): DepthTestAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DepthTestAttrib], obj: TypedObject): DepthTestAttrib {.importcpp: "DCAST(DepthTestAttrib, @)".}
 
 type DepthWriteAttrib* {.importcpp: "PT(DepthWriteAttrib)", bycopy, pure, inheritable, header: "depthWriteAttrib.h".} = object of RenderAttrib
 
-converter toDepthWriteAttrib*(_: type(nil)): DepthWriteAttrib {.importcpp: "(nullptr)".}
+proc toDepthWriteAttrib*(_: type(nil)): DepthWriteAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DepthWriteAttrib], obj: TypedObject): DepthWriteAttrib {.importcpp: "DCAST(DepthWriteAttrib, @)".}
 
 type DepthWriteAttrib_Mode {.importcpp: "DepthWriteAttrib::Mode", pure, header: "depthWriteAttrib.h".} = enum
@@ -1696,7 +1696,7 @@ template M_on*(_: typedesc[DepthWriteAttrib]): DepthWriteAttrib_Mode = DepthWrit
 
 type LightAttrib* {.importcpp: "PT(LightAttrib)", bycopy, pure, inheritable, header: "lightAttrib.h".} = object of RenderAttrib
 
-converter toLightAttrib*(_: type(nil)): LightAttrib {.importcpp: "(nullptr)".}
+proc toLightAttrib*(_: type(nil)): LightAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LightAttrib], obj: TypedObject): LightAttrib {.importcpp: "DCAST(LightAttrib, @)".}
 
 type LightAttrib_Operation {.importcpp: "LightAttrib::Operation", pure, header: "lightAttrib.h".} = enum
@@ -1713,7 +1713,7 @@ template O_remove*(_: typedesc[LightAttrib]): LightAttrib_Operation = LightAttri
 
 type LightRampAttrib* {.importcpp: "PT(LightRampAttrib)", bycopy, pure, inheritable, header: "lightRampAttrib.h".} = object of RenderAttrib
 
-converter toLightRampAttrib*(_: type(nil)): LightRampAttrib {.importcpp: "(nullptr)".}
+proc toLightRampAttrib*(_: type(nil)): LightRampAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LightRampAttrib], obj: TypedObject): LightRampAttrib {.importcpp: "DCAST(LightRampAttrib, @)".}
 
 type LightRampAttrib_LightRampMode {.importcpp: "LightRampAttrib::LightRampMode", pure, header: "lightRampAttrib.h".} = enum
@@ -1738,9 +1738,9 @@ template LRT_hdr2*(_: typedesc[LightRampAttrib]): LightRampAttrib_LightRampMode 
 
 type Loader* {.importcpp: "PT(Loader)", bycopy, pure, inheritable, header: "loader.h".} = object of TypedReferenceCount
 
-converter upcastToNamable*(_: typedesc[Loader]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[Loader]): typedesc[Namable] = typedesc[Namable]
 
-converter toLoader*(_: type(nil)): Loader {.importcpp: "(nullptr)".}
+proc toLoader*(_: type(nil)): Loader {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Loader], obj: TypedObject): Loader {.importcpp: "DCAST(Loader, @)".}
 
 type LoaderFileType* {.importcpp: "LoaderFileType", pure, inheritable, header: "loaderFileType.h".} = object of TypedObject
@@ -1749,19 +1749,19 @@ type LoaderFileTypeRegistry* {.importcpp: "LoaderFileTypeRegistry", pure, inheri
 
 type MaterialAttrib* {.importcpp: "PT(MaterialAttrib)", bycopy, pure, inheritable, header: "materialAttrib.h".} = object of RenderAttrib
 
-converter toMaterialAttrib*(_: type(nil)): MaterialAttrib {.importcpp: "(nullptr)".}
+proc toMaterialAttrib*(_: type(nil)): MaterialAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MaterialAttrib], obj: TypedObject): MaterialAttrib {.importcpp: "DCAST(MaterialAttrib, @)".}
 
 type AsyncFuture* {.importcpp: "PT(AsyncFuture)", bycopy, pure, inheritable, header: "asyncFuture.h".} = object of TypedReferenceCount
 
-converter toAsyncFuture*(_: type(nil)): AsyncFuture {.importcpp: "(nullptr)".}
+proc toAsyncFuture*(_: type(nil)): AsyncFuture {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncFuture], obj: TypedObject): AsyncFuture {.importcpp: "DCAST(AsyncFuture, @)".}
 
 type AsyncTask* {.importcpp: "PT(AsyncTask)", bycopy, pure, inheritable, header: "asyncTask.h".} = object of AsyncFuture
 
-converter upcastToNamable*(_: typedesc[AsyncTask]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[AsyncTask]): typedesc[Namable] = typedesc[Namable]
 
-converter toAsyncTask*(_: type(nil)): AsyncTask {.importcpp: "(nullptr)".}
+proc toAsyncTask*(_: type(nil)): AsyncTask {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncTask], obj: TypedObject): AsyncTask {.importcpp: "DCAST(AsyncTask, @)".}
 
 type AsyncTask_DoneStatus {.importcpp: "AsyncTask::DoneStatus", pure, header: "asyncTask.h".} = enum
@@ -1808,17 +1808,17 @@ template S_awaiting*(_: typedesc[AsyncTask]): AsyncTask_State = AsyncTask_State.
 
 type ModelFlattenRequest* {.importcpp: "PT(ModelFlattenRequest)", bycopy, pure, inheritable, header: "modelFlattenRequest.h".} = object of AsyncTask
 
-converter toModelFlattenRequest*(_: type(nil)): ModelFlattenRequest {.importcpp: "(nullptr)".}
+proc toModelFlattenRequest*(_: type(nil)): ModelFlattenRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ModelFlattenRequest], obj: TypedObject): ModelFlattenRequest {.importcpp: "DCAST(ModelFlattenRequest, @)".}
 
 type ModelLoadRequest* {.importcpp: "PT(ModelLoadRequest)", bycopy, pure, inheritable, header: "modelLoadRequest.h".} = object of AsyncTask
 
-converter toModelLoadRequest*(_: type(nil)): ModelLoadRequest {.importcpp: "(nullptr)".}
+proc toModelLoadRequest*(_: type(nil)): ModelLoadRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ModelLoadRequest], obj: TypedObject): ModelLoadRequest {.importcpp: "DCAST(ModelLoadRequest, @)".}
 
 type ModelNode* {.importcpp: "PT(ModelNode)", bycopy, pure, inheritable, header: "modelNode.h".} = object of PandaNode
 
-converter toModelNode*(_: type(nil)): ModelNode {.importcpp: "(nullptr)".}
+proc toModelNode*(_: type(nil)): ModelNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ModelNode], obj: TypedObject): ModelNode {.importcpp: "DCAST(ModelNode, @)".}
 
 type ModelNode_PreserveTransform {.importcpp: "ModelNode::PreserveTransform", pure, header: "modelNode.h".} = enum
@@ -1839,39 +1839,39 @@ template PT_noTouch*(_: typedesc[ModelNode]): ModelNode_PreserveTransform = Mode
 
 type ModelRoot* {.importcpp: "PT(ModelRoot)", bycopy, pure, inheritable, header: "modelRoot.h".} = object of ModelNode
 
-converter toModelRoot*(_: type(nil)): ModelRoot {.importcpp: "(nullptr)".}
+proc toModelRoot*(_: type(nil)): ModelRoot {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ModelRoot], obj: TypedObject): ModelRoot {.importcpp: "DCAST(ModelRoot, @)".}
 
 type ModelPool* {.importcpp: "ModelPool", pure, inheritable, header: "modelPool.h".} = object
 
 type ModelSaveRequest* {.importcpp: "PT(ModelSaveRequest)", bycopy, pure, inheritable, header: "modelSaveRequest.h".} = object of AsyncTask
 
-converter toModelSaveRequest*(_: type(nil)): ModelSaveRequest {.importcpp: "(nullptr)".}
+proc toModelSaveRequest*(_: type(nil)): ModelSaveRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ModelSaveRequest], obj: TypedObject): ModelSaveRequest {.importcpp: "DCAST(ModelSaveRequest, @)".}
 
 type TextureAttrib* {.importcpp: "PT(TextureAttrib)", bycopy, pure, inheritable, header: "textureAttrib.h".} = object of RenderAttrib
 
-converter toTextureAttrib*(_: type(nil)): TextureAttrib {.importcpp: "(nullptr)".}
+proc toTextureAttrib*(_: type(nil)): TextureAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextureAttrib], obj: TypedObject): TextureAttrib {.importcpp: "DCAST(TextureAttrib, @)".}
 
 type TexGenAttrib* {.importcpp: "PT(TexGenAttrib)", bycopy, pure, inheritable, header: "texGenAttrib.h".} = object of RenderAttrib
 
-converter toTexGenAttrib*(_: type(nil)): TexGenAttrib {.importcpp: "(nullptr)".}
+proc toTexGenAttrib*(_: type(nil)): TexGenAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TexGenAttrib], obj: TypedObject): TexGenAttrib {.importcpp: "DCAST(TexGenAttrib, @)".}
 
 type OccluderNode* {.importcpp: "PT(OccluderNode)", bycopy, pure, inheritable, header: "occluderNode.h".} = object of PandaNode
 
-converter toOccluderNode*(_: type(nil)): OccluderNode {.importcpp: "(nullptr)".}
+proc toOccluderNode*(_: type(nil)): OccluderNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OccluderNode], obj: TypedObject): OccluderNode {.importcpp: "DCAST(OccluderNode, @)".}
 
 type OccluderEffect* {.importcpp: "PT(OccluderEffect)", bycopy, pure, inheritable, header: "occluderEffect.h".} = object of RenderEffect
 
-converter toOccluderEffect*(_: type(nil)): OccluderEffect {.importcpp: "(nullptr)".}
+proc toOccluderEffect*(_: type(nil)): OccluderEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OccluderEffect], obj: TypedObject): OccluderEffect {.importcpp: "DCAST(OccluderEffect, @)".}
 
 type PolylightNode* {.importcpp: "PT(PolylightNode)", bycopy, pure, inheritable, header: "polylightNode.h".} = object of PandaNode
 
-converter toPolylightNode*(_: type(nil)): PolylightNode {.importcpp: "(nullptr)".}
+proc toPolylightNode*(_: type(nil)): PolylightNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PolylightNode], obj: TypedObject): PolylightNode {.importcpp: "DCAST(PolylightNode, @)".}
 
 type PolylightNode_Flicker_Type {.importcpp: "PolylightNode::Flicker_Type", pure, header: "polylightNode.h".} = enum
@@ -1898,7 +1898,7 @@ template AQUADRATIC*(_: typedesc[PolylightNode]): PolylightNode_Attenuation_Type
 
 type PolylightEffect* {.importcpp: "PT(PolylightEffect)", bycopy, pure, inheritable, header: "polylightEffect.h".} = object of RenderEffect
 
-converter toPolylightEffect*(_: type(nil)): PolylightEffect {.importcpp: "(nullptr)".}
+proc toPolylightEffect*(_: type(nil)): PolylightEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PolylightEffect], obj: TypedObject): PolylightEffect {.importcpp: "DCAST(PolylightEffect, @)".}
 
 type PolylightEffect_ContribType {.importcpp: "PolylightEffect::ContribType", pure, header: "polylightEffect.h".} = enum
@@ -1913,22 +1913,22 @@ template CT_all*(_: typedesc[PolylightEffect]): PolylightEffect_ContribType = Po
 
 type ShaderAttrib* {.importcpp: "PT(ShaderAttrib)", bycopy, pure, inheritable, header: "shaderAttrib.h".} = object of RenderAttrib
 
-converter toShaderAttrib*(_: type(nil)): ShaderAttrib {.importcpp: "(nullptr)".}
+proc toShaderAttrib*(_: type(nil)): ShaderAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShaderAttrib], obj: TypedObject): ShaderAttrib {.importcpp: "DCAST(ShaderAttrib, @)".}
 
 type ShowBoundsEffect* {.importcpp: "PT(ShowBoundsEffect)", bycopy, pure, inheritable, header: "showBoundsEffect.h".} = object of RenderEffect
 
-converter toShowBoundsEffect*(_: type(nil)): ShowBoundsEffect {.importcpp: "(nullptr)".}
+proc toShowBoundsEffect*(_: type(nil)): ShowBoundsEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShowBoundsEffect], obj: TypedObject): ShowBoundsEffect {.importcpp: "DCAST(ShowBoundsEffect, @)".}
 
 type TexProjectorEffect* {.importcpp: "PT(TexProjectorEffect)", bycopy, pure, inheritable, header: "texProjectorEffect.h".} = object of RenderEffect
 
-converter toTexProjectorEffect*(_: type(nil)): TexProjectorEffect {.importcpp: "(nullptr)".}
+proc toTexProjectorEffect*(_: type(nil)): TexProjectorEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TexProjectorEffect], obj: TypedObject): TexProjectorEffect {.importcpp: "DCAST(TexProjectorEffect, @)".}
 
 type ScissorEffect* {.importcpp: "PT(ScissorEffect)", bycopy, pure, inheritable, header: "scissorEffect.h".} = object of RenderEffect
 
-converter toScissorEffect*(_: type(nil)): ScissorEffect {.importcpp: "(nullptr)".}
+proc toScissorEffect*(_: type(nil)): ScissorEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ScissorEffect], obj: TypedObject): ScissorEffect {.importcpp: "DCAST(ScissorEffect, @)".}
 
 type SceneGraphReducer* {.importcpp: "SceneGraphReducer", pure, inheritable, header: "sceneGraphReducer.h".} = object
@@ -2005,17 +2005,17 @@ template MN_avoidDynamic*(_: typedesc[SceneGraphReducer]): SceneGraphReducer_Mak
 
 type PortalNode* {.importcpp: "PT(PortalNode)", bycopy, pure, inheritable, header: "portalNode.h".} = object of PandaNode
 
-converter toPortalNode*(_: type(nil)): PortalNode {.importcpp: "(nullptr)".}
+proc toPortalNode*(_: type(nil)): PortalNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PortalNode], obj: TypedObject): PortalNode {.importcpp: "DCAST(PortalNode, @)".}
 
 type ScissorAttrib* {.importcpp: "PT(ScissorAttrib)", bycopy, pure, inheritable, header: "scissorAttrib.h".} = object of RenderAttrib
 
-converter toScissorAttrib*(_: type(nil)): ScissorAttrib {.importcpp: "(nullptr)".}
+proc toScissorAttrib*(_: type(nil)): ScissorAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ScissorAttrib], obj: TypedObject): ScissorAttrib {.importcpp: "DCAST(ScissorAttrib, @)".}
 
 type ShadeModelAttrib* {.importcpp: "PT(ShadeModelAttrib)", bycopy, pure, inheritable, header: "shadeModelAttrib.h".} = object of RenderAttrib
 
-converter toShadeModelAttrib*(_: type(nil)): ShadeModelAttrib {.importcpp: "(nullptr)".}
+proc toShadeModelAttrib*(_: type(nil)): ShadeModelAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShadeModelAttrib], obj: TypedObject): ShadeModelAttrib {.importcpp: "DCAST(ShadeModelAttrib, @)".}
 
 type ShadeModelAttrib_Mode {.importcpp: "ShadeModelAttrib::Mode", pure, header: "shadeModelAttrib.h".} = enum
@@ -2030,7 +2030,7 @@ template M_smooth*(_: typedesc[ShadeModelAttrib]): ShadeModelAttrib_Mode = Shade
 
 type StencilAttrib* {.importcpp: "PT(StencilAttrib)", bycopy, pure, inheritable, header: "stencilAttrib.h".} = object of RenderAttrib
 
-converter toStencilAttrib*(_: type(nil)): StencilAttrib {.importcpp: "(nullptr)".}
+proc toStencilAttrib*(_: type(nil)): StencilAttrib {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[StencilAttrib], obj: TypedObject): StencilAttrib {.importcpp: "DCAST(StencilAttrib, @)".}
 
 type StencilAttrib_StencilRenderState {.importcpp: "StencilAttrib::StencilRenderState", pure, header: "stencilAttrib.h".} = enum
@@ -2115,91 +2115,91 @@ type ShaderPool* {.importcpp: "ShaderPool", pure, inheritable, header: "shaderPo
 
 type MovieAudio* {.importcpp: "PT(MovieAudio)", bycopy, pure, inheritable, header: "movieAudio.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[MovieAudio]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[MovieAudio]): typedesc[Namable] = typedesc[Namable]
 
-converter toMovieAudio*(_: type(nil)): MovieAudio {.importcpp: "(nullptr)".}
+proc toMovieAudio*(_: type(nil)): MovieAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovieAudio], obj: TypedObject): MovieAudio {.importcpp: "DCAST(MovieAudio, @)".}
 
 type FlacAudio* {.importcpp: "PT(FlacAudio)", bycopy, pure, inheritable, header: "flacAudio.h".} = object of MovieAudio
 
-converter toFlacAudio*(_: type(nil)): FlacAudio {.importcpp: "(nullptr)".}
+proc toFlacAudio*(_: type(nil)): FlacAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FlacAudio], obj: TypedObject): FlacAudio {.importcpp: "DCAST(FlacAudio, @)".}
 
 type MovieAudioCursor* {.importcpp: "PT(MovieAudioCursor)", bycopy, pure, inheritable, header: "movieAudioCursor.h".} = object of TypedWritableReferenceCount
 
-converter toMovieAudioCursor*(_: type(nil)): MovieAudioCursor {.importcpp: "(nullptr)".}
+proc toMovieAudioCursor*(_: type(nil)): MovieAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovieAudioCursor], obj: TypedObject): MovieAudioCursor {.importcpp: "DCAST(MovieAudioCursor, @)".}
 
 type FlacAudioCursor* {.importcpp: "PT(FlacAudioCursor)", bycopy, pure, inheritable, header: "flacAudioCursor.h".} = object of MovieAudioCursor
 
-converter toFlacAudioCursor*(_: type(nil)): FlacAudioCursor {.importcpp: "(nullptr)".}
+proc toFlacAudioCursor*(_: type(nil)): FlacAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FlacAudioCursor], obj: TypedObject): FlacAudioCursor {.importcpp: "DCAST(FlacAudioCursor, @)".}
 
 type MovieVideo* {.importcpp: "PT(MovieVideo)", bycopy, pure, inheritable, header: "movieVideo.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[MovieVideo]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[MovieVideo]): typedesc[Namable] = typedesc[Namable]
 
-converter toMovieVideo*(_: type(nil)): MovieVideo {.importcpp: "(nullptr)".}
+proc toMovieVideo*(_: type(nil)): MovieVideo {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovieVideo], obj: TypedObject): MovieVideo {.importcpp: "DCAST(MovieVideo, @)".}
 
 type InkblotVideo* {.importcpp: "PT(InkblotVideo)", bycopy, pure, inheritable, header: "inkblotVideo.h".} = object of MovieVideo
 
-converter toInkblotVideo*(_: type(nil)): InkblotVideo {.importcpp: "(nullptr)".}
+proc toInkblotVideo*(_: type(nil)): InkblotVideo {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[InkblotVideo], obj: TypedObject): InkblotVideo {.importcpp: "DCAST(InkblotVideo, @)".}
 
 type MovieVideoCursor* {.importcpp: "PT(MovieVideoCursor)", bycopy, pure, inheritable, header: "movieVideoCursor.h".} = object of TypedWritableReferenceCount
 
-converter toMovieVideoCursor*(_: type(nil)): MovieVideoCursor {.importcpp: "(nullptr)".}
+proc toMovieVideoCursor*(_: type(nil)): MovieVideoCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovieVideoCursor], obj: TypedObject): MovieVideoCursor {.importcpp: "DCAST(MovieVideoCursor, @)".}
 
 type InkblotVideoCursor* {.importcpp: "PT(InkblotVideoCursor)", bycopy, pure, inheritable, header: "inkblotVideoCursor.h".} = object of MovieVideoCursor
 
-converter toInkblotVideoCursor*(_: type(nil)): InkblotVideoCursor {.importcpp: "(nullptr)".}
+proc toInkblotVideoCursor*(_: type(nil)): InkblotVideoCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[InkblotVideoCursor], obj: TypedObject): InkblotVideoCursor {.importcpp: "DCAST(InkblotVideoCursor, @)".}
 
 type MicrophoneAudio* {.importcpp: "PT(MicrophoneAudio)", bycopy, pure, inheritable, header: "microphoneAudio.h".} = object of MovieAudio
 
-converter toMicrophoneAudio*(_: type(nil)): MicrophoneAudio {.importcpp: "(nullptr)".}
+proc toMicrophoneAudio*(_: type(nil)): MicrophoneAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MicrophoneAudio], obj: TypedObject): MicrophoneAudio {.importcpp: "DCAST(MicrophoneAudio, @)".}
 
 type OpusAudio* {.importcpp: "PT(OpusAudio)", bycopy, pure, inheritable, header: "opusAudio.h".} = object of MovieAudio
 
-converter toOpusAudio*(_: type(nil)): OpusAudio {.importcpp: "(nullptr)".}
+proc toOpusAudio*(_: type(nil)): OpusAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OpusAudio], obj: TypedObject): OpusAudio {.importcpp: "DCAST(OpusAudio, @)".}
 
 type OpusAudioCursor* {.importcpp: "PT(OpusAudioCursor)", bycopy, pure, inheritable, header: "opusAudioCursor.h".} = object of MovieAudioCursor
 
-converter toOpusAudioCursor*(_: type(nil)): OpusAudioCursor {.importcpp: "(nullptr)".}
+proc toOpusAudioCursor*(_: type(nil)): OpusAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OpusAudioCursor], obj: TypedObject): OpusAudioCursor {.importcpp: "DCAST(OpusAudioCursor, @)".}
 
 type UserDataAudio* {.importcpp: "PT(UserDataAudio)", bycopy, pure, inheritable, header: "userDataAudio.h".} = object of MovieAudio
 
-converter toUserDataAudio*(_: type(nil)): UserDataAudio {.importcpp: "(nullptr)".}
+proc toUserDataAudio*(_: type(nil)): UserDataAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UserDataAudio], obj: TypedObject): UserDataAudio {.importcpp: "DCAST(UserDataAudio, @)".}
 
 type UserDataAudioCursor* {.importcpp: "PT(UserDataAudioCursor)", bycopy, pure, inheritable, header: "userDataAudioCursor.h".} = object of MovieAudioCursor
 
-converter toUserDataAudioCursor*(_: type(nil)): UserDataAudioCursor {.importcpp: "(nullptr)".}
+proc toUserDataAudioCursor*(_: type(nil)): UserDataAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UserDataAudioCursor], obj: TypedObject): UserDataAudioCursor {.importcpp: "DCAST(UserDataAudioCursor, @)".}
 
 type VorbisAudio* {.importcpp: "PT(VorbisAudio)", bycopy, pure, inheritable, header: "vorbisAudio.h".} = object of MovieAudio
 
-converter toVorbisAudio*(_: type(nil)): VorbisAudio {.importcpp: "(nullptr)".}
+proc toVorbisAudio*(_: type(nil)): VorbisAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VorbisAudio], obj: TypedObject): VorbisAudio {.importcpp: "DCAST(VorbisAudio, @)".}
 
 type VorbisAudioCursor* {.importcpp: "PT(VorbisAudioCursor)", bycopy, pure, inheritable, header: "vorbisAudioCursor.h".} = object of MovieAudioCursor
 
-converter toVorbisAudioCursor*(_: type(nil)): VorbisAudioCursor {.importcpp: "(nullptr)".}
+proc toVorbisAudioCursor*(_: type(nil)): VorbisAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VorbisAudioCursor], obj: TypedObject): VorbisAudioCursor {.importcpp: "DCAST(VorbisAudioCursor, @)".}
 
 type WavAudio* {.importcpp: "PT(WavAudio)", bycopy, pure, inheritable, header: "wavAudio.h".} = object of MovieAudio
 
-converter toWavAudio*(_: type(nil)): WavAudio {.importcpp: "(nullptr)".}
+proc toWavAudio*(_: type(nil)): WavAudio {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[WavAudio], obj: TypedObject): WavAudio {.importcpp: "DCAST(WavAudio, @)".}
 
 type WavAudioCursor* {.importcpp: "PT(WavAudioCursor)", bycopy, pure, inheritable, header: "wavAudioCursor.h".} = object of MovieAudioCursor
 
-converter toWavAudioCursor*(_: type(nil)): WavAudioCursor {.importcpp: "(nullptr)".}
+proc toWavAudioCursor*(_: type(nil)): WavAudioCursor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[WavAudioCursor], obj: TypedObject): WavAudioCursor {.importcpp: "DCAST(WavAudioCursor, @)".}
 
 type CardMaker* {.importcpp: "CardMaker", pure, inheritable, header: "cardMaker.h".} = object of Namable
@@ -2208,7 +2208,7 @@ type FisheyeMaker* {.importcpp: "FisheyeMaker", pure, inheritable, header: "fish
 
 type TextProperties* {.importcpp: "TextProperties*", bycopy, pure, inheritable, header: "textProperties.h".} = object
 
-converter toTextProperties*(_: type(nil)): TextProperties {.importcpp: "(nullptr)".}
+proc toTextProperties*(_: type(nil)): TextProperties {.importcpp: "(nullptr)".}
 
 type TextProperties_Alignment {.importcpp: "TextProperties::Alignment", pure, header: "textProperties.h".} = enum
   A_left = 0
@@ -2240,10 +2240,10 @@ template D_rtl*(_: typedesc[TextProperties]): TextProperties_Direction = TextPro
 
 type TextNode* {.importcpp: "PT(TextNode)", bycopy, pure, inheritable, header: "textNode.h".} = object of PandaNode
 
-converter upcastToTextEncoder*(_: typedesc[TextNode]): typedesc[TextEncoder] = typedesc[TextEncoder]
-converter upcastToTextProperties*(_: typedesc[TextNode]): typedesc[TextProperties] = typedesc[TextProperties]
+proc upcastToTextEncoder*(_: typedesc[TextNode]): typedesc[TextEncoder] = typedesc[TextEncoder]
+proc upcastToTextProperties*(_: typedesc[TextNode]): typedesc[TextProperties] = typedesc[TextProperties]
 
-converter toTextNode*(_: type(nil)): TextNode {.importcpp: "(nullptr)".}
+proc toTextNode*(_: type(nil)): TextNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextNode], obj: TypedObject): TextNode {.importcpp: "DCAST(TextNode, @)".}
 
 type TextNode_FlattenFlags {.importcpp: "TextNode::FlattenFlags", pure, header: "textNode.h".} = enum
@@ -2264,7 +2264,7 @@ template FF_dynamicMerge*(_: typedesc[TextNode]): TextNode_FlattenFlags = TextNo
 
 type FrameRateMeter* {.importcpp: "PT(FrameRateMeter)", bycopy, pure, inheritable, header: "frameRateMeter.h".} = object of TextNode
 
-converter toFrameRateMeter*(_: type(nil)): FrameRateMeter {.importcpp: "(nullptr)".}
+proc toFrameRateMeter*(_: type(nil)): FrameRateMeter {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FrameRateMeter], obj: TypedObject): FrameRateMeter {.importcpp: "DCAST(FrameRateMeter, @)".}
 
 type GeoMipTerrain* {.importcpp: "GeoMipTerrain", pure, inheritable, header: "geoMipTerrain.h".} = object of TypedObject
@@ -2293,9 +2293,9 @@ type MeshDrawer2D* {.importcpp: "MeshDrawer2D", pure, inheritable, header: "mesh
 
 type Texture* {.importcpp: "PT(Texture)", bycopy, pure, inheritable, header: "texture.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[Texture]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[Texture]): typedesc[Namable] = typedesc[Namable]
 
-converter toTexture*(_: type(nil)): Texture {.importcpp: "(nullptr)".}
+proc toTexture*(_: type(nil)): Texture {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Texture], obj: TypedObject): Texture {.importcpp: "DCAST(Texture, @)".}
 
 type Texture_TextureType {.importcpp: "Texture::TextureType", pure, header: "texture.h".} = enum
@@ -2548,39 +2548,39 @@ template QL_best*(_: typedesc[Texture]): Texture_QualityLevel = Texture_QualityL
 
 type MovieTexture* {.importcpp: "PT(MovieTexture)", bycopy, pure, inheritable, header: "movieTexture.h".} = object of Texture
 
-converter toMovieTexture*(_: type(nil)): MovieTexture {.importcpp: "(nullptr)".}
+proc toMovieTexture*(_: type(nil)): MovieTexture {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovieTexture], obj: TypedObject): MovieTexture {.importcpp: "DCAST(MovieTexture, @)".}
 
 type MultitexReducer* {.importcpp: "MultitexReducer", pure, inheritable, header: "multitexReducer.h".} = object
 
 type VertexTransform* {.importcpp: "PT(VertexTransform)", bycopy, pure, inheritable, header: "vertexTransform.h".} = object of TypedWritableReferenceCount
 
-converter toVertexTransform*(_: type(nil)): VertexTransform {.importcpp: "(nullptr)".}
+proc toVertexTransform*(_: type(nil)): VertexTransform {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VertexTransform], obj: TypedObject): VertexTransform {.importcpp: "DCAST(VertexTransform, @)".}
 
 type NodeVertexTransform* {.importcpp: "PT(NodeVertexTransform)", bycopy, pure, inheritable, header: "nodeVertexTransform.h".} = object of VertexTransform
 
-converter toNodeVertexTransform*(_: type(nil)): NodeVertexTransform {.importcpp: "(nullptr)".}
+proc toNodeVertexTransform*(_: type(nil)): NodeVertexTransform {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NodeVertexTransform], obj: TypedObject): NodeVertexTransform {.importcpp: "DCAST(NodeVertexTransform, @)".}
 
 type ShaderTerrainMesh* {.importcpp: "PT(ShaderTerrainMesh)", bycopy, pure, inheritable, header: "shaderTerrainMesh.h".} = object of PandaNode
 
-converter toShaderTerrainMesh*(_: type(nil)): ShaderTerrainMesh {.importcpp: "(nullptr)".}
+proc toShaderTerrainMesh*(_: type(nil)): ShaderTerrainMesh {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShaderTerrainMesh], obj: TypedObject): ShaderTerrainMesh {.importcpp: "DCAST(ShaderTerrainMesh, @)".}
 
 type SceneGraphAnalyzerMeter* {.importcpp: "PT(SceneGraphAnalyzerMeter)", bycopy, pure, inheritable, header: "sceneGraphAnalyzerMeter.h".} = object of TextNode
 
-converter toSceneGraphAnalyzerMeter*(_: type(nil)): SceneGraphAnalyzerMeter {.importcpp: "(nullptr)".}
+proc toSceneGraphAnalyzerMeter*(_: type(nil)): SceneGraphAnalyzerMeter {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SceneGraphAnalyzerMeter], obj: TypedObject): SceneGraphAnalyzerMeter {.importcpp: "DCAST(SceneGraphAnalyzerMeter, @)".}
 
 type RigidBodyCombiner* {.importcpp: "PT(RigidBodyCombiner)", bycopy, pure, inheritable, header: "rigidBodyCombiner.h".} = object of PandaNode
 
-converter toRigidBodyCombiner*(_: type(nil)): RigidBodyCombiner {.importcpp: "(nullptr)".}
+proc toRigidBodyCombiner*(_: type(nil)): RigidBodyCombiner {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RigidBodyCombiner], obj: TypedObject): RigidBodyCombiner {.importcpp: "DCAST(RigidBodyCombiner, @)".}
 
 type PipeOcclusionCullTraverser* {.importcpp: "PT(PipeOcclusionCullTraverser)", bycopy, pure, inheritable, header: "pipeOcclusionCullTraverser.h".} = object of CullTraverser
 
-converter toPipeOcclusionCullTraverser*(_: type(nil)): PipeOcclusionCullTraverser {.importcpp: "(nullptr)".}
+proc toPipeOcclusionCullTraverser*(_: type(nil)): PipeOcclusionCullTraverser {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PipeOcclusionCullTraverser], obj: TypedObject): PipeOcclusionCullTraverser {.importcpp: "DCAST(PipeOcclusionCullTraverser, @)".}
 
 type PfmVizzer* {.importcpp: "PfmVizzer", pure, inheritable, header: "pfmVizzer.h".} = object
@@ -2625,26 +2625,26 @@ template MF_both*(_: typedesc[PfmVizzer]): PfmVizzer_MeshFace = PfmVizzer_MeshFa
 
 type AnimGroup* {.importcpp: "PT(AnimGroup)", bycopy, pure, inheritable, header: "animGroup.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[AnimGroup]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[AnimGroup]): typedesc[Namable] = typedesc[Namable]
 
-converter toAnimGroup*(_: type(nil)): AnimGroup {.importcpp: "(nullptr)".}
+proc toAnimGroup*(_: type(nil)): AnimGroup {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimGroup], obj: TypedObject): AnimGroup {.importcpp: "DCAST(AnimGroup, @)".}
 
 type AnimBundle* {.importcpp: "PT(AnimBundle)", bycopy, pure, inheritable, header: "animBundle.h".} = object of AnimGroup
 
-converter toAnimBundle*(_: type(nil)): AnimBundle {.importcpp: "(nullptr)".}
+proc toAnimBundle*(_: type(nil)): AnimBundle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimBundle], obj: TypedObject): AnimBundle {.importcpp: "DCAST(AnimBundle, @)".}
 
 type AnimBundleNode* {.importcpp: "PT(AnimBundleNode)", bycopy, pure, inheritable, header: "animBundleNode.h".} = object of PandaNode
 
-converter toAnimBundleNode*(_: type(nil)): AnimBundleNode {.importcpp: "(nullptr)".}
+proc toAnimBundleNode*(_: type(nil)): AnimBundleNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimBundleNode], obj: TypedObject): AnimBundleNode {.importcpp: "DCAST(AnimBundleNode, @)".}
 
 type PartGroup* {.importcpp: "PT(PartGroup)", bycopy, pure, inheritable, header: "partGroup.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[PartGroup]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[PartGroup]): typedesc[Namable] = typedesc[Namable]
 
-converter toPartGroup*(_: type(nil)): PartGroup {.importcpp: "(nullptr)".}
+proc toPartGroup*(_: type(nil)): PartGroup {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PartGroup], obj: TypedObject): PartGroup {.importcpp: "DCAST(PartGroup, @)".}
 
 type PartGroup_HierarchyMatchFlags {.importcpp: "PartGroup::HierarchyMatchFlags", pure, header: "partGroup.h".} = enum
@@ -2661,59 +2661,59 @@ template HMF_okWrongRootName*(_: typedesc[PartGroup]): PartGroup_HierarchyMatchF
 
 type AnimControl* {.importcpp: "PT(AnimControl)", bycopy, pure, inheritable, header: "animControl.h".} = object of TypedReferenceCount
 
-converter upcastToAnimInterface*(_: typedesc[AnimControl]): typedesc[AnimInterface] = typedesc[AnimInterface]
-converter upcastToNamable*(_: typedesc[AnimControl]): typedesc[Namable] = typedesc[Namable]
+proc upcastToAnimInterface*(_: typedesc[AnimControl]): typedesc[AnimInterface] = typedesc[AnimInterface]
+proc upcastToNamable*(_: typedesc[AnimControl]): typedesc[Namable] = typedesc[Namable]
 
-converter toAnimControl*(_: type(nil)): AnimControl {.importcpp: "(nullptr)".}
+proc toAnimControl*(_: type(nil)): AnimControl {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimControl], obj: TypedObject): AnimControl {.importcpp: "DCAST(AnimControl, @)".}
 
 type AnimChannelBase* {.importcpp: "PT(AnimChannelBase)", bycopy, pure, inheritable, header: "animChannelBase.h".} = object of AnimGroup
 
-converter toAnimChannelBase*(_: type(nil)): AnimChannelBase {.importcpp: "(nullptr)".}
+proc toAnimChannelBase*(_: type(nil)): AnimChannelBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimChannelBase], obj: TypedObject): AnimChannelBase {.importcpp: "DCAST(AnimChannelBase, @)".}
 
 type AnimChannelMatrixDynamic* {.importcpp: "PT(AnimChannelMatrixDynamic)", bycopy, pure, inheritable, header: "animChannelMatrixDynamic.h".} = object
 
-converter toAnimChannelMatrixDynamic*(_: type(nil)): AnimChannelMatrixDynamic {.importcpp: "(nullptr)".}
+proc toAnimChannelMatrixDynamic*(_: type(nil)): AnimChannelMatrixDynamic {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimChannelMatrixDynamic], obj: TypedObject): AnimChannelMatrixDynamic {.importcpp: "DCAST(AnimChannelMatrixDynamic, @)".}
 
 type AnimChannelMatrixXfmTable* {.importcpp: "PT(AnimChannelMatrixXfmTable)", bycopy, pure, inheritable, header: "animChannelMatrixXfmTable.h".} = object
 
-converter toAnimChannelMatrixXfmTable*(_: type(nil)): AnimChannelMatrixXfmTable {.importcpp: "(nullptr)".}
+proc toAnimChannelMatrixXfmTable*(_: type(nil)): AnimChannelMatrixXfmTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimChannelMatrixXfmTable], obj: TypedObject): AnimChannelMatrixXfmTable {.importcpp: "DCAST(AnimChannelMatrixXfmTable, @)".}
 
 type AnimChannelScalarDynamic* {.importcpp: "PT(AnimChannelScalarDynamic)", bycopy, pure, inheritable, header: "animChannelScalarDynamic.h".} = object
 
-converter toAnimChannelScalarDynamic*(_: type(nil)): AnimChannelScalarDynamic {.importcpp: "(nullptr)".}
+proc toAnimChannelScalarDynamic*(_: type(nil)): AnimChannelScalarDynamic {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimChannelScalarDynamic], obj: TypedObject): AnimChannelScalarDynamic {.importcpp: "DCAST(AnimChannelScalarDynamic, @)".}
 
 type AnimChannelScalarTable* {.importcpp: "PT(AnimChannelScalarTable)", bycopy, pure, inheritable, header: "animChannelScalarTable.h".} = object
 
-converter toAnimChannelScalarTable*(_: type(nil)): AnimChannelScalarTable {.importcpp: "(nullptr)".}
+proc toAnimChannelScalarTable*(_: type(nil)): AnimChannelScalarTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimChannelScalarTable], obj: TypedObject): AnimChannelScalarTable {.importcpp: "DCAST(AnimChannelScalarTable, @)".}
 
 type AnimControlCollection* {.importcpp: "AnimControlCollection", pure, inheritable, header: "animControlCollection.h".} = object
 
 type CopyOnWriteObject* {.importcpp: "PT(CopyOnWriteObject)", bycopy, pure, inheritable, header: "copyOnWriteObject.h".} = object of CachedTypedWritableReferenceCount
 
-converter toCopyOnWriteObject*(_: type(nil)): CopyOnWriteObject {.importcpp: "(nullptr)".}
+proc toCopyOnWriteObject*(_: type(nil)): CopyOnWriteObject {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CopyOnWriteObject], obj: TypedObject): CopyOnWriteObject {.importcpp: "DCAST(CopyOnWriteObject, @)".}
 
 type AnimPreloadTable* {.importcpp: "PT(AnimPreloadTable)", bycopy, pure, inheritable, header: "animPreloadTable.h".} = object of CopyOnWriteObject
 
-converter toAnimPreloadTable*(_: type(nil)): AnimPreloadTable {.importcpp: "(nullptr)".}
+proc toAnimPreloadTable*(_: type(nil)): AnimPreloadTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimPreloadTable], obj: TypedObject): AnimPreloadTable {.importcpp: "DCAST(AnimPreloadTable, @)".}
 
 type PartSubset* {.importcpp: "PartSubset", pure, inheritable, header: "partSubset.h".} = object
 
 type BindAnimRequest* {.importcpp: "PT(BindAnimRequest)", bycopy, pure, inheritable, header: "bindAnimRequest.h".} = object of ModelLoadRequest
 
-converter toBindAnimRequest*(_: type(nil)): BindAnimRequest {.importcpp: "(nullptr)".}
+proc toBindAnimRequest*(_: type(nil)): BindAnimRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BindAnimRequest], obj: TypedObject): BindAnimRequest {.importcpp: "DCAST(BindAnimRequest, @)".}
 
 type PartBundle* {.importcpp: "PT(PartBundle)", bycopy, pure, inheritable, header: "partBundle.h".} = object of PartGroup
 
-converter toPartBundle*(_: type(nil)): PartBundle {.importcpp: "(nullptr)".}
+proc toPartBundle*(_: type(nil)): PartBundle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PartBundle], obj: TypedObject): PartBundle {.importcpp: "DCAST(PartBundle, @)".}
 
 type PartBundle_BlendType {.importcpp: "PartBundle::BlendType", pure, header: "partBundle.h".} = enum
@@ -2732,27 +2732,27 @@ template BT_componentwiseQuat*(_: typedesc[PartBundle]): PartBundle_BlendType = 
 
 type PartBundleNode* {.importcpp: "PT(PartBundleNode)", bycopy, pure, inheritable, header: "partBundleNode.h".} = object of PandaNode
 
-converter toPartBundleNode*(_: type(nil)): PartBundleNode {.importcpp: "(nullptr)".}
+proc toPartBundleNode*(_: type(nil)): PartBundleNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PartBundleNode], obj: TypedObject): PartBundleNode {.importcpp: "DCAST(PartBundleNode, @)".}
 
 type PartBundleHandle* {.importcpp: "PT(PartBundleHandle)", bycopy, pure, inheritable, header: "partBundleHandle.h".} = object of ReferenceCount
 
-converter toPartBundleHandle*(_: type(nil)): PartBundleHandle {.importcpp: "(nullptr)".}
+proc toPartBundleHandle*(_: type(nil)): PartBundleHandle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PartBundleHandle], obj: TypedObject): PartBundleHandle {.importcpp: "DCAST(PartBundleHandle, @)".}
 
 type MovingPartBase* {.importcpp: "PT(MovingPartBase)", bycopy, pure, inheritable, header: "movingPartBase.h".} = object of PartGroup
 
-converter toMovingPartBase*(_: type(nil)): MovingPartBase {.importcpp: "(nullptr)".}
+proc toMovingPartBase*(_: type(nil)): MovingPartBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovingPartBase], obj: TypedObject): MovingPartBase {.importcpp: "DCAST(MovingPartBase, @)".}
 
 type MovingPartMatrix* {.importcpp: "PT(MovingPartMatrix)", bycopy, pure, inheritable, header: "movingPartMatrix.h".} = object
 
-converter toMovingPartMatrix*(_: type(nil)): MovingPartMatrix {.importcpp: "(nullptr)".}
+proc toMovingPartMatrix*(_: type(nil)): MovingPartMatrix {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovingPartMatrix], obj: TypedObject): MovingPartMatrix {.importcpp: "DCAST(MovingPartMatrix, @)".}
 
 type MovingPartScalar* {.importcpp: "PT(MovingPartScalar)", bycopy, pure, inheritable, header: "movingPartScalar.h".} = object
 
-converter toMovingPartScalar*(_: type(nil)): MovingPartScalar {.importcpp: "(nullptr)".}
+proc toMovingPartScalar*(_: type(nil)): MovingPartScalar {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MovingPartScalar], obj: TypedObject): MovingPartScalar {.importcpp: "DCAST(MovingPartScalar, @)".}
 
 type PStatClient* {.importcpp: "PStatClient", pure, inheritable, header: "pStatClient.h".} = object
@@ -2763,72 +2763,72 @@ type PStatThread* {.importcpp: "PStatThread", pure, inheritable, header: "pStatT
 
 type PStatCollectorForward* {.importcpp: "PT(PStatCollectorForward)", bycopy, pure, inheritable, header: "pStatCollectorForward.h".} = object of PStatCollectorForwardBase
 
-converter toPStatCollectorForward*(_: type(nil)): PStatCollectorForward {.importcpp: "(nullptr)".}
+proc toPStatCollectorForward*(_: type(nil)): PStatCollectorForward {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PStatCollectorForward], obj: TypedObject): PStatCollectorForward {.importcpp: "DCAST(PStatCollectorForward, @)".}
 
 type CharacterJoint* {.importcpp: "PT(CharacterJoint)", bycopy, pure, inheritable, header: "characterJoint.h".} = object of MovingPartMatrix
 
-converter toCharacterJoint*(_: type(nil)): CharacterJoint {.importcpp: "(nullptr)".}
+proc toCharacterJoint*(_: type(nil)): CharacterJoint {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CharacterJoint], obj: TypedObject): CharacterJoint {.importcpp: "DCAST(CharacterJoint, @)".}
 
 type CharacterSlider* {.importcpp: "PT(CharacterSlider)", bycopy, pure, inheritable, header: "characterSlider.h".} = object of MovingPartScalar
 
-converter toCharacterSlider*(_: type(nil)): CharacterSlider {.importcpp: "(nullptr)".}
+proc toCharacterSlider*(_: type(nil)): CharacterSlider {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CharacterSlider], obj: TypedObject): CharacterSlider {.importcpp: "DCAST(CharacterSlider, @)".}
 
 type VertexSlider* {.importcpp: "PT(VertexSlider)", bycopy, pure, inheritable, header: "vertexSlider.h".} = object of TypedWritableReferenceCount
 
-converter toVertexSlider*(_: type(nil)): VertexSlider {.importcpp: "(nullptr)".}
+proc toVertexSlider*(_: type(nil)): VertexSlider {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VertexSlider], obj: TypedObject): VertexSlider {.importcpp: "DCAST(VertexSlider, @)".}
 
 type CharacterVertexSlider* {.importcpp: "PT(CharacterVertexSlider)", bycopy, pure, inheritable, header: "characterVertexSlider.h".} = object of VertexSlider
 
-converter toCharacterVertexSlider*(_: type(nil)): CharacterVertexSlider {.importcpp: "(nullptr)".}
+proc toCharacterVertexSlider*(_: type(nil)): CharacterVertexSlider {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CharacterVertexSlider], obj: TypedObject): CharacterVertexSlider {.importcpp: "DCAST(CharacterVertexSlider, @)".}
 
 type JointVertexTransform* {.importcpp: "PT(JointVertexTransform)", bycopy, pure, inheritable, header: "jointVertexTransform.h".} = object of VertexTransform
 
-converter toJointVertexTransform*(_: type(nil)): JointVertexTransform {.importcpp: "(nullptr)".}
+proc toJointVertexTransform*(_: type(nil)): JointVertexTransform {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[JointVertexTransform], obj: TypedObject): JointVertexTransform {.importcpp: "DCAST(JointVertexTransform, @)".}
 
 type Character* {.importcpp: "PT(Character)", bycopy, pure, inheritable, header: "character.h".} = object of PartBundleNode
 
-converter toCharacter*(_: type(nil)): Character {.importcpp: "(nullptr)".}
+proc toCharacter*(_: type(nil)): Character {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Character], obj: TypedObject): Character {.importcpp: "DCAST(Character, @)".}
 
 type CharacterJointBundle* {.importcpp: "PT(CharacterJointBundle)", bycopy, pure, inheritable, header: "characterJointBundle.h".} = object of PartBundle
 
-converter toCharacterJointBundle*(_: type(nil)): CharacterJointBundle {.importcpp: "(nullptr)".}
+proc toCharacterJointBundle*(_: type(nil)): CharacterJointBundle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CharacterJointBundle], obj: TypedObject): CharacterJointBundle {.importcpp: "DCAST(CharacterJointBundle, @)".}
 
 type CharacterJointEffect* {.importcpp: "PT(CharacterJointEffect)", bycopy, pure, inheritable, header: "characterJointEffect.h".} = object of RenderEffect
 
-converter toCharacterJointEffect*(_: type(nil)): CharacterJointEffect {.importcpp: "(nullptr)".}
+proc toCharacterJointEffect*(_: type(nil)): CharacterJointEffect {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CharacterJointEffect], obj: TypedObject): CharacterJointEffect {.importcpp: "DCAST(CharacterJointEffect, @)".}
 
 type CollisionSolid* {.importcpp: "PT(CollisionSolid)", bycopy, pure, inheritable, header: "collisionSolid.h".} = object of CopyOnWriteObject
 
-converter toCollisionSolid*(_: type(nil)): CollisionSolid {.importcpp: "(nullptr)".}
+proc toCollisionSolid*(_: type(nil)): CollisionSolid {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionSolid], obj: TypedObject): CollisionSolid {.importcpp: "DCAST(CollisionSolid, @)".}
 
 type CollisionBox* {.importcpp: "PT(CollisionBox)", bycopy, pure, inheritable, header: "collisionBox.h".} = object of CollisionSolid
 
-converter toCollisionBox*(_: type(nil)): CollisionBox {.importcpp: "(nullptr)".}
+proc toCollisionBox*(_: type(nil)): CollisionBox {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionBox], obj: TypedObject): CollisionBox {.importcpp: "DCAST(CollisionBox, @)".}
 
 type CollisionCapsule* {.importcpp: "PT(CollisionCapsule)", bycopy, pure, inheritable, header: "collisionCapsule.h".} = object of CollisionSolid
 
-converter toCollisionCapsule*(_: type(nil)): CollisionCapsule {.importcpp: "(nullptr)".}
+proc toCollisionCapsule*(_: type(nil)): CollisionCapsule {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionCapsule], obj: TypedObject): CollisionCapsule {.importcpp: "DCAST(CollisionCapsule, @)".}
 
 type CollisionHandler* {.importcpp: "PT(CollisionHandler)", bycopy, pure, inheritable, header: "collisionHandler.h".} = object of TypedReferenceCount
 
-converter toCollisionHandler*(_: type(nil)): CollisionHandler {.importcpp: "(nullptr)".}
+proc toCollisionHandler*(_: type(nil)): CollisionHandler {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandler], obj: TypedObject): CollisionHandler {.importcpp: "DCAST(CollisionHandler, @)".}
 
 type CollisionNode* {.importcpp: "PT(CollisionNode)", bycopy, pure, inheritable, header: "collisionNode.h".} = object of PandaNode
 
-converter toCollisionNode*(_: type(nil)): CollisionNode {.importcpp: "(nullptr)".}
+proc toCollisionNode*(_: type(nil)): CollisionNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionNode], obj: TypedObject): CollisionNode {.importcpp: "DCAST(CollisionNode, @)".}
 
 type CollisionTraverser* {.importcpp: "CollisionTraverser", pure, inheritable, header: "collisionTraverser.h".} = object of Namable
@@ -2837,108 +2837,108 @@ type CollisionRecorder* {.importcpp: "CollisionRecorder", pure, inheritable, hea
 
 type CollisionEntry* {.importcpp: "PT(CollisionEntry)", bycopy, pure, inheritable, header: "collisionEntry.h".} = object of TypedWritableReferenceCount
 
-converter toCollisionEntry*(_: type(nil)): CollisionEntry {.importcpp: "(nullptr)".}
+proc toCollisionEntry*(_: type(nil)): CollisionEntry {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionEntry], obj: TypedObject): CollisionEntry {.importcpp: "DCAST(CollisionEntry, @)".}
 
 type CollisionPlane* {.importcpp: "PT(CollisionPlane)", bycopy, pure, inheritable, header: "collisionPlane.h".} = object of CollisionSolid
 
-converter toCollisionPlane*(_: type(nil)): CollisionPlane {.importcpp: "(nullptr)".}
+proc toCollisionPlane*(_: type(nil)): CollisionPlane {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionPlane], obj: TypedObject): CollisionPlane {.importcpp: "DCAST(CollisionPlane, @)".}
 
 type CollisionFloorMesh* {.importcpp: "PT(CollisionFloorMesh)", bycopy, pure, inheritable, header: "collisionFloorMesh.h".} = object of CollisionSolid
 
-converter toCollisionFloorMesh*(_: type(nil)): CollisionFloorMesh {.importcpp: "(nullptr)".}
+proc toCollisionFloorMesh*(_: type(nil)): CollisionFloorMesh {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionFloorMesh], obj: TypedObject): CollisionFloorMesh {.importcpp: "DCAST(CollisionFloorMesh, @)".}
 
 type CollisionPolygon* {.importcpp: "PT(CollisionPolygon)", bycopy, pure, inheritable, header: "collisionPolygon.h".} = object of CollisionPlane
 
-converter toCollisionPolygon*(_: type(nil)): CollisionPolygon {.importcpp: "(nullptr)".}
+proc toCollisionPolygon*(_: type(nil)): CollisionPolygon {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionPolygon], obj: TypedObject): CollisionPolygon {.importcpp: "DCAST(CollisionPolygon, @)".}
 
 type CollisionHandlerEvent* {.importcpp: "PT(CollisionHandlerEvent)", bycopy, pure, inheritable, header: "collisionHandlerEvent.h".} = object of CollisionHandler
 
-converter toCollisionHandlerEvent*(_: type(nil)): CollisionHandlerEvent {.importcpp: "(nullptr)".}
+proc toCollisionHandlerEvent*(_: type(nil)): CollisionHandlerEvent {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerEvent], obj: TypedObject): CollisionHandlerEvent {.importcpp: "DCAST(CollisionHandlerEvent, @)".}
 
 type CollisionHandlerPhysical* {.importcpp: "PT(CollisionHandlerPhysical)", bycopy, pure, inheritable, header: "collisionHandlerPhysical.h".} = object of CollisionHandlerEvent
 
-converter toCollisionHandlerPhysical*(_: type(nil)): CollisionHandlerPhysical {.importcpp: "(nullptr)".}
+proc toCollisionHandlerPhysical*(_: type(nil)): CollisionHandlerPhysical {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerPhysical], obj: TypedObject): CollisionHandlerPhysical {.importcpp: "DCAST(CollisionHandlerPhysical, @)".}
 
 type CollisionHandlerFloor* {.importcpp: "PT(CollisionHandlerFloor)", bycopy, pure, inheritable, header: "collisionHandlerFloor.h".} = object of CollisionHandlerPhysical
 
-converter toCollisionHandlerFloor*(_: type(nil)): CollisionHandlerFloor {.importcpp: "(nullptr)".}
+proc toCollisionHandlerFloor*(_: type(nil)): CollisionHandlerFloor {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerFloor], obj: TypedObject): CollisionHandlerFloor {.importcpp: "DCAST(CollisionHandlerFloor, @)".}
 
 type CollisionHandlerPusher* {.importcpp: "PT(CollisionHandlerPusher)", bycopy, pure, inheritable, header: "collisionHandlerPusher.h".} = object of CollisionHandlerPhysical
 
-converter toCollisionHandlerPusher*(_: type(nil)): CollisionHandlerPusher {.importcpp: "(nullptr)".}
+proc toCollisionHandlerPusher*(_: type(nil)): CollisionHandlerPusher {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerPusher], obj: TypedObject): CollisionHandlerPusher {.importcpp: "DCAST(CollisionHandlerPusher, @)".}
 
 type CollisionHandlerFluidPusher* {.importcpp: "PT(CollisionHandlerFluidPusher)", bycopy, pure, inheritable, header: "collisionHandlerFluidPusher.h".} = object of CollisionHandlerPusher
 
-converter toCollisionHandlerFluidPusher*(_: type(nil)): CollisionHandlerFluidPusher {.importcpp: "(nullptr)".}
+proc toCollisionHandlerFluidPusher*(_: type(nil)): CollisionHandlerFluidPusher {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerFluidPusher], obj: TypedObject): CollisionHandlerFluidPusher {.importcpp: "DCAST(CollisionHandlerFluidPusher, @)".}
 
 type CollisionHandlerGravity* {.importcpp: "PT(CollisionHandlerGravity)", bycopy, pure, inheritable, header: "collisionHandlerGravity.h".} = object of CollisionHandlerPhysical
 
-converter toCollisionHandlerGravity*(_: type(nil)): CollisionHandlerGravity {.importcpp: "(nullptr)".}
+proc toCollisionHandlerGravity*(_: type(nil)): CollisionHandlerGravity {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerGravity], obj: TypedObject): CollisionHandlerGravity {.importcpp: "DCAST(CollisionHandlerGravity, @)".}
 
 type CollisionHandlerHighestEvent* {.importcpp: "PT(CollisionHandlerHighestEvent)", bycopy, pure, inheritable, header: "collisionHandlerHighestEvent.h".} = object of CollisionHandlerEvent
 
-converter toCollisionHandlerHighestEvent*(_: type(nil)): CollisionHandlerHighestEvent {.importcpp: "(nullptr)".}
+proc toCollisionHandlerHighestEvent*(_: type(nil)): CollisionHandlerHighestEvent {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerHighestEvent], obj: TypedObject): CollisionHandlerHighestEvent {.importcpp: "DCAST(CollisionHandlerHighestEvent, @)".}
 
 type CollisionHandlerQueue* {.importcpp: "PT(CollisionHandlerQueue)", bycopy, pure, inheritable, header: "collisionHandlerQueue.h".} = object of CollisionHandler
 
-converter toCollisionHandlerQueue*(_: type(nil)): CollisionHandlerQueue {.importcpp: "(nullptr)".}
+proc toCollisionHandlerQueue*(_: type(nil)): CollisionHandlerQueue {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionHandlerQueue], obj: TypedObject): CollisionHandlerQueue {.importcpp: "DCAST(CollisionHandlerQueue, @)".}
 
 type CollisionSphere* {.importcpp: "PT(CollisionSphere)", bycopy, pure, inheritable, header: "collisionSphere.h".} = object of CollisionSolid
 
-converter toCollisionSphere*(_: type(nil)): CollisionSphere {.importcpp: "(nullptr)".}
+proc toCollisionSphere*(_: type(nil)): CollisionSphere {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionSphere], obj: TypedObject): CollisionSphere {.importcpp: "DCAST(CollisionSphere, @)".}
 
 type CollisionInvSphere* {.importcpp: "PT(CollisionInvSphere)", bycopy, pure, inheritable, header: "collisionInvSphere.h".} = object of CollisionSphere
 
-converter toCollisionInvSphere*(_: type(nil)): CollisionInvSphere {.importcpp: "(nullptr)".}
+proc toCollisionInvSphere*(_: type(nil)): CollisionInvSphere {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionInvSphere], obj: TypedObject): CollisionInvSphere {.importcpp: "DCAST(CollisionInvSphere, @)".}
 
 type CollisionRay* {.importcpp: "PT(CollisionRay)", bycopy, pure, inheritable, header: "collisionRay.h".} = object of CollisionSolid
 
-converter toCollisionRay*(_: type(nil)): CollisionRay {.importcpp: "(nullptr)".}
+proc toCollisionRay*(_: type(nil)): CollisionRay {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionRay], obj: TypedObject): CollisionRay {.importcpp: "DCAST(CollisionRay, @)".}
 
 type CollisionLine* {.importcpp: "PT(CollisionLine)", bycopy, pure, inheritable, header: "collisionLine.h".} = object of CollisionRay
 
-converter toCollisionLine*(_: type(nil)): CollisionLine {.importcpp: "(nullptr)".}
+proc toCollisionLine*(_: type(nil)): CollisionLine {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionLine], obj: TypedObject): CollisionLine {.importcpp: "DCAST(CollisionLine, @)".}
 
 type CollisionParabola* {.importcpp: "PT(CollisionParabola)", bycopy, pure, inheritable, header: "collisionParabola.h".} = object of CollisionSolid
 
-converter toCollisionParabola*(_: type(nil)): CollisionParabola {.importcpp: "(nullptr)".}
+proc toCollisionParabola*(_: type(nil)): CollisionParabola {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionParabola], obj: TypedObject): CollisionParabola {.importcpp: "DCAST(CollisionParabola, @)".}
 
 type CollisionSegment* {.importcpp: "PT(CollisionSegment)", bycopy, pure, inheritable, header: "collisionSegment.h".} = object of CollisionSolid
 
-converter toCollisionSegment*(_: type(nil)): CollisionSegment {.importcpp: "(nullptr)".}
+proc toCollisionSegment*(_: type(nil)): CollisionSegment {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionSegment], obj: TypedObject): CollisionSegment {.importcpp: "DCAST(CollisionSegment, @)".}
 
 type CollisionTube* = CollisionCapsule
 
 type CollisionVisualizer* {.importcpp: "PT(CollisionVisualizer)", bycopy, pure, inheritable, header: "collisionVisualizer.h".} = object of PandaNode
 
-converter upcastToCollisionRecorder*(_: typedesc[CollisionVisualizer]): typedesc[CollisionRecorder] = typedesc[CollisionRecorder]
+proc upcastToCollisionRecorder*(_: typedesc[CollisionVisualizer]): typedesc[CollisionRecorder] = typedesc[CollisionRecorder]
 
-converter toCollisionVisualizer*(_: type(nil)): CollisionVisualizer {.importcpp: "(nullptr)".}
+proc toCollisionVisualizer*(_: type(nil)): CollisionVisualizer {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CollisionVisualizer], obj: TypedObject): CollisionVisualizer {.importcpp: "DCAST(CollisionVisualizer, @)".}
 
 type TrackerData* {.importcpp: "TrackerData", pure, inheritable, header: "trackerData.h".} = object
 
 type InputDevice* {.importcpp: "PT(InputDevice)", bycopy, pure, inheritable, header: "inputDevice.h".} = object of TypedReferenceCount
 
-converter toInputDevice*(_: type(nil)): InputDevice {.importcpp: "(nullptr)".}
+proc toInputDevice*(_: type(nil)): InputDevice {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[InputDevice], obj: TypedObject): InputDevice {.importcpp: "DCAST(InputDevice, @)".}
 
 type InputDevice_State {.importcpp: "InputDevice::State", pure, header: "inputDevice.h".} = enum
@@ -2955,22 +2955,22 @@ template S_down*(_: typedesc[InputDevice]): InputDevice_State = InputDevice_Stat
 
 type ClientBase* {.importcpp: "PT(ClientBase)", bycopy, pure, inheritable, header: "clientBase.h".} = object of TypedReferenceCount
 
-converter toClientBase*(_: type(nil)): ClientBase {.importcpp: "(nullptr)".}
+proc toClientBase*(_: type(nil)): ClientBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ClientBase], obj: TypedObject): ClientBase {.importcpp: "DCAST(ClientBase, @)".}
 
 type AnalogNode* {.importcpp: "PT(AnalogNode)", bycopy, pure, inheritable, header: "analogNode.h".} = object of DataNode
 
-converter toAnalogNode*(_: type(nil)): AnalogNode {.importcpp: "(nullptr)".}
+proc toAnalogNode*(_: type(nil)): AnalogNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnalogNode], obj: TypedObject): AnalogNode {.importcpp: "DCAST(AnalogNode, @)".}
 
 type ButtonNode* {.importcpp: "PT(ButtonNode)", bycopy, pure, inheritable, header: "buttonNode.h".} = object of DataNode
 
-converter toButtonNode*(_: type(nil)): ButtonNode {.importcpp: "(nullptr)".}
+proc toButtonNode*(_: type(nil)): ButtonNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ButtonNode], obj: TypedObject): ButtonNode {.importcpp: "DCAST(ButtonNode, @)".}
 
 type DialNode* {.importcpp: "PT(DialNode)", bycopy, pure, inheritable, header: "dialNode.h".} = object of DataNode
 
-converter toDialNode*(_: type(nil)): DialNode {.importcpp: "(nullptr)".}
+proc toDialNode*(_: type(nil)): DialNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DialNode], obj: TypedObject): DialNode {.importcpp: "DCAST(DialNode, @)".}
 
 type InputDeviceSet* {.importcpp: "InputDeviceSet", pure, inheritable, header: "inputDeviceSet.h".} = object
@@ -2979,34 +2979,34 @@ type InputDeviceManager* {.importcpp: "InputDeviceManager", pure, inheritable, h
 
 type InputDeviceNode* {.importcpp: "PT(InputDeviceNode)", bycopy, pure, inheritable, header: "inputDeviceNode.h".} = object of DataNode
 
-converter toInputDeviceNode*(_: type(nil)): InputDeviceNode {.importcpp: "(nullptr)".}
+proc toInputDeviceNode*(_: type(nil)): InputDeviceNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[InputDeviceNode], obj: TypedObject): InputDeviceNode {.importcpp: "DCAST(InputDeviceNode, @)".}
 
 type LinuxJoystickDevice* {.importcpp: "PT(LinuxJoystickDevice)", bycopy, pure, inheritable, header: "linuxJoystickDevice.h".} = object of InputDevice
 
-converter toLinuxJoystickDevice*(_: type(nil)): LinuxJoystickDevice {.importcpp: "(nullptr)".}
+proc toLinuxJoystickDevice*(_: type(nil)): LinuxJoystickDevice {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[LinuxJoystickDevice], obj: TypedObject): LinuxJoystickDevice {.importcpp: "DCAST(LinuxJoystickDevice, @)".}
 
 type TrackerNode* {.importcpp: "PT(TrackerNode)", bycopy, pure, inheritable, header: "trackerNode.h".} = object of DataNode
 
-converter toTrackerNode*(_: type(nil)): TrackerNode {.importcpp: "(nullptr)".}
+proc toTrackerNode*(_: type(nil)): TrackerNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TrackerNode], obj: TypedObject): TrackerNode {.importcpp: "DCAST(TrackerNode, @)".}
 
 type VirtualMouse* {.importcpp: "PT(VirtualMouse)", bycopy, pure, inheritable, header: "virtualMouse.h".} = object of DataNode
 
-converter toVirtualMouse*(_: type(nil)): VirtualMouse {.importcpp: "(nullptr)".}
+proc toVirtualMouse*(_: type(nil)): VirtualMouse {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VirtualMouse], obj: TypedObject): VirtualMouse {.importcpp: "DCAST(VirtualMouse, @)".}
 
 type DataGraphTraverser* {.importcpp: "DataGraphTraverser", pure, inheritable, header: "dataGraphTraverser.h".} = object
 
 type GraphicsDevice* {.importcpp: "PT(GraphicsDevice)", bycopy, pure, inheritable, header: "graphicsDevice.h".} = object of TypedReferenceCount
 
-converter toGraphicsDevice*(_: type(nil)): GraphicsDevice {.importcpp: "(nullptr)".}
+proc toGraphicsDevice*(_: type(nil)): GraphicsDevice {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsDevice], obj: TypedObject): GraphicsDevice {.importcpp: "DCAST(GraphicsDevice, @)".}
 
 type GraphicsPipe* {.importcpp: "PT(GraphicsPipe)", bycopy, pure, inheritable, header: "graphicsPipe.h".} = object of TypedReferenceCount
 
-converter toGraphicsPipe*(_: type(nil)): GraphicsPipe {.importcpp: "(nullptr)".}
+proc toGraphicsPipe*(_: type(nil)): GraphicsPipe {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsPipe], obj: TypedObject): GraphicsPipe {.importcpp: "DCAST(GraphicsPipe, @)".}
 
 type GraphicsPipe_OutputTypes {.importcpp: "GraphicsPipe::OutputTypes", pure, header: "graphicsPipe.h".} = enum
@@ -3077,7 +3077,7 @@ template DS_createDeviceError*(_: typedesc[DisplayInformation]): DisplayInformat
 
 type DrawableRegion* {.importcpp: "DrawableRegion*", bycopy, pure, inheritable, header: "drawableRegion.h".} = object
 
-converter toDrawableRegion*(_: type(nil)): DrawableRegion {.importcpp: "(nullptr)".}
+proc toDrawableRegion*(_: type(nil)): DrawableRegion {.importcpp: "(nullptr)".}
 
 type DrawableRegion_RenderTexturePlane {.importcpp: "DrawableRegion::RenderTexturePlane", pure, header: "drawableRegion.h".} = enum
   RTP_stencil = 0
@@ -3121,7 +3121,7 @@ template RTP_COUNT*(_: typedesc[DrawableRegion]): DrawableRegion_RenderTexturePl
 
 type WindowHandle* {.importcpp: "PT(WindowHandle)", bycopy, pure, inheritable, header: "windowHandle.h".} = object of TypedReferenceCount
 
-converter toWindowHandle*(_: type(nil)): WindowHandle {.importcpp: "(nullptr)".}
+proc toWindowHandle*(_: type(nil)): WindowHandle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[WindowHandle], obj: TypedObject): WindowHandle {.importcpp: "DCAST(WindowHandle, @)".}
 
 type WindowProperties* {.importcpp: "WindowProperties", pure, inheritable, header: "windowProperties.h".} = object
@@ -3152,21 +3152,21 @@ template M_confined*(_: typedesc[WindowProperties]): WindowProperties_MouseMode 
 
 type DisplayRegion* {.importcpp: "PT(DisplayRegion)", bycopy, pure, inheritable, header: "displayRegion.h".} = object of TypedReferenceCount
 
-converter upcastToDrawableRegion*(_: typedesc[DisplayRegion]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
+proc upcastToDrawableRegion*(_: typedesc[DisplayRegion]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
 
-converter toDisplayRegion*(_: type(nil)): DisplayRegion {.importcpp: "(nullptr)".}
+proc toDisplayRegion*(_: type(nil)): DisplayRegion {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DisplayRegion], obj: TypedObject): DisplayRegion {.importcpp: "DCAST(DisplayRegion, @)".}
 
 type GraphicsOutputBase* {.importcpp: "PT(GraphicsOutputBase)", bycopy, pure, inheritable, header: "graphicsOutputBase.h".} = object of TypedWritableReferenceCount
 
-converter toGraphicsOutputBase*(_: type(nil)): GraphicsOutputBase {.importcpp: "(nullptr)".}
+proc toGraphicsOutputBase*(_: type(nil)): GraphicsOutputBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsOutputBase], obj: TypedObject): GraphicsOutputBase {.importcpp: "DCAST(GraphicsOutputBase, @)".}
 
 type GraphicsOutput* {.importcpp: "PT(GraphicsOutput)", bycopy, pure, inheritable, header: "graphicsOutput.h".} = object of GraphicsOutputBase
 
-converter upcastToDrawableRegion*(_: typedesc[GraphicsOutput]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
+proc upcastToDrawableRegion*(_: typedesc[GraphicsOutput]): typedesc[DrawableRegion] = typedesc[DrawableRegion]
 
-converter toGraphicsOutput*(_: type(nil)): GraphicsOutput {.importcpp: "(nullptr)".}
+proc toGraphicsOutput*(_: type(nil)): GraphicsOutput {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsOutput], obj: TypedObject): GraphicsOutput {.importcpp: "DCAST(GraphicsOutput, @)".}
 
 type GraphicsOutput_RenderTextureMode {.importcpp: "GraphicsOutput::RenderTextureMode", pure, header: "graphicsOutput.h".} = enum
@@ -3203,12 +3203,12 @@ template FM_refresh*(_: typedesc[GraphicsOutput]): GraphicsOutput_FrameMode = Gr
 
 type GraphicsStateGuardianBase* {.importcpp: "PT(GraphicsStateGuardianBase)", bycopy, pure, inheritable, header: "graphicsStateGuardianBase.h".} = object of TypedWritableReferenceCount
 
-converter toGraphicsStateGuardianBase*(_: type(nil)): GraphicsStateGuardianBase {.importcpp: "(nullptr)".}
+proc toGraphicsStateGuardianBase*(_: type(nil)): GraphicsStateGuardianBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsStateGuardianBase], obj: TypedObject): GraphicsStateGuardianBase {.importcpp: "DCAST(GraphicsStateGuardianBase, @)".}
 
 type GraphicsStateGuardian* {.importcpp: "PT(GraphicsStateGuardian)", bycopy, pure, inheritable, header: "graphicsStateGuardian.h".} = object of GraphicsStateGuardianBase
 
-converter toGraphicsStateGuardian*(_: type(nil)): GraphicsStateGuardian {.importcpp: "(nullptr)".}
+proc toGraphicsStateGuardian*(_: type(nil)): GraphicsStateGuardian {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsStateGuardian], obj: TypedObject): GraphicsStateGuardian {.importcpp: "DCAST(GraphicsStateGuardian, @)".}
 
 type GraphicsStateGuardian_ShaderModel {.importcpp: "GraphicsStateGuardian::ShaderModel", pure, header: "graphicsStateGuardian.h".} = enum
@@ -3235,21 +3235,21 @@ template SM_51*(_: typedesc[GraphicsStateGuardian]): GraphicsStateGuardian_Shade
 
 type GraphicsEngine* {.importcpp: "PT(GraphicsEngine)", bycopy, pure, inheritable, header: "graphicsEngine.h".} = object of ReferenceCount
 
-converter toGraphicsEngine*(_: type(nil)): GraphicsEngine {.importcpp: "(nullptr)".}
+proc toGraphicsEngine*(_: type(nil)): GraphicsEngine {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsEngine], obj: TypedObject): GraphicsEngine {.importcpp: "DCAST(GraphicsEngine, @)".}
 
 type GraphicsThreadingModel* {.importcpp: "GraphicsThreadingModel", pure, inheritable, header: "graphicsThreadingModel.h".} = object
 
 type StereoDisplayRegion* {.importcpp: "PT(StereoDisplayRegion)", bycopy, pure, inheritable, header: "stereoDisplayRegion.h".} = object of DisplayRegion
 
-converter toStereoDisplayRegion*(_: type(nil)): StereoDisplayRegion {.importcpp: "(nullptr)".}
+proc toStereoDisplayRegion*(_: type(nil)): StereoDisplayRegion {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[StereoDisplayRegion], obj: TypedObject): StereoDisplayRegion {.importcpp: "DCAST(StereoDisplayRegion, @)".}
 
 type FrameBufferProperties* {.importcpp: "FrameBufferProperties", pure, inheritable, header: "frameBufferProperties.h".} = object
 
 type GraphicsWindowInputDevice* {.importcpp: "PT(GraphicsWindowInputDevice)", bycopy, pure, inheritable, header: "graphicsWindowInputDevice.h".} = object of InputDevice
 
-converter toGraphicsWindowInputDevice*(_: type(nil)): GraphicsWindowInputDevice {.importcpp: "(nullptr)".}
+proc toGraphicsWindowInputDevice*(_: type(nil)): GraphicsWindowInputDevice {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsWindowInputDevice], obj: TypedObject): GraphicsWindowInputDevice {.importcpp: "DCAST(GraphicsWindowInputDevice, @)".}
 
 type TouchInfo* {.importcpp: "TouchInfo", pure, inheritable, header: "touchInfo.h".} = object
@@ -3270,12 +3270,12 @@ type GraphicsWindowProcCallbackData* {.importcpp: "GraphicsWindowProcCallbackDat
 
 type GraphicsWindow* {.importcpp: "PT(GraphicsWindow)", bycopy, pure, inheritable, header: "graphicsWindow.h".} = object of GraphicsOutput
 
-converter toGraphicsWindow*(_: type(nil)): GraphicsWindow {.importcpp: "(nullptr)".}
+proc toGraphicsWindow*(_: type(nil)): GraphicsWindow {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsWindow], obj: TypedObject): GraphicsWindow {.importcpp: "DCAST(GraphicsWindow, @)".}
 
 type CallbackGraphicsWindow* {.importcpp: "PT(CallbackGraphicsWindow)", bycopy, pure, inheritable, header: "callbackGraphicsWindow.h".} = object of GraphicsWindow
 
-converter toCallbackGraphicsWindow*(_: type(nil)): CallbackGraphicsWindow {.importcpp: "(nullptr)".}
+proc toCallbackGraphicsWindow*(_: type(nil)): CallbackGraphicsWindow {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CallbackGraphicsWindow], obj: TypedObject): CallbackGraphicsWindow {.importcpp: "DCAST(CallbackGraphicsWindow, @)".}
 
 type CallbackGraphicsWindow_RenderCallbackType {.importcpp: "CallbackGraphicsWindow::RenderCallbackType", pure, header: "callbackGraphicsWindow.h".} = enum
@@ -3302,26 +3302,26 @@ type DisplaySearchParameters* {.importcpp: "DisplaySearchParameters", pure, inhe
 
 type GraphicsBuffer* {.importcpp: "PT(GraphicsBuffer)", bycopy, pure, inheritable, header: "graphicsBuffer.h".} = object of GraphicsOutput
 
-converter toGraphicsBuffer*(_: type(nil)): GraphicsBuffer {.importcpp: "(nullptr)".}
+proc toGraphicsBuffer*(_: type(nil)): GraphicsBuffer {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GraphicsBuffer], obj: TypedObject): GraphicsBuffer {.importcpp: "DCAST(GraphicsBuffer, @)".}
 
 type GraphicsPipeSelection* {.importcpp: "GraphicsPipeSelection*", bycopy, pure, inheritable, header: "graphicsPipeSelection.h".} = object
 
-converter toGraphicsPipeSelection*(_: type(nil)): GraphicsPipeSelection {.importcpp: "(nullptr)".}
+proc toGraphicsPipeSelection*(_: type(nil)): GraphicsPipeSelection {.importcpp: "(nullptr)".}
 
 type MouseAndKeyboard* {.importcpp: "PT(MouseAndKeyboard)", bycopy, pure, inheritable, header: "mouseAndKeyboard.h".} = object of DataNode
 
-converter toMouseAndKeyboard*(_: type(nil)): MouseAndKeyboard {.importcpp: "(nullptr)".}
+proc toMouseAndKeyboard*(_: type(nil)): MouseAndKeyboard {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseAndKeyboard], obj: TypedObject): MouseAndKeyboard {.importcpp: "DCAST(MouseAndKeyboard, @)".}
 
 type NativeWindowHandle* {.importcpp: "PT(NativeWindowHandle)", bycopy, pure, header: "nativeWindowHandle.h".} = object of WindowHandle
 
-converter toNativeWindowHandle*(_: type(nil)): NativeWindowHandle {.importcpp: "(nullptr)".}
+proc toNativeWindowHandle*(_: type(nil)): NativeWindowHandle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NativeWindowHandle], obj: TypedObject): NativeWindowHandle {.importcpp: "DCAST(NativeWindowHandle, @)".}
 
 type ParasiteBuffer* {.importcpp: "PT(ParasiteBuffer)", bycopy, pure, inheritable, header: "parasiteBuffer.h".} = object of GraphicsOutput
 
-converter toParasiteBuffer*(_: type(nil)): ParasiteBuffer {.importcpp: "(nullptr)".}
+proc toParasiteBuffer*(_: type(nil)): ParasiteBuffer {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParasiteBuffer], obj: TypedObject): ParasiteBuffer {.importcpp: "DCAST(ParasiteBuffer, @)".}
 
 type ThreadPriority* {.importcpp: "ThreadPriority", header: "threadPriority.h".} = enum
@@ -3332,9 +3332,9 @@ type ThreadPriority* {.importcpp: "ThreadPriority", header: "threadPriority.h".}
 
 type Thread* {.importcpp: "PT(Thread)", bycopy, pure, inheritable, header: "thread.h".} = object of TypedReferenceCount
 
-converter upcastToNamable*(_: typedesc[Thread]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[Thread]): typedesc[Namable] = typedesc[Namable]
 
-converter toThread*(_: type(nil)): Thread {.importcpp: "(nullptr)".}
+proc toThread*(_: type(nil)): Thread {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Thread], obj: TypedObject): Thread {.importcpp: "DCAST(Thread, @)".}
 
 type MutexDirect* {.importcpp: "MutexDirect", pure, inheritable, header: "mutexDirect.h".} = object
@@ -3355,7 +3355,7 @@ type ReMutex* {.importcpp: "ReMutex", pure, inheritable, header: "reMutex.h".} =
 
 type ExternalThread* {.importcpp: "PT(ExternalThread)", bycopy, pure, inheritable, header: "externalThread.h".} = object of Thread
 
-converter toExternalThread*(_: type(nil)): ExternalThread {.importcpp: "(nullptr)".}
+proc toExternalThread*(_: type(nil)): ExternalThread {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ExternalThread], obj: TypedObject): ExternalThread {.importcpp: "DCAST(ExternalThread, @)".}
 
 type LightMutexDirect* {.importcpp: "LightMutexDirect", pure, inheritable, header: "lightMutexDirect.h".} = object
@@ -3368,7 +3368,7 @@ type LightReMutex* {.importcpp: "LightReMutex", pure, inheritable, header: "ligh
 
 type MainThread* {.importcpp: "PT(MainThread)", bycopy, pure, inheritable, header: "mainThread.h".} = object of Thread
 
-converter toMainThread*(_: type(nil)): MainThread {.importcpp: "(nullptr)".}
+proc toMainThread*(_: type(nil)): MainThread {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MainThread], obj: TypedObject): MainThread {.importcpp: "DCAST(MainThread, @)".}
 
 type Semaphore* {.importcpp: "Semaphore", pure, inheritable, header: "psemaphore.h".} = object
@@ -3377,30 +3377,30 @@ type EventParameter* {.importcpp: "EventParameter", pure, inheritable, header: "
 
 type AsyncTaskManager* {.importcpp: "PT(AsyncTaskManager)", bycopy, pure, inheritable, header: "asyncTaskManager.h".} = object of TypedReferenceCount
 
-converter upcastToNamable*(_: typedesc[AsyncTaskManager]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[AsyncTaskManager]): typedesc[Namable] = typedesc[Namable]
 
-converter toAsyncTaskManager*(_: type(nil)): AsyncTaskManager {.importcpp: "(nullptr)".}
+proc toAsyncTaskManager*(_: type(nil)): AsyncTaskManager {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncTaskManager], obj: TypedObject): AsyncTaskManager {.importcpp: "DCAST(AsyncTaskManager, @)".}
 
 type AsyncTaskCollection* {.importcpp: "AsyncTaskCollection", pure, inheritable, header: "asyncTaskCollection.h".} = object
 
 type AsyncTaskChain* {.importcpp: "PT(AsyncTaskChain)", bycopy, pure, inheritable, header: "asyncTaskChain.h".} = object of TypedReferenceCount
 
-converter upcastToNamable*(_: typedesc[AsyncTaskChain]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[AsyncTaskChain]): typedesc[Namable] = typedesc[Namable]
 
-converter toAsyncTaskChain*(_: type(nil)): AsyncTaskChain {.importcpp: "(nullptr)".}
+proc toAsyncTaskChain*(_: type(nil)): AsyncTaskChain {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncTaskChain], obj: TypedObject): AsyncTaskChain {.importcpp: "DCAST(AsyncTaskChain, @)".}
 
 type AsyncTaskPause* {.importcpp: "PT(AsyncTaskPause)", bycopy, pure, inheritable, header: "asyncTaskPause.h".} = object of AsyncTask
 
-converter toAsyncTaskPause*(_: type(nil)): AsyncTaskPause {.importcpp: "(nullptr)".}
+proc toAsyncTaskPause*(_: type(nil)): AsyncTaskPause {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncTaskPause], obj: TypedObject): AsyncTaskPause {.importcpp: "DCAST(AsyncTaskPause, @)".}
 
 type AsyncTaskSequence* {.importcpp: "PT(AsyncTaskSequence)", bycopy, pure, inheritable, header: "asyncTaskSequence.h".} = object of AsyncTask
 
-converter upcastToAsyncTaskCollection*(_: typedesc[AsyncTaskSequence]): typedesc[AsyncTaskCollection] = typedesc[AsyncTaskCollection]
+proc upcastToAsyncTaskCollection*(_: typedesc[AsyncTaskSequence]): typedesc[AsyncTaskCollection] = typedesc[AsyncTaskCollection]
 
-converter toAsyncTaskSequence*(_: type(nil)): AsyncTaskSequence {.importcpp: "(nullptr)".}
+proc toAsyncTaskSequence*(_: type(nil)): AsyncTaskSequence {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AsyncTaskSequence], obj: TypedObject): AsyncTaskSequence {.importcpp: "DCAST(AsyncTaskSequence, @)".}
 
 type ButtonEvent* {.importcpp: "ButtonEvent", pure, inheritable, header: "buttonEvent.h".} = object
@@ -3431,35 +3431,35 @@ template T_rawUp*(_: typedesc[ButtonEvent]): ButtonEvent_Type = ButtonEvent_Type
 
 type ParamValueBase* {.importcpp: "PT(ParamValueBase)", bycopy, pure, inheritable, header: "paramValue.h".} = object of TypedWritableReferenceCount
 
-converter toParamValueBase*(_: type(nil)): ParamValueBase {.importcpp: "(nullptr)".}
+proc toParamValueBase*(_: type(nil)): ParamValueBase {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParamValueBase], obj: TypedObject): ParamValueBase {.importcpp: "DCAST(ParamValueBase, @)".}
 
 type ButtonEventList* {.importcpp: "PT(ButtonEventList)", bycopy, pure, inheritable, header: "buttonEventList.h".} = object of ParamValueBase
 
-converter toButtonEventList*(_: type(nil)): ButtonEventList {.importcpp: "(nullptr)".}
+proc toButtonEventList*(_: type(nil)): ButtonEventList {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ButtonEventList], obj: TypedObject): ButtonEventList {.importcpp: "DCAST(ButtonEventList, @)".}
 
 type Event* {.importcpp: "PT(Event)", bycopy, pure, inheritable, header: "event.h".} = object of TypedReferenceCount
 
-converter toEvent*(_: type(nil)): Event {.importcpp: "(nullptr)".}
+proc toEvent*(_: type(nil)): Event {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Event], obj: TypedObject): Event {.importcpp: "DCAST(Event, @)".}
 
 type EventHandler* {.importcpp: "EventHandler", pure, inheritable, header: "eventHandler.h".} = object of TypedObject
 
 type EventQueue* {.importcpp: "EventQueue*", bycopy, pure, inheritable, header: "eventQueue.h".} = object
 
-converter toEventQueue*(_: type(nil)): EventQueue {.importcpp: "(nullptr)".}
+proc toEventQueue*(_: type(nil)): EventQueue {.importcpp: "(nullptr)".}
 
 type PointerEventList* {.importcpp: "PT(PointerEventList)", bycopy, pure, inheritable, header: "pointerEventList.h".} = object of ParamValueBase
 
-converter toPointerEventList*(_: type(nil)): PointerEventList {.importcpp: "(nullptr)".}
+proc toPointerEventList*(_: type(nil)): PointerEventList {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PointerEventList], obj: TypedObject): PointerEventList {.importcpp: "DCAST(PointerEventList, @)".}
 
 type AdaptiveLru* {.importcpp: "AdaptiveLru", pure, inheritable, header: "adaptiveLru.h".} = object of Namable
 
 type AdaptiveLruPage* {.importcpp: "AdaptiveLruPage*", bycopy, pure, inheritable, header: "adaptiveLru.h".} = object
 
-converter toAdaptiveLruPage*(_: type(nil)): AdaptiveLruPage {.importcpp: "(nullptr)".}
+proc toAdaptiveLruPage*(_: type(nil)): AdaptiveLruPage {.importcpp: "(nullptr)".}
 
 type GeomEnums* {.importcpp: "GeomEnums", pure, inheritable, header: "geomEnums.h".} = object
 
@@ -3635,46 +3635,46 @@ type GeomVertexAnimationSpec* {.importcpp: "GeomVertexAnimationSpec", pure, inhe
 
 type InternalName* {.importcpp: "PT(InternalName)", bycopy, pure, header: "internalName.h".} = object of TypedWritableReferenceCount
 
-converter toInternalName*(_: type(nil)): InternalName {.importcpp: "(nullptr)".}
+proc toInternalName*(_: type(nil)): InternalName {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[InternalName], obj: TypedObject): InternalName {.importcpp: "DCAST(InternalName, @)".}
 
 type GeomVertexColumn* {.importcpp: "GeomVertexColumn", pure, inheritable, header: "geomVertexColumn.h".} = object of GeomEnums
 
 type GeomVertexArrayFormat* {.importcpp: "PT(GeomVertexArrayFormat)", bycopy, pure, header: "geomVertexArrayFormat.h".} = object of TypedWritableReferenceCount
 
-converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[GeomVertexArrayFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomVertexArrayFormat*(_: type(nil)): GeomVertexArrayFormat {.importcpp: "(nullptr)".}
+proc toGeomVertexArrayFormat*(_: type(nil)): GeomVertexArrayFormat {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayFormat], obj: TypedObject): GeomVertexArrayFormat {.importcpp: "DCAST(GeomVertexArrayFormat, @)".}
 
 type GeomVertexFormat* {.importcpp: "PT(GeomVertexFormat)", bycopy, pure, header: "geomVertexFormat.h".} = object of TypedWritableReferenceCount
 
-converter upcastToGeomEnums*(_: typedesc[GeomVertexFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[GeomVertexFormat]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomVertexFormat*(_: type(nil)): GeomVertexFormat {.importcpp: "(nullptr)".}
+proc toGeomVertexFormat*(_: type(nil)): GeomVertexFormat {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomVertexFormat], obj: TypedObject): GeomVertexFormat {.importcpp: "DCAST(GeomVertexFormat, @)".}
 
 type SimpleLru* {.importcpp: "SimpleLru", pure, inheritable, header: "simpleLru.h".} = object of Namable
 
 type SimpleLruPage* {.importcpp: "SimpleLruPage*", bycopy, pure, inheritable, header: "simpleLru.h".} = object
 
-converter toSimpleLruPage*(_: type(nil)): SimpleLruPage {.importcpp: "(nullptr)".}
+proc toSimpleLruPage*(_: type(nil)): SimpleLruPage {.importcpp: "(nullptr)".}
 
 type SimpleAllocator* {.importcpp: "SimpleAllocator*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
 
-converter toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullptr)".}
+proc toSimpleAllocator*(_: type(nil)): SimpleAllocator {.importcpp: "(nullptr)".}
 
 type SimpleAllocatorBlock* {.importcpp: "SimpleAllocatorBlock*", bycopy, pure, inheritable, header: "simpleAllocator.h".} = object
 
-converter toSimpleAllocatorBlock*(_: type(nil)): SimpleAllocatorBlock {.importcpp: "(nullptr)".}
+proc toSimpleAllocatorBlock*(_: type(nil)): SimpleAllocatorBlock {.importcpp: "(nullptr)".}
 
 type VertexDataSaveFile* {.importcpp: "VertexDataSaveFile*", bycopy, pure, inheritable, header: "vertexDataSaveFile.h".} = object of SimpleAllocator
 
-converter toVertexDataSaveFile*(_: type(nil)): VertexDataSaveFile {.importcpp: "(nullptr)".}
+proc toVertexDataSaveFile*(_: type(nil)): VertexDataSaveFile {.importcpp: "(nullptr)".}
 
 type VertexDataPage* {.importcpp: "VertexDataPage", pure, inheritable, header: "vertexDataPage.h".} = object of SimpleAllocator
 
-converter upcastToSimpleLruPage*(_: typedesc[VertexDataPage]): typedesc[SimpleLruPage] = typedesc[SimpleLruPage]
+proc upcastToSimpleLruPage*(_: typedesc[VertexDataPage]): typedesc[SimpleLruPage] = typedesc[SimpleLruPage]
 
 type VertexDataPage_RamClass {.importcpp: "VertexDataPage::RamClass", pure, header: "vertexDataPage.h".} = enum
   RC_resident = 0
@@ -3694,75 +3694,75 @@ type VertexDataBook* {.importcpp: "VertexDataBook", pure, inheritable, header: "
 
 type VertexDataBlock* {.importcpp: "PT(VertexDataBlock)", bycopy, pure, inheritable, header: "vertexDataBlock.h".} = object of SimpleAllocatorBlock
 
-converter upcastToReferenceCount*(_: typedesc[VertexDataBlock]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
+proc upcastToReferenceCount*(_: typedesc[VertexDataBlock]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
-converter toVertexDataBlock*(_: type(nil)): VertexDataBlock {.importcpp: "(nullptr)".}
+proc toVertexDataBlock*(_: type(nil)): VertexDataBlock {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VertexDataBlock], obj: TypedObject): VertexDataBlock {.importcpp: "DCAST(VertexDataBlock, @)".}
 
 type GeomVertexArrayData* {.importcpp: "PT(GeomVertexArrayData)", bycopy, pure, inheritable, header: "geomVertexArrayData.h".} = object of CopyOnWriteObject
 
-converter upcastToSimpleLruPage*(_: typedesc[GeomVertexArrayData]): typedesc[SimpleLruPage] = typedesc[SimpleLruPage]
-converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayData]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToSimpleLruPage*(_: typedesc[GeomVertexArrayData]): typedesc[SimpleLruPage] = typedesc[SimpleLruPage]
+proc upcastToGeomEnums*(_: typedesc[GeomVertexArrayData]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomVertexArrayData*(_: type(nil)): GeomVertexArrayData {.importcpp: "(nullptr)".}
+proc toGeomVertexArrayData*(_: type(nil)): GeomVertexArrayData {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayData], obj: TypedObject): GeomVertexArrayData {.importcpp: "DCAST(GeomVertexArrayData, @)".}
 
 type GeomVertexArrayDataHandle* {.importcpp: "PT(GeomVertexArrayDataHandle)", bycopy, pure, inheritable, header: "geomVertexArrayData.h".} = object of ReferenceCount
 
-converter upcastToGeomEnums*(_: typedesc[GeomVertexArrayDataHandle]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[GeomVertexArrayDataHandle]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomVertexArrayDataHandle*(_: type(nil)): GeomVertexArrayDataHandle {.importcpp: "(nullptr)".}
+proc toGeomVertexArrayDataHandle*(_: type(nil)): GeomVertexArrayDataHandle {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomVertexArrayDataHandle], obj: TypedObject): GeomVertexArrayDataHandle {.importcpp: "DCAST(GeomVertexArrayDataHandle, @)".}
 
 type GeomCacheManager* {.importcpp: "GeomCacheManager", pure, inheritable, header: "geomCacheManager.h".} = object
 
 type TransformTable* {.importcpp: "PT(TransformTable)", bycopy, pure, inheritable, header: "transformTable.h".} = object of TypedWritableReferenceCount
 
-converter toTransformTable*(_: type(nil)): TransformTable {.importcpp: "(nullptr)".}
+proc toTransformTable*(_: type(nil)): TransformTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TransformTable], obj: TypedObject): TransformTable {.importcpp: "DCAST(TransformTable, @)".}
 
 type TransformBlend* {.importcpp: "TransformBlend", pure, inheritable, header: "transformBlend.h".} = object
 
 type TransformBlendTable* {.importcpp: "PT(TransformBlendTable)", bycopy, pure, inheritable, header: "transformBlendTable.h".} = object of CopyOnWriteObject
 
-converter toTransformBlendTable*(_: type(nil)): TransformBlendTable {.importcpp: "(nullptr)".}
+proc toTransformBlendTable*(_: type(nil)): TransformBlendTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TransformBlendTable], obj: TypedObject): TransformBlendTable {.importcpp: "DCAST(TransformBlendTable, @)".}
 
 type SliderTable* {.importcpp: "PT(SliderTable)", bycopy, pure, inheritable, header: "sliderTable.h".} = object of TypedWritableReferenceCount
 
-converter toSliderTable*(_: type(nil)): SliderTable {.importcpp: "(nullptr)".}
+proc toSliderTable*(_: type(nil)): SliderTable {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SliderTable], obj: TypedObject): SliderTable {.importcpp: "DCAST(SliderTable, @)".}
 
 type GeomVertexData* {.importcpp: "PT(GeomVertexData)", bycopy, pure, inheritable, header: "geomVertexData.h".} = object of CopyOnWriteObject
 
-converter upcastToGeomEnums*(_: typedesc[GeomVertexData]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[GeomVertexData]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomVertexData*(_: type(nil)): GeomVertexData {.importcpp: "(nullptr)".}
+proc toGeomVertexData*(_: type(nil)): GeomVertexData {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomVertexData], obj: TypedObject): GeomVertexData {.importcpp: "DCAST(GeomVertexData, @)".}
 
 type AnimateVerticesRequest* {.importcpp: "PT(AnimateVerticesRequest)", bycopy, pure, inheritable, header: "animateVerticesRequest.h".} = object of AsyncTask
 
-converter toAnimateVerticesRequest*(_: type(nil)): AnimateVerticesRequest {.importcpp: "(nullptr)".}
+proc toAnimateVerticesRequest*(_: type(nil)): AnimateVerticesRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AnimateVerticesRequest], obj: TypedObject): AnimateVerticesRequest {.importcpp: "DCAST(AnimateVerticesRequest, @)".}
 
 type SavedContext* {.importcpp: "SavedContext*", bycopy, pure, inheritable, header: "savedContext.h".} = object of TypedObject
 
-converter toSavedContext*(_: type(nil)): SavedContext {.importcpp: "(nullptr)".}
+proc toSavedContext*(_: type(nil)): SavedContext {.importcpp: "(nullptr)".}
 
 type BufferContext* {.importcpp: "BufferContext*", bycopy, pure, inheritable, header: "bufferContext.h".} = object of SavedContext
 
-converter toBufferContext*(_: type(nil)): BufferContext {.importcpp: "(nullptr)".}
+proc toBufferContext*(_: type(nil)): BufferContext {.importcpp: "(nullptr)".}
 
 type GeomPrimitive* {.importcpp: "PT(GeomPrimitive)", bycopy, pure, inheritable, header: "geomPrimitive.h".} = object of CopyOnWriteObject
 
-converter upcastToGeomEnums*(_: typedesc[GeomPrimitive]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[GeomPrimitive]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeomPrimitive*(_: type(nil)): GeomPrimitive {.importcpp: "(nullptr)".}
+proc toGeomPrimitive*(_: type(nil)): GeomPrimitive {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomPrimitive], obj: TypedObject): GeomPrimitive {.importcpp: "DCAST(GeomPrimitive, @)".}
 
 type TextureStage* {.importcpp: "PT(TextureStage)", bycopy, pure, inheritable, header: "textureStage.h".} = object of TypedWritableReferenceCount
 
-converter toTextureStage*(_: type(nil)): TextureStage {.importcpp: "(nullptr)".}
+proc toTextureStage*(_: type(nil)): TextureStage {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextureStage], obj: TypedObject): TextureStage {.importcpp: "DCAST(TextureStage, @)".}
 
 type TextureStage_Mode {.importcpp: "TextureStage::Mode", pure, header: "textureStage.h".} = enum
@@ -3867,66 +3867,66 @@ template CO_oneMinusSrcAlpha*(_: typedesc[TextureStage]): TextureStage_CombineOp
 
 type Geom* {.importcpp: "PT(Geom)", bycopy, pure, inheritable, header: "geom.h".} = object of CopyOnWriteObject
 
-converter upcastToGeomEnums*(_: typedesc[Geom]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToGeomEnums*(_: typedesc[Geom]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toGeom*(_: type(nil)): Geom {.importcpp: "(nullptr)".}
+proc toGeom*(_: type(nil)): Geom {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Geom], obj: TypedObject): Geom {.importcpp: "DCAST(Geom, @)".}
 
 type GeomContext* {.importcpp: "GeomContext", pure, inheritable, header: "geomContext.h".} = object of SavedContext
 
 type GeomLines* {.importcpp: "PT(GeomLines)", bycopy, pure, inheritable, header: "geomLines.h".} = object of GeomPrimitive
 
-converter toGeomLines*(_: type(nil)): GeomLines {.importcpp: "(nullptr)".}
+proc toGeomLines*(_: type(nil)): GeomLines {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomLines], obj: TypedObject): GeomLines {.importcpp: "DCAST(GeomLines, @)".}
 
 type GeomLinesAdjacency* {.importcpp: "PT(GeomLinesAdjacency)", bycopy, pure, inheritable, header: "geomLinesAdjacency.h".} = object of GeomPrimitive
 
-converter toGeomLinesAdjacency*(_: type(nil)): GeomLinesAdjacency {.importcpp: "(nullptr)".}
+proc toGeomLinesAdjacency*(_: type(nil)): GeomLinesAdjacency {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomLinesAdjacency], obj: TypedObject): GeomLinesAdjacency {.importcpp: "DCAST(GeomLinesAdjacency, @)".}
 
 type GeomLinestrips* {.importcpp: "PT(GeomLinestrips)", bycopy, pure, inheritable, header: "geomLinestrips.h".} = object of GeomPrimitive
 
-converter toGeomLinestrips*(_: type(nil)): GeomLinestrips {.importcpp: "(nullptr)".}
+proc toGeomLinestrips*(_: type(nil)): GeomLinestrips {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomLinestrips], obj: TypedObject): GeomLinestrips {.importcpp: "DCAST(GeomLinestrips, @)".}
 
 type GeomLinestripsAdjacency* {.importcpp: "PT(GeomLinestripsAdjacency)", bycopy, pure, inheritable, header: "geomLinestripsAdjacency.h".} = object of GeomPrimitive
 
-converter toGeomLinestripsAdjacency*(_: type(nil)): GeomLinestripsAdjacency {.importcpp: "(nullptr)".}
+proc toGeomLinestripsAdjacency*(_: type(nil)): GeomLinestripsAdjacency {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomLinestripsAdjacency], obj: TypedObject): GeomLinestripsAdjacency {.importcpp: "DCAST(GeomLinestripsAdjacency, @)".}
 
 type GeomPatches* {.importcpp: "PT(GeomPatches)", bycopy, pure, inheritable, header: "geomPatches.h".} = object of GeomPrimitive
 
-converter toGeomPatches*(_: type(nil)): GeomPatches {.importcpp: "(nullptr)".}
+proc toGeomPatches*(_: type(nil)): GeomPatches {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomPatches], obj: TypedObject): GeomPatches {.importcpp: "DCAST(GeomPatches, @)".}
 
 type GeomPoints* {.importcpp: "PT(GeomPoints)", bycopy, pure, inheritable, header: "geomPoints.h".} = object of GeomPrimitive
 
-converter toGeomPoints*(_: type(nil)): GeomPoints {.importcpp: "(nullptr)".}
+proc toGeomPoints*(_: type(nil)): GeomPoints {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomPoints], obj: TypedObject): GeomPoints {.importcpp: "DCAST(GeomPoints, @)".}
 
 type GeomTriangles* {.importcpp: "PT(GeomTriangles)", bycopy, pure, inheritable, header: "geomTriangles.h".} = object of GeomPrimitive
 
-converter toGeomTriangles*(_: type(nil)): GeomTriangles {.importcpp: "(nullptr)".}
+proc toGeomTriangles*(_: type(nil)): GeomTriangles {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTriangles], obj: TypedObject): GeomTriangles {.importcpp: "DCAST(GeomTriangles, @)".}
 
 type GeomTrianglesAdjacency* {.importcpp: "PT(GeomTrianglesAdjacency)", bycopy, pure, inheritable, header: "geomTrianglesAdjacency.h".} = object of GeomPrimitive
 
-converter toGeomTrianglesAdjacency*(_: type(nil)): GeomTrianglesAdjacency {.importcpp: "(nullptr)".}
+proc toGeomTrianglesAdjacency*(_: type(nil)): GeomTrianglesAdjacency {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTrianglesAdjacency], obj: TypedObject): GeomTrianglesAdjacency {.importcpp: "DCAST(GeomTrianglesAdjacency, @)".}
 
 type GeomTrifans* {.importcpp: "PT(GeomTrifans)", bycopy, pure, inheritable, header: "geomTrifans.h".} = object of GeomPrimitive
 
-converter toGeomTrifans*(_: type(nil)): GeomTrifans {.importcpp: "(nullptr)".}
+proc toGeomTrifans*(_: type(nil)): GeomTrifans {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTrifans], obj: TypedObject): GeomTrifans {.importcpp: "DCAST(GeomTrifans, @)".}
 
 type GeomTristrips* {.importcpp: "PT(GeomTristrips)", bycopy, pure, inheritable, header: "geomTristrips.h".} = object of GeomPrimitive
 
-converter toGeomTristrips*(_: type(nil)): GeomTristrips {.importcpp: "(nullptr)".}
+proc toGeomTristrips*(_: type(nil)): GeomTristrips {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTristrips], obj: TypedObject): GeomTristrips {.importcpp: "DCAST(GeomTristrips, @)".}
 
 type GeomTristripsAdjacency* {.importcpp: "PT(GeomTristripsAdjacency)", bycopy, pure, inheritable, header: "geomTristripsAdjacency.h".} = object of GeomPrimitive
 
-converter toGeomTristripsAdjacency*(_: type(nil)): GeomTristripsAdjacency {.importcpp: "(nullptr)".}
+proc toGeomTristripsAdjacency*(_: type(nil)): GeomTristripsAdjacency {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTristripsAdjacency], obj: TypedObject): GeomTristripsAdjacency {.importcpp: "DCAST(GeomTristripsAdjacency, @)".}
 
 type GeomVertexReader* {.importcpp: "GeomVertexReader", pure, inheritable, header: "geomVertexReader.h".} = object of GeomEnums
@@ -3935,7 +3935,7 @@ type GeomVertexWriter* {.importcpp: "GeomVertexWriter", pure, inheritable, heade
 
 type GeomVertexRewriter* {.importcpp: "GeomVertexRewriter", pure, inheritable, header: "geomVertexRewriter.h".} = object of GeomVertexWriter
 
-converter upcastToGeomVertexReader*(_: typedesc[GeomVertexRewriter]): typedesc[GeomVertexReader] = typedesc[GeomVertexReader]
+proc upcastToGeomVertexReader*(_: typedesc[GeomVertexRewriter]): typedesc[GeomVertexReader] = typedesc[GeomVertexReader]
 
 type SamplerState* {.importcpp: "SamplerState", pure, inheritable, header: "samplerState.h".} = object
 
@@ -3983,7 +3983,7 @@ template WM_invalid*(_: typedesc[SamplerState]): SamplerState_WrapMode = Sampler
 
 type Shader* {.importcpp: "PT(Shader)", bycopy, pure, inheritable, header: "shader.h".} = object of TypedWritableReferenceCount
 
-converter toShader*(_: type(nil)): Shader {.importcpp: "(nullptr)".}
+proc toShader*(_: type(nil)): Shader {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Shader], obj: TypedObject): Shader {.importcpp: "DCAST(Shader, @)".}
 
 type Shader_ShaderLanguage {.importcpp: "Shader::ShaderLanguage", pure, header: "shader.h".} = enum
@@ -4058,24 +4058,24 @@ template bitAutoShaderShadow*(_: typedesc[Shader]): Shader_AutoShaderBit = Shade
 
 type ShaderBuffer* {.importcpp: "PT(ShaderBuffer)", bycopy, pure, inheritable, header: "shaderBuffer.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[ShaderBuffer]): typedesc[Namable] = typedesc[Namable]
-converter upcastToGeomEnums*(_: typedesc[ShaderBuffer]): typedesc[GeomEnums] = typedesc[GeomEnums]
+proc upcastToNamable*(_: typedesc[ShaderBuffer]): typedesc[Namable] = typedesc[Namable]
+proc upcastToGeomEnums*(_: typedesc[ShaderBuffer]): typedesc[GeomEnums] = typedesc[GeomEnums]
 
-converter toShaderBuffer*(_: type(nil)): ShaderBuffer {.importcpp: "(nullptr)".}
+proc toShaderBuffer*(_: type(nil)): ShaderBuffer {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ShaderBuffer], obj: TypedObject): ShaderBuffer {.importcpp: "DCAST(ShaderBuffer, @)".}
 
 type PreparedGraphicsObjects* {.importcpp: "PT(PreparedGraphicsObjects)", bycopy, pure, inheritable, header: "preparedGraphicsObjects.h".} = object of ReferenceCount
 
-converter toPreparedGraphicsObjects*(_: type(nil)): PreparedGraphicsObjects {.importcpp: "(nullptr)".}
+proc toPreparedGraphicsObjects*(_: type(nil)): PreparedGraphicsObjects {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PreparedGraphicsObjects], obj: TypedObject): PreparedGraphicsObjects {.importcpp: "DCAST(PreparedGraphicsObjects, @)".}
 
 type IndexBufferContext* {.importcpp: "IndexBufferContext", pure, inheritable, header: "indexBufferContext.h".} = object of BufferContext
 
-converter upcastToAdaptiveLruPage*(_: typedesc[IndexBufferContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
+proc upcastToAdaptiveLruPage*(_: typedesc[IndexBufferContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
 
 type Lens* {.importcpp: "PT(Lens)", bycopy, pure, inheritable, header: "lens.h".} = object of TypedWritableReferenceCount
 
-converter toLens*(_: type(nil)): Lens {.importcpp: "(nullptr)".}
+proc toLens*(_: type(nil)): Lens {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Lens], obj: TypedObject): Lens {.importcpp: "DCAST(Lens, @)".}
 
 type Lens_StereoChannel {.importcpp: "Lens::StereoChannel", pure, header: "lens.h".} = enum
@@ -4112,69 +4112,69 @@ template FC_keystone*(_: typedesc[Lens]): Lens_FromCorners = Lens_FromCorners.FC
 
 type Material* {.importcpp: "PT(Material)", bycopy, pure, inheritable, header: "material.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[Material]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[Material]): typedesc[Namable] = typedesc[Namable]
 
-converter toMaterial*(_: type(nil)): Material {.importcpp: "(nullptr)".}
+proc toMaterial*(_: type(nil)): Material {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Material], obj: TypedObject): Material {.importcpp: "DCAST(Material, @)".}
 
 type MaterialPool* {.importcpp: "MaterialPool", pure, inheritable, header: "materialPool.h".} = object
 
 type MatrixLens* {.importcpp: "PT(MatrixLens)", bycopy, pure, inheritable, header: "matrixLens.h".} = object of Lens
 
-converter toMatrixLens*(_: type(nil)): MatrixLens {.importcpp: "(nullptr)".}
+proc toMatrixLens*(_: type(nil)): MatrixLens {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MatrixLens], obj: TypedObject): MatrixLens {.importcpp: "DCAST(MatrixLens, @)".}
 
 type OrthographicLens* {.importcpp: "PT(OrthographicLens)", bycopy, pure, inheritable, header: "orthographicLens.h".} = object of Lens
 
-converter toOrthographicLens*(_: type(nil)): OrthographicLens {.importcpp: "(nullptr)".}
+proc toOrthographicLens*(_: type(nil)): OrthographicLens {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OrthographicLens], obj: TypedObject): OrthographicLens {.importcpp: "DCAST(OrthographicLens, @)".}
 
 type ParamTextureSampler* {.importcpp: "PT(ParamTextureSampler)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
 
-converter toParamTextureSampler*(_: type(nil)): ParamTextureSampler {.importcpp: "(nullptr)".}
+proc toParamTextureSampler*(_: type(nil)): ParamTextureSampler {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParamTextureSampler], obj: TypedObject): ParamTextureSampler {.importcpp: "DCAST(ParamTextureSampler, @)".}
 
 type ParamTextureImage* {.importcpp: "PT(ParamTextureImage)", bycopy, pure, inheritable, header: "paramTexture.h".} = object of ParamValueBase
 
-converter toParamTextureImage*(_: type(nil)): ParamTextureImage {.importcpp: "(nullptr)".}
+proc toParamTextureImage*(_: type(nil)): ParamTextureImage {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParamTextureImage], obj: TypedObject): ParamTextureImage {.importcpp: "DCAST(ParamTextureImage, @)".}
 
 type PerspectiveLens* {.importcpp: "PT(PerspectiveLens)", bycopy, pure, inheritable, header: "perspectiveLens.h".} = object of Lens
 
-converter toPerspectiveLens*(_: type(nil)): PerspectiveLens {.importcpp: "(nullptr)".}
+proc toPerspectiveLens*(_: type(nil)): PerspectiveLens {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PerspectiveLens], obj: TypedObject): PerspectiveLens {.importcpp: "DCAST(PerspectiveLens, @)".}
 
 type TextureReloadRequest* {.importcpp: "PT(TextureReloadRequest)", bycopy, pure, inheritable, header: "textureReloadRequest.h".} = object of AsyncTask
 
-converter toTextureReloadRequest*(_: type(nil)): TextureReloadRequest {.importcpp: "(nullptr)".}
+proc toTextureReloadRequest*(_: type(nil)): TextureReloadRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextureReloadRequest], obj: TypedObject): TextureReloadRequest {.importcpp: "DCAST(TextureReloadRequest, @)".}
 
 type TextureContext* {.importcpp: "TextureContext", pure, inheritable, header: "textureContext.h".} = object of BufferContext
 
-converter upcastToAdaptiveLruPage*(_: typedesc[TextureContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
+proc upcastToAdaptiveLruPage*(_: typedesc[TextureContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
 
 type ShaderContext* {.importcpp: "ShaderContext", pure, inheritable, header: "shaderContext.h".} = object of SavedContext
 
 type UserVertexSlider* {.importcpp: "PT(UserVertexSlider)", bycopy, pure, inheritable, header: "userVertexSlider.h".} = object of VertexSlider
 
-converter toUserVertexSlider*(_: type(nil)): UserVertexSlider {.importcpp: "(nullptr)".}
+proc toUserVertexSlider*(_: type(nil)): UserVertexSlider {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UserVertexSlider], obj: TypedObject): UserVertexSlider {.importcpp: "DCAST(UserVertexSlider, @)".}
 
 type UserVertexTransform* {.importcpp: "PT(UserVertexTransform)", bycopy, pure, inheritable, header: "userVertexTransform.h".} = object of VertexTransform
 
-converter toUserVertexTransform*(_: type(nil)): UserVertexTransform {.importcpp: "(nullptr)".}
+proc toUserVertexTransform*(_: type(nil)): UserVertexTransform {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UserVertexTransform], obj: TypedObject): UserVertexTransform {.importcpp: "DCAST(UserVertexTransform, @)".}
 
 type VideoTexture* {.importcpp: "PT(VideoTexture)", bycopy, pure, inheritable, header: "videoTexture.h".} = object of Texture
 
-converter upcastToAnimInterface*(_: typedesc[VideoTexture]): typedesc[AnimInterface] = typedesc[AnimInterface]
+proc upcastToAnimInterface*(_: typedesc[VideoTexture]): typedesc[AnimInterface] = typedesc[AnimInterface]
 
-converter toVideoTexture*(_: type(nil)): VideoTexture {.importcpp: "(nullptr)".}
+proc toVideoTexture*(_: type(nil)): VideoTexture {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[VideoTexture], obj: TypedObject): VideoTexture {.importcpp: "DCAST(VideoTexture, @)".}
 
 type VertexBufferContext* {.importcpp: "VertexBufferContext", pure, inheritable, header: "vertexBufferContext.h".} = object of BufferContext
 
-converter upcastToAdaptiveLruPage*(_: typedesc[VertexBufferContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
+proc upcastToAdaptiveLruPage*(_: typedesc[VertexBufferContext]): typedesc[AdaptiveLruPage] = typedesc[AdaptiveLruPage]
 
 type TextureCollection* {.importcpp: "TextureCollection", pure, inheritable, header: "textureCollection.h".} = object
 
@@ -4182,7 +4182,7 @@ type TexturePool* {.importcpp: "TexturePool", pure, inheritable, header: "textur
 
 type TexturePeeker* {.importcpp: "PT(TexturePeeker)", bycopy, pure, inheritable, header: "texturePeeker.h".} = object of ReferenceCount
 
-converter toTexturePeeker*(_: type(nil)): TexturePeeker {.importcpp: "(nullptr)".}
+proc toTexturePeeker*(_: type(nil)): TexturePeeker {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TexturePeeker], obj: TypedObject): TexturePeeker {.importcpp: "DCAST(TexturePeeker, @)".}
 
 type TextureStagePool* {.importcpp: "TextureStagePool", pure, inheritable, header: "textureStagePool.h".} = object
@@ -4476,7 +4476,7 @@ type ConfigVariableColor* {.importcpp: "ConfigVariableColor", pure, inheritable,
 
 type BoundingVolume* {.importcpp: "PT(BoundingVolume)", bycopy, pure, inheritable, header: "boundingVolume.h".} = object of TypedReferenceCount
 
-converter toBoundingVolume*(_: type(nil)): BoundingVolume {.importcpp: "(nullptr)".}
+proc toBoundingVolume*(_: type(nil)): BoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingVolume], obj: TypedObject): BoundingVolume {.importcpp: "DCAST(BoundingVolume, @)".}
 
 type BoundingVolume_IntersectionFlags {.importcpp: "BoundingVolume::IntersectionFlags", pure, header: "boundingVolume.h".} = enum
@@ -4513,12 +4513,12 @@ template BT_fastest*(_: typedesc[BoundingVolume]): BoundingVolume_BoundsType = B
 
 type GeometricBoundingVolume* {.importcpp: "PT(GeometricBoundingVolume)", bycopy, pure, inheritable, header: "geometricBoundingVolume.h".} = object of BoundingVolume
 
-converter toGeometricBoundingVolume*(_: type(nil)): GeometricBoundingVolume {.importcpp: "(nullptr)".}
+proc toGeometricBoundingVolume*(_: type(nil)): GeometricBoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeometricBoundingVolume], obj: TypedObject): GeometricBoundingVolume {.importcpp: "DCAST(GeometricBoundingVolume, @)".}
 
 type FiniteBoundingVolume* {.importcpp: "PT(FiniteBoundingVolume)", bycopy, pure, inheritable, header: "finiteBoundingVolume.h".} = object of GeometricBoundingVolume
 
-converter toFiniteBoundingVolume*(_: type(nil)): FiniteBoundingVolume {.importcpp: "(nullptr)".}
+proc toFiniteBoundingVolume*(_: type(nil)): FiniteBoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FiniteBoundingVolume], obj: TypedObject): FiniteBoundingVolume {.importcpp: "DCAST(FiniteBoundingVolume, @)".}
 
 type LParabolaf* {.importcpp: "LParabolaf", pure, inheritable, header: "parabola.h".} = object
@@ -4541,7 +4541,7 @@ type Plane* = LPlanef
 
 type BoundingBox* {.importcpp: "PT(BoundingBox)", bycopy, pure, inheritable, header: "boundingBox.h".} = object of FiniteBoundingVolume
 
-converter toBoundingBox*(_: type(nil)): BoundingBox {.importcpp: "(nullptr)".}
+proc toBoundingBox*(_: type(nil)): BoundingBox {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingBox], obj: TypedObject): BoundingBox {.importcpp: "DCAST(BoundingBox, @)".}
 
 type LFrustumf* {.importcpp: "LFrustumf", pure, inheritable, header: "frustum.h".} = object
@@ -4558,39 +4558,39 @@ type Frustum* = LFrustumf
 
 type BoundingHexahedron* {.importcpp: "PT(BoundingHexahedron)", bycopy, pure, inheritable, header: "boundingHexahedron.h".} = object of FiniteBoundingVolume
 
-converter toBoundingHexahedron*(_: type(nil)): BoundingHexahedron {.importcpp: "(nullptr)".}
+proc toBoundingHexahedron*(_: type(nil)): BoundingHexahedron {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingHexahedron], obj: TypedObject): BoundingHexahedron {.importcpp: "DCAST(BoundingHexahedron, @)".}
 
 type BoundingLine* {.importcpp: "PT(BoundingLine)", bycopy, pure, inheritable, header: "boundingLine.h".} = object of GeometricBoundingVolume
 
-converter toBoundingLine*(_: type(nil)): BoundingLine {.importcpp: "(nullptr)".}
+proc toBoundingLine*(_: type(nil)): BoundingLine {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingLine], obj: TypedObject): BoundingLine {.importcpp: "DCAST(BoundingLine, @)".}
 
 type BoundingPlane* {.importcpp: "PT(BoundingPlane)", bycopy, pure, inheritable, header: "boundingPlane.h".} = object of GeometricBoundingVolume
 
-converter toBoundingPlane*(_: type(nil)): BoundingPlane {.importcpp: "(nullptr)".}
+proc toBoundingPlane*(_: type(nil)): BoundingPlane {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingPlane], obj: TypedObject): BoundingPlane {.importcpp: "DCAST(BoundingPlane, @)".}
 
 type BoundingSphere* {.importcpp: "PT(BoundingSphere)", bycopy, pure, inheritable, header: "boundingSphere.h".} = object of FiniteBoundingVolume
 
-converter toBoundingSphere*(_: type(nil)): BoundingSphere {.importcpp: "(nullptr)".}
+proc toBoundingSphere*(_: type(nil)): BoundingSphere {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BoundingSphere], obj: TypedObject): BoundingSphere {.importcpp: "DCAST(BoundingSphere, @)".}
 
 type IntersectionBoundingVolume* {.importcpp: "PT(IntersectionBoundingVolume)", bycopy, pure, inheritable, header: "intersectionBoundingVolume.h".} = object of GeometricBoundingVolume
 
-converter toIntersectionBoundingVolume*(_: type(nil)): IntersectionBoundingVolume {.importcpp: "(nullptr)".}
+proc toIntersectionBoundingVolume*(_: type(nil)): IntersectionBoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[IntersectionBoundingVolume], obj: TypedObject): IntersectionBoundingVolume {.importcpp: "DCAST(IntersectionBoundingVolume, @)".}
 
 type Mersenne* {.importcpp: "Mersenne", pure, inheritable, header: "mersenne.h".} = object
 
 type OmniBoundingVolume* {.importcpp: "PT(OmniBoundingVolume)", bycopy, pure, inheritable, header: "omniBoundingVolume.h".} = object of GeometricBoundingVolume
 
-converter toOmniBoundingVolume*(_: type(nil)): OmniBoundingVolume {.importcpp: "(nullptr)".}
+proc toOmniBoundingVolume*(_: type(nil)): OmniBoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[OmniBoundingVolume], obj: TypedObject): OmniBoundingVolume {.importcpp: "DCAST(OmniBoundingVolume, @)".}
 
 type UnionBoundingVolume* {.importcpp: "PT(UnionBoundingVolume)", bycopy, pure, inheritable, header: "unionBoundingVolume.h".} = object of GeometricBoundingVolume
 
-converter toUnionBoundingVolume*(_: type(nil)): UnionBoundingVolume {.importcpp: "(nullptr)".}
+proc toUnionBoundingVolume*(_: type(nil)): UnionBoundingVolume {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[UnionBoundingVolume], obj: TypedObject): UnionBoundingVolume {.importcpp: "DCAST(UnionBoundingVolume, @)".}
 
 type Randomizer* {.importcpp: "Randomizer", pure, inheritable, header: "randomizer.h".} = object
@@ -4611,65 +4611,65 @@ type Triangulator3* {.importcpp: "Triangulator3", pure, inheritable, header: "tr
 
 type ParametricCurve* {.importcpp: "PT(ParametricCurve)", bycopy, pure, inheritable, header: "parametricCurve.h".} = object of PandaNode
 
-converter toParametricCurve*(_: type(nil)): ParametricCurve {.importcpp: "(nullptr)".}
+proc toParametricCurve*(_: type(nil)): ParametricCurve {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParametricCurve], obj: TypedObject): ParametricCurve {.importcpp: "DCAST(ParametricCurve, @)".}
 
 type CubicCurveseg* {.importcpp: "PT(CubicCurveseg)", bycopy, pure, inheritable, header: "cubicCurveseg.h".} = object of ParametricCurve
 
-converter toCubicCurveseg*(_: type(nil)): CubicCurveseg {.importcpp: "(nullptr)".}
+proc toCubicCurveseg*(_: type(nil)): CubicCurveseg {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CubicCurveseg], obj: TypedObject): CubicCurveseg {.importcpp: "DCAST(CubicCurveseg, @)".}
 
 type ParametricCurveCollection* {.importcpp: "PT(ParametricCurveCollection)", bycopy, pure, inheritable, header: "parametricCurveCollection.h".} = object of ReferenceCount
 
-converter toParametricCurveCollection*(_: type(nil)): ParametricCurveCollection {.importcpp: "(nullptr)".}
+proc toParametricCurveCollection*(_: type(nil)): ParametricCurveCollection {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParametricCurveCollection], obj: TypedObject): ParametricCurveCollection {.importcpp: "DCAST(ParametricCurveCollection, @)".}
 
 type CurveFitter* {.importcpp: "CurveFitter", pure, inheritable, header: "curveFitter.h".} = object
 
 type PiecewiseCurve* {.importcpp: "PT(PiecewiseCurve)", bycopy, pure, inheritable, header: "piecewiseCurve.h".} = object of ParametricCurve
 
-converter toPiecewiseCurve*(_: type(nil)): PiecewiseCurve {.importcpp: "(nullptr)".}
+proc toPiecewiseCurve*(_: type(nil)): PiecewiseCurve {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PiecewiseCurve], obj: TypedObject): PiecewiseCurve {.importcpp: "DCAST(PiecewiseCurve, @)".}
 
 type HermiteCurve* {.importcpp: "PT(HermiteCurve)", bycopy, pure, inheritable, header: "hermiteCurve.h".} = object of PiecewiseCurve
 
-converter toHermiteCurve*(_: type(nil)): HermiteCurve {.importcpp: "(nullptr)".}
+proc toHermiteCurve*(_: type(nil)): HermiteCurve {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[HermiteCurve], obj: TypedObject): HermiteCurve {.importcpp: "DCAST(HermiteCurve, @)".}
 
 type NurbsCurveInterface* {.importcpp: "NurbsCurveInterface*", bycopy, pure, inheritable, header: "nurbsCurveInterface.h".} = object
 
-converter toNurbsCurveInterface*(_: type(nil)): NurbsCurveInterface {.importcpp: "(nullptr)".}
+proc toNurbsCurveInterface*(_: type(nil)): NurbsCurveInterface {.importcpp: "(nullptr)".}
 
 type NurbsCurve* {.importcpp: "PT(NurbsCurve)", bycopy, pure, inheritable, header: "nurbsCurve.h".} = object of PiecewiseCurve
 
-converter upcastToNurbsCurveInterface*(_: typedesc[NurbsCurve]): typedesc[NurbsCurveInterface] = typedesc[NurbsCurveInterface]
+proc upcastToNurbsCurveInterface*(_: typedesc[NurbsCurve]): typedesc[NurbsCurveInterface] = typedesc[NurbsCurveInterface]
 
-converter toNurbsCurve*(_: type(nil)): NurbsCurve {.importcpp: "(nullptr)".}
+proc toNurbsCurve*(_: type(nil)): NurbsCurve {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NurbsCurve], obj: TypedObject): NurbsCurve {.importcpp: "DCAST(NurbsCurve, @)".}
 
 type NurbsCurveResult* {.importcpp: "PT(NurbsCurveResult)", bycopy, pure, inheritable, header: "nurbsCurveResult.h".} = object of ReferenceCount
 
-converter toNurbsCurveResult*(_: type(nil)): NurbsCurveResult {.importcpp: "(nullptr)".}
+proc toNurbsCurveResult*(_: type(nil)): NurbsCurveResult {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NurbsCurveResult], obj: TypedObject): NurbsCurveResult {.importcpp: "DCAST(NurbsCurveResult, @)".}
 
 type NurbsCurveEvaluator* {.importcpp: "PT(NurbsCurveEvaluator)", bycopy, pure, inheritable, header: "nurbsCurveEvaluator.h".} = object of ReferenceCount
 
-converter toNurbsCurveEvaluator*(_: type(nil)): NurbsCurveEvaluator {.importcpp: "(nullptr)".}
+proc toNurbsCurveEvaluator*(_: type(nil)): NurbsCurveEvaluator {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NurbsCurveEvaluator], obj: TypedObject): NurbsCurveEvaluator {.importcpp: "DCAST(NurbsCurveEvaluator, @)".}
 
 type NurbsSurfaceResult* {.importcpp: "PT(NurbsSurfaceResult)", bycopy, pure, inheritable, header: "nurbsSurfaceResult.h".} = object of ReferenceCount
 
-converter toNurbsSurfaceResult*(_: type(nil)): NurbsSurfaceResult {.importcpp: "(nullptr)".}
+proc toNurbsSurfaceResult*(_: type(nil)): NurbsSurfaceResult {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NurbsSurfaceResult], obj: TypedObject): NurbsSurfaceResult {.importcpp: "DCAST(NurbsSurfaceResult, @)".}
 
 type NurbsSurfaceEvaluator* {.importcpp: "PT(NurbsSurfaceEvaluator)", bycopy, pure, inheritable, header: "nurbsSurfaceEvaluator.h".} = object of ReferenceCount
 
-converter toNurbsSurfaceEvaluator*(_: type(nil)): NurbsSurfaceEvaluator {.importcpp: "(nullptr)".}
+proc toNurbsSurfaceEvaluator*(_: type(nil)): NurbsSurfaceEvaluator {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[NurbsSurfaceEvaluator], obj: TypedObject): NurbsSurfaceEvaluator {.importcpp: "DCAST(NurbsSurfaceEvaluator, @)".}
 
 type RopeNode* {.importcpp: "PT(RopeNode)", bycopy, pure, inheritable, header: "ropeNode.h".} = object of PandaNode
 
-converter toRopeNode*(_: type(nil)): RopeNode {.importcpp: "(nullptr)".}
+proc toRopeNode*(_: type(nil)): RopeNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[RopeNode], obj: TypedObject): RopeNode {.importcpp: "DCAST(RopeNode, @)".}
 
 type RopeNode_RenderMode {.importcpp: "RopeNode::RenderMode", pure, header: "ropeNode.h".} = enum
@@ -4712,7 +4712,7 @@ template NM_vertex*(_: typedesc[RopeNode]): RopeNode_NormalMode = RopeNode_Norma
 
 type SheetNode* {.importcpp: "PT(SheetNode)", bycopy, pure, inheritable, header: "sheetNode.h".} = object of PandaNode
 
-converter toSheetNode*(_: type(nil)): SheetNode {.importcpp: "(nullptr)".}
+proc toSheetNode*(_: type(nil)): SheetNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[SheetNode], obj: TypedObject): SheetNode {.importcpp: "DCAST(SheetNode, @)".}
 
 type pixel* {.importcpp: "pixel", pure, inheritable, header: "pnmimage_base.h".} = object
@@ -4748,7 +4748,7 @@ type PfmFile* {.importcpp: "PfmFile", pure, inheritable, header: "pfmFile.h".} =
 
 type PNMBrush* {.importcpp: "PT(PNMBrush)", bycopy, pure, inheritable, header: "pnmBrush.h".} = object of ReferenceCount
 
-converter toPNMBrush*(_: type(nil)): PNMBrush {.importcpp: "(nullptr)".}
+proc toPNMBrush*(_: type(nil)): PNMBrush {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PNMBrush], obj: TypedObject): PNMBrush {.importcpp: "DCAST(PNMBrush, @)".}
 
 type PNMBrush_BrushEffect {.importcpp: "PNMBrush::BrushEffect", pure, header: "pnmBrush.h".} = enum
@@ -4771,14 +4771,14 @@ type PNMPainter* {.importcpp: "PNMPainter", pure, inheritable, header: "pnmPaint
 
 type TextGlyph* {.importcpp: "PT(TextGlyph)", bycopy, pure, inheritable, header: "textGlyph.h".} = object of TypedReferenceCount
 
-converter toTextGlyph*(_: type(nil)): TextGlyph {.importcpp: "(nullptr)".}
+proc toTextGlyph*(_: type(nil)): TextGlyph {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextGlyph], obj: TypedObject): TextGlyph {.importcpp: "DCAST(TextGlyph, @)".}
 
 type TextFont* {.importcpp: "PT(TextFont)", bycopy, pure, inheritable, header: "textFont.h".} = object of TypedReferenceCount
 
-converter upcastToNamable*(_: typedesc[TextFont]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[TextFont]): typedesc[Namable] = typedesc[Namable]
 
-converter toTextFont*(_: type(nil)): TextFont {.importcpp: "(nullptr)".}
+proc toTextFont*(_: type(nil)): TextFont {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[TextFont], obj: TypedObject): TextFont {.importcpp: "DCAST(TextFont, @)".}
 
 type TextFont_RenderMode {.importcpp: "TextFont::RenderMode", pure, header: "textFont.h".} = enum
@@ -4803,12 +4803,12 @@ template RM_invalid*(_: typedesc[TextFont]): TextFont_RenderMode = TextFont_Rend
 
 type DynamicTextGlyph* {.importcpp: "PT(DynamicTextGlyph)", bycopy, pure, inheritable, header: "dynamicTextGlyph.h".} = object of TextGlyph
 
-converter toDynamicTextGlyph*(_: type(nil)): DynamicTextGlyph {.importcpp: "(nullptr)".}
+proc toDynamicTextGlyph*(_: type(nil)): DynamicTextGlyph {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DynamicTextGlyph], obj: TypedObject): DynamicTextGlyph {.importcpp: "DCAST(DynamicTextGlyph, @)".}
 
 type DynamicTextPage* {.importcpp: "PT(DynamicTextPage)", bycopy, pure, inheritable, header: "dynamicTextPage.h".} = object of Texture
 
-converter toDynamicTextPage*(_: type(nil)): DynamicTextPage {.importcpp: "(nullptr)".}
+proc toDynamicTextPage*(_: type(nil)): DynamicTextPage {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DynamicTextPage], obj: TypedObject): DynamicTextPage {.importcpp: "DCAST(DynamicTextPage, @)".}
 
 type FreetypeFont* {.importcpp: "FreetypeFont", pure, inheritable, header: "freetypeFont.h".} = object of Namable
@@ -4829,21 +4829,21 @@ template WO_invalid*(_: typedesc[FreetypeFont]): FreetypeFont_WindingOrder = Fre
 
 type DynamicTextFont* {.importcpp: "PT(DynamicTextFont)", bycopy, pure, inheritable, header: "dynamicTextFont.h".} = object of TextFont
 
-converter upcastToFreetypeFont*(_: typedesc[DynamicTextFont]): typedesc[FreetypeFont] = typedesc[FreetypeFont]
+proc upcastToFreetypeFont*(_: typedesc[DynamicTextFont]): typedesc[FreetypeFont] = typedesc[FreetypeFont]
 
-converter toDynamicTextFont*(_: type(nil)): DynamicTextFont {.importcpp: "(nullptr)".}
+proc toDynamicTextFont*(_: type(nil)): DynamicTextFont {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DynamicTextFont], obj: TypedObject): DynamicTextFont {.importcpp: "DCAST(DynamicTextFont, @)".}
 
 type FontPool* {.importcpp: "FontPool", pure, inheritable, header: "fontPool.h".} = object
 
 type GeomTextGlyph* {.importcpp: "PT(GeomTextGlyph)", bycopy, pure, inheritable, header: "geomTextGlyph.h".} = object of Geom
 
-converter toGeomTextGlyph*(_: type(nil)): GeomTextGlyph {.importcpp: "(nullptr)".}
+proc toGeomTextGlyph*(_: type(nil)): GeomTextGlyph {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[GeomTextGlyph], obj: TypedObject): GeomTextGlyph {.importcpp: "DCAST(GeomTextGlyph, @)".}
 
 type StaticTextFont* {.importcpp: "PT(StaticTextFont)", bycopy, pure, inheritable, header: "staticTextFont.h".} = object of TextFont
 
-converter toStaticTextFont*(_: type(nil)): StaticTextFont {.importcpp: "(nullptr)".}
+proc toStaticTextFont*(_: type(nil)): StaticTextFont {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[StaticTextFont], obj: TypedObject): StaticTextFont {.importcpp: "DCAST(StaticTextFont, @)".}
 
 type TextGraphic* {.importcpp: "TextGraphic", pure, inheritable, header: "textGraphic.h".} = object
@@ -4854,29 +4854,29 @@ type TextAssembler* {.importcpp: "TextAssembler", pure, inheritable, header: "te
 
 type ButtonThrower* {.importcpp: "PT(ButtonThrower)", bycopy, pure, inheritable, header: "buttonThrower.h".} = object of DataNode
 
-converter toButtonThrower*(_: type(nil)): ButtonThrower {.importcpp: "(nullptr)".}
+proc toButtonThrower*(_: type(nil)): ButtonThrower {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ButtonThrower], obj: TypedObject): ButtonThrower {.importcpp: "DCAST(ButtonThrower, @)".}
 
 type MouseInterfaceNode* {.importcpp: "PT(MouseInterfaceNode)", bycopy, pure, inheritable, header: "mouseInterfaceNode.h".} = object of DataNode
 
-converter toMouseInterfaceNode*(_: type(nil)): MouseInterfaceNode {.importcpp: "(nullptr)".}
+proc toMouseInterfaceNode*(_: type(nil)): MouseInterfaceNode {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseInterfaceNode], obj: TypedObject): MouseInterfaceNode {.importcpp: "DCAST(MouseInterfaceNode, @)".}
 
 type DriveInterface* {.importcpp: "PT(DriveInterface)", bycopy, pure, inheritable, header: "driveInterface.h".} = object of MouseInterfaceNode
 
-converter toDriveInterface*(_: type(nil)): DriveInterface {.importcpp: "(nullptr)".}
+proc toDriveInterface*(_: type(nil)): DriveInterface {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[DriveInterface], obj: TypedObject): DriveInterface {.importcpp: "DCAST(DriveInterface, @)".}
 
 type MouseSubregion* {.importcpp: "PT(MouseSubregion)", bycopy, pure, inheritable, header: "mouseSubregion.h".} = object of MouseInterfaceNode
 
-converter toMouseSubregion*(_: type(nil)): MouseSubregion {.importcpp: "(nullptr)".}
+proc toMouseSubregion*(_: type(nil)): MouseSubregion {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseSubregion], obj: TypedObject): MouseSubregion {.importcpp: "DCAST(MouseSubregion, @)".}
 
 type MouseWatcherRegion* {.importcpp: "PT(MouseWatcherRegion)", bycopy, pure, inheritable, header: "mouseWatcherRegion.h".} = object of TypedWritableReferenceCount
 
-converter upcastToNamable*(_: typedesc[MouseWatcherRegion]): typedesc[Namable] = typedesc[Namable]
+proc upcastToNamable*(_: typedesc[MouseWatcherRegion]): typedesc[Namable] = typedesc[Namable]
 
-converter toMouseWatcherRegion*(_: type(nil)): MouseWatcherRegion {.importcpp: "(nullptr)".}
+proc toMouseWatcherRegion*(_: type(nil)): MouseWatcherRegion {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseWatcherRegion], obj: TypedObject): MouseWatcherRegion {.importcpp: "DCAST(MouseWatcherRegion, @)".}
 
 type MouseWatcherRegion_SuppressFlags {.importcpp: "MouseWatcherRegion::SuppressFlags", pure, header: "mouseWatcherRegion.h".} = enum
@@ -4895,27 +4895,27 @@ template SF_mousePosition*(_: typedesc[MouseWatcherRegion]): MouseWatcherRegion_
 
 type MouseWatcherBase* {.importcpp: "MouseWatcherBase*", bycopy, pure, inheritable, header: "mouseWatcherBase.h".} = object
 
-converter toMouseWatcherBase*(_: type(nil)): MouseWatcherBase {.importcpp: "(nullptr)".}
+proc toMouseWatcherBase*(_: type(nil)): MouseWatcherBase {.importcpp: "(nullptr)".}
 
 type MouseWatcherGroup* {.importcpp: "PT(MouseWatcherGroup)", bycopy, pure, inheritable, header: "mouseWatcherGroup.h".} = object of MouseWatcherBase
 
-converter upcastToReferenceCount*(_: typedesc[MouseWatcherGroup]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
+proc upcastToReferenceCount*(_: typedesc[MouseWatcherGroup]): typedesc[ReferenceCount] = typedesc[ReferenceCount]
 
-converter toMouseWatcherGroup*(_: type(nil)): MouseWatcherGroup {.importcpp: "(nullptr)".}
+proc toMouseWatcherGroup*(_: type(nil)): MouseWatcherGroup {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseWatcherGroup], obj: TypedObject): MouseWatcherGroup {.importcpp: "DCAST(MouseWatcherGroup, @)".}
 
 type MouseWatcher* {.importcpp: "PT(MouseWatcher)", bycopy, pure, inheritable, header: "mouseWatcher.h".} = object of DataNode
 
-converter upcastToMouseWatcherBase*(_: typedesc[MouseWatcher]): typedesc[MouseWatcherBase] = typedesc[MouseWatcherBase]
+proc upcastToMouseWatcherBase*(_: typedesc[MouseWatcher]): typedesc[MouseWatcherBase] = typedesc[MouseWatcherBase]
 
-converter toMouseWatcher*(_: type(nil)): MouseWatcher {.importcpp: "(nullptr)".}
+proc toMouseWatcher*(_: type(nil)): MouseWatcher {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[MouseWatcher], obj: TypedObject): MouseWatcher {.importcpp: "DCAST(MouseWatcher, @)".}
 
 type MouseWatcherParameter* {.importcpp: "MouseWatcherParameter", pure, inheritable, header: "mouseWatcherParameter.h".} = object
 
 type Trackball* {.importcpp: "PT(Trackball)", bycopy, pure, inheritable, header: "trackball.h".} = object of MouseInterfaceNode
 
-converter toTrackball*(_: type(nil)): Trackball {.importcpp: "(nullptr)".}
+proc toTrackball*(_: type(nil)): Trackball {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Trackball], obj: TypedObject): Trackball {.importcpp: "DCAST(Trackball, @)".}
 
 type Trackball_ControlMode {.importcpp: "Trackball::ControlMode", pure, header: "trackball.h".} = enum
@@ -4936,7 +4936,7 @@ template CM_roll*(_: typedesc[Trackball]): Trackball_ControlMode = Trackball_Con
 
 type Transform2SG* {.importcpp: "PT(Transform2SG)", bycopy, pure, inheritable, header: "transform2sg.h".} = object of DataNode
 
-converter toTransform2SG*(_: type(nil)): Transform2SG {.importcpp: "(nullptr)".}
+proc toTransform2SG*(_: type(nil)): Transform2SG {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Transform2SG], obj: TypedObject): Transform2SG {.importcpp: "DCAST(Transform2SG, @)".}
 
 type AutoTextureScale* {.importcpp: "AutoTextureScale", header: "autoTextureScale.h".} = enum
@@ -4950,7 +4950,7 @@ type UpdateSeq* {.importcpp: "UpdateSeq", pure, inheritable, header: "updateSeq.
 
 type BamCacheRecord* {.importcpp: "PT(BamCacheRecord)", bycopy, pure, inheritable, header: "bamCacheRecord.h".} = object of TypedWritableReferenceCount
 
-converter toBamCacheRecord*(_: type(nil)): BamCacheRecord {.importcpp: "(nullptr)".}
+proc toBamCacheRecord*(_: type(nil)): BamCacheRecord {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[BamCacheRecord], obj: TypedObject): BamCacheRecord {.importcpp: "DCAST(BamCacheRecord, @)".}
 
 type BamCache* {.importcpp: "BamCache", pure, inheritable, header: "bamCache.h".} = object
@@ -5027,19 +5027,19 @@ type ButtonRegistry* {.importcpp: "ButtonRegistry", pure, inheritable, header: "
 
 type ButtonMap* {.importcpp: "PT(ButtonMap)", bycopy, pure, inheritable, header: "buttonMap.h".} = object of TypedReferenceCount
 
-converter toButtonMap*(_: type(nil)): ButtonMap {.importcpp: "(nullptr)".}
+proc toButtonMap*(_: type(nil)): ButtonMap {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ButtonMap], obj: TypedObject): ButtonMap {.importcpp: "DCAST(ButtonMap, @)".}
 
 type CallbackObject* {.importcpp: "PT(CallbackObject)", bycopy, pure, inheritable, header: "callbackObject.h".} = object of TypedReferenceCount
 
-converter toCallbackObject*(_: type(nil)): CallbackObject {.importcpp: "(nullptr)".}
+proc toCallbackObject*(_: type(nil)): CallbackObject {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[CallbackObject], obj: TypedObject): CallbackObject {.importcpp: "DCAST(CallbackObject, @)".}
 
 type TimeVal* {.importcpp: "TimeVal", pure, inheritable, header: "clockObject.h".} = object
 
 type ClockObject* {.importcpp: "PT(ClockObject)", bycopy, pure, inheritable, header: "clockObject.h".} = object of ReferenceCount
 
-converter toClockObject*(_: type(nil)): ClockObject {.importcpp: "(nullptr)".}
+proc toClockObject*(_: type(nil)): ClockObject {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ClockObject], obj: TypedObject): ClockObject {.importcpp: "DCAST(ClockObject, @)".}
 
 type ClockObject_Mode {.importcpp: "ClockObject::Mode", pure, header: "clockObject.h".} = enum
@@ -5074,7 +5074,7 @@ type ColorSpace* {.importcpp: "ColorSpace", header: "colorSpace.h".} = enum
 
 type DatagramBuffer* {.importcpp: "DatagramBuffer", pure, inheritable, header: "datagramBuffer.h".} = object of DatagramSink
 
-converter upcastToDatagramGenerator*(_: typedesc[DatagramBuffer]): typedesc[DatagramGenerator] = typedesc[DatagramGenerator]
+proc upcastToDatagramGenerator*(_: typedesc[DatagramBuffer]): typedesc[DatagramGenerator] = typedesc[DatagramGenerator]
 
 type DatagramInputFile* {.importcpp: "DatagramInputFile", pure, inheritable, header: "datagramInputFile.h".} = object of DatagramGenerator
 
@@ -5105,7 +5105,7 @@ type SparseArray* {.importcpp: "SparseArray", pure, inheritable, header: "sparse
 
 type ParamTypedRefCount* {.importcpp: "PT(ParamTypedRefCount)", bycopy, pure, inheritable, header: "paramValue.h".} = object of ParamValueBase
 
-converter toParamTypedRefCount*(_: type(nil)): ParamTypedRefCount {.importcpp: "(nullptr)".}
+proc toParamTypedRefCount*(_: type(nil)): ParamTypedRefCount {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[ParamTypedRefCount], obj: TypedObject): ParamTypedRefCount {.importcpp: "DCAST(ParamTypedRefCount, @)".}
 
 type WritableConfigurable* {.importcpp: "WritableConfigurable", pure, inheritable, header: "writableConfigurable.h".} = object of TypedWritable
@@ -5116,12 +5116,12 @@ type PortalMask* = BitMask32
 
 type FilterProperties* {.importcpp: "PT(FilterProperties)", bycopy, pure, inheritable, header: "filterProperties.h".} = object of TypedReferenceCount
 
-converter toFilterProperties*(_: type(nil)): FilterProperties {.importcpp: "(nullptr)".}
+proc toFilterProperties*(_: type(nil)): FilterProperties {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[FilterProperties], obj: TypedObject): FilterProperties {.importcpp: "DCAST(FilterProperties, @)".}
 
 type AudioSound* {.importcpp: "PT(AudioSound)", bycopy, pure, inheritable, header: "audioSound.h".} = object of TypedReferenceCount
 
-converter toAudioSound*(_: type(nil)): AudioSound {.importcpp: "(nullptr)".}
+proc toAudioSound*(_: type(nil)): AudioSound {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AudioSound], obj: TypedObject): AudioSound {.importcpp: "DCAST(AudioSound, @)".}
 
 type AudioSound_SoundStatus {.importcpp: "AudioSound::SoundStatus", pure, header: "audioSound.h".} = enum
@@ -5138,7 +5138,7 @@ template PLAYING*(_: typedesc[AudioSound]): AudioSound_SoundStatus = AudioSound_
 
 type AudioManager* {.importcpp: "PT(AudioManager)", bycopy, pure, inheritable, header: "audioManager.h".} = object of TypedReferenceCount
 
-converter toAudioManager*(_: type(nil)): AudioManager {.importcpp: "(nullptr)".}
+proc toAudioManager*(_: type(nil)): AudioManager {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AudioManager], obj: TypedObject): AudioManager {.importcpp: "DCAST(AudioManager, @)".}
 
 type AudioManager_SpeakerModeCategory {.importcpp: "AudioManager::SpeakerModeCategory", pure, header: "audioManager.h".} = enum
@@ -5205,7 +5205,7 @@ template SM_stream*(_: typedesc[AudioManager]): AudioManager_StreamMode = AudioM
 
 type AudioLoadRequest* {.importcpp: "PT(AudioLoadRequest)", bycopy, pure, inheritable, header: "audioLoadRequest.h".} = object of AsyncTask
 
-converter toAudioLoadRequest*(_: type(nil)): AudioLoadRequest {.importcpp: "(nullptr)".}
+proc toAudioLoadRequest*(_: type(nil)): AudioLoadRequest {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[AudioLoadRequest], obj: TypedObject): AudioLoadRequest {.importcpp: "DCAST(AudioLoadRequest, @)".}
 
 type PGFrameStyle* {.importcpp: "PGFrameStyle", pure, inheritable, header: "pgFrameStyle.h".} = object
@@ -5232,12 +5232,12 @@ template T_textureBorder*(_: typedesc[PGFrameStyle]): PGFrameStyle_Type = PGFram
 
 type PGItem* {.importcpp: "PT(PGItem)", bycopy, pure, inheritable, header: "pgItem.h".} = object of PandaNode
 
-converter toPGItem*(_: type(nil)): PGItem {.importcpp: "(nullptr)".}
+proc toPGItem*(_: type(nil)): PGItem {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGItem], obj: TypedObject): PGItem {.importcpp: "DCAST(PGItem, @)".}
 
 type PGButton* {.importcpp: "PT(PGButton)", bycopy, pure, inheritable, header: "pgButton.h".} = object of PGItem
 
-converter toPGButton*(_: type(nil)): PGButton {.importcpp: "(nullptr)".}
+proc toPGButton*(_: type(nil)): PGButton {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGButton], obj: TypedObject): PGButton {.importcpp: "DCAST(PGButton, @)".}
 
 type PGButton_State {.importcpp: "PGButton::State", pure, header: "pgButton.h".} = enum
@@ -5256,12 +5256,12 @@ template S_inactive*(_: typedesc[PGButton]): PGButton_State = PGButton_State.S_i
 
 type PGTop* {.importcpp: "PT(PGTop)", bycopy, pure, inheritable, header: "pgTop.h".} = object of PandaNode
 
-converter toPGTop*(_: type(nil)): PGTop {.importcpp: "(nullptr)".}
+proc toPGTop*(_: type(nil)): PGTop {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGTop], obj: TypedObject): PGTop {.importcpp: "DCAST(PGTop, @)".}
 
 type PGEntry* {.importcpp: "PT(PGEntry)", bycopy, pure, inheritable, header: "pgEntry.h".} = object of PGItem
 
-converter toPGEntry*(_: type(nil)): PGEntry {.importcpp: "(nullptr)".}
+proc toPGEntry*(_: type(nil)): PGEntry {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGEntry], obj: TypedObject): PGEntry {.importcpp: "DCAST(PGEntry, @)".}
 
 type PGEntry_State {.importcpp: "PGEntry::State", pure, header: "pgEntry.h".} = enum
@@ -5278,88 +5278,88 @@ template S_inactive*(_: typedesc[PGEntry]): PGEntry_State = PGEntry_State.S_inac
 
 type PGMouseWatcherParameter* {.importcpp: "PT(PGMouseWatcherParameter)", bycopy, pure, inheritable, header: "pgMouseWatcherParameter.h".} = object of TypedWritableReferenceCount
 
-converter upcastToMouseWatcherParameter*(_: typedesc[PGMouseWatcherParameter]): typedesc[MouseWatcherParameter] = typedesc[MouseWatcherParameter]
+proc upcastToMouseWatcherParameter*(_: typedesc[PGMouseWatcherParameter]): typedesc[MouseWatcherParameter] = typedesc[MouseWatcherParameter]
 
-converter toPGMouseWatcherParameter*(_: type(nil)): PGMouseWatcherParameter {.importcpp: "(nullptr)".}
+proc toPGMouseWatcherParameter*(_: type(nil)): PGMouseWatcherParameter {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherParameter], obj: TypedObject): PGMouseWatcherParameter {.importcpp: "DCAST(PGMouseWatcherParameter, @)".}
 
 type PGMouseWatcherBackground* {.importcpp: "PT(PGMouseWatcherBackground)", bycopy, pure, inheritable, header: "pgMouseWatcherBackground.h".} = object of MouseWatcherRegion
 
-converter toPGMouseWatcherBackground*(_: type(nil)): PGMouseWatcherBackground {.importcpp: "(nullptr)".}
+proc toPGMouseWatcherBackground*(_: type(nil)): PGMouseWatcherBackground {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGMouseWatcherBackground], obj: TypedObject): PGMouseWatcherBackground {.importcpp: "DCAST(PGMouseWatcherBackground, @)".}
 
 type PGVirtualFrame* {.importcpp: "PT(PGVirtualFrame)", bycopy, pure, inheritable, header: "pgVirtualFrame.h".} = object of PGItem
 
-converter toPGVirtualFrame*(_: type(nil)): PGVirtualFrame {.importcpp: "(nullptr)".}
+proc toPGVirtualFrame*(_: type(nil)): PGVirtualFrame {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGVirtualFrame], obj: TypedObject): PGVirtualFrame {.importcpp: "DCAST(PGVirtualFrame, @)".}
 
 type PGSliderBar* {.importcpp: "PT(PGSliderBar)", bycopy, pure, inheritable, header: "pgSliderBar.h".} = object of PGItem
 
-converter toPGSliderBar*(_: type(nil)): PGSliderBar {.importcpp: "(nullptr)".}
+proc toPGSliderBar*(_: type(nil)): PGSliderBar {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGSliderBar], obj: TypedObject): PGSliderBar {.importcpp: "DCAST(PGSliderBar, @)".}
 
 type PGScrollFrame* {.importcpp: "PT(PGScrollFrame)", bycopy, pure, inheritable, header: "pgScrollFrame.h".} = object of PGVirtualFrame
 
-converter toPGScrollFrame*(_: type(nil)): PGScrollFrame {.importcpp: "(nullptr)".}
+proc toPGScrollFrame*(_: type(nil)): PGScrollFrame {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGScrollFrame], obj: TypedObject): PGScrollFrame {.importcpp: "DCAST(PGScrollFrame, @)".}
 
 type PGWaitBar* {.importcpp: "PT(PGWaitBar)", bycopy, pure, inheritable, header: "pgWaitBar.h".} = object of PGItem
 
-converter toPGWaitBar*(_: type(nil)): PGWaitBar {.importcpp: "(nullptr)".}
+proc toPGWaitBar*(_: type(nil)): PGWaitBar {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[PGWaitBar], obj: TypedObject): PGWaitBar {.importcpp: "DCAST(PGWaitBar, @)".}
 
 type NetAddress* {.importcpp: "NetAddress", pure, inheritable, header: "netAddress.h".} = object
 
 type Connection* {.importcpp: "PT(Connection)", bycopy, pure, inheritable, header: "connection.h".} = object of ReferenceCount
 
-converter toConnection*(_: type(nil)): Connection {.importcpp: "(nullptr)".}
+proc toConnection*(_: type(nil)): Connection {.importcpp: "(nullptr)".}
 func dcast*(_: typedesc[Connection], obj: TypedObject): Connection {.importcpp: "DCAST(Connection, @)".}
 
 type ConnectionReader* {.importcpp: "ConnectionReader*", bycopy, pure, inheritable, header: "connectionReader.h".} = object
 
-converter toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nullptr)".}
+proc toConnectionReader*(_: type(nil)): ConnectionReader {.importcpp: "(nullptr)".}
 
 type ConnectionListener* {.importcpp: "ConnectionListener*", bycopy, pure, inheritable, header: "connectionListener.h".} = object of ConnectionReader
 
-converter toConnectionListener*(_: type(nil)): ConnectionListener {.importcpp: "(nullptr)".}
+proc toConnectionListener*(_: type(nil)): ConnectionListener {.importcpp: "(nullptr)".}
 
 type NetDatagram* {.importcpp: "NetDatagram", pure, inheritable, header: "netDatagram.h".} = object of Datagram
 
 type ConnectionManager* {.importcpp: "ConnectionManager*", bycopy, pure, inheritable, header: "connectionManager.h".} = object
 
-converter toConnectionManager*(_: type(nil)): ConnectionManager {.importcpp: "(nullptr)".}
+proc toConnectionManager*(_: type(nil)): ConnectionManager {.importcpp: "(nullptr)".}
 
 type ConnectionWriter* {.importcpp: "ConnectionWriter", pure, inheritable, header: "connectionWriter.h".} = object
 
 type DatagramGeneratorNet* {.importcpp: "DatagramGeneratorNet*", bycopy, pure, inheritable, header: "datagramGeneratorNet.h".} = object of DatagramGenerator
 
-converter upcastToConnectionReader*(_: typedesc[DatagramGeneratorNet]): typedesc[ConnectionReader] = typedesc[ConnectionReader]
+proc upcastToConnectionReader*(_: typedesc[DatagramGeneratorNet]): typedesc[ConnectionReader] = typedesc[ConnectionReader]
 
-converter toDatagramGeneratorNet*(_: type(nil)): DatagramGeneratorNet {.importcpp: "(nullptr)".}
+proc toDatagramGeneratorNet*(_: type(nil)): DatagramGeneratorNet {.importcpp: "(nullptr)".}
 
 type DatagramSinkNet* {.importcpp: "DatagramSinkNet", pure, inheritable, header: "datagramSinkNet.h".} = object of DatagramSink
 
-converter upcastToConnectionWriter*(_: typedesc[DatagramSinkNet]): typedesc[ConnectionWriter] = typedesc[ConnectionWriter]
+proc upcastToConnectionWriter*(_: typedesc[DatagramSinkNet]): typedesc[ConnectionWriter] = typedesc[ConnectionWriter]
 
 type QueuedConnectionListener* {.importcpp: "QueuedConnectionListener*", bycopy, pure, inheritable, header: "queuedConnectionListener.h".} = object of ConnectionListener
 
-converter toQueuedConnectionListener*(_: type(nil)): QueuedConnectionListener {.importcpp: "(nullptr)".}
+proc toQueuedConnectionListener*(_: type(nil)): QueuedConnectionListener {.importcpp: "(nullptr)".}
 
 type QueuedConnectionManager* {.importcpp: "QueuedConnectionManager*", bycopy, pure, inheritable, header: "queuedConnectionManager.h".} = object of ConnectionManager
 
-converter toQueuedConnectionManager*(_: type(nil)): QueuedConnectionManager {.importcpp: "(nullptr)".}
+proc toQueuedConnectionManager*(_: type(nil)): QueuedConnectionManager {.importcpp: "(nullptr)".}
 
 type QueuedConnectionReader* {.importcpp: "QueuedConnectionReader*", bycopy, pure, inheritable, header: "queuedConnectionReader.h".} = object of ConnectionReader
 
-converter toQueuedConnectionReader*(_: type(nil)): QueuedConnectionReader {.importcpp: "(nullptr)".}
+proc toQueuedConnectionReader*(_: type(nil)): QueuedConnectionReader {.importcpp: "(nullptr)".}
 
 type RecentConnectionReader* {.importcpp: "RecentConnectionReader*", bycopy, pure, inheritable, header: "recentConnectionReader.h".} = object of ConnectionReader
 
-converter toRecentConnectionReader*(_: type(nil)): RecentConnectionReader {.importcpp: "(nullptr)".}
+proc toRecentConnectionReader*(_: type(nil)): RecentConnectionReader {.importcpp: "(nullptr)".}
 
 type Socket_Address* {.importcpp: "Socket_Address*", bycopy, pure, inheritable, header: "socket_address.h".} = object
 
-converter toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr)".}
+proc toSocket_Address*(_: type(nil)): Socket_Address {.importcpp: "(nullptr)".}
 
 type Socket_IP* {.importcpp: "Socket_IP", pure, inheritable, header: "socket_ip.h".} = object of TypedObject
 
@@ -6015,7 +6015,7 @@ proc reregisterTypes*(_: typedesc[TypeRegistry]) {.importcpp: "TypeRegistry::rer
 
 proc initTypeRegistry*(param0: TypeRegistry): TypeRegistry {.importcpp: "TypeRegistry(#)".}
 
-converter getClassType*(_: typedesc[TypedObject]): TypeHandle {.importcpp: "TypedObject::get_class_type()", header: "typedObject.h".}
+proc getClassType*(_: typedesc[TypedObject]): TypeHandle {.importcpp: "TypedObject::get_class_type()", header: "typedObject.h".}
 
 proc initfstream*(): fstream {.importcpp: "fstream()".}
 
@@ -6117,7 +6117,7 @@ proc setFilesystemEncoding*(_: typedesc[Filename], encoding: TextEncoder_Encodin
 
 proc getFilesystemEncoding*(_: typedesc[Filename]): TextEncoder_Encoding {.importcpp: "Filename::get_filesystem_encoding()", header: "filename.h".}
 
-converter getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
+proc getClassType*(_: typedesc[Filename]): TypeHandle {.importcpp: "Filename::get_class_type()", header: "filename.h".}
 
 proc getVersionString*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromStdString(PandaSystem::get_version_string())", header: "pandaSystem.h".}
 
@@ -6149,17 +6149,17 @@ proc getPlatform*(_: typedesc[PandaSystem]): string {.importcpp: "nimStringFromS
 
 proc getGlobalPtr*(_: typedesc[PandaSystem]): PandaSystem {.importcpp: "PandaSystem::get_global_ptr()", header: "pandaSystem.h".}
 
-converter getClassType*(_: typedesc[PandaSystem]): TypeHandle {.importcpp: "PandaSystem::get_class_type()", header: "pandaSystem.h".}
+proc getClassType*(_: typedesc[PandaSystem]): TypeHandle {.importcpp: "PandaSystem::get_class_type()", header: "pandaSystem.h".}
 
 proc initDSearchPath*(): DSearchPath {.importcpp: "DSearchPath()".}
 
 proc initDSearchPath*(copy: DSearchPath): DSearchPath {.importcpp: "DSearchPath(#)".}
 
-converter initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
+proc initDSearchPath*(directory: Filename): DSearchPath {.importcpp: "DSearchPath(#)".}
 
 proc initDSearchPath*(path: string, separator: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.}
 
-converter initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
+proc initDSearchPath*(path: string): DSearchPath {.importcpp: "DSearchPath(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc searchPath*(_: typedesc[DSearchPath], filename: Filename, path: string, separator: string): Filename {.importcpp: "#DSearchPath::search_path(#, nimStringToStdString(#), nimStringToStdString(#))", header: "dSearchPath.h".}
 
@@ -6195,7 +6195,7 @@ proc initExecutionEnvironment*(param0: ExecutionEnvironment): ExecutionEnvironme
 
 proc initGlobPattern*(copy: GlobPattern): GlobPattern {.importcpp: "GlobPattern(#)".}
 
-converter initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
+proc initGlobPattern*(pattern: string): GlobPattern {.importcpp: "GlobPattern(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initGlobPattern*(): GlobPattern {.importcpp: "GlobPattern()".}
 
@@ -6365,7 +6365,7 @@ proc initURLSpec*(url: URLSpec, path: Filename): URLSpec {.importcpp: "URLSpec(#
 
 proc initURLSpec*(url: string, serverNameExpected: bool): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
+proc initURLSpec*(url: string): URLSpec {.importcpp: "URLSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc getDefaultPortForScheme*(_: typedesc[URLSpec], scheme: string): int {.importcpp: "#URLSpec::get_default_port_for_scheme(nimStringToStdString(#))", header: "urlSpec.h".}
 
@@ -6389,9 +6389,9 @@ proc initHTTPDate*(): HTTPDate {.importcpp: "HTTPDate()".}
 
 proc initHTTPDate*(copy: HTTPDate): HTTPDate {.importcpp: "HTTPDate(#)".}
 
-converter initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.}
+proc initHTTPDate*(format: string): HTTPDate {.importcpp: "HTTPDate(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter initHTTPDate*(time: Time): HTTPDate {.importcpp: "HTTPDate(#)".}
+proc initHTTPDate*(time: Time): HTTPDate {.importcpp: "HTTPDate(#)".}
 
 proc now*(_: typedesc[HTTPDate]): HTTPDate {.importcpp: "HTTPDate::now()", header: "httpDate.h".}
 
@@ -6423,17 +6423,17 @@ proc initHTTPEntityTag*(copy: HTTPEntityTag): HTTPEntityTag {.importcpp: "HTTPEn
 
 proc initHTTPEntityTag*(weak: bool, tag: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-converter initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.}
+proc initHTTPEntityTag*(text: string): HTTPEntityTag {.importcpp: "HTTPEntityTag(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initDocumentSpec*(): DocumentSpec {.importcpp: "DocumentSpec()".}
 
 proc initDocumentSpec*(copy: DocumentSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-converter initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
+proc initDocumentSpec*(url: URLSpec): DocumentSpec {.importcpp: "DocumentSpec(#)".}
 
-converter initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
+proc initDocumentSpec*(url: string): DocumentSpec {.importcpp: "DocumentSpec(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "httpChannel.h".}
+proc getClassType*(_: typedesc[HTTPChannel]): TypeHandle {.importcpp: "HTTPChannel::get_class_type()", header: "httpChannel.h".}
 
 proc newHTTPChannel*(param0: HTTPChannel): HTTPChannel {.importcpp: "new HTTPChannel(#)".}
 
@@ -6457,7 +6457,7 @@ proc initExtractor*(): Extractor {.importcpp: "Extractor()".}
 
 proc initMultiplexStream*(): MultiplexStream {.importcpp: "MultiplexStream()".}
 
-converter getClassType*(_: typedesc[VirtualFileHTTP]): TypeHandle {.importcpp: "VirtualFileHTTP::get_class_type()", header: "virtualFileHTTP.h".}
+proc getClassType*(_: typedesc[VirtualFileHTTP]): TypeHandle {.importcpp: "VirtualFileHTTP::get_class_type()", header: "virtualFileHTTP.h".}
 
 proc newVirtualFileMountHTTP*(root: URLSpec, http: HTTPClient): VirtualFileMountHTTP {.importcpp: "new VirtualFileMountHTTP(#, #)".}
 
@@ -6465,7 +6465,7 @@ proc newVirtualFileMountHTTP*(root: URLSpec): VirtualFileMountHTTP {.importcpp: 
 
 proc reloadVfsMountUrl*(_: typedesc[VirtualFileMountHTTP]) {.importcpp: "VirtualFileMountHTTP::reload_vfs_mount_url()", header: "virtualFileMountHTTP.h".}
 
-converter getClassType*(_: typedesc[VirtualFileMountHTTP]): TypeHandle {.importcpp: "VirtualFileMountHTTP::get_class_type()", header: "virtualFileMountHTTP.h".}
+proc getClassType*(_: typedesc[VirtualFileMountHTTP]): TypeHandle {.importcpp: "VirtualFileMountHTTP::get_class_type()", header: "virtualFileMountHTTP.h".}
 
 proc newPatcher*(): Patcher {.importcpp: "new Patcher()".}
 
@@ -6517,7 +6517,7 @@ proc showTrendAges*(_: typedesc[MemoryUsage]) {.importcpp: "MemoryUsage::show_tr
 
 proc initMemoryUsage*(param0: MemoryUsage): MemoryUsage {.importcpp: "MemoryUsage(#)".}
 
-converter getClassType*(_: typedesc[ReferenceCount]): TypeHandle {.importcpp: "ReferenceCount::get_class_type()", header: "referenceCount.h".}
+proc getClassType*(_: typedesc[ReferenceCount]): TypeHandle {.importcpp: "ReferenceCount::get_class_type()", header: "referenceCount.h".}
 
 proc newBuffer*(param0: Buffer): Buffer {.importcpp: "new Buffer(#)".}
 
@@ -6535,31 +6535,31 @@ proc decompressStream*(source: istream, dest: ostream): bool {.importcpp: "decom
 
 proc copyStream*(source: istream, dest: ostream): bool {.importcpp: "copy_stream(#, #)", header: "copy_stream.h".}
 
-converter getClassType*(_: typedesc[NodeReferenceCount]): TypeHandle {.importcpp: "NodeReferenceCount::get_class_type()", header: "nodeReferenceCount.h".}
+proc getClassType*(_: typedesc[NodeReferenceCount]): TypeHandle {.importcpp: "NodeReferenceCount::get_class_type()", header: "nodeReferenceCount.h".}
 
 proc initDatagram*(): Datagram {.importcpp: "Datagram()".}
 
 proc initDatagram*(copy: Datagram): Datagram {.importcpp: "Datagram(#)".}
 
-converter getClassType*(_: typedesc[Datagram]): TypeHandle {.importcpp: "Datagram::get_class_type()", header: "datagram.h".}
+proc getClassType*(_: typedesc[Datagram]): TypeHandle {.importcpp: "Datagram::get_class_type()", header: "datagram.h".}
 
 proc initDatagramIterator*(): DatagramIterator {.importcpp: "DatagramIterator()".}
 
 proc initDatagramIterator*(datagram: Datagram, offset: int): DatagramIterator {.importcpp: "DatagramIterator(#, #)".}
 
-converter initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
+proc initDatagramIterator*(datagram: Datagram): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
 proc initDatagramIterator*(param0: DatagramIterator): DatagramIterator {.importcpp: "DatagramIterator(#)".}
 
-converter getClassType*(_: typedesc[DatagramIterator]): TypeHandle {.importcpp: "DatagramIterator::get_class_type()", header: "datagramIterator.h".}
+proc getClassType*(_: typedesc[DatagramIterator]): TypeHandle {.importcpp: "DatagramIterator::get_class_type()", header: "datagramIterator.h".}
 
-converter getClassType*(_: typedesc[TypedReferenceCount]): TypeHandle {.importcpp: "TypedReferenceCount::get_class_type()", header: "typedReferenceCount.h".}
+proc getClassType*(_: typedesc[TypedReferenceCount]): TypeHandle {.importcpp: "TypedReferenceCount::get_class_type()", header: "typedReferenceCount.h".}
 
 proc newFileReference*(param0: FileReference): FileReference {.importcpp: "new FileReference(#)".}
 
 proc newFileReference*(filename: Filename): FileReference {.importcpp: "new FileReference(#)".}
 
-converter getClassType*(_: typedesc[FileReference]): TypeHandle {.importcpp: "FileReference::get_class_type()", header: "fileReference.h".}
+proc getClassType*(_: typedesc[FileReference]): TypeHandle {.importcpp: "FileReference::get_class_type()", header: "fileReference.h".}
 
 proc encryptString*(source: string, password: string, algorithm: string, keyLength: int, iterationCount: int): string {.importcpp: "nimStringFromStdString(encrypt_string(nimStringToStdString(#), nimStringToStdString(#), nimStringToStdString(#), #, #))", header: "encrypt_string.h".}
 
@@ -6639,7 +6639,7 @@ proc newNamable*(initialName: string): Namable {.importcpp: "new Namable(nimStri
 
 proc newNamable*(): Namable {.importcpp: "new Namable()".}
 
-converter getClassType*(_: typedesc[Namable]): TypeHandle {.importcpp: "Namable::get_class_type()", header: "namable.h".}
+proc getClassType*(_: typedesc[Namable]): TypeHandle {.importcpp: "Namable::get_class_type()", header: "namable.h".}
 
 proc getGlobalPtr*(_: typedesc[OpenSSLWrapper]): OpenSSLWrapper {.importcpp: "OpenSSLWrapper::get_global_ptr()", header: "openSSLWrapper.h".}
 
@@ -6651,31 +6651,31 @@ proc initSubfileInfo*(filename: Filename, start: clonglong, size: int): SubfileI
 
 proc initSubfileInfo*(copy: SubfileInfo): SubfileInfo {.importcpp: "SubfileInfo(#)".}
 
-converter getClassType*(_: typedesc[VirtualFile]): TypeHandle {.importcpp: "VirtualFile::get_class_type()", header: "virtualFile.h".}
+proc getClassType*(_: typedesc[VirtualFile]): TypeHandle {.importcpp: "VirtualFile::get_class_type()", header: "virtualFile.h".}
 
-converter getClassType*(_: typedesc[VirtualFileComposite]): TypeHandle {.importcpp: "VirtualFileComposite::get_class_type()", header: "virtualFileComposite.h".}
+proc getClassType*(_: typedesc[VirtualFileComposite]): TypeHandle {.importcpp: "VirtualFileComposite::get_class_type()", header: "virtualFileComposite.h".}
 
-converter getClassType*(_: typedesc[VirtualFileMount]): TypeHandle {.importcpp: "VirtualFileMount::get_class_type()", header: "virtualFileMount.h".}
+proc getClassType*(_: typedesc[VirtualFileMount]): TypeHandle {.importcpp: "VirtualFileMount::get_class_type()", header: "virtualFileMount.h".}
 
 proc newVirtualFileMountMultifile*(multifile: Multifile): VirtualFileMountMultifile {.importcpp: "new VirtualFileMountMultifile(#)".}
 
-converter getClassType*(_: typedesc[VirtualFileMountMultifile]): TypeHandle {.importcpp: "VirtualFileMountMultifile::get_class_type()", header: "virtualFileMountMultifile.h".}
+proc getClassType*(_: typedesc[VirtualFileMountMultifile]): TypeHandle {.importcpp: "VirtualFileMountMultifile::get_class_type()", header: "virtualFileMountMultifile.h".}
 
 proc newVirtualFileMountRamdisk*(): VirtualFileMountRamdisk {.importcpp: "new VirtualFileMountRamdisk()".}
 
-converter getClassType*(_: typedesc[VirtualFileMountRamdisk]): TypeHandle {.importcpp: "VirtualFileMountRamdisk::get_class_type()", header: "virtualFileMountRamdisk.h".}
+proc getClassType*(_: typedesc[VirtualFileMountRamdisk]): TypeHandle {.importcpp: "VirtualFileMountRamdisk::get_class_type()", header: "virtualFileMountRamdisk.h".}
 
 proc newVirtualFileMountSystem*(physicalFilename: Filename): VirtualFileMountSystem {.importcpp: "new VirtualFileMountSystem(#)".}
 
-converter getClassType*(_: typedesc[VirtualFileMountSystem]): TypeHandle {.importcpp: "VirtualFileMountSystem::get_class_type()", header: "virtualFileMountSystem.h".}
+proc getClassType*(_: typedesc[VirtualFileMountSystem]): TypeHandle {.importcpp: "VirtualFileMountSystem::get_class_type()", header: "virtualFileMountSystem.h".}
 
-converter getClassType*(_: typedesc[VirtualFileSimple]): TypeHandle {.importcpp: "VirtualFileSimple::get_class_type()", header: "virtualFileSimple.h".}
+proc getClassType*(_: typedesc[VirtualFileSimple]): TypeHandle {.importcpp: "VirtualFileSimple::get_class_type()", header: "virtualFileSimple.h".}
 
 proc newTemporaryFile*(filename: Filename): TemporaryFile {.importcpp: "new TemporaryFile(#)".}
 
 proc newTemporaryFile*(param0: TemporaryFile): TemporaryFile {.importcpp: "new TemporaryFile(#)".}
 
-converter getClassType*(_: typedesc[TemporaryFile]): TypeHandle {.importcpp: "TemporaryFile::get_class_type()", header: "temporaryFile.h".}
+proc getClassType*(_: typedesc[TemporaryFile]): TypeHandle {.importcpp: "TemporaryFile::get_class_type()", header: "temporaryFile.h".}
 
 proc initIDecompressStream*(): IDecompressStream {.importcpp: "IDecompressStream()".}
 
@@ -6723,95 +6723,95 @@ proc printAllTo*(_: typedesc[ProfileTimer], `out`: ostream) {.importcpp: "#Profi
 
 proc printAllTo*(_: typedesc[ProfileTimer]) {.importcpp: "ProfileTimer::printAllTo()", header: "profileTimer.h".}
 
-converter getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "RecorderBase::get_class_type()", header: "recorderBase.h".}
+proc getClassType*(_: typedesc[RecorderBase]): TypeHandle {.importcpp: "RecorderBase::get_class_type()", header: "recorderBase.h".}
 
 proc newMouseRecorder*(name: string): MouseRecorder {.importcpp: "new MouseRecorder(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[MouseRecorder]): TypeHandle {.importcpp: "MouseRecorder::get_class_type()", header: "mouseRecorder.h".}
+proc getClassType*(_: typedesc[MouseRecorder]): TypeHandle {.importcpp: "MouseRecorder::get_class_type()", header: "mouseRecorder.h".}
 
 proc newRecorderController*(): RecorderController {.importcpp: "new RecorderController()".}
 
-converter getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
+proc getClassType*(_: typedesc[RecorderController]): TypeHandle {.importcpp: "RecorderController::get_class_type()", header: "recorderController.h".}
 
 proc newSocketStreamRecorder*(): SocketStreamRecorder {.importcpp: "new SocketStreamRecorder()".}
 
 proc newSocketStreamRecorder*(stream: SocketStream, ownsStream: bool): SocketStreamRecorder {.importcpp: "new SocketStreamRecorder(#, #)".}
 
-converter getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
+proc getClassType*(_: typedesc[SocketStreamRecorder]): TypeHandle {.importcpp: "SocketStreamRecorder::get_class_type()", header: "socketStreamRecorder.h".}
 
-converter getClassType*(_: typedesc[LightNode]): TypeHandle {.importcpp: "LightNode::get_class_type()", header: "lightNode.h".}
+proc getClassType*(_: typedesc[LightNode]): TypeHandle {.importcpp: "LightNode::get_class_type()", header: "lightNode.h".}
 
 proc newAmbientLight*(name: string): AmbientLight {.importcpp: "new AmbientLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[AmbientLight]): TypeHandle {.importcpp: "AmbientLight::get_class_type()", header: "ambientLight.h".}
+proc getClassType*(_: typedesc[AmbientLight]): TypeHandle {.importcpp: "AmbientLight::get_class_type()", header: "ambientLight.h".}
 
 proc newCallbackNode*(name: string): CallbackNode {.importcpp: "new CallbackNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[CallbackNode]): TypeHandle {.importcpp: "CallbackNode::get_class_type()", header: "callbackNode.h".}
+proc getClassType*(_: typedesc[CallbackNode]): TypeHandle {.importcpp: "CallbackNode::get_class_type()", header: "callbackNode.h".}
 
 proc newComputeNode*(name: string): ComputeNode {.importcpp: "new ComputeNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
+proc getClassType*(_: typedesc[ComputeNode]): TypeHandle {.importcpp: "ComputeNode::get_class_type()", header: "computeNode.h".}
 
-converter getClassType*(_: typedesc[LightLensNode]): TypeHandle {.importcpp: "LightLensNode::get_class_type()", header: "lightLensNode.h".}
+proc getClassType*(_: typedesc[LightLensNode]): TypeHandle {.importcpp: "LightLensNode::get_class_type()", header: "lightLensNode.h".}
 
 proc newDirectionalLight*(name: string): DirectionalLight {.importcpp: "new DirectionalLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: "DirectionalLight::get_class_type()", header: "directionalLight.h".}
+proc getClassType*(_: typedesc[DirectionalLight]): TypeHandle {.importcpp: "DirectionalLight::get_class_type()", header: "directionalLight.h".}
 
 proc newLODNode*(name: string): LODNode {.importcpp: "new LODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc makeDefaultLod*(_: typedesc[LODNode], name: string): LODNode {.importcpp: "#LODNode::make_default_lod(nimStringToStdString(#))", header: "lodNode.h".}
 
-converter getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lodNode.h".}
+proc getClassType*(_: typedesc[LODNode]): TypeHandle {.importcpp: "LODNode::get_class_type()", header: "lodNode.h".}
 
 proc newFadeLODNode*(name: string): FadeLODNode {.importcpp: "new FadeLODNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLodNode.h".}
+proc getClassType*(_: typedesc[FadeLODNode]): TypeHandle {.importcpp: "FadeLODNode::get_class_type()", header: "fadeLodNode.h".}
 
-converter getClassType*(_: typedesc[NodeCullCallbackData]): TypeHandle {.importcpp: "NodeCullCallbackData::get_class_type()", header: "nodeCullCallbackData.h".}
+proc getClassType*(_: typedesc[NodeCullCallbackData]): TypeHandle {.importcpp: "NodeCullCallbackData::get_class_type()", header: "nodeCullCallbackData.h".}
 
 proc newPointLight*(name: string): PointLight {.importcpp: "new PointLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PointLight]): TypeHandle {.importcpp: "PointLight::get_class_type()", header: "pointLight.h".}
+proc getClassType*(_: typedesc[PointLight]): TypeHandle {.importcpp: "PointLight::get_class_type()", header: "pointLight.h".}
 
 proc newRectangleLight*(name: string): RectangleLight {.importcpp: "new RectangleLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[RectangleLight]): TypeHandle {.importcpp: "RectangleLight::get_class_type()", header: "rectangleLight.h".}
+proc getClassType*(_: typedesc[RectangleLight]): TypeHandle {.importcpp: "RectangleLight::get_class_type()", header: "rectangleLight.h".}
 
 proc newSelectiveChildNode*(name: string): SelectiveChildNode {.importcpp: "new SelectiveChildNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp: "SelectiveChildNode::get_class_type()", header: "selectiveChildNode.h".}
+proc getClassType*(_: typedesc[SelectiveChildNode]): TypeHandle {.importcpp: "SelectiveChildNode::get_class_type()", header: "selectiveChildNode.h".}
 
 proc newSequenceNode*(name: string): SequenceNode {.importcpp: "new SequenceNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SequenceNode]): TypeHandle {.importcpp: "SequenceNode::get_class_type()", header: "sequenceNode.h".}
+proc getClassType*(_: typedesc[SequenceNode]): TypeHandle {.importcpp: "SequenceNode::get_class_type()", header: "sequenceNode.h".}
 
 proc newShaderGenerator*(gsg: GraphicsStateGuardianBase): ShaderGenerator {.importcpp: "new ShaderGenerator(#)".}
 
 proc newShaderGenerator*(param0: ShaderGenerator): ShaderGenerator {.importcpp: "new ShaderGenerator(#)".}
 
-converter getClassType*(_: typedesc[ShaderGenerator]): TypeHandle {.importcpp: "ShaderGenerator::get_class_type()", header: "shaderGenerator.h".}
+proc getClassType*(_: typedesc[ShaderGenerator]): TypeHandle {.importcpp: "ShaderGenerator::get_class_type()", header: "shaderGenerator.h".}
 
 proc newSphereLight*(name: string): SphereLight {.importcpp: "new SphereLight(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SphereLight]): TypeHandle {.importcpp: "SphereLight::get_class_type()", header: "sphereLight.h".}
+proc getClassType*(_: typedesc[SphereLight]): TypeHandle {.importcpp: "SphereLight::get_class_type()", header: "sphereLight.h".}
 
 proc newSpotlight*(name: string): Spotlight {.importcpp: "new Spotlight(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc makeSpot*(_: typedesc[Spotlight], pixelWidth: int, fullRadius: float, fg: LColor, bg: LColor): Texture {.importcpp: "#Spotlight::make_spot(#, #, #, #)", header: "spotlight.h".}
 
-converter getClassType*(_: typedesc[Spotlight]): TypeHandle {.importcpp: "Spotlight::get_class_type()", header: "spotlight.h".}
+proc getClassType*(_: typedesc[Spotlight]): TypeHandle {.importcpp: "Spotlight::get_class_type()", header: "spotlight.h".}
 
 proc newSwitchNode*(name: string): SwitchNode {.importcpp: "new SwitchNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SwitchNode]): TypeHandle {.importcpp: "SwitchNode::get_class_type()", header: "switchNode.h".}
+proc getClassType*(_: typedesc[SwitchNode]): TypeHandle {.importcpp: "SwitchNode::get_class_type()", header: "switchNode.h".}
 
 proc newUvScrollNode*(name: string): UvScrollNode {.importcpp: "new UvScrollNode(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newUvScrollNode*(name: string, uSpeed: float, vSpeed: float, wSpeed: float, rSpeed: float): UvScrollNode {.importcpp: "new UvScrollNode(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[UvScrollNode]): TypeHandle {.importcpp: "UvScrollNode::get_class_type()", header: "uvScrollNode.h".}
+proc getClassType*(_: typedesc[UvScrollNode]): TypeHandle {.importcpp: "UvScrollNode::get_class_type()", header: "uvScrollNode.h".}
 
 proc initSceneGraphAnalyzer*(): SceneGraphAnalyzer {.importcpp: "SceneGraphAnalyzer()".}
 
@@ -6877,7 +6877,7 @@ proc listStates*(_: typedesc[TransformState], `out`: ostream) {.importcpp: "#Tra
 
 proc validateStates*(_: typedesc[TransformState]): bool {.importcpp: "TransformState::validate_states()", header: "transformState.h".}
 
-converter getClassType*(_: typedesc[TransformState]): TypeHandle {.importcpp: "TransformState::get_class_type()", header: "transformState.h".}
+proc getClassType*(_: typedesc[TransformState]): TypeHandle {.importcpp: "TransformState::get_class_type()", header: "transformState.h".}
 
 proc getMaxSlots*(_: typedesc[RenderAttribRegistry]): int {.importcpp: "RenderAttribRegistry::get_max_slots()", header: "renderAttribRegistry.h".}
 
@@ -6891,7 +6891,7 @@ proc garbageCollect*(_: typedesc[RenderAttrib]): int {.importcpp: "RenderAttrib:
 
 proc validateAttribs*(_: typedesc[RenderAttrib]): bool {.importcpp: "RenderAttrib::validate_attribs()", header: "renderAttrib.h".}
 
-converter getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
+proc getClassType*(_: typedesc[RenderAttrib]): TypeHandle {.importcpp: "RenderAttrib::get_class_type()", header: "renderAttrib.h".}
 
 proc make*(_: typedesc[RenderModeAttrib], mode: RenderModeAttrib_Mode, thickness: float, perspective: bool, wireframeColor: LColor): RenderAttrib {.importcpp: "deconstify(#RenderModeAttrib::make(#, #, #, #))", header: "renderModeAttrib.h".}
 
@@ -6905,7 +6905,7 @@ proc makeDefault*(_: typedesc[RenderModeAttrib]): RenderAttrib {.importcpp: "dec
 
 proc getClassSlot*(_: typedesc[RenderModeAttrib]): int {.importcpp: "RenderModeAttrib::get_class_slot()", header: "renderModeAttrib.h".}
 
-converter getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
+proc getClassType*(_: typedesc[RenderModeAttrib]): TypeHandle {.importcpp: "RenderModeAttrib::get_class_type()", header: "renderModeAttrib.h".}
 
 proc make*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deconstify(TexMatrixAttrib::make())", header: "texMatrixAttrib.h".}
 
@@ -6917,7 +6917,7 @@ proc makeDefault*(_: typedesc[TexMatrixAttrib]): RenderAttrib {.importcpp: "deco
 
 proc getClassSlot*(_: typedesc[TexMatrixAttrib]): int {.importcpp: "TexMatrixAttrib::get_class_slot()", header: "texMatrixAttrib.h".}
 
-converter getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
+proc getClassType*(_: typedesc[TexMatrixAttrib]): TypeHandle {.importcpp: "TexMatrixAttrib::get_class_type()", header: "texMatrixAttrib.h".}
 
 proc makeEmpty*(_: typedesc[RenderState]): RenderState {.importcpp: "deconstify(RenderState::make_empty())", header: "renderState.h".}
 
@@ -6959,7 +6959,7 @@ proc listStates*(_: typedesc[RenderState], `out`: ostream) {.importcpp: "#Render
 
 proc validateStates*(_: typedesc[RenderState]): bool {.importcpp: "RenderState::validate_states()", header: "renderState.h".}
 
-converter getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
+proc getClassType*(_: typedesc[RenderState]): TypeHandle {.importcpp: "RenderState::get_class_type()", header: "renderState.h".}
 
 proc make*(_: typedesc[AlphaTestAttrib], mode: RenderAttrib_PandaCompareFunc, referenceAlpha: float): RenderAttrib {.importcpp: "deconstify(#AlphaTestAttrib::make(#, #))", header: "alphaTestAttrib.h".}
 
@@ -6967,7 +6967,7 @@ proc makeDefault*(_: typedesc[AlphaTestAttrib]): RenderAttrib {.importcpp: "deco
 
 proc getClassSlot*(_: typedesc[AlphaTestAttrib]): int {.importcpp: "AlphaTestAttrib::get_class_slot()", header: "alphaTestAttrib.h".}
 
-converter getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
+proc getClassType*(_: typedesc[AlphaTestAttrib]): TypeHandle {.importcpp: "AlphaTestAttrib::get_class_type()", header: "alphaTestAttrib.h".}
 
 proc make*(_: typedesc[AntialiasAttrib], mode: int): RenderAttrib {.importcpp: "deconstify(#AntialiasAttrib::make(#))", header: "antialiasAttrib.h".}
 
@@ -6975,7 +6975,7 @@ proc makeDefault*(_: typedesc[AntialiasAttrib]): RenderAttrib {.importcpp: "deco
 
 proc getClassSlot*(_: typedesc[AntialiasAttrib]): int {.importcpp: "AntialiasAttrib::get_class_slot()", header: "antialiasAttrib.h".}
 
-converter getClassType*(_: typedesc[AntialiasAttrib]): TypeHandle {.importcpp: "AntialiasAttrib::get_class_type()", header: "antialiasAttrib.h".}
+proc getClassType*(_: typedesc[AntialiasAttrib]): TypeHandle {.importcpp: "AntialiasAttrib::get_class_type()", header: "antialiasAttrib.h".}
 
 proc getNumEffects*(_: typedesc[RenderEffect]): int {.importcpp: "RenderEffect::get_num_effects()", header: "renderEffect.h".}
 
@@ -6983,7 +6983,7 @@ proc listEffects*(_: typedesc[RenderEffect], `out`: ostream) {.importcpp: "#Rend
 
 proc validateEffects*(_: typedesc[RenderEffect]): bool {.importcpp: "RenderEffect::validate_effects()", header: "renderEffect.h".}
 
-converter getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
+proc getClassType*(_: typedesc[RenderEffect]): TypeHandle {.importcpp: "RenderEffect::get_class_type()", header: "renderEffect.h".}
 
 proc makeEmpty*(_: typedesc[RenderEffects]): RenderEffects {.importcpp: "deconstify(RenderEffects::make_empty())", header: "renderEffects.h".}
 
@@ -7001,7 +7001,7 @@ proc listStates*(_: typedesc[RenderEffects], `out`: ostream) {.importcpp: "#Rend
 
 proc validateStates*(_: typedesc[RenderEffects]): bool {.importcpp: "RenderEffects::validate_states()", header: "renderEffects.h".}
 
-converter getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "RenderEffects::get_class_type()", header: "renderEffects.h".}
+proc getClassType*(_: typedesc[RenderEffects]): TypeHandle {.importcpp: "RenderEffects::get_class_type()", header: "renderEffects.h".}
 
 proc newPandaNode*(name: string): PandaNode {.importcpp: "new PandaNode(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -7013,7 +7013,7 @@ proc getOverallBit*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::g
 
 proc getAllCameraMask*(_: typedesc[PandaNode]): DrawMask {.importcpp: "PandaNode::get_all_camera_mask()", header: "pandaNode.h".}
 
-converter getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
+proc getClassType*(_: typedesc[PandaNode]): TypeHandle {.importcpp: "PandaNode::get_class_type()", header: "pandaNode.h".}
 
 proc make*(_: typedesc[TransparencyAttrib], mode: TransparencyAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#TransparencyAttrib::make(#))", header: "transparencyAttrib.h".}
 
@@ -7021,7 +7021,7 @@ proc makeDefault*(_: typedesc[TransparencyAttrib]): RenderAttrib {.importcpp: "d
 
 proc getClassSlot*(_: typedesc[TransparencyAttrib]): int {.importcpp: "TransparencyAttrib::get_class_slot()", header: "transparencyAttrib.h".}
 
-converter getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
+proc getClassType*(_: typedesc[TransparencyAttrib]): TypeHandle {.importcpp: "TransparencyAttrib::get_class_type()", header: "transparencyAttrib.h".}
 
 proc makeOff*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "deconstify(LogicOpAttrib::make_off())", header: "logicOpAttrib.h".}
 
@@ -7031,7 +7031,7 @@ proc makeDefault*(_: typedesc[LogicOpAttrib]): RenderAttrib {.importcpp: "decons
 
 proc getClassSlot*(_: typedesc[LogicOpAttrib]): int {.importcpp: "LogicOpAttrib::get_class_slot()", header: "logicOpAttrib.h".}
 
-converter getClassType*(_: typedesc[LogicOpAttrib]): TypeHandle {.importcpp: "LogicOpAttrib::get_class_type()", header: "logicOpAttrib.h".}
+proc getClassType*(_: typedesc[LogicOpAttrib]): TypeHandle {.importcpp: "LogicOpAttrib::get_class_type()", header: "logicOpAttrib.h".}
 
 proc getBlank*(_: typedesc[ShaderInput]): ShaderInput {.importcpp: "ShaderInput::get_blank()", header: "shaderInput.h".}
 
@@ -7099,7 +7099,7 @@ proc initNodePathCollection*(): NodePathCollection {.importcpp: "NodePathCollect
 
 proc initNodePathCollection*(param0: NodePathCollection): NodePathCollection {.importcpp: "NodePathCollection(#)".}
 
-converter getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePath::get_class_type()", header: "nodePath.h".}
+proc getClassType*(_: typedesc[NodePath]): TypeHandle {.importcpp: "NodePath::get_class_type()", header: "nodePath.h".}
 
 proc getGlobalPtr*(_: typedesc[AttribNodeRegistry]): AttribNodeRegistry {.importcpp: "AttribNodeRegistry::get_global_ptr()", header: "attribNodeRegistry.h".}
 
@@ -7113,7 +7113,7 @@ proc makeDefault*(_: typedesc[AudioVolumeAttrib]): RenderAttrib {.importcpp: "de
 
 proc getClassSlot*(_: typedesc[AudioVolumeAttrib]): int {.importcpp: "AudioVolumeAttrib::get_class_slot()", header: "audioVolumeAttrib.h".}
 
-converter getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
+proc getClassType*(_: typedesc[AudioVolumeAttrib]): TypeHandle {.importcpp: "AudioVolumeAttrib::get_class_type()", header: "audioVolumeAttrib.h".}
 
 proc make*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "deconstify(AuxBitplaneAttrib::make())", header: "auxBitplaneAttrib.h".}
 
@@ -7123,9 +7123,9 @@ proc makeDefault*(_: typedesc[AuxBitplaneAttrib]): RenderAttrib {.importcpp: "de
 
 proc getClassSlot*(_: typedesc[AuxBitplaneAttrib]): int {.importcpp: "AuxBitplaneAttrib::get_class_slot()", header: "auxBitplaneAttrib.h".}
 
-converter getClassType*(_: typedesc[AuxBitplaneAttrib]): TypeHandle {.importcpp: "AuxBitplaneAttrib::get_class_type()", header: "auxBitplaneAttrib.h".}
+proc getClassType*(_: typedesc[AuxBitplaneAttrib]): TypeHandle {.importcpp: "AuxBitplaneAttrib::get_class_type()", header: "auxBitplaneAttrib.h".}
 
-converter getClassType*(_: typedesc[AuxSceneData]): TypeHandle {.importcpp: "AuxSceneData::get_class_type()", header: "auxSceneData.h".}
+proc getClassType*(_: typedesc[AuxSceneData]): TypeHandle {.importcpp: "AuxSceneData::get_class_type()", header: "auxSceneData.h".}
 
 proc newAuxSceneData*(param0: AuxSceneData): AuxSceneData {.importcpp: "new AuxSceneData(#)".}
 
@@ -7141,15 +7141,15 @@ proc makePointEye*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "dec
 
 proc makePointWorld*(_: typedesc[BillboardEffect]): RenderEffect {.importcpp: "deconstify(BillboardEffect::make_point_world())", header: "billboardEffect.h".}
 
-converter getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
+proc getClassType*(_: typedesc[BillboardEffect]): TypeHandle {.importcpp: "BillboardEffect::get_class_type()", header: "billboardEffect.h".}
 
 proc newLensNode*(name: string, lens: Lens): LensNode {.importcpp: "new LensNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc newLensNode*(name: string): LensNode {.importcpp: "new LensNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
+proc getClassType*(_: typedesc[LensNode]): TypeHandle {.importcpp: "LensNode::get_class_type()", header: "lensNode.h".}
 
-converter initWeakNodePath*(nodePath: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
+proc initWeakNodePath*(nodePath: NodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
 proc initWeakNodePath*(copy: WeakNodePath): WeakNodePath {.importcpp: "WeakNodePath(#)".}
 
@@ -7159,13 +7159,13 @@ proc newCamera*(name: string, lens: Lens): Camera {.importcpp: "new Camera(nimSt
 
 proc newCamera*(name: string): Camera {.importcpp: "new Camera(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Camera]): TypeHandle {.importcpp: "Camera::get_class_type()", header: "camera.h".}
+proc getClassType*(_: typedesc[Camera]): TypeHandle {.importcpp: "Camera::get_class_type()", header: "camera.h".}
 
 proc newPlaneNode*(name: string, plane: LPlane): PlaneNode {.importcpp: "new PlaneNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc newPlaneNode*(name: string): PlaneNode {.importcpp: "new PlaneNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
+proc getClassType*(_: typedesc[PlaneNode]): TypeHandle {.importcpp: "PlaneNode::get_class_type()", header: "planeNode.h".}
 
 proc make*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "deconstify(ClipPlaneAttrib::make())", header: "clipPlaneAttrib.h".}
 
@@ -7183,7 +7183,7 @@ proc makeAllOff*(_: typedesc[ClipPlaneAttrib]): RenderAttrib {.importcpp: "decon
 
 proc getClassSlot*(_: typedesc[ClipPlaneAttrib]): int {.importcpp: "ClipPlaneAttrib::get_class_slot()", header: "clipPlaneAttrib.h".}
 
-converter getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
+proc getClassType*(_: typedesc[ClipPlaneAttrib]): TypeHandle {.importcpp: "ClipPlaneAttrib::get_class_type()", header: "clipPlaneAttrib.h".}
 
 proc makeVertex*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconstify(ColorAttrib::make_vertex())", header: "colorAttrib.h".}
 
@@ -7195,7 +7195,7 @@ proc makeDefault*(_: typedesc[ColorAttrib]): RenderAttrib {.importcpp: "deconsti
 
 proc getClassSlot*(_: typedesc[ColorAttrib]): int {.importcpp: "ColorAttrib::get_class_slot()", header: "colorAttrib.h".}
 
-converter getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
+proc getClassType*(_: typedesc[ColorAttrib]): TypeHandle {.importcpp: "ColorAttrib::get_class_type()", header: "colorAttrib.h".}
 
 proc makeOff*(_: typedesc[ColorBlendAttrib]): RenderAttrib {.importcpp: "deconstify(ColorBlendAttrib::make_off())", header: "colorBlendAttrib.h".}
 
@@ -7217,7 +7217,7 @@ proc involvesColorScale*(_: typedesc[ColorBlendAttrib], operand: ColorBlendAttri
 
 proc getClassSlot*(_: typedesc[ColorBlendAttrib]): int {.importcpp: "ColorBlendAttrib::get_class_slot()", header: "colorBlendAttrib.h".}
 
-converter getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
+proc getClassType*(_: typedesc[ColorBlendAttrib]): TypeHandle {.importcpp: "ColorBlendAttrib::get_class_type()", header: "colorBlendAttrib.h".}
 
 proc makeIdentity*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "deconstify(ColorScaleAttrib::make_identity())", header: "colorScaleAttrib.h".}
 
@@ -7229,7 +7229,7 @@ proc makeDefault*(_: typedesc[ColorScaleAttrib]): RenderAttrib {.importcpp: "dec
 
 proc getClassSlot*(_: typedesc[ColorScaleAttrib]): int {.importcpp: "ColorScaleAttrib::get_class_slot()", header: "colorScaleAttrib.h".}
 
-converter getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
+proc getClassType*(_: typedesc[ColorScaleAttrib]): TypeHandle {.importcpp: "ColorScaleAttrib::get_class_type()", header: "colorScaleAttrib.h".}
 
 proc make*(_: typedesc[ColorWriteAttrib], channels: int): RenderAttrib {.importcpp: "deconstify(#ColorWriteAttrib::make(#))", header: "colorWriteAttrib.h".}
 
@@ -7237,13 +7237,13 @@ proc makeDefault*(_: typedesc[ColorWriteAttrib]): RenderAttrib {.importcpp: "dec
 
 proc getClassSlot*(_: typedesc[ColorWriteAttrib]): int {.importcpp: "ColorWriteAttrib::get_class_slot()", header: "colorWriteAttrib.h".}
 
-converter getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
+proc getClassType*(_: typedesc[ColorWriteAttrib]): TypeHandle {.importcpp: "ColorWriteAttrib::get_class_type()", header: "colorWriteAttrib.h".}
 
 proc make*(_: typedesc[CompassEffect], reference: NodePath, properties: int): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#, #))", header: "compassEffect.h".}
 
 proc make*(_: typedesc[CompassEffect], reference: NodePath): RenderEffect {.importcpp: "deconstify(#CompassEffect::make(#))", header: "compassEffect.h".}
 
-converter getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
+proc getClassType*(_: typedesc[CompassEffect]): TypeHandle {.importcpp: "CompassEffect::get_class_type()", header: "compassEffect.h".}
 
 proc initCullBinEnums*(): CullBinEnums {.importcpp: "CullBinEnums()".}
 
@@ -7253,7 +7253,7 @@ proc newGeomNode*(name: string): GeomNode {.importcpp: "new GeomNode(nimStringTo
 
 proc getDefaultCollideMask*(_: typedesc[GeomNode]): CollideMask {.importcpp: "GeomNode::get_default_collide_mask()", header: "geomNode.h".}
 
-converter getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
+proc getClassType*(_: typedesc[GeomNode]): TypeHandle {.importcpp: "GeomNode::get_class_type()", header: "geomNode.h".}
 
 proc make*(_: typedesc[CullBinAttrib], binName: string, drawOrder: int): RenderAttrib {.importcpp: "deconstify(#CullBinAttrib::make(nimStringToStdString(#), #))", header: "cullBinAttrib.h".}
 
@@ -7261,7 +7261,7 @@ proc makeDefault*(_: typedesc[CullBinAttrib]): RenderAttrib {.importcpp: "decons
 
 proc getClassSlot*(_: typedesc[CullBinAttrib]): int {.importcpp: "CullBinAttrib::get_class_slot()", header: "cullBinAttrib.h".}
 
-converter getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBinAttrib::get_class_type()", header: "cullBinAttrib.h".}
+proc getClassType*(_: typedesc[CullBinAttrib]): TypeHandle {.importcpp: "CullBinAttrib::get_class_type()", header: "cullBinAttrib.h".}
 
 proc getGlobalPtr*(_: typedesc[CullBinManager]): CullBinManager {.importcpp: "CullBinManager::get_global_ptr()", header: "cullBinManager.h".}
 
@@ -7275,17 +7275,17 @@ proc makeDefault*(_: typedesc[CullFaceAttrib]): RenderAttrib {.importcpp: "decon
 
 proc getClassSlot*(_: typedesc[CullFaceAttrib]): int {.importcpp: "CullFaceAttrib::get_class_slot()", header: "cullFaceAttrib.h".}
 
-converter getClassType*(_: typedesc[CullFaceAttrib]): TypeHandle {.importcpp: "CullFaceAttrib::get_class_type()", header: "cullFaceAttrib.h".}
+proc getClassType*(_: typedesc[CullFaceAttrib]): TypeHandle {.importcpp: "CullFaceAttrib::get_class_type()", header: "cullFaceAttrib.h".}
 
 proc initCullTraverserData*(param0: CullTraverserData): CullTraverserData {.importcpp: "CullTraverserData(#)".}
 
-converter getClassType*(_: typedesc[SceneSetup]): TypeHandle {.importcpp: "SceneSetup::get_class_type()", header: "sceneSetup.h".}
+proc getClassType*(_: typedesc[SceneSetup]): TypeHandle {.importcpp: "SceneSetup::get_class_type()", header: "sceneSetup.h".}
 
 proc newSceneSetup*(param0: SceneSetup): SceneSetup {.importcpp: "new SceneSetup(#)".}
 
 proc newFog*(name: string): Fog {.importcpp: "new Fog(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
+proc getClassType*(_: typedesc[Fog]): TypeHandle {.importcpp: "Fog::get_class_type()", header: "fog.h".}
 
 proc make*(_: typedesc[FogAttrib], fog: Fog): RenderAttrib {.importcpp: "deconstify(#FogAttrib::make(#))", header: "fogAttrib.h".}
 
@@ -7295,7 +7295,7 @@ proc makeDefault*(_: typedesc[FogAttrib]): RenderAttrib {.importcpp: "deconstify
 
 proc getClassSlot*(_: typedesc[FogAttrib]): int {.importcpp: "FogAttrib::get_class_slot()", header: "fogAttrib.h".}
 
-converter getClassType*(_: typedesc[FogAttrib]): TypeHandle {.importcpp: "FogAttrib::get_class_type()", header: "fogAttrib.h".}
+proc getClassType*(_: typedesc[FogAttrib]): TypeHandle {.importcpp: "FogAttrib::get_class_type()", header: "fogAttrib.h".}
 
 proc newCullTraverser*(): CullTraverser {.importcpp: "new CullTraverser()".}
 
@@ -7303,9 +7303,9 @@ proc newCullTraverser*(copy: CullTraverser): CullTraverser {.importcpp: "new Cul
 
 proc flushLevel*(_: typedesc[CullTraverser]) {.importcpp: "CullTraverser::flush_level()", header: "cullTraverser.h".}
 
-converter getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "CullTraverser::get_class_type()", header: "cullTraverser.h".}
+proc getClassType*(_: typedesc[CullTraverser]): TypeHandle {.importcpp: "CullTraverser::get_class_type()", header: "cullTraverser.h".}
 
-converter getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
+proc getClassType*(_: typedesc[GeomDrawCallbackData]): TypeHandle {.importcpp: "GeomDrawCallbackData::get_class_type()", header: "geomDrawCallbackData.h".}
 
 proc make*(_: typedesc[RescaleNormalAttrib], mode: RescaleNormalAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#RescaleNormalAttrib::make(#))", header: "rescaleNormalAttrib.h".}
 
@@ -7313,15 +7313,15 @@ proc makeDefault*(_: typedesc[RescaleNormalAttrib]): RenderAttrib {.importcpp: "
 
 proc getClassSlot*(_: typedesc[RescaleNormalAttrib]): int {.importcpp: "RescaleNormalAttrib::get_class_slot()", header: "rescaleNormalAttrib.h".}
 
-converter getClassType*(_: typedesc[RescaleNormalAttrib]): TypeHandle {.importcpp: "RescaleNormalAttrib::get_class_type()", header: "rescaleNormalAttrib.h".}
+proc getClassType*(_: typedesc[RescaleNormalAttrib]): TypeHandle {.importcpp: "RescaleNormalAttrib::get_class_type()", header: "rescaleNormalAttrib.h".}
 
-converter getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullResult::get_class_type()", header: "cullResult.h".}
+proc getClassType*(_: typedesc[CullResult]): TypeHandle {.importcpp: "CullResult::get_class_type()", header: "cullResult.h".}
 
 proc newCullResult*(param0: CullResult): CullResult {.importcpp: "new CullResult(#)".}
 
 proc make*(_: typedesc[DecalEffect]): RenderEffect {.importcpp: "deconstify(DecalEffect::make())", header: "decalEffect.h".}
 
-converter getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
+proc getClassType*(_: typedesc[DecalEffect]): TypeHandle {.importcpp: "DecalEffect::get_class_type()", header: "decalEffect.h".}
 
 proc make*(_: typedesc[DepthOffsetAttrib], offset: int): RenderAttrib {.importcpp: "deconstify(#DepthOffsetAttrib::make(#))", header: "depthOffsetAttrib.h".}
 
@@ -7333,7 +7333,7 @@ proc makeDefault*(_: typedesc[DepthOffsetAttrib]): RenderAttrib {.importcpp: "de
 
 proc getClassSlot*(_: typedesc[DepthOffsetAttrib]): int {.importcpp: "DepthOffsetAttrib::get_class_slot()", header: "depthOffsetAttrib.h".}
 
-converter getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
+proc getClassType*(_: typedesc[DepthOffsetAttrib]): TypeHandle {.importcpp: "DepthOffsetAttrib::get_class_type()", header: "depthOffsetAttrib.h".}
 
 proc make*(_: typedesc[DepthTestAttrib], mode: RenderAttrib_PandaCompareFunc): RenderAttrib {.importcpp: "deconstify(#DepthTestAttrib::make(#))", header: "depthTestAttrib.h".}
 
@@ -7341,7 +7341,7 @@ proc makeDefault*(_: typedesc[DepthTestAttrib]): RenderAttrib {.importcpp: "deco
 
 proc getClassSlot*(_: typedesc[DepthTestAttrib]): int {.importcpp: "DepthTestAttrib::get_class_slot()", header: "depthTestAttrib.h".}
 
-converter getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
+proc getClassType*(_: typedesc[DepthTestAttrib]): TypeHandle {.importcpp: "DepthTestAttrib::get_class_type()", header: "depthTestAttrib.h".}
 
 proc make*(_: typedesc[DepthWriteAttrib], mode: DepthWriteAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#DepthWriteAttrib::make(#))", header: "depthWriteAttrib.h".}
 
@@ -7349,9 +7349,9 @@ proc makeDefault*(_: typedesc[DepthWriteAttrib]): RenderAttrib {.importcpp: "dec
 
 proc getClassSlot*(_: typedesc[DepthWriteAttrib]): int {.importcpp: "DepthWriteAttrib::get_class_slot()", header: "depthWriteAttrib.h".}
 
-converter getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "DepthWriteAttrib::get_class_type()", header: "depthWriteAttrib.h".}
+proc getClassType*(_: typedesc[DepthWriteAttrib]): TypeHandle {.importcpp: "DepthWriteAttrib::get_class_type()", header: "depthWriteAttrib.h".}
 
-converter getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
+proc getClassType*(_: typedesc[Light]): TypeHandle {.importcpp: "Light::get_class_type()", header: "light.h".}
 
 proc make*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstify(LightAttrib::make())", header: "lightAttrib.h".}
 
@@ -7369,7 +7369,7 @@ proc makeAllOff*(_: typedesc[LightAttrib]): RenderAttrib {.importcpp: "deconstif
 
 proc getClassSlot*(_: typedesc[LightAttrib]): int {.importcpp: "LightAttrib::get_class_slot()", header: "lightAttrib.h".}
 
-converter getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
+proc getClassType*(_: typedesc[LightAttrib]): TypeHandle {.importcpp: "LightAttrib::get_class_type()", header: "lightAttrib.h".}
 
 proc makeDefault*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconstify(LightRampAttrib::make_default())", header: "lightRampAttrib.h".}
 
@@ -7387,7 +7387,7 @@ proc makeHdr2*(_: typedesc[LightRampAttrib]): RenderAttrib {.importcpp: "deconst
 
 proc getClassSlot*(_: typedesc[LightRampAttrib]): int {.importcpp: "LightRampAttrib::get_class_slot()", header: "lightRampAttrib.h".}
 
-converter getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "LightRampAttrib::get_class_type()", header: "lightRampAttrib.h".}
+proc getClassType*(_: typedesc[LightRampAttrib]): TypeHandle {.importcpp: "LightRampAttrib::get_class_type()", header: "lightRampAttrib.h".}
 
 proc newLoader*(param0: Loader): Loader {.importcpp: "new Loader(#)".}
 
@@ -7397,9 +7397,9 @@ proc newLoader*(): Loader {.importcpp: "new Loader()".}
 
 proc getGlobalPtr*(_: typedesc[Loader]): Loader {.importcpp: "Loader::get_global_ptr()", header: "loader.h".}
 
-converter getClassType*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()", header: "loader.h".}
+proc getClassType*(_: typedesc[Loader]): TypeHandle {.importcpp: "Loader::get_class_type()", header: "loader.h".}
 
-converter getClassType*(_: typedesc[LoaderFileType]): TypeHandle {.importcpp: "LoaderFileType::get_class_type()", header: "loaderFileType.h".}
+proc getClassType*(_: typedesc[LoaderFileType]): TypeHandle {.importcpp: "LoaderFileType::get_class_type()", header: "loaderFileType.h".}
 
 proc getGlobalPtr*(_: typedesc[LoaderFileTypeRegistry]): LoaderFileTypeRegistry {.importcpp: "LoaderFileTypeRegistry::get_global_ptr()", header: "loaderFileTypeRegistry.h".}
 
@@ -7413,29 +7413,29 @@ proc makeDefault*(_: typedesc[MaterialAttrib]): RenderAttrib {.importcpp: "decon
 
 proc getClassSlot*(_: typedesc[MaterialAttrib]): int {.importcpp: "MaterialAttrib::get_class_slot()", header: "materialAttrib.h".}
 
-converter getClassType*(_: typedesc[MaterialAttrib]): TypeHandle {.importcpp: "MaterialAttrib::get_class_type()", header: "materialAttrib.h".}
+proc getClassType*(_: typedesc[MaterialAttrib]): TypeHandle {.importcpp: "MaterialAttrib::get_class_type()", header: "materialAttrib.h".}
 
 proc newModelFlattenRequest*(param0: ModelFlattenRequest): ModelFlattenRequest {.importcpp: "new ModelFlattenRequest(#)".}
 
 proc newModelFlattenRequest*(orig: PandaNode): ModelFlattenRequest {.importcpp: "new ModelFlattenRequest(#)".}
 
-converter getClassType*(_: typedesc[ModelFlattenRequest]): TypeHandle {.importcpp: "ModelFlattenRequest::get_class_type()", header: "modelFlattenRequest.h".}
+proc getClassType*(_: typedesc[ModelFlattenRequest]): TypeHandle {.importcpp: "ModelFlattenRequest::get_class_type()", header: "modelFlattenRequest.h".}
 
 proc newModelLoadRequest*(param0: ModelLoadRequest): ModelLoadRequest {.importcpp: "new ModelLoadRequest(#)".}
 
 proc newModelLoadRequest*(name: string, filename: Filename, options: LoaderOptions, loader: Loader): ModelLoadRequest {.importcpp: "new ModelLoadRequest(nimStringToStdString(#), #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ModelLoadRequest]): TypeHandle {.importcpp: "ModelLoadRequest::get_class_type()", header: "modelLoadRequest.h".}
+proc getClassType*(_: typedesc[ModelLoadRequest]): TypeHandle {.importcpp: "ModelLoadRequest::get_class_type()", header: "modelLoadRequest.h".}
 
 proc newModelNode*(name: string): ModelNode {.importcpp: "new ModelNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
+proc getClassType*(_: typedesc[ModelNode]): TypeHandle {.importcpp: "ModelNode::get_class_type()", header: "modelNode.h".}
 
 proc newModelRoot*(fullpath: Filename, timestamp: Time): ModelRoot {.importcpp: "new ModelRoot(#, #)".}
 
 proc newModelRoot*(name: string): ModelRoot {.importcpp: "new ModelRoot(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ModelRoot]): TypeHandle {.importcpp: "ModelRoot::get_class_type()", header: "modelRoot.h".}
+proc getClassType*(_: typedesc[ModelRoot]): TypeHandle {.importcpp: "ModelRoot::get_class_type()", header: "modelRoot.h".}
 
 proc hasModel*(_: typedesc[ModelPool], filename: Filename): bool {.importcpp: "#ModelPool::has_model(#)", header: "modelPool.h".}
 
@@ -7469,7 +7469,7 @@ proc newModelSaveRequest*(param0: ModelSaveRequest): ModelSaveRequest {.importcp
 
 proc newModelSaveRequest*(name: string, filename: Filename, options: LoaderOptions, node: PandaNode, loader: Loader): ModelSaveRequest {.importcpp: "new ModelSaveRequest(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
+proc getClassType*(_: typedesc[ModelSaveRequest]): TypeHandle {.importcpp: "ModelSaveRequest::get_class_type()", header: "modelSaveRequest.h".}
 
 proc make*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconstify(TextureAttrib::make())", header: "textureAttrib.h".}
 
@@ -7483,7 +7483,7 @@ proc makeAllOff*(_: typedesc[TextureAttrib]): RenderAttrib {.importcpp: "deconst
 
 proc getClassSlot*(_: typedesc[TextureAttrib]): int {.importcpp: "TextureAttrib::get_class_slot()", header: "textureAttrib.h".}
 
-converter getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
+proc getClassType*(_: typedesc[TextureAttrib]): TypeHandle {.importcpp: "TextureAttrib::get_class_type()", header: "textureAttrib.h".}
 
 proc make*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconstify(TexGenAttrib::make())", header: "texGenAttrib.h".}
 
@@ -7493,27 +7493,27 @@ proc makeDefault*(_: typedesc[TexGenAttrib]): RenderAttrib {.importcpp: "deconst
 
 proc getClassSlot*(_: typedesc[TexGenAttrib]): int {.importcpp: "TexGenAttrib::get_class_slot()", header: "texGenAttrib.h".}
 
-converter getClassType*(_: typedesc[TexGenAttrib]): TypeHandle {.importcpp: "TexGenAttrib::get_class_type()", header: "texGenAttrib.h".}
+proc getClassType*(_: typedesc[TexGenAttrib]): TypeHandle {.importcpp: "TexGenAttrib::get_class_type()", header: "texGenAttrib.h".}
 
 proc newOccluderNode*(name: string): OccluderNode {.importcpp: "new OccluderNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
+proc getClassType*(_: typedesc[OccluderNode]): TypeHandle {.importcpp: "OccluderNode::get_class_type()", header: "occluderNode.h".}
 
 proc make*(_: typedesc[OccluderEffect]): RenderEffect {.importcpp: "deconstify(OccluderEffect::make())", header: "occluderEffect.h".}
 
-converter getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
+proc getClassType*(_: typedesc[OccluderEffect]): TypeHandle {.importcpp: "OccluderEffect::get_class_type()", header: "occluderEffect.h".}
 
 proc newPolylightNode*(param0: PolylightNode): PolylightNode {.importcpp: "new PolylightNode(#)".}
 
 proc newPolylightNode*(name: string): PolylightNode {.importcpp: "new PolylightNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
+proc getClassType*(_: typedesc[PolylightNode]): TypeHandle {.importcpp: "PolylightNode::get_class_type()", header: "polylightNode.h".}
 
 proc make*(_: typedesc[PolylightEffect]): RenderEffect {.importcpp: "deconstify(PolylightEffect::make())", header: "polylightEffect.h".}
 
 proc make*(_: typedesc[PolylightEffect], weight: float, contrib: PolylightEffect_ContribType, effectCenter: LPoint3): RenderEffect {.importcpp: "deconstify(#PolylightEffect::make(#, #, (LPoint3 const &)(#)))", header: "polylightEffect.h".}
 
-converter getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
+proc getClassType*(_: typedesc[PolylightEffect]): TypeHandle {.importcpp: "PolylightEffect::get_class_type()", header: "polylightEffect.h".}
 
 proc make*(_: typedesc[ShaderAttrib], shader: Shader, priority: int): RenderAttrib {.importcpp: "deconstify(#ShaderAttrib::make(#, #))", header: "shaderAttrib.h".}
 
@@ -7529,17 +7529,17 @@ proc registerWithReadFactory*(_: typedesc[ShaderAttrib]) {.importcpp: "ShaderAtt
 
 proc getClassSlot*(_: typedesc[ShaderAttrib]): int {.importcpp: "ShaderAttrib::get_class_slot()", header: "shaderAttrib.h".}
 
-converter getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
+proc getClassType*(_: typedesc[ShaderAttrib]): TypeHandle {.importcpp: "ShaderAttrib::get_class_type()", header: "shaderAttrib.h".}
 
 proc make*(_: typedesc[ShowBoundsEffect], tight: bool): RenderEffect {.importcpp: "deconstify(#ShowBoundsEffect::make(#))", header: "showBoundsEffect.h".}
 
 proc make*(_: typedesc[ShowBoundsEffect]): RenderEffect {.importcpp: "deconstify(ShowBoundsEffect::make())", header: "showBoundsEffect.h".}
 
-converter getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
+proc getClassType*(_: typedesc[ShowBoundsEffect]): TypeHandle {.importcpp: "ShowBoundsEffect::get_class_type()", header: "showBoundsEffect.h".}
 
 proc make*(_: typedesc[TexProjectorEffect]): RenderEffect {.importcpp: "deconstify(TexProjectorEffect::make())", header: "texProjectorEffect.h".}
 
-converter getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
+proc getClassType*(_: typedesc[TexProjectorEffect]): TypeHandle {.importcpp: "TexProjectorEffect::get_class_type()", header: "texProjectorEffect.h".}
 
 proc makeScreen*(_: typedesc[ScissorEffect], frame: LVecBase4, clip: bool): RenderEffect {.importcpp: "deconstify(#ScissorEffect::make_screen((LVecBase4 const &)(#), #))", header: "scissorEffect.h".}
 
@@ -7557,7 +7557,7 @@ proc makeNode*(_: typedesc[ScissorEffect], clip: bool): RenderEffect {.importcpp
 
 proc makeNode*(_: typedesc[ScissorEffect]): RenderEffect {.importcpp: "deconstify(ScissorEffect::make_node())", header: "scissorEffect.h".}
 
-converter getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
+proc getClassType*(_: typedesc[ScissorEffect]): TypeHandle {.importcpp: "ScissorEffect::get_class_type()", header: "scissorEffect.h".}
 
 proc initSceneGraphReducer*(gsg: GraphicsStateGuardianBase): SceneGraphReducer {.importcpp: "SceneGraphReducer(#)".}
 
@@ -7571,7 +7571,7 @@ proc newPortalNode*(name: string, pos: LPoint3, scale: float): PortalNode {.impo
 
 proc newPortalNode*(name: string, pos: LPoint3): PortalNode {.importcpp: "new PortalNode(nimStringToStdString(#), (LPoint3 &)(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
+proc getClassType*(_: typedesc[PortalNode]): TypeHandle {.importcpp: "PortalNode::get_class_type()", header: "portalNode.h".}
 
 proc makeOff*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "deconstify(ScissorAttrib::make_off())", header: "scissorAttrib.h".}
 
@@ -7583,7 +7583,7 @@ proc makeDefault*(_: typedesc[ScissorAttrib]): RenderAttrib {.importcpp: "decons
 
 proc getClassSlot*(_: typedesc[ScissorAttrib]): int {.importcpp: "ScissorAttrib::get_class_slot()", header: "scissorAttrib.h".}
 
-converter getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
+proc getClassType*(_: typedesc[ScissorAttrib]): TypeHandle {.importcpp: "ScissorAttrib::get_class_type()", header: "scissorAttrib.h".}
 
 proc make*(_: typedesc[ShadeModelAttrib], mode: ShadeModelAttrib_Mode): RenderAttrib {.importcpp: "deconstify(#ShadeModelAttrib::make(#))", header: "shadeModelAttrib.h".}
 
@@ -7591,7 +7591,7 @@ proc makeDefault*(_: typedesc[ShadeModelAttrib]): RenderAttrib {.importcpp: "dec
 
 proc getClassSlot*(_: typedesc[ShadeModelAttrib]): int {.importcpp: "ShadeModelAttrib::get_class_slot()", header: "shadeModelAttrib.h".}
 
-converter getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
+proc getClassType*(_: typedesc[ShadeModelAttrib]): TypeHandle {.importcpp: "ShadeModelAttrib::get_class_type()", header: "shadeModelAttrib.h".}
 
 proc makeOff*(_: typedesc[StencilAttrib]): RenderAttrib {.importcpp: "deconstify(StencilAttrib::make_off())", header: "stencilAttrib.h".}
 
@@ -7609,7 +7609,7 @@ proc make2SidedWithClear*(_: typedesc[StencilAttrib], frontEnable: bool, backEna
 
 proc getClassSlot*(_: typedesc[StencilAttrib]): int {.importcpp: "StencilAttrib::get_class_slot()", header: "stencilAttrib.h".}
 
-converter getClassType*(_: typedesc[StencilAttrib]): TypeHandle {.importcpp: "StencilAttrib::get_class_type()", header: "stencilAttrib.h".}
+proc getClassType*(_: typedesc[StencilAttrib]): TypeHandle {.importcpp: "StencilAttrib::get_class_type()", header: "stencilAttrib.h".}
 
 proc hasShader*(_: typedesc[ShaderPool], filename: Filename): bool {.importcpp: "#ShaderPool::has_shader(#)", header: "shaderPool.h".}
 
@@ -7637,7 +7637,7 @@ proc newMovieAudio*(): MovieAudio {.importcpp: "new MovieAudio()".}
 
 proc get*(_: typedesc[MovieAudio], name: Filename): MovieAudio {.importcpp: "#MovieAudio::get(#)", header: "movieAudio.h".}
 
-converter getClassType*(_: typedesc[MovieAudio]): TypeHandle {.importcpp: "MovieAudio::get_class_type()", header: "movieAudio.h".}
+proc getClassType*(_: typedesc[MovieAudio]): TypeHandle {.importcpp: "MovieAudio::get_class_type()", header: "movieAudio.h".}
 
 proc newFlacAudio*(name: Filename): FlacAudio {.importcpp: "new FlacAudio(#)".}
 
@@ -7645,19 +7645,19 @@ proc newFlacAudio*(param0: FlacAudio): FlacAudio {.importcpp: "new FlacAudio(#)"
 
 proc make*(_: typedesc[FlacAudio], name: Filename): MovieAudio {.importcpp: "#FlacAudio::make(#)", header: "flacAudio.h".}
 
-converter getClassType*(_: typedesc[FlacAudio]): TypeHandle {.importcpp: "FlacAudio::get_class_type()", header: "flacAudio.h".}
+proc getClassType*(_: typedesc[FlacAudio]): TypeHandle {.importcpp: "FlacAudio::get_class_type()", header: "flacAudio.h".}
 
 proc newMovieAudioCursor*(src: MovieAudio): MovieAudioCursor {.importcpp: "new MovieAudioCursor(#)".}
 
 proc newMovieAudioCursor*(param0: MovieAudioCursor): MovieAudioCursor {.importcpp: "new MovieAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[MovieAudioCursor]): TypeHandle {.importcpp: "MovieAudioCursor::get_class_type()", header: "movieAudioCursor.h".}
+proc getClassType*(_: typedesc[MovieAudioCursor]): TypeHandle {.importcpp: "MovieAudioCursor::get_class_type()", header: "movieAudioCursor.h".}
 
 proc newFlacAudioCursor*(src: FlacAudio, stream: istream): FlacAudioCursor {.importcpp: "new FlacAudioCursor(#, #)".}
 
 proc newFlacAudioCursor*(param0: FlacAudioCursor): FlacAudioCursor {.importcpp: "new FlacAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "FlacAudioCursor::get_class_type()", header: "flacAudioCursor.h".}
+proc getClassType*(_: typedesc[FlacAudioCursor]): TypeHandle {.importcpp: "FlacAudioCursor::get_class_type()", header: "flacAudioCursor.h".}
 
 proc newMovieVideo*(param0: MovieVideo): MovieVideo {.importcpp: "new MovieVideo(#)".}
 
@@ -7667,15 +7667,15 @@ proc newMovieVideo*(): MovieVideo {.importcpp: "new MovieVideo()".}
 
 proc get*(_: typedesc[MovieVideo], name: Filename): MovieVideo {.importcpp: "#MovieVideo::get(#)", header: "movieVideo.h".}
 
-converter getClassType*(_: typedesc[MovieVideo]): TypeHandle {.importcpp: "MovieVideo::get_class_type()", header: "movieVideo.h".}
+proc getClassType*(_: typedesc[MovieVideo]): TypeHandle {.importcpp: "MovieVideo::get_class_type()", header: "movieVideo.h".}
 
 proc newInkblotVideo*(param0: InkblotVideo): InkblotVideo {.importcpp: "new InkblotVideo(#)".}
 
 proc newInkblotVideo*(x: int, y: int, fps: int): InkblotVideo {.importcpp: "new InkblotVideo(#, #, #)".}
 
-converter getClassType*(_: typedesc[InkblotVideo]): TypeHandle {.importcpp: "InkblotVideo::get_class_type()", header: "inkblotVideo.h".}
+proc getClassType*(_: typedesc[InkblotVideo]): TypeHandle {.importcpp: "InkblotVideo::get_class_type()", header: "inkblotVideo.h".}
 
-converter getClassType*(_: typedesc[MovieVideoCursor]): TypeHandle {.importcpp: "MovieVideoCursor::get_class_type()", header: "movieVideoCursor.h".}
+proc getClassType*(_: typedesc[MovieVideoCursor]): TypeHandle {.importcpp: "MovieVideoCursor::get_class_type()", header: "movieVideoCursor.h".}
 
 proc newMovieVideoCursor*(param0: MovieVideoCursor): MovieVideoCursor {.importcpp: "new MovieVideoCursor(#)".}
 
@@ -7683,13 +7683,13 @@ proc newInkblotVideoCursor*(src: InkblotVideo): InkblotVideoCursor {.importcpp: 
 
 proc newInkblotVideoCursor*(param0: InkblotVideoCursor): InkblotVideoCursor {.importcpp: "new InkblotVideoCursor(#)".}
 
-converter getClassType*(_: typedesc[InkblotVideoCursor]): TypeHandle {.importcpp: "InkblotVideoCursor::get_class_type()", header: "inkblotVideoCursor.h".}
+proc getClassType*(_: typedesc[InkblotVideoCursor]): TypeHandle {.importcpp: "InkblotVideoCursor::get_class_type()", header: "inkblotVideoCursor.h".}
 
 proc getNumOptions*(_: typedesc[MicrophoneAudio]): int {.importcpp: "MicrophoneAudio::get_num_options()", header: "microphoneAudio.h".}
 
 proc getOption*(_: typedesc[MicrophoneAudio], n: int): MicrophoneAudio {.importcpp: "#MicrophoneAudio::get_option(#)", header: "microphoneAudio.h".}
 
-converter getClassType*(_: typedesc[MicrophoneAudio]): TypeHandle {.importcpp: "MicrophoneAudio::get_class_type()", header: "microphoneAudio.h".}
+proc getClassType*(_: typedesc[MicrophoneAudio]): TypeHandle {.importcpp: "MicrophoneAudio::get_class_type()", header: "microphoneAudio.h".}
 
 proc newOpusAudio*(name: Filename): OpusAudio {.importcpp: "new OpusAudio(#)".}
 
@@ -7697,13 +7697,13 @@ proc newOpusAudio*(param0: OpusAudio): OpusAudio {.importcpp: "new OpusAudio(#)"
 
 proc make*(_: typedesc[OpusAudio], name: Filename): MovieAudio {.importcpp: "#OpusAudio::make(#)", header: "opusAudio.h".}
 
-converter getClassType*(_: typedesc[OpusAudio]): TypeHandle {.importcpp: "OpusAudio::get_class_type()", header: "opusAudio.h".}
+proc getClassType*(_: typedesc[OpusAudio]): TypeHandle {.importcpp: "OpusAudio::get_class_type()", header: "opusAudio.h".}
 
 proc newOpusAudioCursor*(src: OpusAudio, stream: istream): OpusAudioCursor {.importcpp: "new OpusAudioCursor(#, #)".}
 
 proc newOpusAudioCursor*(param0: OpusAudioCursor): OpusAudioCursor {.importcpp: "new OpusAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[OpusAudioCursor]): TypeHandle {.importcpp: "OpusAudioCursor::get_class_type()", header: "opusAudioCursor.h".}
+proc getClassType*(_: typedesc[OpusAudioCursor]): TypeHandle {.importcpp: "OpusAudioCursor::get_class_type()", header: "opusAudioCursor.h".}
 
 proc newUserDataAudio*(param0: UserDataAudio): UserDataAudio {.importcpp: "new UserDataAudio(#)".}
 
@@ -7711,13 +7711,13 @@ proc newUserDataAudio*(rate: int, channels: int, removeAfterRead: bool): UserDat
 
 proc newUserDataAudio*(rate: int, channels: int): UserDataAudio {.importcpp: "new UserDataAudio(#, #)".}
 
-converter getClassType*(_: typedesc[UserDataAudio]): TypeHandle {.importcpp: "UserDataAudio::get_class_type()", header: "userDataAudio.h".}
+proc getClassType*(_: typedesc[UserDataAudio]): TypeHandle {.importcpp: "UserDataAudio::get_class_type()", header: "userDataAudio.h".}
 
 proc newUserDataAudioCursor*(src: UserDataAudio): UserDataAudioCursor {.importcpp: "new UserDataAudioCursor(#)".}
 
 proc newUserDataAudioCursor*(param0: UserDataAudioCursor): UserDataAudioCursor {.importcpp: "new UserDataAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[UserDataAudioCursor]): TypeHandle {.importcpp: "UserDataAudioCursor::get_class_type()", header: "userDataAudioCursor.h".}
+proc getClassType*(_: typedesc[UserDataAudioCursor]): TypeHandle {.importcpp: "UserDataAudioCursor::get_class_type()", header: "userDataAudioCursor.h".}
 
 proc newVorbisAudio*(name: Filename): VorbisAudio {.importcpp: "new VorbisAudio(#)".}
 
@@ -7725,13 +7725,13 @@ proc newVorbisAudio*(param0: VorbisAudio): VorbisAudio {.importcpp: "new VorbisA
 
 proc make*(_: typedesc[VorbisAudio], name: Filename): MovieAudio {.importcpp: "#VorbisAudio::make(#)", header: "vorbisAudio.h".}
 
-converter getClassType*(_: typedesc[VorbisAudio]): TypeHandle {.importcpp: "VorbisAudio::get_class_type()", header: "vorbisAudio.h".}
+proc getClassType*(_: typedesc[VorbisAudio]): TypeHandle {.importcpp: "VorbisAudio::get_class_type()", header: "vorbisAudio.h".}
 
 proc newVorbisAudioCursor*(src: VorbisAudio, stream: istream): VorbisAudioCursor {.importcpp: "new VorbisAudioCursor(#, #)".}
 
 proc newVorbisAudioCursor*(param0: VorbisAudioCursor): VorbisAudioCursor {.importcpp: "new VorbisAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[VorbisAudioCursor]): TypeHandle {.importcpp: "VorbisAudioCursor::get_class_type()", header: "vorbisAudioCursor.h".}
+proc getClassType*(_: typedesc[VorbisAudioCursor]): TypeHandle {.importcpp: "VorbisAudioCursor::get_class_type()", header: "vorbisAudioCursor.h".}
 
 proc newWavAudio*(name: Filename): WavAudio {.importcpp: "new WavAudio(#)".}
 
@@ -7739,13 +7739,13 @@ proc newWavAudio*(param0: WavAudio): WavAudio {.importcpp: "new WavAudio(#)".}
 
 proc make*(_: typedesc[WavAudio], name: Filename): MovieAudio {.importcpp: "#WavAudio::make(#)", header: "wavAudio.h".}
 
-converter getClassType*(_: typedesc[WavAudio]): TypeHandle {.importcpp: "WavAudio::get_class_type()", header: "wavAudio.h".}
+proc getClassType*(_: typedesc[WavAudio]): TypeHandle {.importcpp: "WavAudio::get_class_type()", header: "wavAudio.h".}
 
 proc newWavAudioCursor*(src: WavAudio, stream: istream): WavAudioCursor {.importcpp: "new WavAudioCursor(#, #)".}
 
 proc newWavAudioCursor*(param0: WavAudioCursor): WavAudioCursor {.importcpp: "new WavAudioCursor(#)".}
 
-converter getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
+proc getClassType*(_: typedesc[WavAudioCursor]): TypeHandle {.importcpp: "WavAudioCursor::get_class_type()", header: "wavAudioCursor.h".}
 
 proc initCardMaker*(param0: CardMaker): CardMaker {.importcpp: "CardMaker(#)".}
 
@@ -7759,11 +7759,11 @@ proc newFrameRateMeter*(param0: FrameRateMeter): FrameRateMeter {.importcpp: "ne
 
 proc newFrameRateMeter*(name: string): FrameRateMeter {.importcpp: "new FrameRateMeter(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
+proc getClassType*(_: typedesc[FrameRateMeter]): TypeHandle {.importcpp: "FrameRateMeter::get_class_type()", header: "frameRateMeter.h".}
 
 proc initGeoMipTerrain*(name: string): GeoMipTerrain {.importcpp: "GeoMipTerrain(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
+proc getClassType*(_: typedesc[GeoMipTerrain]): TypeHandle {.importcpp: "GeoMipTerrain::get_class_type()", header: "geoMipTerrain.h".}
 
 proc initHeightfieldTesselator*(param0: HeightfieldTesselator): HeightfieldTesselator {.importcpp: "HeightfieldTesselator(#)".}
 
@@ -7777,17 +7777,17 @@ proc initLineSegs*(): LineSegs {.importcpp: "LineSegs()".}
 
 proc initMeshDrawer*(): MeshDrawer {.importcpp: "MeshDrawer()".}
 
-converter getClassType*(_: typedesc[MeshDrawer]): TypeHandle {.importcpp: "MeshDrawer::get_class_type()", header: "meshDrawer.h".}
+proc getClassType*(_: typedesc[MeshDrawer]): TypeHandle {.importcpp: "MeshDrawer::get_class_type()", header: "meshDrawer.h".}
 
 proc initMeshDrawer2D*(): MeshDrawer2D {.importcpp: "MeshDrawer2D()".}
 
-converter getClassType*(_: typedesc[MeshDrawer2D]): TypeHandle {.importcpp: "MeshDrawer2D::get_class_type()", header: "meshDrawer2D.h".}
+proc getClassType*(_: typedesc[MeshDrawer2D]): TypeHandle {.importcpp: "MeshDrawer2D::get_class_type()", header: "meshDrawer2D.h".}
 
 proc newMovieTexture*(video: MovieVideo): MovieTexture {.importcpp: "new MovieTexture(#)".}
 
 proc newMovieTexture*(name: string): MovieTexture {.importcpp: "new MovieTexture(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[MovieTexture]): TypeHandle {.importcpp: "MovieTexture::get_class_type()", header: "movieTexture.h".}
+proc getClassType*(_: typedesc[MovieTexture]): TypeHandle {.importcpp: "MovieTexture::get_class_type()", header: "movieTexture.h".}
 
 proc initMultitexReducer*(): MultitexReducer {.importcpp: "MultitexReducer()".}
 
@@ -7797,25 +7797,25 @@ proc newNodeVertexTransform*(node: PandaNode, prev: VertexTransform): NodeVertex
 
 proc newNodeVertexTransform*(node: PandaNode): NodeVertexTransform {.importcpp: "new NodeVertexTransform(#)".}
 
-converter getClassType*(_: typedesc[NodeVertexTransform]): TypeHandle {.importcpp: "NodeVertexTransform::get_class_type()", header: "nodeVertexTransform.h".}
+proc getClassType*(_: typedesc[NodeVertexTransform]): TypeHandle {.importcpp: "NodeVertexTransform::get_class_type()", header: "nodeVertexTransform.h".}
 
 proc newShaderTerrainMesh*(): ShaderTerrainMesh {.importcpp: "new ShaderTerrainMesh()".}
 
-converter getClassType*(_: typedesc[ShaderTerrainMesh]): TypeHandle {.importcpp: "ShaderTerrainMesh::get_class_type()", header: "shaderTerrainMesh.h".}
+proc getClassType*(_: typedesc[ShaderTerrainMesh]): TypeHandle {.importcpp: "ShaderTerrainMesh::get_class_type()", header: "shaderTerrainMesh.h".}
 
 proc newSceneGraphAnalyzerMeter*(param0: SceneGraphAnalyzerMeter): SceneGraphAnalyzerMeter {.importcpp: "new SceneGraphAnalyzerMeter(#)".}
 
 proc newSceneGraphAnalyzerMeter*(name: string, node: PandaNode): SceneGraphAnalyzerMeter {.importcpp: "new SceneGraphAnalyzerMeter(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SceneGraphAnalyzerMeter]): TypeHandle {.importcpp: "SceneGraphAnalyzerMeter::get_class_type()", header: "sceneGraphAnalyzerMeter.h".}
+proc getClassType*(_: typedesc[SceneGraphAnalyzerMeter]): TypeHandle {.importcpp: "SceneGraphAnalyzerMeter::get_class_type()", header: "sceneGraphAnalyzerMeter.h".}
 
 proc newRigidBodyCombiner*(name: string): RigidBodyCombiner {.importcpp: "new RigidBodyCombiner(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[RigidBodyCombiner]): TypeHandle {.importcpp: "RigidBodyCombiner::get_class_type()", header: "rigidBodyCombiner.h".}
+proc getClassType*(_: typedesc[RigidBodyCombiner]): TypeHandle {.importcpp: "RigidBodyCombiner::get_class_type()", header: "rigidBodyCombiner.h".}
 
 proc newPipeOcclusionCullTraverser*(host: GraphicsOutput): PipeOcclusionCullTraverser {.importcpp: "new PipeOcclusionCullTraverser(#)".}
 
-converter getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
+proc getClassType*(_: typedesc[PipeOcclusionCullTraverser]): TypeHandle {.importcpp: "PipeOcclusionCullTraverser::get_class_type()", header: "pipeOcclusionCullTraverser.h".}
 
 proc initPfmVizzer*(pfm: PfmFile): PfmVizzer {.importcpp: "PfmVizzer(#)".}
 
@@ -7825,41 +7825,41 @@ proc newAnimGroup*(parent: AnimGroup, name: string): AnimGroup {.importcpp: "new
 
 proc newAnimGroup*(param0: AnimGroup): AnimGroup {.importcpp: "new AnimGroup(#)".}
 
-converter getClassType*(_: typedesc[AnimGroup]): TypeHandle {.importcpp: "AnimGroup::get_class_type()", header: "animGroup.h".}
+proc getClassType*(_: typedesc[AnimGroup]): TypeHandle {.importcpp: "AnimGroup::get_class_type()", header: "animGroup.h".}
 
 proc newAnimBundle*(param0: AnimBundle): AnimBundle {.importcpp: "new AnimBundle(#)".}
 
 proc newAnimBundle*(name: string, fps: float, numFrames: int): AnimBundle {.importcpp: "new AnimBundle(nimStringToStdString(#), #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[AnimBundle]): TypeHandle {.importcpp: "AnimBundle::get_class_type()", header: "animBundle.h".}
+proc getClassType*(_: typedesc[AnimBundle]): TypeHandle {.importcpp: "AnimBundle::get_class_type()", header: "animBundle.h".}
 
 proc newAnimBundleNode*(name: string, bundle: AnimBundle): AnimBundleNode {.importcpp: "new AnimBundleNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
 proc findAnimBundle*(_: typedesc[AnimBundleNode], root: PandaNode): AnimBundle {.importcpp: "#AnimBundleNode::find_anim_bundle(#)", header: "animBundleNode.h".}
 
-converter getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "AnimBundleNode::get_class_type()", header: "animBundleNode.h".}
+proc getClassType*(_: typedesc[AnimBundleNode]): TypeHandle {.importcpp: "AnimBundleNode::get_class_type()", header: "animBundleNode.h".}
 
 proc newPartGroup*(parent: PartGroup, name: string): PartGroup {.importcpp: "new PartGroup(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGroup::get_class_type()", header: "partGroup.h".}
+proc getClassType*(_: typedesc[PartGroup]): TypeHandle {.importcpp: "PartGroup::get_class_type()", header: "partGroup.h".}
 
-converter getClassType*(_: typedesc[AnimControl]): TypeHandle {.importcpp: "AnimControl::get_class_type()", header: "animControl.h".}
+proc getClassType*(_: typedesc[AnimControl]): TypeHandle {.importcpp: "AnimControl::get_class_type()", header: "animControl.h".}
 
-converter getClassType*(_: typedesc[AnimChannelBase]): TypeHandle {.importcpp: "AnimChannelBase::get_class_type()", header: "animChannelBase.h".}
+proc getClassType*(_: typedesc[AnimChannelBase]): TypeHandle {.importcpp: "AnimChannelBase::get_class_type()", header: "animChannelBase.h".}
 
-converter getClassType*(_: typedesc[AnimChannelMatrixDynamic]): TypeHandle {.importcpp: "AnimChannelMatrixDynamic::get_class_type()", header: "animChannelMatrixDynamic.h".}
+proc getClassType*(_: typedesc[AnimChannelMatrixDynamic]): TypeHandle {.importcpp: "AnimChannelMatrixDynamic::get_class_type()", header: "animChannelMatrixDynamic.h".}
 
 proc newAnimChannelMatrixXfmTable*(parent: AnimGroup, name: string): AnimChannelMatrixXfmTable {.importcpp: "new AnimChannelMatrixXfmTable(#, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc isValidId*(_: typedesc[AnimChannelMatrixXfmTable], tableId: char): bool {.importcpp: "#AnimChannelMatrixXfmTable::is_valid_id(#)", header: "animChannelMatrixXfmTable.h".}
 
-converter getClassType*(_: typedesc[AnimChannelMatrixXfmTable]): TypeHandle {.importcpp: "AnimChannelMatrixXfmTable::get_class_type()", header: "animChannelMatrixXfmTable.h".}
+proc getClassType*(_: typedesc[AnimChannelMatrixXfmTable]): TypeHandle {.importcpp: "AnimChannelMatrixXfmTable::get_class_type()", header: "animChannelMatrixXfmTable.h".}
 
-converter getClassType*(_: typedesc[AnimChannelScalarDynamic]): TypeHandle {.importcpp: "AnimChannelScalarDynamic::get_class_type()", header: "animChannelScalarDynamic.h".}
+proc getClassType*(_: typedesc[AnimChannelScalarDynamic]): TypeHandle {.importcpp: "AnimChannelScalarDynamic::get_class_type()", header: "animChannelScalarDynamic.h".}
 
 proc newAnimChannelScalarTable*(parent: AnimGroup, name: string): AnimChannelScalarTable {.importcpp: "new AnimChannelScalarTable(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[AnimChannelScalarTable]): TypeHandle {.importcpp: "AnimChannelScalarTable::get_class_type()", header: "animChannelScalarTable.h".}
+proc getClassType*(_: typedesc[AnimChannelScalarTable]): TypeHandle {.importcpp: "AnimChannelScalarTable::get_class_type()", header: "animChannelScalarTable.h".}
 
 proc initAnimControlCollection*(): AnimControlCollection {.importcpp: "AnimControlCollection()".}
 
@@ -7867,7 +7867,7 @@ proc initAnimControlCollection*(param0: AnimControlCollection): AnimControlColle
 
 proc newAnimPreloadTable*(): AnimPreloadTable {.importcpp: "new AnimPreloadTable()".}
 
-converter getClassType*(_: typedesc[AnimPreloadTable]): TypeHandle {.importcpp: "AnimPreloadTable::get_class_type()", header: "animPreloadTable.h".}
+proc getClassType*(_: typedesc[AnimPreloadTable]): TypeHandle {.importcpp: "AnimPreloadTable::get_class_type()", header: "animPreloadTable.h".}
 
 proc autoBind*(rootNode: PandaNode, controls: AnimControlCollection, hierarchyMatchFlags: int) {.importcpp: "auto_bind(#, #, #)", header: "auto_bind.h".}
 
@@ -7881,7 +7881,7 @@ proc newBindAnimRequest*(param0: BindAnimRequest): BindAnimRequest {.importcpp: 
 
 proc newBindAnimRequest*(name: string, filename: Filename, options: LoaderOptions, loader: Loader, control: AnimControl, hierarchyMatchFlags: int, subset: PartSubset): BindAnimRequest {.importcpp: "new BindAnimRequest(nimStringToStdString(#), #, #, #, #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[BindAnimRequest]): TypeHandle {.importcpp: "BindAnimRequest::get_class_type()", header: "bindAnimRequest.h".}
+proc getClassType*(_: typedesc[BindAnimRequest]): TypeHandle {.importcpp: "BindAnimRequest::get_class_type()", header: "bindAnimRequest.h".}
 
 proc newPartBundle*(name: string): PartBundle {.importcpp: "new PartBundle(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -7893,15 +7893,15 @@ proc newPartBundleHandle*(bundle: PartBundle): PartBundleHandle {.importcpp: "ne
 
 proc newPartBundleHandle*(param0: PartBundleHandle): PartBundleHandle {.importcpp: "new PartBundleHandle(#)".}
 
-converter getClassType*(_: typedesc[PartBundleNode]): TypeHandle {.importcpp: "PartBundleNode::get_class_type()", header: "partBundleNode.h".}
+proc getClassType*(_: typedesc[PartBundleNode]): TypeHandle {.importcpp: "PartBundleNode::get_class_type()", header: "partBundleNode.h".}
 
-converter getClassType*(_: typedesc[PartBundle]): TypeHandle {.importcpp: "PartBundle::get_class_type()", header: "partBundle.h".}
+proc getClassType*(_: typedesc[PartBundle]): TypeHandle {.importcpp: "PartBundle::get_class_type()", header: "partBundle.h".}
 
-converter getClassType*(_: typedesc[MovingPartBase]): TypeHandle {.importcpp: "MovingPartBase::get_class_type()", header: "movingPartBase.h".}
+proc getClassType*(_: typedesc[MovingPartBase]): TypeHandle {.importcpp: "MovingPartBase::get_class_type()", header: "movingPartBase.h".}
 
-converter getClassType*(_: typedesc[MovingPartMatrix]): TypeHandle {.importcpp: "MovingPartMatrix::get_class_type()", header: "movingPartMatrix.h".}
+proc getClassType*(_: typedesc[MovingPartMatrix]): TypeHandle {.importcpp: "MovingPartMatrix::get_class_type()", header: "movingPartMatrix.h".}
 
-converter getClassType*(_: typedesc[MovingPartScalar]): TypeHandle {.importcpp: "MovingPartScalar::get_class_type()", header: "movingPartScalar.h".}
+proc getClassType*(_: typedesc[MovingPartScalar]): TypeHandle {.importcpp: "MovingPartScalar::get_class_type()", header: "movingPartScalar.h".}
 
 proc initPStatCollector*(copy: PStatCollector): PStatCollector {.importcpp: "PStatCollector(#)".}
 
@@ -7917,7 +7917,7 @@ proc initPStatThread*(copy: PStatThread): PStatThread {.importcpp: "PStatThread(
 
 proc initPStatThread*(thread: Thread, client: PStatClient): PStatThread {.importcpp: "PStatThread(#, #)".}
 
-converter initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".}
+proc initPStatThread*(thread: Thread): PStatThread {.importcpp: "PStatThread(#)".}
 
 proc connect*(_: typedesc[PStatClient], hostname: string, port: int): bool {.importcpp: "#PStatClient::connect(nimStringToStdString(#), #)", header: "pStatClient.h".}
 
@@ -7941,53 +7941,53 @@ proc newPStatCollectorForward*(col: PStatCollector): PStatCollectorForward {.imp
 
 proc newCharacterJoint*(character: Character, root: PartBundle, parent: PartGroup, name: string, defaultValue: LMatrix4): CharacterJoint {.importcpp: "new CharacterJoint(#, #, #, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[CharacterJoint]): TypeHandle {.importcpp: "CharacterJoint::get_class_type()", header: "characterJoint.h".}
+proc getClassType*(_: typedesc[CharacterJoint]): TypeHandle {.importcpp: "CharacterJoint::get_class_type()", header: "characterJoint.h".}
 
 proc newCharacterSlider*(parent: PartGroup, name: string): CharacterSlider {.importcpp: "new CharacterSlider(#, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newCharacterSlider*(parent: PartGroup, name: string, defaultValue: float): CharacterSlider {.importcpp: "new CharacterSlider(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[CharacterSlider]): TypeHandle {.importcpp: "CharacterSlider::get_class_type()", header: "characterSlider.h".}
+proc getClassType*(_: typedesc[CharacterSlider]): TypeHandle {.importcpp: "CharacterSlider::get_class_type()", header: "characterSlider.h".}
 
 proc newCharacterVertexSlider*(charSlider: CharacterSlider): CharacterVertexSlider {.importcpp: "new CharacterVertexSlider(#)".}
 
-converter getClassType*(_: typedesc[CharacterVertexSlider]): TypeHandle {.importcpp: "CharacterVertexSlider::get_class_type()", header: "characterVertexSlider.h".}
+proc getClassType*(_: typedesc[CharacterVertexSlider]): TypeHandle {.importcpp: "CharacterVertexSlider::get_class_type()", header: "characterVertexSlider.h".}
 
 proc newJointVertexTransform*(joint: CharacterJoint): JointVertexTransform {.importcpp: "new JointVertexTransform(#)".}
 
-converter getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
+proc getClassType*(_: typedesc[JointVertexTransform]): TypeHandle {.importcpp: "JointVertexTransform::get_class_type()", header: "jointVertexTransform.h".}
 
 proc newCharacter*(param0: Character): Character {.importcpp: "new Character(#)".}
 
 proc newCharacter*(name: string): Character {.importcpp: "new Character(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()", header: "character.h".}
+proc getClassType*(_: typedesc[Character]): TypeHandle {.importcpp: "Character::get_class_type()", header: "character.h".}
 
 proc newCharacterJointBundle*(name: string): CharacterJointBundle {.importcpp: "new CharacterJointBundle(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newCharacterJointBundle*(): CharacterJointBundle {.importcpp: "new CharacterJointBundle()".}
 
-converter getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
+proc getClassType*(_: typedesc[CharacterJointBundle]): TypeHandle {.importcpp: "CharacterJointBundle::get_class_type()", header: "characterJointBundle.h".}
 
 proc make*(_: typedesc[CharacterJointEffect], character: Character): RenderEffect {.importcpp: "deconstify(#CharacterJointEffect::make(#))", header: "characterJointEffect.h".}
 
-converter getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
+proc getClassType*(_: typedesc[CharacterJointEffect]): TypeHandle {.importcpp: "CharacterJointEffect::get_class_type()", header: "characterJointEffect.h".}
 
-converter getClassType*(_: typedesc[CollisionSolid]): TypeHandle {.importcpp: "CollisionSolid::get_class_type()", header: "collisionSolid.h".}
+proc getClassType*(_: typedesc[CollisionSolid]): TypeHandle {.importcpp: "CollisionSolid::get_class_type()", header: "collisionSolid.h".}
 
 proc newCollisionBox*(min: LPoint3, max: LPoint3): CollisionBox {.importcpp: "new CollisionBox((LPoint3 const &)(#), (LPoint3 const &)(#))".}
 
 proc newCollisionBox*(center: LPoint3, x: float, y: float, z: float): CollisionBox {.importcpp: "new CollisionBox((LPoint3 const &)(#), #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionBox]): TypeHandle {.importcpp: "CollisionBox::get_class_type()", header: "collisionBox.h".}
+proc getClassType*(_: typedesc[CollisionBox]): TypeHandle {.importcpp: "CollisionBox::get_class_type()", header: "collisionBox.h".}
 
 proc newCollisionCapsule*(a: LPoint3, db: LPoint3, radius: float): CollisionCapsule {.importcpp: "new CollisionCapsule((LPoint3 const &)(#), (LPoint3 const &)(#), #)".}
 
 proc newCollisionCapsule*(ax: float, ay: float, az: float, bx: float, by: float, bz: float, radius: float): CollisionCapsule {.importcpp: "new CollisionCapsule(#, #, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionCapsule]): TypeHandle {.importcpp: "CollisionCapsule::get_class_type()", header: "collisionCapsule.h".}
+proc getClassType*(_: typedesc[CollisionCapsule]): TypeHandle {.importcpp: "CollisionCapsule::get_class_type()", header: "collisionCapsule.h".}
 
-converter getClassType*(_: typedesc[CollisionHandler]): TypeHandle {.importcpp: "CollisionHandler::get_class_type()", header: "collisionHandler.h".}
+proc getClassType*(_: typedesc[CollisionHandler]): TypeHandle {.importcpp: "CollisionHandler::get_class_type()", header: "collisionHandler.h".}
 
 proc newCollisionHandler*(param0: CollisionHandler): CollisionHandler {.importcpp: "new CollisionHandler(#)".}
 
@@ -7995,7 +7995,7 @@ proc newCollisionNode*(name: string): CollisionNode {.importcpp: "new CollisionN
 
 proc getDefaultCollideMask*(_: typedesc[CollisionNode]): CollideMask {.importcpp: "CollisionNode::get_default_collide_mask()", header: "collisionNode.h".}
 
-converter getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
+proc getClassType*(_: typedesc[CollisionNode]): TypeHandle {.importcpp: "CollisionNode::get_class_type()", header: "collisionNode.h".}
 
 proc initCollisionTraverser*(param0: CollisionTraverser): CollisionTraverser {.importcpp: "CollisionTraverser(#)".}
 
@@ -8003,21 +8003,21 @@ proc initCollisionTraverser*(name: string): CollisionTraverser {.importcpp: "Col
 
 proc initCollisionTraverser*(): CollisionTraverser {.importcpp: "CollisionTraverser()".}
 
-converter getClassType*(_: typedesc[CollisionRecorder]): TypeHandle {.importcpp: "CollisionRecorder::get_class_type()", header: "collisionRecorder.h".}
+proc getClassType*(_: typedesc[CollisionRecorder]): TypeHandle {.importcpp: "CollisionRecorder::get_class_type()", header: "collisionRecorder.h".}
 
-converter getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
+proc getClassType*(_: typedesc[CollisionTraverser]): TypeHandle {.importcpp: "CollisionTraverser::get_class_type()", header: "collisionTraverser.h".}
 
-converter getClassType*(_: typedesc[CollisionEntry]): TypeHandle {.importcpp: "CollisionEntry::get_class_type()", header: "collisionEntry.h".}
+proc getClassType*(_: typedesc[CollisionEntry]): TypeHandle {.importcpp: "CollisionEntry::get_class_type()", header: "collisionEntry.h".}
 
 proc newCollisionPlane*(copy: CollisionPlane): CollisionPlane {.importcpp: "new CollisionPlane(#)".}
 
 proc newCollisionPlane*(plane: LPlane): CollisionPlane {.importcpp: "new CollisionPlane(#)".}
 
-converter getClassType*(_: typedesc[CollisionPlane]): TypeHandle {.importcpp: "CollisionPlane::get_class_type()", header: "collisionPlane.h".}
+proc getClassType*(_: typedesc[CollisionPlane]): TypeHandle {.importcpp: "CollisionPlane::get_class_type()", header: "collisionPlane.h".}
 
 proc newCollisionFloorMesh*(): CollisionFloorMesh {.importcpp: "new CollisionFloorMesh()".}
 
-converter getClassType*(_: typedesc[CollisionFloorMesh]): TypeHandle {.importcpp: "CollisionFloorMesh::get_class_type()", header: "collisionFloorMesh.h".}
+proc getClassType*(_: typedesc[CollisionFloorMesh]): TypeHandle {.importcpp: "CollisionFloorMesh::get_class_type()", header: "collisionFloorMesh.h".}
 
 proc newCollisionPolygon*(a: LVecBase3, b: LVecBase3, c: LVecBase3): CollisionPolygon {.importcpp: "new CollisionPolygon((LVecBase3 const &)(#), (LVecBase3 const &)(#), (LVecBase3 const &)(#))".}
 
@@ -8027,55 +8027,55 @@ proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPo
 
 proc verifyPoints*(_: typedesc[CollisionPolygon], a: LPoint3, b: LPoint3, c: LPoint3, d: LPoint3): bool {.importcpp: "#CollisionPolygon::verify_points((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#))", header: "collisionPolygon.h".}
 
-converter getClassType*(_: typedesc[CollisionPolygon]): TypeHandle {.importcpp: "CollisionPolygon::get_class_type()", header: "collisionPolygon.h".}
+proc getClassType*(_: typedesc[CollisionPolygon]): TypeHandle {.importcpp: "CollisionPolygon::get_class_type()", header: "collisionPolygon.h".}
 
 proc newCollisionHandlerEvent*(): CollisionHandlerEvent {.importcpp: "new CollisionHandlerEvent()".}
 
 proc newCollisionHandlerEvent*(param0: CollisionHandlerEvent): CollisionHandlerEvent {.importcpp: "new CollisionHandlerEvent(#)".}
 
-converter getClassType*(_: typedesc[CollisionHandlerEvent]): TypeHandle {.importcpp: "CollisionHandlerEvent::get_class_type()", header: "collisionHandlerEvent.h".}
+proc getClassType*(_: typedesc[CollisionHandlerEvent]): TypeHandle {.importcpp: "CollisionHandlerEvent::get_class_type()", header: "collisionHandlerEvent.h".}
 
-converter getClassType*(_: typedesc[CollisionHandlerPhysical]): TypeHandle {.importcpp: "CollisionHandlerPhysical::get_class_type()", header: "collisionHandlerPhysical.h".}
+proc getClassType*(_: typedesc[CollisionHandlerPhysical]): TypeHandle {.importcpp: "CollisionHandlerPhysical::get_class_type()", header: "collisionHandlerPhysical.h".}
 
 proc newCollisionHandlerFloor*(): CollisionHandlerFloor {.importcpp: "new CollisionHandlerFloor()".}
 
-converter getClassType*(_: typedesc[CollisionHandlerFloor]): TypeHandle {.importcpp: "CollisionHandlerFloor::get_class_type()", header: "collisionHandlerFloor.h".}
+proc getClassType*(_: typedesc[CollisionHandlerFloor]): TypeHandle {.importcpp: "CollisionHandlerFloor::get_class_type()", header: "collisionHandlerFloor.h".}
 
 proc newCollisionHandlerPusher*(): CollisionHandlerPusher {.importcpp: "new CollisionHandlerPusher()".}
 
-converter getClassType*(_: typedesc[CollisionHandlerPusher]): TypeHandle {.importcpp: "CollisionHandlerPusher::get_class_type()", header: "collisionHandlerPusher.h".}
+proc getClassType*(_: typedesc[CollisionHandlerPusher]): TypeHandle {.importcpp: "CollisionHandlerPusher::get_class_type()", header: "collisionHandlerPusher.h".}
 
 proc newCollisionHandlerFluidPusher*(): CollisionHandlerFluidPusher {.importcpp: "new CollisionHandlerFluidPusher()".}
 
-converter getClassType*(_: typedesc[CollisionHandlerFluidPusher]): TypeHandle {.importcpp: "CollisionHandlerFluidPusher::get_class_type()", header: "collisionHandlerFluidPusher.h".}
+proc getClassType*(_: typedesc[CollisionHandlerFluidPusher]): TypeHandle {.importcpp: "CollisionHandlerFluidPusher::get_class_type()", header: "collisionHandlerFluidPusher.h".}
 
 proc newCollisionHandlerGravity*(): CollisionHandlerGravity {.importcpp: "new CollisionHandlerGravity()".}
 
-converter getClassType*(_: typedesc[CollisionHandlerGravity]): TypeHandle {.importcpp: "CollisionHandlerGravity::get_class_type()", header: "collisionHandlerGravity.h".}
+proc getClassType*(_: typedesc[CollisionHandlerGravity]): TypeHandle {.importcpp: "CollisionHandlerGravity::get_class_type()", header: "collisionHandlerGravity.h".}
 
 proc newCollisionHandlerHighestEvent*(): CollisionHandlerHighestEvent {.importcpp: "new CollisionHandlerHighestEvent()".}
 
 proc newCollisionHandlerHighestEvent*(param0: CollisionHandlerHighestEvent): CollisionHandlerHighestEvent {.importcpp: "new CollisionHandlerHighestEvent(#)".}
 
-converter getClassType*(_: typedesc[CollisionHandlerHighestEvent]): TypeHandle {.importcpp: "CollisionHandlerHighestEvent::get_class_type()", header: "collisionHandlerHighestEvent.h".}
+proc getClassType*(_: typedesc[CollisionHandlerHighestEvent]): TypeHandle {.importcpp: "CollisionHandlerHighestEvent::get_class_type()", header: "collisionHandlerHighestEvent.h".}
 
 proc newCollisionHandlerQueue*(): CollisionHandlerQueue {.importcpp: "new CollisionHandlerQueue()".}
 
 proc newCollisionHandlerQueue*(param0: CollisionHandlerQueue): CollisionHandlerQueue {.importcpp: "new CollisionHandlerQueue(#)".}
 
-converter getClassType*(_: typedesc[CollisionHandlerQueue]): TypeHandle {.importcpp: "CollisionHandlerQueue::get_class_type()", header: "collisionHandlerQueue.h".}
+proc getClassType*(_: typedesc[CollisionHandlerQueue]): TypeHandle {.importcpp: "CollisionHandlerQueue::get_class_type()", header: "collisionHandlerQueue.h".}
 
 proc newCollisionSphere*(center: LPoint3, radius: float): CollisionSphere {.importcpp: "new CollisionSphere((LPoint3 const &)(#), #)".}
 
 proc newCollisionSphere*(cx: float, cy: float, cz: float, radius: float): CollisionSphere {.importcpp: "new CollisionSphere(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionSphere]): TypeHandle {.importcpp: "CollisionSphere::get_class_type()", header: "collisionSphere.h".}
+proc getClassType*(_: typedesc[CollisionSphere]): TypeHandle {.importcpp: "CollisionSphere::get_class_type()", header: "collisionSphere.h".}
 
 proc newCollisionInvSphere*(center: LPoint3, radius: float): CollisionInvSphere {.importcpp: "new CollisionInvSphere((LPoint3 const &)(#), #)".}
 
 proc newCollisionInvSphere*(cx: float, cy: float, cz: float, radius: float): CollisionInvSphere {.importcpp: "new CollisionInvSphere(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionInvSphere]): TypeHandle {.importcpp: "CollisionInvSphere::get_class_type()", header: "collisionInvSphere.h".}
+proc getClassType*(_: typedesc[CollisionInvSphere]): TypeHandle {.importcpp: "CollisionInvSphere::get_class_type()", header: "collisionInvSphere.h".}
 
 proc newCollisionRay*(): CollisionRay {.importcpp: "new CollisionRay()".}
 
@@ -8083,7 +8083,7 @@ proc newCollisionRay*(origin: LPoint3, direction: LVector3): CollisionRay {.impo
 
 proc newCollisionRay*(ox: float, oy: float, oz: float, dx: float, dy: float, dz: float): CollisionRay {.importcpp: "new CollisionRay(#, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionRay]): TypeHandle {.importcpp: "CollisionRay::get_class_type()", header: "collisionRay.h".}
+proc getClassType*(_: typedesc[CollisionRay]): TypeHandle {.importcpp: "CollisionRay::get_class_type()", header: "collisionRay.h".}
 
 proc newCollisionLine*(): CollisionLine {.importcpp: "new CollisionLine()".}
 
@@ -8091,13 +8091,13 @@ proc newCollisionLine*(origin: LPoint3, direction: LVector3): CollisionLine {.im
 
 proc newCollisionLine*(ox: float, oy: float, oz: float, dx: float, dy: float, dz: float): CollisionLine {.importcpp: "new CollisionLine(#, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionLine]): TypeHandle {.importcpp: "CollisionLine::get_class_type()", header: "collisionLine.h".}
+proc getClassType*(_: typedesc[CollisionLine]): TypeHandle {.importcpp: "CollisionLine::get_class_type()", header: "collisionLine.h".}
 
 proc newCollisionParabola*(): CollisionParabola {.importcpp: "new CollisionParabola()".}
 
 proc newCollisionParabola*(parabola: LParabola, t1: float, t2: float): CollisionParabola {.importcpp: "new CollisionParabola(#, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionParabola]): TypeHandle {.importcpp: "CollisionParabola::get_class_type()", header: "collisionParabola.h".}
+proc getClassType*(_: typedesc[CollisionParabola]): TypeHandle {.importcpp: "CollisionParabola::get_class_type()", header: "collisionParabola.h".}
 
 proc newCollisionSegment*(): CollisionSegment {.importcpp: "new CollisionSegment()".}
 
@@ -8105,17 +8105,17 @@ proc newCollisionSegment*(a: LPoint3, db: LPoint3): CollisionSegment {.importcpp
 
 proc newCollisionSegment*(ax: float, ay: float, az: float, bx: float, by: float, bz: float): CollisionSegment {.importcpp: "new CollisionSegment(#, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: "CollisionSegment::get_class_type()", header: "collisionSegment.h".}
+proc getClassType*(_: typedesc[CollisionSegment]): TypeHandle {.importcpp: "CollisionSegment::get_class_type()", header: "collisionSegment.h".}
 
 proc newCollisionVisualizer*(copy: CollisionVisualizer): CollisionVisualizer {.importcpp: "new CollisionVisualizer(#)".}
 
 proc newCollisionVisualizer*(name: string): CollisionVisualizer {.importcpp: "new CollisionVisualizer(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[CollisionVisualizer]): TypeHandle {.importcpp: "CollisionVisualizer::get_class_type()", header: "collisionVisualizer.h".}
+proc getClassType*(_: typedesc[CollisionVisualizer]): TypeHandle {.importcpp: "CollisionVisualizer::get_class_type()", header: "collisionVisualizer.h".}
 
-converter getClassType*(_: typedesc[InputDevice]): TypeHandle {.importcpp: "InputDevice::get_class_type()", header: "inputDevice.h".}
+proc getClassType*(_: typedesc[InputDevice]): TypeHandle {.importcpp: "InputDevice::get_class_type()", header: "inputDevice.h".}
 
-converter getClassType*(_: typedesc[ClientBase]): TypeHandle {.importcpp: "ClientBase::get_class_type()", header: "clientBase.h".}
+proc getClassType*(_: typedesc[ClientBase]): TypeHandle {.importcpp: "ClientBase::get_class_type()", header: "clientBase.h".}
 
 proc newAnalogNode*(param0: AnalogNode): AnalogNode {.importcpp: "new AnalogNode(#)".}
 
@@ -8123,7 +8123,7 @@ proc newAnalogNode*(client: ClientBase, deviceName: string): AnalogNode {.import
 
 proc newAnalogNode*(device: InputDevice): AnalogNode {.importcpp: "new AnalogNode(#)".}
 
-converter getClassType*(_: typedesc[AnalogNode]): TypeHandle {.importcpp: "AnalogNode::get_class_type()", header: "analogNode.h".}
+proc getClassType*(_: typedesc[AnalogNode]): TypeHandle {.importcpp: "AnalogNode::get_class_type()", header: "analogNode.h".}
 
 proc newButtonNode*(param0: ButtonNode): ButtonNode {.importcpp: "new ButtonNode(#)".}
 
@@ -8131,13 +8131,13 @@ proc newButtonNode*(client: ClientBase, deviceName: string): ButtonNode {.import
 
 proc newButtonNode*(device: InputDevice): ButtonNode {.importcpp: "new ButtonNode(#)".}
 
-converter getClassType*(_: typedesc[ButtonNode]): TypeHandle {.importcpp: "ButtonNode::get_class_type()", header: "buttonNode.h".}
+proc getClassType*(_: typedesc[ButtonNode]): TypeHandle {.importcpp: "ButtonNode::get_class_type()", header: "buttonNode.h".}
 
 proc newDialNode*(client: ClientBase, deviceName: string): DialNode {.importcpp: "new DialNode(#, nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newDialNode*(param0: DialNode): DialNode {.importcpp: "new DialNode(#)".}
 
-converter getClassType*(_: typedesc[DialNode]): TypeHandle {.importcpp: "DialNode::get_class_type()", header: "dialNode.h".}
+proc getClassType*(_: typedesc[DialNode]): TypeHandle {.importcpp: "DialNode::get_class_type()", header: "dialNode.h".}
 
 proc initInputDeviceSet*(): InputDeviceSet {.importcpp: "InputDeviceSet()".}
 
@@ -8149,9 +8149,9 @@ proc newInputDeviceNode*(device: InputDevice, name: string): InputDeviceNode {.i
 
 proc newInputDeviceNode*(param0: InputDeviceNode): InputDeviceNode {.importcpp: "new InputDeviceNode(#)".}
 
-converter getClassType*(_: typedesc[InputDeviceNode]): TypeHandle {.importcpp: "InputDeviceNode::get_class_type()", header: "inputDeviceNode.h".}
+proc getClassType*(_: typedesc[InputDeviceNode]): TypeHandle {.importcpp: "InputDeviceNode::get_class_type()", header: "inputDeviceNode.h".}
 
-converter getClassType*(_: typedesc[LinuxJoystickDevice]): TypeHandle {.importcpp: "LinuxJoystickDevice::get_class_type()", header: "linuxJoystickDevice.h".}
+proc getClassType*(_: typedesc[LinuxJoystickDevice]): TypeHandle {.importcpp: "LinuxJoystickDevice::get_class_type()", header: "linuxJoystickDevice.h".}
 
 proc newTrackerNode*(client: ClientBase, deviceName: string): TrackerNode {.importcpp: "new TrackerNode(#, nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -8159,13 +8159,13 @@ proc newTrackerNode*(device: InputDevice): TrackerNode {.importcpp: "new Tracker
 
 proc newTrackerNode*(param0: TrackerNode): TrackerNode {.importcpp: "new TrackerNode(#)".}
 
-converter getClassType*(_: typedesc[TrackerNode]): TypeHandle {.importcpp: "TrackerNode::get_class_type()", header: "trackerNode.h".}
+proc getClassType*(_: typedesc[TrackerNode]): TypeHandle {.importcpp: "TrackerNode::get_class_type()", header: "trackerNode.h".}
 
 proc newVirtualMouse*(param0: VirtualMouse): VirtualMouse {.importcpp: "new VirtualMouse(#)".}
 
 proc newVirtualMouse*(name: string): VirtualMouse {.importcpp: "new VirtualMouse(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[VirtualMouse]): TypeHandle {.importcpp: "VirtualMouse::get_class_type()", header: "virtualMouse.h".}
+proc getClassType*(_: typedesc[VirtualMouse]): TypeHandle {.importcpp: "VirtualMouse::get_class_type()", header: "virtualMouse.h".}
 
 proc initDataGraphTraverser*(param0: DataGraphTraverser): DataGraphTraverser {.importcpp: "DataGraphTraverser(#)".}
 
@@ -8175,9 +8175,9 @@ proc initDataGraphTraverser*(): DataGraphTraverser {.importcpp: "DataGraphTraver
 
 proc newDataNode*(name: string): DataNode {.importcpp: "new DataNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[DataNode]): TypeHandle {.importcpp: "DataNode::get_class_type()", header: "dataNode.h".}
+proc getClassType*(_: typedesc[DataNode]): TypeHandle {.importcpp: "DataNode::get_class_type()", header: "dataNode.h".}
 
-converter getClassType*(_: typedesc[GraphicsDevice]): TypeHandle {.importcpp: "GraphicsDevice::get_class_type()", header: "graphicsDevice.h".}
+proc getClassType*(_: typedesc[GraphicsDevice]): TypeHandle {.importcpp: "GraphicsDevice::get_class_type()", header: "graphicsDevice.h".}
 
 proc initDisplayInformation*(): DisplayInformation {.importcpp: "DisplayInformation()".}
 
@@ -8185,13 +8185,13 @@ proc initDisplayInformation*(param0: DisplayInformation): DisplayInformation {.i
 
 proc getCpuTime*(_: typedesc[DisplayInformation]): clonglong {.importcpp: "DisplayInformation::get_cpu_time()", header: "displayInformation.h".}
 
-converter getClassType*(_: typedesc[GraphicsPipe]): TypeHandle {.importcpp: "GraphicsPipe::get_class_type()", header: "graphicsPipe.h".}
+proc getClassType*(_: typedesc[GraphicsPipe]): TypeHandle {.importcpp: "GraphicsPipe::get_class_type()", header: "graphicsPipe.h".}
 
-proc getRenderbufferType*(_: typedesc[DrawableRegion], plane: int): int {.importcpp: "#DrawableRegion::get_renderbuffer_type(#)", header: "drawableRegion.h".}
+proc getRenderbufferType*(_: typedesc[DrawableRegion | GraphicsOutput], plane: int): int {.importcpp: "#DrawableRegion::get_renderbuffer_type(#)", header: "drawableRegion.h".}
 
 proc newWindowHandle*(copy: WindowHandle): WindowHandle {.importcpp: "new WindowHandle(#)".}
 
-converter getClassType*(_: typedesc[WindowHandle]): TypeHandle {.importcpp: "WindowHandle::get_class_type()", header: "windowHandle.h".}
+proc getClassType*(_: typedesc[WindowHandle]): TypeHandle {.importcpp: "WindowHandle::get_class_type()", header: "windowHandle.h".}
 
 proc getConfigProperties*(_: typedesc[WindowProperties]): WindowProperties {.importcpp: "WindowProperties::get_config_properties()", header: "windowProperties.h".}
 
@@ -8207,13 +8207,13 @@ proc size*(_: typedesc[WindowProperties], xSize: int, ySize: int): WindowPropert
 
 proc getAlphaScaleTextureStage*(_: typedesc[GraphicsStateGuardian]): TextureStage {.importcpp: "GraphicsStateGuardian::get_alpha_scale_texture_stage()", header: "graphicsStateGuardian.h".}
 
-converter getClassType*(_: typedesc[GraphicsStateGuardian]): TypeHandle {.importcpp: "GraphicsStateGuardian::get_class_type()", header: "graphicsStateGuardian.h".}
+proc getClassType*(_: typedesc[GraphicsStateGuardian]): TypeHandle {.importcpp: "GraphicsStateGuardian::get_class_type()", header: "graphicsStateGuardian.h".}
 
 proc newGraphicsEngine*(): GraphicsEngine {.importcpp: "new GraphicsEngine()".}
 
 proc initGraphicsThreadingModel*(copy: GraphicsThreadingModel): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(#)".}
 
-converter initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.}
+proc initGraphicsThreadingModel*(model: string): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc initGraphicsThreadingModel*(): GraphicsThreadingModel {.importcpp: "GraphicsThreadingModel()".}
 
@@ -8223,15 +8223,15 @@ proc makeScreenshotFilename*(_: typedesc[GraphicsOutput], prefix: string): Filen
 
 proc makeScreenshotFilename*(_: typedesc[GraphicsOutput]): Filename {.importcpp: "GraphicsOutput::make_screenshot_filename()", header: "graphicsOutput.h".}
 
-converter getClassType*(_: typedesc[GraphicsOutput]): TypeHandle {.importcpp: "GraphicsOutput::get_class_type()", header: "graphicsOutput.h".}
+proc getClassType*(_: typedesc[GraphicsOutput]): TypeHandle {.importcpp: "GraphicsOutput::get_class_type()", header: "graphicsOutput.h".}
 
 proc makeScreenshotFilename*(_: typedesc[DisplayRegion], prefix: string): Filename {.importcpp: "#DisplayRegion::make_screenshot_filename(nimStringToStdString(#))", header: "displayRegion.h".}
 
 proc makeScreenshotFilename*(_: typedesc[DisplayRegion]): Filename {.importcpp: "DisplayRegion::make_screenshot_filename()", header: "displayRegion.h".}
 
-converter getClassType*(_: typedesc[DisplayRegion]): TypeHandle {.importcpp: "DisplayRegion::get_class_type()", header: "displayRegion.h".}
+proc getClassType*(_: typedesc[DisplayRegion]): TypeHandle {.importcpp: "DisplayRegion::get_class_type()", header: "displayRegion.h".}
 
-converter getClassType*(_: typedesc[StereoDisplayRegion]): TypeHandle {.importcpp: "StereoDisplayRegion::get_class_type()", header: "stereoDisplayRegion.h".}
+proc getClassType*(_: typedesc[StereoDisplayRegion]): TypeHandle {.importcpp: "StereoDisplayRegion::get_class_type()", header: "stereoDisplayRegion.h".}
 
 proc initFrameBufferProperties*(): FrameBufferProperties {.importcpp: "FrameBufferProperties()".}
 
@@ -8239,29 +8239,29 @@ proc initFrameBufferProperties*(param0: FrameBufferProperties): FrameBufferPrope
 
 proc getDefault*(_: typedesc[FrameBufferProperties]): FrameBufferProperties {.importcpp: "FrameBufferProperties::get_default()", header: "frameBufferProperties.h".}
 
-converter getClassType*(_: typedesc[GraphicsWindowInputDevice]): TypeHandle {.importcpp: "GraphicsWindowInputDevice::get_class_type()", header: "graphicsWindowInputDevice.h".}
+proc getClassType*(_: typedesc[GraphicsWindowInputDevice]): TypeHandle {.importcpp: "GraphicsWindowInputDevice::get_class_type()", header: "graphicsWindowInputDevice.h".}
 
 proc initTouchInfo*(param0: TouchInfo): TouchInfo {.importcpp: "TouchInfo(#)".}
 
-converter getClassType*(_: typedesc[GraphicsWindowProcCallbackData]): TypeHandle {.importcpp: "GraphicsWindowProcCallbackData::get_class_type()", header: "graphicsWindowProcCallbackData.h".}
+proc getClassType*(_: typedesc[GraphicsWindowProcCallbackData]): TypeHandle {.importcpp: "GraphicsWindowProcCallbackData::get_class_type()", header: "graphicsWindowProcCallbackData.h".}
 
-converter getClassType*(_: typedesc[GraphicsWindow]): TypeHandle {.importcpp: "GraphicsWindow::get_class_type()", header: "graphicsWindow.h".}
+proc getClassType*(_: typedesc[GraphicsWindow]): TypeHandle {.importcpp: "GraphicsWindow::get_class_type()", header: "graphicsWindow.h".}
 
-converter getClassType*(_: typedesc[CallbackGraphicsWindow]): TypeHandle {.importcpp: "CallbackGraphicsWindow::get_class_type()", header: "callbackGraphicsWindow.h".}
+proc getClassType*(_: typedesc[CallbackGraphicsWindow]): TypeHandle {.importcpp: "CallbackGraphicsWindow::get_class_type()", header: "callbackGraphicsWindow.h".}
 
 proc initDisplayMode*(): DisplayMode {.importcpp: "DisplayMode()".}
 
 proc initDisplayMode*(param0: DisplayMode): DisplayMode {.importcpp: "DisplayMode(#)".}
 
-converter getClassType*(_: typedesc[DisplayRegionCullCallbackData]): TypeHandle {.importcpp: "DisplayRegionCullCallbackData::get_class_type()", header: "displayRegionCullCallbackData.h".}
+proc getClassType*(_: typedesc[DisplayRegionCullCallbackData]): TypeHandle {.importcpp: "DisplayRegionCullCallbackData::get_class_type()", header: "displayRegionCullCallbackData.h".}
 
-converter getClassType*(_: typedesc[DisplayRegionDrawCallbackData]): TypeHandle {.importcpp: "DisplayRegionDrawCallbackData::get_class_type()", header: "displayRegionDrawCallbackData.h".}
+proc getClassType*(_: typedesc[DisplayRegionDrawCallbackData]): TypeHandle {.importcpp: "DisplayRegionDrawCallbackData::get_class_type()", header: "displayRegionDrawCallbackData.h".}
 
 proc initDisplaySearchParameters*(): DisplaySearchParameters {.importcpp: "DisplaySearchParameters()".}
 
 proc initDisplaySearchParameters*(param0: DisplaySearchParameters): DisplaySearchParameters {.importcpp: "DisplaySearchParameters(#)".}
 
-converter getClassType*(_: typedesc[GraphicsBuffer]): TypeHandle {.importcpp: "GraphicsBuffer::get_class_type()", header: "graphicsBuffer.h".}
+proc getClassType*(_: typedesc[GraphicsBuffer]): TypeHandle {.importcpp: "GraphicsBuffer::get_class_type()", header: "graphicsBuffer.h".}
 
 proc getGlobalPtr*(_: typedesc[GraphicsPipeSelection]): GraphicsPipeSelection {.importcpp: "GraphicsPipeSelection::get_global_ptr()", header: "graphicsPipeSelection.h".}
 
@@ -8269,15 +8269,15 @@ proc newMouseAndKeyboard*(window: GraphicsWindow, device: int, name: string): Mo
 
 proc newMouseAndKeyboard*(param0: MouseAndKeyboard): MouseAndKeyboard {.importcpp: "new MouseAndKeyboard(#)".}
 
-converter getClassType*(_: typedesc[MouseAndKeyboard]): TypeHandle {.importcpp: "MouseAndKeyboard::get_class_type()", header: "mouseAndKeyboard.h".}
+proc getClassType*(_: typedesc[MouseAndKeyboard]): TypeHandle {.importcpp: "MouseAndKeyboard::get_class_type()", header: "mouseAndKeyboard.h".}
 
 proc makeInt*(_: typedesc[NativeWindowHandle], window: int): WindowHandle {.importcpp: "#NativeWindowHandle::make_int(#)", header: "nativeWindowHandle.h".}
 
 proc makeSubprocess*(_: typedesc[NativeWindowHandle], filename: Filename): WindowHandle {.importcpp: "#NativeWindowHandle::make_subprocess(#)", header: "nativeWindowHandle.h".}
 
-converter getClassType*(_: typedesc[NativeWindowHandle]): TypeHandle {.importcpp: "NativeWindowHandle::get_class_type()", header: "nativeWindowHandle.h".}
+proc getClassType*(_: typedesc[NativeWindowHandle]): TypeHandle {.importcpp: "NativeWindowHandle::get_class_type()", header: "nativeWindowHandle.h".}
 
-converter getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "ParasiteBuffer::get_class_type()", header: "parasiteBuffer.h".}
+proc getClassType*(_: typedesc[ParasiteBuffer]): TypeHandle {.importcpp: "ParasiteBuffer::get_class_type()", header: "parasiteBuffer.h".}
 
 proc bindThread*(_: typedesc[Thread], name: string, syncName: string): Thread {.importcpp: "#Thread::bind_thread(nimStringToStdString(#), nimStringToStdString(#))", header: "thread.h".}
 
@@ -8305,7 +8305,7 @@ proc writeStatus*(_: typedesc[Thread], `out`: ostream) {.importcpp: "#Thread::wr
 
 proc prepareForExit*(_: typedesc[Thread]) {.importcpp: "Thread::prepare_for_exit()", header: "thread.h".}
 
-converter getClassType*(_: typedesc[Thread]): TypeHandle {.importcpp: "Thread::get_class_type()", header: "thread.h".}
+proc getClassType*(_: typedesc[Thread]): TypeHandle {.importcpp: "Thread::get_class_type()", header: "thread.h".}
 
 proc initMutex*(): Mutex {.importcpp: "Mutex()".}
 
@@ -8319,7 +8319,7 @@ proc initReMutex*(): ReMutex {.importcpp: "ReMutex()".}
 
 proc initReMutex*(name: string): ReMutex {.importcpp: "ReMutex(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ExternalThread]): TypeHandle {.importcpp: "ExternalThread::get_class_type()", header: "externalThread.h".}
+proc getClassType*(_: typedesc[ExternalThread]): TypeHandle {.importcpp: "ExternalThread::get_class_type()", header: "externalThread.h".}
 
 proc initLightMutex*(): LightMutex {.importcpp: "LightMutex()".}
 
@@ -8329,7 +8329,7 @@ proc initLightReMutex*(): LightReMutex {.importcpp: "LightReMutex()".}
 
 proc initLightReMutex*(name: string): LightReMutex {.importcpp: "LightReMutex(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[MainThread]): TypeHandle {.importcpp: "MainThread::get_class_type()", header: "mainThread.h".}
+proc getClassType*(_: typedesc[MainThread]): TypeHandle {.importcpp: "MainThread::get_class_type()", header: "mainThread.h".}
 
 proc initSemaphore*(initialCount: int): Semaphore {.importcpp: "Semaphore(#)".}
 
@@ -8339,23 +8339,23 @@ proc initEventParameter*(): EventParameter {.importcpp: "EventParameter()".}
 
 proc initEventParameter*(copy: EventParameter): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".}
+proc initEventParameter*(`ptr`: TypedReferenceCount): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".}
+proc initEventParameter*(`ptr`: TypedWritableReferenceCount): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".}
+proc initEventParameter*(value: float64): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".}
+proc initEventParameter*(value: int): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
+proc initEventParameter*(param0: type(nil)): EventParameter {.importcpp: "EventParameter(#)".}
 
-converter initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.}
+proc initEventParameter*(value: string): EventParameter {.importcpp: "EventParameter(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newAsyncFuture*(): AsyncFuture {.importcpp: "new AsyncFuture()".}
 
 proc newAsyncFuture*(param0: AsyncFuture): AsyncFuture {.importcpp: "new AsyncFuture(#)".}
 
-converter getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "AsyncFuture::get_class_type()", header: "asyncFuture.h".}
+proc getClassType*(_: typedesc[AsyncFuture]): TypeHandle {.importcpp: "AsyncFuture::get_class_type()", header: "asyncFuture.h".}
 
 proc newAsyncTaskManager*(name: string): AsyncTaskManager {.importcpp: "new AsyncTaskManager(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -8365,37 +8365,37 @@ proc initAsyncTaskCollection*(copy: AsyncTaskCollection): AsyncTaskCollection {.
 
 proc getGlobalPtr*(_: typedesc[AsyncTaskManager]): AsyncTaskManager {.importcpp: "AsyncTaskManager::get_global_ptr()", header: "asyncTaskManager.h".}
 
-converter getClassType*(_: typedesc[AsyncTaskManager]): TypeHandle {.importcpp: "AsyncTaskManager::get_class_type()", header: "asyncTaskManager.h".}
+proc getClassType*(_: typedesc[AsyncTaskManager]): TypeHandle {.importcpp: "AsyncTaskManager::get_class_type()", header: "asyncTaskManager.h".}
 
-converter getClassType*(_: typedesc[AsyncTask]): TypeHandle {.importcpp: "AsyncTask::get_class_type()", header: "asyncTask.h".}
+proc getClassType*(_: typedesc[AsyncTask]): TypeHandle {.importcpp: "AsyncTask::get_class_type()", header: "asyncTask.h".}
 
 proc newAsyncTask*(param0: AsyncTask): AsyncTask {.importcpp: "new AsyncTask(#)".}
 
-converter getClassType*(_: typedesc[AsyncTaskChain]): TypeHandle {.importcpp: "AsyncTaskChain::get_class_type()", header: "asyncTaskChain.h".}
+proc getClassType*(_: typedesc[AsyncTaskChain]): TypeHandle {.importcpp: "AsyncTaskChain::get_class_type()", header: "asyncTaskChain.h".}
 
 proc newAsyncTaskPause*(param0: AsyncTaskPause): AsyncTaskPause {.importcpp: "new AsyncTaskPause(#)".}
 
 proc newAsyncTaskPause*(delay: float64): AsyncTaskPause {.importcpp: "new AsyncTaskPause(#)".}
 
-converter getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "AsyncTaskPause::get_class_type()", header: "asyncTaskPause.h".}
+proc getClassType*(_: typedesc[AsyncTaskPause]): TypeHandle {.importcpp: "AsyncTaskPause::get_class_type()", header: "asyncTaskPause.h".}
 
 proc newAsyncTaskSequence*(param0: AsyncTaskSequence): AsyncTaskSequence {.importcpp: "new AsyncTaskSequence(#)".}
 
 proc newAsyncTaskSequence*(name: string): AsyncTaskSequence {.importcpp: "new AsyncTaskSequence(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[AsyncTaskSequence]): TypeHandle {.importcpp: "AsyncTaskSequence::get_class_type()", header: "asyncTaskSequence.h".}
+proc getClassType*(_: typedesc[AsyncTaskSequence]): TypeHandle {.importcpp: "AsyncTaskSequence::get_class_type()", header: "asyncTaskSequence.h".}
 
 proc newButtonEventList*(): ButtonEventList {.importcpp: "new ButtonEventList()".}
 
 proc newButtonEventList*(copy: ButtonEventList): ButtonEventList {.importcpp: "new ButtonEventList(#)".}
 
-converter getClassType*(_: typedesc[ButtonEventList]): TypeHandle {.importcpp: "ButtonEventList::get_class_type()", header: "buttonEventList.h".}
+proc getClassType*(_: typedesc[ButtonEventList]): TypeHandle {.importcpp: "ButtonEventList::get_class_type()", header: "buttonEventList.h".}
 
 proc newEvent*(copy: Event): Event {.importcpp: "new Event(#)".}
 
 proc newEvent*(eventName: string): Event {.importcpp: "new Event(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Event]): TypeHandle {.importcpp: "Event::get_class_type()", header: "event.h".}
+proc getClassType*(_: typedesc[Event]): TypeHandle {.importcpp: "Event::get_class_type()", header: "event.h".}
 
 proc initEventHandler*(evQueue: EventQueue): EventHandler {.importcpp: "EventHandler(#)".}
 
@@ -8403,7 +8403,7 @@ proc getGlobalEventHandler*(_: typedesc[EventHandler], queue: EventQueue): Event
 
 proc getGlobalEventHandler*(_: typedesc[EventHandler]): EventHandler {.importcpp: "EventHandler::get_global_event_handler()", header: "eventHandler.h".}
 
-converter getClassType*(_: typedesc[EventHandler]): TypeHandle {.importcpp: "EventHandler::get_class_type()", header: "eventHandler.h".}
+proc getClassType*(_: typedesc[EventHandler]): TypeHandle {.importcpp: "EventHandler::get_class_type()", header: "eventHandler.h".}
 
 proc newEventQueue*(): EventQueue {.importcpp: "new EventQueue()".}
 
@@ -8411,7 +8411,7 @@ proc getGlobalEventQueue*(_: typedesc[EventQueue]): EventQueue {.importcpp: "Eve
 
 proc newPointerEventList*(): PointerEventList {.importcpp: "new PointerEventList()".}
 
-converter getClassType*(_: typedesc[PointerEventList]): TypeHandle {.importcpp: "PointerEventList::get_class_type()", header: "pointerEventList.h".}
+proc getClassType*(_: typedesc[PointerEventList]): TypeHandle {.importcpp: "PointerEventList::get_class_type()", header: "pointerEventList.h".}
 
 proc initAdaptiveLru*(name: string, maxSize: int): AdaptiveLru {.importcpp: "AdaptiveLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -8475,7 +8475,7 @@ proc getModel*(_: typedesc[InternalName]): InternalName {.importcpp: "InternalNa
 
 proc getView*(_: typedesc[InternalName]): InternalName {.importcpp: "InternalName::get_view()", header: "internalName.h".}
 
-converter getClassType*(_: typedesc[InternalName]): TypeHandle {.importcpp: "InternalName::get_class_type()", header: "internalName.h".}
+proc getClassType*(_: typedesc[InternalName]): TypeHandle {.importcpp: "InternalName::get_class_type()", header: "internalName.h".}
 
 proc initGeomVertexColumn*(name: InternalName, numComponents: int, numericType: GeomEnums_NumericType, contents: GeomEnums_Contents, start: int, columnAlignment: int, numElements: int, elementStride: int): GeomVertexColumn {.importcpp: "GeomVertexColumn(#, #, #, #, #, #, #, #)".}
 
@@ -8501,7 +8501,7 @@ proc newGeomVertexArrayFormat*(copy: GeomVertexArrayFormat): GeomVertexArrayForm
 
 proc registerFormat*(_: typedesc[GeomVertexArrayFormat], format: GeomVertexArrayFormat): GeomVertexArrayFormat {.importcpp: "deconstify(#GeomVertexArrayFormat::register_format(#))", header: "geomVertexArrayFormat.h".}
 
-converter getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
+proc getClassType*(_: typedesc[GeomVertexArrayFormat]): TypeHandle {.importcpp: "GeomVertexArrayFormat::get_class_type()", header: "geomVertexArrayFormat.h".}
 
 proc newGeomVertexFormat*(): GeomVertexFormat {.importcpp: "new GeomVertexFormat()".}
 
@@ -8539,7 +8539,7 @@ proc getV3n3c4*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "d
 
 proc getV3n3c4t2*(_: typedesc[GeomVertexFormat]): GeomVertexFormat {.importcpp: "deconstify(GeomVertexFormat::get_v3n3c4t2())", header: "geomVertexFormat.h".}
 
-converter getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
+proc getClassType*(_: typedesc[GeomVertexFormat]): TypeHandle {.importcpp: "GeomVertexFormat::get_class_type()", header: "geomVertexFormat.h".}
 
 proc initSimpleLru*(name: string, maxSize: int): SimpleLru {.importcpp: "SimpleLru(nimStringToStdString(#), #)", header: stringConversionCode.}
 
@@ -8565,7 +8565,7 @@ proc stopThreads*(_: typedesc[VertexDataPage]) {.importcpp: "VertexDataPage::sto
 
 proc flushThreads*(_: typedesc[VertexDataPage]) {.importcpp: "VertexDataPage::flush_threads()", header: "vertexDataPage.h".}
 
-converter getClassType*(_: typedesc[VertexDataPage]): TypeHandle {.importcpp: "VertexDataPage::get_class_type()", header: "vertexDataPage.h".}
+proc getClassType*(_: typedesc[VertexDataPage]): TypeHandle {.importcpp: "VertexDataPage::get_class_type()", header: "vertexDataPage.h".}
 
 proc initVertexDataBook*(blockSize: int): VertexDataBook {.importcpp: "VertexDataBook(#)".}
 
@@ -8581,9 +8581,9 @@ proc lruEpoch*(_: typedesc[GeomVertexArrayData]) {.importcpp: "GeomVertexArrayDa
 
 proc getBook*(_: typedesc[GeomVertexArrayData]): VertexDataBook {.importcpp: "GeomVertexArrayData::get_book()", header: "geomVertexArrayData.h".}
 
-converter getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcpp: "GeomVertexArrayData::get_class_type()", header: "geomVertexArrayData.h".}
+proc getClassType*(_: typedesc[GeomVertexArrayData]): TypeHandle {.importcpp: "GeomVertexArrayData::get_class_type()", header: "geomVertexArrayData.h".}
 
-converter getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayData.h".}
+proc getClassType*(_: typedesc[GeomVertexArrayDataHandle]): TypeHandle {.importcpp: "GeomVertexArrayDataHandle::get_class_type()", header: "geomVertexArrayData.h".}
 
 proc getGlobalPtr*(_: typedesc[GeomCacheManager]): GeomCacheManager {.importcpp: "GeomCacheManager::get_global_ptr()", header: "geomCacheManager.h".}
 
@@ -8591,7 +8591,7 @@ proc getNextModified*(_: typedesc[VertexTransform], currentThread: Thread): Upda
 
 proc getGlobalModified*(_: typedesc[VertexTransform], currentThread: Thread): UpdateSeq {.importcpp: "#VertexTransform::get_global_modified(#)", header: "vertexTransform.h".}
 
-converter getClassType*(_: typedesc[VertexTransform]): TypeHandle {.importcpp: "VertexTransform::get_class_type()", header: "vertexTransform.h".}
+proc getClassType*(_: typedesc[VertexTransform]): TypeHandle {.importcpp: "VertexTransform::get_class_type()", header: "vertexTransform.h".}
 
 proc newTransformTable*(): TransformTable {.importcpp: "new TransformTable()".}
 
@@ -8599,7 +8599,7 @@ proc newTransformTable*(copy: TransformTable): TransformTable {.importcpp: "new 
 
 proc registerTable*(_: typedesc[TransformTable], table: TransformTable): TransformTable {.importcpp: "deconstify(#TransformTable::register_table(#))", header: "transformTable.h".}
 
-converter getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
+proc getClassType*(_: typedesc[TransformTable]): TypeHandle {.importcpp: "TransformTable::get_class_type()", header: "transformTable.h".}
 
 proc initTransformBlend*(): TransformBlend {.importcpp: "TransformBlend()".}
 
@@ -8613,15 +8613,15 @@ proc initTransformBlend*(transform0: VertexTransform, weight0: float, transform1
 
 proc initTransformBlend*(transform0: VertexTransform, weight0: float, transform1: VertexTransform, weight1: float, transform2: VertexTransform, weight2: float, transform3: VertexTransform, weight3: float): TransformBlend {.importcpp: "TransformBlend(#, #, #, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[TransformBlend]): TypeHandle {.importcpp: "TransformBlend::get_class_type()", header: "transformBlend.h".}
+proc getClassType*(_: typedesc[TransformBlend]): TypeHandle {.importcpp: "TransformBlend::get_class_type()", header: "transformBlend.h".}
 
 proc newTransformBlendTable*(): TransformBlendTable {.importcpp: "new TransformBlendTable()".}
 
 proc newTransformBlendTable*(copy: TransformBlendTable): TransformBlendTable {.importcpp: "new TransformBlendTable(#)".}
 
-converter getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
+proc getClassType*(_: typedesc[TransformBlendTable]): TypeHandle {.importcpp: "TransformBlendTable::get_class_type()", header: "transformBlendTable.h".}
 
-converter getClassType*(_: typedesc[VertexSlider]): TypeHandle {.importcpp: "VertexSlider::get_class_type()", header: "vertexSlider.h".}
+proc getClassType*(_: typedesc[VertexSlider]): TypeHandle {.importcpp: "VertexSlider::get_class_type()", header: "vertexSlider.h".}
 
 proc newSliderTable*(): SliderTable {.importcpp: "new SliderTable()".}
 
@@ -8629,7 +8629,7 @@ proc newSliderTable*(copy: SliderTable): SliderTable {.importcpp: "new SliderTab
 
 proc registerTable*(_: typedesc[SliderTable], table: SliderTable): SliderTable {.importcpp: "deconstify(#SliderTable::register_table(#))", header: "sliderTable.h".}
 
-converter getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
+proc getClassType*(_: typedesc[SliderTable]): TypeHandle {.importcpp: "SliderTable::get_class_type()", header: "sliderTable.h".}
 
 proc newGeomVertexData*(copy: GeomVertexData): GeomVertexData {.importcpp: "new GeomVertexData(#)".}
 
@@ -8637,19 +8637,19 @@ proc newGeomVertexData*(copy: GeomVertexData, format: GeomVertexFormat): GeomVer
 
 proc newGeomVertexData*(name: string, format: GeomVertexFormat, usageHint: GeomEnums_UsageHint): GeomVertexData {.importcpp: "new GeomVertexData(nimStringToStdString(#), #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[GeomVertexData]): TypeHandle {.importcpp: "GeomVertexData::get_class_type()", header: "geomVertexData.h".}
+proc getClassType*(_: typedesc[GeomVertexData]): TypeHandle {.importcpp: "GeomVertexData::get_class_type()", header: "geomVertexData.h".}
 
 proc newAnimateVerticesRequest*(param0: AnimateVerticesRequest): AnimateVerticesRequest {.importcpp: "new AnimateVerticesRequest(#)".}
 
 proc newAnimateVerticesRequest*(geomVertexData: GeomVertexData): AnimateVerticesRequest {.importcpp: "new AnimateVerticesRequest(#)".}
 
-converter getClassType*(_: typedesc[AnimateVerticesRequest]): TypeHandle {.importcpp: "AnimateVerticesRequest::get_class_type()", header: "animateVerticesRequest.h".}
+proc getClassType*(_: typedesc[AnimateVerticesRequest]): TypeHandle {.importcpp: "AnimateVerticesRequest::get_class_type()", header: "animateVerticesRequest.h".}
 
-converter getClassType*(_: typedesc[SavedContext]): TypeHandle {.importcpp: "SavedContext::get_class_type()", header: "savedContext.h".}
+proc getClassType*(_: typedesc[SavedContext]): TypeHandle {.importcpp: "SavedContext::get_class_type()", header: "savedContext.h".}
 
-converter getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "BufferContext::get_class_type()", header: "bufferContext.h".}
+proc getClassType*(_: typedesc[BufferContext]): TypeHandle {.importcpp: "BufferContext::get_class_type()", header: "bufferContext.h".}
 
-converter getClassType*(_: typedesc[GeomPrimitive]): TypeHandle {.importcpp: "GeomPrimitive::get_class_type()", header: "geomPrimitive.h".}
+proc getClassType*(_: typedesc[GeomPrimitive]): TypeHandle {.importcpp: "GeomPrimitive::get_class_type()", header: "geomPrimitive.h".}
 
 proc newTextureStage*(copy: TextureStage): TextureStage {.importcpp: "new TextureStage(#)".}
 
@@ -8657,83 +8657,83 @@ proc newTextureStage*(name: string): TextureStage {.importcpp: "new TextureStage
 
 proc getDefault*(_: typedesc[TextureStage]): TextureStage {.importcpp: "TextureStage::get_default()", header: "textureStage.h".}
 
-converter getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "TextureStage::get_class_type()", header: "textureStage.h".}
+proc getClassType*(_: typedesc[TextureStage]): TypeHandle {.importcpp: "TextureStage::get_class_type()", header: "textureStage.h".}
 
 proc newGeom*(data: GeomVertexData): Geom {.importcpp: "new Geom(#)".}
 
-converter getClassType*(_: typedesc[Geom]): TypeHandle {.importcpp: "Geom::get_class_type()", header: "geom.h".}
+proc getClassType*(_: typedesc[Geom]): TypeHandle {.importcpp: "Geom::get_class_type()", header: "geom.h".}
 
-converter getClassType*(_: typedesc[GeomContext]): TypeHandle {.importcpp: "GeomContext::get_class_type()", header: "geomContext.h".}
+proc getClassType*(_: typedesc[GeomContext]): TypeHandle {.importcpp: "GeomContext::get_class_type()", header: "geomContext.h".}
 
 proc newGeomLines*(usageHint: GeomEnums_UsageHint): GeomLines {.importcpp: "new GeomLines(#)".}
 
 proc newGeomLines*(copy: GeomLines): GeomLines {.importcpp: "new GeomLines(#)".}
 
-converter getClassType*(_: typedesc[GeomLines]): TypeHandle {.importcpp: "GeomLines::get_class_type()", header: "geomLines.h".}
+proc getClassType*(_: typedesc[GeomLines]): TypeHandle {.importcpp: "GeomLines::get_class_type()", header: "geomLines.h".}
 
 proc newGeomLinesAdjacency*(usageHint: GeomEnums_UsageHint): GeomLinesAdjacency {.importcpp: "new GeomLinesAdjacency(#)".}
 
 proc newGeomLinesAdjacency*(copy: GeomLinesAdjacency): GeomLinesAdjacency {.importcpp: "new GeomLinesAdjacency(#)".}
 
-converter getClassType*(_: typedesc[GeomLinesAdjacency]): TypeHandle {.importcpp: "GeomLinesAdjacency::get_class_type()", header: "geomLinesAdjacency.h".}
+proc getClassType*(_: typedesc[GeomLinesAdjacency]): TypeHandle {.importcpp: "GeomLinesAdjacency::get_class_type()", header: "geomLinesAdjacency.h".}
 
 proc newGeomLinestrips*(usageHint: GeomEnums_UsageHint): GeomLinestrips {.importcpp: "new GeomLinestrips(#)".}
 
 proc newGeomLinestrips*(copy: GeomLinestrips): GeomLinestrips {.importcpp: "new GeomLinestrips(#)".}
 
-converter getClassType*(_: typedesc[GeomLinestrips]): TypeHandle {.importcpp: "GeomLinestrips::get_class_type()", header: "geomLinestrips.h".}
+proc getClassType*(_: typedesc[GeomLinestrips]): TypeHandle {.importcpp: "GeomLinestrips::get_class_type()", header: "geomLinestrips.h".}
 
 proc newGeomLinestripsAdjacency*(usageHint: GeomEnums_UsageHint): GeomLinestripsAdjacency {.importcpp: "new GeomLinestripsAdjacency(#)".}
 
 proc newGeomLinestripsAdjacency*(copy: GeomLinestripsAdjacency): GeomLinestripsAdjacency {.importcpp: "new GeomLinestripsAdjacency(#)".}
 
-converter getClassType*(_: typedesc[GeomLinestripsAdjacency]): TypeHandle {.importcpp: "GeomLinestripsAdjacency::get_class_type()", header: "geomLinestripsAdjacency.h".}
+proc getClassType*(_: typedesc[GeomLinestripsAdjacency]): TypeHandle {.importcpp: "GeomLinestripsAdjacency::get_class_type()", header: "geomLinestripsAdjacency.h".}
 
 proc newGeomPatches*(copy: GeomPatches): GeomPatches {.importcpp: "new GeomPatches(#)".}
 
 proc newGeomPatches*(numVerticesPerPatch: int, usageHint: GeomEnums_UsageHint): GeomPatches {.importcpp: "new GeomPatches(#, #)".}
 
-converter getClassType*(_: typedesc[GeomPatches]): TypeHandle {.importcpp: "GeomPatches::get_class_type()", header: "geomPatches.h".}
+proc getClassType*(_: typedesc[GeomPatches]): TypeHandle {.importcpp: "GeomPatches::get_class_type()", header: "geomPatches.h".}
 
 proc newGeomPoints*(usageHint: GeomEnums_UsageHint): GeomPoints {.importcpp: "new GeomPoints(#)".}
 
 proc newGeomPoints*(copy: GeomPoints): GeomPoints {.importcpp: "new GeomPoints(#)".}
 
-converter getClassType*(_: typedesc[GeomPoints]): TypeHandle {.importcpp: "GeomPoints::get_class_type()", header: "geomPoints.h".}
+proc getClassType*(_: typedesc[GeomPoints]): TypeHandle {.importcpp: "GeomPoints::get_class_type()", header: "geomPoints.h".}
 
 proc newGeomTriangles*(usageHint: GeomEnums_UsageHint): GeomTriangles {.importcpp: "new GeomTriangles(#)".}
 
 proc newGeomTriangles*(copy: GeomTriangles): GeomTriangles {.importcpp: "new GeomTriangles(#)".}
 
-converter getClassType*(_: typedesc[GeomTriangles]): TypeHandle {.importcpp: "GeomTriangles::get_class_type()", header: "geomTriangles.h".}
+proc getClassType*(_: typedesc[GeomTriangles]): TypeHandle {.importcpp: "GeomTriangles::get_class_type()", header: "geomTriangles.h".}
 
 proc newGeomTrianglesAdjacency*(usageHint: GeomEnums_UsageHint): GeomTrianglesAdjacency {.importcpp: "new GeomTrianglesAdjacency(#)".}
 
 proc newGeomTrianglesAdjacency*(copy: GeomTrianglesAdjacency): GeomTrianglesAdjacency {.importcpp: "new GeomTrianglesAdjacency(#)".}
 
-converter getClassType*(_: typedesc[GeomTrianglesAdjacency]): TypeHandle {.importcpp: "GeomTrianglesAdjacency::get_class_type()", header: "geomTrianglesAdjacency.h".}
+proc getClassType*(_: typedesc[GeomTrianglesAdjacency]): TypeHandle {.importcpp: "GeomTrianglesAdjacency::get_class_type()", header: "geomTrianglesAdjacency.h".}
 
 proc newGeomTrifans*(usageHint: GeomEnums_UsageHint): GeomTrifans {.importcpp: "new GeomTrifans(#)".}
 
 proc newGeomTrifans*(copy: GeomTrifans): GeomTrifans {.importcpp: "new GeomTrifans(#)".}
 
-converter getClassType*(_: typedesc[GeomTrifans]): TypeHandle {.importcpp: "GeomTrifans::get_class_type()", header: "geomTrifans.h".}
+proc getClassType*(_: typedesc[GeomTrifans]): TypeHandle {.importcpp: "GeomTrifans::get_class_type()", header: "geomTrifans.h".}
 
 proc newGeomTristrips*(usageHint: GeomEnums_UsageHint): GeomTristrips {.importcpp: "new GeomTristrips(#)".}
 
 proc newGeomTristrips*(copy: GeomTristrips): GeomTristrips {.importcpp: "new GeomTristrips(#)".}
 
-converter getClassType*(_: typedesc[GeomTristrips]): TypeHandle {.importcpp: "GeomTristrips::get_class_type()", header: "geomTristrips.h".}
+proc getClassType*(_: typedesc[GeomTristrips]): TypeHandle {.importcpp: "GeomTristrips::get_class_type()", header: "geomTristrips.h".}
 
 proc newGeomTristripsAdjacency*(usageHint: GeomEnums_UsageHint): GeomTristripsAdjacency {.importcpp: "new GeomTristripsAdjacency(#)".}
 
 proc newGeomTristripsAdjacency*(copy: GeomTristripsAdjacency): GeomTristripsAdjacency {.importcpp: "new GeomTristripsAdjacency(#)".}
 
-converter getClassType*(_: typedesc[GeomTristripsAdjacency]): TypeHandle {.importcpp: "GeomTristripsAdjacency::get_class_type()", header: "geomTristripsAdjacency.h".}
+proc getClassType*(_: typedesc[GeomTristripsAdjacency]): TypeHandle {.importcpp: "GeomTristripsAdjacency::get_class_type()", header: "geomTristripsAdjacency.h".}
 
 proc initGeomVertexReader*(arrayData: GeomVertexArrayData, currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#, #)".}
 
-converter initGeomVertexReader*(arrayData: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
+proc initGeomVertexReader*(arrayData: GeomVertexArrayData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
 proc initGeomVertexReader*(arrayData: GeomVertexArrayData, column: int, currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#, #, #)".}
 
@@ -8745,17 +8745,17 @@ proc initGeomVertexReader*(vertexData: GeomVertexData, name: InternalName): Geom
 
 proc initGeomVertexReader*(vertexData: GeomVertexData, currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#, #)".}
 
-converter initGeomVertexReader*(vertexData: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
+proc initGeomVertexReader*(vertexData: GeomVertexData): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
 proc initGeomVertexReader*(copy: GeomVertexReader): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
-converter initGeomVertexReader*(currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
+proc initGeomVertexReader*(currentThread: Thread): GeomVertexReader {.importcpp: "GeomVertexReader(#)".}
 
 proc initGeomVertexReader*(): GeomVertexReader {.importcpp: "GeomVertexReader()".}
 
 proc initGeomVertexWriter*(arrayData: GeomVertexArrayData, currentThread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#, #)".}
 
-converter initGeomVertexWriter*(arrayData: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
+proc initGeomVertexWriter*(arrayData: GeomVertexArrayData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
 proc initGeomVertexWriter*(arrayData: GeomVertexArrayData, column: int, currentThread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#, #, #)".}
 
@@ -8767,17 +8767,17 @@ proc initGeomVertexWriter*(vertexData: GeomVertexData, name: InternalName): Geom
 
 proc initGeomVertexWriter*(vertexData: GeomVertexData, currentThread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#, #)".}
 
-converter initGeomVertexWriter*(vertexData: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
+proc initGeomVertexWriter*(vertexData: GeomVertexData): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
 proc initGeomVertexWriter*(copy: GeomVertexWriter): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
-converter initGeomVertexWriter*(currentThread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
+proc initGeomVertexWriter*(currentThread: Thread): GeomVertexWriter {.importcpp: "GeomVertexWriter(#)".}
 
 proc initGeomVertexWriter*(): GeomVertexWriter {.importcpp: "GeomVertexWriter()".}
 
 proc initGeomVertexRewriter*(arrayData: GeomVertexArrayData, currentThread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#, #)".}
 
-converter initGeomVertexRewriter*(arrayData: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
+proc initGeomVertexRewriter*(arrayData: GeomVertexArrayData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
 proc initGeomVertexRewriter*(arrayData: GeomVertexArrayData, column: int, currentThread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#, #, #)".}
 
@@ -8789,11 +8789,11 @@ proc initGeomVertexRewriter*(vertexData: GeomVertexData, name: InternalName): Ge
 
 proc initGeomVertexRewriter*(vertexData: GeomVertexData, currentThread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#, #)".}
 
-converter initGeomVertexRewriter*(vertexData: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
+proc initGeomVertexRewriter*(vertexData: GeomVertexData): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
 proc initGeomVertexRewriter*(copy: GeomVertexRewriter): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
-converter initGeomVertexRewriter*(currentThread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
+proc initGeomVertexRewriter*(currentThread: Thread): GeomVertexRewriter {.importcpp: "GeomVertexRewriter(#)".}
 
 proc initGeomVertexRewriter*(): GeomVertexRewriter {.importcpp: "GeomVertexRewriter()".}
 
@@ -8813,7 +8813,7 @@ proc formatWrapMode*(_: typedesc[SamplerState], wm: SamplerState_WrapMode): stri
 
 proc stringWrapMode*(_: typedesc[SamplerState], str: string): SamplerState_WrapMode {.importcpp: "#SamplerState::string_wrap_mode(nimStringToStdString(#))", header: "samplerState.h".}
 
-converter getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "SamplerState::get_class_type()", header: "samplerState.h".}
+proc getClassType*(_: typedesc[SamplerState]): TypeHandle {.importcpp: "SamplerState::get_class_type()", header: "samplerState.h".}
 
 proc newTexture*(name: string): Texture {.importcpp: "new Texture(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -8857,7 +8857,7 @@ proc formatQualityLevel*(_: typedesc[Texture], tql: Texture_QualityLevel): strin
 
 proc stringQualityLevel*(_: typedesc[Texture], str: string): Texture_QualityLevel {.importcpp: "#Texture::string_quality_level(nimStringToStdString(#))", header: "texture.h".}
 
-converter getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
+proc getClassType*(_: typedesc[Texture]): TypeHandle {.importcpp: "Texture::get_class_type()", header: "texture.h".}
 
 proc load*(_: typedesc[Shader], file: Filename, lang: Shader_ShaderLanguage): Shader {.importcpp: "#Shader::load(#, #)", header: "shader.h".}
 
@@ -8887,7 +8887,7 @@ proc loadCompute*(_: typedesc[Shader], lang: Shader_ShaderLanguage, fn: Filename
 
 proc makeCompute*(_: typedesc[Shader], lang: Shader_ShaderLanguage, body: string): Shader {.importcpp: "#Shader::make_compute(#, nimStringToStdString(#))", header: "shader.h".}
 
-converter getClassType*(_: typedesc[Shader]): TypeHandle {.importcpp: "Shader::get_class_type()", header: "shader.h".}
+proc getClassType*(_: typedesc[Shader]): TypeHandle {.importcpp: "Shader::get_class_type()", header: "shader.h".}
 
 proc newShader*(param0: Shader): Shader {.importcpp: "new Shader(#)".}
 
@@ -8895,15 +8895,15 @@ proc newShaderBuffer*(param0: ShaderBuffer): ShaderBuffer {.importcpp: "new Shad
 
 proc newShaderBuffer*(name: string, size: clonglong, usageHint: GeomEnums_UsageHint): ShaderBuffer {.importcpp: "new ShaderBuffer(nimStringToStdString(#), #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ShaderBuffer]): TypeHandle {.importcpp: "ShaderBuffer::get_class_type()", header: "shaderBuffer.h".}
+proc getClassType*(_: typedesc[ShaderBuffer]): TypeHandle {.importcpp: "ShaderBuffer::get_class_type()", header: "shaderBuffer.h".}
 
-converter getClassType*(_: typedesc[IndexBufferContext]): TypeHandle {.importcpp: "IndexBufferContext::get_class_type()", header: "indexBufferContext.h".}
+proc getClassType*(_: typedesc[IndexBufferContext]): TypeHandle {.importcpp: "IndexBufferContext::get_class_type()", header: "indexBufferContext.h".}
 
 proc getDefaultNear*(_: typedesc[Lens]): float {.importcpp: "Lens::get_default_near()", header: "lens.h".}
 
 proc getDefaultFar*(_: typedesc[Lens]): float {.importcpp: "Lens::get_default_far()", header: "lens.h".}
 
-converter getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_class_type()", header: "lens.h".}
+proc getClassType*(_: typedesc[Lens]): TypeHandle {.importcpp: "Lens::get_class_type()", header: "lens.h".}
 
 proc newMaterial*(copy: Material): Material {.importcpp: "new Material(#)".}
 
@@ -8913,7 +8913,7 @@ proc newMaterial*(): Material {.importcpp: "new Material()".}
 
 proc getDefault*(_: typedesc[Material]): Material {.importcpp: "Material::get_default()", header: "material.h".}
 
-converter getClassType*(_: typedesc[Material]): TypeHandle {.importcpp: "Material::get_class_type()", header: "material.h".}
+proc getClassType*(_: typedesc[Material]): TypeHandle {.importcpp: "Material::get_class_type()", header: "material.h".}
 
 proc getMaterial*(_: typedesc[MaterialPool], temp: Material): Material {.importcpp: "#MaterialPool::get_material(#)", header: "materialPool.h".}
 
@@ -8929,15 +8929,15 @@ proc write*(_: typedesc[MaterialPool], `out`: ostream) {.importcpp: "#MaterialPo
 
 proc newMatrixLens*(): MatrixLens {.importcpp: "new MatrixLens()".}
 
-converter getClassType*(_: typedesc[MatrixLens]): TypeHandle {.importcpp: "MatrixLens::get_class_type()", header: "matrixLens.h".}
+proc getClassType*(_: typedesc[MatrixLens]): TypeHandle {.importcpp: "MatrixLens::get_class_type()", header: "matrixLens.h".}
 
 proc newOrthographicLens*(): OrthographicLens {.importcpp: "new OrthographicLens()".}
 
-converter getClassType*(_: typedesc[OrthographicLens]): TypeHandle {.importcpp: "OrthographicLens::get_class_type()", header: "orthographicLens.h".}
+proc getClassType*(_: typedesc[OrthographicLens]): TypeHandle {.importcpp: "OrthographicLens::get_class_type()", header: "orthographicLens.h".}
 
 proc newParamTextureSampler*(tex: Texture, sampler: SamplerState): ParamTextureSampler {.importcpp: "new ParamTextureSampler(#, #)".}
 
-converter getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTexture.h".}
+proc getClassType*(_: typedesc[ParamTextureSampler]): TypeHandle {.importcpp: "ParamTextureSampler::get_class_type()", header: "paramTexture.h".}
 
 proc newParamTextureImage*(tex: Texture, read: bool, write: bool, z: int, n: int): ParamTextureImage {.importcpp: "new ParamTextureImage(#, #, #, #, #)".}
 
@@ -8945,37 +8945,37 @@ proc newParamTextureImage*(tex: Texture, read: bool, write: bool, z: int): Param
 
 proc newParamTextureImage*(tex: Texture, read: bool, write: bool): ParamTextureImage {.importcpp: "new ParamTextureImage(#, #, #)".}
 
-converter getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTexture.h".}
+proc getClassType*(_: typedesc[ParamTextureImage]): TypeHandle {.importcpp: "ParamTextureImage::get_class_type()", header: "paramTexture.h".}
 
 proc newPerspectiveLens*(): PerspectiveLens {.importcpp: "new PerspectiveLens()".}
 
 proc newPerspectiveLens*(hfov: float, vfov: float): PerspectiveLens {.importcpp: "new PerspectiveLens(#, #)".}
 
-converter getClassType*(_: typedesc[PerspectiveLens]): TypeHandle {.importcpp: "PerspectiveLens::get_class_type()", header: "perspectiveLens.h".}
+proc getClassType*(_: typedesc[PerspectiveLens]): TypeHandle {.importcpp: "PerspectiveLens::get_class_type()", header: "perspectiveLens.h".}
 
 proc newTextureReloadRequest*(param0: TextureReloadRequest): TextureReloadRequest {.importcpp: "new TextureReloadRequest(#)".}
 
 proc newTextureReloadRequest*(name: string, pgo: PreparedGraphicsObjects, texture: Texture, allowCompressed: bool): TextureReloadRequest {.importcpp: "new TextureReloadRequest(nimStringToStdString(#), #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[TextureReloadRequest]): TypeHandle {.importcpp: "TextureReloadRequest::get_class_type()", header: "textureReloadRequest.h".}
+proc getClassType*(_: typedesc[TextureReloadRequest]): TypeHandle {.importcpp: "TextureReloadRequest::get_class_type()", header: "textureReloadRequest.h".}
 
-converter getClassType*(_: typedesc[TextureContext]): TypeHandle {.importcpp: "TextureContext::get_class_type()", header: "textureContext.h".}
+proc getClassType*(_: typedesc[TextureContext]): TypeHandle {.importcpp: "TextureContext::get_class_type()", header: "textureContext.h".}
 
-converter getClassType*(_: typedesc[ShaderContext]): TypeHandle {.importcpp: "ShaderContext::get_class_type()", header: "shaderContext.h".}
+proc getClassType*(_: typedesc[ShaderContext]): TypeHandle {.importcpp: "ShaderContext::get_class_type()", header: "shaderContext.h".}
 
 proc newUserVertexSlider*(name: InternalName): UserVertexSlider {.importcpp: "new UserVertexSlider(#)".}
 
 proc newUserVertexSlider*(name: string): UserVertexSlider {.importcpp: "new UserVertexSlider(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[UserVertexSlider]): TypeHandle {.importcpp: "UserVertexSlider::get_class_type()", header: "userVertexSlider.h".}
+proc getClassType*(_: typedesc[UserVertexSlider]): TypeHandle {.importcpp: "UserVertexSlider::get_class_type()", header: "userVertexSlider.h".}
 
 proc newUserVertexTransform*(name: string): UserVertexTransform {.importcpp: "new UserVertexTransform(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcpp: "UserVertexTransform::get_class_type()", header: "userVertexTransform.h".}
+proc getClassType*(_: typedesc[UserVertexTransform]): TypeHandle {.importcpp: "UserVertexTransform::get_class_type()", header: "userVertexTransform.h".}
 
-converter getClassType*(_: typedesc[VideoTexture]): TypeHandle {.importcpp: "VideoTexture::get_class_type()", header: "videoTexture.h".}
+proc getClassType*(_: typedesc[VideoTexture]): TypeHandle {.importcpp: "VideoTexture::get_class_type()", header: "videoTexture.h".}
 
-converter getClassType*(_: typedesc[VertexBufferContext]): TypeHandle {.importcpp: "VertexBufferContext::get_class_type()", header: "vertexBufferContext.h".}
+proc getClassType*(_: typedesc[VertexBufferContext]): TypeHandle {.importcpp: "VertexBufferContext::get_class_type()", header: "vertexBufferContext.h".}
 
 proc initTextureCollection*(): TextureCollection {.importcpp: "TextureCollection()".}
 
@@ -9089,7 +9089,7 @@ proc listContents*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "
 
 proc write*(_: typedesc[TextureStagePool], `out`: ostream) {.importcpp: "#TextureStagePool::write(#)", header: "textureStagePool.h".}
 
-converter getClassType*(_: typedesc[GraphicsOutputBase]): TypeHandle {.importcpp: "GraphicsOutputBase::get_class_type()", header: "graphicsOutputBase.h".}
+proc getClassType*(_: typedesc[GraphicsOutputBase]): TypeHandle {.importcpp: "GraphicsOutputBase::get_class_type()", header: "graphicsOutputBase.h".}
 
 proc getDefaultGsg*(_: typedesc[GraphicsStateGuardianBase]): GraphicsStateGuardianBase {.importcpp: "GraphicsStateGuardianBase::get_default_gsg()", header: "graphicsStateGuardianBase.h".}
 
@@ -9099,7 +9099,7 @@ proc getNumGsgs*(_: typedesc[GraphicsStateGuardianBase]): int {.importcpp: "Grap
 
 proc getGsg*(_: typedesc[GraphicsStateGuardianBase], n: int): GraphicsStateGuardianBase {.importcpp: "#GraphicsStateGuardianBase::get_gsg(#)", header: "graphicsStateGuardianBase.h".}
 
-converter getClassType*(_: typedesc[GraphicsStateGuardianBase]): TypeHandle {.importcpp: "GraphicsStateGuardianBase::get_class_type()", header: "graphicsStateGuardianBase.h".}
+proc getClassType*(_: typedesc[GraphicsStateGuardianBase]): TypeHandle {.importcpp: "GraphicsStateGuardianBase::get_class_type()", header: "graphicsStateGuardianBase.h".}
 
 proc initMathNumbers*(): MathNumbers {.importcpp: "MathNumbers()".}
 
@@ -9123,7 +9123,7 @@ func len*(_: typedesc[LVecBase2f] or LVecBase2f): int {.importcpp: "LVecBase2f::
 
 proc getNumComponents*(_: typedesc[LVecBase2f]): int {.importcpp: "LVecBase2f::get_num_components()", header: "lvecBase2.h".}
 
-converter getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
+proc getClassType*(_: typedesc[LVecBase2f]): TypeHandle {.importcpp: "LVecBase2f::get_class_type()", header: "lvecBase2.h".}
 
 proc zero*(_: typedesc[LVecBase2d]): LVecBase2d {.importcpp: "LVecBase2d::zero()", header: "lvecBase2.h".}
 
@@ -9135,7 +9135,7 @@ func len*(_: typedesc[LVecBase2d] or LVecBase2d): int {.importcpp: "LVecBase2d::
 
 proc getNumComponents*(_: typedesc[LVecBase2d]): int {.importcpp: "LVecBase2d::get_num_components()", header: "lvecBase2.h".}
 
-converter getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
+proc getClassType*(_: typedesc[LVecBase2d]): TypeHandle {.importcpp: "LVecBase2d::get_class_type()", header: "lvecBase2.h".}
 
 proc zero*(_: typedesc[LVecBase2i]): LVecBase2i {.importcpp: "LVecBase2i::zero()", header: "lvecBase2.h".}
 
@@ -9147,11 +9147,11 @@ func len*(_: typedesc[LVecBase2i] or LVecBase2i): int {.importcpp: "LVecBase2i::
 
 proc getNumComponents*(_: typedesc[LVecBase2i]): int {.importcpp: "LVecBase2i::get_num_components()", header: "lvecBase2.h".}
 
-converter getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecBase2i::get_class_type()", header: "lvecBase2.h".}
+proc getClassType*(_: typedesc[LVecBase2i]): TypeHandle {.importcpp: "LVecBase2i::get_class_type()", header: "lvecBase2.h".}
 
 proc initLVector2f*(): LVector2f {.importcpp: "LVector2f()".}
 
-converter initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f((LVecBase2f const &)(#))".}
+proc initLVector2f*(copy: LVecBase2f): LVector2f {.importcpp: "LVector2f((LVecBase2f const &)(#))".}
 
 proc initLVector2f*(param0: LVector2f): LVector2f {.importcpp: "LVector2f((LVector2f const &)(#))".}
 
@@ -9165,11 +9165,11 @@ proc unitX*(_: typedesc[LVector2f]): LVector2f {.importcpp: "LVector2f::unit_x()
 
 proc unitY*(_: typedesc[LVector2f]): LVector2f {.importcpp: "LVector2f::unit_y()", header: "lvector2.h".}
 
-converter getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVector2f::get_class_type()", header: "lvector2.h".}
+proc getClassType*(_: typedesc[LVector2f]): TypeHandle {.importcpp: "LVector2f::get_class_type()", header: "lvector2.h".}
 
 proc initLVector2d*(): LVector2d {.importcpp: "LVector2d()".}
 
-converter initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d((LVecBase2d const &)(#))".}
+proc initLVector2d*(copy: LVecBase2d): LVector2d {.importcpp: "LVector2d((LVecBase2d const &)(#))".}
 
 proc initLVector2d*(param0: LVector2d): LVector2d {.importcpp: "LVector2d((LVector2d const &)(#))".}
 
@@ -9183,11 +9183,11 @@ proc unitX*(_: typedesc[LVector2d]): LVector2d {.importcpp: "LVector2d::unit_x()
 
 proc unitY*(_: typedesc[LVector2d]): LVector2d {.importcpp: "LVector2d::unit_y()", header: "lvector2.h".}
 
-converter getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVector2d::get_class_type()", header: "lvector2.h".}
+proc getClassType*(_: typedesc[LVector2d]): TypeHandle {.importcpp: "LVector2d::get_class_type()", header: "lvector2.h".}
 
 proc initLVector2i*(): LVector2i {.importcpp: "LVector2i()".}
 
-converter initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i((LVecBase2i const &)(#))".}
+proc initLVector2i*(copy: LVecBase2i): LVector2i {.importcpp: "LVector2i((LVecBase2i const &)(#))".}
 
 proc initLVector2i*(param0: LVector2i): LVector2i {.importcpp: "LVector2i((LVector2i const &)(#))".}
 
@@ -9201,13 +9201,13 @@ proc unitX*(_: typedesc[LVector2i]): LVector2i {.importcpp: "LVector2i::unit_x()
 
 proc unitY*(_: typedesc[LVector2i]): LVector2i {.importcpp: "LVector2i::unit_y()", header: "lvector2.h".}
 
-converter getClassType*(_: typedesc[LVector2i]): TypeHandle {.importcpp: "LVector2i::get_class_type()", header: "lvector2.h".}
+proc getClassType*(_: typedesc[LVector2i]): TypeHandle {.importcpp: "LVector2i::get_class_type()", header: "lvector2.h".}
 
 proc initLPoint2f*(): LPoint2f {.importcpp: "LPoint2f()".}
 
 proc initLPoint2f*(param0: LPoint2f): LPoint2f {.importcpp: "LPoint2f((LPoint2f const &)(#))".}
 
-converter initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f((LVecBase2f const &)(#))".}
+proc initLPoint2f*(copy: LVecBase2f): LPoint2f {.importcpp: "LPoint2f((LVecBase2f const &)(#))".}
 
 proc initLPoint2f*(fillValue: float32): LPoint2f {.importcpp: "LPoint2f(#)".}
 
@@ -9219,13 +9219,13 @@ proc unitX*(_: typedesc[LPoint2f]): LPoint2f {.importcpp: "LPoint2f::unit_x()", 
 
 proc unitY*(_: typedesc[LPoint2f]): LPoint2f {.importcpp: "LPoint2f::unit_y()", header: "lpoint2.h".}
 
-converter getClassType*(_: typedesc[LPoint2f]): TypeHandle {.importcpp: "LPoint2f::get_class_type()", header: "lpoint2.h".}
+proc getClassType*(_: typedesc[LPoint2f]): TypeHandle {.importcpp: "LPoint2f::get_class_type()", header: "lpoint2.h".}
 
 proc initLPoint2d*(): LPoint2d {.importcpp: "LPoint2d()".}
 
 proc initLPoint2d*(param0: LPoint2d): LPoint2d {.importcpp: "LPoint2d((LPoint2d const &)(#))".}
 
-converter initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d((LVecBase2d const &)(#))".}
+proc initLPoint2d*(copy: LVecBase2d): LPoint2d {.importcpp: "LPoint2d((LVecBase2d const &)(#))".}
 
 proc initLPoint2d*(fillValue: float64): LPoint2d {.importcpp: "LPoint2d(#)".}
 
@@ -9237,13 +9237,13 @@ proc unitX*(_: typedesc[LPoint2d]): LPoint2d {.importcpp: "LPoint2d::unit_x()", 
 
 proc unitY*(_: typedesc[LPoint2d]): LPoint2d {.importcpp: "LPoint2d::unit_y()", header: "lpoint2.h".}
 
-converter getClassType*(_: typedesc[LPoint2d]): TypeHandle {.importcpp: "LPoint2d::get_class_type()", header: "lpoint2.h".}
+proc getClassType*(_: typedesc[LPoint2d]): TypeHandle {.importcpp: "LPoint2d::get_class_type()", header: "lpoint2.h".}
 
 proc initLPoint2i*(): LPoint2i {.importcpp: "LPoint2i()".}
 
 proc initLPoint2i*(param0: LPoint2i): LPoint2i {.importcpp: "LPoint2i((LPoint2i const &)(#))".}
 
-converter initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i((LVecBase2i const &)(#))".}
+proc initLPoint2i*(copy: LVecBase2i): LPoint2i {.importcpp: "LPoint2i((LVecBase2i const &)(#))".}
 
 proc initLPoint2i*(fillValue: int): LPoint2i {.importcpp: "LPoint2i(#)".}
 
@@ -9255,7 +9255,7 @@ proc unitX*(_: typedesc[LPoint2i]): LPoint2i {.importcpp: "LPoint2i::unit_x()", 
 
 proc unitY*(_: typedesc[LPoint2i]): LPoint2i {.importcpp: "LPoint2i::unit_y()", header: "lpoint2.h".}
 
-converter getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
+proc getClassType*(_: typedesc[LPoint2i]): TypeHandle {.importcpp: "LPoint2i::get_class_type()", header: "lpoint2.h".}
 
 proc zero*(_: typedesc[LVecBase3f]): LVecBase3f {.importcpp: "LVecBase3f::zero()", header: "lvecBase3.h".}
 
@@ -9269,7 +9269,7 @@ func len*(_: typedesc[LVecBase3f] or LVecBase3f): int {.importcpp: "LVecBase3f::
 
 proc getNumComponents*(_: typedesc[LVecBase3f]): int {.importcpp: "LVecBase3f::get_num_components()", header: "lvecBase3.h".}
 
-converter getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
+proc getClassType*(_: typedesc[LVecBase3f]): TypeHandle {.importcpp: "LVecBase3f::get_class_type()", header: "lvecBase3.h".}
 
 proc zero*(_: typedesc[LVecBase3d]): LVecBase3d {.importcpp: "LVecBase3d::zero()", header: "lvecBase3.h".}
 
@@ -9283,7 +9283,7 @@ func len*(_: typedesc[LVecBase3d] or LVecBase3d): int {.importcpp: "LVecBase3d::
 
 proc getNumComponents*(_: typedesc[LVecBase3d]): int {.importcpp: "LVecBase3d::get_num_components()", header: "lvecBase3.h".}
 
-converter getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
+proc getClassType*(_: typedesc[LVecBase3d]): TypeHandle {.importcpp: "LVecBase3d::get_class_type()", header: "lvecBase3.h".}
 
 proc zero*(_: typedesc[LVecBase3i]): LVecBase3i {.importcpp: "LVecBase3i::zero()", header: "lvecBase3.h".}
 
@@ -9297,7 +9297,7 @@ func len*(_: typedesc[LVecBase3i] or LVecBase3i): int {.importcpp: "LVecBase3i::
 
 proc getNumComponents*(_: typedesc[LVecBase3i]): int {.importcpp: "LVecBase3i::get_num_components()", header: "lvecBase3.h".}
 
-converter getClassType*(_: typedesc[LVecBase3i]): TypeHandle {.importcpp: "LVecBase3i::get_class_type()", header: "lvecBase3.h".}
+proc getClassType*(_: typedesc[LVecBase3i]): TypeHandle {.importcpp: "LVecBase3i::get_class_type()", header: "lvecBase3.h".}
 
 proc getDefaultCoordinateSystem*(): CoordinateSystem {.importcpp: "get_default_coordinate_system()", header: "coordinateSystem.h".}
 
@@ -9313,7 +9313,7 @@ proc initLVector3f*(): LVector3f {.importcpp: "LVector3f()".}
 
 proc initLVector3f*(copy: LVecBase2f, z: float32): LVector3f {.importcpp: "LVector3f((LVecBase2f const &)(#), #)".}
 
-converter initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f((LVecBase3f const &)(#))".}
+proc initLVector3f*(copy: LVecBase3f): LVector3f {.importcpp: "LVector3f((LVecBase3f const &)(#))".}
 
 proc initLVector3f*(param0: LVector3f): LVector3f {.importcpp: "LVector3f((LVector3f const &)(#))".}
 
@@ -9357,13 +9357,13 @@ proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32, cs:
 
 proc rfu*(_: typedesc[LVector3f], right: float32, fwd: float32, up: float32): LVector3f {.importcpp: "#LVector3f::rfu(#, #, #)", header: "lvector3.h".}
 
-converter getClassType*(_: typedesc[LVector3f]): TypeHandle {.importcpp: "LVector3f::get_class_type()", header: "lvector3.h".}
+proc getClassType*(_: typedesc[LVector3f]): TypeHandle {.importcpp: "LVector3f::get_class_type()", header: "lvector3.h".}
 
 proc initLVector3d*(): LVector3d {.importcpp: "LVector3d()".}
 
 proc initLVector3d*(copy: LVecBase2d, z: float64): LVector3d {.importcpp: "LVector3d((LVecBase2d const &)(#), #)".}
 
-converter initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d((LVecBase3d const &)(#))".}
+proc initLVector3d*(copy: LVecBase3d): LVector3d {.importcpp: "LVector3d((LVecBase3d const &)(#))".}
 
 proc initLVector3d*(param0: LVector3d): LVector3d {.importcpp: "LVector3d((LVector3d const &)(#))".}
 
@@ -9407,13 +9407,13 @@ proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64, cs:
 
 proc rfu*(_: typedesc[LVector3d], right: float64, fwd: float64, up: float64): LVector3d {.importcpp: "#LVector3d::rfu(#, #, #)", header: "lvector3.h".}
 
-converter getClassType*(_: typedesc[LVector3d]): TypeHandle {.importcpp: "LVector3d::get_class_type()", header: "lvector3.h".}
+proc getClassType*(_: typedesc[LVector3d]): TypeHandle {.importcpp: "LVector3d::get_class_type()", header: "lvector3.h".}
 
 proc initLVector3i*(): LVector3i {.importcpp: "LVector3i()".}
 
 proc initLVector3i*(copy: LVecBase2i, z: int): LVector3i {.importcpp: "LVector3i((LVecBase2i const &)(#), #)".}
 
-converter initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i((LVecBase3i const &)(#))".}
+proc initLVector3i*(copy: LVecBase3i): LVector3i {.importcpp: "LVector3i((LVecBase3i const &)(#))".}
 
 proc initLVector3i*(param0: LVector3i): LVector3i {.importcpp: "LVector3i((LVector3i const &)(#))".}
 
@@ -9457,7 +9457,7 @@ proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int, cs: CoordinateS
 
 proc rfu*(_: typedesc[LVector3i], right: int, fwd: int, up: int): LVector3i {.importcpp: "#LVector3i::rfu(#, #, #)", header: "lvector3.h".}
 
-converter getClassType*(_: typedesc[LVector3i]): TypeHandle {.importcpp: "LVector3i::get_class_type()", header: "lvector3.h".}
+proc getClassType*(_: typedesc[LVector3i]): TypeHandle {.importcpp: "LVector3i::get_class_type()", header: "lvector3.h".}
 
 proc initLPoint3f*(): LPoint3f {.importcpp: "LPoint3f()".}
 
@@ -9465,7 +9465,7 @@ proc initLPoint3f*(param0: LPoint3f): LPoint3f {.importcpp: "LPoint3f((LPoint3f 
 
 proc initLPoint3f*(copy: LVecBase2f, z: float32): LPoint3f {.importcpp: "LPoint3f((LVecBase2f const &)(#), #)".}
 
-converter initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f((LVecBase3f const &)(#))".}
+proc initLPoint3f*(copy: LVecBase3f): LPoint3f {.importcpp: "LPoint3f((LVecBase3f const &)(#))".}
 
 proc initLPoint3f*(fillValue: float32): LPoint3f {.importcpp: "LPoint3f(#)".}
 
@@ -9487,7 +9487,7 @@ proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32, cs: 
 
 proc rfu*(_: typedesc[LPoint3f], right: float32, fwd: float32, up: float32): LPoint3f {.importcpp: "#LPoint3f::rfu(#, #, #)", header: "lpoint3.h".}
 
-converter getClassType*(_: typedesc[LPoint3f]): TypeHandle {.importcpp: "LPoint3f::get_class_type()", header: "lpoint3.h".}
+proc getClassType*(_: typedesc[LPoint3f]): TypeHandle {.importcpp: "LPoint3f::get_class_type()", header: "lpoint3.h".}
 
 proc initLPoint3d*(): LPoint3d {.importcpp: "LPoint3d()".}
 
@@ -9495,7 +9495,7 @@ proc initLPoint3d*(param0: LPoint3d): LPoint3d {.importcpp: "LPoint3d((LPoint3d 
 
 proc initLPoint3d*(copy: LVecBase2d, z: float64): LPoint3d {.importcpp: "LPoint3d((LVecBase2d const &)(#), #)".}
 
-converter initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d((LVecBase3d const &)(#))".}
+proc initLPoint3d*(copy: LVecBase3d): LPoint3d {.importcpp: "LPoint3d((LVecBase3d const &)(#))".}
 
 proc initLPoint3d*(fillValue: float64): LPoint3d {.importcpp: "LPoint3d(#)".}
 
@@ -9517,7 +9517,7 @@ proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64, cs: 
 
 proc rfu*(_: typedesc[LPoint3d], right: float64, fwd: float64, up: float64): LPoint3d {.importcpp: "#LPoint3d::rfu(#, #, #)", header: "lpoint3.h".}
 
-converter getClassType*(_: typedesc[LPoint3d]): TypeHandle {.importcpp: "LPoint3d::get_class_type()", header: "lpoint3.h".}
+proc getClassType*(_: typedesc[LPoint3d]): TypeHandle {.importcpp: "LPoint3d::get_class_type()", header: "lpoint3.h".}
 
 proc initLPoint3i*(): LPoint3i {.importcpp: "LPoint3i()".}
 
@@ -9525,7 +9525,7 @@ proc initLPoint3i*(param0: LPoint3i): LPoint3i {.importcpp: "LPoint3i((LPoint3i 
 
 proc initLPoint3i*(copy: LVecBase2i, z: int): LPoint3i {.importcpp: "LPoint3i((LVecBase2i const &)(#), #)".}
 
-converter initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i((LVecBase3i const &)(#))".}
+proc initLPoint3i*(copy: LVecBase3i): LPoint3i {.importcpp: "LPoint3i((LVecBase3i const &)(#))".}
 
 proc initLPoint3i*(fillValue: int): LPoint3i {.importcpp: "LPoint3i(#)".}
 
@@ -9547,7 +9547,7 @@ proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int, cs: CoordinateSy
 
 proc rfu*(_: typedesc[LPoint3i], right: int, fwd: int, up: int): LPoint3i {.importcpp: "#LPoint3i::rfu(#, #, #)", header: "lpoint3.h".}
 
-converter getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
+proc getClassType*(_: typedesc[LPoint3i]): TypeHandle {.importcpp: "LPoint3i::get_class_type()", header: "lpoint3.h".}
 
 proc zero*(_: typedesc[LVecBase4f]): LVecBase4f {.importcpp: "LVecBase4f::zero()", header: "lvecBase4.h".}
 
@@ -9563,13 +9563,13 @@ func len*(_: typedesc[LVecBase4f] or LVecBase4f): int {.importcpp: "LVecBase4f::
 
 proc getNumComponents*(_: typedesc[LVecBase4f]): int {.importcpp: "LVecBase4f::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[LVecBase4f]): TypeHandle {.importcpp: "LVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
 func len*(_: typedesc[UnalignedLVecBase4f] or UnalignedLVecBase4f): int {.importcpp: "UnalignedLVecBase4f::size()", header: "lvecBase4.h".}
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4f]): int {.importcpp: "UnalignedLVecBase4f::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4f]): TypeHandle {.importcpp: "UnalignedLVecBase4f::get_class_type()", header: "lvecBase4.h".}
 
 proc zero*(_: typedesc[LVecBase4d]): LVecBase4d {.importcpp: "LVecBase4d::zero()", header: "lvecBase4.h".}
 
@@ -9585,13 +9585,13 @@ func len*(_: typedesc[LVecBase4d] or LVecBase4d): int {.importcpp: "LVecBase4d::
 
 proc getNumComponents*(_: typedesc[LVecBase4d]): int {.importcpp: "LVecBase4d::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[LVecBase4d]): TypeHandle {.importcpp: "LVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
 func len*(_: typedesc[UnalignedLVecBase4d] or UnalignedLVecBase4d): int {.importcpp: "UnalignedLVecBase4d::size()", header: "lvecBase4.h".}
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4d]): int {.importcpp: "UnalignedLVecBase4d::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4d]): TypeHandle {.importcpp: "UnalignedLVecBase4d::get_class_type()", header: "lvecBase4.h".}
 
 proc zero*(_: typedesc[LVecBase4i]): LVecBase4i {.importcpp: "LVecBase4i::zero()", header: "lvecBase4.h".}
 
@@ -9607,19 +9607,19 @@ func len*(_: typedesc[LVecBase4i] or LVecBase4i): int {.importcpp: "LVecBase4i::
 
 proc getNumComponents*(_: typedesc[LVecBase4i]): int {.importcpp: "LVecBase4i::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[LVecBase4i]): TypeHandle {.importcpp: "LVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
 func len*(_: typedesc[UnalignedLVecBase4i] or UnalignedLVecBase4i): int {.importcpp: "UnalignedLVecBase4i::size()", header: "lvecBase4.h".}
 
 proc getNumComponents*(_: typedesc[UnalignedLVecBase4i]): int {.importcpp: "UnalignedLVecBase4i::get_num_components()", header: "lvecBase4.h".}
 
-converter getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
+proc getClassType*(_: typedesc[UnalignedLVecBase4i]): TypeHandle {.importcpp: "UnalignedLVecBase4i::get_class_type()", header: "lvecBase4.h".}
 
 proc initLVector4f*(): LVector4f {.importcpp: "LVector4f()".}
 
 proc initLVector4f*(copy: LVecBase3f, w: float32): LVector4f {.importcpp: "LVector4f((LVecBase3f const &)(#), #)".}
 
-converter initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f((LVecBase4f const &)(#))".}
+proc initLVector4f*(copy: LVecBase4f): LVector4f {.importcpp: "LVector4f((LVecBase4f const &)(#))".}
 
 proc initLVector4f*(param0: LVector4f): LVector4f {.importcpp: "LVector4f((LVector4f const &)(#))".}
 
@@ -9637,13 +9637,13 @@ proc unitZ*(_: typedesc[LVector4f]): LVector4f {.importcpp: "LVector4f::unit_z()
 
 proc unitW*(_: typedesc[LVector4f]): LVector4f {.importcpp: "LVector4f::unit_w()", header: "lvector4.h".}
 
-converter getClassType*(_: typedesc[LVector4f]): TypeHandle {.importcpp: "LVector4f::get_class_type()", header: "lvector4.h".}
+proc getClassType*(_: typedesc[LVector4f]): TypeHandle {.importcpp: "LVector4f::get_class_type()", header: "lvector4.h".}
 
 proc initLVector4d*(): LVector4d {.importcpp: "LVector4d()".}
 
 proc initLVector4d*(copy: LVecBase3d, w: float64): LVector4d {.importcpp: "LVector4d((LVecBase3d const &)(#), #)".}
 
-converter initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d((LVecBase4d const &)(#))".}
+proc initLVector4d*(copy: LVecBase4d): LVector4d {.importcpp: "LVector4d((LVecBase4d const &)(#))".}
 
 proc initLVector4d*(param0: LVector4d): LVector4d {.importcpp: "LVector4d((LVector4d const &)(#))".}
 
@@ -9661,13 +9661,13 @@ proc unitZ*(_: typedesc[LVector4d]): LVector4d {.importcpp: "LVector4d::unit_z()
 
 proc unitW*(_: typedesc[LVector4d]): LVector4d {.importcpp: "LVector4d::unit_w()", header: "lvector4.h".}
 
-converter getClassType*(_: typedesc[LVector4d]): TypeHandle {.importcpp: "LVector4d::get_class_type()", header: "lvector4.h".}
+proc getClassType*(_: typedesc[LVector4d]): TypeHandle {.importcpp: "LVector4d::get_class_type()", header: "lvector4.h".}
 
 proc initLVector4i*(): LVector4i {.importcpp: "LVector4i()".}
 
 proc initLVector4i*(copy: LVecBase3i, w: int): LVector4i {.importcpp: "LVector4i((LVecBase3i const &)(#), #)".}
 
-converter initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i((LVecBase4i const &)(#))".}
+proc initLVector4i*(copy: LVecBase4i): LVector4i {.importcpp: "LVector4i((LVecBase4i const &)(#))".}
 
 proc initLVector4i*(param0: LVector4i): LVector4i {.importcpp: "LVector4i((LVector4i const &)(#))".}
 
@@ -9685,7 +9685,7 @@ proc unitZ*(_: typedesc[LVector4i]): LVector4i {.importcpp: "LVector4i::unit_z()
 
 proc unitW*(_: typedesc[LVector4i]): LVector4i {.importcpp: "LVector4i::unit_w()", header: "lvector4.h".}
 
-converter getClassType*(_: typedesc[LVector4i]): TypeHandle {.importcpp: "LVector4i::get_class_type()", header: "lvector4.h".}
+proc getClassType*(_: typedesc[LVector4i]): TypeHandle {.importcpp: "LVector4i::get_class_type()", header: "lvector4.h".}
 
 proc initLPoint4f*(): LPoint4f {.importcpp: "LPoint4f()".}
 
@@ -9693,7 +9693,7 @@ proc initLPoint4f*(param0: LPoint4f): LPoint4f {.importcpp: "LPoint4f((LPoint4f 
 
 proc initLPoint4f*(copy: LVecBase3f, w: float32): LPoint4f {.importcpp: "LPoint4f((LVecBase3f const &)(#), #)".}
 
-converter initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f((LVecBase4f const &)(#))".}
+proc initLPoint4f*(copy: LVecBase4f): LPoint4f {.importcpp: "LPoint4f((LVecBase4f const &)(#))".}
 
 proc initLPoint4f*(fillValue: float32): LPoint4f {.importcpp: "LPoint4f(#)".}
 
@@ -9709,7 +9709,7 @@ proc unitZ*(_: typedesc[LPoint4f]): LPoint4f {.importcpp: "LPoint4f::unit_z()", 
 
 proc unitW*(_: typedesc[LPoint4f]): LPoint4f {.importcpp: "LPoint4f::unit_w()", header: "lpoint4.h".}
 
-converter getClassType*(_: typedesc[LPoint4f]): TypeHandle {.importcpp: "LPoint4f::get_class_type()", header: "lpoint4.h".}
+proc getClassType*(_: typedesc[LPoint4f]): TypeHandle {.importcpp: "LPoint4f::get_class_type()", header: "lpoint4.h".}
 
 proc initLPoint4d*(): LPoint4d {.importcpp: "LPoint4d()".}
 
@@ -9717,7 +9717,7 @@ proc initLPoint4d*(param0: LPoint4d): LPoint4d {.importcpp: "LPoint4d((LPoint4d 
 
 proc initLPoint4d*(copy: LVecBase3d, w: float64): LPoint4d {.importcpp: "LPoint4d((LVecBase3d const &)(#), #)".}
 
-converter initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d((LVecBase4d const &)(#))".}
+proc initLPoint4d*(copy: LVecBase4d): LPoint4d {.importcpp: "LPoint4d((LVecBase4d const &)(#))".}
 
 proc initLPoint4d*(fillValue: float64): LPoint4d {.importcpp: "LPoint4d(#)".}
 
@@ -9733,7 +9733,7 @@ proc unitZ*(_: typedesc[LPoint4d]): LPoint4d {.importcpp: "LPoint4d::unit_z()", 
 
 proc unitW*(_: typedesc[LPoint4d]): LPoint4d {.importcpp: "LPoint4d::unit_w()", header: "lpoint4.h".}
 
-converter getClassType*(_: typedesc[LPoint4d]): TypeHandle {.importcpp: "LPoint4d::get_class_type()", header: "lpoint4.h".}
+proc getClassType*(_: typedesc[LPoint4d]): TypeHandle {.importcpp: "LPoint4d::get_class_type()", header: "lpoint4.h".}
 
 proc initLPoint4i*(): LPoint4i {.importcpp: "LPoint4i()".}
 
@@ -9741,7 +9741,7 @@ proc initLPoint4i*(param0: LPoint4i): LPoint4i {.importcpp: "LPoint4i((LPoint4i 
 
 proc initLPoint4i*(copy: LVecBase3i, w: int): LPoint4i {.importcpp: "LPoint4i((LVecBase3i const &)(#), #)".}
 
-converter initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i((LVecBase4i const &)(#))".}
+proc initLPoint4i*(copy: LVecBase4i): LPoint4i {.importcpp: "LPoint4i((LVecBase4i const &)(#))".}
 
 proc initLPoint4i*(fillValue: int): LPoint4i {.importcpp: "LPoint4i(#)".}
 
@@ -9757,7 +9757,7 @@ proc unitZ*(_: typedesc[LPoint4i]): LPoint4i {.importcpp: "LPoint4i::unit_z()", 
 
 proc unitW*(_: typedesc[LPoint4i]): LPoint4i {.importcpp: "LPoint4i::unit_w()", header: "lpoint4.h".}
 
-converter getClassType*(_: typedesc[LPoint4i]): TypeHandle {.importcpp: "LPoint4i::get_class_type()", header: "lpoint4.h".}
+proc getClassType*(_: typedesc[LPoint4i]): TypeHandle {.importcpp: "LPoint4i::get_class_type()", header: "lpoint4.h".}
 
 proc initLMatrix3f*(): LMatrix3f {.importcpp: "LMatrix3f()".}
 
@@ -9811,7 +9811,7 @@ proc scaleShearMat*(_: typedesc[LMatrix3f], sx: float32, sy: float32, sz: float3
 
 proc convertMat*(_: typedesc[LMatrix3f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3f {.importcpp: "#LMatrix3f::convert_mat(#, #)", header: "lmatrix.h".}
 
-converter getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[LMatrix3f]): TypeHandle {.importcpp: "LMatrix3f::get_class_type()", header: "lmatrix.h".}
 
 proc transpose*(a: LMatrix3d): LMatrix3d {.importcpp: "transpose(#)", header: "lmatrix.h".}
 
@@ -9835,7 +9835,7 @@ proc invert*(a: LQuaternionf): LQuaternionf {.importcpp: "invert(#)", header: "l
 
 proc initLMatrix4f*(): LMatrix4f {.importcpp: "LMatrix4f()".}
 
-converter initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
+proc initLMatrix4f*(upper3: LMatrix3f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 
 proc initLMatrix4f*(upper3: LMatrix3f, trans: LVecBase3f): LMatrix4f {.importcpp: "LMatrix4f(#, (LVecBase3f const &)(#))".}
 
@@ -9843,7 +9843,7 @@ proc initLMatrix4f*(other: LMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 
 proc initLMatrix4f*(param0: LVecBase4f, param1: LVecBase4f, param2: LVecBase4f, param3: LVecBase4f): LMatrix4f {.importcpp: "LMatrix4f((LVecBase4f const &)(#), (LVecBase4f const &)(#), (LVecBase4f const &)(#), (LVecBase4f const &)(#))".}
 
-converter initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
+proc initLMatrix4f*(other: UnalignedLMatrix4f): LMatrix4f {.importcpp: "LMatrix4f(#)".}
 
 proc initLMatrix4f*(param0: float32, param1: float32, param2: float32, param3: float32, param4: float32, param5: float32, param6: float32, param7: float32, param8: float32, param9: float32, param10: float32, param11: float32, param12: float32, param13: float32, param14: float32, param15: float32): LMatrix4f {.importcpp: "LMatrix4f(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -9895,17 +9895,17 @@ proc zToYUpMat*(_: typedesc[LMatrix4f]): LMatrix4f {.importcpp: "LMatrix4f::z_to
 
 proc convertMat*(_: typedesc[LMatrix4f], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4f {.importcpp: "#LMatrix4f::convert_mat(#, #)", header: "lmatrix.h".}
 
-converter getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[LMatrix4f]): TypeHandle {.importcpp: "LMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4f*(): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f()".}
 
-converter initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
+proc initUnalignedLMatrix4f*(copy: LMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
 proc initUnalignedLMatrix4f*(copy: UnalignedLMatrix4f): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#)".}
 
 proc initUnalignedLMatrix4f*(e00: float32, e01: float32, e02: float32, e03: float32, e10: float32, e11: float32, e12: float32, e13: float32, e20: float32, e21: float32, e22: float32, e23: float32, e30: float32, e31: float32, e32: float32, e33: float32): UnalignedLMatrix4f {.importcpp: "UnalignedLMatrix4f(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[UnalignedLMatrix4f]): TypeHandle {.importcpp: "UnalignedLMatrix4f::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix3d*(): LMatrix3d {.importcpp: "LMatrix3d()".}
 
@@ -9959,11 +9959,11 @@ proc scaleShearMat*(_: typedesc[LMatrix3d], sx: float64, sy: float64, sz: float6
 
 proc convertMat*(_: typedesc[LMatrix3d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix3d {.importcpp: "#LMatrix3d::convert_mat(#, #)", header: "lmatrix.h".}
 
-converter getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[LMatrix3d]): TypeHandle {.importcpp: "LMatrix3d::get_class_type()", header: "lmatrix.h".}
 
 proc initLMatrix4d*(): LMatrix4d {.importcpp: "LMatrix4d()".}
 
-converter initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
+proc initLMatrix4d*(upper3: LMatrix3d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 
 proc initLMatrix4d*(upper3: LMatrix3d, trans: LVecBase3d): LMatrix4d {.importcpp: "LMatrix4d(#, (LVecBase3d const &)(#))".}
 
@@ -9971,7 +9971,7 @@ proc initLMatrix4d*(other: LMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 
 proc initLMatrix4d*(param0: LVecBase4d, param1: LVecBase4d, param2: LVecBase4d, param3: LVecBase4d): LMatrix4d {.importcpp: "LMatrix4d((LVecBase4d const &)(#), (LVecBase4d const &)(#), (LVecBase4d const &)(#), (LVecBase4d const &)(#))".}
 
-converter initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
+proc initLMatrix4d*(other: UnalignedLMatrix4d): LMatrix4d {.importcpp: "LMatrix4d(#)".}
 
 proc initLMatrix4d*(param0: float64, param1: float64, param2: float64, param3: float64, param4: float64, param5: float64, param6: float64, param7: float64, param8: float64, param9: float64, param10: float64, param11: float64, param12: float64, param13: float64, param14: float64, param15: float64): LMatrix4d {.importcpp: "LMatrix4d(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
@@ -10023,17 +10023,17 @@ proc zToYUpMat*(_: typedesc[LMatrix4d]): LMatrix4d {.importcpp: "LMatrix4d::z_to
 
 proc convertMat*(_: typedesc[LMatrix4d], `from`: CoordinateSystem, to: CoordinateSystem): LMatrix4d {.importcpp: "#LMatrix4d::convert_mat(#, #)", header: "lmatrix.h".}
 
-converter getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[LMatrix4d]): TypeHandle {.importcpp: "LMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc initUnalignedLMatrix4d*(): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d()".}
 
-converter initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
+proc initUnalignedLMatrix4d*(copy: LMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
 proc initUnalignedLMatrix4d*(copy: UnalignedLMatrix4d): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#)".}
 
 proc initUnalignedLMatrix4d*(e00: float64, e01: float64, e02: float64, e03: float64, e10: float64, e11: float64, e12: float64, e13: float64, e20: float64, e21: float64, e22: float64, e23: float64, e30: float64, e31: float64, e32: float64, e33: float64): UnalignedLMatrix4d {.importcpp: "UnalignedLMatrix4d(#, #, #, #, #, #, #, #, #, #, #, #, #, #, #, #)".}
 
-converter getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "lmatrix.h".}
+proc getClassType*(_: typedesc[UnalignedLMatrix4d]): TypeHandle {.importcpp: "UnalignedLMatrix4d::get_class_type()", header: "lmatrix.h".}
 
 proc `*`*(m: LMatrix3d, q: LQuaterniond): LMatrix3d {.importcpp: "operator *(#, #)".}
 
@@ -10211,7 +10211,7 @@ proc initLQuaternionf*(): LQuaternionf {.importcpp: "LQuaternionf()".}
 
 proc initLQuaternionf*(param0: LQuaternionf): LQuaternionf {.importcpp: "LQuaternionf(#)".}
 
-converter initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf((LVecBase4f const &)(#))".}
+proc initLQuaternionf*(copy: LVecBase4f): LQuaternionf {.importcpp: "LQuaternionf((LVecBase4f const &)(#))".}
 
 proc initLQuaternionf*(r: float32, copy: LVecBase3f): LQuaternionf {.importcpp: "LQuaternionf(#, (LVecBase3f const &)(#))".}
 
@@ -10221,13 +10221,13 @@ proc pureImaginary*(_: typedesc[LQuaternionf], v: LVector3f): LQuaternionf {.imp
 
 proc identQuat*(_: typedesc[LQuaternionf]): LQuaternionf {.importcpp: "LQuaternionf::ident_quat()", header: "lquaternion.h".}
 
-converter getClassType*(_: typedesc[LQuaternionf]): TypeHandle {.importcpp: "LQuaternionf::get_class_type()", header: "lquaternion.h".}
+proc getClassType*(_: typedesc[LQuaternionf]): TypeHandle {.importcpp: "LQuaternionf::get_class_type()", header: "lquaternion.h".}
 
 proc initLQuaterniond*(): LQuaterniond {.importcpp: "LQuaterniond()".}
 
 proc initLQuaterniond*(param0: LQuaterniond): LQuaterniond {.importcpp: "LQuaterniond(#)".}
 
-converter initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond((LVecBase4d const &)(#))".}
+proc initLQuaterniond*(copy: LVecBase4d): LQuaterniond {.importcpp: "LQuaterniond((LVecBase4d const &)(#))".}
 
 proc initLQuaterniond*(r: float64, copy: LVecBase3d): LQuaterniond {.importcpp: "LQuaterniond(#, (LVecBase3d const &)(#))".}
 
@@ -10237,19 +10237,19 @@ proc pureImaginary*(_: typedesc[LQuaterniond], v: LVector3d): LQuaterniond {.imp
 
 proc identQuat*(_: typedesc[LQuaterniond]): LQuaterniond {.importcpp: "LQuaterniond::ident_quat()", header: "lquaternion.h".}
 
-converter getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQuaterniond::get_class_type()", header: "lquaternion.h".}
+proc getClassType*(_: typedesc[LQuaterniond]): TypeHandle {.importcpp: "LQuaterniond::get_class_type()", header: "lquaternion.h".}
 
 proc initLRotationf*(): LRotationf {.importcpp: "LRotationf()".}
 
-converter initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".}
+proc initLRotationf*(m: LMatrix3f): LRotationf {.importcpp: "LRotationf(#)".}
 
-converter initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".}
+proc initLRotationf*(m: LMatrix4f): LRotationf {.importcpp: "LRotationf(#)".}
 
-converter initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
+proc initLRotationf*(c: LQuaternionf): LRotationf {.importcpp: "LRotationf(#)".}
 
 proc initLRotationf*(param0: LRotationf): LRotationf {.importcpp: "LRotationf(#)".}
 
-converter initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf((LVecBase4f const &)(#))".}
+proc initLRotationf*(copy: LVecBase4f): LRotationf {.importcpp: "LRotationf((LVecBase4f const &)(#))".}
 
 proc initLRotationf*(axis: LVector3f, angle: float32): LRotationf {.importcpp: "LRotationf((LVector3f const &)(#), #)".}
 
@@ -10257,19 +10257,19 @@ proc initLRotationf*(h: float32, p: float32, r: float32): LRotationf {.importcpp
 
 proc initLRotationf*(r: float32, i: float32, j: float32, k: float32): LRotationf {.importcpp: "LRotationf(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRotationf::get_class_type()", header: "lrotation.h".}
+proc getClassType*(_: typedesc[LRotationf]): TypeHandle {.importcpp: "LRotationf::get_class_type()", header: "lrotation.h".}
 
 proc initLRotationd*(): LRotationd {.importcpp: "LRotationd()".}
 
-converter initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".}
+proc initLRotationd*(m: LMatrix3d): LRotationd {.importcpp: "LRotationd(#)".}
 
-converter initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".}
+proc initLRotationd*(m: LMatrix4d): LRotationd {.importcpp: "LRotationd(#)".}
 
-converter initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
+proc initLRotationd*(c: LQuaterniond): LRotationd {.importcpp: "LRotationd(#)".}
 
 proc initLRotationd*(param0: LRotationd): LRotationd {.importcpp: "LRotationd(#)".}
 
-converter initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd((LVecBase4d const &)(#))".}
+proc initLRotationd*(copy: LVecBase4d): LRotationd {.importcpp: "LRotationd((LVecBase4d const &)(#))".}
 
 proc initLRotationd*(axis: LVector3d, angle: float64): LRotationd {.importcpp: "LRotationd((LVector3d const &)(#), #)".}
 
@@ -10277,39 +10277,39 @@ proc initLRotationd*(h: float64, p: float64, r: float64): LRotationd {.importcpp
 
 proc initLRotationd*(r: float64, i: float64, j: float64, k: float64): LRotationd {.importcpp: "LRotationd(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRotationd::get_class_type()", header: "lrotation.h".}
+proc getClassType*(_: typedesc[LRotationd]): TypeHandle {.importcpp: "LRotationd::get_class_type()", header: "lrotation.h".}
 
 proc initLOrientationf*(): LOrientationf {.importcpp: "LOrientationf()".}
 
-converter initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".}
+proc initLOrientationf*(m: LMatrix3f): LOrientationf {.importcpp: "LOrientationf(#)".}
 
-converter initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".}
+proc initLOrientationf*(m: LMatrix4f): LOrientationf {.importcpp: "LOrientationf(#)".}
 
 proc initLOrientationf*(param0: LOrientationf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
-converter initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
+proc initLOrientationf*(c: LQuaternionf): LOrientationf {.importcpp: "LOrientationf(#)".}
 
 proc initLOrientationf*(pointAt: LVector3f, twist: float32): LOrientationf {.importcpp: "LOrientationf((LVector3f const &)(#), #)".}
 
 proc initLOrientationf*(r: float32, i: float32, j: float32, k: float32): LOrientationf {.importcpp: "LOrientationf(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LOrientationf::get_class_type()", header: "lorientation.h".}
+proc getClassType*(_: typedesc[LOrientationf]): TypeHandle {.importcpp: "LOrientationf::get_class_type()", header: "lorientation.h".}
 
 proc initLOrientationd*(): LOrientationd {.importcpp: "LOrientationd()".}
 
-converter initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".}
+proc initLOrientationd*(m: LMatrix3d): LOrientationd {.importcpp: "LOrientationd(#)".}
 
-converter initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".}
+proc initLOrientationd*(m: LMatrix4d): LOrientationd {.importcpp: "LOrientationd(#)".}
 
 proc initLOrientationd*(param0: LOrientationd): LOrientationd {.importcpp: "LOrientationd(#)".}
 
-converter initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
+proc initLOrientationd*(c: LQuaterniond): LOrientationd {.importcpp: "LOrientationd(#)".}
 
 proc initLOrientationd*(pointAt: LVector3d, twist: float64): LOrientationd {.importcpp: "LOrientationd((LVector3d const &)(#), #)".}
 
 proc initLOrientationd*(r: float64, i: float64, j: float64, k: float64): LOrientationd {.importcpp: "LOrientationd(#, #, #, #)".}
 
-converter getClassType*(_: typedesc[LOrientationd]): TypeHandle {.importcpp: "LOrientationd::get_class_type()", header: "lorientation.h".}
+proc getClassType*(_: typedesc[LOrientationd]): TypeHandle {.importcpp: "LOrientationd::get_class_type()", header: "lorientation.h".}
 
 proc initConfigVariableColor*(param0: ConfigVariableColor): ConfigVariableColor {.importcpp: "ConfigVariableColor(#)".}
 
@@ -10327,11 +10327,11 @@ proc initConfigVariableColor*(name: string, defaultValue: string, description: s
 
 proc initConfigVariableColor*(name: string, defaultValue: string): ConfigVariableColor {.importcpp: "ConfigVariableColor(nimStringToStdString(#), nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[BoundingVolume]): TypeHandle {.importcpp: "BoundingVolume::get_class_type()", header: "boundingVolume.h".}
+proc getClassType*(_: typedesc[BoundingVolume]): TypeHandle {.importcpp: "BoundingVolume::get_class_type()", header: "boundingVolume.h".}
 
-converter getClassType*(_: typedesc[GeometricBoundingVolume]): TypeHandle {.importcpp: "GeometricBoundingVolume::get_class_type()", header: "geometricBoundingVolume.h".}
+proc getClassType*(_: typedesc[GeometricBoundingVolume]): TypeHandle {.importcpp: "GeometricBoundingVolume::get_class_type()", header: "geometricBoundingVolume.h".}
 
-converter getClassType*(_: typedesc[FiniteBoundingVolume]): TypeHandle {.importcpp: "FiniteBoundingVolume::get_class_type()", header: "finiteBoundingVolume.h".}
+proc getClassType*(_: typedesc[FiniteBoundingVolume]): TypeHandle {.importcpp: "FiniteBoundingVolume::get_class_type()", header: "finiteBoundingVolume.h".}
 
 proc initLParabolaf*(): LParabolaf {.importcpp: "LParabolaf()".}
 
@@ -10351,7 +10351,7 @@ proc initLPlanef*(param0: LPlanef): LPlanef {.importcpp: "LPlanef(#)".}
 
 proc initLPlanef*(a: LPoint3f, b: LPoint3f, c: LPoint3f): LPlanef {.importcpp: "LPlanef((LPoint3f const &)(#), (LPoint3f const &)(#), (LPoint3f const &)(#))".}
 
-converter initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef((LVecBase4f const &)(#))".}
+proc initLPlanef*(copy: LVecBase4f): LPlanef {.importcpp: "LPlanef((LVecBase4f const &)(#))".}
 
 proc initLPlanef*(normal: LVector3f, point: LPoint3f): LPlanef {.importcpp: "LPlanef((LVector3f const &)(#), (LPoint3f const &)(#))".}
 
@@ -10363,7 +10363,7 @@ proc initLPlaned*(param0: LPlaned): LPlaned {.importcpp: "LPlaned(#)".}
 
 proc initLPlaned*(a: LPoint3d, b: LPoint3d, c: LPoint3d): LPlaned {.importcpp: "LPlaned((LPoint3d const &)(#), (LPoint3d const &)(#), (LPoint3d const &)(#))".}
 
-converter initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned((LVecBase4d const &)(#))".}
+proc initLPlaned*(copy: LVecBase4d): LPlaned {.importcpp: "LPlaned((LVecBase4d const &)(#))".}
 
 proc initLPlaned*(normal: LVector3d, point: LPoint3d): LPlaned {.importcpp: "LPlaned((LVector3d const &)(#), (LPoint3d const &)(#))".}
 
@@ -10373,7 +10373,7 @@ proc newBoundingBox*(): BoundingBox {.importcpp: "new BoundingBox()".}
 
 proc newBoundingBox*(min: LPoint3, max: LPoint3): BoundingBox {.importcpp: "new BoundingBox((LPoint3 const &)(#), (LPoint3 const &)(#))".}
 
-converter getClassType*(_: typedesc[BoundingBox]): TypeHandle {.importcpp: "BoundingBox::get_class_type()", header: "boundingBox.h".}
+proc getClassType*(_: typedesc[BoundingBox]): TypeHandle {.importcpp: "BoundingBox::get_class_type()", header: "boundingBox.h".}
 
 proc initLFrustumf*(): LFrustumf {.importcpp: "LFrustumf()".}
 
@@ -10389,27 +10389,27 @@ proc newBoundingHexahedron*(frustum: LFrustum, isOrtho: bool): BoundingHexahedro
 
 proc newBoundingHexahedron*(fll: LPoint3, flr: LPoint3, fur: LPoint3, ful: LPoint3, nll: LPoint3, nlr: LPoint3, nur: LPoint3, nul: LPoint3): BoundingHexahedron {.importcpp: "new BoundingHexahedron((LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#), (LPoint3 const &)(#))".}
 
-converter getClassType*(_: typedesc[BoundingHexahedron]): TypeHandle {.importcpp: "BoundingHexahedron::get_class_type()", header: "boundingHexahedron.h".}
+proc getClassType*(_: typedesc[BoundingHexahedron]): TypeHandle {.importcpp: "BoundingHexahedron::get_class_type()", header: "boundingHexahedron.h".}
 
 proc newBoundingLine*(a: LPoint3, b: LPoint3): BoundingLine {.importcpp: "new BoundingLine((LPoint3 const &)(#), (LPoint3 const &)(#))".}
 
-converter getClassType*(_: typedesc[BoundingLine]): TypeHandle {.importcpp: "BoundingLine::get_class_type()", header: "boundingLine.h".}
+proc getClassType*(_: typedesc[BoundingLine]): TypeHandle {.importcpp: "BoundingLine::get_class_type()", header: "boundingLine.h".}
 
 proc newBoundingPlane*(): BoundingPlane {.importcpp: "new BoundingPlane()".}
 
 proc newBoundingPlane*(plane: LPlane): BoundingPlane {.importcpp: "new BoundingPlane(#)".}
 
-converter getClassType*(_: typedesc[BoundingPlane]): TypeHandle {.importcpp: "BoundingPlane::get_class_type()", header: "boundingPlane.h".}
+proc getClassType*(_: typedesc[BoundingPlane]): TypeHandle {.importcpp: "BoundingPlane::get_class_type()", header: "boundingPlane.h".}
 
 proc newBoundingSphere*(): BoundingSphere {.importcpp: "new BoundingSphere()".}
 
 proc newBoundingSphere*(center: LPoint3, radius: float): BoundingSphere {.importcpp: "new BoundingSphere((LPoint3 const &)(#), #)".}
 
-converter getClassType*(_: typedesc[BoundingSphere]): TypeHandle {.importcpp: "BoundingSphere::get_class_type()", header: "boundingSphere.h".}
+proc getClassType*(_: typedesc[BoundingSphere]): TypeHandle {.importcpp: "BoundingSphere::get_class_type()", header: "boundingSphere.h".}
 
 proc newIntersectionBoundingVolume*(): IntersectionBoundingVolume {.importcpp: "new IntersectionBoundingVolume()".}
 
-converter getClassType*(_: typedesc[IntersectionBoundingVolume]): TypeHandle {.importcpp: "IntersectionBoundingVolume::get_class_type()", header: "intersectionBoundingVolume.h".}
+proc getClassType*(_: typedesc[IntersectionBoundingVolume]): TypeHandle {.importcpp: "IntersectionBoundingVolume::get_class_type()", header: "intersectionBoundingVolume.h".}
 
 proc headsUp*(mat: LMatrix3d, fwd: LVector3d, cs: CoordinateSystem) {.importcpp: "heads_up(#, (LVector3d const &)(#), #)", header: "look_at.h".}
 
@@ -10513,11 +10513,11 @@ proc initMersenne*(seed: int): Mersenne {.importcpp: "Mersenne(#)".}
 
 proc newOmniBoundingVolume*(): OmniBoundingVolume {.importcpp: "new OmniBoundingVolume()".}
 
-converter getClassType*(_: typedesc[OmniBoundingVolume]): TypeHandle {.importcpp: "OmniBoundingVolume::get_class_type()", header: "omniBoundingVolume.h".}
+proc getClassType*(_: typedesc[OmniBoundingVolume]): TypeHandle {.importcpp: "OmniBoundingVolume::get_class_type()", header: "omniBoundingVolume.h".}
 
 proc newUnionBoundingVolume*(): UnionBoundingVolume {.importcpp: "new UnionBoundingVolume()".}
 
-converter getClassType*(_: typedesc[UnionBoundingVolume]): TypeHandle {.importcpp: "UnionBoundingVolume::get_class_type()", header: "unionBoundingVolume.h".}
+proc getClassType*(_: typedesc[UnionBoundingVolume]): TypeHandle {.importcpp: "UnionBoundingVolume::get_class_type()", header: "unionBoundingVolume.h".}
 
 proc initRandomizer*(copy: Randomizer): Randomizer {.importcpp: "Randomizer(#)".}
 
@@ -10595,9 +10595,9 @@ proc initTriangulator3*(): Triangulator3 {.importcpp: "Triangulator3()".}
 
 proc initTriangulator3*(param0: Triangulator3): Triangulator3 {.importcpp: "Triangulator3(#)".}
 
-converter getClassType*(_: typedesc[ParametricCurve]): TypeHandle {.importcpp: "ParametricCurve::get_class_type()", header: "parametricCurve.h".}
+proc getClassType*(_: typedesc[ParametricCurve]): TypeHandle {.importcpp: "ParametricCurve::get_class_type()", header: "parametricCurve.h".}
 
-converter getClassType*(_: typedesc[CubicCurveseg]): TypeHandle {.importcpp: "CubicCurveseg::get_class_type()", header: "cubicCurveseg.h".}
+proc getClassType*(_: typedesc[CubicCurveseg]): TypeHandle {.importcpp: "CubicCurveseg::get_class_type()", header: "cubicCurveseg.h".}
 
 proc newParametricCurveCollection*(): ParametricCurveCollection {.importcpp: "new ParametricCurveCollection()".}
 
@@ -10607,25 +10607,25 @@ proc initCurveFitter*(): CurveFitter {.importcpp: "CurveFitter()".}
 
 proc initCurveFitter*(param0: CurveFitter): CurveFitter {.importcpp: "CurveFitter(#)".}
 
-converter getClassType*(_: typedesc[CurveFitter]): TypeHandle {.importcpp: "CurveFitter::get_class_type()", header: "curveFitter.h".}
+proc getClassType*(_: typedesc[CurveFitter]): TypeHandle {.importcpp: "CurveFitter::get_class_type()", header: "curveFitter.h".}
 
 proc newPiecewiseCurve*(): PiecewiseCurve {.importcpp: "new PiecewiseCurve()".}
 
-converter getClassType*(_: typedesc[PiecewiseCurve]): TypeHandle {.importcpp: "PiecewiseCurve::get_class_type()", header: "piecewiseCurve.h".}
+proc getClassType*(_: typedesc[PiecewiseCurve]): TypeHandle {.importcpp: "PiecewiseCurve::get_class_type()", header: "piecewiseCurve.h".}
 
 proc newHermiteCurve*(): HermiteCurve {.importcpp: "new HermiteCurve()".}
 
 proc newHermiteCurve*(pc: ParametricCurve): HermiteCurve {.importcpp: "new HermiteCurve(#)".}
 
-converter getClassType*(_: typedesc[HermiteCurve]): TypeHandle {.importcpp: "HermiteCurve::get_class_type()", header: "hermiteCurve.h".}
+proc getClassType*(_: typedesc[HermiteCurve]): TypeHandle {.importcpp: "HermiteCurve::get_class_type()", header: "hermiteCurve.h".}
 
-converter getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcpp: "NurbsCurveInterface::get_class_type()", header: "nurbsCurveInterface.h".}
+proc getClassType*(_: typedesc[NurbsCurveInterface]): TypeHandle {.importcpp: "NurbsCurveInterface::get_class_type()", header: "nurbsCurveInterface.h".}
 
 proc newNurbsCurve*(): NurbsCurve {.importcpp: "new NurbsCurve()".}
 
 proc newNurbsCurve*(pc: ParametricCurve): NurbsCurve {.importcpp: "new NurbsCurve(#)".}
 
-converter getClassType*(_: typedesc[NurbsCurve]): TypeHandle {.importcpp: "NurbsCurve::get_class_type()", header: "nurbsCurve.h".}
+proc getClassType*(_: typedesc[NurbsCurve]): TypeHandle {.importcpp: "NurbsCurve::get_class_type()", header: "nurbsCurve.h".}
 
 proc newNurbsCurveResult*(param0: NurbsCurveResult): NurbsCurveResult {.importcpp: "new NurbsCurveResult(#)".}
 
@@ -10645,11 +10645,11 @@ proc getVertexColorDimension*(_: typedesc[RopeNode]): int {.importcpp: "RopeNode
 
 proc getVertexThicknessDimension*(_: typedesc[RopeNode]): int {.importcpp: "RopeNode::get_vertex_thickness_dimension()", header: "ropeNode.h".}
 
-converter getClassType*(_: typedesc[RopeNode]): TypeHandle {.importcpp: "RopeNode::get_class_type()", header: "ropeNode.h".}
+proc getClassType*(_: typedesc[RopeNode]): TypeHandle {.importcpp: "RopeNode::get_class_type()", header: "ropeNode.h".}
 
 proc newSheetNode*(name: string): SheetNode {.importcpp: "new SheetNode(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[SheetNode]): TypeHandle {.importcpp: "SheetNode::get_class_type()", header: "sheetNode.h".}
+proc getClassType*(_: typedesc[SheetNode]): TypeHandle {.importcpp: "SheetNode::get_class_type()", header: "sheetNode.h".}
 
 proc initpixel*(): pixel {.importcpp: "pixel()".}
 
@@ -10677,7 +10677,7 @@ proc encodeSRGBUchar*(val: float32): char {.importcpp: "encode_sRGB_uchar(#)", h
 
 proc encodeSRGBUchar*(val: char): char {.importcpp: "encode_sRGB_uchar(#)", header: "convert_srgb.h".}
 
-converter getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pnmFileType.h".}
+proc getClassType*(_: typedesc[PNMFileType]): TypeHandle {.importcpp: "PNMFileType::get_class_type()", header: "pnmFileType.h".}
 
 proc getGlobalPtr*(_: typedesc[PNMFileTypeRegistry]): PNMFileTypeRegistry {.importcpp: "PNMFileTypeRegistry::get_global_ptr()", header: "pnmFileTypeRegistry.h".}
 
@@ -10735,15 +10735,15 @@ proc initPNMPainter*(image: PNMImage): PNMPainter {.importcpp: "PNMPainter(#)".}
 
 proc initPNMPainter*(param0: PNMPainter): PNMPainter {.importcpp: "PNMPainter(#)".}
 
-converter getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGlyph::get_class_type()", header: "textGlyph.h".}
+proc getClassType*(_: typedesc[TextGlyph]): TypeHandle {.importcpp: "TextGlyph::get_class_type()", header: "textGlyph.h".}
 
-converter getClassType*(_: typedesc[TextFont]): TypeHandle {.importcpp: "TextFont::get_class_type()", header: "textFont.h".}
+proc getClassType*(_: typedesc[TextFont]): TypeHandle {.importcpp: "TextFont::get_class_type()", header: "textFont.h".}
 
-converter getClassType*(_: typedesc[DynamicTextPage]): TypeHandle {.importcpp: "DynamicTextPage::get_class_type()", header: "dynamicTextPage.h".}
+proc getClassType*(_: typedesc[DynamicTextPage]): TypeHandle {.importcpp: "DynamicTextPage::get_class_type()", header: "dynamicTextPage.h".}
 
 proc newDynamicTextPage*(param0: DynamicTextPage): DynamicTextPage {.importcpp: "new DynamicTextPage(#)".}
 
-converter getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: "DynamicTextGlyph::get_class_type()", header: "dynamicTextGlyph.h".}
+proc getClassType*(_: typedesc[DynamicTextGlyph]): TypeHandle {.importcpp: "DynamicTextGlyph::get_class_type()", header: "dynamicTextGlyph.h".}
 
 proc newDynamicTextFont*(copy: DynamicTextFont): DynamicTextFont {.importcpp: "new DynamicTextFont(#)".}
 
@@ -10753,7 +10753,7 @@ proc newDynamicTextFont*(fontFilename: Filename): DynamicTextFont {.importcpp: "
 
 proc newDynamicTextFont*(fontData: string, dataLength: int, faceIndex: int): DynamicTextFont {.importcpp: "new DynamicTextFont(nimStringToStdString(#), #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
+proc getClassType*(_: typedesc[DynamicTextFont]): TypeHandle {.importcpp: "DynamicTextFont::get_class_type()", header: "dynamicTextFont.h".}
 
 proc hasFont*(_: typedesc[FontPool], filename: string): bool {.importcpp: "#FontPool::has_font(nimStringToStdString(#))", header: "fontPool.h".}
 
@@ -10773,13 +10773,13 @@ proc listContents*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "#FontPoo
 
 proc write*(_: typedesc[FontPool], `out`: ostream) {.importcpp: "#FontPool::write(#)", header: "fontPool.h".}
 
-converter getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
+proc getClassType*(_: typedesc[GeomTextGlyph]): TypeHandle {.importcpp: "GeomTextGlyph::get_class_type()", header: "geomTextGlyph.h".}
 
 proc newStaticTextFont*(fontDef: PandaNode, cs: CoordinateSystem): StaticTextFont {.importcpp: "new StaticTextFont(#, #)".}
 
 proc newStaticTextFont*(fontDef: PandaNode): StaticTextFont {.importcpp: "new StaticTextFont(#)".}
 
-converter getClassType*(_: typedesc[StaticTextFont]): TypeHandle {.importcpp: "StaticTextFont::get_class_type()", header: "staticTextFont.h".}
+proc getClassType*(_: typedesc[StaticTextFont]): TypeHandle {.importcpp: "StaticTextFont::get_class_type()", header: "staticTextFont.h".}
 
 proc newTextProperties*(): TextProperties {.importcpp: "new TextProperties()".}
 
@@ -10789,7 +10789,7 @@ proc setDefaultFont*(_: typedesc[TextProperties], param0: TextFont) {.importcpp:
 
 proc getDefaultFont*(_: typedesc[TextProperties]): TextFont {.importcpp: "TextProperties::get_default_font()", header: "textProperties.h".}
 
-converter getClassType*(_: typedesc[TextProperties]): TypeHandle {.importcpp: "TextProperties::get_class_type()", header: "textProperties.h".}
+proc getClassType*(_: typedesc[TextProperties]): TypeHandle {.importcpp: "TextProperties::get_class_type()", header: "textProperties.h".}
 
 proc initTextGraphic*(): TextGraphic {.importcpp: "TextGraphic()".}
 
@@ -10819,15 +10819,15 @@ proc newTextNode*(name: string): TextNode {.importcpp: "new TextNode(nimStringTo
 
 proc newTextNode*(name: string, copy: TextProperties): TextNode {.importcpp: "new TextNode(nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[TextNode]): TypeHandle {.importcpp: "TextNode::get_class_type()", header: "textNode.h".}
+proc getClassType*(_: typedesc[TextNode]): TypeHandle {.importcpp: "TextNode::get_class_type()", header: "textNode.h".}
 
 proc newButtonThrower*(param0: ButtonThrower): ButtonThrower {.importcpp: "new ButtonThrower(#)".}
 
 proc newButtonThrower*(name: string): ButtonThrower {.importcpp: "new ButtonThrower(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[ButtonThrower]): TypeHandle {.importcpp: "ButtonThrower::get_class_type()", header: "buttonThrower.h".}
+proc getClassType*(_: typedesc[ButtonThrower]): TypeHandle {.importcpp: "ButtonThrower::get_class_type()", header: "buttonThrower.h".}
 
-converter getClassType*(_: typedesc[MouseInterfaceNode]): TypeHandle {.importcpp: "MouseInterfaceNode::get_class_type()", header: "mouseInterfaceNode.h".}
+proc getClassType*(_: typedesc[MouseInterfaceNode]): TypeHandle {.importcpp: "MouseInterfaceNode::get_class_type()", header: "mouseInterfaceNode.h".}
 
 proc newMouseInterfaceNode*(param0: MouseInterfaceNode): MouseInterfaceNode {.importcpp: "new MouseInterfaceNode(#)".}
 
@@ -10837,13 +10837,13 @@ proc newDriveInterface*(name: string): DriveInterface {.importcpp: "new DriveInt
 
 proc newDriveInterface*(): DriveInterface {.importcpp: "new DriveInterface()".}
 
-converter getClassType*(_: typedesc[DriveInterface]): TypeHandle {.importcpp: "DriveInterface::get_class_type()", header: "driveInterface.h".}
+proc getClassType*(_: typedesc[DriveInterface]): TypeHandle {.importcpp: "DriveInterface::get_class_type()", header: "driveInterface.h".}
 
 proc newMouseSubregion*(param0: MouseSubregion): MouseSubregion {.importcpp: "new MouseSubregion(#)".}
 
 proc newMouseSubregion*(name: string): MouseSubregion {.importcpp: "new MouseSubregion(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "MouseSubregion::get_class_type()", header: "mouseSubregion.h".}
+proc getClassType*(_: typedesc[MouseSubregion]): TypeHandle {.importcpp: "MouseSubregion::get_class_type()", header: "mouseSubregion.h".}
 
 proc newMouseWatcherRegion*(param0: MouseWatcherRegion): MouseWatcherRegion {.importcpp: "new MouseWatcherRegion(#)".}
 
@@ -10851,31 +10851,31 @@ proc newMouseWatcherRegion*(name: string, frame: LVecBase4): MouseWatcherRegion 
 
 proc newMouseWatcherRegion*(name: string, left: float, right: float, bottom: float, top: float): MouseWatcherRegion {.importcpp: "new MouseWatcherRegion(nimStringToStdString(#), #, #, #, #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[MouseWatcherRegion]): TypeHandle {.importcpp: "MouseWatcherRegion::get_class_type()", header: "mouseWatcherRegion.h".}
+proc getClassType*(_: typedesc[MouseWatcherRegion]): TypeHandle {.importcpp: "MouseWatcherRegion::get_class_type()", header: "mouseWatcherRegion.h".}
 
-converter getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
+proc getClassType*(_: typedesc[MouseWatcherBase]): TypeHandle {.importcpp: "MouseWatcherBase::get_class_type()", header: "mouseWatcherBase.h".}
 
-converter getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp: "MouseWatcherGroup::get_class_type()", header: "mouseWatcherGroup.h".}
+proc getClassType*(_: typedesc[MouseWatcherGroup]): TypeHandle {.importcpp: "MouseWatcherGroup::get_class_type()", header: "mouseWatcherGroup.h".}
 
 proc newMouseWatcher*(name: string): MouseWatcher {.importcpp: "new MouseWatcher(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newMouseWatcher*(): MouseWatcher {.importcpp: "new MouseWatcher()".}
 
-converter getClassType*(_: typedesc[MouseWatcher]): TypeHandle {.importcpp: "MouseWatcher::get_class_type()", header: "mouseWatcher.h".}
+proc getClassType*(_: typedesc[MouseWatcher]): TypeHandle {.importcpp: "MouseWatcher::get_class_type()", header: "mouseWatcher.h".}
 
 proc newTrackball*(param0: Trackball): Trackball {.importcpp: "new Trackball(#)".}
 
 proc newTrackball*(name: string): Trackball {.importcpp: "new Trackball(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Trackball]): TypeHandle {.importcpp: "Trackball::get_class_type()", header: "trackball.h".}
+proc getClassType*(_: typedesc[Trackball]): TypeHandle {.importcpp: "Trackball::get_class_type()", header: "trackball.h".}
 
 proc newTransform2SG*(param0: Transform2SG): Transform2SG {.importcpp: "new Transform2SG(#)".}
 
 proc newTransform2SG*(name: string): Transform2SG {.importcpp: "new Transform2SG(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2sg.h".}
+proc getClassType*(_: typedesc[Transform2SG]): TypeHandle {.importcpp: "Transform2SG::get_class_type()", header: "transform2sg.h".}
 
-converter getClassType*(_: typedesc[AnimInterface]): TypeHandle {.importcpp: "AnimInterface::get_class_type()", header: "animInterface.h".}
+proc getClassType*(_: typedesc[AnimInterface]): TypeHandle {.importcpp: "AnimInterface::get_class_type()", header: "animInterface.h".}
 
 proc initUpdateSeq*(): UpdateSeq {.importcpp: "UpdateSeq()".}
 
@@ -10887,11 +10887,11 @@ proc old*(_: typedesc[UpdateSeq]): UpdateSeq {.importcpp: "UpdateSeq::old()", he
 
 proc fresh*(_: typedesc[UpdateSeq]): UpdateSeq {.importcpp: "UpdateSeq::fresh()", header: "updateSeq.h".}
 
-converter getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
+proc getClassType*(_: typedesc[TypedWritable]): TypeHandle {.importcpp: "TypedWritable::get_class_type()", header: "typedWritable.h".}
 
-converter getClassType*(_: typedesc[TypedWritableReferenceCount]): TypeHandle {.importcpp: "TypedWritableReferenceCount::get_class_type()", header: "typedWritableReferenceCount.h".}
+proc getClassType*(_: typedesc[TypedWritableReferenceCount]): TypeHandle {.importcpp: "TypedWritableReferenceCount::get_class_type()", header: "typedWritableReferenceCount.h".}
 
-converter getClassType*(_: typedesc[BamCacheRecord]): TypeHandle {.importcpp: "BamCacheRecord::get_class_type()", header: "bamCacheRecord.h".}
+proc getClassType*(_: typedesc[BamCacheRecord]): TypeHandle {.importcpp: "BamCacheRecord::get_class_type()", header: "bamCacheRecord.h".}
 
 proc initBamCache*(): BamCache {.importcpp: "BamCache()".}
 
@@ -10927,7 +10927,7 @@ proc initBitMask16*(): BitMask16 {.importcpp: "BitMask16()".}
 
 proc initBitMask16*(param0: BitMask[uint16, 16]): BitMask16 {.importcpp: "BitMask16(#)".}
 
-converter initBitMask16*(initValue: int): BitMask16 {.importcpp: "BitMask16(#)".}
+proc initBitMask16*(initValue: int): BitMask16 {.importcpp: "BitMask16(#)".}
 
 proc allOn*(_: typedesc[BitMask[uint16, 16]]): BitMask16 {.importcpp: "BitMask< uint16_t, 16 >::all_on()", header: "bitMask.h".}
 
@@ -10943,13 +10943,13 @@ proc hasMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): bool {.importcpp: "BitMas
 
 proc getMaxNumBits*(_: typedesc[BitMask[uint16, 16]]): int {.importcpp: "BitMask< uint16_t, 16 >::get_max_num_bits()", header: "bitMask.h".}
 
-converter getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask< uint16_t, 16 >::get_class_type()", header: "bitMask.h".}
+proc getClassType*(_: typedesc[BitMask[uint16, 16]]): TypeHandle {.importcpp: "BitMask< uint16_t, 16 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitMask32*(): BitMask32 {.importcpp: "BitMask32()".}
 
 proc initBitMask32*(param0: BitMask[uint32, 32]): BitMask32 {.importcpp: "BitMask32(#)".}
 
-converter initBitMask32*(initValue: int): BitMask32 {.importcpp: "BitMask32(#)".}
+proc initBitMask32*(initValue: int): BitMask32 {.importcpp: "BitMask32(#)".}
 
 proc allOn*(_: typedesc[BitMask[uint32, 32]]): BitMask32 {.importcpp: "BitMask< uint32_t, 32 >::all_on()", header: "bitMask.h".}
 
@@ -10965,13 +10965,13 @@ proc hasMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): bool {.importcpp: "BitMas
 
 proc getMaxNumBits*(_: typedesc[BitMask[uint32, 32]]): int {.importcpp: "BitMask< uint32_t, 32 >::get_max_num_bits()", header: "bitMask.h".}
 
-converter getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask< uint32_t, 32 >::get_class_type()", header: "bitMask.h".}
+proc getClassType*(_: typedesc[BitMask[uint32, 32]]): TypeHandle {.importcpp: "BitMask< uint32_t, 32 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitMask64*(): BitMask64 {.importcpp: "BitMask64()".}
 
 proc initBitMask64*(param0: BitMask[uint64, 64]): BitMask64 {.importcpp: "BitMask64(#)".}
 
-converter initBitMask64*(initValue: clonglong): BitMask64 {.importcpp: "BitMask64(#)".}
+proc initBitMask64*(initValue: clonglong): BitMask64 {.importcpp: "BitMask64(#)".}
 
 proc allOn*(_: typedesc[BitMask[uint64, 64]]): BitMask64 {.importcpp: "BitMask< uint64_t, 64 >::all_on()", header: "bitMask.h".}
 
@@ -10987,15 +10987,15 @@ proc hasMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): bool {.importcpp: "BitMas
 
 proc getMaxNumBits*(_: typedesc[BitMask[uint64, 64]]): int {.importcpp: "BitMask< uint64_t, 64 >::get_max_num_bits()", header: "bitMask.h".}
 
-converter getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask< uint64_t, 64 >::get_class_type()", header: "bitMask.h".}
+proc getClassType*(_: typedesc[BitMask[uint64, 64]]): TypeHandle {.importcpp: "BitMask< uint64_t, 64 >::get_class_type()", header: "bitMask.h".}
 
 proc initBitArray*(): BitArray {.importcpp: "BitArray()".}
 
 proc initBitArray*(param0: BitArray): BitArray {.importcpp: "BitArray(#)".}
 
-converter initBitArray*(initValue: clonglong): BitArray {.importcpp: "BitArray(#)".}
+proc initBitArray*(initValue: clonglong): BitArray {.importcpp: "BitArray(#)".}
 
-converter initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
+proc initBitArray*(`from`: SparseArray): BitArray {.importcpp: "BitArray(#)".}
 
 proc allOn*(_: typedesc[BitArray]): BitArray {.importcpp: "BitArray::all_on()", header: "bitArray.h".}
 
@@ -11013,7 +11013,7 @@ proc getMaxNumBits*(_: typedesc[BitArray]): int {.importcpp: "BitArray::get_max_
 
 proc getNumBitsPerWord*(_: typedesc[BitArray]): int {.importcpp: "BitArray::get_num_bits_per_word()", header: "bitArray.h".}
 
-converter getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
+proc getClassType*(_: typedesc[BitArray]): TypeHandle {.importcpp: "BitArray::get_class_type()", header: "bitArray.h".}
 
 proc initButtonHandle*(): ButtonHandle {.importcpp: "ButtonHandle()".}
 
@@ -11021,27 +11021,27 @@ proc initButtonHandle*(param0: ButtonHandle): ButtonHandle {.importcpp: "ButtonH
 
 proc initButtonHandle*(index: int): ButtonHandle {.importcpp: "ButtonHandle(#)".}
 
-converter initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.}
+proc initButtonHandle*(name: string): ButtonHandle {.importcpp: "ButtonHandle(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc none*(_: typedesc[ButtonHandle]): ButtonHandle {.importcpp: "ButtonHandle::none()", header: "buttonHandle.h".}
 
-converter getClassType*(_: typedesc[ButtonHandle]): TypeHandle {.importcpp: "ButtonHandle::get_class_type()", header: "buttonHandle.h".}
+proc getClassType*(_: typedesc[ButtonHandle]): TypeHandle {.importcpp: "ButtonHandle::get_class_type()", header: "buttonHandle.h".}
 
 proc initButtonRegistry*(param0: ButtonRegistry): ButtonRegistry {.importcpp: "ButtonRegistry(#)".}
 
-converter getClassType*(_: typedesc[ButtonMap]): TypeHandle {.importcpp: "ButtonMap::get_class_type()", header: "buttonMap.h".}
+proc getClassType*(_: typedesc[ButtonMap]): TypeHandle {.importcpp: "ButtonMap::get_class_type()", header: "buttonMap.h".}
 
 proc newButtonMap*(): ButtonMap {.importcpp: "new ButtonMap()".}
 
 proc newButtonMap*(param0: ButtonMap): ButtonMap {.importcpp: "new ButtonMap(#)".}
 
-converter getClassType*(_: typedesc[CallbackObject]): TypeHandle {.importcpp: "CallbackObject::get_class_type()", header: "callbackObject.h".}
+proc getClassType*(_: typedesc[CallbackObject]): TypeHandle {.importcpp: "CallbackObject::get_class_type()", header: "callbackObject.h".}
 
 proc newCallbackObject*(param0: CallbackObject): CallbackObject {.importcpp: "new CallbackObject(#)".}
 
-converter getClassType*(_: typedesc[CachedTypedWritableReferenceCount]): TypeHandle {.importcpp: "CachedTypedWritableReferenceCount::get_class_type()", header: "cachedTypedWritableReferenceCount.h".}
+proc getClassType*(_: typedesc[CachedTypedWritableReferenceCount]): TypeHandle {.importcpp: "CachedTypedWritableReferenceCount::get_class_type()", header: "cachedTypedWritableReferenceCount.h".}
 
-converter getClassType*(_: typedesc[CallbackData]): TypeHandle {.importcpp: "CallbackData::get_class_type()", header: "callbackData.h".}
+proc getClassType*(_: typedesc[CallbackData]): TypeHandle {.importcpp: "CallbackData::get_class_type()", header: "callbackData.h".}
 
 proc initTimeVal*(): TimeVal {.importcpp: "TimeVal()".}
 
@@ -11055,7 +11055,7 @@ proc newClockObject*(): ClockObject {.importcpp: "new ClockObject()".}
 
 proc getGlobalClock*(_: typedesc[ClockObject]): ClockObject {.importcpp: "ClockObject::get_global_clock()", header: "clockObject.h".}
 
-converter getClassType*(_: typedesc[ClockObject]): TypeHandle {.importcpp: "ClockObject::get_class_type()", header: "clockObject.h".}
+proc getClassType*(_: typedesc[ClockObject]): TypeHandle {.importcpp: "ClockObject::get_class_type()", header: "clockObject.h".}
 
 proc parseColorSpaceString*(str: string): ColorSpace {.importcpp: "parse_color_space_string(nimStringToStdString(#))", header: "colorSpace.h".}
 
@@ -11065,7 +11065,7 @@ proc getModelPath*(): ConfigVariableSearchPath {.importcpp: "get_model_path()", 
 
 proc getPluginPath*(): ConfigVariableSearchPath {.importcpp: "get_plugin_path()", header: "config_putil.h".}
 
-converter getClassType*(_: typedesc[CopyOnWriteObject]): TypeHandle {.importcpp: "CopyOnWriteObject::get_class_type()", header: "copyOnWriteObject.h".}
+proc getClassType*(_: typedesc[CopyOnWriteObject]): TypeHandle {.importcpp: "CopyOnWriteObject::get_class_type()", header: "copyOnWriteObject.h".}
 
 proc initDatagramBuffer*(): DatagramBuffer {.importcpp: "DatagramBuffer()".}
 
@@ -11287,11 +11287,11 @@ proc initPointerData*(): PointerData {.importcpp: "PointerData()".}
 
 proc initPointerData*(param0: PointerData): PointerData {.importcpp: "PointerData(#)".}
 
-converter getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.importcpp: "NodeCachedReferenceCount::get_class_type()", header: "nodeCachedReferenceCount.h".}
+proc getClassType*(_: typedesc[NodeCachedReferenceCount]): TypeHandle {.importcpp: "NodeCachedReferenceCount::get_class_type()", header: "nodeCachedReferenceCount.h".}
 
 proc initSparseArray*(): SparseArray {.importcpp: "SparseArray()".}
 
-converter initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
+proc initSparseArray*(`from`: BitArray): SparseArray {.importcpp: "SparseArray(#)".}
 
 proc initSparseArray*(param0: SparseArray): SparseArray {.importcpp: "SparseArray(#)".}
 
@@ -11309,15 +11309,15 @@ proc hasMaxNumBits*(_: typedesc[SparseArray]): bool {.importcpp: "SparseArray::h
 
 proc getMaxNumBits*(_: typedesc[SparseArray]): int {.importcpp: "SparseArray::get_max_num_bits()", header: "sparseArray.h".}
 
-converter getClassType*(_: typedesc[SparseArray]): TypeHandle {.importcpp: "SparseArray::get_class_type()", header: "sparseArray.h".}
+proc getClassType*(_: typedesc[SparseArray]): TypeHandle {.importcpp: "SparseArray::get_class_type()", header: "sparseArray.h".}
 
-converter getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValue.h".}
+proc getClassType*(_: typedesc[ParamValueBase]): TypeHandle {.importcpp: "ParamValueBase::get_class_type()", header: "paramValue.h".}
 
 proc newParamTypedRefCount*(value: TypedReferenceCount): ParamTypedRefCount {.importcpp: "new ParamTypedRefCount(#)".}
 
-converter getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramValue.h".}
+proc getClassType*(_: typedesc[ParamTypedRefCount]): TypeHandle {.importcpp: "ParamTypedRefCount::get_class_type()", header: "paramValue.h".}
 
-converter getClassType*(_: typedesc[WritableConfigurable]): TypeHandle {.importcpp: "WritableConfigurable::get_class_type()", header: "writableConfigurable.h".}
+proc getClassType*(_: typedesc[WritableConfigurable]): TypeHandle {.importcpp: "WritableConfigurable::get_class_type()", header: "writableConfigurable.h".}
 
 proc initUniqueIdAllocator*(param0: UniqueIdAllocator): UniqueIdAllocator {.importcpp: "UniqueIdAllocator(#)".}
 
@@ -11331,21 +11331,21 @@ proc newFilterProperties*(): FilterProperties {.importcpp: "new FilterProperties
 
 proc newFilterProperties*(param0: FilterProperties): FilterProperties {.importcpp: "new FilterProperties(#)".}
 
-converter getClassType*(_: typedesc[FilterProperties]): TypeHandle {.importcpp: "FilterProperties::get_class_type()", header: "filterProperties.h".}
+proc getClassType*(_: typedesc[FilterProperties]): TypeHandle {.importcpp: "FilterProperties::get_class_type()", header: "filterProperties.h".}
 
-converter getClassType*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()", header: "audioSound.h".}
+proc getClassType*(_: typedesc[AudioSound]): TypeHandle {.importcpp: "AudioSound::get_class_type()", header: "audioSound.h".}
 
 proc createAudioManager*(_: typedesc[AudioManager]): AudioManager {.importcpp: "AudioManager::create_AudioManager()", header: "audioManager.h".}
 
 proc getDlsPathname*(_: typedesc[AudioManager]): Filename {.importcpp: "AudioManager::get_dls_pathname()", header: "audioManager.h".}
 
-converter getClassType*(_: typedesc[AudioManager]): TypeHandle {.importcpp: "AudioManager::get_class_type()", header: "audioManager.h".}
+proc getClassType*(_: typedesc[AudioManager]): TypeHandle {.importcpp: "AudioManager::get_class_type()", header: "audioManager.h".}
 
 proc newAudioLoadRequest*(param0: AudioLoadRequest): AudioLoadRequest {.importcpp: "new AudioLoadRequest(#)".}
 
 proc newAudioLoadRequest*(audioManager: AudioManager, filename: string, positional: bool): AudioLoadRequest {.importcpp: "new AudioLoadRequest(#, nimStringToStdString(#), #)", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[AudioLoadRequest]): TypeHandle {.importcpp: "AudioLoadRequest::get_class_type()", header: "audioLoadRequest.h".}
+proc getClassType*(_: typedesc[AudioLoadRequest]): TypeHandle {.importcpp: "AudioLoadRequest::get_class_type()", header: "audioLoadRequest.h".}
 
 proc initPGFrameStyle*(): PGFrameStyle {.importcpp: "PGFrameStyle()".}
 
@@ -11379,17 +11379,17 @@ proc setTextNode*(_: typedesc[PGItem], node: TextNode) {.importcpp: "#PGItem::se
 
 proc getFocusItem*(_: typedesc[PGItem]): PGItem {.importcpp: "PGItem::get_focus_item()", header: "pgItem.h".}
 
-converter getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pgItem.h".}
+proc getClassType*(_: typedesc[PGItem]): TypeHandle {.importcpp: "PGItem::get_class_type()", header: "pgItem.h".}
 
 proc newPGButton*(name: string): PGButton {.importcpp: "new PGButton(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc getClickPrefix*(_: typedesc[PGButton]): string {.importcpp: "nimStringFromStdString(PGButton::get_click_prefix())", header: "pgButton.h".}
 
-converter getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pgButton.h".}
+proc getClassType*(_: typedesc[PGButton]): TypeHandle {.importcpp: "PGButton::get_class_type()", header: "pgButton.h".}
 
 proc newPGTop*(name: string): PGTop {.importcpp: "new PGTop(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pgTop.h".}
+proc getClassType*(_: typedesc[PGTop]): TypeHandle {.importcpp: "PGTop::get_class_type()", header: "pgTop.h".}
 
 proc newPGEntry*(name: string): PGEntry {.importcpp: "new PGEntry(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -11405,9 +11405,9 @@ proc getErasePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromSt
 
 proc getCursormovePrefix*(_: typedesc[PGEntry]): string {.importcpp: "nimStringFromStdString(PGEntry::get_cursormove_prefix())", header: "pgEntry.h".}
 
-converter getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pgEntry.h".}
+proc getClassType*(_: typedesc[PGEntry]): TypeHandle {.importcpp: "PGEntry::get_class_type()", header: "pgEntry.h".}
 
-converter getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pgMouseWatcherParameter.h".}
+proc getClassType*(_: typedesc[PGMouseWatcherParameter]): TypeHandle {.importcpp: "PGMouseWatcherParameter::get_class_type()", header: "pgMouseWatcherParameter.h".}
 
 proc newPGMouseWatcherParameter*(param0: PGMouseWatcherParameter): PGMouseWatcherParameter {.importcpp: "new PGMouseWatcherParameter(#)".}
 
@@ -11415,13 +11415,13 @@ proc newPGMouseWatcherBackground*(): PGMouseWatcherBackground {.importcpp: "new 
 
 proc newPGMouseWatcherBackground*(param0: PGMouseWatcherBackground): PGMouseWatcherBackground {.importcpp: "new PGMouseWatcherBackground(#)".}
 
-converter getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pgMouseWatcherBackground.h".}
+proc getClassType*(_: typedesc[PGMouseWatcherBackground]): TypeHandle {.importcpp: "PGMouseWatcherBackground::get_class_type()", header: "pgMouseWatcherBackground.h".}
 
 proc newPGVirtualFrame*(name: string): PGVirtualFrame {.importcpp: "new PGVirtualFrame(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newPGVirtualFrame*(): PGVirtualFrame {.importcpp: "new PGVirtualFrame()".}
 
-converter getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pgVirtualFrame.h".}
+proc getClassType*(_: typedesc[PGVirtualFrame]): TypeHandle {.importcpp: "PGVirtualFrame::get_class_type()", header: "pgVirtualFrame.h".}
 
 proc newPGSliderBar*(name: string): PGSliderBar {.importcpp: "new PGSliderBar(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -11429,35 +11429,35 @@ proc newPGSliderBar*(): PGSliderBar {.importcpp: "new PGSliderBar()".}
 
 proc getAdjustPrefix*(_: typedesc[PGSliderBar]): string {.importcpp: "nimStringFromStdString(PGSliderBar::get_adjust_prefix())", header: "pgSliderBar.h".}
 
-converter getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pgSliderBar.h".}
+proc getClassType*(_: typedesc[PGSliderBar]): TypeHandle {.importcpp: "PGSliderBar::get_class_type()", header: "pgSliderBar.h".}
 
 proc newPGScrollFrame*(name: string): PGScrollFrame {.importcpp: "new PGScrollFrame(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newPGScrollFrame*(): PGScrollFrame {.importcpp: "new PGScrollFrame()".}
 
-converter getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pgScrollFrame.h".}
+proc getClassType*(_: typedesc[PGScrollFrame]): TypeHandle {.importcpp: "PGScrollFrame::get_class_type()", header: "pgScrollFrame.h".}
 
 proc newPGWaitBar*(name: string): PGWaitBar {.importcpp: "new PGWaitBar(nimStringToStdString(#))", header: stringConversionCode.}
 
 proc newPGWaitBar*(): PGWaitBar {.importcpp: "new PGWaitBar()".}
 
-converter getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pgWaitBar.h".}
+proc getClassType*(_: typedesc[PGWaitBar]): TypeHandle {.importcpp: "PGWaitBar::get_class_type()", header: "pgWaitBar.h".}
 
 proc initNetAddress*(): NetAddress {.importcpp: "NetAddress()".}
 
 proc initNetAddress*(param0: NetAddress): NetAddress {.importcpp: "NetAddress(#)".}
 
-converter initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".}
+proc initNetAddress*(`addr`: Socket_Address): NetAddress {.importcpp: "NetAddress(#)".}
 
 proc newConnection*(manager: ConnectionManager, socket: Socket_IP): Connection {.importcpp: "new Connection(#, #)".}
 
 proc initNetDatagram*(): NetDatagram {.importcpp: "NetDatagram()".}
 
-converter initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
+proc initNetDatagram*(copy: Datagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
 proc initNetDatagram*(copy: NetDatagram): NetDatagram {.importcpp: "NetDatagram(#)".}
 
-converter getClassType*(_: typedesc[NetDatagram]): TypeHandle {.importcpp: "NetDatagram::get_class_type()", header: "netDatagram.h".}
+proc getClassType*(_: typedesc[NetDatagram]): TypeHandle {.importcpp: "NetDatagram::get_class_type()", header: "netDatagram.h".}
 
 proc newConnectionManager*(): ConnectionManager {.importcpp: "new ConnectionManager()".}
 
@@ -11487,31 +11487,31 @@ proc newSocketAddress*(): Socket_Address {.importcpp: "new Socket_Address()".}
 
 proc initSocketIP*(): Socket_IP {.importcpp: "Socket_IP()".}
 
-converter initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".}
+proc initSocketIP*(`in`: int): Socket_IP {.importcpp: "Socket_IP(#)".}
 
 proc GetLastError*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::GetLastError()", header: "socket_ip.h".}
 
 proc InitNetworkDriver*(_: typedesc[Socket_IP]): int {.importcpp: "Socket_IP::InitNetworkDriver()", header: "socket_ip.h".}
 
-converter getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_ip.h".}
+proc getClassType*(_: typedesc[Socket_IP]): TypeHandle {.importcpp: "Socket_IP::get_class_type()", header: "socket_ip.h".}
 
 proc initSocketTCP*(): Socket_TCP {.importcpp: "Socket_TCP()".}
 
-converter initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
+proc initSocketTCP*(param0: int): Socket_TCP {.importcpp: "Socket_TCP(#)".}
 
-converter getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_tcp.h".}
+proc getClassType*(_: typedesc[Socket_TCP]): TypeHandle {.importcpp: "Socket_TCP::get_class_type()", header: "socket_tcp.h".}
 
 proc initSocketTCPListen*(): Socket_TCP_Listen {.importcpp: "Socket_TCP_Listen()".}
 
-converter getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_tcp_listen.h".}
+proc getClassType*(_: typedesc[Socket_TCP_Listen]): TypeHandle {.importcpp: "Socket_TCP_Listen::get_class_type()", header: "socket_tcp_listen.h".}
 
 proc initSocketUDPIncoming*(): Socket_UDP_Incoming {.importcpp: "Socket_UDP_Incoming()".}
 
-converter getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_udp_incoming.h".}
+proc getClassType*(_: typedesc[Socket_UDP_Incoming]): TypeHandle {.importcpp: "Socket_UDP_Incoming::get_class_type()", header: "socket_udp_incoming.h".}
 
 proc initSocketUDPOutgoing*(): Socket_UDP_Outgoing {.importcpp: "Socket_UDP_Outgoing()".}
 
-converter getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_udp_outgoing.h".}
+proc getClassType*(_: typedesc[Socket_UDP_Outgoing]): TypeHandle {.importcpp: "Socket_UDP_Outgoing::get_class_type()", header: "socket_udp_outgoing.h".}
 
 proc initSocketFdset*(): Socket_fdset {.importcpp: "Socket_fdset()".}
 
@@ -11519,11 +11519,11 @@ proc initSocketFdset*(param0: Socket_fdset): Socket_fdset {.importcpp: "Socket_f
 
 proc initBufferedDatagramConnection*(rbufsize: int, wbufsize: int, writeFlushPoint: int): Buffered_DatagramConnection {.importcpp: "Buffered_DatagramConnection(#, #, #)".}
 
-converter getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_datagramconnection.h".}
+proc getClassType*(_: typedesc[Buffered_DatagramConnection]): TypeHandle {.importcpp: "Buffered_DatagramConnection::get_class_type()", header: "buffered_datagramconnection.h".}
 
 proc initSocketUDP*(): Socket_UDP {.importcpp: "Socket_UDP()".}
 
-converter getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_udp.h".}
+proc getClassType*(_: typedesc[Socket_UDP]): TypeHandle {.importcpp: "Socket_UDP::get_class_type()", header: "socket_udp.h".}
 
 proc getPointsPerUnit*(_: typedesc[FreetypeFont]): float {.importcpp: "FreetypeFont::get_points_per_unit()", header: "freetypeFont.h".}
 
@@ -11807,7 +11807,7 @@ func file*(this: DatagramSink): FileReference {.importcpp: "deconstify(#->get_fi
 
 func filePos*(this: DatagramSink): clonglong {.importcpp: "#->get_file_pos()".}
 
-func name*(this: Event | GeomVertexData | GraphicsOutput | InternalName | Namable | TextureStage): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
+func name*(this: Event | PandaNode | GeomVertexData | GraphicsOutput | InternalName | Namable | TextureStage): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 proc `name=`*(this: AsyncTask | Event | GeomVertexData | Namable | TextureStage, name: string) {.importcpp: "#->set_name(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -12023,25 +12023,25 @@ func maxDistance*(this: PointLight | RectangleLight | Spotlight): float {.import
 
 proc `maxDistance=`*(this: PointLight | RectangleLight | Spotlight, maxDistance: float) {.importcpp: "#->set_max_distance(#)".}
 
-func playRate*(this: AnimInterface | MovieTexture): float64 {.importcpp: "#->get_play_rate()".}
+func playRate*(this: AnimInterface | AnimControl | MovieTexture): float64 {.importcpp: "#->get_play_rate()".}
 
-proc `playRate=`*(this: AnimInterface | MovieTexture, playRate: float64) {.importcpp: "#->set_play_rate(#)".}
+proc `playRate=`*(this: AnimInterface | AnimControl | MovieTexture, playRate: float64) {.importcpp: "#->set_play_rate(#)".}
 
-func frameRate*(this: AnimInterface): float64 {.importcpp: "#->get_frame_rate()".}
+func frameRate*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_frame_rate()".}
 
-func numFrames*(this: AnimBundle | AnimInterface): int {.importcpp: "#->get_num_frames()".}
+func numFrames*(this: AnimBundle | AnimInterface | AnimControl): int {.importcpp: "#->get_num_frames()".}
 
-func frame*(this: AnimInterface): int {.importcpp: "#->get_frame()".}
+func frame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_frame()".}
 
-func nextFrame*(this: AnimInterface): int {.importcpp: "#->get_next_frame()".}
+func nextFrame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_next_frame()".}
 
-func frac*(this: AnimInterface): float64 {.importcpp: "#->get_frac()".}
+func frac*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_frac()".}
 
-func fullFrame*(this: AnimInterface): int {.importcpp: "#->get_full_frame()".}
+func fullFrame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_full_frame()".}
 
-func fullFframe*(this: AnimInterface): float64 {.importcpp: "#->get_full_fframe()".}
+func fullFframe*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_full_fframe()".}
 
-func playing*(this: AnimInterface | MovieTexture): bool {.importcpp: "#->is_playing()".}
+func playing*(this: AnimInterface | AnimControl | MovieTexture): bool {.importcpp: "#->is_playing()".}
 
 proc `frameRate=`*(this: SequenceNode, frameRate: float64) {.importcpp: "#->set_frame_rate(#)".}
 
@@ -12477,9 +12477,9 @@ func flattenFlags*(this: TextNode): int {.importcpp: "#->get_flatten_flags()".}
 
 proc `flattenFlags=`*(this: TextNode, flattenFlags: int) {.importcpp: "#->set_flatten_flags(#)".}
 
-func clearColor*(this: DrawableRegion | Texture): LColor {.importcpp: "#->get_clear_color()".}
+func clearColor*(this: DrawableRegion | GraphicsOutput | Texture): LColor {.importcpp: "#->get_clear_color()".}
 
-proc `clearColor=`*(this: DrawableRegion | Texture, color: LColor) {.importcpp: "#->set_clear_color(#)".}
+proc `clearColor=`*(this: DrawableRegion | GraphicsOutput | Texture, color: LColor) {.importcpp: "#->set_clear_color(#)".}
 
 proc `filename=`*(this: Texture, filename: Filename) {.importcpp: "#->set_filename(#)".}
 
@@ -12939,19 +12939,19 @@ func displayInformation*(this: GraphicsPipe): DisplayInformation {.importcpp: "#
 
 func interfaceName*(this: GraphicsPipe): string {.importcpp: "nimStringFromStdString(#->get_interface_name())", header: stringConversionCode.}
 
-func clearDepth*(this: DrawableRegion): float {.importcpp: "#->get_clear_depth()".}
+func clearDepth*(this: DrawableRegion | GraphicsOutput): float {.importcpp: "#->get_clear_depth()".}
 
-proc `clearDepth=`*(this: DrawableRegion, depth: float) {.importcpp: "#->set_clear_depth(#)".}
+proc `clearDepth=`*(this: DrawableRegion | GraphicsOutput, depth: float) {.importcpp: "#->set_clear_depth(#)".}
 
-func clearStencil*(this: DrawableRegion): int {.importcpp: "#->get_clear_stencil()".}
+func clearStencil*(this: DrawableRegion | GraphicsOutput): int {.importcpp: "#->get_clear_stencil()".}
 
-proc `clearStencil=`*(this: DrawableRegion, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
+proc `clearStencil=`*(this: DrawableRegion | GraphicsOutput, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
 
-func pixelZoom*(this: DrawableRegion): float {.importcpp: "#->get_pixel_zoom()".}
+func pixelZoom*(this: DrawableRegion | GraphicsOutput): float {.importcpp: "#->get_pixel_zoom()".}
 
-proc `pixelZoom=`*(this: DrawableRegion, pixelZoom: float) {.importcpp: "#->set_pixel_zoom(#)".}
+proc `pixelZoom=`*(this: DrawableRegion | GraphicsOutput, pixelZoom: float) {.importcpp: "#->set_pixel_zoom(#)".}
 
-func pixelFactor*(this: DrawableRegion): float {.importcpp: "#->get_pixel_factor()".}
+func pixelFactor*(this: DrawableRegion | GraphicsOutput): float {.importcpp: "#->get_pixel_factor()".}
 
 func origin*(this: WindowProperties): LPoint2i {.importcpp: "#.get_origin()".}
 
@@ -14267,7 +14267,7 @@ proc getIndex*(this: ButtonHandle | PStatCollector | PStatThread | TypeHandle): 
 
 proc output*(this: AdaptiveLru | AnimControlCollection | AsyncTaskCollection | AttribNodeRegistry | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | ButtonHandle | CollisionRecorder | CollisionTraverser | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DocumentSpec | DownloadDb | EventParameter | Filename | FrameBufferProperties | GeomVertexAnimationSpec | GeomVertexColumn | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDeviceSet | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LightMutexDirect | LightReMutexDirect | LoaderOptions | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherParameter | MutexDirect | NetAddress | NodePath | NodePathCollection | PGFrameStyle | PNMImageHeader | PStatCollector | PartSubset | PfmFile | ReMutexDirect | Semaphore | SimpleLru | SparseArray | SubfileInfo | TextureCollection | TextureStageCollection | TransformBlend | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | WeakNodePath | WindowProperties | pixel, `out`: ostream) {.importcpp: "#.output(#)".}
 
-converter `typecast bool`*(this: ButtonHandle | ConfigVariableBool | NodePath | ShaderInput | TypeHandle | URLSpec | WeakNodePath): bool {.importcpp: "(bool)(#)".}
+proc `typecast bool`*(this: ButtonHandle | ConfigVariableBool | NodePath | ShaderInput | TypeHandle | URLSpec | WeakNodePath): bool {.importcpp: "(bool)(#)".}
 
 proc registerDynamicType*(this: TypeRegistry, name: string): TypeHandle {.importcpp: "#.register_dynamic_type(nimStringToStdString(#))", header: stringConversionCode.}
 
@@ -14319,7 +14319,7 @@ proc seekg*(this: istream, pos: clonglong) {.importcpp: "#.seekg(#)".}
 
 proc seekg*(this: istream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekg(#, #)".}
 
-converter upcastToIstream*(this: iostream): var istream {.importcpp: "((std::istream *)&(#))".}
+proc upcastToIstream*(this: iostream): var istream {.importcpp: "((std::istream *)&(#))".}
 
 proc put*(this: ostream, c: char) {.importcpp: "#.put(#)".}
 
@@ -14331,7 +14331,7 @@ proc seekp*(this: ostream, pos: clonglong) {.importcpp: "#.seekp(#)".}
 
 proc seekp*(this: ostream, off: clonglong, dir: ios_base_seekdir) {.importcpp: "#.seekp(#, #)".}
 
-converter upcastToOstream*(this: OSocketStream | iostream): var ostream {.importcpp: "((std::ostream *)&(#))".}
+proc upcastToOstream*(this: OSocketStream | iostream): var ostream {.importcpp: "((std::ostream *)&(#))".}
 
 proc close*(this: BamFile | DatagramInputFile | DatagramOutputFile | FileStream | IFileStream | OFileStream | OSocketStream | SocketStream | fstream | ifstream | ofstream) {.importcpp: "#.close()".}
 
@@ -14567,7 +14567,7 @@ proc setSystemTag*(this: PandaSystem, system: string, tag: string, value: string
 
 proc heapTrim*(this: PandaSystem, pad: int): bool {.importcpp: "#->heap_trim(#)".}
 
-proc output*(this: AdaptiveLruPage | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DisplayRegion | Event | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | InputDevice | InternalName | Lens | LightLensNode | LightNode | Loader | Material | MouseWatcherBase | MouseWatcherRegion | Multifile | Namable | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGMouseWatcherParameter | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | RenderAttrib | RenderEffect | RenderEffects | RenderState | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | TextNode | TextureStage | Thread | TransformState | VertexSlider | VertexTransform | VirtualFile | VirtualFileMount | WindowHandle, `out`: ostream) {.importcpp: "#->output(#)".}
+proc output*(this: AdaptiveLruPage | AnimControl | AnimGroup | AnimInterface | AnimControl | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BoundingVolume | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionSolid | DisplayRegion | Event | Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | InputDevice | InternalName | Lens | LightLensNode | LightNode | Loader | Material | MouseWatcherBase | MouseWatcherRegion | Multifile | Namable | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGMouseWatcherParameter | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | RenderAttrib | RenderEffect | RenderEffects | RenderState | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | TextNode | TextureStage | Thread | TransformState | VertexSlider | VertexTransform | VirtualFile | VirtualFileMount | WindowHandle, `out`: ostream) {.importcpp: "#->output(#)".}
 
 proc write*(this: AudioManager | AudioSound | PandaSystem | SimpleAllocator | SliderTable | TransformTable | VirtualFileMount, `out`: ostream) {.importcpp: "#->write(#)".}
 
@@ -14847,7 +14847,7 @@ proc getWord*(this: ConfigVariableBool, n: int): bool {.importcpp: "#.get_word(#
 
 proc setWord*(this: ConfigVariableBool, n: int, value: bool) {.importcpp: "#.set_word(#, #)".}
 
-converter `typecast double`*(this: ConfigVariableDouble): float64 {.importcpp: "(double)(#)".}
+proc `typecast double`*(this: ConfigVariableDouble): float64 {.importcpp: "(double)(#)".}
 
 proc `[]`*(this: ConfigVariableDouble, n: int): float64 {.importcpp: "#.operator [](#)".}
 
@@ -14879,7 +14879,7 @@ proc getWord*(this: ConfigVariableFilename, n: int): Filename {.importcpp: "#.ge
 
 proc setWord*(this: ConfigVariableFilename, n: int, value: Filename) {.importcpp: "#.set_word(#, #)".}
 
-converter `typecast int`*(this: ConfigVariableInt): int {.importcpp: "(int)(#)".}
+proc `typecast int`*(this: ConfigVariableInt): int {.importcpp: "(int)(#)".}
 
 proc `[]`*(this: ConfigVariableInt, n: int): int {.importcpp: "#.operator [](#)".}
 
@@ -14893,7 +14893,7 @@ proc getWord*(this: ConfigVariableInt, n: int): int {.importcpp: "#.get_word(#)"
 
 proc setWord*(this: ConfigVariableInt, n: int, value: int) {.importcpp: "#.set_word(#, #)".}
 
-converter `typecast int64_t`*(this: ConfigVariableInt64): clonglong {.importcpp: "(int64_t)(#)".}
+proc `typecast int64_t`*(this: ConfigVariableInt64): clonglong {.importcpp: "(int64_t)(#)".}
 
 proc `[]`*(this: ConfigVariableInt64, n: int): clonglong {.importcpp: "#.operator [](#)".}
 
@@ -14915,7 +14915,7 @@ proc getUniqueValue*(this: ConfigVariableList, n: int): string {.importcpp: "nim
 
 proc `[]`*(this: ConfigVariableList, n: int): string {.importcpp: "nimStringFromStdString(#.operator [](#))", header: stringConversionCode.}
 
-converter `typecast DSearchPath`*(this: ConfigVariableSearchPath): DSearchPath {.importcpp: "(DSearchPath)(#)".}
+proc `typecast DSearchPath`*(this: ConfigVariableSearchPath): DSearchPath {.importcpp: "(DSearchPath)(#)".}
 
 proc getValue*(this: ConfigVariableSearchPath): DSearchPath {.importcpp: "#.get_value()".}
 
@@ -14931,7 +14931,7 @@ proc getWord*(this: ConfigVariableString, n: int): string {.importcpp: "nimStrin
 
 proc setWord*(this: ConfigVariableString, n: int, value: string) {.importcpp: "#.set_word(#, nimStringToStdString(#))", header: stringConversionCode.}
 
-converter upcastToConfigFlags*(this: NotifyCategory): var ConfigFlags {.importcpp: "((ConfigFlags *)&(#))".}
+proc upcastToConfigFlags*(this: NotifyCategory): var ConfigFlags {.importcpp: "((ConfigFlags *)&(#))".}
 
 proc getFullname*(this: NotifyCategory | PStatCollector): string {.importcpp: "nimStringFromStdString(#.get_fullname())", header: stringConversionCode.}
 
@@ -15107,11 +15107,11 @@ proc acquire*(this: LightMutexDirect | MutexDirect | Semaphore | StreamWrapperBa
 
 proc release*(this: LightMutexDirect | LightReMutexDirect | MutexDirect | ReMutexDirect | StreamWrapperBase) {.importcpp: "#.release()".}
 
-converter upcastToStreamWrapperBase*(this: IStreamWrapper | OStreamWrapper): var StreamWrapperBase {.importcpp: "((StreamWrapperBase *)&(#))".}
+proc upcastToStreamWrapperBase*(this: IStreamWrapper | OStreamWrapper): var StreamWrapperBase {.importcpp: "((StreamWrapperBase *)&(#))".}
 
-converter upcastToIStreamWrapper*(this: StreamWrapper): var IStreamWrapper {.importcpp: "((IStreamWrapper *)&(#))".}
+proc upcastToIStreamWrapper*(this: StreamWrapper): var IStreamWrapper {.importcpp: "((IStreamWrapper *)&(#))".}
 
-converter upcastToOStreamWrapper*(this: StreamWrapper): var OStreamWrapper {.importcpp: "((OStreamWrapper *)&(#))".}
+proc upcastToOStreamWrapper*(this: StreamWrapper): var OStreamWrapper {.importcpp: "((OStreamWrapper *)&(#))".}
 
 proc getIostream*(this: StreamWrapper): iostream {.importcpp: "#.get_iostream()".}
 
@@ -15139,19 +15139,19 @@ proc considerFlush*(this: Connection | SSWriter | SocketStreamRecorder): bool {.
 
 proc flush*(this: Connection | Multifile | SSWriter | SocketStreamRecorder): bool {.importcpp: "#->flush()".}
 
-converter upcastToIstream*(this: ISocketStream): istream {.importcpp: "((std::istream *)(#))".}
+proc upcastToIstream*(this: ISocketStream): istream {.importcpp: "((std::istream *)(#))".}
 
-converter upcastToSSReader*(this: ISocketStream): SSReader {.importcpp: "((SSReader *)(#))".}
+proc upcastToSSReader*(this: ISocketStream): SSReader {.importcpp: "((SSReader *)(#))".}
 
 proc getReadState*(this: ISocketStream): ISocketStream_ReadState {.importcpp: "#->get_read_state()".}
 
-converter upcastToSSWriter*(this: OSocketStream | SocketStream): var SSWriter {.importcpp: "((SSWriter *)&(#))".}
+proc upcastToSSWriter*(this: OSocketStream | SocketStream): var SSWriter {.importcpp: "((SSWriter *)&(#))".}
 
 proc flush*(this: OSocketStream | SocketStream): bool {.importcpp: "#.flush()".}
 
-converter upcastToIostream*(this: SocketStream): var iostream {.importcpp: "((std::iostream *)&(#))".}
+proc upcastToIostream*(this: SocketStream): var iostream {.importcpp: "((std::iostream *)&(#))".}
 
-converter upcastToSSReader*(this: SocketStream): var SSReader {.importcpp: "((SSReader *)&(#))".}
+proc upcastToSSReader*(this: SocketStream): var SSReader {.importcpp: "((SSReader *)&(#))".}
 
 proc setTcpHeaderSize*(this: ConnectionWriter | SocketStream, tcpHeaderSize: int) {.importcpp: "#.set_tcp_header_size(#)".}
 
@@ -15785,9 +15785,9 @@ proc copyDatagram*(this: DatagramSink, result: SubfileInfo, source: SubfileInfo)
 
 proc flush*(this: CollisionHandlerEvent | DatagramSink) {.importcpp: "#->flush()".}
 
-converter upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(TypedReferenceCount *)(#))".}
+proc upcastToTypedObject*(this: TypedReferenceCount): TypedObject {.importcpp: "((TypedObject *)(TypedReferenceCount *)(#))".}
 
-converter upcastToReferenceCount*(this: GeomVertexArrayDataHandle | MouseWatcherGroup | SocketStreamRecorder | TypedReferenceCount | TypedWritableReferenceCount | VertexDataBlock): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
+proc upcastToReferenceCount*(this: GeomVertexArrayDataHandle | MouseWatcherGroup | SocketStreamRecorder | TypedReferenceCount | TypedWritableReferenceCount | VertexDataBlock): ReferenceCount {.importcpp: "(PT(ReferenceCount)(#))".}
 
 proc seek*(this: Ramfile, pos: int) {.importcpp: "#.seek(#)".}
 
@@ -16011,7 +16011,7 @@ proc clearName*(this: AsyncTask | Event | Namable) {.importcpp: "#->clear_name()
 
 proc hasName*(this: Event | Namable): bool {.importcpp: "#->has_name()".}
 
-proc getName*(this: AudioSound | DynamicTextFont | Event | GeomVertexData | GraphicsOutput | InternalName | Namable | PreparedGraphicsObjects | TextureStage | UserVertexTransform): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
+proc getName*(this: AudioSound | PartGroup | DynamicTextFont | Event | GeomVertexData | GraphicsOutput | InternalName | Namable | PreparedGraphicsObjects | TextureStage | UserVertexTransform): string {.importcpp: "nimStringFromStdString(#->get_name())", header: stringConversionCode.}
 
 proc clearCertificates*(this: OpenSSLWrapper) {.importcpp: "#.clear_certificates()".}
 
@@ -16259,11 +16259,11 @@ proc isValidPointer*(this: WeakPointerToVoid): bool {.importcpp: "#.is_valid_poi
 
 proc isRecording*(this: RecorderBase | RecorderController): bool {.importcpp: "#->is_recording()".}
 
-proc isPlaying*(this: AnimInterface | MovieTexture | RecorderBase | RecorderController): bool {.importcpp: "#->is_playing()".}
+proc isPlaying*(this: AnimInterface | AnimControl | MovieTexture | RecorderBase | RecorderController): bool {.importcpp: "#->is_playing()".}
 
-converter upcastToDataNode*(this: MouseRecorder | MouseWatcher): DataNode {.importcpp: "(PT(DataNode)(#))".}
+proc upcastToDataNode*(this: MouseRecorder | MouseWatcher): DataNode {.importcpp: "(PT(DataNode)(#))".}
 
-converter upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(MouseRecorder *)(#))".}
+proc upcastToRecorderBase*(this: MouseRecorder): RecorderBase {.importcpp: "((RecorderBase *)(MouseRecorder *)(#))".}
 
 proc beginRecord*(this: RecorderController, filename: Filename): bool {.importcpp: "#->begin_record(#)".}
 
@@ -16297,11 +16297,11 @@ proc recordFrame*(this: RecorderController) {.importcpp: "#->record_frame()".}
 
 proc playFrame*(this: RecorderController) {.importcpp: "#->play_frame()".}
 
-converter upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(SocketStreamRecorder *)(#))".}
+proc upcastToRecorderBase*(this: SocketStreamRecorder): RecorderBase {.importcpp: "((RecorderBase *)(SocketStreamRecorder *)(#))".}
 
-converter upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(LightNode *)(#))".}
+proc upcastToLight*(this: LightNode): Light {.importcpp: "((Light *)(LightNode *)(#))".}
 
-converter upcastToPandaNode*(this: CollisionVisualizer | LightNode | TextNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
+proc upcastToPandaNode*(this: CollisionVisualizer | LightNode | TextNode): PandaNode {.importcpp: "(PT(PandaNode)(#))".}
 
 proc write*(this: AdaptiveLruPage | AnimGroup | AnimPreloadTable | DynamicTextFont | GeomPrimitive | PandaNode | PartGroup | RenderAttrib | RenderEffect | RenderEffects | RenderState | SimpleLruPage | TextFont | TransformBlendTable | TransformState | VertexSlider | VertexTransform, `out`: ostream, indentLevel: int) {.importcpp: "#->write(#, #)".}
 
@@ -16333,9 +16333,9 @@ proc removeDispatch*(this: ComputeNode, i: int) {.importcpp: "#->remove_dispatch
 
 proc clearDispatches*(this: ComputeNode) {.importcpp: "#->clear_dispatches()".}
 
-converter upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(LightLensNode *)(#))".}
+proc upcastToLight*(this: LightLensNode): Light {.importcpp: "((Light *)(LightLensNode *)(#))".}
 
-converter upcastToCamera*(this: LightLensNode): Camera {.importcpp: "(PT(Camera)(#))".}
+proc upcastToCamera*(this: LightLensNode): Camera {.importcpp: "(PT(Camera)(#))".}
 
 proc hasSpecularColor*(this: LightLensNode): bool {.importcpp: "#->has_specular_color()".}
 
@@ -16433,11 +16433,11 @@ proc getMaxDistance*(this: PointLight | RectangleLight | Spotlight): float {.imp
 
 proc setMaxDistance*(this: PointLight | RectangleLight | Spotlight, maxDistance: float) {.importcpp: "#->set_max_distance(#)".}
 
-converter upcastToSelectiveChildNode*(this: SequenceNode): SelectiveChildNode {.importcpp: "(PT(SelectiveChildNode)(#))".}
+proc upcastToSelectiveChildNode*(this: SequenceNode): SelectiveChildNode {.importcpp: "(PT(SelectiveChildNode)(#))".}
 
-converter upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(SequenceNode *)(#))".}
+proc upcastToAnimInterface*(this: SequenceNode): AnimInterface {.importcpp: "((AnimInterface *)(SequenceNode *)(#))".}
 
-proc getNumFrames*(this: AdaptiveLruPage | AnimBundle | AnimInterface | SequenceNode): int {.importcpp: "#->get_num_frames()".}
+proc getNumFrames*(this: AdaptiveLruPage | AnimBundle | AnimInterface | AnimControl | SequenceNode): int {.importcpp: "#->get_num_frames()".}
 
 proc setFrameRate*(this: ClockObject | SequenceNode, frameRate: float64) {.importcpp: "#->set_frame_rate(#)".}
 
@@ -16799,9 +16799,9 @@ proc addEffect*(this: RenderEffects, effect: RenderEffect): RenderEffects {.impo
 
 proc removeEffect*(this: RenderEffects, `type`: TypeHandle): RenderEffects {.importcpp: "deconstify(#->remove_effect(#))", header: deconstifyCode.}
 
-converter upcastToTypedWritableReferenceCount*(this: AnimGroup | BamCacheRecord | GeomVertexArrayFormat | GeomVertexFormat | Material | MouseWatcherRegion | MovieAudio | MovieVideo | PGMouseWatcherParameter | PandaNode | PartGroup | ShaderBuffer | Texture): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
+proc upcastToTypedWritableReferenceCount*(this: AnimGroup | BamCacheRecord | GeomVertexArrayFormat | GeomVertexFormat | Material | MouseWatcherRegion | MovieAudio | MovieVideo | PGMouseWatcherParameter | PandaNode | PartGroup | ShaderBuffer | Texture): TypedWritableReferenceCount {.importcpp: "(PT(TypedWritableReferenceCount)(#))".}
 
-converter upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(PandaNode *)(#))".}
+proc upcastToNamable*(this: PandaNode): Namable {.importcpp: "((Namable *)(PandaNode *)(#))".}
 
 proc combineWith*(this: PandaNode, other: PandaNode): PandaNode {.importcpp: "#->combine_with(#)".}
 
@@ -18513,7 +18513,7 @@ proc getMode*(this: Fog): Fog_Mode {.importcpp: "#->get_mode()".}
 
 proc setMode*(this: Fog, mode: Fog_Mode) {.importcpp: "#->set_mode(#)".}
 
-proc setColor*(this: Fog | Light | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
+proc setColor*(this: Fog | Light | AmbientLight | PointLight | DirectionalLight | Spotlight | MouseWatcherBase | PolylightNode | TextureStage, color: LColor) {.importcpp: "#->set_color(#)".}
 
 proc setColor*(this: Fog | PolylightNode, r: float, g: float, b: float) {.importcpp: "#->set_color(#, #, #)".}
 
@@ -18661,9 +18661,9 @@ proc getLevel*(this: LightRampAttrib, n: int): float {.importcpp: "#->get_level(
 
 proc getThreshold*(this: LightRampAttrib, n: int): float {.importcpp: "#->get_threshold(#)".}
 
-converter upcastToTypedReferenceCount*(this: AnimControl | AsyncTaskChain | AsyncTaskManager | DisplayRegion | Loader | TextFont | Thread): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
+proc upcastToTypedReferenceCount*(this: AnimControl | AsyncTaskChain | AsyncTaskManager | DisplayRegion | Loader | TextFont | Thread): TypedReferenceCount {.importcpp: "(PT(TypedReferenceCount)(#))".}
 
-converter upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(Loader *)(#))".}
+proc upcastToNamable*(this: Loader): Namable {.importcpp: "((Namable *)(Loader *)(#))".}
 
 proc setTaskManager*(this: Loader, taskManager: AsyncTaskManager) {.importcpp: "#->set_task_manager(#)".}
 
@@ -19097,7 +19097,7 @@ proc getMode*(this: ShadeModelAttrib): ShadeModelAttrib_Mode {.importcpp: "#->ge
 
 proc getRenderState*(this: StencilAttrib, renderStateIdentifier: StencilAttrib_StencilRenderState): int {.importcpp: "#->get_render_state(#)".}
 
-converter upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(MovieAudio *)(#))".}
+proc upcastToNamable*(this: MovieAudio): Namable {.importcpp: "((Namable *)(MovieAudio *)(#))".}
 
 proc open*(this: MovieAudio): MovieAudioCursor {.importcpp: "#->open()".}
 
@@ -19127,7 +19127,7 @@ proc readSamples*(this: MovieAudioCursor, n: int): string {.importcpp: "nimStrin
 
 proc readSamples*(this: MovieAudioCursor, n: int, dg: Datagram) {.importcpp: "#->read_samples(#, #)".}
 
-converter upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(MovieVideo *)(#))".}
+proc upcastToNamable*(this: MovieVideo): Namable {.importcpp: "((Namable *)(MovieVideo *)(#))".}
 
 proc open*(this: MovieVideo): MovieVideoCursor {.importcpp: "#->open()".}
 
@@ -19425,9 +19425,9 @@ proc getAlphaCursor*(this: MovieTexture, page: int): MovieVideoCursor {.importcp
 
 proc restart*(this: MovieTexture) {.importcpp: "#->restart()".}
 
-proc stop*(this: AnimInterface | AudioSound | MovieTexture) {.importcpp: "#->stop()".}
+proc stop*(this: AnimInterface | AnimControl | AudioSound | MovieTexture) {.importcpp: "#->stop()".}
 
-proc play*(this: AnimInterface | AudioSound | MovieTexture) {.importcpp: "#->play()".}
+proc play*(this: AnimInterface | AnimControl | AudioSound | MovieTexture) {.importcpp: "#->play()".}
 
 proc setTime*(this: MovieTexture, t: float64) {.importcpp: "#->set_time(#)".}
 
@@ -19441,9 +19441,9 @@ proc setLoopCount*(this: MovieTexture, count: int) {.importcpp: "#->set_loop_cou
 
 proc getLoopCount*(this: AudioSound | MovieTexture): int {.importcpp: "#->get_loop_count()".}
 
-proc setPlayRate*(this: AnimInterface | MovieTexture, playRate: float64) {.importcpp: "#->set_play_rate(#)".}
+proc setPlayRate*(this: AnimInterface | AnimControl | MovieTexture, playRate: float64) {.importcpp: "#->set_play_rate(#)".}
 
-proc getPlayRate*(this: AnimInterface | MovieTexture): float64 {.importcpp: "#->get_play_rate()".}
+proc getPlayRate*(this: AnimInterface | AnimControl | MovieTexture): float64 {.importcpp: "#->get_play_rate()".}
 
 proc synchronizeTo*(this: MovieTexture, sound: AudioSound) {.importcpp: "#->synchronize_to(#)".}
 
@@ -19499,7 +19499,7 @@ proc collect*(this: RigidBodyCombiner) {.importcpp: "#->collect()".}
 
 proc getInternalScene*(this: RigidBodyCombiner): NodePath {.importcpp: "#->get_internal_scene()".}
 
-converter upcastToCullTraverser*(this: PipeOcclusionCullTraverser): CullTraverser {.importcpp: "(PT(CullTraverser)(#))".}
+proc upcastToCullTraverser*(this: PipeOcclusionCullTraverser): CullTraverser {.importcpp: "(PT(CullTraverser)(#))".}
 
 proc getBuffer*(this: PipeOcclusionCullTraverser): GraphicsOutput {.importcpp: "#->get_buffer()".}
 
@@ -19569,7 +19569,7 @@ proc makeDisplacement*(this: PfmVizzer, result: PNMImage, maxU: float64, maxV: f
 
 proc makeDisplacement*(this: PfmVizzer, result: PfmFile, maxU: float64, maxV: float64, for32bit: bool) {.importcpp: "#.make_displacement(#, #, #, #)".}
 
-converter upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(AnimGroup *)(#))".}
+proc upcastToNamable*(this: AnimGroup): Namable {.importcpp: "((Namable *)(AnimGroup *)(#))".}
 
 proc getChild*(this: AnimGroup, n: int): AnimGroup {.importcpp: "#->get_child(#)".}
 
@@ -19585,7 +19585,7 @@ proc getBaseFrameRate*(this: AnimBundle): float64 {.importcpp: "#->get_base_fram
 
 proc getBundle*(this: AnimBundleNode): AnimBundle {.importcpp: "#->get_bundle()".}
 
-converter upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(PartGroup *)(#))".}
+proc upcastToNamable*(this: PartGroup): Namable {.importcpp: "((Namable *)(PartGroup *)(#))".}
 
 proc isCharacterJoint*(this: PartGroup): bool {.importcpp: "#->is_character_joint()".}
 
@@ -19613,9 +19613,9 @@ proc getForcedChannel*(this: PartGroup): AnimChannelBase {.importcpp: "#->get_fo
 
 proc writeWithValue*(this: PartGroup, `out`: ostream, indentLevel: int) {.importcpp: "#->write_with_value(#, #)".}
 
-converter upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(AnimControl *)(#))".}
+proc upcastToAnimInterface*(this: AnimControl): AnimInterface {.importcpp: "((AnimInterface *)(AnimControl *)(#))".}
 
-converter upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(AnimControl *)(#))".}
+proc upcastToNamable*(this: AnimControl): Namable {.importcpp: "((Namable *)(AnimControl *)(#))".}
 
 proc isPending*(this: AnimControl): bool {.importcpp: "#->is_pending()".}
 
@@ -20293,7 +20293,7 @@ proc setT2*(this: CollisionParabola, t2: float) {.importcpp: "#->set_t2(#)".}
 
 proc getT2*(this: CollisionParabola): float {.importcpp: "#->get_t2()".}
 
-converter upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(CollisionVisualizer *)(#))".}
+proc upcastToCollisionRecorder*(this: CollisionVisualizer): CollisionRecorder {.importcpp: "((CollisionRecorder *)(CollisionVisualizer *)(#))".}
 
 proc setPointScale*(this: CollisionVisualizer, pointScale: float) {.importcpp: "#->set_point_scale(#)".}
 
@@ -20533,49 +20533,49 @@ proc lookupCpuData*(this: GraphicsPipe) {.importcpp: "#->lookup_cpu_data()".}
 
 proc getInterfaceName*(this: GraphicsPipe): string {.importcpp: "nimStringFromStdString(#->get_interface_name())", header: stringConversionCode.}
 
-proc setClearColorActive*(this: DrawableRegion, clearColorActive: bool) {.importcpp: "#->set_clear_color_active(#)".}
+proc setClearColorActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion, clearColorActive: bool) {.importcpp: "#->set_clear_color_active(#)".}
 
-proc getClearColorActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_color_active()".}
+proc getClearColorActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion): bool {.importcpp: "#->get_clear_color_active()".}
 
-proc setClearDepthActive*(this: DrawableRegion, clearDepthActive: bool) {.importcpp: "#->set_clear_depth_active(#)".}
+proc setClearDepthActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion, clearDepthActive: bool) {.importcpp: "#->set_clear_depth_active(#)".}
 
-proc getClearDepthActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_depth_active()".}
+proc getClearDepthActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion): bool {.importcpp: "#->get_clear_depth_active()".}
 
-proc setClearStencilActive*(this: DrawableRegion, clearStencilActive: bool) {.importcpp: "#->set_clear_stencil_active(#)".}
+proc setClearStencilActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion, clearStencilActive: bool) {.importcpp: "#->set_clear_stencil_active(#)".}
 
-proc getClearStencilActive*(this: DrawableRegion): bool {.importcpp: "#->get_clear_stencil_active()".}
+proc getClearStencilActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion): bool {.importcpp: "#->get_clear_stencil_active()".}
 
-proc setClearColor*(this: DrawableRegion | Texture, color: LColor) {.importcpp: "#->set_clear_color(#)".}
+proc setClearColor*(this: DrawableRegion | GraphicsOutput | DisplayRegion | Texture, color: LColor) {.importcpp: "#->set_clear_color(#)".}
 
-proc getClearColor*(this: DrawableRegion | Texture): LColor {.importcpp: "#->get_clear_color()".}
+proc getClearColor*(this: DrawableRegion | GraphicsOutput | DisplayRegion | Texture): LColor {.importcpp: "#->get_clear_color()".}
 
-proc setClearDepth*(this: DrawableRegion, depth: float) {.importcpp: "#->set_clear_depth(#)".}
+proc setClearDepth*(this: DrawableRegion | GraphicsOutput | DisplayRegion, depth: float) {.importcpp: "#->set_clear_depth(#)".}
 
-proc getClearDepth*(this: DrawableRegion): float {.importcpp: "#->get_clear_depth()".}
+proc getClearDepth*(this: DrawableRegion | GraphicsOutput | DisplayRegion): float {.importcpp: "#->get_clear_depth()".}
 
-proc setClearStencil*(this: DrawableRegion, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
+proc setClearStencil*(this: DrawableRegion | GraphicsOutput | DisplayRegion, stencil: int) {.importcpp: "#->set_clear_stencil(#)".}
 
-proc getClearStencil*(this: DrawableRegion): int {.importcpp: "#->get_clear_stencil()".}
+proc getClearStencil*(this: DrawableRegion | GraphicsOutput | DisplayRegion): int {.importcpp: "#->get_clear_stencil()".}
 
-proc setClearActive*(this: DrawableRegion, n: int, clearAuxActive: bool) {.importcpp: "#->set_clear_active(#, #)".}
+proc setClearActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion, n: int, clearAuxActive: bool) {.importcpp: "#->set_clear_active(#, #)".}
 
-proc getClearActive*(this: DrawableRegion, n: int): bool {.importcpp: "#->get_clear_active(#)".}
+proc getClearActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion, n: int): bool {.importcpp: "#->get_clear_active(#)".}
 
-proc setClearValue*(this: DrawableRegion, n: int, clearValue: LColor) {.importcpp: "#->set_clear_value(#, #)".}
+proc setClearValue*(this: DrawableRegion | GraphicsOutput | DisplayRegion, n: int, clearValue: LColor) {.importcpp: "#->set_clear_value(#, #)".}
 
-proc getClearValue*(this: DrawableRegion, n: int): LColor {.importcpp: "#->get_clear_value(#)".}
+proc getClearValue*(this: DrawableRegion | GraphicsOutput | DisplayRegion, n: int): LColor {.importcpp: "#->get_clear_value(#)".}
 
-proc disableClears*(this: DrawableRegion) {.importcpp: "#->disable_clears()".}
+proc disableClears*(this: DrawableRegion | GraphicsOutput | DisplayRegion) {.importcpp: "#->disable_clears()".}
 
-proc isAnyClearActive*(this: DrawableRegion): bool {.importcpp: "#->is_any_clear_active()".}
+proc isAnyClearActive*(this: DrawableRegion | GraphicsOutput | DisplayRegion): bool {.importcpp: "#->is_any_clear_active()".}
 
-proc setPixelZoom*(this: DrawableRegion, pixelZoom: float) {.importcpp: "#->set_pixel_zoom(#)".}
+proc setPixelZoom*(this: DrawableRegion | GraphicsOutput | DisplayRegion, pixelZoom: float) {.importcpp: "#->set_pixel_zoom(#)".}
 
-proc getPixelZoom*(this: DrawableRegion): float {.importcpp: "#->get_pixel_zoom()".}
+proc getPixelZoom*(this: DrawableRegion | GraphicsOutput | DisplayRegion): float {.importcpp: "#->get_pixel_zoom()".}
 
-proc getPixelFactor*(this: DrawableRegion): float {.importcpp: "#->get_pixel_factor()".}
+proc getPixelFactor*(this: DrawableRegion | GraphicsOutput | DisplayRegion): float {.importcpp: "#->get_pixel_factor()".}
 
-proc supportsPixelZoom*(this: DrawableRegion): bool {.importcpp: "#->supports_pixel_zoom()".}
+proc supportsPixelZoom*(this: DrawableRegion | GraphicsOutput | DisplayRegion): bool {.importcpp: "#->supports_pixel_zoom()".}
 
 proc sendWindowsMessage*(this: WindowHandle, msg: int, wparam: int, lparam: int) {.importcpp: "#->send_windows_message(#, #, #)".}
 
@@ -20733,7 +20733,7 @@ proc clearParentWindow*(this: var WindowProperties) {.importcpp: "#.clear_parent
 
 proc addProperties*(this: var WindowProperties, other: WindowProperties) {.importcpp: "#.add_properties(#)".}
 
-converter upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(DisplayRegion *)(#))".}
+proc upcastToDrawableRegion*(this: DisplayRegion): DrawableRegion {.importcpp: "((DrawableRegion *)(DisplayRegion *)(#))".}
 
 proc getNumRegions*(this: DisplayRegion | MouseWatcherBase): int {.importcpp: "#->get_num_regions()".}
 
@@ -20769,9 +20769,9 @@ proc setDimensions*(this: DisplayRegion, i: int, l: float, r: float, b: float, t
 
 proc isStereo*(this: DisplayRegion | GraphicsOutput): bool {.importcpp: "#->is_stereo()".}
 
-converter upcastToGraphicsOutputBase*(this: GraphicsOutput): GraphicsOutputBase {.importcpp: "(PT(GraphicsOutputBase)(#))".}
+proc upcastToGraphicsOutputBase*(this: GraphicsOutput): GraphicsOutputBase {.importcpp: "(PT(GraphicsOutputBase)(#))".}
 
-converter upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(GraphicsOutput *)(#))".}
+proc upcastToDrawableRegion*(this: GraphicsOutput): DrawableRegion {.importcpp: "((DrawableRegion *)(GraphicsOutput *)(#))".}
 
 proc getGsg*(this: GraphicsOutput): GraphicsStateGuardian {.importcpp: "#->get_gsg()".}
 
@@ -21529,7 +21529,7 @@ proc loadAuxModules*(this: GraphicsPipeSelection) {.importcpp: "#->load_aux_modu
 
 proc setSource*(this: MouseAndKeyboard, window: GraphicsWindow, device: int) {.importcpp: "#->set_source(#, #)".}
 
-converter upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(Thread *)(#))".}
+proc upcastToNamable*(this: Thread): Namable {.importcpp: "((Namable *)(Thread *)(#))".}
 
 proc getSyncName*(this: Thread): string {.importcpp: "nimStringFromStdString(#->get_sync_name())", header: stringConversionCode.}
 
@@ -21621,9 +21621,9 @@ proc wait*(this: AsyncFuture) {.importcpp: "#->wait()".}
 
 proc wait*(this: AsyncFuture, timeout: float64) {.importcpp: "#->wait(#)".}
 
-converter upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(AsyncFuture)(#))".}
+proc upcastToAsyncFuture*(this: AsyncTask): AsyncFuture {.importcpp: "(PT(AsyncFuture)(#))".}
 
-converter upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(AsyncTask *)(#))".}
+proc upcastToNamable*(this: AsyncTask): Namable {.importcpp: "((Namable *)(AsyncTask *)(#))".}
 
 proc getState*(this: AsyncTask): AsyncTask_State {.importcpp: "#->get_state()".}
 
@@ -21665,7 +21665,7 @@ proc getMaxDt*(this: AsyncTask | ClockObject): float64 {.importcpp: "#->get_max_
 
 proc getAverageDt*(this: AsyncTask): float64 {.importcpp: "#->get_average_dt()".}
 
-converter upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(AsyncTaskManager *)(#))".}
+proc upcastToNamable*(this: AsyncTaskManager): Namable {.importcpp: "((Namable *)(AsyncTaskManager *)(#))".}
 
 proc cleanup*(this: AsyncTaskManager) {.importcpp: "#->cleanup()".}
 
@@ -21735,7 +21735,7 @@ proc `+`*(this: AsyncTaskCollection, other: AsyncTaskCollection): AsyncTaskColle
 
 proc getNextWakeTime*(this: AsyncTaskChain | AsyncTaskManager): float64 {.importcpp: "#->get_next_wake_time()".}
 
-converter upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(AsyncTaskChain *)(#))".}
+proc upcastToNamable*(this: AsyncTaskChain): Namable {.importcpp: "((Namable *)(AsyncTaskChain *)(#))".}
 
 proc setTickClock*(this: AsyncTaskChain, tickClock: bool) {.importcpp: "#->set_tick_clock(#)".}
 
@@ -21763,9 +21763,9 @@ proc setTimeslicePriority*(this: AsyncTaskChain, timeslicePriority: bool) {.impo
 
 proc getTimeslicePriority*(this: AsyncTaskChain): bool {.importcpp: "#->get_timeslice_priority()".}
 
-converter upcastToAsyncTask*(this: AsyncTaskSequence): AsyncTask {.importcpp: "(PT(AsyncTask)(#))".}
+proc upcastToAsyncTask*(this: AsyncTaskSequence): AsyncTask {.importcpp: "(PT(AsyncTask)(#))".}
 
-converter upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(AsyncTaskSequence *)(#))".}
+proc upcastToAsyncTaskCollection*(this: AsyncTaskSequence): AsyncTaskCollection {.importcpp: "((AsyncTaskCollection *)(AsyncTaskSequence *)(#))".}
 
 proc setRepeatCount*(this: AsyncTaskSequence, repeatCount: int) {.importcpp: "#->set_repeat_count(#)".}
 
@@ -21949,7 +21949,7 @@ proc setStart*(this: GeomVertexColumn, start: int) {.importcpp: "#.set_start(#)"
 
 proc setColumnAlignment*(this: GeomVertexColumn, columnAlignment: int) {.importcpp: "#.set_column_alignment(#)".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayFormat *)(#))".}
+proc upcastToGeomEnums*(this: GeomVertexArrayFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayFormat *)(#))".}
 
 proc isRegistered*(this: GeomVertexArrayFormat | GeomVertexFormat | SliderTable | TransformTable): bool {.importcpp: "#->is_registered()".}
 
@@ -22003,7 +22003,7 @@ proc getFormatString*(this: GeomVertexArrayFormat, pad: bool): string {.importcp
 
 proc getFormatString*(this: GeomVertexArrayFormat): string {.importcpp: "nimStringFromStdString(#->get_format_string())", header: stringConversionCode.}
 
-converter upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexFormat *)(#))".}
+proc upcastToGeomEnums*(this: GeomVertexFormat): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexFormat *)(#))".}
 
 proc getAnimation*(this: GeomVertexFormat): GeomVertexAnimationSpec {.importcpp: "#->get_animation()".}
 
@@ -22061,7 +22061,7 @@ proc getMorphDelta*(this: GeomVertexFormat, n: int): InternalName {.importcpp: "
 
 proc writeWithData*(this: GeomVertexFormat, `out`: ostream, indentLevel: int, data: GeomVertexData) {.importcpp: "#->write_with_data(#, #, #)".}
 
-converter upcastToNamable*(this: SimpleLru): var Namable {.importcpp: "((Namable *)&(#))".}
+proc upcastToNamable*(this: SimpleLru): var Namable {.importcpp: "((Namable *)&(#))".}
 
 proc getLru*(this: SimpleLruPage): SimpleLru {.importcpp: "#->get_lru()".}
 
@@ -22101,9 +22101,9 @@ proc getTotalFileSize*(this: VertexDataSaveFile): int {.importcpp: "#->get_total
 
 proc getUsedFileSize*(this: VertexDataSaveFile): int {.importcpp: "#->get_used_file_size()".}
 
-converter upcastToSimpleAllocator*(this: VertexDataPage): var SimpleAllocator {.importcpp: "((SimpleAllocator *)&(#))".}
+proc upcastToSimpleAllocator*(this: VertexDataPage): var SimpleAllocator {.importcpp: "((SimpleAllocator *)&(#))".}
 
-converter upcastToSimpleLruPage*(this: VertexDataPage): var SimpleLruPage {.importcpp: "((SimpleLruPage *)&(#))".}
+proc upcastToSimpleLruPage*(this: VertexDataPage): var SimpleLruPage {.importcpp: "((SimpleLruPage *)&(#))".}
 
 proc getRamClass*(this: VertexDataPage): VertexDataPage_RamClass {.importcpp: "#.get_ram_class()".}
 
@@ -22131,17 +22131,17 @@ proc countAllocatedSize*(this: VertexDataBook, ramClass: VertexDataPage_RamClass
 
 proc saveToDisk*(this: VertexDataBook) {.importcpp: "#.save_to_disk()".}
 
-converter upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(VertexDataBlock *)(#))".}
+proc upcastToSimpleAllocatorBlock*(this: VertexDataBlock): SimpleAllocatorBlock {.importcpp: "((SimpleAllocatorBlock *)(VertexDataBlock *)(#))".}
 
 proc getPage*(this: VertexDataBlock): VertexDataPage {.importcpp: "#->get_page()".}
 
 proc getNextBlock*(this: VertexDataBlock): VertexDataBlock {.importcpp: "#->get_next_block()".}
 
-converter upcastToCopyOnWriteObject*(this: Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
+proc upcastToCopyOnWriteObject*(this: Geom | GeomPrimitive | GeomVertexArrayData | GeomVertexData): CopyOnWriteObject {.importcpp: "(PT(CopyOnWriteObject)(#))".}
 
-converter upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(GeomVertexArrayData *)(#))".}
+proc upcastToSimpleLruPage*(this: GeomVertexArrayData): SimpleLruPage {.importcpp: "((SimpleLruPage *)(GeomVertexArrayData *)(#))".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayData *)(#))".}
+proc upcastToGeomEnums*(this: GeomVertexArrayData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayData *)(#))".}
 
 proc compareTo*(this: GeomVertexArrayData, other: GeomVertexArrayData): int {.importcpp: "#->compare_to(#)".}
 
@@ -22177,7 +22177,7 @@ proc release*(this: Geom | GeomVertexArrayData | Shader | ShaderBuffer | Texture
 
 proc releaseAll*(this: Geom | GeomVertexArrayData | Shader | ShaderBuffer | Texture): int {.importcpp: "#->release_all()".}
 
-converter upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayDataHandle *)(#))".}
+proc upcastToGeomEnums*(this: GeomVertexArrayDataHandle): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexArrayDataHandle *)(#))".}
 
 proc getObject*(this: GeomVertexArrayDataHandle): GeomVertexArrayData {.importcpp: "#->get_object()".}
 
@@ -22291,7 +22291,7 @@ proc removeSlider*(this: SliderTable, n: int) {.importcpp: "#->remove_slider(#)"
 
 proc addSlider*(this: SliderTable, slider: VertexSlider, rows: SparseArray): int {.importcpp: "#->add_slider(#, #)".}
 
-converter upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexData *)(#))".}
+proc upcastToGeomEnums*(this: GeomVertexData): GeomEnums {.importcpp: "((GeomEnums *)(GeomVertexData *)(#))".}
 
 proc compareTo*(this: GeomVertexData, other: GeomVertexData): int {.importcpp: "#->compare_to(#)".}
 
@@ -22365,13 +22365,13 @@ proc clearCache*(this: AudioManager | Geom | GeomVertexData) {.importcpp: "#->cl
 
 proc clearCacheStage*(this: GeomVertexData) {.importcpp: "#->clear_cache_stage()".}
 
-converter upcastToSavedContext*(this: BufferContext): SavedContext {.importcpp: "((SavedContext *)(#))".}
+proc upcastToSavedContext*(this: BufferContext): SavedContext {.importcpp: "((SavedContext *)(#))".}
 
 proc getActive*(this: AudioManager | AudioSound | BufferContext | MouseWatcherRegion | PGItem): bool {.importcpp: "#->get_active()".}
 
 proc getResident*(this: BufferContext): bool {.importcpp: "#->get_resident()".}
 
-converter upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(GeomPrimitive *)(#))".}
+proc upcastToGeomEnums*(this: GeomPrimitive): GeomEnums {.importcpp: "((GeomEnums *)(GeomPrimitive *)(#))".}
 
 proc makeCopy*(this: GeomPrimitive): GeomPrimitive {.importcpp: "#->make_copy()".}
 
@@ -22583,7 +22583,7 @@ proc `<`*(this: TextureStage, other: TextureStage): bool {.importcpp: "#->operat
 
 proc compareTo*(this: TextureStage, other: TextureStage): int {.importcpp: "#->compare_to(#)".}
 
-converter upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(Geom *)(#))".}
+proc upcastToGeomEnums*(this: Geom): GeomEnums {.importcpp: "((GeomEnums *)(Geom *)(#))".}
 
 proc makeCopy*(this: Geom): Geom {.importcpp: "#->make_copy()".}
 
@@ -22869,9 +22869,9 @@ proc addData4i*(this: GeomVertexWriter, data: LVecBase4i) {.importcpp: "#.add_da
 
 proc addData4i*(this: GeomVertexWriter, a: int, b: int, c: int, d: int) {.importcpp: "#.add_data4i(#, #, #, #)".}
 
-converter upcastToGeomVertexWriter*(this: GeomVertexRewriter): var GeomVertexWriter {.importcpp: "((GeomVertexWriter *)&(#))".}
+proc upcastToGeomVertexWriter*(this: GeomVertexRewriter): var GeomVertexWriter {.importcpp: "((GeomVertexWriter *)&(#))".}
 
-converter upcastToGeomVertexReader*(this: GeomVertexRewriter): var GeomVertexReader {.importcpp: "((GeomVertexReader *)&(#))".}
+proc upcastToGeomVertexReader*(this: GeomVertexRewriter): var GeomVertexReader {.importcpp: "((GeomVertexReader *)&(#))".}
 
 proc setWrapU*(this: var SamplerState, wrap: SamplerState_WrapMode) {.importcpp: "#.set_wrap_u(#)".}
 
@@ -22933,7 +22933,7 @@ proc isPrepared*(this: SamplerState, preparedObjects: PreparedGraphicsObjects): 
 
 proc release*(this: SamplerState, preparedObjects: PreparedGraphicsObjects) {.importcpp: "#.release(#)".}
 
-converter upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(Texture *)(#))".}
+proc upcastToNamable*(this: Texture): Namable {.importcpp: "((Namable *)(Texture *)(#))".}
 
 proc makeCopy*(this: Texture): Texture {.importcpp: "#->make_copy()".}
 
@@ -23361,9 +23361,9 @@ proc setCacheCompiledShader*(this: Shader, flag: bool) {.importcpp: "#->set_cach
 
 proc prepareNow*(this: Shader, preparedObjects: PreparedGraphicsObjects, gsg: GraphicsStateGuardianBase): ShaderContext {.importcpp: "#->prepare_now(#, #)".}
 
-converter upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(ShaderBuffer *)(#))".}
+proc upcastToNamable*(this: ShaderBuffer): Namable {.importcpp: "((Namable *)(ShaderBuffer *)(#))".}
 
-converter upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(ShaderBuffer *)(#))".}
+proc upcastToGeomEnums*(this: ShaderBuffer): GeomEnums {.importcpp: "((GeomEnums *)(ShaderBuffer *)(#))".}
 
 proc prepareNow*(this: ShaderBuffer, preparedObjects: PreparedGraphicsObjects, gsg: GraphicsStateGuardianBase): BufferContext {.importcpp: "#->prepare_now(#, #)".}
 
@@ -23493,9 +23493,9 @@ proc getNumPreparedShaderBuffers*(this: PreparedGraphicsObjects): int {.importcp
 
 proc prepareShaderBufferNow*(this: PreparedGraphicsObjects, data: ShaderBuffer, gsg: GraphicsStateGuardianBase): BufferContext {.importcpp: "#->prepare_shader_buffer_now(#, #)".}
 
-converter upcastToBufferContext*(this: IndexBufferContext | TextureContext | VertexBufferContext): var BufferContext {.importcpp: "((BufferContext *)&(#))".}
+proc upcastToBufferContext*(this: IndexBufferContext | TextureContext | VertexBufferContext): var BufferContext {.importcpp: "((BufferContext *)&(#))".}
 
-converter upcastToAdaptiveLruPage*(this: IndexBufferContext | TextureContext | VertexBufferContext): var AdaptiveLruPage {.importcpp: "((AdaptiveLruPage *)&(#))".}
+proc upcastToAdaptiveLruPage*(this: IndexBufferContext | TextureContext | VertexBufferContext): var AdaptiveLruPage {.importcpp: "((AdaptiveLruPage *)&(#))".}
 
 proc getData*(this: IndexBufferContext): GeomPrimitive {.importcpp: "#.get_data()".}
 
@@ -23639,7 +23639,7 @@ proc getLensMatInv*(this: Lens): LMatrix4 {.importcpp: "#->get_lens_mat_inv()".}
 
 proc getLastChange*(this: Lens): UpdateSeq {.importcpp: "#->get_last_change()".}
 
-converter upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(Material *)(#))".}
+proc upcastToNamable*(this: Material): Namable {.importcpp: "((Namable *)(Material *)(#))".}
 
 proc hasBaseColor*(this: Material): bool {.importcpp: "#->has_base_color()".}
 
@@ -23787,9 +23787,9 @@ proc setSlider*(this: UserVertexSlider, slider: float) {.importcpp: "#->set_slid
 
 proc setMatrix*(this: RopeNode | UserVertexTransform, matrix: LMatrix4) {.importcpp: "#->set_matrix(#)".}
 
-converter upcastToTexture*(this: VideoTexture): Texture {.importcpp: "(PT(Texture)(#))".}
+proc upcastToTexture*(this: VideoTexture): Texture {.importcpp: "(PT(Texture)(#))".}
 
-converter upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(VideoTexture *)(#))".}
+proc upcastToAnimInterface*(this: VideoTexture): AnimInterface {.importcpp: "((AnimInterface *)(VideoTexture *)(#))".}
 
 proc getData*(this: VertexBufferContext): GeomVertexArrayData {.importcpp: "#.get_data()".}
 
@@ -26317,9 +26317,9 @@ proc setKnot*(this: NurbsCurveInterface, n: int, t: float): bool {.importcpp: "#
 
 proc getKnot*(this: NurbsCurveInterface, n: int): float {.importcpp: "#->get_knot(#)".}
 
-converter upcastToPiecewiseCurve*(this: NurbsCurve): PiecewiseCurve {.importcpp: "(PT(PiecewiseCurve)(#))".}
+proc upcastToPiecewiseCurve*(this: NurbsCurve): PiecewiseCurve {.importcpp: "(PT(PiecewiseCurve)(#))".}
 
-converter upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(NurbsCurve *)(#))".}
+proc upcastToNurbsCurveInterface*(this: NurbsCurve): NurbsCurveInterface {.importcpp: "((NurbsCurveInterface *)(NurbsCurve *)(#))".}
 
 proc getStartT*(this: NurbsCurveResult): float {.importcpp: "#->get_start_t()".}
 
@@ -27223,11 +27223,11 @@ proc isWhitespace*(this: TextGlyph): bool {.importcpp: "#->is_whitespace()".}
 
 proc getGeom*(this: TextGlyph, usageHint: GeomEnums_UsageHint): Geom {.importcpp: "#->get_geom(#)".}
 
-converter upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(TextFont *)(#))".}
+proc upcastToNamable*(this: TextFont): Namable {.importcpp: "((Namable *)(TextFont *)(#))".}
 
 proc makeCopy*(this: DynamicTextFont | TextFont): TextFont {.importcpp: "#->make_copy()".}
 
-converter `typecast bool`*(this: TextFont): bool {.importcpp: "(bool)*(#)".}
+proc `typecast bool`*(this: TextFont): bool {.importcpp: "(bool)*(#)".}
 
 proc getLineHeight*(this: DynamicTextFont | TextFont | TextNode): float {.importcpp: "#->get_line_height()".}
 
@@ -27253,9 +27253,9 @@ proc getUvRight*(this: DynamicTextGlyph): float {.importcpp: "#->get_uv_right()"
 
 proc getUvTop*(this: DynamicTextGlyph): float {.importcpp: "#->get_uv_top()".}
 
-converter upcastToTextFont*(this: DynamicTextFont): TextFont {.importcpp: "(PT(TextFont)(#))".}
+proc upcastToTextFont*(this: DynamicTextFont): TextFont {.importcpp: "(PT(TextFont)(#))".}
 
-converter upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(DynamicTextFont *)(#))".}
+proc upcastToFreetypeFont*(this: DynamicTextFont): FreetypeFont {.importcpp: "((FreetypeFont *)(DynamicTextFont *)(#))".}
 
 proc setPointSize*(this: DynamicTextFont, pointSize: float): bool {.importcpp: "#->set_point_size(#)".}
 
@@ -27589,9 +27589,9 @@ proc getUl*(this: TextAssembler): LVector2 {.importcpp: "#.get_ul()".}
 
 proc getLr*(this: TextAssembler): LVector2 {.importcpp: "#.get_lr()".}
 
-converter upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(TextNode *)(#))".}
+proc upcastToTextEncoder*(this: TextNode): TextEncoder {.importcpp: "((TextEncoder *)(TextNode *)(#))".}
 
-converter upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(TextNode *)(#))".}
+proc upcastToTextProperties*(this: TextNode): TextProperties {.importcpp: "((TextProperties *)(TextNode *)(#))".}
 
 proc setMaxRows*(this: TextNode, maxRows: int) {.importcpp: "#->set_max_rows(#)".}
 
@@ -27863,7 +27863,7 @@ proc setMat*(this: DriveInterface | Trackball, mat: LMatrix4) {.importcpp: "#->s
 
 proc forceDgraph*(this: DriveInterface) {.importcpp: "#->force_dgraph()".}
 
-converter upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
+proc upcastToNamable*(this: MouseWatcherRegion): Namable {.importcpp: "((Namable *)(MouseWatcherRegion *)(#))".}
 
 proc setFrame*(this: MouseWatcher | MouseWatcherRegion | PGItem, frame: LVecBase4) {.importcpp: "#->set_frame((LVecBase4 const &)(#))".}
 
@@ -27901,9 +27901,9 @@ proc hideRegions*(this: MouseWatcherBase) {.importcpp: "#->hide_regions()".}
 
 proc updateRegions*(this: MouseWatcherBase) {.importcpp: "#->update_regions()".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcherGroup *)(#))".}
+proc upcastToMouseWatcherBase*(this: MouseWatcherGroup): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcherGroup *)(#))".}
 
-converter upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcher *)(#))".}
+proc upcastToMouseWatcherBase*(this: MouseWatcher): MouseWatcherBase {.importcpp: "((MouseWatcherBase *)(MouseWatcher *)(#))".}
 
 proc hasMouse*(this: MouseWatcher): bool {.importcpp: "#->has_mouse()".}
 
@@ -28065,29 +28065,29 @@ proc getRelTo*(this: Trackball): NodePath {.importcpp: "#->get_rel_to()".}
 
 proc getTransMat*(this: Trackball): LMatrix4 {.importcpp: "#->get_trans_mat()".}
 
-proc play*(this: AnimInterface, `from`: float64, to: float64) {.importcpp: "#->play(#, #)".}
+proc play*(this: AnimInterface | AnimControl, `from`: float64, to: float64) {.importcpp: "#->play(#, #)".}
 
-proc loop*(this: AnimInterface, restart: bool) {.importcpp: "#->loop(#)".}
+proc loop*(this: AnimInterface | AnimControl, restart: bool) {.importcpp: "#->loop(#)".}
 
-proc loop*(this: AnimInterface, restart: bool, `from`: float64, to: float64) {.importcpp: "#->loop(#, #, #)".}
+proc loop*(this: AnimInterface | AnimControl, restart: bool, `from`: float64, to: float64) {.importcpp: "#->loop(#, #, #)".}
 
-proc pingpong*(this: AnimInterface, restart: bool) {.importcpp: "#->pingpong(#)".}
+proc pingpong*(this: AnimInterface | AnimControl, restart: bool) {.importcpp: "#->pingpong(#)".}
 
-proc pingpong*(this: AnimInterface, restart: bool, `from`: float64, to: float64) {.importcpp: "#->pingpong(#, #, #)".}
+proc pingpong*(this: AnimInterface | AnimControl, restart: bool, `from`: float64, to: float64) {.importcpp: "#->pingpong(#, #, #)".}
 
-proc pose*(this: AnimInterface, frame: float64) {.importcpp: "#->pose(#)".}
+proc pose*(this: AnimInterface | AnimControl, frame: float64) {.importcpp: "#->pose(#)".}
 
-proc getFrameRate*(this: AnimInterface): float64 {.importcpp: "#->get_frame_rate()".}
+proc getFrameRate*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_frame_rate()".}
 
-proc getFrame*(this: AnimInterface): int {.importcpp: "#->get_frame()".}
+proc getFrame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_frame()".}
 
-proc getNextFrame*(this: AnimInterface): int {.importcpp: "#->get_next_frame()".}
+proc getNextFrame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_next_frame()".}
 
-proc getFrac*(this: AnimInterface): float64 {.importcpp: "#->get_frac()".}
+proc getFrac*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_frac()".}
 
-proc getFullFrame*(this: AnimInterface): int {.importcpp: "#->get_full_frame()".}
+proc getFullFrame*(this: AnimInterface | AnimControl): int {.importcpp: "#->get_full_frame()".}
 
-proc getFullFframe*(this: AnimInterface): float64 {.importcpp: "#->get_full_fframe()".}
+proc getFullFframe*(this: AnimInterface | AnimControl): float64 {.importcpp: "#->get_full_fframe()".}
 
 proc isInitial*(this: UpdateSeq): bool {.importcpp: "#.is_initial()".}
 
@@ -28117,7 +28117,7 @@ proc markBamModified*(this: TypedWritable) {.importcpp: "#->mark_bam_modified()"
 
 proc getBamModified*(this: TypedWritable): UpdateSeq {.importcpp: "#->get_bam_modified()".}
 
-converter upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(TypedWritableReferenceCount *)(#))".}
+proc upcastToTypedWritable*(this: TypedWritableReferenceCount): TypedWritable {.importcpp: "((TypedWritable *)(TypedWritableReferenceCount *)(#))".}
 
 proc makeCopy*(this: BamCacheRecord): BamCacheRecord {.importcpp: "#->make_copy()".}
 
@@ -28525,9 +28525,9 @@ proc getAverageFrameRateInterval*(this: ClockObject): float64 {.importcpp: "#->g
 
 proc checkErrors*(this: ClockObject, currentThread: Thread): bool {.importcpp: "#->check_errors(#)".}
 
-converter upcastToDatagramSink*(this: DatagramBuffer | DatagramSinkNet): var DatagramSink {.importcpp: "((DatagramSink *)&(#))".}
+proc upcastToDatagramSink*(this: DatagramBuffer | DatagramSinkNet): var DatagramSink {.importcpp: "((DatagramSink *)&(#))".}
 
-converter upcastToDatagramGenerator*(this: DatagramBuffer): var DatagramGenerator {.importcpp: "((DatagramGenerator *)&(#))".}
+proc upcastToDatagramGenerator*(this: DatagramBuffer): var DatagramGenerator {.importcpp: "((DatagramGenerator *)&(#))".}
 
 proc open*(this: DatagramInputFile | DatagramOutputFile, file: FileReference): bool {.importcpp: "#.open(#)".}
 
@@ -29039,7 +29039,7 @@ proc getPlainWtext*(this: PGEntry): string {.importcpp: "nimStringFromStdString(
 
 proc setAcceptEnabled*(this: PGEntry, enabled: bool) {.importcpp: "#->set_accept_enabled(#)".}
 
-converter upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(PGMouseWatcherParameter *)(#))".}
+proc upcastToMouseWatcherParameter*(this: PGMouseWatcherParameter): MouseWatcherParameter {.importcpp: "((MouseWatcherParameter *)(PGMouseWatcherParameter *)(#))".}
 
 proc setup*(this: PGVirtualFrame, width: float, height: float) {.importcpp: "#->setup(#, #)".}
 
@@ -29061,7 +29061,7 @@ proc getCanvasNode*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas
 
 proc getCanvasParent*(this: PGVirtualFrame): PandaNode {.importcpp: "#->get_canvas_parent()".}
 
-converter upcastToPGItem*(this: PGSliderBar): PGItem {.importcpp: "(PT(PGItem)(#))".}
+proc upcastToPGItem*(this: PGSliderBar): PGItem {.importcpp: "(PT(PGItem)(#))".}
 
 proc setupScrollBar*(this: PGSliderBar, vertical: bool, length: float, width: float, bevel: float) {.importcpp: "#->setup_scroll_bar(#, #, #, #)".}
 
@@ -29117,7 +29117,7 @@ proc remanage*(this: PGScrollFrame | PGSliderBar) {.importcpp: "#->remanage()".}
 
 proc recompute*(this: PGScrollFrame | PGSliderBar) {.importcpp: "#->recompute()".}
 
-converter upcastToPGVirtualFrame*(this: PGScrollFrame): PGVirtualFrame {.importcpp: "(PT(PGVirtualFrame)(#))".}
+proc upcastToPGVirtualFrame*(this: PGScrollFrame): PGVirtualFrame {.importcpp: "(PT(PGVirtualFrame)(#))".}
 
 proc setup*(this: PGScrollFrame, width: float, height: float, left: float, right: float, bottom: float, top: float, sliderWidth: float, bevel: float) {.importcpp: "#->setup(#, #, #, #, #, #, #, #)".}
 
@@ -29277,11 +29277,11 @@ proc getRawMode*(this: ConnectionWriter): bool {.importcpp: "#.get_raw_mode()".}
 
 proc shutdown*(this: ConnectionWriter) {.importcpp: "#.shutdown()".}
 
-converter upcastToDatagramGenerator*(this: DatagramGeneratorNet): DatagramGenerator {.importcpp: "((DatagramGenerator *)(#))".}
+proc upcastToDatagramGenerator*(this: DatagramGeneratorNet): DatagramGenerator {.importcpp: "((DatagramGenerator *)(#))".}
 
-converter upcastToConnectionReader*(this: DatagramGeneratorNet | QueuedConnectionReader): ConnectionReader {.importcpp: "((ConnectionReader *)(#))".}
+proc upcastToConnectionReader*(this: DatagramGeneratorNet | QueuedConnectionReader): ConnectionReader {.importcpp: "((ConnectionReader *)(#))".}
 
-converter upcastToConnectionWriter*(this: DatagramSinkNet): var ConnectionWriter {.importcpp: "((ConnectionWriter *)&(#))".}
+proc upcastToConnectionWriter*(this: DatagramSinkNet): var ConnectionWriter {.importcpp: "((ConnectionWriter *)&(#))".}
 
 proc setTarget*(this: DatagramSinkNet, connection: Connection) {.importcpp: "#.set_target(#)".}
 
@@ -29289,11 +29289,11 @@ proc getTarget*(this: DatagramSinkNet): Connection {.importcpp: "#.get_target()"
 
 proc putDatagram*(this: DatagramSinkNet, data: Datagram): bool {.importcpp: "#.put_datagram(#)".}
 
-converter upcastToConnectionListener*(this: QueuedConnectionListener): ConnectionListener {.importcpp: "((ConnectionListener *)(#))".}
+proc upcastToConnectionListener*(this: QueuedConnectionListener): ConnectionListener {.importcpp: "((ConnectionListener *)(#))".}
 
 proc newConnectionAvailable*(this: QueuedConnectionListener): bool {.importcpp: "#->new_connection_available()".}
 
-converter upcastToConnectionManager*(this: QueuedConnectionManager): ConnectionManager {.importcpp: "((ConnectionManager *)(#))".}
+proc upcastToConnectionManager*(this: QueuedConnectionManager): ConnectionManager {.importcpp: "((ConnectionManager *)(#))".}
 
 proc resetConnectionAvailable*(this: QueuedConnectionManager): bool {.importcpp: "#->reset_connection_available()".}
 
@@ -30603,13 +30603,13 @@ proc getStateDefs*(this: PGItem): seq[NodePath] =
   for i in 0 ..< count:
     result[i] = this.getStateDef(i)
 
-func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollection | AnimGroup | AnimInterface | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskCollection | AsyncTaskManager | AttribNodeRegistry | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | BoundingVolume | ButtonHandle | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionRecorder | CollisionSolid | CollisionTraverser | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DisplayRegion | DocumentSpec | DownloadDb | Event | EventParameter | Filename | FrameBufferProperties | Geom | GeomPrimitive | GeomVertexAnimationSpec | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexColumn | GeomVertexData | GeomVertexFormat | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDevice | InputDeviceSet | InternalName | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LQuaterniond | LQuaternionf | LVecBase2d | LVecBase2f | LVecBase2i | LVecBase3d | LVecBase3f | LVecBase3i | LVecBase4d | LVecBase4f | LVecBase4i | Lens | LightLensNode | LightMutexDirect | LightNode | LightReMutexDirect | Loader | LoaderOptions | Material | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherBase | MouseWatcherParameter | MouseWatcherRegion | Multifile | MutexDirect | Namable | NetAddress | NodePath | NodePathCollection | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGFrameStyle | PGMouseWatcherParameter | PNMImageHeader | PStatCollector | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | PartSubset | PfmFile | ReMutexDirect | RenderAttrib | RenderEffect | RenderEffects | RenderState | Semaphore | SimpleAllocator | SimpleAllocatorBlock | SimpleLru | SimpleLruPage | SparseArray | SubfileInfo | TextNode | TextureCollection | TextureStage | TextureStageCollection | Thread | TransformBlend | TransformState | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | VertexSlider | VertexTransform | VirtualFile | VirtualFileMount | WeakNodePath | WindowHandle | WindowProperties | pixel): string {.inline.} =
+func `$`*(this: AdaptiveLru | AdaptiveLruPage | AnimControl | AnimControlCollection | AnimGroup | AnimInterface | AnimControl | AnimPreloadTable | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskCollection | AsyncTaskManager | AttribNodeRegistry | AudioManager | AudioSound | AuxSceneData | BamCacheRecord | BitArray | BitMask[uint16, 16] | BitMask[uint32, 32] | BitMask[uint64, 64] | BoundingVolume | ButtonHandle | ButtonMap | CallbackData | CallbackObject | CollisionEntry | CollisionHandlerQueue | CollisionRecorder | CollisionSolid | CollisionTraverser | ConditionVarDirect | ConditionVarFullDirect | ConfigDeclaration | ConfigPage | ConfigPageManager | ConfigVariableBase | ConfigVariableCore | ConfigVariableList | ConfigVariableManager | ConfigVariableSearchPath | CurveFitter | DSearchPath | Datagram | DatagramIterator | DisplayMode | DisplayRegion | DocumentSpec | DownloadDb | Event | EventParameter | Filename | FrameBufferProperties | Geom | GeomPrimitive | GeomVertexAnimationSpec | GeomVertexArrayData | GeomVertexArrayFormat | GeomVertexColumn | GeomVertexData | GeomVertexFormat | GeomVertexReader | GeomVertexRewriter | GeomVertexWriter | GlobPattern | GraphicsThreadingModel | HTTPCookie | HTTPDate | HTTPEntityTag | HashVal | InputDevice | InputDeviceSet | InternalName | InternalNameCollection | LMatrix3d | LMatrix3f | LMatrix4d | LMatrix4f | LParabolad | LParabolaf | LPlaned | LPlanef | LQuaterniond | LQuaternionf | LVecBase2d | LVecBase2f | LVecBase2i | LVecBase3d | LVecBase3f | LVecBase3i | LVecBase4d | LVecBase4f | LVecBase4i | Lens | LightLensNode | LightMutexDirect | LightNode | LightReMutexDirect | Loader | LoaderOptions | Material | MaterialCollection | MemoryUsagePointers | ModifierButtons | MouseWatcherBase | MouseWatcherParameter | MouseWatcherRegion | Multifile | MutexDirect | Namable | NetAddress | NodePath | NodePathCollection | NurbsCurveEvaluator | NurbsSurfaceEvaluator | PGFrameStyle | PGMouseWatcherParameter | PNMImageHeader | PStatCollector | PandaNode | PandaSystem | ParamValueBase | ParametricCurveCollection | PartBundle | PartSubset | PfmFile | ReMutexDirect | RenderAttrib | RenderEffect | RenderEffects | RenderState | Semaphore | SimpleAllocator | SimpleAllocatorBlock | SimpleLru | SimpleLruPage | SparseArray | SubfileInfo | TextNode | TextureCollection | TextureStage | TextureStageCollection | Thread | TransformBlend | TransformState | TypeHandle | URLSpec | UniqueIdAllocator | UpdateSeq | VertexDataPage | VertexSlider | VertexTransform | VirtualFile | VirtualFileMount | WeakNodePath | WindowHandle | WindowProperties | pixel): string {.inline.} =
   var str : StringStream
   this.output(str)
   str.data
 
-converter toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
-func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
+proc toBool*(this: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimControl | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle): bool {.importcpp: "(# != nullptr)".}
+func `==`*(x: AdaptiveLruPage | AlphaTestAttrib | AmbientLight | AnalogNode | AnimBundle | AnimBundleNode | AnimChannelBase | AnimChannelMatrixDynamic | AnimChannelMatrixXfmTable | AnimChannelScalarDynamic | AnimChannelScalarTable | AnimControl | AnimGroup | AnimInterface | AnimControl | AnimPreloadTable | AnimateVerticesRequest | AntialiasAttrib | AsyncFuture | AsyncTask | AsyncTaskChain | AsyncTaskManager | AsyncTaskPause | AsyncTaskSequence | AudioLoadRequest | AudioManager | AudioSound | AudioVolumeAttrib | AuxBitplaneAttrib | AuxSceneData | BamCacheRecord | BillboardEffect | BindAnimRequest | BoundingBox | BoundingHexahedron | BoundingLine | BoundingPlane | BoundingSphere | BoundingVolume | Buffer | BufferContext | ButtonEventList | ButtonMap | ButtonNode | ButtonThrower | CachedTypedWritableReferenceCount | CallbackData | CallbackGraphicsWindow | CallbackNode | CallbackObject | Camera | Character | CharacterJoint | CharacterJointBundle | CharacterJointEffect | CharacterSlider | CharacterVertexSlider | ClientBase | ClipPlaneAttrib | ClockObject | CollisionBox | CollisionCapsule | CollisionEntry | CollisionFloorMesh | CollisionHandler | CollisionHandlerEvent | CollisionHandlerFloor | CollisionHandlerFluidPusher | CollisionHandlerGravity | CollisionHandlerHighestEvent | CollisionHandlerPhysical | CollisionHandlerPusher | CollisionHandlerQueue | CollisionInvSphere | CollisionLine | CollisionNode | CollisionParabola | CollisionPlane | CollisionPolygon | CollisionRay | CollisionSegment | CollisionSolid | CollisionSphere | CollisionVisualizer | ColorAttrib | ColorBlendAttrib | ColorScaleAttrib | ColorWriteAttrib | CompassEffect | ComputeNode | Connection | ConnectionListener | ConnectionManager | ConnectionReader | CopyOnWriteObject | CubicCurveseg | CullBinAttrib | CullFaceAttrib | CullResult | CullTraverser | DataNode | DatagramGenerator | DatagramGeneratorNet | DatagramSink | DecalEffect | DepthOffsetAttrib | DepthTestAttrib | DepthWriteAttrib | DialNode | DirectionalLight | DisplayRegion | DrawableRegion | DriveInterface | DynamicTextFont | DynamicTextGlyph | DynamicTextPage | Event | EventQueue | ExternalThread | FadeLODNode | FileReference | FilterProperties | FiniteBoundingVolume | FlacAudio | FlacAudioCursor | Fog | FogAttrib | FrameRateMeter | Geom | GeomLines | GeomLinesAdjacency | GeomLinestrips | GeomLinestripsAdjacency | GeomNode | GeomPatches | GeomPoints | GeomPrimitive | GeomTextGlyph | GeomTriangles | GeomTrianglesAdjacency | GeomTrifans | GeomTristrips | GeomTristripsAdjacency | GeomVertexArrayData | GeomVertexArrayDataHandle | GeomVertexArrayFormat | GeomVertexData | GeomVertexFormat | GeometricBoundingVolume | GraphicsBuffer | GraphicsDevice | GraphicsEngine | GraphicsOutput | GraphicsOutputBase | GraphicsPipe | GraphicsPipeSelection | GraphicsStateGuardian | GraphicsStateGuardianBase | GraphicsWindow | GraphicsWindowInputDevice | HTTPChannel | HTTPClient | HermiteCurve | ISocketStream | InkblotVideo | InkblotVideoCursor | InputDevice | InputDeviceNode | InternalName | IntersectionBoundingVolume | JointVertexTransform | LODNode | Lens | LensNode | Light | LightAttrib | LightLensNode | LightNode | LightRampAttrib | LinuxJoystickDevice | Loader | LogicOpAttrib | MainThread | Material | MaterialAttrib | MatrixLens | MicrophoneAudio | ModelFlattenRequest | ModelLoadRequest | ModelNode | ModelRoot | ModelSaveRequest | MouseAndKeyboard | MouseInterfaceNode | MouseRecorder | MouseSubregion | MouseWatcher | MouseWatcherBase | MouseWatcherGroup | MouseWatcherRegion | MovieAudio | MovieAudioCursor | MovieTexture | MovieVideo | MovieVideoCursor | MovingPartBase | MovingPartMatrix | MovingPartScalar | Multifile | Namable | NativeWindowHandle | NodeCachedReferenceCount | NodeReferenceCount | NodeVertexTransform | NurbsCurve | NurbsCurveEvaluator | NurbsCurveInterface | NurbsCurveResult | NurbsSurfaceEvaluator | NurbsSurfaceResult | OccluderEffect | OccluderNode | OmniBoundingVolume | OpusAudio | OpusAudioCursor | OrthographicLens | PGButton | PGEntry | PGItem | PGMouseWatcherBackground | PGMouseWatcherParameter | PGScrollFrame | PGSliderBar | PGTop | PGVirtualFrame | PGWaitBar | PNMBrush | PStatCollectorForward | PStatCollectorForwardBase | PandaNode | PandaSystem | ParamTextureImage | ParamTextureSampler | ParamTypedRefCount | ParamValueBase | ParametricCurve | ParametricCurveCollection | ParasiteBuffer | PartBundle | PartBundleHandle | PartBundleNode | PartGroup | Patcher | PerspectiveLens | PiecewiseCurve | PipeOcclusionCullTraverser | PlaneNode | PointLight | PointerEventList | PolylightEffect | PolylightNode | PortalNode | PreparedGraphicsObjects | QueuedConnectionListener | QueuedConnectionManager | QueuedConnectionReader | RecentConnectionReader | RecorderBase | RecorderController | RectangleLight | ReferenceCount | RenderAttrib | RenderEffect | RenderEffects | RenderModeAttrib | RenderState | RescaleNormalAttrib | RigidBodyCombiner | RopeNode | SSReader | SSWriter | SavedContext | SceneGraphAnalyzerMeter | SceneSetup | ScissorAttrib | ScissorEffect | SelectiveChildNode | SequenceNode | ShadeModelAttrib | Shader | ShaderAttrib | ShaderBuffer | ShaderGenerator | ShaderTerrainMesh | SheetNode | ShowBoundsEffect | SimpleAllocator | SimpleAllocatorBlock | SimpleLruPage | SliderTable | SocketStreamRecorder | Socket_Address | SphereLight | Spotlight | StaticTextFont | StencilAttrib | StereoDisplayRegion | SwitchNode | TemporaryFile | TexGenAttrib | TexMatrixAttrib | TexProjectorEffect | TextEncoder | TextFont | TextGlyph | TextNode | TextProperties | Texture | TextureAttrib | TexturePeeker | TextureReloadRequest | TextureStage | Thread | Trackball | TrackerNode | Transform2SG | TransformBlendTable | TransformState | TransformTable | TransparencyAttrib | TypedObject | TypedReferenceCount | TypedWritable | TypedWritableReferenceCount | UnionBoundingVolume | UserDataAudio | UserDataAudioCursor | UserVertexSlider | UserVertexTransform | UvScrollNode | VertexDataBlock | VertexDataSaveFile | VertexSlider | VertexTransform | VideoTexture | VirtualFile | VirtualFileComposite | VirtualFileHTTP | VirtualFileList | VirtualFileMount | VirtualFileMountHTTP | VirtualFileMountMultifile | VirtualFileMountRamdisk | VirtualFileMountSystem | VirtualFileSimple | VirtualMouse | VorbisAudio | VorbisAudioCursor | WavAudio | WavAudioCursor | WindowHandle, y: type(nil)): bool {.importcpp: "(# == nullptr)".}
 
 proc contains*(this: VirtualFileSystem_mounts, value: VirtualFileMount): bool =
   for i in 0 ..< len(this):
@@ -31292,19 +31292,19 @@ iterator items*(this: ModifierButtons_buttons): ButtonHandle =
     yield this[i]
 
 
-converter initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringToStdString(#))", header: stringConversionCode.}
+proc initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringToStdString(#))", header: stringConversionCode.}
 
-converter toInternalName*(name: string): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#))", header: "internalName.h".}
+proc toInternalName*(name: string): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#))", header: "internalName.h".}
 
-proc setText*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
-func text*(this: TextEncoder) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
-func `text=`*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+proc setText*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+func text*(this: TextEncoder | TextNode) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
+func `text=`*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
 
 func newNimCallbackObject(procp: pointer, envp: pointer): CallbackObject {.importcpp: "new NimCallbackObject((NimCallbackObject::Function *)#, #)", header: nimCallbackObjectCode.}
 
-converter newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObject =
+proc newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObject =
   var procp = rawProc(function);
   var envp = rawEnv(function);
   if envp != nil:
@@ -31316,91 +31316,91 @@ func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
 func initLVecBase2f*(fillValue: float32): LVecBase2f = LVecBase2f(x: fillValue, y: fillValue)
 func initLVecBase2f*(x: float32, y: float32): LVecBase2f = LVecBase2f(x: x, y: y)
-converter initLVecBase2f*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2f {.inline, noSideEffect.} = LVecBase2f(x: (float32)args.x, y: (float32)args.y)
+proc initLVecBase2f*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2f {.inline, noSideEffect.} = LVecBase2f(x: (float32)args.x, y: (float32)args.y)
 
 func initLVecBase2d*(): LVecBase2d = LVecBase2d(x: 0, y: 0)
 func initLVecBase2d*(copy: LVecBase2d): LVecBase2d = LVecBase2d(x: copy.x, y: copy.y)
 func initLVecBase2d*(fillValue: float64): LVecBase2d = LVecBase2d(x: fillValue, y: fillValue)
 func initLVecBase2d*(x: float64, y: float64): LVecBase2d = LVecBase2d(x: x, y: y)
-converter initLVecBase2d*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2d {.inline, noSideEffect.} = LVecBase2d(x: (float64)args.x, y: (float64)args.y)
+proc initLVecBase2d*[T0, T1: SomeNumber](args: tuple[x: T0, y: T1]): LVecBase2d {.inline, noSideEffect.} = LVecBase2d(x: (float64)args.x, y: (float64)args.y)
 
 func initLVecBase2i*(): LVecBase2i = LVecBase2i(x: 0, y: 0)
 func initLVecBase2i*(copy: LVecBase2i): LVecBase2i = LVecBase2i(x: copy.x, y: copy.y)
 func initLVecBase2i*(fillValue: int32): LVecBase2i = LVecBase2i(x: fillValue, y: fillValue)
 func initLVecBase2i*(x: int32, y: int32): LVecBase2i = LVecBase2i(x: x, y: y)
-converter initLVecBase2i*[T0, T1: int | int32](args: tuple[x: T0, y: T1]): LVecBase2i {.inline, noSideEffect.} = LVecBase2i(x: (int32)args.x, y: (int32)args.y)
+proc initLVecBase2i*[T0, T1: int | int32](args: tuple[x: T0, y: T1]): LVecBase2i {.inline, noSideEffect.} = LVecBase2i(x: (int32)args.x, y: (int32)args.y)
 
 func initLVecBase3f*(): LVecBase3f = LVecBase3f(x: 0, y: 0, z: 0)
 func initLVecBase3f*(copy: LVecBase2f, z: float32): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: z)
 func initLVecBase3f*(copy: LVecBase3f): LVecBase3f = LVecBase3f(x: copy.x, y: copy.y, z: copy.z)
 func initLVecBase3f*(fillValue: float32): LVecBase3f = LVecBase3f(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3f*(x: float32, y: float32, z: float32): LVecBase3f = LVecBase3f(x: x, y: y, z: z)
-converter initLVecBase3f*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3f {.inline, noSideEffect.} = LVecBase3f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z)
+proc initLVecBase3f*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3f {.inline, noSideEffect.} = LVecBase3f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z)
 
 func initLVecBase3d*(): LVecBase3d = LVecBase3d(x: 0, y: 0, z: 0)
 func initLVecBase3d*(copy: LVecBase2d, z: float64): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: z)
 func initLVecBase3d*(copy: LVecBase3d): LVecBase3d = LVecBase3d(x: copy.x, y: copy.y, z: copy.z)
 func initLVecBase3d*(fillValue: float64): LVecBase3d = LVecBase3d(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3d*(x: float64, y: float64, z: float64): LVecBase3d = LVecBase3d(x: x, y: y, z: z)
-converter initLVecBase3d*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3d {.inline, noSideEffect.} = LVecBase3d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z)
+proc initLVecBase3d*[T0, T1, T2: SomeNumber](args: tuple[x: T0, y: T1, z: T2]): LVecBase3d {.inline, noSideEffect.} = LVecBase3d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z)
 
 func initLVecBase3i*(): LVecBase3i = LVecBase3i(x: 0, y: 0, z: 0)
 func initLVecBase3i*(copy: LVecBase2i, z: int32): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: z)
 func initLVecBase3i*(copy: LVecBase3i): LVecBase3i = LVecBase3i(x: copy.x, y: copy.y, z: copy.z)
 func initLVecBase3i*(fillValue: int32): LVecBase3i = LVecBase3i(x: fillValue, y: fillValue, z: fillValue)
 func initLVecBase3i*(x: int32, y: int32, z: int32): LVecBase3i = LVecBase3i(x: x, y: y, z: z)
-converter initLVecBase3i*[T0, T1, T2: int | int32](args: tuple[x: T0, y: T1, z: T2]): LVecBase3i {.inline, noSideEffect.} = LVecBase3i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z)
+proc initLVecBase3i*[T0, T1, T2: int | int32](args: tuple[x: T0, y: T1, z: T2]): LVecBase3i {.inline, noSideEffect.} = LVecBase3i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z)
 
 func initLVecBase4f*(): LVecBase4f = LVecBase4f(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4f*(copy: LVecBase3f, w: float32): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4f*(copy: LVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initLVecBase4f*(fillValue: float32): LVecBase4f = LVecBase4f(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4f*(x: float32, y: float32, z: float32, w: float32): LVecBase4f = LVecBase4f(x: x, y: y, z: z, w: w)
-converter initLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4f {.inline, noSideEffect.} = LVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
-converter initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-converter initLVecBase4f*(point: LPoint3f): LVecBase4f = LVecBase4f(x: point.x, y: point.y, z: point.z, w: 1)
-converter initLVecBase4f*(vector: LVector3f): LVecBase4f = LVecBase4f(x: vector.x, y: vector.y, z: vector.z, w: 0)
+proc initLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4f {.inline, noSideEffect.} = LVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
+proc initLVecBase4f*(copy: UnalignedLVecBase4f): LVecBase4f = LVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4f*(point: LPoint3f): LVecBase4f = LVecBase4f(x: point.x, y: point.y, z: point.z, w: 1)
+proc initLVecBase4f*(vector: LVector3f): LVecBase4f = LVecBase4f(x: vector.x, y: vector.y, z: vector.z, w: 0)
 
 func initLVecBase4d*(): LVecBase4d = LVecBase4d(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4d*(copy: LVecBase3d, w: float64): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4d*(copy: LVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initLVecBase4d*(fillValue: float64): LVecBase4d = LVecBase4d(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4d*(x: float64, y: float64, z: float64, w: float64): LVecBase4d = LVecBase4d(x: x, y: y, z: z, w: w)
-converter initLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4d {.inline, noSideEffect.} = LVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
-converter initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-converter initLVecBase4d*(point: LPoint3d): LVecBase4d = LVecBase4d(x: point.x, y: point.y, z: point.z, w: 1)
-converter initLVecBase4d*(vector: LVector3d): LVecBase4d = LVecBase4d(x: vector.x, y: vector.y, z: vector.z, w: 0)
+proc initLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4d {.inline, noSideEffect.} = LVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
+proc initLVecBase4d*(copy: UnalignedLVecBase4d): LVecBase4d = LVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4d*(point: LPoint3d): LVecBase4d = LVecBase4d(x: point.x, y: point.y, z: point.z, w: 1)
+proc initLVecBase4d*(vector: LVector3d): LVecBase4d = LVecBase4d(x: vector.x, y: vector.y, z: vector.z, w: 0)
 
 func initLVecBase4i*(): LVecBase4i = LVecBase4i(x: 0, y: 0, z: 0, w: 0)
 func initLVecBase4i*(copy: LVecBase3i, w: int32): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: w)
 func initLVecBase4i*(copy: LVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initLVecBase4i*(fillValue: int32): LVecBase4i = LVecBase4i(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initLVecBase4i*(x: int32, y: int32, z: int32, w: int32): LVecBase4i = LVecBase4i(x: x, y: y, z: z, w: w)
-converter initLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4i {.inline, noSideEffect.} = LVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
-converter initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-converter initLVecBase4i*(point: LPoint3i): LVecBase4i = LVecBase4i(x: point.x, y: point.y, z: point.z, w: 1)
-converter initLVecBase4i*(vector: LVector3i): LVecBase4i = LVecBase4i(x: vector.x, y: vector.y, z: vector.z, w: 0)
+proc initLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): LVecBase4i {.inline, noSideEffect.} = LVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
+proc initLVecBase4i*(copy: UnalignedLVecBase4i): LVecBase4i = LVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initLVecBase4i*(point: LPoint3i): LVecBase4i = LVecBase4i(x: point.x, y: point.y, z: point.z, w: 1)
+proc initLVecBase4i*(vector: LVector3i): LVecBase4i = LVecBase4i(x: vector.x, y: vector.y, z: vector.z, w: 0)
 
 func initUnalignedLVecBase4f*(): UnalignedLVecBase4f = UnalignedLVecBase4f(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4f*(copy: UnalignedLVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initUnalignedLVecBase4f*(fillValue: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4f*(x: float32, y: float32, z: float32, w: float32): UnalignedLVecBase4f = UnalignedLVecBase4f(x: x, y: y, z: z, w: w)
-converter initUnalignedLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4f {.inline, noSideEffect.} = UnalignedLVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
-converter initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4f*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4f {.inline, noSideEffect.} = UnalignedLVecBase4f(x: (float32)args.x, y: (float32)args.y, z: (float32)args.z, w: (float32)args.w)
+proc initUnalignedLVecBase4f*(copy: LVecBase4f): UnalignedLVecBase4f = UnalignedLVecBase4f(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 
 func initUnalignedLVecBase4d*(): UnalignedLVecBase4d = UnalignedLVecBase4d(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4d*(copy: UnalignedLVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initUnalignedLVecBase4d*(fillValue: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4d*(x: float64, y: float64, z: float64, w: float64): UnalignedLVecBase4d = UnalignedLVecBase4d(x: x, y: y, z: z, w: w)
-converter initUnalignedLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4d {.inline, noSideEffect.} = UnalignedLVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
-converter initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4d*[T0, T1, T2, T3: SomeNumber](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4d {.inline, noSideEffect.} = UnalignedLVecBase4d(x: (float64)args.x, y: (float64)args.y, z: (float64)args.z, w: (float64)args.w)
+proc initUnalignedLVecBase4d*(copy: LVecBase4d): UnalignedLVecBase4d = UnalignedLVecBase4d(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 
 func initUnalignedLVecBase4i*(): UnalignedLVecBase4i = UnalignedLVecBase4i(x: 0, y: 0, z: 0, w: 0)
 func initUnalignedLVecBase4i*(copy: UnalignedLVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 func initUnalignedLVecBase4i*(fillValue: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: fillValue, y: fillValue, z: fillValue, w: fillValue)
 func initUnalignedLVecBase4i*(x: int32, y: int32, z: int32, w: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: x, y: y, z: z, w: w)
-converter initUnalignedLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4i {.inline, noSideEffect.} = UnalignedLVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
-converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
+proc initUnalignedLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4i {.inline, noSideEffect.} = UnalignedLVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
+proc initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
 
 func xx*(this: LVecBase2f): LVecBase2f = LVecBase2f(x: this.x, y: this.x)
 func xxx*(this: LVecBase2f): LVecBase3f = LVecBase3f(x: this.x, y: this.x, z: this.x)

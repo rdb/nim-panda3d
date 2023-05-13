@@ -9,6 +9,7 @@ from panda3d.interrogatedb import *
 
 
 OUTPUT_DOCSTRINGS = False
+CONVERTER_TYPE = "converter"
 
 
 panda_include_dir = os.path.join(os.path.dirname(os.path.dirname(pandac.__file__)), "include", "")
@@ -243,9 +244,9 @@ converter initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringTo
 
 converter toInternalName*(name: string): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#))", header: "internalName.h".}
 
-proc setText*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
-func text*(this: TextEncoder) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
-func `text=`*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+proc setText*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+func text*(this: TextEncoder | TextNode) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
+func `text=`*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
 
@@ -348,7 +349,7 @@ func initUnalignedLVecBase4i*(fillValue: int32): UnalignedLVecBase4i = Unaligned
 func initUnalignedLVecBase4i*(x: int32, y: int32, z: int32, w: int32): UnalignedLVecBase4i = UnalignedLVecBase4i(x: x, y: y, z: z, w: w)
 converter initUnalignedLVecBase4i*[T0, T1, T2, T3: int | int32](args: tuple[x: T0, y: T1, z: T2, w: T3]): UnalignedLVecBase4i {.inline, noSideEffect.} = UnalignedLVecBase4i(x: (int32)args.x, y: (int32)args.y, z: (int32)args.z, w: (int32)args.w)
 converter initUnalignedLVecBase4i*(copy: LVecBase4i): UnalignedLVecBase4i = UnalignedLVecBase4i(x: copy.x, y: copy.y, z: copy.z, w: copy.w)
-"""
+""".replace("converter", CONVERTER_TYPE)
 
 # Generate vector swizzle operators
 for base in "LVecBase", "LVector", "LPoint":
@@ -1063,6 +1064,48 @@ class BindingGenerator:
         self.seq_properties = defaultdict(set)
         self.contains_funcs = defaultdict(set)
         self.wrapped_funcs = defaultdict(set)
+        self._extra_derivations = defaultdict(set)
+
+    def get_class_bases(self, type):
+        # Determine the class to inherit from.
+        valid_bases = []
+        for i in range(interrogate_type_number_of_derivations(type)):
+            base_type = interrogate_type_get_derivation(type, i)
+            if is_type_valid(base_type):
+                valid_bases.append(base_type)
+                if is_type_pointer(type) and not is_type_pointer(base_type):
+                    print(f"Pointer type {translated_type_name(type)} has non-pointer base {translated_type_name(base_type)}!")
+
+        # Put the typed class first.
+        if valid_bases:
+            for base_type in valid_bases:
+                if is_type_typed(base_type):
+                    break
+            else:
+                # Grab the first type.
+                base_type = valid_bases[0]
+
+            valid_bases.remove(base_type)
+            valid_bases.insert(0, base_type)
+
+        return valid_bases
+
+    def record_extra_derivation(self, base_type, type):
+        self._extra_derivations[translated_type_name(base_type)].add(translated_type_name(type))
+
+    def expand_type(self, type):
+        type_name = translated_type_name(type)
+        result = {type_name}
+        if CONVERTER_TYPE == "converter":
+            return result
+
+        result |= self._extra_derivations[type_name]
+
+        extra_bases = self.get_class_bases(type)
+        for base in extra_bases[1:]:
+            result |= self.expand_type(type)
+
+        return result
 
     def bind_coerce_constructor(self, function, wrapper, num_default_args=0):
         return
@@ -1083,7 +1126,7 @@ class BindingGenerator:
             param_type = interrogate_wrapper_parameter_type(wrapper, i_param)
             if not is_type_valid(param_type):
                 return
-            type_name = translated_type_name(param_type)
+            type_name = " | ".join(self.expand_type(param_type))
 
             args.append(f"{param_name}: {type_name}")
 
@@ -1100,7 +1143,7 @@ class BindingGenerator:
 
         type_name = translated_type_name(return_type, scoped=False, template=False)
         args_string = ", ".join(args)
-        out.write(f"converter init{type_name}*(args: tuple[{args_string}])")
+        out.write(f"{CONVERTER_TYPE} init{type_name}*(args: tuple[{args_string}])")
 
         if type_name.startswith("BitMask["):
             type_name = "BitMask" + type_name.rstrip(']').split(", ")[-1]
@@ -1183,7 +1226,7 @@ class BindingGenerator:
                                type_name != "pixel" and \
                                (type_name != "ButtonHandle" or interrogate_wrapper_parameter_name(wrapper, 0) != "index") and \
                                interrogate_wrapper_parameter_name(wrapper, 0) != "fill_value":
-                                proc_type = "converter"
+                                proc_type = CONVERTER_TYPE
                         elif num_args > 1 and is_type_valid(interrogate_wrapper_parameter_type(wrapper, 0)):
                             # Accept a tuple for coercion.
                             if not type_name.startswith("ConfigVariable") and \
@@ -1246,6 +1289,7 @@ class BindingGenerator:
                 else:
                     return False
             type_name = translated_type_name(param_type)
+            type_options = " | ".join(self.expand_type(param_type))
 
             if interrogate_wrapper_parameter_is_this(wrapper, i_param):
                 if interrogate_type_true_name(param_type).endswith("const *") and \
@@ -1269,15 +1313,15 @@ class BindingGenerator:
                 if wrapper_name:
                     args.append(f"this: {wrapper_name}")
                 elif func_name.startswith("operator ") and func_name[9:] in INPLACE_OPERATORS:
-                    args.append(f"{param_name}: var {type_name}")
+                    args.append(f"{param_name}: var {type_options}")
                 elif not this_var or interrogate_type_true_name(param_type).endswith("const *"):
                     #if not this_pointer and not interrogate_type_true_name(param_type).endswith("const *"):
                     #    print(interrogate_function_scoped_name(function))
-                    args.append(f"{param_name}: {type_name}")
+                    args.append(f"{param_name}: {type_options}")
                 else:
-                    args.append(f"{param_name}: var {type_name}")
+                    args.append(f"{param_name}: var {type_options}")
             else:
-                args.append(f"{param_name}: {type_name}")
+                args.append(f"{param_name}: {type_options}")
 
                 if type_name == "string":
                     cpp_args.append("nimStringToStdString(#)")
@@ -1375,7 +1419,7 @@ class BindingGenerator:
 
         if not interrogate_wrapper_is_deprecated(wrapper) and not (OUTPUT_DOCSTRINGS and interrogate_wrapper_has_comment(wrapper)):
             if args and args[0].startswith("this: "):
-                self.wrapped_funcs[(proc_type, func_name, suffix, cpp_expr, tuple(args[1:]), header)].add(args[0][6:])
+                self.wrapped_funcs[(proc_type, func_name, suffix, cpp_expr, tuple(args[1:]), header)] |= frozenset(args[0][6:].split(" | "))
                 return True
 
         pragmas = [f"importcpp: \"{cpp_expr}\""]
@@ -1408,7 +1452,7 @@ class BindingGenerator:
                 return
 
             if func_name == "get_class_type" or func_name.startswith("upcast_to_") or func_name.startswith("operator typecast "):
-                proc_type = "converter"
+                proc_type = CONVERTER_TYPE
 
         if func_name in NIM_KEYWORDS:
             return
@@ -1795,25 +1839,13 @@ class BindingGenerator:
                 out.write(f"type {type_name_star} {{.{pragma_str}.}} = object")
 
             # Determine the class to inherit from.
-            valid_bases = []
-            for i in range(interrogate_type_number_of_derivations(type)):
-                base_type = interrogate_type_get_derivation(type, i)
-                if is_type_valid(base_type):
-                    valid_bases.append(base_type)
-                    if is_type_pointer(type) and not is_type_pointer(base_type):
-                        print(f"Pointer type {type_name} has non-pointer base {translated_type_name(base_type)}!")
-
-            # We inherit from the first base that is typed, if any.
+            valid_bases = self.get_class_bases(type)
             if valid_bases:
-                for base_type in valid_bases:
-                    if is_type_typed(base_type):
-                        break
-                else:
-                    # Grab the first type.
-                    base_type = valid_bases[0]
-
+                base_type = valid_bases[0]
                 base_name = translated_type_name(base_type)
                 out.write(f" of {base_name}")
+            else:
+                base_type = None
 
             if OUTPUT_DOCSTRINGS and interrogate_type_has_comment(type):
                 comment = translate_comment(interrogate_type_comment(type), '  ## ')
@@ -1851,11 +1883,11 @@ class BindingGenerator:
                 for other_base_type in valid_bases:
                     if other_base_type != base_type:
                         other_base_name = translated_type_name(other_base_type)
-                        out.write(f"converter upcastTo{other_base_name}*(_: typedesc[{type_name}]): typedesc[{other_base_name}] = typedesc[{other_base_name}]\n")
+                        out.write(f"{CONVERTER_TYPE} upcastTo{other_base_name}*(_: typedesc[{type_name}]): typedesc[{other_base_name}] = typedesc[{other_base_name}]\n")
                 out.write("\n")
 
             if is_type_pointer(type):
-                out.write(f"converter to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")
+                out.write(f"{CONVERTER_TYPE} to{type_name}*(_: type(nil)): {type_name} {{.importcpp: \"(nullptr)\".}}\n")
 
                 if cpp_name == "TypedObject":
                     out.write(f"func dcast*(_: typedesc[{type_name}], obj: TypedObject): {type_name} {{.importcpp: \"(@)\".}}\n")
@@ -1877,6 +1909,11 @@ class BindingGenerator:
 
     def bind_module(self, module_name):
         print("Generating bindings for %s" % (module_name))
+
+        # Record secondary derivations
+        for type in iter_module_types(module_name):
+            for base_type in self.get_class_bases(type)[1:]:
+                self.record_extra_derivation(base_type, type)
 
         # Prevent conflicts between type names and properties
         ignore_properties_named = set(NIM_KEYWORDS)
@@ -1986,7 +2023,7 @@ class BindingGenerator:
 
         if pointer_types:
             type_str = " | ".join(sorted(pointer_types))
-            out.write(f"converter toBool*(this: {type_str}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
+            out.write(f"{CONVERTER_TYPE} toBool*(this: {type_str}): bool {{.importcpp: \"(# != nullptr)\".}}\n")
             out.write(f"func `==`*(x: {type_str}, y: type(nil)): bool {{.importcpp: \"(# == nullptr)\".}}\n")
             out.write("\n")
 

@@ -31308,9 +31308,9 @@ converter initFilename*(fn: string): Filename {.importcpp: "Filename(nimStringTo
 
 converter toInternalName*(name: string): InternalName {.importcpp: "InternalName::make(nimStringToStdString(#))", header: "internalName.h".}
 
-proc setText*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
-func text*(this: TextEncoder) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
-func `text=`*(this: TextEncoder, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+proc setText*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
+func text*(this: TextEncoder | TextNode) : string {.importcpp: "nimStringFromStdString(#->get_text())", header: stringConversionCode.}
+func `text=`*(this: TextEncoder | TextNode, text: string) {.importcpp: "#->set_text(nimStringToStdString(#))", header: stringConversionCode.}
 
 func time*(this: AsyncTask): float {.importcpp: "#->get_elapsed_time()".}
 

@@ -13,6 +13,13 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
+const bitMaskPreamble = """
+#include "bitMask.h"
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+"""
+
 const wrappedVec2Code = """
 #include "lvecBase2.h"
 #include "lvector2.h"
@@ -5015,7 +5022,7 @@ type BamReader* {.importcpp: "BamReader", pure, inheritable, header: "bamReader.
 
 type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.h".} = object of BamEnums
 
-type BitMask*[T: static[typedesc], U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
+type BitMask*[T: static[typedesc], U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: bitMaskPreamble.} = object
 
 type BitMask16* = BitMask[uint16, 16]
 
@@ -5023,7 +5030,7 @@ type BitMask32* = BitMask[uint32, 32]
 
 type BitMask64* = BitMask[uint64, 64]
 
-type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMask.h".} = object
+type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: bitMaskPreamble.} = object
 
 type BitArray* {.importcpp: "BitArray", pure, inheritable, header: "bitArray.h".} = object
 
@@ -31319,6 +31326,32 @@ proc newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObject =
     GC_ref(cast[RootRef](envp))
 
   newNimCallbackObject(procp, envp)
+
+proc analyze*(this: NodePath): void =
+  var sga : SceneGraphAnalyzer
+  sga.addNode(this.node())
+  if sga.getNumLodNodes() != 0:
+    echo "At highest LOD:"
+    var sga2 : SceneGraphAnalyzer
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_highest)
+    sga2.addNode(this.node())
+    var ss1 : StringStream
+    sga2.write(ss1)
+    echo ss1.data
+
+    echo "\nAt lowest LOD:"
+    sga2.clear()
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_lowest)
+    sga2.addNode(this.node())
+    var ss2 : StringStream
+    sga2.write(ss2)
+    echo ss2.data
+
+    echo "\nAll nodes:"
+
+  var ss : StringStream
+  sga.write(ss)
+  echo ss.data
 
 func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)

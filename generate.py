@@ -93,6 +93,13 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
+const bitMaskPreamble = \"\"\"
+#include "bitMask.h"
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+\"\"\"
+
 const wrappedVec2Code = \"\"\"
 #include "lvecBase2.h"
 #include "lvector2.h"
@@ -259,6 +266,32 @@ converter newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObj
     GC_ref(cast[RootRef](envp))
 
   newNimCallbackObject(procp, envp)
+
+proc analyze*(this: NodePath): void =
+  var sga : SceneGraphAnalyzer
+  sga.addNode(this.node())
+  if sga.getNumLodNodes() != 0:
+    echo "At highest LOD:"
+    var sga2 : SceneGraphAnalyzer
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_highest)
+    sga2.addNode(this.node())
+    var ss1 : StringStream
+    sga2.write(ss1)
+    echo ss1.data
+
+    echo "\\nAt lowest LOD:"
+    sga2.clear()
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_lowest)
+    sga2.addNode(this.node())
+    var ss2 : StringStream
+    sga2.write(ss2)
+    echo ss2.data
+
+    echo "\\nAll nodes:"
+
+  var ss : StringStream
+  sga.write(ss)
+  echo ss.data
 
 func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
@@ -1096,6 +1129,9 @@ class BindingGenerator:
     def expand_type(self, type):
         type_name = translated_type_name(type)
         result = {type_name}
+        if CONVERTER_TYPE == "converter":
+            return result
+
         result |= self._extra_derivations[type_name]
 
         extra_bases = self.get_class_bases(type)
@@ -1823,7 +1859,9 @@ class BindingGenerator:
                 pragmas.append("deprecated")
 
             header = get_type_header(type)
-            if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
+            if header == "bitMask.h":
+                pragmas.append(f"header: bitMaskPreamble")
+            elif header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
                 if not os.path.isfile(panda_include_dir + header):
                     print("Header not found: ", header)
                 pragmas.append(f"header: \"{header}\"")

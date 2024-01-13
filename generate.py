@@ -93,6 +93,13 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
+const bitMaskPreamble = \"\"\"
+#include "bitMask.h"
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+\"\"\"
+
 const wrappedVec2Code = \"\"\"
 #include "lvecBase2.h"
 #include "lvector2.h"
@@ -1852,7 +1859,9 @@ class BindingGenerator:
                 pragmas.append("deprecated")
 
             header = get_type_header(type)
-            if header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
+            if header == "bitMask.h":
+                pragmas.append(f"header: bitMaskPreamble")
+            elif header and not type_name.startswith("LVecBase") and not type_name.startswith("UnalignedLVecBase") and not type_name.startswith("LPoint") and not type_name.startswith("LVector"):
                 if not os.path.isfile(panda_include_dir + header):
                     print("Header not found: ", header)
                 pragmas.append(f"header: \"{header}\"")

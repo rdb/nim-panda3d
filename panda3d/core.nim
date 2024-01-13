@@ -13,6 +13,13 @@ when defined(vcc):
 else:
   {.passL: "-lpandaexpress -lpanda -lp3dtoolconfig -lp3dtool".}
 
+const bitMaskPreamble = """
+#include "bitMask.h"
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+"""
+
 const wrappedVec2Code = """
 #include "lvecBase2.h"
 #include "lvector2.h"
@@ -5015,7 +5022,7 @@ type BamReader* {.importcpp: "BamReader", pure, inheritable, header: "bamReader.
 
 type BamWriter* {.importcpp: "BamWriter", pure, inheritable, header: "bamWriter.h".} = object of BamEnums
 
-type BitMask*[T: static[typedesc], U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: "bitMask.h".} = object
+type BitMask*[T: static[typedesc], U: static[int]] {.importcpp: "BitMask<'0, '1>", pure, inheritable, header: bitMaskPreamble.} = object
 
 type BitMask16* = BitMask[uint16, 16]
 
@@ -5023,7 +5030,7 @@ type BitMask32* = BitMask[uint32, 32]
 
 type BitMask64* = BitMask[uint64, 64]
 
-type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: "bitMask.h".} = object
+type BitMaskNative* {.importcpp: "BitMaskNative", pure, inheritable, header: bitMaskPreamble.} = object
 
 type BitArray* {.importcpp: "BitArray", pure, inheritable, header: "bitArray.h".} = object
 

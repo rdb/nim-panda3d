@@ -31324,6 +31324,32 @@ converter newCallbackObject*(function: proc (cbdata: CallbackData)): CallbackObj
 
   newNimCallbackObject(procp, envp)
 
+proc analyze*(this: NodePath): void =
+  var sga : SceneGraphAnalyzer
+  sga.addNode(this.node())
+  if sga.getNumLodNodes() != 0:
+    echo "At highest LOD:"
+    var sga2 : SceneGraphAnalyzer
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_highest)
+    sga2.addNode(this.node())
+    var ss1 : StringStream
+    sga2.write(ss1)
+    echo ss1.data
+
+    echo "\nAt lowest LOD:"
+    sga2.clear()
+    sga2.setLodMode(SceneGraphAnalyzer_LodMode.LM_lowest)
+    sga2.addNode(this.node())
+    var ss2 : StringStream
+    sga2.write(ss2)
+    echo ss2.data
+
+    echo "\nAll nodes:"
+
+  var ss : StringStream
+  sga.write(ss)
+  echo ss.data
+
 func initLVecBase2f*(): LVecBase2f = LVecBase2f(x: 0, y: 0)
 func initLVecBase2f*(copy: LVecBase2f): LVecBase2f = LVecBase2f(x: copy.x, y: copy.y)
 func initLVecBase2f*(fillValue: float32): LVecBase2f = LVecBase2f(x: fillValue, y: fillValue)
